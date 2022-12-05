@@ -11,6 +11,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
+    "@googlemaps/js-api-loader": "^1.15.1",
+    "@googlemaps/markerclusterer": "^2.0.14",
     "@mantine/carousel": "^5.9.2",
     "@mantine/core": "^5.9.2",
     "@mantine/dates": "^5.9.2",
@@ -24,6 +26,8 @@
     "@mantine/spotlight": "^5.9.2",
     "@mantine/tiptap": "^5.9.2",
     "@react-google-maps/api": "^2.17.0",
+    "@react-google-maps/infobox": "^2.16.0",
+    "@react-google-maps/marker-clusterer": "^2.16.1",
     "@tabler/icons": "^1.115.0",
     "@tiptap/extension-link": "^2.0.0-beta.205",
     "@tiptap/react": "^2.0.0-beta.205",

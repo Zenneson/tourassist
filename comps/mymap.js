@@ -17,6 +17,7 @@ function Map() {
       zoom={4.7}
       center={{ lat: 40, lng: -88 }}
       mapContainerClassName="mapContainer"
+      mapId="d9abba45cff72fe"
     ></GoogleMap>
   );
 }
