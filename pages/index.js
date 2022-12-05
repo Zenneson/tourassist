@@ -1,5 +1,6 @@
 import Head from "next/head";
+import Mymap from "../comps/mymap";
 
 export default function Home() {
-  return <div>Tourassist</div>;
+  return <Mymap />;
 }
