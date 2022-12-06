@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback } from "react";
 import {
   GoogleMap,
   useGoogleMap,
@@ -6,24 +6,37 @@ import {
   Marker,
 } from "@react-google-maps/api";
 
+let map, infoWindow, countryLayer;
+
 export default function Mymap() {
-  const { isLoaded } = useLoadScript({
+  const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyAeYHu9_AGQDASLgQ8xiZ_Hd4GvwhOtdQk",
     version: "beta",
   });
 
-  const renderMap = () => (
-    <GoogleMap
-      id="mymap"
-      zoom={4.2}
-      center={{ lat: 40, lng: -88 }}
-      mapContainerClassName="mapContainer"
-      options={options}
-      onLoad={addCountryLayer}
-    ></GoogleMap>
-  );
+  const RenderMap = () => {
+    const onLoad = useCallback(function onLoad(mapInstance) {
+      map = mapInstance;
+      addCountryLayer(mapInstance);
+    }, []);
 
-  return isLoaded ? renderMap() : <div>Loading...</div>;
+    return (
+      <GoogleMap
+        id="mymap"
+        zoom={4.2}
+        center={{ lat: 40, lng: -88 }}
+        mapContainerClassName="mapContainer"
+        options={options}
+        onLoad={onLoad}
+      ></GoogleMap>
+    );
+  };
+
+  if (loadError) {
+    return <div>Map cannot be loaded right now, sorry.</div>;
+  }
+
+  return isLoaded ? <RenderMap /> : <div>Loading...</div>;
 }
 
 const options = {
@@ -47,7 +60,6 @@ const clickedStyle = {
   fillColor: "#c32e26",
   fillOpacity: 0.8,
 };
-let map, infoWindow, countryLayer;
 
 function addCountryLayer(map) {
   if (!map.getMapCapabilities().isDataDrivenStylingAvailable) return;
