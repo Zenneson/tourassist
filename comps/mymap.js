@@ -24,12 +24,41 @@ export default function Mymap() {
   );
 }
 
+const defaultStyle = {
+  strokeColor: "#c32e26",
+  strokeWeight: 1,
+  fillColor: "#c32e26",
+  fillOpacity: 0.1,
+};
+const clickedStyle = {
+  ...defaultStyle,
+  fillColor: "#c32e26",
+  fillOpacity: 0.8,
+};
+let countryLayer;
+
 function addCountryLayer(map) {
-  const countryLayer = map.getFeatureLayer(google.maps.FeatureType.COUNTRY);
-  countryLayer.style = {
-    strokeColor: "#c32e26",
-    strokeWeight: 1,
-    fillColor: "#c32e26",
-    fillOpacity: 0.2,
+  if (!map.getMapCapabilities().isDataDrivenStylingAvailable) return;
+
+  countryLayer = map.getFeatureLayer("COUNTRY");
+  countryLayer.addListener("click", clickCountry);
+
+  applyStyleToSelected();
+}
+
+function applyStyleToSelected(placeid) {
+  countryLayer.style = (options) => {
+    if (placeid && options.feature.placeId == placeid) {
+      return clickedStyle;
+    }
+    return defaultStyle;
   };
+}
+
+function clickCountry(event) {
+  let feature = event.features[0];
+
+  if (!feature.placeId) return;
+
+  applyStyleToSelected(feature.placeId);
 }
