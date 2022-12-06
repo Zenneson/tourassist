@@ -2,28 +2,34 @@ import { useMemo } from "react";
 import {
   GoogleMap,
   useGoogleMap,
-  LoadScript,
+  useLoadScript,
   Marker,
 } from "@react-google-maps/api";
 
 export default function Mymap() {
-  return (
-    <LoadScript
-      googleMapsApiKey="AIzaSyAeYHu9_AGQDASLgQ8xiZ_Hd4GvwhOtdQk"
-      version="beta"
-    >
-      <GoogleMap
-        id="mymap"
-        zoom={4.7}
-        center={{ lat: 40, lng: -88 }}
-        mapContainerClassName="mapContainer"
-        options={{ disableDefaultUI: true, mapId: "d9abba45cff72fe" }}
-        onLoad={addCountryLayer}
-      ></GoogleMap>
-    </LoadScript>
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "AIzaSyAeYHu9_AGQDASLgQ8xiZ_Hd4GvwhOtdQk",
+    version: "beta",
+  });
+
+  const renderMap = () => (
+    <GoogleMap
+      id="mymap"
+      zoom={4.2}
+      center={{ lat: 40, lng: -88 }}
+      mapContainerClassName="mapContainer"
+      options={options}
+      onLoad={addCountryLayer}
+    ></GoogleMap>
   );
+
+  return isLoaded ? renderMap() : <div>Loading...</div>;
 }
 
+const options = {
+  disableDefaultUI: true,
+  mapId: "d9abba45cff72fe",
+};
 const defaultStyle = {
   strokeColor: "#c32e26",
   strokeWeight: 1,
@@ -48,6 +54,7 @@ function addCountryLayer(map) {
 
 function applyStyleToSelected(placeid) {
   countryLayer.style = (options) => {
+    console.log(options.feature);
     if (placeid && options.feature.placeId == placeid) {
       return clickedStyle;
     }
