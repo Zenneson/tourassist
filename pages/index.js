@@ -3,6 +3,7 @@ import {
   AppShell,
   Header,
   Text,
+  Image,
   MediaQuery,
   Burger,
   useMantineTheme,
@@ -32,7 +33,14 @@ export default function Home() {
               />
             </MediaQuery>
 
-            <Text>TouraSSist</Text>
+            <Image
+              width={"auto"}
+              height={50}
+              src={"img/rlogo.png"}
+              alt="TouraSSist_logo"
+              withPlaceholder
+            />
+            {/* <Text>TouraSSist</Text> */}
           </div>
         </Header>
       }
