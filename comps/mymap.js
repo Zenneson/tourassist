@@ -20,7 +20,7 @@ export default function Mymap() {
         id="mymap"
         zoom={4.2}
         center={{ lat: 40, lng: -88 }}
-        mapContainerClassName="mapContainer"
+        mapContainerStyle={containerStyle}
         options={options}
         onLoad={onLoad}
       ></GoogleMap>
@@ -34,6 +34,10 @@ export default function Mymap() {
   return isLoaded ? <RenderMap /> : <div>Loading...</div>;
 }
 
+const containerStyle = {
+  width: "100%",
+  height: "100vh",
+};
 const options = {
   disableDefaultUI: true,
   disableDoubleClickZoom: true,
