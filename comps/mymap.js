@@ -1,10 +1,5 @@
 import { useCallback } from "react";
-import {
-  GoogleMap,
-  useGoogleMap,
-  useLoadScript,
-  Marker,
-} from "@react-google-maps/api";
+import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 
 let map, infoWindow, countryLayer;
 
@@ -50,10 +45,10 @@ const options = {
   mapId: "d9abba45cff72fe",
 };
 const defaultStyle = {
-  strokeColor: "#c32e26",
-  strokeWeight: 1,
-  fillColor: "#c32e26",
-  fillOpacity: 0.1,
+  strokeColor: "#fff",
+  strokeWeight: 0.01,
+  fillColor: "#fff",
+  fillOpacity: 0.01,
 };
 const clickedStyle = {
   ...defaultStyle,
