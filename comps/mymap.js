@@ -1,10 +1,11 @@
+import React from "react";
 import { useCallback } from "react";
-import { GoogleMap, useLoadScript } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
 let map, infoWindow, countryLayer;
 
-export default function Mymap() {
-  const { isLoaded, loadError } = useLoadScript({
+function Mymap() {
+  const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyAeYHu9_AGQDASLgQ8xiZ_Hd4GvwhOtdQk",
     version: "beta",
   });
@@ -107,3 +108,5 @@ function updateInfoWindow(content, center) {
     shouldFocus: false,
   });
 }
+
+export default React.memo(Mymap);
