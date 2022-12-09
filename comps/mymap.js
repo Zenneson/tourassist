@@ -1,38 +1,26 @@
-import React from "react";
-import { useCallback } from "react";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { useCallback, useRef } from "react";
+import { GoogleMap } from "@react-google-maps/api";
 
 let map, infoWindow, countryLayer;
 
-function Mymap() {
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyAeYHu9_AGQDASLgQ8xiZ_Hd4GvwhOtdQk",
-    version: "beta",
-  });
+export default function Mymap() {
+  const mapRef = useRef();
+  const onLoad = useCallback(function onLoad(mapInstance) {
+    mapRef.current = mapInstance;
+    map = mapInstance;
+    addCountryLayer(mapInstance);
+  }, []);
 
-  const RenderMap = () => {
-    const onLoad = useCallback(function onLoad(mapInstance) {
-      map = mapInstance;
-      addCountryLayer(mapInstance);
-    }, []);
-
-    return (
-      <GoogleMap
-        id="mymap"
-        zoom={4.2}
-        center={{ lat: 40, lng: -88 }}
-        mapContainerStyle={containerStyle}
-        options={options}
-        onLoad={onLoad}
-      ></GoogleMap>
-    );
-  };
-
-  if (loadError) {
-    return <div>Map cannot be loaded right now, sorry.</div>;
-  }
-
-  return isLoaded ? <RenderMap /> : <div>Loading...</div>;
+  return (
+    <GoogleMap
+      id="mymap"
+      zoom={4.2}
+      center={{ lat: 40, lng: -88 }}
+      mapContainerStyle={containerStyle}
+      options={options}
+      onLoad={onLoad}
+    ></GoogleMap>
+  );
 }
 
 const containerStyle = {
@@ -108,5 +96,3 @@ function updateInfoWindow(content, center) {
     shouldFocus: false,
   });
 }
-
-export default React.memo(Mymap);
