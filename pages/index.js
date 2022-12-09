@@ -2,7 +2,8 @@ import { useState } from "react";
 import {
   AppShell,
   Header,
-  Text,
+  Drawer,
+  Button,
   Image,
   MediaQuery,
   Burger,
@@ -13,14 +14,20 @@ import Mymap from "../comps/mymap";
 export default function Home() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const [listOpened, setListOpened] = useState(false);
 
   return (
     <AppShell
       padding="none"
       header={
-        <Header height={{ base: 50, md: 70 }} p="md">
+        <Header height={{ base: 50, md: 70 }} p="md" zIndex={100}>
           <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
+              justifyContent: "space-between",
+            }}
           >
             {/* Mobile Menu Burger */}
             <MediaQuery largerThan="sm" styles={{ display: "none" }}>
@@ -40,12 +47,28 @@ export default function Home() {
               alt="TouraSSist_logo"
               withPlaceholder
             />
-            {/* <Text>TouraSSist</Text> */}
+            <Button onClick={() => setListOpened(true)}>Login</Button>
           </div>
         </Header>
       }
     >
       <Mymap />
+      <Drawer
+        opened={listOpened}
+        onClose={() => setListOpened(false)}
+        withOverlay={false}
+        withCloseButton={false}
+        zIndex={99}
+        padding="xl"
+      >
+        <div
+          style={{
+            paddingTop: "35px",
+          }}
+        >
+          <h2>List</h2>
+        </div>
+      </Drawer>
     </AppShell>
   );
 }
