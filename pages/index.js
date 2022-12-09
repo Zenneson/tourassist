@@ -9,14 +9,20 @@ import {
   Burger,
   useMantineTheme,
 } from "@mantine/core";
+import { useJsApiLoader } from "@react-google-maps/api";
 import Mymap from "../comps/mymap";
 
 export default function Home() {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyAeYHu9_AGQDASLgQ8xiZ_Hd4GvwhOtdQk",
+    version: "beta",
+  });
+
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [listOpened, setListOpened] = useState(false);
 
-  return (
+  return isLoaded ? (
     <AppShell
       padding="none"
       header={
@@ -70,5 +76,7 @@ export default function Home() {
         </div>
       </Drawer>
     </AppShell>
+  ) : (
+    <div>Loading...</div>
   );
 }
