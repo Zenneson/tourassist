@@ -9,6 +9,7 @@ import {
   Burger,
   useMantineTheme,
 } from "@mantine/core";
+import Map from "react-map-gl";
 
 export default function Home() {
   const theme = useMantineTheme();
@@ -67,6 +68,18 @@ export default function Home() {
           <h2>List</h2>
         </div>
       </Drawer>
+      <Map
+        initialViewState={{
+          longitude: -122.4,
+          latitude: 37.8,
+          zoom: 14,
+        }}
+        style={{ width: "100%", height: "100%" }}
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapboxAccessToken={
+          "pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
+        }
+      />
     </AppShell>
   );
 }
