@@ -69,13 +69,14 @@ export default function Home() {
         </div>
       </Drawer>
       <Map
+        projection="globe"
+        mapStyle="mapbox://styles/zenneson/clbh1hpwy002314n303oi5xmk"
         initialViewState={{
-          longitude: -122.4,
-          latitude: 37.8,
-          zoom: 14,
+          latitude: 35,
+          longitude: -88,
+          zoom: 2.5,
         }}
         style={{ width: "100%", height: "100%" }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxAccessToken={
           "pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
         }
