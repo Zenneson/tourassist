@@ -13,16 +13,11 @@ import {
 import Map from "react-map-gl";
 
 export default function Home() {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyAeYHu9_AGQDASLgQ8xiZ_Hd4GvwhOtdQk",
-    version: "beta",
-  });
-
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [listOpened, setListOpened] = useState(false);
 
-  return isLoaded ? (
+  return (
     <AppShell
       padding="none"
       header={
@@ -103,7 +98,5 @@ export default function Home() {
         }
       ></Map>
     </AppShell>
-  ) : (
-    <div>Loading...</div>
   );
 }
