@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   AppShell,
   Header,
+  Autocomplete,
   Drawer,
   Button,
   Image,
@@ -43,7 +44,7 @@ export default function Home() {
             <Image
               width={"auto"}
               height={50}
-              src={"img/rlogo.png"}
+              src={"img/blogo.png"}
               alt="TouraSSist_logo"
               withPlaceholder
             />
@@ -52,6 +53,21 @@ export default function Home() {
         </Header>
       }
     >
+      <Autocomplete
+        placeholder="Search for a location"
+        transition="slide-up"
+        size="lg"
+        radius="xl"
+        data={["1", "2", "3", "4", "5"]}
+        style={{
+          position: "absolute",
+          bottom: "100px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "500px",
+          zIndex: 100,
+        }}
+      />
       <Drawer
         opened={listOpened}
         onClose={() => setListOpened(false)}
@@ -70,17 +86,17 @@ export default function Home() {
       </Drawer>
       <Map
         projection="globe"
-        mapStyle="mapbox://styles/zenneson/clbh1hpwy002314n303oi5xmk"
+        mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
         initialViewState={{
           latitude: 35,
           longitude: -88,
-          zoom: 2.5,
+          zoom: 3,
         }}
         style={{ width: "100%", height: "100%" }}
         mapboxAccessToken={
           "pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
         }
-      />
+      ></Map>
     </AppShell>
   );
 }
