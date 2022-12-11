@@ -57,7 +57,7 @@ export default function Home() {
               </Text>{" "}
               would you like to go?
             </Title>
-            <Text sx={{ fontSize: "1.5rem" }}>
+            <Text size="md">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
