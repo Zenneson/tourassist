@@ -21,6 +21,7 @@ export default function App(props) {
           /** Put your mantine theme override here */
           // colorScheme: "light",
           colorScheme: "dark",
+          loader: "bars",
         }}
       >
         <Component {...pageProps} />

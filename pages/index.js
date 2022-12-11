@@ -15,13 +15,20 @@ import {
   Burger,
   useMantineTheme,
 } from "@mantine/core";
+import Link from "next/link";
 import Map from "react-map-gl";
 
 export default function Home() {
   const theme = useMantineTheme();
+
   const [opened, setOpened] = useState(false);
+
   const [listOpened, setListOpened] = useState(false);
+  // <Button onClick={() => setListOpened(true)}>Login</Button>
+
   const [visible, setVisible] = useState(false);
+
+  const { user, username } = {};
 
   return (
     <div>
@@ -98,9 +105,13 @@ export default function Home() {
         {!visible && <Overlay opacity={0.9} color="#000" zIndex={102} />}
         <AppShell
           padding="none"
-          // sx={{ display: "none" }}
           header={
-            <Header height={{ base: 50, md: 70 }} p="md" zIndex={100}>
+            <Header
+              height={{ base: 50, md: 70 }}
+              p="md"
+              zIndex={100}
+              hidden={!visible}
+            >
               <div
                 style={{
                   display: "flex",
@@ -119,15 +130,38 @@ export default function Home() {
                     mr="xl"
                   />
                 </MediaQuery>
-
-                <Image
-                  width={"auto"}
-                  height={50}
-                  src={"img/blogo.png"}
-                  alt="TouraSSist_logo"
-                  withPlaceholder
-                />
-                <Button onClick={() => setListOpened(true)}>Login</Button>
+                <Link href="/">
+                  <Image
+                    width={"auto"}
+                    height={50}
+                    src={"img/blogo.png"}
+                    alt="TouraSSist_logo"
+                    withPlaceholder
+                  />
+                </Link>
+                <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+                  <>
+                    {username && (
+                      <Link href={`/${username}`}>
+                        <Image
+                          alt="Profile"
+                          src={user?.photoURL}
+                          sx={{
+                            borderRadius: "50%",
+                            width: "50px",
+                            height: "50px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </Link>
+                    )}
+                    {!username && (
+                      <Button component="a" href="/enter">
+                        Login
+                      </Button>
+                    )}
+                  </>
+                </MediaQuery>
               </div>
             </Header>
           }
