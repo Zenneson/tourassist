@@ -43,7 +43,7 @@ export default function Home() {
           >
             <Title
               order={1}
-              sx={{ fontSize: "6rem", marginBottom: "40px", lineHeight: "1" }}
+              sx={{ fontSize: "6rem", marginBottom: "30px", lineHeight: "1" }}
             >
               Where in the{" "}
               <Text
@@ -57,7 +57,7 @@ export default function Home() {
               </Text>{" "}
               would you like to go?
             </Title>
-            <Text size="md">
+            <Text size="md" sx={{ width: "90%", marginLeft: "5%" }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -66,7 +66,7 @@ export default function Home() {
               nulla pariatur. Excepteur sint occaecat cupidatat non proident,
               sunt in culpa qui officia deserunt mollit anim id est laborum.
             </Text>
-            <Box sx={{ marginTop: "20px" }}>
+            <Box sx={{ marginTop: "30px" }}>
               <Button
                 size="md"
                 uppercase={true}
