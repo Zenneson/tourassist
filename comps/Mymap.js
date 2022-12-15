@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Map, { Source, Layer } from "react-map-gl";
 import bbox from "@turf/bbox";
 
 export default function Mymap() {
+  const mapRef = useRef();
   const [viewState, setViewState] = useState({
     latitude: 35,
     longitude: -88,
@@ -18,9 +19,26 @@ export default function Mymap() {
       .catch((err) => console.error("Could not load data"));
   }, []);
 
+  const onEvent = (event) => {
+    const country = event.features[0];
+    if (country) {
+      const [minLng, minLat, maxLng, maxLat] = bbox(country);
+      mapRef.current.fitBounds(
+        [
+          [minLng, minLat],
+          [maxLng, maxLat],
+        ],
+        { padding: 40, duration: 1000 }
+      );
+    }
+  };
+
   return (
     <Map
       {...viewState}
+      ref={mapRef}
+      onClick={onEvent}
+      interactiveLayerIds={["country-data"]}
       onMove={(evt) => setViewState(evt.viewState)}
       projection="globe"
       mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
@@ -34,8 +52,8 @@ export default function Mymap() {
           id="country-data"
           type="fill"
           paint={{
-            "fill-color": "#000",
-            "fill-opacity": 0,
+            "fill-color": "#fff",
+            "fill-opacity": 0.1,
           }}
         />
       </Source>
