@@ -16,7 +16,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import Link from "next/link";
-import Map from "react-map-gl";
+import Mymap from "../comps/Mymap";
 
 export default function Home() {
   const theme = useMantineTheme();
@@ -199,19 +199,7 @@ export default function Home() {
               <h2>List</h2>
             </div>
           </Drawer>
-          <Map
-            projection="globe"
-            mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
-            initialViewState={{
-              latitude: 35,
-              longitude: -88,
-              zoom: 3,
-            }}
-            style={{ width: "100%", height: "100%" }}
-            mapboxAccessToken={
-              "pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
-            }
-          ></Map>
+          <Mymap />
         </AppShell>
       </Box>
     </div>
