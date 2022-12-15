@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Map, { Source, Layer } from "react-map-gl";
+import bbox from "@turf/bbox";
 
 export default function Mymap() {
   const [viewState, setViewState] = useState({
@@ -7,6 +8,15 @@ export default function Mymap() {
     longitude: -88,
     zoom: 3.7,
   });
+
+  const [allData, setAllData] = useState(null);
+
+  useEffect(() => {
+    fetch("data/countries.geojson")
+      .then((resp) => resp.json())
+      .then((json) => setAllData(json))
+      .catch((err) => console.error("Could not load data"));
+  }, []);
 
   return (
     <Map
@@ -19,6 +29,16 @@ export default function Mymap() {
         "pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
       }
     >
+      <Source type="geojson" data={allData}>
+        <Layer
+          id="country-data"
+          type="fill"
+          paint={{
+            "fill-color": "#000",
+            "fill-opacity": 0,
+          }}
+        />
+      </Source>
       <Source
         id="country-boundaries"
         type="vector"
@@ -30,8 +50,9 @@ export default function Mymap() {
           source-layer="country_boundaries"
           type="line"
           paint={{
+            // "line-color": "#00e8fc",
             "line-color": "#fff",
-            "line-width": 2,
+            "line-width": 1,
           }}
         />
       </Source>
