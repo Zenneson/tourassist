@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import {
-  Title,
-  Text,
-  Center,
   Box,
   Overlay,
   AppShell,
@@ -18,6 +15,7 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import Intro from "../comps/intro";
+import Sidebar from "../comps/sidebar";
 import Mymap from "../comps/mymap";
 
 export const visibleState = atom({
@@ -25,15 +23,17 @@ export const visibleState = atom({
   default: false,
 });
 
+export const listOpenedState = atom({
+  key: "listOpenedState",
+  default: false,
+});
+
 export default function Home() {
   const theme = useMantineTheme();
+  const [listOpened, setListOpened] = useRecoilState(listOpenedState);
+  const [visible, setVisible] = useRecoilState(visibleState);
 
   const [opened, setOpened] = useState(false);
-
-  const [listOpened, setListOpened] = useState(false);
-  // <Button onClick={() => setListOpened(true)}>Login</Button>
-
-  const [visible, setVisible] = useRecoilState(visibleState);
 
   const { user, username } = {};
 
@@ -81,6 +81,7 @@ export default function Home() {
                     height={50}
                     src={"img/blogo.png"}
                     alt="TouraSSist_logo"
+                    onClick={() => setListOpened((o) => !o)}
                     withPlaceholder
                   />
                 </Link>
@@ -128,22 +129,7 @@ export default function Home() {
               }}
             />
           )}
-          <Drawer
-            opened={listOpened}
-            onClose={() => setListOpened(false)}
-            withOverlay={false}
-            withCloseButton={false}
-            zIndex={99}
-            padding="xl"
-          >
-            <div
-              style={{
-                paddingTop: "35px",
-              }}
-            >
-              <h2>List</h2>
-            </div>
-          </Drawer>
+          <Sidebar />
           <Mymap />
         </AppShell>
       </Box>

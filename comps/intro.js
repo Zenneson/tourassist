@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { Center, Box, Title, Text, Button } from "@mantine/core";
-import { visibleState } from "../pages";
+import { visibleState } from "../pages/index";
 
 export default function Intro() {
   // const visible = useRecoilValue(visibleState);
