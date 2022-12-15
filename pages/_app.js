@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { RecoilRoot } from "recoil";
 import { MantineProvider } from "@mantine/core";
 
 export default function App(props) {
@@ -24,7 +25,9 @@ export default function App(props) {
           loader: "bars",
         }}
       >
-        <Component {...pageProps} />
+        <RecoilRoot>
+          <Component {...pageProps} />
+        </RecoilRoot>
       </MantineProvider>
     </>
   );
