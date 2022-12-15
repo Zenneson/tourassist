@@ -1,20 +1,19 @@
-import { useRef } from "react";
-import Map, { Source, Layer, MapRef } from "react-map-gl";
-import bbox from "@turf/bbox";
+import { useState } from "react";
+import Map, { Source, Layer } from "react-map-gl";
 
 export default function Mymap() {
+  const [viewState, setViewState] = useState({
+    latitude: 35,
+    longitude: -88,
+    zoom: 3.7,
+  });
+
   return (
     <Map
-      ref={mapRef}
-      interactiveLayerIds={["country-boundaries"]}
-      onClick={onClick}
+      {...viewState}
+      onMove={(evt) => setViewState(evt.viewState)}
       projection="globe"
       mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
-      initialViewState={{
-        latitude: 35,
-        longitude: -88,
-        zoom: 3.7,
-      }}
       style={{ width: "100%", height: "100%" }}
       mapboxAccessToken={
         "pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
