@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Map, { Source, Layer } from "react-map-gl";
 import bbox from "@turf/bbox";
 
@@ -6,6 +6,7 @@ export default function Mymap() {
   const mapRef = useRef();
 
   const [allData, setAllData] = useState(null);
+  const [clickedCountry, setClickedCountry] = useState(null);
 
   useEffect(() => {
     fetch("data/countries.geojson")
@@ -14,9 +15,8 @@ export default function Mymap() {
       .catch((err) => console.error("Could not load data"));
   }, []);
 
-  const onEvent = (event) => {
+  const onEvent = useCallback((event) => {
     const country = event.features[0];
-    console.log(country.properties.ADMIN);
 
     if (country) {
       const [minLng, minLat, maxLng, maxLat] = bbox(country);
@@ -28,12 +28,13 @@ export default function Mymap() {
         ],
         {
           duration: 1000,
-          padding: { top: 500, bottom: 200, left: 800, right: 250 },
+          padding: 500,
           pitch: 45,
+          offset: [80, 0],
         }
       );
     }
-  };
+  }, []);
 
   return (
     <Map
