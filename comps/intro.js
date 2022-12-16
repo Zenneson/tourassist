@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { Center, Box, Title, Text, Button } from "@mantine/core";
+import { Center, Box, Title, Text, Button, Overlay } from "@mantine/core";
 import { visibleState } from "../pages/index";
 
 export default function Intro() {
@@ -71,6 +71,7 @@ export default function Intro() {
           </Box>
         </Center>
       )}
+      {!visible && <Overlay opacity={0.9} color="#000" zIndex={102} />}
     </>
   );
 }

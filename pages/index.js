@@ -39,7 +39,7 @@ export default function Home() {
 
   return (
     <div>
-      <Intro />
+      {/* <Intro /> */}
       <Box
         sx={{
           height: "100vh",
@@ -47,7 +47,6 @@ export default function Home() {
           position: "relative",
         }}
       >
-        {!visible && <Overlay opacity={0.9} color="#000" zIndex={102} />}
         <AppShell
           padding="none"
           header={

@@ -4,11 +4,6 @@ import bbox from "@turf/bbox";
 
 export default function Mymap() {
   const mapRef = useRef();
-  const [viewState, setViewState] = useState({
-    latitude: 35,
-    longitude: -88,
-    zoom: 3.7,
-  });
 
   const [allData, setAllData] = useState(null);
 
@@ -21,26 +16,39 @@ export default function Mymap() {
 
   const onEvent = (event) => {
     const country = event.features[0];
+    console.log(country.properties.ADMIN);
+
     if (country) {
       const [minLng, minLat, maxLng, maxLat] = bbox(country);
+
       mapRef.current.fitBounds(
         [
           [minLng, minLat],
           [maxLng, maxLat],
         ],
-        { padding: 40, duration: 1000 }
+        {
+          duration: 1000,
+          padding: { top: 500, bottom: 200, left: 800, right: 250 },
+          pitch: 45,
+        }
       );
     }
   };
 
   return (
     <Map
-      {...viewState}
+      initialViewState={{
+        latitude: 35,
+        longitude: -88,
+        zoom: 2.5,
+        pitch: 0,
+      }}
       ref={mapRef}
       onClick={onEvent}
-      interactiveLayerIds={["country-data"]}
-      onMove={(evt) => setViewState(evt.viewState)}
       projection="globe"
+      doubleClickZoom={false}
+      touchPitch={false}
+      interactiveLayerIds={["country-data"]}
       mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
       style={{ width: "100%", height: "100%" }}
       mapboxAccessToken={
@@ -52,8 +60,9 @@ export default function Mymap() {
           id="country-data"
           type="fill"
           paint={{
-            "fill-color": "#fff",
-            "fill-opacity": 0.1,
+            // "fill-color": "#fff",
+            "fill-color": "#00e8fc",
+            "fill-opacity": 0,
           }}
         />
       </Source>
@@ -70,7 +79,7 @@ export default function Mymap() {
           paint={{
             // "line-color": "#00e8fc",
             "line-color": "#fff",
-            "line-width": 1,
+            "line-width": 2,
           }}
         />
       </Source>
