@@ -39,7 +39,7 @@ export default function Home() {
 
   return (
     <div>
-      <Intro />
+      {/* <Intro /> */}
       <Box
         sx={{
           height: "100vh",

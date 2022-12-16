@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import Map, { Source, Layer } from "react-map-gl";
 import bbox from "@turf/bbox";
 
@@ -15,7 +15,7 @@ export default function Mymap() {
       .catch((err) => console.error("Could not load data"));
   }, []);
 
-  const onEvent = useCallback((event) => {
+  const onEvent = (event) => {
     const country = event.features[0];
 
     if (country) {
@@ -34,7 +34,7 @@ export default function Mymap() {
         }
       );
     }
-  }, []);
+  };
 
   return (
     <Map
