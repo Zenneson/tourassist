@@ -52,9 +52,7 @@ export default function Mymap() {
       interactiveLayerIds={["country-data"]}
       mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
       style={{ width: "100%", height: "100%" }}
-      mapboxAccessToken={
-        "pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
-      }
+      mapboxAccessToken={"********"}
     >
       <Source type="geojson" data={allData}>
         <Layer

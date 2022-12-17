@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import Intro from "../comps/intro";
 import Sidebar from "../comps/sidebar";
-import Mymap from "../comps/mymap";
+import Mymap from "../comps/Mymap";
 
 export const visibleState = atom({
   key: "visibleState",
@@ -39,7 +39,7 @@ export default function Home() {
 
   return (
     <div>
-      {/* <Intro /> */}
+      <Intro />
       <Box
         sx={{
           height: "100vh",
