@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { RecoilRoot } from "recoil";
 import { MantineProvider } from "@mantine/core";
 
 export default function App(props) {
@@ -19,10 +20,14 @@ export default function App(props) {
         withNormalizeCSS
         theme={{
           /** Put your mantine theme override here */
-          colorScheme: "light",
+          // colorScheme: "light",
+          colorScheme: "dark",
+          loader: "bars",
         }}
       >
-        <Component {...pageProps} />
+        <RecoilRoot>
+          <Component {...pageProps} />
+        </RecoilRoot>
       </MantineProvider>
     </>
   );
