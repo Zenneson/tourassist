@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import Map, { Source, Layer, Popup } from "react-map-gl";
-import centroid from "@turf/centroid";
+import bbox from "@turf/bbox";
+import centerOfMass from "@turf/center-of-mass";
 
 export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
   const [countryName, setCountryName] = useState('');
+  const [popup, setPopup] = useState(false);
 
   const [allData, setAllData] = useState(null);
   const [clickedCountry, setClickedCountry] = useState(null);
@@ -17,19 +19,33 @@ export default function Mymap() {
       .then((json) => setAllData(json))
       .catch((err) => console.error("Could not load data"));
   }, []);
-  const setPopupInfo = ()=>{
+  const setPopupInfo = () => {
     console.log(false)
+    setPopup(false);
+    // mapRef.current.setZoom(2.5);
+    mapRef.current.setPitch(0);
+    mapRef.current.flyTo({
+      center: center.current.geometry.coordinates,
+      zoom: 2.5,
+      speed: 1,
+      pitch: 0,
+    });
   }
   const onEvent = (event) => {
     const country = event.features[0];
-  
+
     if (country) {
       setCountryName(country.properties.name_en);
-
-      center.current = centroid(country);
-      mapRef.current.flyTo({
-        center: [center.current.geometry.coordinates[0], center.current.geometry.coordinates[1]],
-        essential: true // this animation is considered essential with respect to prefers-reduced-motion 
+      center.current = centerOfMass(country);
+      setPopup(true);
+      // mapRef.current.flyTo({
+      //   center: [center.current.geometry.coordinates[0], center.current.geometry.coordinates[1]],
+      //   essential: true // this animation is considered essential with respect to prefers-reduced-motion 
+      // });
+      mapRef.current.fitBounds(bbox(country), {
+        // easing: true,
+        duration: 1000,
+        linear: false,
       });
     }
   };
@@ -52,13 +68,14 @@ export default function Mymap() {
       style={{ width: "100%", height: "100%" }}
       mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
     >
-      {countryName && (
+      {popup && (
         <Popup
           anchor="top"
-          longitude={Number(center.current.geometry.coordinates[0])}
-          latitude={Number(center.current.geometry.coordinates[1])}
+          longitude={Number(center.current?.geometry.coordinates[0])}
+          latitude={Number(center.current?.geometry.coordinates[1])}
           onClose={() => setPopupInfo()}
           closeButton={true}
+          closeOnClick={false}
         >
           <div>
             Country name: {countryName}
@@ -94,6 +111,7 @@ export default function Mymap() {
           source="country-boundaries"
           source-layer="country_boundaries"
           type="line"
+          filter={filter}
           paint={{
             "line-color": "#ffffff",
             "line-width": 2

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
+import 'mapbox-gl/dist/mapbox-gl.css';
 import {
   Box,
   Overlay,

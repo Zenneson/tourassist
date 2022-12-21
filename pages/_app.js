@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { RecoilRoot } from "recoil";
 import { MantineProvider } from "@mantine/core";
-
+import 'mapbox-gl/dist/mapbox-gl.css';
 export default function App(props) {
   const { Component, pageProps } = props;
 
