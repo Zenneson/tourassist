@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import Map, { Source, Layer, Popup } from "react-map-gl";
+import Map, { Source, Layer } from "react-map-gl";
 import bbox from "@turf/bbox";
 import centerOfMass from "@turf/center-of-mass";
 
 export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
-  const [countryName, setCountryName] = useState("");
-  const [popup, setPopup] = useState(false);
+  const [regionName, setRegionName] = useState("");
+  const [showStates, setShowStates] = useState(false);
 
   const initialViewState = {
     latitude: 35,
@@ -16,28 +16,27 @@ export default function Mymap() {
     pitch: 0,
   };
 
-  const filter = useMemo(() => ["in", "name_en", countryName], [countryName]);
-  const setPopupInfo = () => {
-    console.log(false);
-    setPopup(false);
-    mapRef.current.flyTo({
-      center: center.current.geometry.coordinates,
-    });
-  };
+  const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
 
   const onEvent = (event) => {
-    const country = event.features[0];
+    const feature = event.features[0];
 
-    if (country) {
-      setCountryName(country.properties.name_en);
-      center.current = centerOfMass(country);
-      setPopup(true);
+    if (feature) {
+      setRegionName(feature.properties.name_en);
+      center.current = centerOfMass(feature);
 
+      if (feature.properties.name_en === "United States") {
+        setShowStates(true);
+      } else {
+        setShowStates(false);
+      }
+
+      console.log(feature.properties.name_en);
       let maxZoom = 0;
-      switch (country.properties.name_en) {
+      switch (feature.properties.name_en) {
         case "United States":
-          center.current.geometry.coordinates = [-112, 46];
-          maxZoom = 3;
+          center.current.geometry.coordinates = [-98.5795, 45.8283];
+          maxZoom = 3.5;
           break;
         case "Canada":
           center.current.geometry.coordinates = [-95.8203, 61.0447];
@@ -88,8 +87,8 @@ export default function Mymap() {
           maxZoom = 4.2;
           break;
         case "Ecuador":
-          center.current.geometry.coordinates = [-80, -2.5];
-          maxZoom = 5.2;
+          center.current.geometry.coordinates = [-78.5, -2.5];
+          maxZoom = 5.5;
           break;
         case "Svalbard and Jan Mayen":
           center.current.geometry.coordinates = [20, 78];
@@ -99,14 +98,29 @@ export default function Mymap() {
           center.current.geometry.coordinates = [138, 37];
           maxZoom = 4.2;
           break;
+        case "Spain":
+          center.current.geometry.coordinates = [-3.5, 40];
+          maxZoom = 4.5;
+          break;
+        case "Portugal":
+          center.current.geometry.coordinates = [-8, 39];
+          maxZoom = 5.3;
+          break;
+        case "France":
+          center.current.geometry.coordinates = [2, 46];
+          maxZoom = 4.5;
+          break;
+        case "Italy":
+          center.current.geometry.coordinates = [12, 42];
+          maxZoom = 4.5;
+          break;
       }
 
-      console.log(country.properties.name_en);
-
-      const [minLng, minLat, maxLng, maxLat] = bbox(country);
+      const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       mapRef.current.flyTo({
         center: center.current.geometry.coordinates,
-        zoom: initialViewState.zoom,
+        zoom: 3.5,
+        duration: 500,
         pitch: initialViewState.pitch,
       });
       setTimeout(() => {
@@ -118,13 +132,13 @@ export default function Mymap() {
           {
             center: center.current.geometry.coordinates,
             padding: { top: 200, bottom: 200, left: 700, right: 700 },
-            duration: 1000,
+            duration: 1500,
             maxZoom: maxZoom || 7.5,
             pitch: 40,
             linear: false,
           }
         );
-      }, 1000);
+      }, 500);
     }
   };
 
@@ -136,23 +150,11 @@ export default function Mymap() {
       projection="globe"
       doubleClickZoom={false}
       touchPitch={false}
-      interactiveLayerIds={["country-boundaries"]}
+      interactiveLayerIds={["country-boundaries", "states"]}
       mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
       style={{ width: "100%", height: "100%" }}
       mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
     >
-      {popup && (
-        <Popup
-          anchor="bottom"
-          longitude={Number(center.current?.geometry.coordinates[0])}
-          latitude={Number(center.current?.geometry.coordinates[1])}
-          onClose={() => setPopupInfo()}
-          closeButton={true}
-          closeOnClick={false}
-        >
-          <div>Country name: {countryName}</div>
-        </Popup>
-      )}
       <Source
         id="country-boundaries"
         type="vector"
@@ -185,8 +187,20 @@ export default function Mymap() {
           type="fill"
           filter={filter}
           paint={{
-            "fill-color": "rgba( 0,232,250, .8 )",
+            "fill-color": "rgba( 0,232,250, .7 )",
           }}
+        />
+      </Source>
+      <Source id="states" type="geojson" data="data/states.geojson">
+        <Layer
+          id="states"
+          type="line"
+          source="states"
+          paint={{
+            "line-color": "#ffffff",
+            "line-width": 2.5,
+          }}
+          filter={!showStates ? ["in", "name", ""] : ["!", ["in", "name", ""]]}
         />
       </Source>
     </Map>
