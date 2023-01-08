@@ -17,21 +17,44 @@ export default function Mymap() {
   };
 
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
+  useEffect(() => {
+    console.log("regionName", regionName);
+  }, [regionName]);
 
   const onEvent = (event) => {
     const feature = event.features[0];
 
     if (feature) {
-      setRegionName(feature.properties.name_en);
+      if (feature.properties.name_en) {
+        setRegionName(feature.properties.name_en);
+      }
+      if (feature.properties.NAME) {
+        setRegionName(feature.properties.NAME);
+      }
       center.current = centerOfMass(feature);
 
-      if (feature.properties.name_en === "United States") {
+      if (
+        feature.properties.name_en === "United States" ||
+        feature.properties.NAME
+      ) {
         setShowStates(true);
+        if (feature.properties.NAME) {
+          mapRef.current
+            .getMap()
+            .setPaintProperty(
+              "clicked-state",
+              "fill-color",
+              "rgba( 0,232,250, .9 )"
+            );
+          setShowStates(false);
+        }
       } else {
         setShowStates(false);
+        mapRef.current
+          .getMap()
+          .setPaintProperty("clicked-state", "fill-color", "transparent");
       }
 
-      console.log(feature.properties.name_en);
       let maxZoom = 0;
       switch (feature.properties.name_en) {
         case "United States":
@@ -114,13 +137,17 @@ export default function Mymap() {
           center.current.geometry.coordinates = [12, 42];
           maxZoom = 4.5;
           break;
+        case "Algeria":
+          center.current.geometry.coordinates = [3, 28];
+          maxZoom = 4.5;
+          break;
       }
 
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       mapRef.current.flyTo({
         center: center.current.geometry.coordinates,
-        zoom: 3.5,
-        duration: 500,
+        zoom: 3,
+        duration: 800,
         pitch: initialViewState.pitch,
       });
       setTimeout(() => {
@@ -138,7 +165,7 @@ export default function Mymap() {
             linear: false,
           }
         );
-      }, 500);
+      }, 800);
     }
   };
 
@@ -150,7 +177,7 @@ export default function Mymap() {
       projection="globe"
       doubleClickZoom={false}
       touchPitch={false}
-      interactiveLayerIds={["country-boundaries", "states"]}
+      interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
       mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
       style={{ width: "100%", height: "100%" }}
       mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
@@ -176,8 +203,8 @@ export default function Mymap() {
           type="line"
           filter={filter}
           paint={{
-            "line-color": "#ffffff",
-            "line-width": 2,
+            "line-color": "rgba(255, 255, 255, 1)",
+            "line-width": 4,
           }}
         />
         <Layer
@@ -185,22 +212,41 @@ export default function Mymap() {
           source="country-boundaries"
           source-layer="country_boundaries"
           type="fill"
-          filter={filter}
+          filter={!showStates ? filter : ["in", "name", "United States"]}
           paint={{
             "fill-color": "rgba( 0,232,250, .7 )",
           }}
         />
       </Source>
-      <Source id="states" type="geojson" data="data/states.geojson">
+      <Source id="states-boundaries" type="geojson" data="data/states.geojson">
         <Layer
           id="states"
-          type="line"
-          source="states"
+          type="fill"
+          source="states-boundaries"
           paint={{
-            "line-color": "#ffffff",
-            "line-width": 2.5,
+            "fill-color": "rgba(0,0,0,0)",
           }}
-          filter={!showStates ? ["in", "name", ""] : ["!", ["in", "name", ""]]}
+          filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+        />
+        <Layer
+          id="states-boundaries"
+          type="line"
+          source="states-boundaries"
+          paint={{
+            "line-color": "rgba(255, 255, 255, 1)",
+            "line-width": 0.1,
+          }}
+          filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+        />
+      </Source>
+      <Source id="clicked-state" type="geojson" data="data/states.geojson">
+        <Layer
+          id="clicked-state"
+          type="fill"
+          paint={{
+            "fill-color": "rgba(0,0,0,0)",
+          }}
+          filter={["==", "NAME", regionName]}
         />
       </Source>
     </Map>
