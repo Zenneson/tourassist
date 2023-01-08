@@ -36,7 +36,7 @@ export default function Mymap() {
       let maxZoom = 0;
       switch (country.properties.name_en) {
         case "United States":
-          center.current.geometry.coordinates = [-108, 48];
+          center.current.geometry.coordinates = [-112, 46];
           maxZoom = 3;
           break;
         case "Canada":
@@ -90,6 +90,14 @@ export default function Mymap() {
         case "Ecuador":
           center.current.geometry.coordinates = [-80, -2.5];
           maxZoom = 5.2;
+          break;
+        case "Svalbard and Jan Mayen":
+          center.current.geometry.coordinates = [20, 78];
+          maxZoom = 4.5;
+          break;
+        case "Japan":
+          center.current.geometry.coordinates = [138, 37];
+          maxZoom = 4.2;
           break;
       }
 
