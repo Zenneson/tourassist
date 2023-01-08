@@ -36,8 +36,8 @@ export default function Mymap() {
       let maxZoom = 0;
       switch (country.properties.name_en) {
         case "United States":
-          center.current.geometry.coordinates = [-98.5795, 39.8283];
-          maxZoom = 4;
+          center.current.geometry.coordinates = [-108, 48];
+          maxZoom = 3;
           break;
         case "Canada":
           center.current.geometry.coordinates = [-95.8203, 61.0447];
@@ -78,6 +78,18 @@ export default function Mymap() {
         case "Indonesia":
           center.current.geometry.coordinates = [120.5, -2.5];
           maxZoom = 4;
+          break;
+        case "Sweden":
+          center.current.geometry.coordinates = [18.5, 62.5];
+          maxZoom = 4.3;
+          break;
+        case "Chile":
+          center.current.geometry.coordinates = [-71.5, -40.5];
+          maxZoom = 4.2;
+          break;
+        case "Ecuador":
+          center.current.geometry.coordinates = [-80, -2.5];
+          maxZoom = 5.2;
           break;
       }
 
@@ -123,7 +135,7 @@ export default function Mymap() {
     >
       {popup && (
         <Popup
-          anchor="top"
+          anchor="bottom"
           longitude={Number(center.current?.geometry.coordinates[0])}
           latitude={Number(center.current?.geometry.coordinates[1])}
           onClose={() => setPopupInfo()}
