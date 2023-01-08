@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 import {
   Box,
   Overlay,
@@ -65,16 +65,6 @@ export default function Home() {
                   justifyContent: "space-between",
                 }}
               >
-                {/* Mobile Menu Burger */}
-                <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-                  <Burger
-                    opened={opened}
-                    onClick={() => setOpened((o) => !o)}
-                    size="sm"
-                    color={theme.colors.gray[6]}
-                    mr="xl"
-                  />
-                </MediaQuery>
                 <Link href="/">
                   <Image
                     width={"auto"}
@@ -85,29 +75,6 @@ export default function Home() {
                     withPlaceholder
                   />
                 </Link>
-                <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-                  <>
-                    {username && (
-                      <Link href={`/${username}`}>
-                        <Image
-                          alt="Profile"
-                          src={user?.photoURL}
-                          sx={{
-                            borderRadius: "50%",
-                            width: "50px",
-                            height: "50px",
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Link>
-                    )}
-                    {!username && (
-                      <Button component="a" href="/enter">
-                        Login
-                      </Button>
-                    )}
-                  </>
-                </MediaQuery>
               </div>
             </Header>
           }
