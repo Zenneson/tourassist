@@ -57,7 +57,7 @@ export default function Mymap() {
               "rgba( 255,255,255, 0.5 )"
             );
           stateZoom = 5;
-          regionPadding = { top: 200, bottom: 200, left: 600, right: 600 };
+          regionPadding = { top: 200, bottom: 200, left: 400, right: 400 };
         }
       } else {
         setShowStates(false);
@@ -72,7 +72,7 @@ export default function Mymap() {
             "rgba( 0,232,250, .8 )"
           );
         stateZoom = null;
-        regionPadding = { top: 200, bottom: 200, left: 700, right: 700 };
+        regionPadding = { top: 200, bottom: 200, left: 500, right: 500 };
       }
 
       switch (feature.properties.name_en) {
@@ -175,7 +175,7 @@ export default function Mymap() {
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       mapRef.current.flyTo({
         center: center.current.geometry.coordinates,
-        zoom: stateZoom || 3,
+        zoom: stateZoom || 3.1,
         duration: 800,
         pitch: initialViewState.pitch,
       });
@@ -198,14 +198,28 @@ export default function Mymap() {
     }
   };
 
+  // function that sets the pitch to 0 if the zoom level is less than 5 using onZoomEnd and flyTo
+  const onZoomEnd = (e) => {
+    if (e.target.getZoom() < 3) {
+      mapRef.current.flyTo({
+        pitch: 0,
+        duration: 2000,
+      });
+    }
+  };
+
   return (
     <Map
       initialViewState={initialViewState}
+      maxPitch={60}
+      onZoomEnd={onZoomEnd}
+      touchPitch={false}
+      touchZoomRotate={false}
+      keyboard={false}
       ref={mapRef}
       onClick={onEvent}
       projection="globe"
       doubleClickZoom={false}
-      touchPitch={false}
       interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
       mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
       style={{ width: "100%", height: "100%" }}
