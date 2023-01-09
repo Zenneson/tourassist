@@ -24,6 +24,8 @@ export default function Mymap() {
   const onEvent = (event) => {
     const feature = event.features[0];
 
+    let maxZoom = 0;
+    let regionPadding = {};
     if (feature) {
       if (feature.properties.name_en) {
         setRegionName(feature.properties.name_en);
@@ -38,7 +40,7 @@ export default function Mymap() {
         feature.properties.NAME
       ) {
         setShowStates(true);
-        if (feature.properties.NAME) {
+        if (feature.properties.NAME && showStates) {
           mapRef.current
             .getMap()
             .setPaintProperty(
@@ -46,16 +48,30 @@ export default function Mymap() {
               "fill-color",
               "rgba( 0,232,250, .9 )"
             );
-          setShowStates(false);
+          mapRef.current
+            .getMap()
+            .setPaintProperty(
+              "country-boundaries-fill",
+              "fill-color",
+              "rgba( 0,232,250, .2 )"
+            );
+          regionPadding = { top: 200, bottom: 200, left: 500, right: 500 };
         }
       } else {
         setShowStates(false);
         mapRef.current
           .getMap()
           .setPaintProperty("clicked-state", "fill-color", "transparent");
+        mapRef.current
+          .getMap()
+          .setPaintProperty(
+            "country-boundaries-fill",
+            "fill-color",
+            "rgba( 0,232,250, .8 )"
+          );
+        regionPadding = { top: 200, bottom: 200, left: 700, right: 700 };
       }
 
-      let maxZoom = 0;
       switch (feature.properties.name_en) {
         case "United States":
           center.current.geometry.coordinates = [-98.5795, 45.8283];
@@ -141,6 +157,10 @@ export default function Mymap() {
           center.current.geometry.coordinates = [3, 28];
           maxZoom = 4.5;
           break;
+        case "Bahamas":
+          center.current.geometry.coordinates = [-77, 24];
+          maxZoom = 5.5;
+          break;
       }
 
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
@@ -158,9 +178,9 @@ export default function Mymap() {
           ],
           {
             center: center.current.geometry.coordinates,
-            padding: { top: 200, bottom: 200, left: 700, right: 700 },
+            padding: regionPadding,
             duration: 1500,
-            maxZoom: maxZoom || 7.5,
+            maxZoom: maxZoom || 8,
             pitch: 40,
             linear: false,
           }
@@ -214,7 +234,7 @@ export default function Mymap() {
           type="fill"
           filter={!showStates ? filter : ["in", "name", "United States"]}
           paint={{
-            "fill-color": "rgba( 0,232,250, .7 )",
+            "fill-color": "rgba( 0,232,250, .8 )",
           }}
         />
       </Source>
@@ -234,7 +254,7 @@ export default function Mymap() {
           source="states-boundaries"
           paint={{
             "line-color": "rgba(255, 255, 255, 1)",
-            "line-width": 0.1,
+            "line-width": 2,
           }}
           filter={!showStates ? filter : ["!", ["in", "name", ""]]}
         />
