@@ -25,6 +25,7 @@ export default function Mymap() {
     const feature = event.features[0];
 
     let maxZoom = 0;
+    let stateZoom = 0;
     let regionPadding = {};
     if (feature) {
       if (feature.properties.name_en) {
@@ -53,9 +54,10 @@ export default function Mymap() {
             .setPaintProperty(
               "country-boundaries-fill",
               "fill-color",
-              "rgba( 0,232,250, .2 )"
+              "rgba( 255,255,255, 0.5 )"
             );
-          regionPadding = { top: 200, bottom: 200, left: 500, right: 500 };
+          stateZoom = 5;
+          regionPadding = { top: 200, bottom: 200, left: 600, right: 600 };
         }
       } else {
         setShowStates(false);
@@ -69,6 +71,7 @@ export default function Mymap() {
             "fill-color",
             "rgba( 0,232,250, .8 )"
           );
+        stateZoom = null;
         regionPadding = { top: 200, bottom: 200, left: 700, right: 700 };
       }
 
@@ -161,12 +164,18 @@ export default function Mymap() {
           center.current.geometry.coordinates = [-77, 24];
           maxZoom = 5.5;
           break;
+        case "Democratic Republic of the Congo":
+          center.current.geometry.coordinates = [25, -3];
+          maxZoom = 4;
+          break;
       }
+
+      console.log(feature.properties.name_en);
 
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       mapRef.current.flyTo({
         center: center.current.geometry.coordinates,
-        zoom: 3,
+        zoom: stateZoom || 3,
         duration: 800,
         pitch: initialViewState.pitch,
       });
@@ -217,6 +226,16 @@ export default function Mymap() {
           }}
         />
         <Layer
+          id="country-boundaries-fill"
+          source="country-boundaries"
+          source-layer="country_boundaries"
+          type="fill"
+          filter={!showStates ? filter : ["in", "name", "United States"]}
+          paint={{
+            "fill-color": "rgba( 0,232,250, .8 )",
+          }}
+        />
+        <Layer
           id="country-boundaries-lines"
           source="country-boundaries"
           source-layer="country_boundaries"
@@ -225,16 +244,6 @@ export default function Mymap() {
           paint={{
             "line-color": "rgba(255, 255, 255, 1)",
             "line-width": 4,
-          }}
-        />
-        <Layer
-          id="country-boundaries-fill"
-          source="country-boundaries"
-          source-layer="country_boundaries"
-          type="fill"
-          filter={!showStates ? filter : ["in", "name", "United States"]}
-          paint={{
-            "fill-color": "rgba( 0,232,250, .8 )",
           }}
         />
       </Source>
@@ -254,7 +263,7 @@ export default function Mymap() {
           source="states-boundaries"
           paint={{
             "line-color": "rgba(255, 255, 255, 1)",
-            "line-width": 2,
+            "line-width": 4,
           }}
           filter={!showStates ? filter : ["!", ["in", "name", ""]]}
         />
