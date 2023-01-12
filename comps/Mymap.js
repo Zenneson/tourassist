@@ -54,16 +54,13 @@ export default function Mymap() {
             .setPaintProperty(
               "country-boundaries-fill",
               "fill-color",
-              "rgba( 255,255,255, 0.5 )"
+              "rgba( 255,255,255, 0 )"
             );
           stateZoom = 5;
           regionPadding = { top: 200, bottom: 200, left: 400, right: 400 };
         }
       } else {
         setShowStates(false);
-        mapRef.current
-          .getMap()
-          .setPaintProperty("clicked-state", "fill-color", "transparent");
         mapRef.current
           .getMap()
           .setPaintProperty(
@@ -78,7 +75,7 @@ export default function Mymap() {
       switch (feature.properties.name_en) {
         case "United States":
           center.current.geometry.coordinates = [-98.5795, 45.8283];
-          maxZoom = 3.5;
+          maxZoom = 4;
           break;
         case "Canada":
           center.current.geometry.coordinates = [-95.8203, 61.0447];
@@ -168,6 +165,14 @@ export default function Mymap() {
           center.current.geometry.coordinates = [25, -3];
           maxZoom = 4;
           break;
+        case "Iceland":
+          center.current.geometry.coordinates = [-19, 65];
+          maxZoom = 4.5;
+          break;
+        case "Faroe Islands":
+          center.current.geometry.coordinates = [-7, 62];
+          maxZoom = 5.5;
+          break;
       }
 
       console.log(feature.properties.name_en);
@@ -175,7 +180,7 @@ export default function Mymap() {
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       mapRef.current.flyTo({
         center: center.current.geometry.coordinates,
-        zoom: stateZoom || 3.1,
+        zoom: stateZoom || 3.5,
         duration: 800,
         pitch: initialViewState.pitch,
       });
@@ -198,7 +203,6 @@ export default function Mymap() {
     }
   };
 
-  // function that sets the pitch to 0 if the zoom level is less than 5 using onZoomEnd and flyTo
   const onZoomEnd = (e) => {
     if (e.target.getZoom() < 3) {
       mapRef.current.flyTo({
@@ -213,8 +217,8 @@ export default function Mymap() {
       initialViewState={initialViewState}
       maxPitch={60}
       onZoomEnd={onZoomEnd}
-      touchPitch={false}
-      touchZoomRotate={false}
+      // touchPitch={false}
+      // touchZoomRotate={false}
       keyboard={false}
       ref={mapRef}
       onClick={onEvent}
