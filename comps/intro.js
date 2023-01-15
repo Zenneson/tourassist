@@ -31,8 +31,8 @@ export default function Intro() {
               <Text
                 inherit
                 span
-                variant="gradient"
                 fw={900}
+                variant="gradient"
                 gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
               >
                 world

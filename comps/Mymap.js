@@ -261,8 +261,12 @@ export default function Mymap() {
         overlayOpacity={0.5}
         title={
           <Title
+            order={1}
+            fw={900}
+            variant="gradient"
+            gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
             sx={{
-              color: "white",
+              textTransform: "uppercase",
             }}
           >
             {regionName}
@@ -274,8 +278,8 @@ export default function Mymap() {
           },
           close: {
             position: "absolute",
-            top: "5px",
-            right: "5px",
+            top: "10px",
+            right: "10px",
           },
         })}
       >
@@ -306,21 +310,21 @@ export default function Mymap() {
           align="center"
           justify="center"
           gap="xs"
-          style={{ opacity: "0.2" }}
+          style={{ opacity: "0.15" }}
         >
           <div
             style={{
               display: "block",
-              width: "40%",
+              width: "48%",
               height: "1px",
               border: "1px solid #fff",
             }}
           ></div>
           <p
             style={{
-              width: "10%",
+              width: "4%",
               textAlign: "center",
-              fontSize: "12px",
+              fontSize: "10px",
               fontWeight: "bold",
               color: "#fff",
             }}
@@ -330,7 +334,7 @@ export default function Mymap() {
           <div
             style={{
               display: "block",
-              width: "40%",
+              width: "48%",
               height: "1px",
               border: "1px solid #fff",
             }}
