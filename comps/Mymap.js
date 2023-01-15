@@ -56,14 +56,12 @@ export default function Mymap() {
       "";
 
     if (place) {
-      if (place) {
-        setRegionName(place);
-      }
       if (isSelection) {
         center.current = feature.geometry.coordinates;
       } else {
         center.current = centerOfMass(feature);
       }
+      setRegionName(place);
 
       if (place === "United States" || isState) {
         setShowStates(true);
