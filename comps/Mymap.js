@@ -2,12 +2,25 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import Map, { Source, Layer } from "react-map-gl";
 import bbox from "@turf/bbox";
 import centerOfMass from "@turf/center-of-mass";
+import { Autocomplete, Modal, Title, Button, Flex } from "@mantine/core";
+import { atom, useRecoilState } from "recoil";
+import { visibleState } from "../pages/index";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+
+export const placeSearchState = atom({
+  key: "placeSearchState",
+  default: true,
+});
 
 export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
   const [regionName, setRegionName] = useState("");
   const [showStates, setShowStates] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [visible, setVisible] = useRecoilState(visibleState);
+  const [showPlaceSearch, setShowPlaceSearch] =
+    useRecoilState(placeSearchState);
 
   const initialViewState = {
     latitude: 35,
@@ -195,11 +208,16 @@ export default function Mymap() {
             padding: regionPadding,
             duration: 1500,
             maxZoom: maxZoom || 8,
-            pitch: 40,
+            pitch: 50,
             linear: false,
           }
         );
       }, 800);
+
+      if (feature.properties.name_en !== "United States") {
+        setShowModal(true);
+        setShowPlaceSearch(false);
+      }
     }
   };
 
@@ -212,90 +230,202 @@ export default function Mymap() {
     }
   };
 
+  const onClose = () => {
+    setShowModal(false);
+    mapRef.current.flyTo({
+      zoom: 3,
+      duration: 1200,
+      pitch: initialViewState.pitch,
+    });
+    setRegionName("");
+    setShowPlaceSearch(true);
+  };
+
   return (
-    <Map
-      initialViewState={initialViewState}
-      maxPitch={60}
-      onZoomEnd={onZoomEnd}
-      // touchPitch={false}
-      // touchZoomRotate={false}
-      keyboard={false}
-      ref={mapRef}
-      onClick={onEvent}
-      projection="globe"
-      doubleClickZoom={false}
-      interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-      mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
-      style={{ width: "100%", height: "100%" }}
-      mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
-    >
-      <Source
-        id="country-boundaries"
-        type="vector"
-        url="mapbox://mapbox.country-boundaries-v1"
+    <>
+      <Modal
+        opened={showModal}
+        centered
+        zIndex={99}
+        onClose={onClose}
+        overlayColor="rgba(0,0,0,0)"
+        overlayBlur={8}
+        overlayOpacity={0.5}
+        title={
+          <Title
+            sx={{
+              color: "white",
+            }}
+          >
+            {regionName}
+          </Title>
+        }
+        styles={(theme) => ({
+          modal: {
+            backgroundColor: "rgba(0,0,0,0.7)",
+          },
+          close: {
+            position: "absolute",
+            top: "5px",
+            right: "5px",
+          },
+        })}
       >
-        <Layer
+        <Button
+          fullWidth
+          variant="gradient"
+          gradient={{ from: "#00C9FF", to: "#92FE9D", deg: 45 }}
+          sx={{
+            color: "#121212",
+          }}
+        >
+          Travel to {regionName}
+        </Button>
+        <Flex
+          align="center"
+          justify="center"
+          gap="xs"
+          style={{ opacity: "0.2" }}
+        >
+          <div
+            style={{
+              display: "block",
+              width: "40%",
+              height: "1px",
+              border: "1px solid #fff",
+            }}
+          ></div>
+          <p
+            style={{
+              width: "10%",
+              textAlign: "center",
+              fontSize: "12px",
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+          >
+            OR
+          </p>
+          <div
+            style={{
+              display: "block",
+              width: "40%",
+              height: "1px",
+              border: "1px solid #fff",
+            }}
+          ></div>
+        </Flex>
+        <Autocomplete
+          placeholder={`Pick a city in ${regionName}`}
+          data={["1"]}
+        />
+      </Modal>
+      {visible && showPlaceSearch && (
+        <Autocomplete
+          placeholder="Where in the world do you want to go?"
+          transition="slide-up"
+          size="sm"
+          radius="xl"
+          data={["1", "2", "3", "4", "5"]}
+          style={{
+            position: "absolute",
+            bottom: "150px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "500px",
+            zIndex: 100,
+            padding: "20px",
+          }}
+        />
+      )}
+      <Map
+        initialViewState={initialViewState}
+        maxPitch={60}
+        onZoomEnd={onZoomEnd}
+        // touchPitch={false}
+        // touchZoomRotate={false}
+        keyboard={false}
+        ref={mapRef}
+        onClick={onEvent}
+        projection="globe"
+        doubleClickZoom={false}
+        interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
+        mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
+        style={{ width: "100%", height: "100%" }}
+        mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
+      >
+        <Source
           id="country-boundaries"
-          source="country-boundaries"
-          source-layer="country_boundaries"
-          type="fill"
-          paint={{
-            "fill-color": "rgba(0,0,0,0)",
-          }}
-        />
-        <Layer
-          id="country-boundaries-fill"
-          source="country-boundaries"
-          source-layer="country_boundaries"
-          type="fill"
-          filter={!showStates ? filter : ["in", "name", "United States"]}
-          paint={{
-            "fill-color": "rgba( 0,232,250, .8 )",
-          }}
-        />
-        <Layer
-          id="country-boundaries-lines"
-          source="country-boundaries"
-          source-layer="country_boundaries"
-          type="line"
-          filter={filter}
-          paint={{
-            "line-color": "rgba(255, 255, 255, 1)",
-            "line-width": 4,
-          }}
-        />
-      </Source>
-      <Source id="states-boundaries" type="geojson" data="data/states.geojson">
-        <Layer
-          id="states"
-          type="fill"
-          source="states-boundaries"
-          paint={{
-            "fill-color": "rgba(0,0,0,0)",
-          }}
-          filter={!showStates ? filter : ["!", ["in", "name", ""]]}
-        />
-        <Layer
+          type="vector"
+          url="mapbox://mapbox.country-boundaries-v1"
+        >
+          <Layer
+            id="country-boundaries"
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="fill"
+            paint={{
+              "fill-color": "rgba(0,0,0,0)",
+            }}
+          />
+          <Layer
+            id="country-boundaries-fill"
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="fill"
+            filter={!showStates ? filter : ["in", "name", "United States"]}
+            paint={{
+              "fill-color": "rgba( 0,232,250, .8 )",
+            }}
+          />
+          <Layer
+            id="country-boundaries-lines"
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="line"
+            filter={filter}
+            paint={{
+              "line-color": "rgba(255, 255, 255, 1)",
+              "line-width": 4,
+            }}
+          />
+        </Source>
+        <Source
           id="states-boundaries"
-          type="line"
-          source="states-boundaries"
-          paint={{
-            "line-color": "rgba(255, 255, 255, 1)",
-            "line-width": 4,
-          }}
-          filter={!showStates ? filter : ["!", ["in", "name", ""]]}
-        />
-      </Source>
-      <Source id="clicked-state" type="geojson" data="data/states.geojson">
-        <Layer
-          id="clicked-state"
-          type="fill"
-          paint={{
-            "fill-color": "rgba(0,0,0,0)",
-          }}
-          filter={["==", "NAME", regionName]}
-        />
-      </Source>
-    </Map>
+          type="geojson"
+          data="data/states.geojson"
+        >
+          <Layer
+            id="states"
+            type="fill"
+            source="states-boundaries"
+            paint={{
+              "fill-color": "rgba(0,0,0,0)",
+            }}
+            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+          />
+          <Layer
+            id="states-boundaries"
+            type="line"
+            source="states-boundaries"
+            paint={{
+              "line-color": "rgba(255, 255, 255, 1)",
+              "line-width": 4,
+            }}
+            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+          />
+        </Source>
+        <Source id="clicked-state" type="geojson" data="data/states.geojson">
+          <Layer
+            id="clicked-state"
+            type="fill"
+            paint={{
+              "fill-color": "rgba(0,0,0,0)",
+            }}
+            filter={["==", "NAME", regionName]}
+          />
+        </Source>
+      </Map>
+    </>
   );
 }

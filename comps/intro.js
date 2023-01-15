@@ -3,7 +3,6 @@ import { Center, Box, Title, Text, Button, Overlay } from "@mantine/core";
 import { visibleState } from "../pages/index";
 
 export default function Intro() {
-  // const visible = useRecoilValue(visibleState);
   const [visible, setVisible] = useRecoilState(visibleState);
 
   return (

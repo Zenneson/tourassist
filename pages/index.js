@@ -6,7 +6,6 @@ import {
   Overlay,
   AppShell,
   Header,
-  Autocomplete,
   Drawer,
   Button,
   Image,
@@ -18,6 +17,7 @@ import Link from "next/link";
 import Intro from "../comps/intro";
 import Sidebar from "../comps/sidebar";
 import Mymap from "../comps/Mymap";
+import { placeSearchState } from "../comps/Mymap";
 
 export const visibleState = atom({
   key: "visibleState",
@@ -33,6 +33,8 @@ export default function Home() {
   const theme = useMantineTheme();
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [visible, setVisible] = useRecoilState(visibleState);
+  const [showPlaceSearch, setShowPlaceSearch] =
+    useRecoilState(placeSearchState);
 
   const [opened, setOpened] = useState(false);
 
@@ -79,23 +81,6 @@ export default function Home() {
             </Header>
           }
         >
-          {visible && (
-            <Autocomplete
-              placeholder="Search for a location"
-              transition="slide-up"
-              size="lg"
-              radius="xl"
-              data={["1", "2", "3", "4", "5"]}
-              style={{
-                position: "absolute",
-                bottom: "100px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: "500px",
-                zIndex: 100,
-              }}
-            />
-          )}
           <Sidebar />
           <Mymap />
         </AppShell>
