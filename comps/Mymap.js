@@ -24,6 +24,8 @@ export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
   const [regionName, setRegionName] = useState("");
+  const [countrySearch, setCountrySearch] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [showStates, setShowStates] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [visible, setVisible] = useRecoilState(visibleState);
@@ -196,8 +198,6 @@ export default function Mymap() {
           break;
       }
 
-      console.log(feature.properties.name_en);
-
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       mapRef.current.flyTo({
         center: center.current.geometry.coordinates,
@@ -247,6 +247,27 @@ export default function Mymap() {
     });
     setRegionName("");
     setShowPlaceSearch(true);
+  };
+
+  const handleChange = async (e) => {
+    setCountrySearch(e);
+
+    if (countrySearch.length > 2 || e) {
+      try {
+        const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw&autocomplete=true&types=country&limit=5`;
+        const response = await fetch(endpoint);
+        const results = await response.json();
+        setSuggestions(results.features);
+
+        console.log(suggestions);
+      } catch (error) {
+        console.log("Error fetching data for Country Autocomplete: ", error);
+      }
+    }
+  };
+
+  const AutoCompleteItem = ({ item }) => {
+    return <div key={item.id}>{item.text}</div>;
   };
 
   return (
@@ -340,18 +361,22 @@ export default function Mymap() {
             }}
           ></div>
         </Flex>
-        <Autocomplete
-          placeholder={`Pick a city in ${regionName}`}
-          data={["1"]}
-        />
+        <Autocomplete placeholder={`Pick a city in ${regionName}`} data={[]} />
       </Modal>
       {visible && showPlaceSearch && (
         <Autocomplete
           placeholder="Where in the world do you want to go?"
-          transition="slide-up"
           size="md"
           radius="xl"
-          data={["1", "2", "3", "4", "5"]}
+          value={countrySearch}
+          onChange={(e) => handleChange(e)}
+          itemComponent={AutoCompleteItem}
+          data={suggestions}
+          // filter={(item) => item.text}
+          filter={function (item) {
+            console.log(item.text);
+            return item.text;
+          }}
           style={{
             position: "absolute",
             bottom: "150px",
