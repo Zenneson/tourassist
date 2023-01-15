@@ -2,10 +2,18 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import Map, { Source, Layer } from "react-map-gl";
 import bbox from "@turf/bbox";
 import centerOfMass from "@turf/center-of-mass";
-import { Autocomplete, Modal, Title, Button, Flex } from "@mantine/core";
+import {
+  Autocomplete,
+  Modal,
+  Title,
+  Button,
+  Flex,
+  Tooltip,
+} from "@mantine/core";
 import { atom, useRecoilState } from "recoil";
 import { visibleState } from "../pages/index";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import { IconPlaylistAdd } from "@tabler/icons";
 
 export const placeSearchState = atom({
   key: "placeSearchState",
@@ -271,16 +279,29 @@ export default function Mymap() {
           },
         })}
       >
-        <Button
-          fullWidth
-          variant="gradient"
-          gradient={{ from: "#00C9FF", to: "#92FE9D", deg: 45 }}
-          sx={{
-            color: "#121212",
-          }}
-        >
-          Travel to {regionName}
-        </Button>
+        <Flex gap="xs">
+          <Button
+            sx={{
+              width: "90%",
+            }}
+          >
+            Travel to {regionName}
+          </Button>
+          <Tooltip
+            label={`Add ${regionName} to Tour`}
+            position="top-end"
+            withArrow
+          >
+            <Button
+              sx={{
+                width: "10%",
+                padding: "0",
+              }}
+            >
+              <IconPlaylistAdd size={20} />
+            </Button>
+          </Tooltip>
+        </Flex>
         <Flex
           align="center"
           justify="center"
@@ -324,7 +345,7 @@ export default function Mymap() {
         <Autocomplete
           placeholder="Where in the world do you want to go?"
           transition="slide-up"
-          size="sm"
+          size="md"
           radius="xl"
           data={["1", "2", "3", "4", "5"]}
           style={{
