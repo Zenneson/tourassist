@@ -256,8 +256,8 @@ export default function Mymap() {
         centered
         zIndex={99}
         onClose={onClose}
-        overlayColor="rgba(0,0,0,0)"
-        overlayBlur={8}
+        overlayColor="rgba(0,0,0,0.25)"
+        overlayBlur={2}
         overlayOpacity={0.5}
         title={
           <Title
