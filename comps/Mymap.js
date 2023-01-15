@@ -44,27 +44,30 @@ export default function Mymap() {
     console.log("regionName", regionName);
   }, [regionName]);
 
-  const onEvent = (event) => {
-    const feature = event.features[0];
-
-    let maxZoom = 0;
+  function goToCountry(feature) {
+    let maxZoom = 5.5;
     let stateZoom = 0;
-    let regionPadding = {};
-    if (feature) {
-      if (feature.properties.name_en) {
-        setRegionName(feature.properties.name_en);
-      }
-      if (feature.properties.NAME) {
-        setRegionName(feature.properties.NAME);
-      }
-      center.current = centerOfMass(feature);
+    let isState = true ? feature?.properties?.NAME : false;
+    let isSelection = true ? feature?.text : false;
+    let place =
+      feature?.properties?.name_en ||
+      feature?.properties?.NAME ||
+      feature?.text ||
+      "";
 
-      if (
-        feature.properties.name_en === "United States" ||
-        feature.properties.NAME
-      ) {
+    if (place) {
+      if (place) {
+        setRegionName(place);
+      }
+      if (isSelection) {
+        center.current = feature.geometry.coordinates;
+      } else {
+        center.current = centerOfMass(feature);
+      }
+
+      if (place === "United States" || isState) {
         setShowStates(true);
-        if (feature.properties.NAME && showStates) {
+        if (place && isState && showStates) {
           mapRef.current
             .getMap()
             .setPaintProperty(
@@ -80,7 +83,6 @@ export default function Mymap() {
               "rgba( 255,255,255, 0 )"
             );
           stateZoom = 5;
-          regionPadding = { top: 200, bottom: 200, left: 400, right: 400 };
         }
       } else {
         setShowStates(false);
@@ -92,139 +94,237 @@ export default function Mymap() {
             "rgba( 0,232,250, .8 )"
           );
         stateZoom = null;
-        regionPadding = { top: 200, bottom: 200, left: 500, right: 500 };
       }
 
-      switch (feature.properties.name_en) {
+      let newCenter;
+
+      if (isSelection) {
+        newCenter = feature.geometry.coordinates;
+      } else {
+        newCenter = center.current.geometry.coordinates;
+      }
+
+      switch (place) {
         case "United States":
-          center.current.geometry.coordinates = [-98.5795, 45.8283];
+          newCenter = [-98.5795, 45.8283];
           maxZoom = 4;
           break;
         case "Canada":
-          center.current.geometry.coordinates = [-95.8203, 61.0447];
+          newCenter = [-95.8203, 61.0447];
           maxZoom = 3.5;
           break;
         case "Russia":
-          center.current.geometry.coordinates = [94.9619, 60.6359];
+          newCenter = [94.9619, 60.6359];
           maxZoom = 3.2;
           break;
         case "China":
-          center.current.geometry.coordinates = [103.9924, 35.504];
+          newCenter = [103.9924, 35.504];
           maxZoom = 3.5;
           break;
         case "Brazil":
-          center.current.geometry.coordinates = [-53.1562, -10.7836];
+          newCenter = [-53.1562, -10.7836];
           maxZoom = 3.5;
           break;
         case "Australia":
-          center.current.geometry.coordinates = [134.0362, -26.529];
+          newCenter = [134.0362, -26.529];
           maxZoom = 3.5;
           break;
         case "India":
-          center.current.geometry.coordinates = [78.6428, 22.5644];
+          newCenter = [78.6428, 22.5644];
           maxZoom = 4.2;
           break;
         case "Argentina":
-          center.current.geometry.coordinates = [-65.1886, -36.1791];
+          newCenter = [-65.1886, -36.1791];
           maxZoom = 3.5;
           break;
         case "Greenland":
-          center.current.geometry.coordinates = [-41.875, 71.5];
+          newCenter = [-41.875, 71.5];
           maxZoom = 3.8;
           break;
         case "Mexico":
-          center.current.geometry.coordinates = [-102.5, 23.5];
+          newCenter = [-102.5, 23.5];
           maxZoom = 4.5;
           break;
         case "Indonesia":
-          center.current.geometry.coordinates = [120.5, -2.5];
+          newCenter = [120.5, -2.5];
           maxZoom = 4;
           break;
         case "Sweden":
-          center.current.geometry.coordinates = [18.5, 62.5];
+          newCenter = [18.5, 62.5];
           maxZoom = 4.3;
           break;
         case "Chile":
-          center.current.geometry.coordinates = [-71.5, -40.5];
+          newCenter = [-71.5, -40.5];
           maxZoom = 4.2;
           break;
         case "Ecuador":
-          center.current.geometry.coordinates = [-78.5, -2.5];
+          newCenter = [-78.5, -2.5];
           maxZoom = 5.5;
           break;
         case "Svalbard and Jan Mayen":
-          center.current.geometry.coordinates = [20, 78];
+          newCenter = [20, 78];
           maxZoom = 4.5;
           break;
         case "Japan":
-          center.current.geometry.coordinates = [138, 37];
+          newCenter = [138, 37];
           maxZoom = 4.2;
           break;
         case "Spain":
-          center.current.geometry.coordinates = [-3.5, 40];
+          newCenter = [-3.5, 40];
           maxZoom = 4.5;
           break;
         case "Portugal":
-          center.current.geometry.coordinates = [-8, 39];
+          newCenter = [-8, 39];
           maxZoom = 5.3;
           break;
         case "France":
-          center.current.geometry.coordinates = [2, 46];
+          newCenter = [2, 46];
           maxZoom = 4.5;
           break;
         case "Italy":
-          center.current.geometry.coordinates = [12, 42];
+          newCenter = [12, 42];
           maxZoom = 4.5;
           break;
         case "Algeria":
-          center.current.geometry.coordinates = [3, 28];
+          newCenter = [3, 28];
           maxZoom = 4.5;
           break;
         case "Bahamas":
-          center.current.geometry.coordinates = [-77, 24];
+          newCenter = [-77, 24];
           maxZoom = 5.5;
           break;
         case "Democratic Republic of the Congo":
-          center.current.geometry.coordinates = [25, -3];
+          newCenter = [25, -3];
           maxZoom = 4;
           break;
         case "Iceland":
-          center.current.geometry.coordinates = [-19, 65];
+          newCenter = [-19, 65];
           maxZoom = 4.5;
           break;
         case "Faroe Islands":
-          center.current.geometry.coordinates = [-7, 62];
+          newCenter = [-7, 62];
           maxZoom = 5.5;
+          break;
+        case "Cuba":
+          newCenter = [-80, 21];
+          maxZoom = 5.5;
+          break;
+        case "Grenada":
+          newCenter = [-61.7, 12];
+          maxZoom = 7.5;
+          break;
+        case "Barbados":
+          newCenter = [-59.5, 13];
+          maxZoom = 7.5;
+          break;
+        case "Saint Vincent and the Grenadines":
+          newCenter = [-61.2, 13];
+          maxZoom = 7.5;
+          break;
+        case "Martinique":
+          newCenter = [-61, 14];
+          maxZoom = 7.5;
+          break;
+        case "Saint Lucia":
+          newCenter = [-61, 13];
+          maxZoom = 7.5;
+          break;
+        case "Dominica":
+          newCenter = [-61.2, 15.4];
+          maxZoom = 7.5;
+          break;
+        case "Antigua and Barbuda":
+          newCenter = [-61.7, 17];
+          maxZoom = 7.5;
+          break;
+        case "Guadeloupe":
+          newCenter = [-61.5, 16];
+          maxZoom = 7.5;
+          break;
+        case "Montserrat":
+          newCenter = [-62, 16];
+          maxZoom = 7.5;
+          break;
+        case "Antigua and Barbuda":
+          newCenter = [-61, 17];
+          maxZoom = 7.5;
+          break;
+        case "Saint Kitts and Nevis":
+          newCenter = [-62.7, 17];
+          maxZoom = 7.5;
+          break;
+        case "US Virgin Islands":
+          newCenter = [-64, 18];
+          maxZoom = 7.5;
+          break;
+        case "British Virgin Islands":
+          newCenter = [-64.4, 18.4];
+          maxZoom = 7.5;
+          break;
+        case "Trinidad and Tobago":
+          newCenter = [-61.1, 11];
+          maxZoom = 7.5;
+          break;
+        case "Turks and Caicos Islands":
+          newCenter = [-72, 21];
+          maxZoom = 7.5;
           break;
       }
 
-      const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       mapRef.current.flyTo({
-        center: center.current.geometry.coordinates,
+        center: newCenter,
         zoom: stateZoom || 3.5,
         duration: 800,
         pitch: initialViewState.pitch,
       });
       setTimeout(() => {
-        mapRef.current.fitBounds(
-          [
-            [minLng, minLat],
-            [maxLng, maxLat],
-          ],
-          {
-            center: center.current.geometry.coordinates,
-            padding: regionPadding,
-            duration: 1500,
-            maxZoom: maxZoom || 8,
-            pitch: 50,
-            linear: false,
-          }
-        );
+        mapRef.current.flyTo({
+          center: newCenter,
+          duration: 1500,
+          zoom: maxZoom,
+          maxZoom: maxZoom || 5.5,
+          pitch: 50,
+          linear: false,
+        });
       }, 800);
 
-      if (feature.properties.name_en !== "United States") {
+      if (place !== "United States") {
         setShowModal(true);
         setShowPlaceSearch(false);
+      }
+    }
+  }
+
+  const onEvent = (event) => {
+    const feature = event.features[0];
+    goToCountry(feature);
+  };
+
+  const handleSelect = (e) => {
+    goToCountry(e);
+  };
+
+  const handleChange = async (e) => {
+    setCountrySearch(e);
+
+    if (countrySearch.length > 1) {
+      try {
+        const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw&autocomplete=truetypes=region%2Ccountry&limit=5`;
+        const response = await fetch(endpoint);
+        const results = await response.json();
+        const suggestions = results.features.map((feature) => ({
+          label: feature.label,
+          value: feature.place_name,
+          place_name: feature.place_name,
+          place_type: feature.place_type,
+          center: feature.center,
+          geometry: feature.geometry,
+          text: feature.text,
+          bbox: feature.bbox,
+        }));
+        setSuggestions(suggestions);
+      } catch (error) {
+        console.log("Error fetching data for Country Autocomplete: ", error);
       }
     }
   };
@@ -247,27 +347,6 @@ export default function Mymap() {
     });
     setRegionName("");
     setShowPlaceSearch(true);
-  };
-
-  const handleChange = async (e) => {
-    setCountrySearch(e);
-
-    if (countrySearch.length > 2 || e) {
-      try {
-        const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw&autocomplete=true&types=country&limit=5`;
-        const response = await fetch(endpoint);
-        const results = await response.json();
-        setSuggestions(results.features);
-
-        console.log(suggestions);
-      } catch (error) {
-        console.log("Error fetching data for Country Autocomplete: ", error);
-      }
-    }
-  };
-
-  const AutoCompleteItem = ({ item }) => {
-    return <div key={item.id}>{item.text}</div>;
   };
 
   return (
@@ -364,29 +443,30 @@ export default function Mymap() {
         <Autocomplete placeholder={`Pick a city in ${regionName}`} data={[]} />
       </Modal>
       {visible && showPlaceSearch && (
-        <Autocomplete
-          placeholder="Where in the world do you want to go?"
-          size="md"
-          radius="xl"
-          value={countrySearch}
-          onChange={(e) => handleChange(e)}
-          itemComponent={AutoCompleteItem}
-          data={suggestions}
-          // filter={(item) => item.text}
-          filter={function (item) {
-            console.log(item.text);
-            return item.text;
-          }}
-          style={{
+        <Flex
+          justify="center"
+          sx={{
             position: "absolute",
             bottom: "150px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "500px",
-            zIndex: 100,
-            padding: "20px",
+            width: "100%",
           }}
-        />
+        >
+          <Autocomplete
+            placeholder="Where in the world do you want to go?"
+            size="md"
+            radius="xl"
+            value={countrySearch}
+            onChange={(e) => handleChange(e)}
+            onItemSubmit={(e) => handleSelect(e)}
+            data={suggestions}
+            filter={(value, item) => item}
+            style={{
+              width: "500px",
+              zIndex: 100,
+              padding: "20px",
+            }}
+          />
+        </Flex>
       )}
       <Map
         initialViewState={initialViewState}
