@@ -61,18 +61,10 @@ export default function Mymap() {
       } else {
         center.current = centerOfMass(feature);
       }
-      setRegionName(place);
 
-      if (place === "United States" || isState) {
+      if (place === "United States") {
         setShowStates(true);
         if (isState || isSelection) {
-          mapRef.current
-            .getMap()
-            .setPaintProperty(
-              "country-boundaries-fill",
-              "fill-color",
-              "rgba( 255,255,255, 0 )"
-            );
           stateZoom = 5;
         }
       } else {
@@ -105,7 +97,7 @@ export default function Mymap() {
           duration: 1500,
           zoom: maxZoom,
           maxZoom: maxZoom,
-          pitch: 50,
+          pitch: 45,
           linear: false,
         });
       }, 800);
@@ -115,6 +107,7 @@ export default function Mymap() {
         setShowPlaceSearch(false);
       }
     }
+    setRegionName(place);
   }
 
   const onEvent = (event) => {
@@ -178,8 +171,8 @@ export default function Mymap() {
         centered
         zIndex={99}
         onClose={onClose}
-        overlayColor="rgba(0,0,0,0.25)"
-        overlayBlur={2}
+        overlayColor="rgba(0,0,0,1)"
+        overlayBlur={1}
         overlayOpacity={0.5}
         title={
           <Title
