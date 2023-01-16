@@ -172,7 +172,7 @@ export default function Mymap() {
         zIndex={99}
         onClose={onClose}
         overlayColor="rgba(0,0,0,1)"
-        overlayBlur={1}
+        overlayBlur={1.5}
         overlayOpacity={0.5}
         transition="pop"
         transitionDuration={800}
@@ -265,7 +265,7 @@ export default function Mymap() {
           justify="center"
           sx={{
             position: "absolute",
-            bottom: "150px",
+            bottom: "100px",
             width: "100%",
           }}
         >

@@ -113,59 +113,59 @@ function getNewCenter(orgCenter, place) {
       break;
     case "Grenada":
       newCenter = [-61.7, 12];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Barbados":
       newCenter = [-59.5, 13];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Saint Vincent and the Grenadines":
       newCenter = [-61.2, 13];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Martinique":
       newCenter = [-61, 14];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Saint Lucia":
       newCenter = [-61, 13];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Dominica":
       newCenter = [-61.2, 15.4];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Antigua and Barbuda":
       newCenter = [-61.7, 17];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Guadeloupe":
       newCenter = [-61.5, 16];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Montserrat":
       newCenter = [-62, 16];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Antigua and Barbuda":
       newCenter = [-61, 17];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Saint Kitts and Nevis":
       newCenter = [-62.7, 17];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "US Virgin Islands":
       newCenter = [-64, 18];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "British Virgin Islands":
       newCenter = [-64.4, 18.4];
-      maxZoom = 7.5;
+      maxZoom = 8;
       break;
     case "Trinidad and Tobago":
       newCenter = [-61.1, 11];
-      maxZoom = 7.5;
+      maxZoom = 7.8;
       break;
     case "Turks and Caicos Islands":
       newCenter = [-72, 21];
