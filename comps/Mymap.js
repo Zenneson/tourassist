@@ -65,14 +65,7 @@ export default function Mymap() {
 
       if (place === "United States" || isState) {
         setShowStates(true);
-        if (place && isState && showStates) {
-          mapRef.current
-            .getMap()
-            .setPaintProperty(
-              "clicked-state",
-              "fill-color",
-              "rgba( 0,232,250, .9 )"
-            );
+        if (isState || isSelection) {
           mapRef.current
             .getMap()
             .setPaintProperty(
@@ -379,7 +372,7 @@ export default function Mymap() {
             id="clicked-state"
             type="fill"
             paint={{
-              "fill-color": "rgba(0,0,0,0)",
+              "fill-color": "rgba( 0,232,250, .8 )",
             }}
             filter={["==", "NAME", regionName]}
           />
