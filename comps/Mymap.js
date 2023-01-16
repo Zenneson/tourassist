@@ -164,6 +164,12 @@ export default function Mymap() {
     setShowPlaceSearch(true);
   };
 
+  const autocompleteRef = useRef(null);
+  function handleClick(event) {
+    event.preventDefault();
+    autocompleteRef.current.select();
+  }
+
   return (
     <>
       <Modal
@@ -276,6 +282,8 @@ export default function Mymap() {
             value={countrySearch}
             onChange={(e) => handleChange(e)}
             onItemSubmit={(e) => handleSelect(e)}
+            onClick={handleClick}
+            ref={autocompleteRef}
             data={suggestions}
             filter={(value, item) => item}
             style={{
