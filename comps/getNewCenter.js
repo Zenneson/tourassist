@@ -1,6 +1,6 @@
-export default function countryLocal(place) {
-  let newCenter = [0, 0];
-  let maxZoom = 0;
+function getNewCenter(orgCenter, place) {
+  let newCenter = orgCenter;
+  let maxZoom = 5.5;
 
   switch (place) {
     case "United States":
@@ -167,6 +167,9 @@ export default function countryLocal(place) {
       newCenter = [-72, 21];
       maxZoom = 7.5;
       break;
+    default:
+      break;
   }
-  return [newCenter, maxZoom];
+  return { newCenter, maxZoom };
 }
+export { getNewCenter };

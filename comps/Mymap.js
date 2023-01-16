@@ -14,7 +14,7 @@ import { atom, useRecoilState } from "recoil";
 import { visibleState } from "../pages/index";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { IconPlaylistAdd } from "@tabler/icons";
-import countryLocal from "./countryLocal";
+import { getNewCenter } from "../comps/getNewCenter";
 
 export const placeSearchState = atom({
   key: "placeSearchState",
@@ -46,8 +46,7 @@ export default function Mymap() {
   }, [regionName]);
 
   function goToCountry(feature) {
-    let maxZoom = 5.5;
-    let stateZoom = 0;
+    let stateZoom = 3.5;
     let isState = true ? feature?.properties?.NAME : false;
     let isSelection = true ? feature?.text : false;
     let place =
@@ -95,15 +94,11 @@ export default function Mymap() {
         stateZoom = null;
       }
 
-      let newCenter;
-
+      let orgCenter = center.current.geometry?.coordinates;
+      let { newCenter, maxZoom } = getNewCenter(orgCenter, place) || {};
       if (isSelection) {
         newCenter = feature.geometry.coordinates;
-      } else {
-        newCenter = center.current.geometry.coordinates;
       }
-
-      [newCenter, maxZoom] = countryLocal(place);
 
       mapRef.current.flyTo({
         center: newCenter,
@@ -116,7 +111,7 @@ export default function Mymap() {
           center: newCenter,
           duration: 1500,
           zoom: maxZoom,
-          maxZoom: maxZoom || 5.5,
+          maxZoom: maxZoom,
           pitch: 50,
           linear: false,
         });
