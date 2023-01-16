@@ -97,7 +97,7 @@ export default function Mymap() {
           duration: 1500,
           zoom: maxZoom,
           maxZoom: maxZoom,
-          pitch: 45,
+          pitch: 40,
           linear: false,
         });
       }, 800);
@@ -174,6 +174,9 @@ export default function Mymap() {
         overlayColor="rgba(0,0,0,1)"
         overlayBlur={1}
         overlayOpacity={0.5}
+        transition="pop"
+        transitionDuration={800}
+        transitionTimingFunction="ease"
         title={
           <Title
             order={1}

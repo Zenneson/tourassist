@@ -4,7 +4,7 @@ function getNewCenter(orgCenter, place) {
 
   switch (place) {
     case "United States":
-      newCenter = [-98.5795, 45.8283];
+      newCenter = [-98.5795, 43];
       maxZoom = 4;
       break;
     case "Canada":
@@ -12,7 +12,7 @@ function getNewCenter(orgCenter, place) {
       maxZoom = 3.5;
       break;
     case "Russia":
-      newCenter = [94.9619, 60.6359];
+      newCenter = [94.9619, 65];
       maxZoom = 3.2;
       break;
     case "China":
@@ -97,6 +97,10 @@ function getNewCenter(orgCenter, place) {
       break;
     case "Iceland":
       newCenter = [-19, 65];
+      maxZoom = 4.5;
+      break;
+    case "Norway":
+      newCenter = [10, 65];
       maxZoom = 4.5;
       break;
     case "Faroe Islands":
