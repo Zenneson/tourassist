@@ -11,10 +11,11 @@ import {
   Tooltip,
   Text,
   LoadingOverlay,
+  Divider,
 } from "@mantine/core";
 import { atom, useRecoilState } from "recoil";
 import { visibleState } from "../pages/index";
-import { IconPlaylistAdd } from "@tabler/icons";
+import { IconPlaylistAdd, IconMapSearch } from "@tabler/icons";
 import { getNewCenter } from "../comps/getNewCenter";
 
 export const placeSearchState = atom({
@@ -246,6 +247,7 @@ export default function Mymap() {
         overlayOpacity={0.9}
         overlayColor="#000"
         loader={<div></div>}
+        style={{ pointerEvents: "none" }}
       />
       <Modal
         centered
@@ -318,40 +320,19 @@ export default function Mymap() {
         </Flex>
         {!isCity && (
           <>
-            <Flex
-              align="center"
-              justify="center"
-              gap="xs"
-              style={{ opacity: "0.15" }}
+            <div
+              style={{
+                opacity: 0.1,
+              }}
             >
-              <div
-                style={{
-                  display: "block",
-                  width: "48%",
-                  height: "1px",
-                  border: "1px solid #fff",
-                }}
-              ></div>
-              <p
-                style={{
-                  width: "4%",
-                  textAlign: "center",
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                  color: "#fff",
-                }}
-              >
-                OR
-              </p>
-              <div
-                style={{
-                  display: "block",
-                  width: "48%",
-                  height: "1px",
-                  border: "1px solid #fff",
-                }}
-              ></div>
-            </Flex>
+              <Divider
+                label={<IconMapSearch size={17} />}
+                labelPosition="center"
+                color="#fff"
+                size="xs"
+                my="xs"
+              />
+            </div>
             <Autocomplete
               placeholder={`Pick a place in ${regionName}...`}
               defaultValue=""

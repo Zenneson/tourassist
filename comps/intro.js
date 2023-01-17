@@ -59,28 +59,35 @@ export default function Intro() {
               nulla pariatur. Excepteur sint occaecat cupidatat non proident,
               sunt in culpa qui officia deserunt mollit anim id est laborum.
             </Text>
-            <Box sx={{ marginTop: "30px" }}>
+            <Button.Group
+              sx={{
+                marginTop: "30px",
+                justifyContent: "center",
+              }}
+            >
               <Button
                 size="md"
                 uppercase={true}
+                fw={900}
                 variant="default"
-                sx={{ width: "200px", marginRight: "20px" }}
+                sx={{ width: "200px", color: "rgba(255,255,255,0.3)" }}
               >
                 Login | Sign Up
               </Button>
               <Button
+                fw={900}
                 size="md"
                 uppercase={true}
                 loading={mapLoaded}
-                loaderProps={{ variant: "oval" }}
+                loaderProps={{ variant: "oval", size: 20 }}
                 variant="filled"
                 sx={{ width: "200px" }}
                 onClick={() => setVisible((v) => !v)}
-                leftIcon={<IconWorld size={18} />}
+                leftIcon={<IconWorld size={20} style={{ color: "#00E8FC" }} />}
               >
                 Plan a trip
               </Button>
-            </Box>
+            </Button.Group>
           </Box>
         </Center>
       )}
