@@ -20,7 +20,7 @@ export default function Sidebar() {
             paddingTop: "35px",
           }}
         >
-          <h2>List</h2>
+          <h2>Tour</h2>
         </div>
       </Drawer>
     </>
