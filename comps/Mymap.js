@@ -22,6 +22,11 @@ export const placeSearchState = atom({
   default: true,
 });
 
+export const mapLoadState = atom({
+  key: "mapLoadState",
+  default: true,
+});
+
 export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
@@ -39,7 +44,7 @@ export default function Mymap() {
   const [isState, setIsState] = useState(false);
   const [isCity, setIsCity] = useState(false);
   const [isCountry, setIsCountry] = useState(false);
-  const [mapLoaded, setMapLoaded] = useState(true);
+  const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [visible, setVisible] = useRecoilState(visibleState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
@@ -236,10 +241,11 @@ export default function Mymap() {
       <LoadingOverlay
         visible={mapLoaded}
         zIndex={103}
-        transitionDuration={3000}
+        transitionDuration={2000}
         overlayBlur={10}
         overlayOpacity={0.9}
         overlayColor="#000"
+        loader={<div></div>}
       />
       <Modal
         centered
@@ -266,7 +272,7 @@ export default function Mymap() {
               {regionName}
             </Title>
             {citySubTitle && (
-              <Text fw={600} size="xs">
+              <Text fw={600} size="xs" color="#fff">
                 {citySubTitle}
               </Text>
             )}

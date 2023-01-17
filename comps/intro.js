@@ -8,10 +8,13 @@ import {
   Overlay,
   Transition,
 } from "@mantine/core";
+import { IconWorld } from "@tabler/icons";
 import { visibleState } from "../pages/index";
+import { mapLoadState } from "./Mymap";
 
 export default function Intro() {
   const [visible, setVisible] = useRecoilState(visibleState);
+  const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
 
   return (
     <>
@@ -68,9 +71,12 @@ export default function Intro() {
               <Button
                 size="md"
                 uppercase={true}
+                loading={mapLoaded}
+                loaderProps={{ variant: "oval" }}
                 variant="filled"
                 sx={{ width: "200px" }}
                 onClick={() => setVisible((v) => !v)}
+                leftIcon={<IconWorld size={18} />}
               >
                 Plan a trip
               </Button>
