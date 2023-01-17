@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import Map, { Source, Layer } from "react-map-gl";
+import Map, { Marker, Source, Layer } from "react-map-gl";
 import bbox from "@turf/bbox";
 import centerOfMass from "@turf/center-of-mass";
 import {
@@ -12,7 +12,6 @@ import {
 } from "@mantine/core";
 import { atom, useRecoilState } from "recoil";
 import { visibleState } from "../pages/index";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { IconPlaylistAdd } from "@tabler/icons";
 import { getNewCenter } from "../comps/getNewCenter";
 
@@ -30,6 +29,7 @@ export default function Mymap() {
   const [citySearch, setCitySearch] = useState("");
   const [cityData, setCityData] = useState([]);
   const [countryData, setCountryData] = useState([]);
+  const [placeLngLat, setPlaceLngLat] = useState([]);
   const [borderBox, setBorderbox] = useState([]);
   const [showStates, setShowStates] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -48,27 +48,25 @@ export default function Mymap() {
 
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
   useEffect(() => {
-    console.log("regionName", regionName);
-    console.log("isoName", isoName);
-  }, [regionName, isoName]);
+    console.log("Region Name: ", regionName);
+    console.log("ISO: ", isoName);
+    console.log("Place Center: ", placeLngLat);
+  }, [regionName, isoName, placeLngLat]);
 
   function goToCountry(feature) {
     if (feature == null) return;
-    setIsState(true) ? feature?.properties?.NAME : setIsState(false);
+    setIsState(feature?.properties?.NAME);
+    setPlaceLngLat(feature?.center);
     let stateZoom = 3.5;
     let isSelection = true ? feature?.text : false;
     let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
-    let place =
+    let location =
       feature?.properties?.name_en ||
       feature?.properties?.NAME ||
       feature?.text ||
       "";
 
-    if (isSelection && feature?.place_type[0] === "place") {
-      setIsCity(true);
-    } else {
-      setIsCity(false);
-    }
+    console.log("Place Type: ", feature?.place_type);
 
     let border;
     if (feature?.text) {
@@ -78,41 +76,48 @@ export default function Mymap() {
     }
     setBorderbox(border);
 
-    if (place) {
+    if (location) {
       if (isSelection) {
         center.current = feature.geometry.coordinates;
       } else {
         center.current = centerOfMass(feature);
       }
 
-      if (place === "United States") {
+      if (location === "United States") {
         setShowStates(true);
         if (isState || isSelection) {
           stateZoom = 5.5;
         }
       } else {
         setShowStates(false);
-        mapRef.current
-          .getMap()
-          .setPaintProperty(
-            "country-boundaries-fill",
-            "fill-color",
-            "rgba( 0,232,250, .8 )"
-          );
         stateZoom = null;
       }
 
+      let mapPitch = 40;
       let orgCenter = center.current.geometry?.coordinates;
-      let { newCenter, maxZoom } = getNewCenter(orgCenter, place) || {};
+      let { newCenter, maxZoom } = getNewCenter(orgCenter, location) || {};
       if (isSelection) {
         newCenter = feature.geometry.coordinates;
+      }
+
+      if (
+        isSelection &&
+        (feature?.place_type[0] === "place" ||
+          feature?.place_type[1] === "place" ||
+          (feature?.place_type[0] === "region" && location === "United States"))
+      ) {
+        maxZoom = 12;
+        mapPitch = 75;
+        setIsCity(true);
+      } else {
+        setIsCity(false);
       }
 
       mapRef.current.flyTo({
         center: newCenter,
         zoom: stateZoom || 3.5,
         duration: 800,
-        pitch: initialViewState.pitch,
+        pitch: 0,
       });
       setTimeout(() => {
         mapRef.current.flyTo({
@@ -120,17 +125,17 @@ export default function Mymap() {
           duration: 1500,
           zoom: maxZoom,
           maxZoom: maxZoom,
-          pitch: 40,
+          pitch: mapPitch,
           linear: false,
         });
       }, 800);
 
-      if (place !== "United States") {
+      if (location !== "United States") {
         setShowModal(true);
         setShowPlaceSearch(false);
       }
     }
-    setRegionName(place);
+    setRegionName(location);
     setIsoName(isoName);
   }
 
@@ -145,12 +150,11 @@ export default function Mymap() {
 
   const handleChange = async (field, e) => {
     let endpoint;
-    console.log(borderBox);
     if (field === "country")
       endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&proximity=ip&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion%2Ccountry&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
     if (field === "city") {
       const [minLng, minLat, maxLng, maxLat] = borderBox;
-      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&proximity=ip&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&proximity=ip&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
     }
 
     if (countrySearch.length > 1 || citySearch.length > 1) {
@@ -179,21 +183,22 @@ export default function Mymap() {
   const onZoomEnd = (e) => {
     if (e.target.getZoom() < 3) {
       mapRef.current.flyTo({
-        pitch: 0,
         duration: 2000,
+        pitch: 0,
       });
     }
   };
 
   const onClose = () => {
-    setShowModal(false);
     mapRef.current.flyTo({
       zoom: 3,
       duration: 1200,
-      pitch: initialViewState.pitch,
+      pitch: 0,
     });
     setRegionName("");
+    setShowModal(false);
     setShowPlaceSearch(true);
+    setIsCity(false);
   };
 
   const cityAutoRef = useRef(null);
@@ -202,13 +207,12 @@ export default function Mymap() {
   return (
     <>
       <Modal
-        opened={showModal}
         centered
+        opened={showModal}
         zIndex={99}
         onClose={onClose}
         overlayColor="rgba(0,0,0,1)"
-        overlayBlur={1.5}
-        overlayOpacity={0.5}
+        overlayOpacity={0.75}
         transition="pop"
         transitionDuration={800}
         transitionTimingFunction="ease"
@@ -227,7 +231,7 @@ export default function Mymap() {
         }
         styles={(theme) => ({
           modal: {
-            backgroundColor: "rgba(0,0,0,0.7)",
+            backgroundColor: "rgba(0,0,0,0.5)",
           },
           close: {
             position: "absolute",
@@ -355,7 +359,7 @@ export default function Mymap() {
       )}
       <Map
         initialViewState={initialViewState}
-        maxPitch={60}
+        maxPitch={80}
         onZoomEnd={onZoomEnd}
         // touchPitch={false}
         // touchZoomRotate={false}
@@ -369,6 +373,15 @@ export default function Mymap() {
         style={{ width: "100%", height: "100%" }}
         mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
       >
+        {isCity && (
+          <Marker
+            longitude={placeLngLat[0]}
+            latitude={placeLngLat[1]}
+            offsetLeft={-20}
+            offsetTop={-10}
+            scale={4}
+          ></Marker>
+        )}
         <Source
           id="country-boundaries"
           type="vector"
@@ -437,7 +450,7 @@ export default function Mymap() {
             paint={{
               "fill-color": "rgba( 0,232,250, .8 )",
             }}
-            filter={["==", "NAME", regionName]}
+            filter={isCity ? false : ["==", "NAME", regionName]}
           />
         </Source>
       </Map>
