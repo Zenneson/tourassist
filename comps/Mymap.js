@@ -25,10 +25,16 @@ export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
   const [regionName, setRegionName] = useState("");
+  const [isoName, setIsoName] = useState("");
   const [countrySearch, setCountrySearch] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+  const [citySearch, setCitySearch] = useState("");
+  const [cityData, setCityData] = useState([]);
+  const [countryData, setCountryData] = useState([]);
+  const [borderBox, setBorderbox] = useState([]);
   const [showStates, setShowStates] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isState, setIsState] = useState(false);
+  const [isCity, setIsCity] = useState(false);
   const [visible, setVisible] = useRecoilState(visibleState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
@@ -43,17 +49,34 @@ export default function Mymap() {
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
   useEffect(() => {
     console.log("regionName", regionName);
-  }, [regionName]);
+    console.log("isoName", isoName);
+  }, [regionName, isoName]);
 
   function goToCountry(feature) {
+    if (feature == null) return;
+    setIsState(true) ? feature?.properties?.NAME : setIsState(false);
     let stateZoom = 3.5;
-    let isState = true ? feature?.properties?.NAME : false;
     let isSelection = true ? feature?.text : false;
+    let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
     let place =
       feature?.properties?.name_en ||
       feature?.properties?.NAME ||
       feature?.text ||
       "";
+
+    if (isSelection && feature?.place_type[0] === "place") {
+      setIsCity(true);
+    } else {
+      setIsCity(false);
+    }
+
+    let border;
+    if (feature?.text) {
+      border = feature.bbox;
+    } else {
+      border = bbox(feature);
+    }
+    setBorderbox(border);
 
     if (place) {
       if (isSelection) {
@@ -65,7 +88,7 @@ export default function Mymap() {
       if (place === "United States") {
         setShowStates(true);
         if (isState || isSelection) {
-          stateZoom = 5;
+          stateZoom = 5.5;
         }
       } else {
         setShowStates(false);
@@ -108,6 +131,7 @@ export default function Mymap() {
       }
     }
     setRegionName(place);
+    setIsoName(isoName);
   }
 
   const onEvent = (event) => {
@@ -119,15 +143,21 @@ export default function Mymap() {
     goToCountry(e);
   };
 
-  const handleChange = async (e) => {
-    setCountrySearch(e);
+  const handleChange = async (field, e) => {
+    let endpoint;
+    console.log(borderBox);
+    if (field === "country")
+      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&proximity=ip&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion%2Ccountry&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+    if (field === "city") {
+      const [minLng, minLat, maxLng, maxLat] = borderBox;
+      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&proximity=ip&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+    }
 
-    if (countrySearch.length > 1) {
+    if (countrySearch.length > 1 || citySearch.length > 1) {
       try {
-        const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw&autocomplete=truetypes=region%2Ccountry&limit=5`;
         const response = await fetch(endpoint);
         const results = await response.json();
-        const suggestions = results.features.map((feature) => ({
+        const data = results.features.map((feature) => ({
           label: feature.label,
           value: feature.place_name,
           place_name: feature.place_name,
@@ -136,8 +166,10 @@ export default function Mymap() {
           geometry: feature.geometry,
           text: feature.text,
           bbox: feature.bbox,
+          shortcode: feature.properties.short_code,
         }));
-        setSuggestions(suggestions);
+        if (field === "city") setCityData(data);
+        if (field === "country") setCountryData(data);
       } catch (error) {
         console.log("Error fetching data for Country Autocomplete: ", error);
       }
@@ -164,11 +196,8 @@ export default function Mymap() {
     setShowPlaceSearch(true);
   };
 
-  const autocompleteRef = useRef(null);
-  function handleClick(event) {
-    event.preventDefault();
-    autocompleteRef.current.select();
-  }
+  const cityAutoRef = useRef(null);
+  const countryAutoRef = useRef(null);
 
   return (
     <>
@@ -230,41 +259,64 @@ export default function Mymap() {
             </Button>
           </Tooltip>
         </Flex>
-        <Flex
-          align="center"
-          justify="center"
-          gap="xs"
-          style={{ opacity: "0.15" }}
-        >
-          <div
-            style={{
-              display: "block",
-              width: "48%",
-              height: "1px",
-              border: "1px solid #fff",
-            }}
-          ></div>
-          <p
-            style={{
-              width: "4%",
-              textAlign: "center",
-              fontSize: "10px",
-              fontWeight: "bold",
-              color: "#fff",
-            }}
-          >
-            OR
-          </p>
-          <div
-            style={{
-              display: "block",
-              width: "48%",
-              height: "1px",
-              border: "1px solid #fff",
-            }}
-          ></div>
-        </Flex>
-        <Autocomplete placeholder={`Pick a city in ${regionName}`} data={[]} />
+        {!isCity && (
+          <>
+            <Flex
+              align="center"
+              justify="center"
+              gap="xs"
+              style={{ opacity: "0.15" }}
+            >
+              <div
+                style={{
+                  display: "block",
+                  width: "48%",
+                  height: "1px",
+                  border: "1px solid #fff",
+                }}
+              ></div>
+              <p
+                style={{
+                  width: "4%",
+                  textAlign: "center",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  color: "#fff",
+                }}
+              >
+                OR
+              </p>
+              <div
+                style={{
+                  display: "block",
+                  width: "48%",
+                  height: "1px",
+                  border: "1px solid #fff",
+                }}
+              ></div>
+            </Flex>
+            <Autocomplete
+              placeholder={`Pick a city in ${regionName}`}
+              value={citySearch}
+              onChange={function (e) {
+                const field = "city";
+                setCitySearch(e);
+                handleChange(field, e);
+              }}
+              onItemSubmit={function (e) {
+                handleSelect(e);
+                setCitySearch("");
+              }}
+              ref={cityAutoRef}
+              onClick={function (event) {
+                event.preventDefault();
+                cityAutoRef.current.select();
+              }}
+              data={cityData}
+              filter={(value, item) => item}
+            />
+          </>
+        )}
       </Modal>
       {visible && showPlaceSearch && (
         <Flex
@@ -280,11 +332,18 @@ export default function Mymap() {
             size="md"
             radius="xl"
             value={countrySearch}
-            onChange={(e) => handleChange(e)}
+            onChange={function (e) {
+              const field = "country";
+              setCountrySearch(e);
+              handleChange(field, e);
+            }}
             onItemSubmit={(e) => handleSelect(e)}
-            onClick={handleClick}
-            ref={autocompleteRef}
-            data={suggestions}
+            ref={countryAutoRef}
+            onClick={function (event) {
+              event.preventDefault();
+              countryAutoRef.current.select();
+            }}
+            data={countryData}
             filter={(value, item) => item}
             style={{
               width: "500px",

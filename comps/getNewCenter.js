@@ -113,63 +113,75 @@ function getNewCenter(orgCenter, place) {
       break;
     case "Grenada":
       newCenter = [-61.7, 12];
-      maxZoom = 8;
+      maxZoom = 9;
       break;
     case "Barbados":
       newCenter = [-59.5, 13];
-      maxZoom = 8;
+      maxZoom = 9;
       break;
     case "Saint Vincent and the Grenadines":
       newCenter = [-61.2, 13];
-      maxZoom = 8;
+      maxZoom = 9;
       break;
     case "Martinique":
-      newCenter = [-61, 14];
-      maxZoom = 8;
+      newCenter = [-61, 14.5];
+      maxZoom = 9;
       break;
     case "Saint Lucia":
-      newCenter = [-61, 13];
-      maxZoom = 8;
+      newCenter = [-61, 13.7];
+      maxZoom = 9;
       break;
     case "Dominica":
-      newCenter = [-61.2, 15.4];
-      maxZoom = 8;
+      newCenter = [-61.4, 15.4];
+      maxZoom = 9;
       break;
     case "Antigua and Barbuda":
       newCenter = [-61.7, 17];
-      maxZoom = 8;
+      maxZoom = 9;
       break;
     case "Guadeloupe":
       newCenter = [-61.5, 16];
-      maxZoom = 8;
+      maxZoom = 9;
       break;
     case "Montserrat":
-      newCenter = [-62, 16];
-      maxZoom = 8;
+      newCenter = [-62.2, 16.5];
+      maxZoom = 9;
       break;
     case "Antigua and Barbuda":
-      newCenter = [-61, 17];
-      maxZoom = 8;
+      newCenter = [-61.1, 17];
+      maxZoom = 9;
       break;
     case "Saint Kitts and Nevis":
       newCenter = [-62.7, 17];
-      maxZoom = 8;
+      maxZoom = 9;
       break;
-    case "US Virgin Islands":
-      newCenter = [-64, 18];
-      maxZoom = 8;
+    case "U.S. Virgin Islands":
+      newCenter = [-64.75, 17.85];
+      maxZoom = 9;
       break;
     case "British Virgin Islands":
-      newCenter = [-64.4, 18.4];
-      maxZoom = 8;
+      newCenter = [-64.45, 18.4];
+      maxZoom = 9;
       break;
     case "Trinidad and Tobago":
       newCenter = [-61.1, 11];
-      maxZoom = 7.8;
+      maxZoom = 9;
       break;
     case "Turks and Caicos Islands":
       newCenter = [-72, 21];
-      maxZoom = 7.5;
+      maxZoom = 8.2;
+      break;
+    case "Saint Martin":
+      newCenter = [-63, 18];
+      maxZoom = 9;
+      break;
+    case "Anguilla":
+      newCenter = [-63.1, 18];
+      maxZoom = 9;
+      break;
+    case "Puerto Rico":
+      newCenter = [-66.5, 18.25];
+      maxZoom = 8.5;
       break;
     default:
       break;
