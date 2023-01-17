@@ -9,6 +9,7 @@ import {
   Button,
   Flex,
   Tooltip,
+  Text,
 } from "@mantine/core";
 import { atom, useRecoilState } from "recoil";
 import { visibleState } from "../pages/index";
@@ -24,6 +25,7 @@ export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
   const [regionName, setRegionName] = useState("");
+  const [citySubTitle, setCitySubTitle] = useState("");
   const [isoName, setIsoName] = useState("");
   const [countrySearch, setCountrySearch] = useState("");
   const [citySearch, setCitySearch] = useState("");
@@ -35,6 +37,7 @@ export default function Mymap() {
   const [showModal, setShowModal] = useState(false);
   const [isState, setIsState] = useState(false);
   const [isCity, setIsCity] = useState(false);
+  const [isCountry, setIsCountry] = useState(false);
   const [visible, setVisible] = useRecoilState(visibleState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
@@ -66,7 +69,16 @@ export default function Mymap() {
       feature?.text ||
       "";
 
-    console.log("Place Type: ", feature?.place_type);
+    let dashIndex = feature?.layer?.id.indexOf("-");
+    let placeType = feature?.layer?.id.substring(0, dashIndex);
+    if (isSelection) {
+      placeType = feature?.place_type[0];
+    }
+    if (placeType === "country" || placeType === "country-boundries") {
+      setIsCountry(true);
+    } else {
+      setIsCountry(false);
+    }
 
     let border;
     if (feature?.text) {
@@ -108,8 +120,12 @@ export default function Mymap() {
       ) {
         maxZoom = 12;
         mapPitch = 75;
+        let index = feature.place_name.indexOf(",");
+        let result = feature.place_name.substring(index + 1);
+        setCitySubTitle(result);
         setIsCity(true);
       } else {
+        setCitySubTitle("");
         setIsCity(false);
       }
 
@@ -150,11 +166,18 @@ export default function Mymap() {
 
   const handleChange = async (field, e) => {
     let endpoint;
-    if (field === "country")
-      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&proximity=ip&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion%2Ccountry&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
-    if (field === "city") {
-      const [minLng, minLat, maxLng, maxLat] = borderBox;
-      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&proximity=ip&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+    switch (field) {
+      case "country":
+        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion%2Ccountry&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+        break;
+      case "city":
+        const [minLng, minLat, maxLng, maxLat] = borderBox;
+        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+        if (isCountry)
+          endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+        break;
+      default:
+        break;
     }
 
     if (countrySearch.length > 1 || citySearch.length > 1) {
@@ -212,31 +235,43 @@ export default function Mymap() {
         zIndex={99}
         onClose={onClose}
         overlayColor="rgba(0,0,0,1)"
-        overlayOpacity={0.75}
+        overlayOpacity={0}
+        overlayBlur={5}
         transition="pop"
         transitionDuration={800}
         transitionTimingFunction="ease"
         title={
-          <Title
-            order={1}
-            fw={900}
-            variant="gradient"
-            gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
-            sx={{
-              textTransform: "uppercase",
-            }}
-          >
-            {regionName}
-          </Title>
+          <>
+            <Title
+              order={1}
+              fw={900}
+              variant="gradient"
+              gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
+              sx={{
+                textTransform: "uppercase",
+              }}
+            >
+              {regionName}
+            </Title>
+            {citySubTitle && (
+              <Text fw={600} size="xs">
+                {citySubTitle}
+              </Text>
+            )}
+          </>
         }
         styles={(theme) => ({
           modal: {
             backgroundColor: "rgba(0,0,0,0.5)",
           },
           close: {
+            outline: "none",
             position: "absolute",
             top: "10px",
             right: "10px",
+            ":focus": {
+              outline: "none",
+            },
           },
         })}
       >
@@ -300,7 +335,8 @@ export default function Mymap() {
               ></div>
             </Flex>
             <Autocomplete
-              placeholder={`Pick a city in ${regionName}`}
+              placeholder={`Pick a place in ${regionName}...`}
+              defaultValue=""
               value={citySearch}
               onChange={function (e) {
                 const field = "city";
@@ -318,6 +354,13 @@ export default function Mymap() {
               }}
               data={cityData}
               filter={(value, item) => item}
+              styles={(theme) => ({
+                input: {
+                  "::placeholder": {
+                    color: "white",
+                  },
+                },
+              })}
             />
           </>
         )}
@@ -335,6 +378,7 @@ export default function Mymap() {
             placeholder="Where in the world do you want to go?"
             size="md"
             radius="xl"
+            defaultValue=""
             value={countrySearch}
             onChange={function (e) {
               const field = "country";
@@ -379,7 +423,7 @@ export default function Mymap() {
             latitude={placeLngLat[1]}
             offsetLeft={-20}
             offsetTop={-10}
-            scale={4}
+            scale={4.5}
           ></Marker>
         )}
         <Source
