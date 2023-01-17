@@ -5,6 +5,7 @@ import {
   Title,
   Text,
   Button,
+  Group,
   Overlay,
   Transition,
 } from "@mantine/core";
@@ -59,7 +60,7 @@ export default function Intro() {
               nulla pariatur. Excepteur sint occaecat cupidatat non proident,
               sunt in culpa qui officia deserunt mollit anim id est laborum.
             </Text>
-            <Button.Group
+            <Group
               sx={{
                 marginTop: "30px",
                 justifyContent: "center",
@@ -87,7 +88,7 @@ export default function Intro() {
               >
                 Plan a trip
               </Button>
-            </Button.Group>
+            </Group>
           </Box>
         </Center>
       )}

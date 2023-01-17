@@ -282,7 +282,7 @@ export default function Mymap() {
         }
         styles={(theme) => ({
           modal: {
-            backgroundColor: "rgba(0,0,0,0.5)",
+            backgroundColor: "rgba(0,0,0,0.6)",
           },
           close: {
             outline: "none",
