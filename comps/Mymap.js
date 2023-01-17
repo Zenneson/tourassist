@@ -153,6 +153,8 @@ export default function Mymap() {
     }
     setRegionName(location);
     setIsoName(isoName);
+    setCityData([]);
+    setCountryData([]);
   }
 
   const onEvent = (event) => {
