@@ -10,6 +10,7 @@ import {
   Flex,
   Tooltip,
   Text,
+  LoadingOverlay,
 } from "@mantine/core";
 import { atom, useRecoilState } from "recoil";
 import { visibleState } from "../pages/index";
@@ -38,6 +39,7 @@ export default function Mymap() {
   const [isState, setIsState] = useState(false);
   const [isCity, setIsCity] = useState(false);
   const [isCountry, setIsCountry] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(true);
   const [visible, setVisible] = useRecoilState(visibleState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
@@ -231,6 +233,14 @@ export default function Mymap() {
 
   return (
     <>
+      <LoadingOverlay
+        visible={mapLoaded}
+        zIndex={103}
+        transitionDuration={3000}
+        overlayBlur={10}
+        overlayOpacity={0.9}
+        overlayColor="#000"
+      />
       <Modal
         centered
         opened={showModal}
@@ -407,8 +417,7 @@ export default function Mymap() {
         initialViewState={initialViewState}
         maxPitch={80}
         onZoomEnd={onZoomEnd}
-        // touchPitch={false}
-        // touchZoomRotate={false}
+        onLoad={() => setMapLoaded((v) => !v)}
         keyboard={false}
         ref={mapRef}
         onClick={onEvent}

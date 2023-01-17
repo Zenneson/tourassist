@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { RecoilRoot } from "recoil";
 import { MantineProvider } from "@mantine/core";
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 export default function App(props) {
   const { Component, pageProps } = props;
 
@@ -22,7 +22,7 @@ export default function App(props) {
           /** Put your mantine theme override here */
           // colorScheme: "light",
           colorScheme: "dark",
-          loader: "bars",
+          loader: "dots",
         }}
       >
         <RecoilRoot>
