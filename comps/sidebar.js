@@ -1,7 +1,14 @@
 import { useRecoilState } from "recoil";
-import { Drawer, Button, CloseButton, Stack } from "@mantine/core";
+import {
+  Drawer,
+  Button,
+  CloseButton,
+  Stack,
+  Divider,
+  SegmentedControl,
+} from "@mantine/core";
 import { listOpenedState } from "../pages/index";
-import { IconMenuOrder } from "@tabler/icons";
+import { IconMapPin, IconMenuOrder, IconTrash } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
 
 export default function Sidebar() {
@@ -24,13 +31,38 @@ export default function Sidebar() {
           },
         }}
       >
-        <Stack
+        <Divider
+          label="Tour List"
           style={{
-            marginTop: "80px",
+            margin: "65px 0 15px 0",
+            opacity: 0.3,
           }}
-        >
+        />
+        <Stack>
           <PlaceListItem />
         </Stack>
+        <SegmentedControl
+          radius="xl"
+          // fullWidth
+          sx={({ theme }) => ({
+            width: "70%",
+            marginLeft: "15%",
+            opacity: 0.5,
+            transition: "all 200ms ease-in-out",
+            "&:hover": {
+              opacity: 1,
+            },
+            marginTop: "15px",
+            label: {
+              padding: "5px 0 0 0",
+            },
+          })}
+          data={[
+            { value: "location", label: <IconMapPin size={15} /> },
+            { value: "reorder", label: <IconMenuOrder size={15} /> },
+            { value: "delete", label: <IconTrash size={15} /> },
+          ]}
+        />
       </Drawer>
     </>
   );
