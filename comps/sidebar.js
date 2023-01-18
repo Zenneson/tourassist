@@ -1,6 +1,8 @@
 import { useRecoilState } from "recoil";
-import { Drawer } from "@mantine/core";
+import { Drawer, Button, CloseButton } from "@mantine/core";
 import { listOpenedState } from "../pages/index";
+import { IconMenuOrder } from "@tabler/icons";
+import PlaceListItem from "./placeListItem";
 
 export default function Sidebar() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
@@ -12,22 +14,26 @@ export default function Sidebar() {
         onClose={() => setListOpened(false)}
         withOverlay={false}
         withCloseButton={false}
-        zIndex={99}
+        zIndex={100}
         padding="xl"
-        size="sm"
+        size="md"
         styles={{
           drawer: {
-            background: "rgba(18, 18, 18, 0.7)",
+            background: "rgba(10, 10, 10, 0.95)",
             boxShadow: "0px 0px 5px 0px rgba(0, 0, 0, 0.3)",
           },
         }}
       >
         <div
           style={{
-            paddingTop: "35px",
+            marginTop: "60px",
           }}
         >
-          <h2>Tour</h2>
+          <PlaceListItem />
+          <PlaceListItem />
+          <PlaceListItem />
+          <PlaceListItem />
+          <PlaceListItem />
         </div>
       </Drawer>
     </>

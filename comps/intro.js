@@ -81,7 +81,8 @@ export default function Intro() {
                 uppercase={true}
                 loading={mapLoaded}
                 loaderProps={{ variant: "oval", size: 20 }}
-                variant="filled"
+                variant="gradient"
+                gradient={{ from: "#001930", to: "#001427", deg: 180 }}
                 sx={{ width: "200px" }}
                 onClick={() => setVisible((v) => !v)}
                 leftIcon={<IconWorld size={20} style={{ color: "#00E8FC" }} />}

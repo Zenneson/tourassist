@@ -56,7 +56,7 @@ export default function Home() {
             <Header
               height={{ base: 50, md: 70 }}
               p="md"
-              zIndex={100}
+              zIndex={120}
               hidden={!visible}
             >
               <div

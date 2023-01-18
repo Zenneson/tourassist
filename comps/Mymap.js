@@ -269,6 +269,7 @@ export default function Mymap() {
               gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
               sx={{
                 textTransform: "uppercase",
+                textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
               }}
             >
               {regionName}
@@ -297,6 +298,8 @@ export default function Mymap() {
       >
         <Flex gap="xs">
           <Button
+            variant="gradient"
+            gradient={{ from: "#001930", to: "#001427", deg: 180 }}
             sx={{
               width: "90%",
             }}
@@ -309,6 +312,8 @@ export default function Mymap() {
             withArrow
           >
             <Button
+              variant="gradient"
+              gradient={{ from: "#001930", to: "#001427", deg: 180 }}
               sx={{
                 width: "10%",
                 padding: "0",
