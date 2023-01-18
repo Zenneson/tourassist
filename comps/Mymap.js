@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import Map, { Marker, Source, Layer } from "react-map-gl";
 import bbox from "@turf/bbox";
 import centerOfMass from "@turf/center-of-mass";
+import { atom, useRecoilState } from "recoil";
 import {
   Autocomplete,
   Modal,
@@ -13,10 +14,16 @@ import {
   LoadingOverlay,
   Divider,
 } from "@mantine/core";
-import { atom, useRecoilState } from "recoil";
-import { visibleState } from "../pages/index";
-import { IconPlaylistAdd, IconMapSearch } from "@tabler/icons";
+import {
+  IconPlaylistAdd,
+  IconMapSearch,
+  IconQuestionMark,
+} from "@tabler/icons";
 import { getNewCenter } from "../comps/getNewCenter";
+import { visibleState } from "../pages/index";
+import { searchOpenedState } from "../pages/index";
+import { infoOpenedState } from "../comps/infoModal";
+import { loginOpenedState } from "../comps/loginModal";
 
 export const placeSearchState = atom({
   key: "placeSearchState",
@@ -47,6 +54,9 @@ export default function Mymap() {
   const [isCountry, setIsCountry] = useState(false);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [visible, setVisible] = useRecoilState(visibleState);
+  const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
+  const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
+  const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
 
@@ -299,7 +309,7 @@ export default function Mymap() {
         <Flex gap="xs">
           <Button
             variant="gradient"
-            gradient={{ from: "#001930", to: "#001427", deg: 180 }}
+            gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
             sx={{
               width: "90%",
             }}
@@ -313,7 +323,7 @@ export default function Mymap() {
           >
             <Button
               variant="gradient"
-              gradient={{ from: "#001930", to: "#001427", deg: 180 }}
+              gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
               sx={{
                 width: "10%",
                 padding: "0",
@@ -325,19 +335,16 @@ export default function Mymap() {
         </Flex>
         {!isCity && (
           <>
-            <div
+            <Divider
+              label={<IconMapSearch size={17} />}
+              labelPosition="center"
+              color="#fff"
+              size="xs"
+              my="xs"
               style={{
-                opacity: 0.1,
+                opacity: 0.2,
               }}
-            >
-              <Divider
-                label={<IconMapSearch size={17} />}
-                labelPosition="center"
-                color="#fff"
-                size="xs"
-                my="xs"
-              />
-            </div>
+            />
             <Autocomplete
               placeholder={`Pick a place in ${regionName}...`}
               defaultValue=""
@@ -369,42 +376,65 @@ export default function Mymap() {
           </>
         )}
       </Modal>
-      {visible && showPlaceSearch && (
-        <Flex
-          justify="center"
-          sx={{
-            position: "absolute",
-            bottom: "100px",
-            width: "100%",
-          }}
-        >
-          <Autocomplete
-            placeholder="Where in the world do you want to go?"
-            size="md"
-            radius="xl"
-            defaultValue=""
-            value={countrySearch}
-            onChange={function (e) {
-              const field = "country";
-              setCountrySearch(e);
-              handleChange(field, e);
+      {!loginOpened &&
+        !infoOpened &&
+        !searchOpened &&
+        visible &&
+        showPlaceSearch && (
+          <Flex
+            justify="center"
+            align="center"
+            gap={10}
+            sx={{
+              position: "absolute",
+              bottom: "100px",
+              width: "100%",
             }}
-            onItemSubmit={(e) => handleSelect(e)}
-            ref={countryAutoRef}
-            onClick={function (event) {
-              event.preventDefault();
-              countryAutoRef.current.select();
-            }}
-            data={countryData}
-            filter={(value, item) => item}
-            style={{
-              width: "500px",
-              zIndex: 100,
-              padding: "20px",
-            }}
-          />
-        </Flex>
-      )}
+          >
+            <Autocomplete
+              placeholder="Where in the world do you want to go?"
+              size="md"
+              radius="xl"
+              defaultValue=""
+              value={countrySearch}
+              onChange={function (e) {
+                const field = "country";
+                setCountrySearch(e);
+                handleChange(field, e);
+              }}
+              onItemSubmit={(e) => handleSelect(e)}
+              ref={countryAutoRef}
+              onClick={function (event) {
+                event.preventDefault();
+                countryAutoRef.current.select();
+              }}
+              data={countryData}
+              filter={(value, item) => item}
+              style={{
+                width: "350px",
+                zIndex: 100,
+              }}
+            />
+            <Tooltip
+              label="TourAssist?"
+              position="top"
+              openDelay={800}
+              withArrow
+            >
+              <Button
+                onClick={() => setInfoOpened(true)}
+                variant="default"
+                radius="xl"
+                p={10}
+                style={{
+                  zIndex: 100,
+                }}
+              >
+                <IconQuestionMark size={15} />
+              </Button>
+            </Tooltip>
+          </Flex>
+        )}
       <Map
         initialViewState={initialViewState}
         maxPitch={80}

@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { Drawer, Button, CloseButton } from "@mantine/core";
+import { Drawer, Button, CloseButton, Stack } from "@mantine/core";
 import { listOpenedState } from "../pages/index";
 import { IconMenuOrder } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
@@ -19,22 +19,18 @@ export default function Sidebar() {
         size="md"
         styles={{
           drawer: {
-            background: "rgba(10, 10, 10, 0.95)",
+            background: "rgba(31, 31, 31, 0.95)",
             boxShadow: "0px 0px 5px 0px rgba(0, 0, 0, 0.3)",
           },
         }}
       >
-        <div
+        <Stack
           style={{
-            marginTop: "60px",
+            marginTop: "80px",
           }}
         >
           <PlaceListItem />
-          <PlaceListItem />
-          <PlaceListItem />
-          <PlaceListItem />
-          <PlaceListItem />
-        </div>
+        </Stack>
       </Drawer>
     </>
   );

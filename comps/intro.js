@@ -9,13 +9,15 @@ import {
   Overlay,
   Transition,
 } from "@mantine/core";
-import { IconWorld } from "@tabler/icons";
+import { IconWorld, IconLogin } from "@tabler/icons";
 import { visibleState } from "../pages/index";
 import { mapLoadState } from "./Mymap";
+import { loginOpenedState } from "./loginModal";
 
 export default function Intro() {
   const [visible, setVisible] = useRecoilState(visibleState);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
+  const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
 
   return (
     <>
@@ -72,6 +74,11 @@ export default function Intro() {
                 fw={900}
                 variant="default"
                 sx={{ width: "200px", color: "rgba(255,255,255,0.3)" }}
+                leftIcon={<IconLogin size={20} />}
+                onClick={function () {
+                  setLoginOpened(true);
+                  setVisible(true);
+                }}
               >
                 Login | Sign Up
               </Button>
@@ -82,9 +89,9 @@ export default function Intro() {
                 loading={mapLoaded}
                 loaderProps={{ variant: "oval", size: 20 }}
                 variant="gradient"
-                gradient={{ from: "#001930", to: "#001427", deg: 180 }}
+                gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
                 sx={{ width: "200px" }}
-                onClick={() => setVisible((v) => !v)}
+                onClick={() => setVisible(true)}
                 leftIcon={<IconWorld size={20} style={{ color: "#00E8FC" }} />}
               >
                 Plan a trip

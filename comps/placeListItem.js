@@ -1,28 +1,36 @@
-import { Button, CloseButton } from "@mantine/core";
-import { IconMenuOrder } from "@tabler/icons";
+import { Button, CloseButton, Box } from "@mantine/core";
+import { IconMenuOrder, IconX } from "@tabler/icons";
 
 export default function Page() {
   return (
-    <>
+    <div>
       <Button.Group
         sx={{
           borderRadius: "5px",
-          marginBottom: "15px",
         }}
       >
         <Button
           variant="gradient"
-          gradient={{ from: "#001930", to: "#001427", deg: 180 }}
+          gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
           sx={{
             padding: "0 10px",
             color: "rgba(255, 255, 255, 0.5)",
+            opacity: "0.7",
           }}
+          styles={(theme) => ({
+            root: {
+              "&:hover": {
+                opacity: "1",
+                transition: "background 0.2s ease-in-out",
+              },
+            },
+          })}
         >
           <IconMenuOrder size={16} />
         </Button>
         <Button
           variant="gradient"
-          gradient={{ from: "#001930", to: "#001427", deg: 180 }}
+          gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
           overflow="hidden"
           fullWidth
           fw={400}
@@ -30,20 +38,31 @@ export default function Page() {
             maxWidth: "198px",
             fontSize: "12px",
             color: "#fff",
+            pointerEvents: "none",
           }}
         >
           Country Name
         </Button>
         <Button
-          color="red"
+          variant="gradient"
+          gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
           sx={{
-            background: "#001427",
-            padding: "0 5px",
+            padding: "0",
           }}
+          styles={(theme) => ({
+            label: {
+              padding: "0 7px",
+              "&:hover": {
+                background: "#ed0000",
+                borderRadius: "0 5px 5px 0",
+                transition: "background 0.2s ease-in-out",
+              },
+            },
+          })}
         >
-          <CloseButton />
+          <IconX size={18} />
         </Button>
       </Button.Group>
-    </>
+    </div>
   );
 }
