@@ -14,6 +14,13 @@ export default function Sidebar() {
         withCloseButton={false}
         zIndex={99}
         padding="xl"
+        size="sm"
+        styles={{
+          drawer: {
+            background: "rgba(18, 18, 18, 0.7)",
+            boxShadow: "0px 0px 5px 0px rgba(0, 0, 0, 0.3)",
+          },
+        }}
       >
         <div
           style={{
