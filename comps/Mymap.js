@@ -18,12 +18,14 @@ import {
   IconPlaylistAdd,
   IconMapSearch,
   IconQuestionMark,
+  IconLocation,
 } from "@tabler/icons";
 import { getNewCenter } from "../comps/getNewCenter";
 import { visibleState } from "../pages/index";
 import { searchOpenedState } from "../pages/index";
 import { infoOpenedState } from "../comps/infoModal";
 import { loginOpenedState } from "../comps/loginModal";
+import { listOpenedState } from "../pages/index";
 
 export const placeSearchState = atom({
   key: "placeSearchState",
@@ -33,6 +35,11 @@ export const placeSearchState = atom({
 export const mapLoadState = atom({
   key: "mapLoadState",
   default: true,
+});
+
+export const placeListState = atom({
+  key: "placeListState",
+  default: [],
 });
 
 export default function Mymap() {
@@ -52,11 +59,14 @@ export default function Mymap() {
   const [isState, setIsState] = useState(false);
   const [isCity, setIsCity] = useState(false);
   const [isCountry, setIsCountry] = useState(false);
+  const [placeLocation, setPlaceLocation] = useState({});
+  const [places, setPlaces] = useRecoilState(placeListState);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [visible, setVisible] = useRecoilState(visibleState);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
+  const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
 
@@ -72,11 +82,12 @@ export default function Mymap() {
     console.log("Region Name: ", regionName);
     console.log("ISO: ", isoName);
     console.log("Place Center: ", placeLngLat);
-  }, [regionName, isoName, placeLngLat]);
+    console.log("Places: ", places);
+  }, [regionName, isoName, placeLngLat, places]);
 
   function goToCountry(feature) {
     if (feature == null) return;
-    setIsState(feature?.properties?.NAME);
+    setIsState(feature?.properties?.STATE);
     setPlaceLngLat(feature?.center);
     let stateZoom = 3.5;
     let isSelection = true ? feature?.text : false;
@@ -130,6 +141,9 @@ export default function Mymap() {
         newCenter = feature.geometry.coordinates;
       }
 
+      let index = feature.place_name?.indexOf(",");
+      let result = feature.place_name?.substring(index + 2);
+      setCitySubTitle(result);
       if (
         isSelection &&
         (feature?.place_type[0] === "place" ||
@@ -138,14 +152,19 @@ export default function Mymap() {
       ) {
         maxZoom = 12;
         mapPitch = 75;
-        let index = feature.place_name.indexOf(",");
-        let result = feature.place_name.substring(index + 1);
-        setCitySubTitle(result);
         setIsCity(true);
       } else {
         setCitySubTitle("");
         setIsCity(false);
       }
+
+      let currentLocation = {};
+      if (placeType === "country") currentLocation = { name: location };
+      if (placeType === "place" || placeType === "region")
+        currentLocation = { name: location, region: result };
+      if (placeType === "")
+        currentLocation = { name: location, region: "United States" };
+      setPlaceLocation(currentLocation);
 
       mapRef.current.flyTo({
         center: newCenter,
@@ -174,6 +193,13 @@ export default function Mymap() {
     setCityData([]);
     setCountryData([]);
   }
+
+  const addPlaces = (place) => {
+    let key = places.length + 1;
+    place.id = key;
+    let newPlaces = [...places, place];
+    setPlaces(newPlaces);
+  };
 
   const onEvent = (event) => {
     const feature = event.features[0];
@@ -314,7 +340,12 @@ export default function Mymap() {
               width: "90%",
             }}
           >
-            Travel to {regionName}
+            <Text span color="dimmed">
+              Travel to&nbsp;{" "}
+            </Text>
+            <Text span size="md" fw={900} transform="uppercase">
+              {regionName}
+            </Text>
           </Button>
           <Tooltip
             label={`Add ${regionName} to Tour`}
@@ -323,6 +354,10 @@ export default function Mymap() {
           >
             <Button
               variant="gradient"
+              onClick={() => {
+                addPlaces(placeLocation);
+                setListOpened(true);
+              }}
               gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
               sx={{
                 width: "10%",
@@ -346,6 +381,7 @@ export default function Mymap() {
               }}
             />
             <Autocomplete
+              icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
               placeholder={`Pick a place in ${regionName}...`}
               defaultValue=""
               value={citySearch}
@@ -392,27 +428,28 @@ export default function Mymap() {
             }}
           >
             <Autocomplete
-              placeholder="Where in the world do you want to go?"
+              icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
               size="md"
               radius="xl"
               defaultValue=""
               value={countrySearch}
-              onChange={function (e) {
-                const field = "country";
-                setCountrySearch(e);
-                handleChange(field, e);
-              }}
+              placeholder="Where in the world do you want to go?"
               onItemSubmit={(e) => handleSelect(e)}
               ref={countryAutoRef}
-              onClick={function (event) {
-                event.preventDefault();
-                countryAutoRef.current.select();
-              }}
               data={countryData}
               filter={(value, item) => item}
               style={{
                 width: "350px",
                 zIndex: 100,
+              }}
+              onClick={function (event) {
+                event.preventDefault();
+                countryAutoRef.current.select();
+              }}
+              onChange={function (e) {
+                const field = "country";
+                setCountrySearch(e);
+                handleChange(field, e);
               }}
             />
             <Tooltip

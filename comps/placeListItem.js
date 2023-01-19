@@ -1,11 +1,12 @@
 import { Avatar, Grid, Col, Text, Button } from "@mantine/core";
 import { IconMapPin, IconMenuOrder, IconTrash } from "@tabler/icons";
 
-export default function Page({ init, name, region }) {
+export default function Page({ name, region }) {
   return (
     <Grid
       align="center"
       sx={{
+        marginTop: "2px",
         borderRadius: "100px",
         cursor: "pointer",
         userSelect: "none",
@@ -25,7 +26,8 @@ export default function Page({ init, name, region }) {
           radius="xl"
           color="#00E8FC"
         >
-          {init}
+          US
+          {/* {init} */}
         </Avatar>
       </Col>
       <Col span="auto">

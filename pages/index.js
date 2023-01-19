@@ -27,7 +27,7 @@ import Intro from "../comps/intro";
 import Sidebar from "../comps/sidebar";
 import Mymap from "../comps/Mymap";
 import { placeSearchState } from "../comps/Mymap";
-import { placeListState } from "../comps/sidebar";
+import { placeListState } from "../comps/Mymap";
 import InfoModal, { infoOpenedState } from "../comps/infoModal";
 import LoginModal, { loginOpenedState } from "../comps/loginModal";
 

@@ -3,6 +3,7 @@ import { atom, useRecoilState } from "recoil";
 import {
   Drawer,
   Button,
+  Box,
   CloseButton,
   Stack,
   Divider,
@@ -10,32 +11,9 @@ import {
   Center,
 } from "@mantine/core";
 import { listOpenedState } from "../pages/index";
+import { placeListState } from "../comps/Mymap";
 import { IconMapPin, IconMenuOrder, IconTrash, IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
-
-export const placeListState = atom({
-  key: "placeListState",
-  default: [
-    {
-      id: 1,
-      init: "SS",
-      name: "Silver Spring",
-      region: "Maryland, United States",
-    },
-    {
-      id: 2,
-      init: "SG",
-      name: "Saint Georges",
-      region: "Grenada",
-    },
-    {
-      id: 3,
-      init: "NY",
-      name: "New York",
-      region: "New York, United States",
-    },
-  ],
-});
 
 export default function Sidebar() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
@@ -89,7 +67,7 @@ export default function Sidebar() {
         />
         <Stack spacing={10}>
           {places.map((place) => (
-            <>
+            <Box key={place.id}>
               {place.id !== 1 && (
                 <Divider
                   sx={{
@@ -97,13 +75,8 @@ export default function Sidebar() {
                   }}
                 />
               )}
-              <PlaceListItem
-                key={place.id}
-                init={place.init}
-                name={place.name}
-                region={place.region}
-              />
-            </>
+              <PlaceListItem name={place.name} region={place.region} />
+            </Box>
           ))}
         </Stack>
         <Button
