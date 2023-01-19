@@ -84,7 +84,7 @@ export default function Sidebar() {
           label="Tour Locations"
           sx={{
             opacity: 0.4,
-            margin: "15px 0 5px 0",
+            margin: "5px 0 10px 0",
           }}
         />
         <Stack spacing={10}>
