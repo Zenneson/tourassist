@@ -34,7 +34,7 @@ export default function Sidebar() {
         <Divider
           label="Tour List"
           style={{
-            margin: "65px 0 15px 0",
+            margin: "65px 0 5px 0",
             opacity: 0.3,
           }}
         />
