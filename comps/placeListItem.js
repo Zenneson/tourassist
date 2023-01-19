@@ -6,7 +6,7 @@ export default function Page({ init, name, region }) {
     <Grid
       align="center"
       sx={{
-        borderRadius: "5px",
+        borderRadius: "100px",
         cursor: "pointer",
         userSelect: "none",
         transition: "all 200ms ease",
