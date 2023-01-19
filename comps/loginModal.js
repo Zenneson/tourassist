@@ -13,7 +13,7 @@ export default function LoginModal() {
   return (
     <>
       <Modal
-        overlayColor="rgba(0,0,0,0.9)"
+        overlayColor="rgba(0,0,0,0)"
         overlayBlur={10}
         opened={loginOpened}
         onClose={() => setLoginOpened(false)}
@@ -25,7 +25,7 @@ export default function LoginModal() {
         }
         styles={(theme) => ({
           modal: {
-            backgroundColor: "rgba(0,0,0,0.95)",
+            backgroundColor: "rgba(0,0,0,0.9)",
           },
           close: {
             outline: "none",

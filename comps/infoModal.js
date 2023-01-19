@@ -33,7 +33,7 @@ export default function InfoModal() {
         }
         styles={(theme) => ({
           modal: {
-            backgroundColor: "rgba(0,0,0,0.95)",
+            backgroundColor: "rgba(0,0,0,0.9)",
           },
           close: {
             outline: "none",

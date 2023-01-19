@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
-import { IconQuestionMark, IconLogin, IconSearch } from "@tabler/icons";
+import {
+  IconQuestionMark,
+  IconLogin,
+  IconSearch,
+  IconList,
+} from "@tabler/icons";
 import {
   useMantineTheme,
   Box,
@@ -22,6 +27,7 @@ import Intro from "../comps/intro";
 import Sidebar from "../comps/sidebar";
 import Mymap from "../comps/Mymap";
 import { placeSearchState } from "../comps/Mymap";
+import { placeListState } from "../comps/sidebar";
 import InfoModal, { infoOpenedState } from "../comps/infoModal";
 import LoginModal, { loginOpenedState } from "../comps/loginModal";
 
@@ -47,6 +53,7 @@ export default function Home() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [visible, setVisible] = useRecoilState(visibleState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
+  const [places, setPlaces] = useRecoilState(placeListState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
 
@@ -107,7 +114,6 @@ export default function Home() {
                 height={50}
                 src={"img/blogo.png"}
                 alt="TouraSSist_logo"
-                onClick={() => setListOpened((o) => !o)}
                 withPlaceholder
               />
               <Group
@@ -163,10 +169,35 @@ export default function Home() {
                   </Button>
                 </Tooltip>
               </Group>
-              <Sidebar />
+              {visible && !infoOpened && !searchOpened && !loginOpened && (
+                <Sidebar />
+              )}
             </Header>
           }
         >
+          {places.length >= 1 && !listOpened && (
+            <Button
+              variant="gradient"
+              gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+              onClick={() => setListOpened(true)}
+              sx={{
+                opacity: 0.5,
+                borderRadius: "0 5px 5px 0",
+                position: "absolute",
+                top: "105px",
+                left: "0",
+                padding: "0 8px",
+                transition: "all 100ms ease-in-out",
+                zIndex: 120,
+                boxShadow: "0 0 20px rgba(255, 255, 255, 0.1)",
+                "&:hover": {
+                  opacity: 1,
+                },
+              }}
+            >
+              <IconList size={15} />
+            </Button>
+          )}
           <Mymap />
         </AppShell>
       </Box>
