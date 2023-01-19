@@ -112,15 +112,19 @@ export default function Sidebar() {
           size="sm"
           sx={(theme) => ({
             background: "#008554",
+            border: "1px solid #008554",
             transition: "all 100ms ease-in-out",
             color: "#003a24",
-            width: "90%",
-            margin: "25px 0 0 5%",
+            width: "100%",
+            marginTop: "20px",
             opacity: 0.5,
             "&:hover": {
               opacity: 1,
               color: "#fff",
               background: "#003a24",
+              boxShadow: "0px 0px 15px 0px rgba(255, 255, 255, 0.03)",
+              transform: "scale(1.02)",
+              border: "1px solid rgba(255, 255, 255, 0.05)",
             },
           })}
         >

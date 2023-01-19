@@ -181,7 +181,7 @@ export default function Home() {
               gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
               onClick={() => setListOpened(true)}
               sx={{
-                opacity: 0.5,
+                opacity: 0.35,
                 borderRadius: "0 5px 5px 0",
                 position: "absolute",
                 top: "105px",
