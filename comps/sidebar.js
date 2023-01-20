@@ -39,7 +39,7 @@ export default function Sidebar() {
             margin: "70px 0 10px 0",
           }}
         />
-        <Stack spacing={10}>
+        <Stack>
           <ReOrderableList
             name="placesList"
             list={places}

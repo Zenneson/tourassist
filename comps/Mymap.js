@@ -403,7 +403,7 @@ export default function Mymap() {
             />
             <Autocomplete
               icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-              placeholder={`Pick a place in ${regionName}...`}
+              placeholder={`Where in ${regionName}?`}
               defaultValue=""
               value={citySearch}
               onChange={function (e) {

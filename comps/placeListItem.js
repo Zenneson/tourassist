@@ -68,7 +68,7 @@ export default function Page({ name, region }) {
           }}
           styles={({ theme }) => ({
             root: {
-              opacity: 0.35,
+              opacity: 0.25,
               transition: "all 200ms ease",
               "&:hover": {
                 opacity: 1,
@@ -76,7 +76,7 @@ export default function Page({ name, region }) {
             },
             placeholder: {
               background: "rgba(255, 0, 0, 0.04)",
-              border: "1px solid rgba(255, 0, 0, 0.3)",
+              border: "1px solid rgba(255, 255, 255, 0)",
             },
           })}
         >
