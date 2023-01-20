@@ -4,7 +4,7 @@ import { atom, useRecoilState } from "recoil";
 import { buttonModeState } from "./sidebar";
 import { placeListState } from "../comps/Mymap";
 
-export default function Page({ id, name, region, handleDrag, handleDrop }) {
+export default function Page({ name, region }) {
   const [buttonMode, setButtonMode] = useRecoilState(buttonModeState);
   const [places, setPlaces] = useRecoilState(placeListState);
   const handleRemove = () => {
@@ -13,11 +13,7 @@ export default function Page({ id, name, region, handleDrag, handleDrop }) {
 
   return (
     <Grid
-      id={id}
       draggable={buttonMode === "reorder"}
-      onDragOver={(ev) => ev.preventDefault()}
-      onDragStart={handleDrag}
-      onDrop={handleDrop}
       align="center"
       sx={{
         marginTop: "2px",

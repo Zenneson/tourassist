@@ -21,35 +21,9 @@ export const buttonModeState = atom({
 });
 
 export default function Sidebar() {
-  const [dragId, setDragId] = useState();
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
   const [buttonMode, setButtonMode] = useRecoilState(buttonModeState);
-
-  const handleDrag = (ev) => {
-    // setDragId(ev.currentTarget);
-    console.log(ev);
-  };
-
-  const handleDrop = (ev) => {
-    const dragBox = places.find((place) => place === dragId);
-    const dropBox = places.find((place) => place === ev.currentTarget);
-
-    // const dragBoxOrder = dragBox.order;
-    // const dropBoxOrder = dropBox.order;
-
-    const newPlacesState = places.map((place) => {
-      if (place === dragId) {
-        place.order = dropBoxOrder;
-      }
-      if (place === ev.currentTarget) {
-        place.order = dragBoxOrder;
-      }
-      return place;
-    });
-    // const sorted = newPlacesState.sort((a, b) => a.order - b.order);
-    // setPlaces(sorted);
-  };
 
   return (
     <>
@@ -108,13 +82,7 @@ export default function Sidebar() {
                   }}
                 />
               )}
-              <PlaceListItem
-                id={index}
-                name={place.name}
-                region={place.region}
-                handleDrag={handleDrag}
-                handleDrop={handleDrop}
-              />
+              <PlaceListItem name={place.name} region={place.region} />
             </Box>
           ))}
         </Stack>
