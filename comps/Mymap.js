@@ -195,7 +195,7 @@ export default function Mymap() {
   }
 
   const addPlaces = (place) => {
-    let newPlace = place;
+    let newPlace = JSON.parse(JSON.stringify(place));
     newPlace.id = place.id;
     newPlace.order = places.length + 1;
     let newPlaces = [...places, newPlace];
