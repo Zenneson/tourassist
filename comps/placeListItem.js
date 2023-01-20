@@ -70,7 +70,7 @@ export default function Page({ name, region }) {
           }}
           styles={({ theme }) => ({
             root: {
-              opacity: 0.25,
+              opacity: 0.35,
               transition: "all 200ms ease",
               "&:hover": {
                 opacity: 1,
