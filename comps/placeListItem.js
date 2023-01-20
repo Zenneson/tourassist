@@ -49,9 +49,8 @@ export default function Page({ name, region }) {
             },
           })}
         >
-          <IconMapPin size={21} />
-          {/* <IconTrash size={21} /> */}
-          {/* <IconMenuOrder size={21} /> */}
+          <IconMenuOrder size={20} />
+          {/* <IconTrash size={20} /> */}
         </Avatar>
       </Col>
     </Grid>
