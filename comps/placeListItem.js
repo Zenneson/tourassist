@@ -1,5 +1,5 @@
 import { Avatar, Grid, Col, Text, Button } from "@mantine/core";
-import { IconMapPin, IconMenuOrder, IconTrash } from "@tabler/icons";
+import { IconMenuOrder, IconTrash } from "@tabler/icons";
 
 export default function Page({ name, region }) {
   return (
@@ -26,8 +26,7 @@ export default function Page({ name, region }) {
           radius="xl"
           color="#00E8FC"
         >
-          US
-          {/* {init} */}
+          {name[0]}
         </Avatar>
       </Col>
       <Col span="auto">
