@@ -51,11 +51,23 @@ export default function Sidebar() {
                 padding: "5px 0 0 0",
               },
             })}
-            data={[
-              { value: "location", label: <IconMapPin size={15} /> },
-              { value: "reorder", label: <IconMenuOrder size={15} /> },
-              { value: "delete", label: <IconTrash size={15} /> },
-            ]}
+            data={
+              places.length > 1
+                ? [
+                    { value: "location", label: <IconMapPin size={15} /> },
+                    { value: "reorder", label: <IconMenuOrder size={15} /> },
+                    { value: "delete", label: <IconTrash size={15} /> },
+                  ]
+                : [
+                    { value: "location", label: <IconMapPin size={15} /> },
+                    {
+                      value: "reorder",
+                      label: <IconMenuOrder size={15} />,
+                      disabled: true,
+                    },
+                    { value: "delete", label: <IconTrash size={15} /> },
+                  ]
+            }
           />
         </Center>
         <Divider
@@ -67,7 +79,7 @@ export default function Sidebar() {
         />
         <Stack spacing={10}>
           {places.map((place) => (
-            <Box key={place.id}>
+            <Box key={place.name + "_ID"}>
               {place.id !== 1 && (
                 <Divider
                   sx={{

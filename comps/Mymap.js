@@ -20,6 +20,7 @@ import {
   IconQuestionMark,
   IconLocation,
 } from "@tabler/icons";
+import { showNotification } from "@mantine/notifications";
 import { getNewCenter } from "../comps/getNewCenter";
 import { visibleState } from "../pages/index";
 import { searchOpenedState } from "../pages/index";
@@ -82,8 +83,7 @@ export default function Mymap() {
     console.log("Region Name: ", regionName);
     console.log("ISO: ", isoName);
     console.log("Place Center: ", placeLngLat);
-    console.log("Places: ", places);
-  }, [regionName, isoName, placeLngLat, places]);
+  }, [regionName, isoName, placeLngLat]);
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -195,10 +195,23 @@ export default function Mymap() {
   }
 
   const addPlaces = (place) => {
-    let key = places.length + 1;
-    place.id = key;
+    if (places.includes(place)) {
+      console.log("Place already exists");
+      return;
+    }
     let newPlaces = [...places, place];
     setPlaces(newPlaces);
+  };
+
+  // check and see if the user has already added the place to their list
+  const checkPlace = (place) => {
+    let placeExists = false;
+    places.forEach((p) => {
+      if (p.name === place.name) {
+        placeExists = true;
+      }
+    });
+    return placeExists;
   };
 
   const onEvent = (event) => {
@@ -355,8 +368,17 @@ export default function Mymap() {
             <Button
               variant="gradient"
               onClick={() => {
-                addPlaces(placeLocation);
-                setListOpened(true);
+                if (checkPlace(placeLocation) === false) {
+                  addPlaces(placeLocation);
+                  setListOpened(true);
+                } else {
+                  showNotification({
+                    color: "red",
+                    style: { backgroundColor: "#2e2e2e" },
+                    title: "Loaction already added",
+                    message: `${regionName} was already added to your tour`,
+                  });
+                }
               }}
               gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
               sx={{

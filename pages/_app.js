@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { RecoilRoot } from "recoil";
 import { MantineProvider } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import "mapbox-gl/dist/mapbox-gl.css";
 export default function App(props) {
   const { Component, pageProps } = props;
@@ -25,7 +26,9 @@ export default function App(props) {
         }}
       >
         <RecoilRoot>
-          <Component {...pageProps} />
+          <NotificationsProvider position="top-center">
+            <Component {...pageProps} />
+          </NotificationsProvider>
         </RecoilRoot>
       </MantineProvider>
     </>
