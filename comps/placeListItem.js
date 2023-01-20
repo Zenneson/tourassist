@@ -1,4 +1,4 @@
-import { Avatar, Grid, Col, Text, Button } from "@mantine/core";
+import { Avatar, Grid, Col, Text } from "@mantine/core";
 import { IconMenuOrder, IconTrash } from "@tabler/icons";
 import { atom, useRecoilState } from "recoil";
 import { buttonModeState } from "./sidebar";

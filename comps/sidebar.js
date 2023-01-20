@@ -4,7 +4,6 @@ import {
   Drawer,
   Button,
   Box,
-  CloseButton,
   Stack,
   Divider,
   SegmentedControl,
@@ -12,7 +11,7 @@ import {
 } from "@mantine/core";
 import { listOpenedState } from "../pages/index";
 import { placeListState } from "../comps/Mymap";
-import { IconMapPin, IconMenuOrder, IconTrash, IconX } from "@tabler/icons";
+import { IconMenuOrder, IconTrash, IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
 
 export const buttonModeState = atom({
