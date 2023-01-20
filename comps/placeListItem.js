@@ -27,15 +27,17 @@ export default function Page({ name, region }) {
         },
       }}
     >
-      <Col
-        span="content"
-        sx={{
-          padding: "0 0 0 10px",
-          opacity: 0.2,
-        }}
-      >
-        <IconMenuOrder size={15} />
-      </Col>
+      {places.length > 1 && (
+        <Col
+          span="content"
+          sx={{
+            padding: "0 0 0 10px",
+            opacity: 0.2,
+          }}
+        >
+          <IconMenuOrder size={15} />
+        </Col>
+      )}
       <Col
         span="content"
         sx={{
