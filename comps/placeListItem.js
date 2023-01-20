@@ -5,7 +5,6 @@ import { buttonModeState } from "./sidebar";
 import { placeListState } from "../comps/Mymap";
 
 export default function Page({ name, region }) {
-  const [buttonMode, setButtonMode] = useRecoilState(buttonModeState);
   const [places, setPlaces] = useRecoilState(placeListState);
   const handleRemove = () => {
     setPlaces(places.filter((place) => place.name !== name));
@@ -13,7 +12,6 @@ export default function Page({ name, region }) {
 
   return (
     <Grid
-      draggable={buttonMode === "reorder"}
       align="center"
       sx={{
         marginTop: "2px",
@@ -29,7 +27,21 @@ export default function Page({ name, region }) {
         },
       }}
     >
-      <Col span="content">
+      <Col
+        span="content"
+        sx={{
+          padding: "0 0 0 10px",
+          opacity: 0.2,
+        }}
+      >
+        <IconMenuOrder size={15} />
+      </Col>
+      <Col
+        span="content"
+        sx={{
+          padding: "0 0 0 5px",
+        }}
+      >
         <Avatar
           variant="gradient"
           gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
@@ -52,22 +64,23 @@ export default function Page({ name, region }) {
           radius="xl"
           variant="outline"
           onClick={() => {
-            if (buttonMode === "delete") {
-              handleRemove();
-            }
+            handleRemove();
           }}
           styles={({ theme }) => ({
+            root: {
+              opacity: 0.35,
+              transition: "all 200ms ease",
+              "&:hover": {
+                opacity: 1,
+              },
+            },
             placeholder: {
-              border: "1px solid rgba(255, 255, 255, 0.027)",
-              color: "rgba(255, 255, 255, 0.3)",
+              background: "rgba(255, 0, 0, 0.04)",
+              border: "1px solid rgba(255, 0, 0, 0.3)",
             },
           })}
         >
-          {buttonMode === "reorder" ? (
-            <IconMenuOrder size={20} />
-          ) : (
-            <IconTrash size={20} color="rgba(255, 0, 0, 0.5)" />
-          )}
+          <IconTrash size={17} color="rgba(255, 0, 0, 0.8)" />
         </Avatar>
       </Col>
     </Grid>

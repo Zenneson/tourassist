@@ -1,17 +1,9 @@
-import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
-import {
-  Drawer,
-  Button,
-  Box,
-  Stack,
-  Divider,
-  SegmentedControl,
-  Center,
-} from "@mantine/core";
+import { ReOrderableItem, ReOrderableList } from "react-reorderable-list";
+import { Drawer, Button, Stack, Divider, Center } from "@mantine/core";
 import { listOpenedState } from "../pages/index";
 import { placeListState } from "../comps/Mymap";
-import { IconMenuOrder, IconTrash, IconX } from "@tabler/icons";
+import { IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
 
 export const buttonModeState = atom({
@@ -22,7 +14,6 @@ export const buttonModeState = atom({
 export default function Sidebar() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
-  const [buttonMode, setButtonMode] = useRecoilState(buttonModeState);
 
   return (
     <>
@@ -41,49 +32,28 @@ export default function Sidebar() {
           },
         }}
       >
-        <Center>
-          <SegmentedControl
-            value={buttonMode}
-            onChange={(value) => setButtonMode(value)}
-            radius="xl"
-            sx={({ theme }) => ({
-              width: "80%",
-              opacity: 0.5,
-              margin: "80px 0 5px 0",
-              transition: "all 200ms ease-in-out",
-              "&:hover": {
-                opacity: 1,
-              },
-              label: {
-                padding: "5px 0 0 0",
-              },
-            })}
-            data={[
-              { value: "reorder", label: <IconMenuOrder size={15} /> },
-              { value: "delete", label: <IconTrash size={15} /> },
-            ]}
-          />
-        </Center>
         <Divider
           label="Tour Locations"
           sx={{
             opacity: 0.4,
-            margin: "5px 0 10px 0",
+            margin: "70px 0 10px 0",
           }}
         />
         <Stack spacing={10}>
-          {places.map((place, index) => (
-            <Box key={index}>
-              {place.id !== 1 && (
-                <Divider
-                  sx={{
-                    opacity: 0.25,
-                  }}
-                />
-              )}
-              <PlaceListItem name={place.name} region={place.region} />
-            </Box>
-          ))}
+          <ReOrderableList
+            name="placesList"
+            list={places}
+            onListUpdate={(newList) => setPlaces(newList)}
+            styles={{
+              width: "100%",
+            }}
+          >
+            {places.map((place, index) => (
+              <ReOrderableItem key={`item-${index}`}>
+                <PlaceListItem name={place.name} region={place.region} />
+              </ReOrderableItem>
+            ))}
+          </ReOrderableList>
         </Stack>
         <Center>
           <Button
