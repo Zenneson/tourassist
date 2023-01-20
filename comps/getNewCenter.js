@@ -89,7 +89,7 @@ function getNewCenter(orgCenter, place) {
       break;
     case "Bahamas":
       newCenter = [-77, 24];
-      maxZoom = 5.5;
+      maxZoom = 6;
       break;
     case "Democratic Republic of the Congo":
       newCenter = [25, -3];
@@ -110,6 +110,10 @@ function getNewCenter(orgCenter, place) {
     case "Cuba":
       newCenter = [-80, 21];
       maxZoom = 5.5;
+      break;
+    case "Jamaica":
+      newCenter = [-77.5, 18];
+      maxZoom = 7;
       break;
     case "Grenada":
       newCenter = [-61.7, 12];

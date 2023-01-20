@@ -15,9 +15,41 @@ import { placeListState } from "../comps/Mymap";
 import { IconMapPin, IconMenuOrder, IconTrash, IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
 
+export const buttonModeState = atom({
+  key: "buttonModeState",
+  default: "reorder",
+});
+
 export default function Sidebar() {
+  const [dragId, setDragId] = useState();
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
+  const [buttonMode, setButtonMode] = useRecoilState(buttonModeState);
+
+  const handleDrag = (ev) => {
+    // setDragId(ev.currentTarget);
+    console.log(ev);
+  };
+
+  const handleDrop = (ev) => {
+    const dragBox = places.find((place) => place === dragId);
+    const dropBox = places.find((place) => place === ev.currentTarget);
+
+    // const dragBoxOrder = dragBox.order;
+    // const dropBoxOrder = dropBox.order;
+
+    const newPlacesState = places.map((place) => {
+      if (place === dragId) {
+        place.order = dropBoxOrder;
+      }
+      if (place === ev.currentTarget) {
+        place.order = dragBoxOrder;
+      }
+      return place;
+    });
+    // const sorted = newPlacesState.sort((a, b) => a.order - b.order);
+    // setPlaces(sorted);
+  };
 
   return (
     <>
@@ -38,6 +70,8 @@ export default function Sidebar() {
       >
         <Center>
           <SegmentedControl
+            value={buttonMode}
+            onChange={(value) => setButtonMode(value)}
             radius="xl"
             sx={({ theme }) => ({
               width: "80%",
@@ -65,8 +99,8 @@ export default function Sidebar() {
           }}
         />
         <Stack spacing={10}>
-          {places.map((place) => (
-            <Box key={place.name + "_ID"}>
+          {places.map((place, index) => (
+            <Box key={index}>
               {place.id !== 1 && (
                 <Divider
                   sx={{
@@ -74,7 +108,13 @@ export default function Sidebar() {
                   }}
                 />
               )}
-              <PlaceListItem name={place.name} region={place.region} />
+              <PlaceListItem
+                id={index}
+                name={place.name}
+                region={place.region}
+                handleDrag={handleDrag}
+                handleDrop={handleDrop}
+              />
             </Box>
           ))}
         </Stack>

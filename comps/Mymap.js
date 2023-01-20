@@ -195,11 +195,10 @@ export default function Mymap() {
   }
 
   const addPlaces = (place) => {
-    if (places.includes(place)) {
-      console.log("Place already exists");
-      return;
-    }
-    let newPlaces = [...places, place];
+    let newPlace = place;
+    newPlace.id = place.id;
+    newPlace.order = places.length + 1;
+    let newPlaces = [...places, newPlace];
     setPlaces(newPlaces);
   };
 
@@ -368,9 +367,9 @@ export default function Mymap() {
             <Button
               variant="gradient"
               onClick={() => {
+                setListOpened(true);
                 if (checkPlace(placeLocation) === false) {
                   addPlaces(placeLocation);
-                  setListOpened(true);
                 } else {
                   showNotification({
                     color: "red",

@@ -1,9 +1,23 @@
 import { Avatar, Grid, Col, Text, Button } from "@mantine/core";
 import { IconMenuOrder, IconTrash } from "@tabler/icons";
+import { atom, useRecoilState } from "recoil";
+import { buttonModeState } from "./sidebar";
+import { placeListState } from "../comps/Mymap";
 
-export default function Page({ name, region }) {
+export default function Page({ id, name, region, handleDrag, handleDrop }) {
+  const [buttonMode, setButtonMode] = useRecoilState(buttonModeState);
+  const [places, setPlaces] = useRecoilState(placeListState);
+  const handleRemove = () => {
+    setPlaces(places.filter((place) => place.name !== name));
+  };
+
   return (
     <Grid
+      id={id}
+      draggable={buttonMode === "reorder"}
+      onDragOver={(ev) => ev.preventDefault()}
+      onDragStart={handleDrag}
+      onDrop={handleDrop}
       align="center"
       sx={{
         marginTop: "2px",
@@ -41,6 +55,11 @@ export default function Page({ name, region }) {
         <Avatar
           radius="xl"
           variant="outline"
+          onClick={() => {
+            if (buttonMode === "delete") {
+              handleRemove();
+            }
+          }}
           styles={({ theme }) => ({
             placeholder: {
               border: "1px solid rgba(255, 255, 255, 0.027)",
@@ -48,8 +67,11 @@ export default function Page({ name, region }) {
             },
           })}
         >
-          <IconMenuOrder size={20} />
-          {/* <IconTrash size={20} /> */}
+          {buttonMode === "reorder" ? (
+            <IconMenuOrder size={20} />
+          ) : (
+            <IconTrash size={20} color="rgba(255, 0, 0, 0.5)" />
+          )}
         </Avatar>
       </Col>
     </Grid>
