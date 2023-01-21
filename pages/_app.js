@@ -2,7 +2,6 @@ import Head from "next/head";
 import { RecoilRoot } from "recoil";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
-import "mapbox-gl/dist/mapbox-gl.css";
 export default function App(props) {
   const { Component, pageProps } = props;
 
@@ -20,9 +19,23 @@ export default function App(props) {
         withGlobalStyles
         withNormalizeCSS
         theme={{
+          loader: "dots",
           // colorScheme: "light",
           colorScheme: "dark",
-          loader: "dots",
+          colors: {
+            dark: [
+              "#C1C2C5",
+              "#A6A7AB",
+              "#909296",
+              "#5C5F66",
+              "#373A40",
+              "#131314",
+              "#101113",
+              "#0b0c0d",
+              "#050506",
+              "#020202",
+            ],
+          },
         }}
       >
         <RecoilRoot>

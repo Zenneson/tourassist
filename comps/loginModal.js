@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import { Modal, Title, Text } from "@mantine/core";
+import LoginComp from "./loginComp";
 
 export const loginOpenedState = atom({
   key: "loginOpenedState",
@@ -39,7 +40,7 @@ export default function LoginModal() {
           },
         })}
       >
-        <Text fw={400}>Login</Text>
+        <LoginComp />
       </Modal>
     </>
   );

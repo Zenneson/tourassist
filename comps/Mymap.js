@@ -72,18 +72,33 @@ export default function Mymap() {
     useRecoilState(placeSearchState);
 
   const initialViewState = {
-    latitude: 35,
-    longitude: -88,
+    latitude: 30,
+    longitude: -90,
     zoom: 2.5,
     pitch: 0,
   };
 
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
   useEffect(() => {
+    let rotationIntervalId;
+    if (!visible || mapLoaded) {
+      rotationIntervalId = setInterval(() => {
+        mapRef.current?.easeTo({
+          center: [
+            mapRef.current?.getCenter().lng + 0.15,
+            mapRef.current?.getCenter().lat,
+          ],
+          duration: 100,
+        });
+      }, 100);
+    } else {
+      clearInterval(rotationIntervalId);
+    }
+    return () => clearInterval(rotationIntervalId);
     console.log("Region Name: ", regionName);
     console.log("ISO: ", isoName);
     console.log("Place Center: ", placeLngLat);
-  }, [regionName, isoName, placeLngLat]);
+  }, [regionName, isoName, placeLngLat, visible, mapLoaded]);
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -497,7 +512,9 @@ export default function Mymap() {
         initialViewState={initialViewState}
         maxPitch={80}
         onZoomEnd={onZoomEnd}
-        onLoad={() => setMapLoaded((v) => !v)}
+        onLoad={() => {
+          setMapLoaded((v) => !v);
+        }}
         keyboard={false}
         ref={mapRef}
         onClick={onEvent}

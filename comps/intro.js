@@ -2,17 +2,20 @@ import { useRecoilState } from "recoil";
 import {
   Center,
   Box,
+  Flex,
   Title,
   Text,
   Button,
   Group,
   Overlay,
   Transition,
+  Image,
 } from "@mantine/core";
 import { IconWorld, IconLogin } from "@tabler/icons";
 import { visibleState } from "../pages/index";
 import { mapLoadState } from "./Mymap";
 import { loginOpenedState } from "./loginModal";
+import LoginComp from "./loginComp";
 
 export default function Intro() {
   const [visible, setVisible] = useRecoilState(visibleState);
@@ -22,83 +25,111 @@ export default function Intro() {
   return (
     <>
       {!visible && (
-        <Center
+        <Flex
           sx={{
             position: "absolute",
-            height: "100vh",
+            top: 0,
+            left: 0,
             width: "100%",
-            flexWrap: "wrap",
+            height: "100vh",
             zIndex: "105",
           }}
         >
-          <Box
+          <Center
             sx={{
-              textAlign: "center",
-              width: "70%",
+              backgroundColor: "#050506",
+              height: "100vh",
+              width: "40%",
+              minWidth: "350px",
+              maxWidth: "600px",
+              boxShadow: "0 0 10px 0 rgba(0,0,0,0.2)",
+              flexDirection: "column",
             }}
           >
-            <Title
-              order={1}
-              sx={{ fontSize: "6rem", marginBottom: "30px", lineHeight: "1" }}
-            >
-              Where in the{" "}
-              <Text
-                inherit
-                span
-                fw={900}
-                variant="gradient"
-                gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
-              >
-                world
-              </Text>{" "}
-              would you like to go?
-            </Title>
-            <Text size="md" sx={{ width: "90%", marginLeft: "5%" }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </Text>
-            <Group
+            <Image
+              mt={-60}
+              mb={20}
+              mr={3}
+              sx={{ width: "100%", maxWidth: "250px" }}
+              src={"img/blogo.png"}
+              alt="TouraSSist_logo"
+              withPlaceholder
+            />
+            <Box
               sx={{
-                marginTop: "30px",
-                justifyContent: "center",
+                width: "80%",
+                maxWidth: "380px",
               }}
             >
-              <Button
-                size="md"
-                uppercase={true}
-                fw={900}
-                variant="default"
-                sx={{ width: "200px", color: "rgba(255,255,255,0.3)" }}
-                leftIcon={<IconLogin size={20} />}
-                onClick={function () {
-                  setLoginOpened(true);
-                  setVisible(true);
+              <LoginComp />
+            </Box>
+          </Center>
+          <Center
+            sx={{
+              width: "100%",
+              height: "100vh",
+              flexWrap: "wrap",
+              zIndex: "105",
+            }}
+          >
+            <Box
+              sx={{
+                textAlign: "center",
+                width: "75%",
+                minWidth: "300px",
+              }}
+            >
+              <Title
+                order={1}
+                sx={{
+                  fontSize: "4.5rem",
+                  marginBottom: "30px",
+                  lineHeight: "1",
                 }}
               >
-                Login | Sign Up
-              </Button>
-              <Button
-                fw={900}
-                size="md"
-                uppercase={true}
-                loading={mapLoaded}
-                loaderProps={{ variant: "oval", size: 20 }}
-                variant="gradient"
-                gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
-                sx={{ width: "200px" }}
-                onClick={() => setVisible(true)}
-                leftIcon={<IconWorld size={20} style={{ color: "#00E8FC" }} />}
+                Where in the{" "}
+                <Text
+                  inherit
+                  span
+                  fw={900}
+                  variant="gradient"
+                  gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                >
+                  world
+                </Text>{" "}
+                would you like to go?
+              </Title>
+              <Text size="md" sx={{ width: "90%", marginLeft: "5%" }}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam.
+              </Text>
+              <Group
+                sx={{
+                  marginTop: "30px",
+                  justifyContent: "center",
+                }}
               >
-                Plan a trip
-              </Button>
-            </Group>
-          </Box>
-        </Center>
+                <Button
+                  fw={900}
+                  size="md"
+                  uppercase={true}
+                  loading={mapLoaded}
+                  loaderProps={{ variant: "oval", size: 20 }}
+                  variant="gradient"
+                  gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+                  sx={{ width: "200px" }}
+                  onClick={() => setVisible(true)}
+                  leftIcon={
+                    <IconWorld size={20} style={{ color: "#00E8FC" }} />
+                  }
+                >
+                  Plan a trip
+                </Button>
+              </Group>
+            </Box>
+          </Center>
+        </Flex>
       )}
       <Transition
         mounted={!visible}
