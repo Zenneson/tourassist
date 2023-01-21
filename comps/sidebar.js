@@ -32,7 +32,7 @@ export default function Sidebar() {
           size="md"
           styles={{
             drawer: {
-              background: "rgba(31, 31, 31, 0.95)",
+              background: "rgba(5, 6, 8, 0.95)",
               boxShadow: "0px 0px 5px 0px rgba(0, 0, 0, 0.3)",
             },
           }}
@@ -90,7 +90,7 @@ export default function Sidebar() {
           <Button
             onClick={() => setListOpened(false)}
             sx={{
-              background: "rgba(31, 31, 31, 0.95)",
+              background: "rgba(8, 7, 11, 0.95)",
               borderRadius: "0 5px 5px 0",
               position: "absolute",
               top: "105px",
@@ -98,7 +98,7 @@ export default function Sidebar() {
               padding: "0 8px",
               transition: "all 100ms ease-in-out",
               "&:hover": {
-                background: "rgba(20, 20, 20, 1)",
+                background: "rgba(16, 17, 19, 1)",
               },
             }}
           >

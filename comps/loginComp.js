@@ -105,22 +105,18 @@ export default function LoginComp() {
       <Box w="100%" mt="xl">
         <Group grow>
           <Button
-            variant="outline"
-            leftIcon={<IconBrandGoogle size={17} />}
-            radius="xl"
+            variant="default"
+            leftIcon={<IconBrandGoogle size={15} />}
             sx={{
-              border: "1px solid rgba(255,255,255,0.3)",
               color: "rgba(255,255,255,0.3)",
             }}
           >
             Google
           </Button>
           <Button
-            variant="outline"
-            leftIcon={<IconBrandTwitter size={17} />}
-            radius="xl"
+            variant="default"
+            leftIcon={<IconBrandTwitter size={15} />}
             sx={{
-              border: "1px solid rgba(255,255,255,0.3)",
               color: "rgba(255,255,255,0.3)",
             }}
           >
@@ -128,7 +124,7 @@ export default function LoginComp() {
           </Button>
         </Group>
         <Divider
-          label={<IconAt size={15} />}
+          label={<IconAt size={12} />}
           labelPosition="center"
           my="lg"
           color="#fff"

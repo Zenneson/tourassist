@@ -37,12 +37,12 @@ export default function Intro() {
         >
           <Center
             sx={{
-              backgroundColor: "#050506",
+              backgroundColor: "rgba(0,0,0,0.8)",
               height: "100vh",
               width: "40%",
               minWidth: "350px",
               maxWidth: "600px",
-              boxShadow: "0 0 10px 0 rgba(0,0,0,0.2)",
+              boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
               flexDirection: "column",
             }}
           >
@@ -138,7 +138,7 @@ export default function Intro() {
         exitDuration={100}
         timingFunction="linear"
       >
-        {(styles) => <Overlay opacity={0.9} color="#000" zIndex={102} />}
+        {(styles) => <Overlay opacity={0.9} color="rgb(0,0,0)" zIndex={102} />}
       </Transition>
     </>
   );
