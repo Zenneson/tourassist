@@ -1,90 +1,120 @@
 import { Avatar, Grid, Col, Text } from "@mantine/core";
-import { IconMenuOrder, IconTrash } from "@tabler/icons";
+import { IconGripVertical, IconTrash } from "@tabler/icons";
 import { atom, useRecoilState } from "recoil";
-import { buttonModeState } from "./sidebar";
 import { placeListState } from "../comps/Mymap";
+import { listOpenedState } from "../pages/index";
+import { Draggable } from "react-beautiful-dnd";
 
-export default function Page({ name, region }) {
+export default function PlaceListItem({ index, name, region, draggableId }) {
   const [places, setPlaces] = useRecoilState(placeListState);
+  const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const handleRemove = () => {
     setPlaces(places.filter((place) => place.name !== name));
   };
 
   return (
-    <Grid
-      align="center"
-      sx={{
-        marginTop: "2px",
-        borderRadius: "100px",
-        cursor: "pointer",
-        userSelect: "none",
-        transition: "all 200ms ease",
-        "&:hover": {
-          background: "rgba(0, 0, 0, 0.1)",
-        },
-        "&:active": {
-          transform: "scale(1.02)",
-        },
-      }}
-    >
-      {places.length > 1 && (
-        <Col
-          span="content"
+    <Draggable key={name} draggableId={draggableId} index={index}>
+      {(provided) => (
+        <Grid
+          {...provided.draggableProps}
+          ref={provided.innerRef}
+          align="center"
           sx={{
-            padding: "0 0 0 10px",
-            opacity: 0.2,
+            marginTop: "2px",
+            borderRadius: "100px",
+            userSelect: "none",
+            transition: "all 200ms ease",
+            "&:hover": {
+              background: "rgba(0, 0, 0, 0.1)",
+            },
+            "&:active": {
+              transform: "scale(1.02)",
+              backgroundColor: "#121212",
+              boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
+            },
           }}
         >
-          <IconMenuOrder size={15} />
-        </Col>
+          {places.length > 1 ? (
+            <Col
+              {...provided.dragHandleProps}
+              span="content"
+              sx={{
+                padding: "3px 0 0 10px",
+                opacity: 0.2,
+                cursor: "grab",
+                "&:hover": {
+                  opacity: 1,
+                },
+                "&:active": {
+                  cursor: "grabbing",
+                },
+              }}
+            >
+              <IconGripVertical size={15} />
+            </Col>
+          ) : (
+            <Col
+              {...provided.dragHandleProps}
+              span="content"
+              sx={{
+                padding: 0,
+                opacity: 0.2,
+              }}
+            ></Col>
+          )}
+          <Col
+            span="content"
+            sx={{
+              padding: "0 0 0 5px",
+            }}
+          >
+            <Avatar
+              variant="gradient"
+              gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+              radius="xl"
+              color="#00E8FC"
+            >
+              {name[0]}
+            </Avatar>
+          </Col>
+          <Col span="auto">
+            <Text size="md" fw={700}>
+              {name}
+            </Text>
+            <Text size="xs" sx={{ color: "rgba(255,255,255,0.3)" }}>
+              {region}
+            </Text>
+          </Col>
+          <Col span="content">
+            <Avatar
+              radius="xl"
+              variant="outline"
+              onClick={() => {
+                handleRemove();
+                if (places.length === 1) {
+                  setListOpened(false);
+                }
+              }}
+              styles={({ theme }) => ({
+                root: {
+                  cursor: "pointer",
+                  opacity: 0.35,
+                  transition: "all 200ms ease",
+                  "&:hover": {
+                    opacity: 1,
+                  },
+                },
+                placeholder: {
+                  background: "rgba(255, 0, 0, 0.04)",
+                  border: "1px solid rgba(255, 255, 255, 0)",
+                },
+              })}
+            >
+              <IconTrash size={17} color="rgba(255, 0, 0, 0.8)" />
+            </Avatar>
+          </Col>
+        </Grid>
       )}
-      <Col
-        span="content"
-        sx={{
-          padding: "0 0 0 5px",
-        }}
-      >
-        <Avatar
-          variant="gradient"
-          gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
-          radius="xl"
-          color="#00E8FC"
-        >
-          {name[0]}
-        </Avatar>
-      </Col>
-      <Col span="auto">
-        <Text size="md" fw={700}>
-          {name}
-        </Text>
-        <Text size="xs" sx={{ color: "rgba(255,255,255,0.3)" }}>
-          {region}
-        </Text>
-      </Col>
-      <Col span="content">
-        <Avatar
-          radius="xl"
-          variant="outline"
-          onClick={() => {
-            handleRemove();
-          }}
-          styles={({ theme }) => ({
-            root: {
-              opacity: 0.35,
-              transition: "all 200ms ease",
-              "&:hover": {
-                opacity: 1,
-              },
-            },
-            placeholder: {
-              background: "rgba(255, 0, 0, 0.04)",
-              border: "1px solid rgba(255, 255, 255, 0)",
-            },
-          })}
-        >
-          <IconTrash size={17} color="rgba(255, 0, 0, 0.8)" />
-        </Avatar>
-      </Col>
-    </Grid>
+    </Draggable>
   );
 }
