@@ -1,12 +1,12 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
+// import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB_LeZwAqankwio7WIUYQx7UUhloVuNq7Y",
+  // TODO: Update authDomain
   authDomain: "tourassist-836db.firebaseapp.com",
   projectId: "tourassist-836db",
   storageBucket: "tourassist-836db.appspot.com",
@@ -15,12 +15,7 @@ const firebaseConfig = {
   measurementId: "G-W3T7NY210E",
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-}
-
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
-export const storage = firebase.storage();
+export const app = initializeApp(firebaseConfig);
+// export const analytics = getAnalytics(app);
+export const firestore = getFirestore(app);
+export const storage = getStorage(app);

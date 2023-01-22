@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { app } from "../libs/firebase";
 import {
   Anchor,
   Box,
@@ -19,6 +21,7 @@ import { visibleState } from "../pages/index";
 import {
   IconBrandGoogle,
   IconBrandTwitter,
+  IconBrandFacebook,
   IconAt,
   IconLogin,
 } from "@tabler/icons";
@@ -37,12 +40,11 @@ export default function LoginComp() {
   const [lastNameFocus, setLastNameFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
-  const [wFocuses, setWFocuses] = useState("");
   const [visible, setVisible] = useRecoilState(visibleState);
-  const [type, toggle] = useToggle(["login", "register"]);
+  const [type, toggle] = useToggle(["login", "sign-up"]);
   const [loginType, setLoginType] = useRecoilState(loginTypeState);
-  setLoginType(type);
 
+  const provider = new GoogleAuthProvider();
   const useStyles = createStyles((theme, { floating }) => ({
     root: {
       position: "relative",
@@ -88,8 +90,6 @@ export default function LoginComp() {
     floating: password.trim().length !== 0 || passwordFocus,
   });
 
-  console.log();
-
   const form = useForm({
     initialValues: {
       email: "",
@@ -107,12 +107,31 @@ export default function LoginComp() {
     },
   });
 
+  const auth = getAuth(app);
+  const signInWithGoogle = async () => {
+    const userCred = await signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        setVisible(true);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.customData.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+      });
+  };
+
   return (
     <>
       <Box w="100%" mt="xl">
         <Group grow spacing={20}>
           <Button
+            onClick={signInWithGoogle}
             variant="default"
+            size="xs"
             leftIcon={<IconBrandGoogle size={15} />}
             sx={{
               color: "rgba(255,255,255,0.3)",
@@ -122,6 +141,7 @@ export default function LoginComp() {
           </Button>
           <Button
             variant="default"
+            size="xs"
             leftIcon={<IconBrandTwitter size={15} />}
             sx={{
               color: "rgba(255,255,255,0.3)",
@@ -129,10 +149,20 @@ export default function LoginComp() {
           >
             Twitter
           </Button>
+          <Button
+            variant="default"
+            size="xs"
+            leftIcon={<IconBrandFacebook size={15} />}
+            sx={{
+              color: "rgba(255,255,255,0.3)",
+            }}
+          >
+            Facebook
+          </Button>
         </Group>
         <form onSubmit={form.onSubmit(() => {})}>
           <Stack>
-            {type === "register" && (
+            {type === "sign-up" && (
               <Flex gap={20}>
                 <TextInput
                   label="First Name"
@@ -196,7 +226,7 @@ export default function LoginComp() {
               }
             />
 
-            {type === "register" && (
+            {type === "sign-up" && (
               <Checkbox
                 label="I accept terms and conditions"
                 checked={form.values.terms}
@@ -211,10 +241,13 @@ export default function LoginComp() {
               component="button"
               type="button"
               color="dimmed"
-              onClick={() => toggle()}
+              onClick={function () {
+                setLoginType(type);
+                toggle();
+              }}
               size="xs"
             >
-              {type === "register"
+              {type === "sign-up"
                 ? "Already have an account?"
                 : "Don't have an account?"}
             </Anchor>
@@ -229,7 +262,7 @@ export default function LoginComp() {
                 setVisible(true);
               }}
             >
-              {type === "register" ? "Sign up" : "Login"}
+              {type === "sign-up" ? "Sign up" : "Login"}
             </Button>
           </Group>
         </form>

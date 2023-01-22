@@ -41,9 +41,9 @@ export default function Intro() {
               backgroundColor: "#020202",
               height: "100vh",
               width: "50%",
-              minWidth: "400px",
+              minWidth: "450px",
               maxWidth: "1000px",
-              boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
+              boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
               flexDirection: "column",
             }}
           >

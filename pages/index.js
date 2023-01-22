@@ -1,27 +1,26 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
+import { getAuth, signOut } from "firebase/auth";
+import { app } from "../libs/firebase";
 import {
   IconQuestionMark,
   IconLogin,
+  IconLogout,
   IconSearch,
   IconList,
 } from "@tabler/icons";
 import {
   useMantineTheme,
   Box,
-  Overlay,
   AppShell,
   Header,
-  Drawer,
   Button,
   Image,
-  MediaQuery,
-  Burger,
-  Flex,
   Group,
   Modal,
   TextInput,
   Tooltip,
+  Popover,
 } from "@mantine/core";
 import Intro from "../comps/intro";
 import Sidebar from "../comps/sidebar";
@@ -46,6 +45,16 @@ export const searchOpenedState = atom({
   default: false,
 });
 
+const signOutGoogle = async () => {
+  // await signOut()
+  //   .then(() => {
+  //     // Sign-out successful.
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+};
+
 export default function Home() {
   const theme = useMantineTheme();
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
@@ -54,8 +63,13 @@ export default function Home() {
   const [visible, setVisible] = useRecoilState(visibleState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
+  const [logoutOpeened, setLogoutOpeened] = useState(false);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
+
+  const auth = getAuth(app);
+  const user = auth.currentUser;
+  console.log(user);
 
   return (
     <div>
@@ -138,6 +152,7 @@ export default function Home() {
                     <IconSearch size={17} />
                   </Button>
                 </Tooltip>
+
                 <Tooltip
                   label="TourAssist?"
                   position="bottom"
@@ -153,21 +168,52 @@ export default function Home() {
                     <IconQuestionMark size={17} />
                   </Button>
                 </Tooltip>
-                <Tooltip
-                  label="Login"
-                  position="bottom"
-                  openDelay={800}
+                <Popover
+                  width="auto"
+                  position="left"
                   withArrow
+                  shadow="md"
+                  opened={logoutOpeened}
+                  onChange={setLogoutOpeened}
                 >
-                  <Button
-                    onClick={() => setLoginOpened(true)}
-                    variant="subtle"
-                    radius="xl"
-                    p={10}
+                  <Tooltip
+                    label="Login"
+                    position="bottom"
+                    openDelay={800}
+                    withArrow
                   >
-                    <IconLogin size={17} />
-                  </Button>
-                </Tooltip>
+                    <Popover.Target>
+                      <Button
+                        onClick={() => {
+                          if (!user) setLoginOpened(true);
+                          if (user) setLogoutOpeened((o) => !o);
+                        }}
+                        variant="subtle"
+                        radius="xl"
+                        p={10}
+                      >
+                        {user ? (
+                          <IconLogout size={17} />
+                        ) : (
+                          <IconLogin size={17} />
+                        )}
+                      </Button>
+                    </Popover.Target>
+                  </Tooltip>
+                  <Popover.Dropdown p={0}>
+                    <Button
+                      size="xs"
+                      fw={700}
+                      uppercase={true}
+                      variant="default"
+                      sx={{ color: "rgba(255,255,255,0.3)" }}
+                      leftIcon={<IconLogout size={15} />}
+                      onClick={signOutGoogle}
+                    >
+                      Logout
+                    </Button>
+                  </Popover.Dropdown>
+                </Popover>
               </Group>
               {visible && !infoOpened && !searchOpened && !loginOpened && (
                 <Sidebar />
