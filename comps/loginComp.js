@@ -3,9 +3,9 @@ import { atom, useRecoilState } from "recoil";
 import {
   getAuth,
   GoogleAuthProvider,
-  FacebookAuthProvider,
   TwitterAuthProvider,
   signInWithPopup,
+  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { app } from "../libs/firebase";
 import {
@@ -25,12 +25,8 @@ import { showNotification } from "@mantine/notifications";
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { visibleState } from "../pages/index";
 import { loginOpenedState } from "../comps/loginModal";
-import {
-  IconBrandGoogle,
-  IconBrandTwitter,
-  IconBrandFacebook,
-  IconLogin,
-} from "@tabler/icons";
+import { IconBrandGoogle, IconBrandTwitter, IconLogin } from "@tabler/icons";
+import { async } from "@firebase/util";
 
 export const loginTypeState = atom({
   key: "loginTypeState",
@@ -192,47 +188,6 @@ export default function LoginComp() {
       });
   };
 
-  const signInWithFacebook = async () => {
-    const userCred = await signInWithPopup(auth, new FacebookAuthProvider())
-      .then((result) => {
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        setVisible(true);
-        setLoginOpened(false);
-        showNotification({
-          title: "Signed in with Facebook",
-          message: `Welcome ${result.user.displayName}`,
-          color: "#00E8FC",
-          icon: <IconBrandFacebook size={15} />,
-          autoClose: 2500,
-          style: { backgroundColor: "#2e2e2e" },
-        });
-        console.log("+++LOGGED IN WITH FACEBOOK+++");
-      })
-      .catch((error) => {
-        // TODO: Fix this error
-        if (error.code === "auth/account-exists-with-different-credential") {
-          const pendingCred = error.credential;
-          signInWithPopup(auth, new FacebookAuthProvider()).then((result) => {
-            result.user.linkWithCredential(pendingCred).then(() => {
-              setVisible(true);
-              setLoginOpened(false);
-              showNotification({
-                title: "Signed in with Facebook",
-                message: `Welcome ${result.user.displayName}`,
-                color: "#00E8FC",
-                icon: <IconBrandFacebook size={15} />,
-                autoClose: 2500,
-                style: { backgroundColor: "#2e2e2e" },
-              });
-              console.log("Credential Linked");
-            });
-          });
-        }
-        const credential = FacebookAuthProvider.credentialFromError(error);
-        console.log("Facebook Login Error: ", error);
-      });
-  };
-
   return (
     <>
       <Box w="100%" mt="xl">
@@ -240,7 +195,8 @@ export default function LoginComp() {
           <Button
             onClick={signInWithGoogle}
             variant="default"
-            size="xs"
+            size="sm"
+            py={5}
             leftIcon={<IconBrandGoogle size={15} />}
             sx={{
               color: "rgba(255,255,255,0.3)",
@@ -251,24 +207,14 @@ export default function LoginComp() {
           <Button
             onClick={signInWithTwitter}
             variant="default"
-            size="xs"
+            size="sm"
+            py={5}
             leftIcon={<IconBrandTwitter size={15} />}
             sx={{
               color: "rgba(255,255,255,0.3)",
             }}
           >
             Twitter
-          </Button>
-          <Button
-            onClick={signInWithFacebook}
-            variant="default"
-            size="xs"
-            leftIcon={<IconBrandFacebook size={15} />}
-            sx={{
-              color: "rgba(255,255,255,0.3)",
-            }}
-          >
-            Facebook
           </Button>
         </Group>
         <form onSubmit={form.onSubmit(() => {})}>

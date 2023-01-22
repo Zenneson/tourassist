@@ -82,6 +82,7 @@ export default function Intro() {
             >
               <Title
                 order={1}
+                fw={900}
                 sx={{
                   fontSize: "4.5rem",
                   marginBottom: "30px",
@@ -92,7 +93,6 @@ export default function Intro() {
                 <Text
                   inherit
                   span
-                  fw={900}
                   variant="gradient"
                   gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
                 >
