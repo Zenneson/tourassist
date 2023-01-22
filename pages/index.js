@@ -45,16 +45,6 @@ export const searchOpenedState = atom({
   default: false,
 });
 
-const signOutGoogle = async () => {
-  // await signOut()
-  //   .then(() => {
-  //     // Sign-out successful.
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-};
-
 export default function Home() {
   const theme = useMantineTheme();
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
@@ -69,7 +59,6 @@ export default function Home() {
 
   const auth = getAuth(app);
   const user = auth.currentUser;
-  console.log(user);
 
   return (
     <div>
@@ -208,7 +197,16 @@ export default function Home() {
                       variant="default"
                       sx={{ color: "rgba(255,255,255,0.3)" }}
                       leftIcon={<IconLogout size={15} />}
-                      onClick={signOutGoogle}
+                      onClick={function () {
+                        signOut(auth)
+                          .then(() => {
+                            console.log("LOGGED OUT");
+                            setLogoutOpeened(false);
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                      }}
                     >
                       Logout
                     </Button>

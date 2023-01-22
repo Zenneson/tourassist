@@ -115,6 +115,7 @@ export default function LoginComp() {
         const token = credential.accessToken;
         const user = result.user;
         setVisible(true);
+        console.log("+++LOGGED IN WITH GOOGLE+++");
       })
       .catch((error) => {
         const errorCode = error.code;
