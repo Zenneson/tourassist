@@ -4,6 +4,7 @@ import {
   getAuth,
   GoogleAuthProvider,
   FacebookAuthProvider,
+  TwitterAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
 import { app } from "../libs/firebase";
@@ -20,8 +21,10 @@ import {
   createStyles,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { visibleState } from "../pages/index";
+import { loginOpenedState } from "../comps/loginModal";
 import {
   IconBrandGoogle,
   IconBrandTwitter,
@@ -44,6 +47,7 @@ export default function LoginComp() {
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
   const [visible, setVisible] = useRecoilState(visibleState);
+  const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const [loginType, setLoginType] = useRecoilState(loginTypeState);
 
@@ -115,7 +119,15 @@ export default function LoginComp() {
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         setVisible(true);
-        console.log("+++LOGGED IN WITH GOOGLE+++");
+        setLoginOpened(false);
+        showNotification({
+          title: "Signed in with Google",
+          message: `Welcome ${result.user.displayName}`,
+          color: "#00E8FC",
+          icon: <IconBrandGoogle size={15} />,
+          autoClose: 2500,
+          style: { backgroundColor: "#2e2e2e" },
+        });
       })
       .catch((error) => {
         if (error.code === "auth/account-exists-with-different-credential") {
@@ -123,12 +135,60 @@ export default function LoginComp() {
           signInWithPopup(auth, new GoogleAuthProvider()).then((result) => {
             result.user.linkWithCredential(pendingCred).then(() => {
               setVisible(true);
-              console.log("+++LOGGED IN WITH GOOGLE+++");
+              setLoginOpened(false);
+              showNotification({
+                title: "Signed in with Google",
+                message: `Welcome ${result.user.displayName}`,
+                color: "#00E8FC",
+                icon: <IconBrandGoogle size={15} />,
+                autoClose: 2500,
+                style: { backgroundColor: "#2e2e2e" },
+              });
             });
+            console.log("Credential Linked");
           });
         }
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log("Google Login Error: ", error);
+      });
+  };
+
+  const signInWithTwitter = async () => {
+    const userCred = await signInWithPopup(auth, new TwitterAuthProvider())
+      .then((result) => {
+        const credential = TwitterAuthProvider.credentialFromResult(result);
+        setVisible(true);
+        setLoginOpened(false);
+        showNotification({
+          title: "Signed in with Twitter",
+          message: `Welcome ${result.user.displayName}`,
+          color: "#00E8FC",
+          icon: <IconBrandTwitter size={15} />,
+          autoClose: 2500,
+          style: { backgroundColor: "#2e2e2e" },
+        });
+      })
+      .catch((error) => {
+        if (error.code === "auth/account-exists-with-different-credential") {
+          const pendingCred = error.credential;
+          signInWithPopup(auth, new TwitterAuthProvider()).then((result) => {
+            result.user.linkWithCredential(pendingCred).then(() => {
+              setVisible(true);
+              setLoginOpened(false);
+              showNotification({
+                title: "Signed in with Twitter",
+                message: `Welcome ${result.user.displayName}`,
+                color: "#00E8FC",
+                icon: <IconBrandTwitter size={15} />,
+                autoClose: 2500,
+                style: { backgroundColor: "#2e2e2e" },
+              });
+              console.log("Credential Linked");
+            });
+          });
+        }
+        const credential = TwitterAuthProvider.credentialFromError(error);
+        console.log("Twitter Login Error: ", error);
       });
   };
 
@@ -137,15 +197,34 @@ export default function LoginComp() {
       .then((result) => {
         const credential = FacebookAuthProvider.credentialFromResult(result);
         setVisible(true);
+        setLoginOpened(false);
+        showNotification({
+          title: "Signed in with Facebook",
+          message: `Welcome ${result.user.displayName}`,
+          color: "#00E8FC",
+          icon: <IconBrandFacebook size={15} />,
+          autoClose: 2500,
+          style: { backgroundColor: "#2e2e2e" },
+        });
         console.log("+++LOGGED IN WITH FACEBOOK+++");
       })
       .catch((error) => {
+        // TODO: Fix this error
         if (error.code === "auth/account-exists-with-different-credential") {
           const pendingCred = error.credential;
           signInWithPopup(auth, new FacebookAuthProvider()).then((result) => {
             result.user.linkWithCredential(pendingCred).then(() => {
               setVisible(true);
-              console.log("+++LOGGED IN WITH FACEBOOK+++");
+              setLoginOpened(false);
+              showNotification({
+                title: "Signed in with Facebook",
+                message: `Welcome ${result.user.displayName}`,
+                color: "#00E8FC",
+                icon: <IconBrandFacebook size={15} />,
+                autoClose: 2500,
+                style: { backgroundColor: "#2e2e2e" },
+              });
+              console.log("Credential Linked");
             });
           });
         }
@@ -170,6 +249,7 @@ export default function LoginComp() {
             Google
           </Button>
           <Button
+            onClick={signInWithTwitter}
             variant="default"
             size="xs"
             leftIcon={<IconBrandTwitter size={15} />}

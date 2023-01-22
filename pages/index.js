@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { atom, useRecoilState, useSetRecoilState } from "recoil";
 import { getAuth, signOut } from "firebase/auth";
 import { app } from "../libs/firebase";
@@ -57,6 +58,7 @@ export default function Home() {
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
 
+  const router = useRouter();
   const auth = getAuth(app);
   const user = auth.currentUser;
 
@@ -200,8 +202,7 @@ export default function Home() {
                       onClick={function () {
                         signOut(auth)
                           .then(() => {
-                            console.log("---LOGGED OUT---");
-                            setLogoutOpeened(false);
+                            router.reload();
                           })
                           .catch((error) => {
                             console.log(error);
