@@ -30,9 +30,9 @@ export default function Sidebar() {
           zIndex={100}
           padding="xl"
           size="md"
+          opacity={0.95}
           styles={{
             drawer: {
-              background: "rgba(5, 6, 8, 0.95)",
               boxShadow: "0px 0px 5px 0px rgba(0, 0, 0, 0.3)",
             },
           }}

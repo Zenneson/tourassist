@@ -2,6 +2,7 @@ import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import { Modal, Title, Text } from "@mantine/core";
 import LoginComp from "./loginComp";
+import { loginTypeState } from "./loginComp";
 
 export const loginOpenedState = atom({
   key: "loginOpenedState",
@@ -10,6 +11,7 @@ export const loginOpenedState = atom({
 
 export default function LoginModal() {
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
+  const [loginType, setLoginType] = useRecoilState(loginTypeState);
 
   return (
     <>
@@ -21,8 +23,8 @@ export default function LoginModal() {
         onClose={() => setLoginOpened(false)}
         centered
         title={
-          <Title oreder={3} fw={900}>
-            Login
+          <Title oreder={3} fw={900} transform="capitalize">
+            {loginType}
           </Title>
         }
         styles={(theme) => ({

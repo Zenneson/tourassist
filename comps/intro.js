@@ -36,12 +36,13 @@ export default function Intro() {
           }}
         >
           <Center
+            opacity={0.9}
             sx={{
-              backgroundColor: "rgba(0,0,0,0.8)",
+              backgroundColor: "#020202",
               height: "100vh",
-              width: "40%",
-              minWidth: "350px",
-              maxWidth: "600px",
+              width: "50%",
+              minWidth: "400px",
+              maxWidth: "1000px",
               boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
               flexDirection: "column",
             }}
@@ -138,7 +139,7 @@ export default function Intro() {
         exitDuration={100}
         timingFunction="linear"
       >
-        {(styles) => <Overlay opacity={0.9} color="rgb(0,0,0)" zIndex={102} />}
+        {(styles) => <Overlay color="rgba(0,0,0,0.9)" blur={5} zIndex={102} />}
       </Transition>
     </>
   );

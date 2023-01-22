@@ -177,10 +177,9 @@ export default function Home() {
         >
           {places.length >= 1 && !listOpened && (
             <Button
-              variant="gradient"
-              gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
               onClick={() => setListOpened(true)}
               sx={{
+                backgroundColor: "#020202",
                 opacity: 0.35,
                 borderRadius: "0 5px 5px 0",
                 position: "absolute",
@@ -192,6 +191,7 @@ export default function Home() {
                 boxShadow: "0 0 20px rgba(255, 255, 255, 0.1)",
                 "&:hover": {
                   opacity: 1,
+                  backgroundColor: "#020202",
                 },
               }}
             >

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { atom, useRecoilState } from "recoil";
 import {
   Anchor,
   Box,
@@ -23,8 +23,12 @@ import {
   IconLogin,
 } from "@tabler/icons";
 
+export const loginTypeState = atom({
+  key: "loginTypeState",
+  default: "login",
+});
+
 export default function LoginComp() {
-  const [type, toggle] = useToggle(["login", "register"]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,6 +39,9 @@ export default function LoginComp() {
   const [emailFocus, setEmailFocus] = useState(false);
   const [wFocuses, setWFocuses] = useState("");
   const [visible, setVisible] = useRecoilState(visibleState);
+  const [type, toggle] = useToggle(["login", "register"]);
+  const [loginType, setLoginType] = useRecoilState(loginTypeState);
+  setLoginType(type);
 
   const useStyles = createStyles((theme, { floating }) => ({
     root: {
@@ -103,7 +110,7 @@ export default function LoginComp() {
   return (
     <>
       <Box w="100%" mt="xl">
-        <Group grow>
+        <Group grow spacing={20}>
           <Button
             variant="default"
             leftIcon={<IconBrandGoogle size={15} />}
@@ -123,17 +130,10 @@ export default function LoginComp() {
             Twitter
           </Button>
         </Group>
-        <Divider
-          label={<IconAt size={12} />}
-          labelPosition="center"
-          my="lg"
-          color="#fff"
-          sx={{ width: "100%", opacity: 0.1 }}
-        />
         <form onSubmit={form.onSubmit(() => {})}>
           <Stack>
             {type === "register" && (
-              <Flex gap="md">
+              <Flex gap={20}>
                 <TextInput
                   label="First Name"
                   placeholder="FIRST NAME"
@@ -143,7 +143,8 @@ export default function LoginComp() {
                   onChange={(event) => setFirstName(event.currentTarget.value)}
                   onFocus={() => setFirstNameFocus(true)}
                   onBlur={() => setFirstNameFocus(false)}
-                  mt="md"
+                  mt="xl"
+                  mb={-19}
                   autoComplete="nope"
                   w="100%"
                 />
@@ -156,7 +157,8 @@ export default function LoginComp() {
                   onChange={(event) => setLastName(event.currentTarget.value)}
                   onFocus={() => setLastNameFocus(true)}
                   onBlur={() => setLastNameFocus(false)}
-                  mt="md"
+                  mt="xl"
+                  mb={-19}
                   autoComplete="nope"
                   w="100%"
                 />
@@ -174,7 +176,7 @@ export default function LoginComp() {
               onFocus={() => setEmailFocus(true)}
               onBlur={() => setEmailFocus(false)}
               error={form.errors.email && "Invalid email"}
-              mt="xs"
+              mt={26}
             />
 
             <PasswordInput

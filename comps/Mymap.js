@@ -307,7 +307,7 @@ export default function Mymap() {
         zIndex={103}
         transitionDuration={2000}
         overlayBlur={10}
-        overlayOpacity={0.9}
+        overlayOpacity={1}
         overlayColor="#000"
         loader={<div></div>}
         style={{ pointerEvents: "none" }}
@@ -381,6 +381,7 @@ export default function Mymap() {
           >
             <Button
               variant="gradient"
+              gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
               onClick={() => {
                 setListOpened(true);
                 if (checkPlace(placeLocation) === false) {
@@ -394,7 +395,6 @@ export default function Mymap() {
                   });
                 }
               }}
-              gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
               sx={{
                 width: "10%",
                 padding: "0",
