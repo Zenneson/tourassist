@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { app } from "../libs/firebase";
 import {
   Anchor,
@@ -11,7 +16,6 @@ import {
   PasswordInput,
   Stack,
   Group,
-  Divider,
   Checkbox,
   createStyles,
 } from "@mantine/core";
@@ -22,7 +26,6 @@ import {
   IconBrandGoogle,
   IconBrandTwitter,
   IconBrandFacebook,
-  IconAt,
   IconLogin,
 } from "@tabler/icons";
 
@@ -44,7 +47,6 @@ export default function LoginComp() {
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const [loginType, setLoginType] = useRecoilState(loginTypeState);
 
-  const provider = new GoogleAuthProvider();
   const useStyles = createStyles((theme, { floating }) => ({
     root: {
       position: "relative",
@@ -109,19 +111,46 @@ export default function LoginComp() {
 
   const auth = getAuth(app);
   const signInWithGoogle = async () => {
-    const userCred = await signInWithPopup(auth, provider)
+    const userCred = await signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
         setVisible(true);
         console.log("+++LOGGED IN WITH GOOGLE+++");
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
+        if (error.code === "auth/account-exists-with-different-credential") {
+          const pendingCred = error.credential;
+          signInWithPopup(auth, new GoogleAuthProvider()).then((result) => {
+            result.user.linkWithCredential(pendingCred).then(() => {
+              setVisible(true);
+              console.log("+++LOGGED IN WITH GOOGLE+++");
+            });
+          });
+        }
         const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log("Google Login Error: ", error);
+      });
+  };
+
+  const signInWithFacebook = async () => {
+    const userCred = await signInWithPopup(auth, new FacebookAuthProvider())
+      .then((result) => {
+        const credential = FacebookAuthProvider.credentialFromResult(result);
+        setVisible(true);
+        console.log("+++LOGGED IN WITH FACEBOOK+++");
+      })
+      .catch((error) => {
+        if (error.code === "auth/account-exists-with-different-credential") {
+          const pendingCred = error.credential;
+          signInWithPopup(auth, new FacebookAuthProvider()).then((result) => {
+            result.user.linkWithCredential(pendingCred).then(() => {
+              setVisible(true);
+              console.log("+++LOGGED IN WITH FACEBOOK+++");
+            });
+          });
+        }
+        const credential = FacebookAuthProvider.credentialFromError(error);
+        console.log("Facebook Login Error: ", error);
       });
   };
 
@@ -151,6 +180,7 @@ export default function LoginComp() {
             Twitter
           </Button>
           <Button
+            onClick={signInWithFacebook}
             variant="default"
             size="xs"
             leftIcon={<IconBrandFacebook size={15} />}

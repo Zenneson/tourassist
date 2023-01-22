@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { atom, useRecoilState } from "recoil";
+import { atom, useRecoilState, useSetRecoilState } from "recoil";
 import { getAuth, signOut } from "firebase/auth";
 import { app } from "../libs/firebase";
 import {
@@ -200,7 +200,7 @@ export default function Home() {
                       onClick={function () {
                         signOut(auth)
                           .then(() => {
-                            console.log("LOGGED OUT");
+                            console.log("---LOGGED OUT---");
                             setLogoutOpeened(false);
                           })
                           .catch((error) => {
