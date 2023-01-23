@@ -22,26 +22,16 @@ import {
 } from "@tabler/icons";
 import { showNotification } from "@mantine/notifications";
 import { getNewCenter } from "../comps/getNewCenter";
-import { visibleState } from "../pages/index";
-import { searchOpenedState } from "../pages/index";
-import { infoOpenedState } from "../comps/infoModal";
-import { loginOpenedState } from "../comps/loginModal";
-import { listOpenedState } from "../pages/index";
-
-export const placeSearchState = atom({
-  key: "placeSearchState",
-  default: true,
-});
-
-export const mapLoadState = atom({
-  key: "mapLoadState",
-  default: true,
-});
-
-export const placeListState = atom({
-  key: "placeListState",
-  default: [],
-});
+import {
+  visibleState,
+  listOpenedState,
+  searchOpenedState,
+  placeSearchState,
+  mapLoadState,
+  placeListState,
+  loginOpenedState,
+  infoOpenedState,
+} from "../libs/atoms";
 
 export default function Mymap() {
   const mapRef = useRef();

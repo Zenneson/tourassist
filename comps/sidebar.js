@@ -1,11 +1,9 @@
 import { atom, useRecoilState } from "recoil";
 import { Drawer, Button, Divider, Center, Box, Stack } from "@mantine/core";
-import { useEventListener } from "@mantine/hooks";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { listOpenedState } from "../pages/index";
-import { placeListState } from "../comps/Mymap";
 import { IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
+import { listOpenedState, placeListState } from "../libs/atoms";
 
 export default function Sidebar() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);

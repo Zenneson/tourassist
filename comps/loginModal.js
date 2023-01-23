@@ -2,12 +2,7 @@ import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import { Modal, Title, Text } from "@mantine/core";
 import LoginComp from "./loginComp";
-import { loginTypeState } from "./loginComp";
-
-export const loginOpenedState = atom({
-  key: "loginOpenedState",
-  default: false,
-});
+import { loginOpenedState, loginTypeState } from "../libs/atoms";
 
 export default function LoginModal() {
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);

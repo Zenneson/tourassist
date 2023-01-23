@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import { Modal, Title, Text } from "@mantine/core";
-
-export const infoOpenedState = atom({
-  key: "infoOpenedState",
-  default: false,
-});
+import { infoOpenedState } from "../libs/atoms";
 
 export default function InfoModal() {
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);

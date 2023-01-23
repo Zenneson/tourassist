@@ -27,8 +27,6 @@ import {
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { useToggle } from "@mantine/hooks";
-import { visibleState } from "../pages/index";
-import { loginOpenedState } from "../comps/loginModal";
 import {
   IconBrandGoogle,
   IconBrandTwitter,
@@ -38,12 +36,12 @@ import {
   IconCheck,
   IconUserCheck,
 } from "@tabler/icons";
-import { async } from "@firebase/util";
-
-export const loginTypeState = atom({
-  key: "loginTypeState",
-  default: "login",
-});
+import {
+  loginTypeState,
+  loginOpenedState,
+  visibleState,
+  userState,
+} from "../libs/atoms";
 
 export default function LoginComp() {
   const [email, setEmail] = useState("");
@@ -57,6 +55,8 @@ export default function LoginComp() {
   const [passValue, setPassValue] = useState("");
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const [loginType, setLoginType] = useRecoilState(loginTypeState);
+
+  const auth = getAuth(app);
 
   const requirements = [
     { re: /[0-9]/, label: "Includes number" },
@@ -100,7 +100,7 @@ export default function LoginComp() {
   ));
 
   const strength = getStrength(passValue);
-  const color = strength === 100 ? "teal" : strength > 50 ? "yellow" : "red";
+  const color = strength === 100 ? "#00E8FC" : strength > 50 ? "yellow" : "red";
 
   const useStyles = createStyles((theme, { floating }) => ({
     root: {
@@ -169,64 +169,45 @@ export default function LoginComp() {
     });
   }
 
-  const auth = getAuth(app);
-  const signInWithGoogle = async () => {
-    const userCred = await signInWithPopup(auth, new GoogleAuthProvider())
+  async function signInWith(signin, provider, icon) {
+    const userCred = await signInWithPopup(auth, new provider())
       .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const credential = provider.credentialFromResult(result);
         setVisible(true);
         setLoginOpened(false);
-        notify("Signed in with Google", <IconBrandGoogle size={15} />);
+        notify(`Signed in with ${signin}`, icon);
+        localStorage.setItem("user", JSON.stringify(auth.currentUser));
       })
       .catch((error) => {
         if (error.code === "auth/account-exists-with-different-credential") {
           const pendingCred = error.credential;
-          signInWithPopup(auth, new GoogleAuthProvider()).then((result) => {
+          signInWithPopup(auth, new provider()).then((result) => {
             result.user.linkWithCredential(pendingCred).then(() => {
               setVisible(true);
               setLoginOpened(false);
-              notify("Signed in with Google", <IconBrandGoogle size={15} />);
+              notify(`Signed in with ${signin}`, icon);
+              localStorage.setItem("user", JSON.stringify(auth.currentUser));
             });
             console.log("Credential Linked");
           });
         }
-        const credential = GoogleAuthProvider.credentialFromError(error);
+        const credential = provider.credentialFromError(error);
         console.log("Google Login Error: ", error);
       });
-  };
-
-  const signInWithTwitter = async () => {
-    const userCred = await signInWithPopup(auth, new TwitterAuthProvider())
-      .then((result) => {
-        const credential = TwitterAuthProvider.credentialFromResult(result);
-        setVisible(true);
-        setLoginOpened(false);
-        notify("Signed in with Twitter", <IconBrandTwitter size={15} />);
-        console.log("Twitter Login Success: ", result);
-      })
-      .catch((error) => {
-        if (error.code === "auth/account-exists-with-different-credential") {
-          const pendingCred = error.credential;
-          signInWithPopup(auth, new TwitterAuthProvider()).then((result) => {
-            result.user.linkWithCredential(pendingCred).then(() => {
-              setVisible(true);
-              setLoginOpened(false);
-              notify("Signed in with Twitter", <IconBrandTwitter size={15} />);
-              console.log("Credential Linked");
-            });
-          });
-        }
-        const credential = TwitterAuthProvider.credentialFromError(error);
-        console.log("Twitter Login Error: ", error);
-      });
-  };
+  }
 
   return (
     <>
       <Box w="100%" mt="xl">
         <Group grow spacing={20}>
           <Button
-            onClick={signInWithGoogle}
+            onClick={() =>
+              signInWith(
+                "Google",
+                GoogleAuthProvider,
+                <IconBrandGoogle size={15} />
+              )
+            }
             variant="default"
             size="sm"
             py={5}
@@ -238,7 +219,13 @@ export default function LoginComp() {
             Google
           </Button>
           <Button
-            onClick={signInWithTwitter}
+            onClick={() =>
+              signInWith(
+                "Twitter",
+                TwitterAuthProvider,
+                <IconBrandTwitter size={15} />
+              )
+            }
             variant="default"
             size="sm"
             py={5}
@@ -253,7 +240,6 @@ export default function LoginComp() {
         <form
           onSubmit={form.onSubmit((event) => {
             if (type === "sign-up") {
-              const auth = getAuth();
               createUserWithEmailAndPassword(
                 auth,
                 form.values.email,
@@ -272,7 +258,6 @@ export default function LoginComp() {
                   console.log("Error Message: ", errorMessage);
                 });
             } else {
-              const auth = getAuth();
               signInWithEmailAndPassword(
                 auth,
                 form.values.email,

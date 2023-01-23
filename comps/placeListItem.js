@@ -1,9 +1,8 @@
 import { Avatar, Grid, Col, Text } from "@mantine/core";
 import { IconGripVertical, IconTrash } from "@tabler/icons";
 import { atom, useRecoilState } from "recoil";
-import { placeListState } from "../comps/Mymap";
-import { listOpenedState } from "../pages/index";
 import { Draggable } from "react-beautiful-dnd";
+import { listOpenedState, placeListState } from "../libs/atoms";
 
 export default function PlaceListItem({ index, name, region, draggableId }) {
   const [places, setPlaces] = useRecoilState(placeListState);

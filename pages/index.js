@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { atom, useRecoilState, useSetRecoilState } from "recoil";
+import { atom, useRecoilState } from "recoil";
 import { getAuth, signOut } from "firebase/auth";
 import { app } from "../libs/firebase";
 import {
@@ -11,7 +11,6 @@ import {
   IconList,
 } from "@tabler/icons";
 import {
-  useMantineTheme,
   Box,
   AppShell,
   Header,
@@ -26,28 +25,18 @@ import {
 import Intro from "../comps/intro";
 import Sidebar from "../comps/sidebar";
 import Mymap from "../comps/Mymap";
-import { placeSearchState } from "../comps/Mymap";
-import { placeListState } from "../comps/Mymap";
-import InfoModal, { infoOpenedState } from "../comps/infoModal";
-import LoginModal, { loginOpenedState } from "../comps/loginModal";
-
-export const visibleState = atom({
-  key: "visibleState",
-  default: false,
-});
-
-export const listOpenedState = atom({
-  key: "listOpenedState",
-  default: false,
-});
-
-export const searchOpenedState = atom({
-  key: "searchOpenedState",
-  default: false,
-});
+import InfoModal from "../comps/infoModal";
+import LoginModal from "../comps/loginModal";
+import {
+  visibleState,
+  listOpenedState,
+  searchOpenedState,
+  loginOpenedState,
+  infoOpenedState,
+  placeListState,
+} from "../libs/atoms";
 
 export default function Home() {
-  const theme = useMantineTheme();
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
@@ -55,12 +44,13 @@ export default function Home() {
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
   const [logoutOpeened, setLogoutOpeened] = useState(false);
-  const [showPlaceSearch, setShowPlaceSearch] =
-    useRecoilState(placeSearchState);
 
   const router = useRouter();
   const auth = getAuth(app);
   const user = auth.currentUser;
+  console.log(user?.providerData[0].email);
+  console.log(user?.providerData[0].email);
+  console.log(user?.providerData[0].providerId);
 
   return (
     <div>
@@ -202,6 +192,7 @@ export default function Home() {
                       onClick={function () {
                         signOut(auth)
                           .then(() => {
+                            localStorage.removeItem("user");
                             router.reload();
                           })
                           .catch((error) => {

@@ -11,11 +11,9 @@ import {
   Transition,
   Image,
 } from "@mantine/core";
-import { IconWorld, IconLogin } from "@tabler/icons";
-import { visibleState } from "../pages/index";
-import { mapLoadState } from "./Mymap";
-import { loginOpenedState } from "./loginModal";
+import { IconWorld } from "@tabler/icons";
 import LoginComp from "./loginComp";
+import { visibleState, mapLoadState, loginOpenedState } from "../libs/atoms";
 
 export default function Intro() {
   const [visible, setVisible] = useRecoilState(visibleState);
