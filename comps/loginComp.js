@@ -6,7 +6,7 @@ import {
   TwitterAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
-  fetchSignInMethodsForEmail,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { app } from "../libs/firebase";
 import {
@@ -36,6 +36,7 @@ import {
   IconDoorEnter,
   IconX,
   IconCheck,
+  IconUserCheck,
 } from "@tabler/icons";
 import { async } from "@firebase/util";
 
@@ -158,6 +159,16 @@ export default function LoginComp() {
     },
   });
 
+  function notify(message, icon) {
+    showNotification({
+      message: message,
+      color: "#00E8FC",
+      icon: icon,
+      autoClose: 2500,
+      style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+    });
+  }
+
   const auth = getAuth(app);
   const signInWithGoogle = async () => {
     const userCred = await signInWithPopup(auth, new GoogleAuthProvider())
@@ -165,14 +176,7 @@ export default function LoginComp() {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         setVisible(true);
         setLoginOpened(false);
-        showNotification({
-          title: "Signed in with Google",
-          message: `Account: ${result.user.email}`,
-          color: "#00E8FC",
-          icon: <IconBrandGoogle size={15} />,
-          autoClose: 2500,
-          style: { backgroundColor: "#2e2e2e" },
-        });
+        notify("Signed in with Google", <IconBrandGoogle size={15} />);
       })
       .catch((error) => {
         if (error.code === "auth/account-exists-with-different-credential") {
@@ -181,14 +185,7 @@ export default function LoginComp() {
             result.user.linkWithCredential(pendingCred).then(() => {
               setVisible(true);
               setLoginOpened(false);
-              showNotification({
-                title: "Signed in with Google",
-                message: `Account: ${result.user.email}`,
-                color: "#00E8FC",
-                icon: <IconBrandGoogle size={15} />,
-                autoClose: 2500,
-                style: { backgroundColor: "#2e2e2e" },
-              });
+              notify("Signed in with Google", <IconBrandGoogle size={15} />);
             });
             console.log("Credential Linked");
           });
@@ -204,14 +201,8 @@ export default function LoginComp() {
         const credential = TwitterAuthProvider.credentialFromResult(result);
         setVisible(true);
         setLoginOpened(false);
-        showNotification({
-          title: "Signed in with Twitter",
-          message: `Account: ${result.user.email}`,
-          color: "#00E8FC",
-          icon: <IconBrandTwitter size={15} />,
-          autoClose: 2500,
-          style: { backgroundColor: "#2e2e2e" },
-        });
+        notify("Signed in with Twitter", <IconBrandTwitter size={15} />);
+        console.log("Twitter Login Success: ", result);
       })
       .catch((error) => {
         if (error.code === "auth/account-exists-with-different-credential") {
@@ -220,14 +211,7 @@ export default function LoginComp() {
             result.user.linkWithCredential(pendingCred).then(() => {
               setVisible(true);
               setLoginOpened(false);
-              showNotification({
-                title: "Signed in with Twitter",
-                message: `Account: ${result.user.email}`,
-                color: "#00E8FC",
-                icon: <IconBrandTwitter size={15} />,
-                autoClose: 2500,
-                style: { backgroundColor: "#2e2e2e" },
-              });
+              notify("Signed in with Twitter", <IconBrandTwitter size={15} />);
               console.log("Credential Linked");
             });
           });
@@ -279,14 +263,26 @@ export default function LoginComp() {
                   const user = userCredential.user;
                   setVisible(true);
                   setLoginOpened(false);
-                  showNotification({
-                    title: "Account Created",
-                    message: `Account: ${user.email}`,
-                    color: "#00E8FC",
-                    icon: <IconDoorEnter size={15} />,
-                    autoClose: 2500,
-                    style: { backgroundColor: "#2e2e2e" },
-                  });
+                  notify("Account Created", <IconDoorEnter size={15} />);
+                })
+                .catch((error) => {
+                  const errorCode = error.code;
+                  const errorMessage = error.message;
+                  console.log("Error Code: ", errorCode);
+                  console.log("Error Message: ", errorMessage);
+                });
+            } else {
+              const auth = getAuth();
+              signInWithEmailAndPassword(
+                auth,
+                form.values.email,
+                form.values.password
+              )
+                .then((userCredential) => {
+                  const user = userCredential.user;
+                  setVisible(true);
+                  setLoginOpened(false);
+                  notify("Signed in", <IconUserCheck size={15} />);
                 })
                 .catch((error) => {
                   const errorCode = error.code;
