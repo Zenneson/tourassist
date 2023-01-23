@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   TwitterAuthProvider,
   signInWithPopup,
+  createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { app } from "../libs/firebase";
@@ -12,9 +13,12 @@ import {
   Anchor,
   Box,
   Button,
-  Flex,
+  Divider,
   TextInput,
   PasswordInput,
+  Progress,
+  Text,
+  Popover,
   Stack,
   Group,
   Checkbox,
@@ -22,10 +26,17 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { useToggle, upperFirst } from "@mantine/hooks";
+import { useToggle } from "@mantine/hooks";
 import { visibleState } from "../pages/index";
 import { loginOpenedState } from "../comps/loginModal";
-import { IconBrandGoogle, IconBrandTwitter, IconLogin } from "@tabler/icons";
+import {
+  IconBrandGoogle,
+  IconBrandTwitter,
+  IconLogin,
+  IconDoorEnter,
+  IconX,
+  IconCheck,
+} from "@tabler/icons";
 import { async } from "@firebase/util";
 
 export const loginTypeState = atom({
@@ -34,18 +45,61 @@ export const loginTypeState = atom({
 });
 
 export default function LoginComp() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [firstNameFocus, setFirstNameFocus] = useState(false);
-  const [lastNameFocus, setLastNameFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
   const [visible, setVisible] = useRecoilState(visibleState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
+  const [passPopOpened, setPassPopOpened] = useState(false);
+  const [emailValue, setEmailValue] = useState("");
+  const [passValue, setPassValue] = useState("");
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const [loginType, setLoginType] = useRecoilState(loginTypeState);
+
+  const requirements = [
+    { re: /[0-9]/, label: "Includes number" },
+    { re: /[a-z]/, label: "Includes lowercase letter" },
+    { re: /[A-Z]/, label: "Includes uppercase letter" },
+    { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
+  ];
+
+  function PasswordRequirement({ meets, label }) {
+    return (
+      <Text
+        color={meets ? "#00E8FC" : "red"}
+        sx={{ display: "flex", alignItems: "center" }}
+        mt={7}
+        size="sm"
+      >
+        {meets ? <IconCheck size={14} /> : <IconX size={14} />}{" "}
+        <Box ml={10}>{label}</Box>
+      </Text>
+    );
+  }
+
+  function getStrength(password) {
+    let multiplier = password.length > 5 ? 0 : 1;
+
+    requirements.forEach((requirement) => {
+      if (!requirement.re.test(password)) {
+        multiplier += 1;
+      }
+    });
+
+    return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
+  }
+
+  const checks = requirements.map((requirement, index) => (
+    <PasswordRequirement
+      key={index}
+      label={requirement.label}
+      meets={requirement.re.test(passValue)}
+    />
+  ));
+
+  const strength = getStrength(passValue);
+  const color = strength === 100 ? "teal" : strength > 50 ? "yellow" : "red";
 
   const useStyles = createStyles((theme, { floating }) => ({
     root: {
@@ -79,32 +133,27 @@ export default function LoginComp() {
     },
   }));
 
-  const { classes } = useStyles({
-    floating: firstName.trim().length !== 0 || firstNameFocus,
-  });
-  const { classes: classes2 } = useStyles({
-    floating: lastName.trim().length !== 0 || lastNameFocus,
-  });
   const { classes: classes3 } = useStyles({
-    floating: email.trim().length !== 0 || emailFocus,
+    floating: emailValue.trim().length !== 0 || emailFocus,
   });
   const { classes: classes4 } = useStyles({
-    floating: password.trim().length !== 0 || passwordFocus,
+    floating: passValue.trim().length !== 0 || passwordFocus,
   });
 
   const form = useForm({
     initialValues: {
       email: "",
-      name: "",
+      firstName: "",
+      lasrName: "",
       password: "",
-      terms: true,
+      terms: false,
     },
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
       password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
+        getStrength(val) !== 100
+          ? "Password doesn not meet requirements"
           : null,
     },
   });
@@ -118,7 +167,7 @@ export default function LoginComp() {
         setLoginOpened(false);
         showNotification({
           title: "Signed in with Google",
-          message: `Welcome ${result.user.displayName}`,
+          message: `Account: ${result.user.email}`,
           color: "#00E8FC",
           icon: <IconBrandGoogle size={15} />,
           autoClose: 2500,
@@ -134,7 +183,7 @@ export default function LoginComp() {
               setLoginOpened(false);
               showNotification({
                 title: "Signed in with Google",
-                message: `Welcome ${result.user.displayName}`,
+                message: `Account: ${result.user.email}`,
                 color: "#00E8FC",
                 icon: <IconBrandGoogle size={15} />,
                 autoClose: 2500,
@@ -157,7 +206,7 @@ export default function LoginComp() {
         setLoginOpened(false);
         showNotification({
           title: "Signed in with Twitter",
-          message: `Welcome ${result.user.displayName}`,
+          message: `Account: ${result.user.email}`,
           color: "#00E8FC",
           icon: <IconBrandTwitter size={15} />,
           autoClose: 2500,
@@ -173,7 +222,7 @@ export default function LoginComp() {
               setLoginOpened(false);
               showNotification({
                 title: "Signed in with Twitter",
-                message: `Welcome ${result.user.displayName}`,
+                message: `Account: ${result.user.email}`,
                 color: "#00E8FC",
                 icon: <IconBrandTwitter size={15} />,
                 autoClose: 2500,
@@ -217,39 +266,47 @@ export default function LoginComp() {
             Twitter
           </Button>
         </Group>
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form
+          onSubmit={form.onSubmit((event) => {
+            if (type === "sign-up") {
+              const auth = getAuth();
+              createUserWithEmailAndPassword(
+                auth,
+                form.values.email,
+                form.values.password
+              )
+                .then((userCredential) => {
+                  const user = userCredential.user;
+                  setVisible(true);
+                  setLoginOpened(false);
+                  showNotification({
+                    title: "Account Created",
+                    message: `Account: ${user.email}`,
+                    color: "#00E8FC",
+                    icon: <IconDoorEnter size={15} />,
+                    autoClose: 2500,
+                    style: { backgroundColor: "#2e2e2e" },
+                  });
+                })
+                .catch((error) => {
+                  const errorCode = error.code;
+                  const errorMessage = error.message;
+                  console.log("Error Code: ", errorCode);
+                  console.log("Error Message: ", errorMessage);
+                });
+            }
+          })}
+        >
           <Stack>
             {type === "sign-up" && (
-              <Flex gap={20}>
-                <TextInput
-                  label="First Name"
-                  placeholder="FIRST NAME"
-                  required
-                  classNames={classes}
-                  value={firstName}
-                  onChange={(event) => setFirstName(event.currentTarget.value)}
-                  onFocus={() => setFirstNameFocus(true)}
-                  onBlur={() => setFirstNameFocus(false)}
-                  mt="xl"
-                  mb={-19}
-                  autoComplete="nope"
-                  w="100%"
-                />
-                <TextInput
-                  label="Last Name"
-                  placeholder="LAST NAME"
-                  required
-                  classNames={classes2}
-                  value={lastName}
-                  onChange={(event) => setLastName(event.currentTarget.value)}
-                  onFocus={() => setLastNameFocus(true)}
-                  onBlur={() => setLastNameFocus(false)}
-                  mt="xl"
-                  mb={-19}
-                  autoComplete="nope"
-                  w="100%"
-                />
-              </Flex>
+              <Divider
+                label="Create Account"
+                labelPosition="left"
+                color="rgba(255,255,255,0.3)"
+                mt={16}
+                mb={-22}
+                opacity={0.4}
+              />
             )}
             <TextInput
               required
@@ -257,36 +314,68 @@ export default function LoginComp() {
               placeholder="johndoe@gmail.com"
               classNames={classes3}
               value={form.values.email}
-              onChange={(event) =>
-                form.setFieldValue("email", event.currentTarget.value)
-              }
+              onChange={(event) => {
+                setEmailValue(event.currentTarget.value);
+                form.setFieldValue("email", event.currentTarget.value);
+              }}
               onFocus={() => setEmailFocus(true)}
               onBlur={() => setEmailFocus(false)}
               error={form.errors.email && "Invalid email"}
               mt={26}
             />
-
-            <PasswordInput
-              required
-              label="Password"
-              classNames={classes4}
-              value={form.values.password}
-              onChange={(event) =>
-                form.setFieldValue("password", event.currentTarget.value)
-              }
-              onFocus={() => setPasswordFocus(true)}
-              onBlur={() => setPasswordFocus(false)}
-              mt="xs"
-              error={
-                form.errors.password &&
-                "Password should include at least 6 characters"
-              }
-            />
-
+            <Popover
+              opened={passPopOpened}
+              position="bottom"
+              width="target"
+              transition="pop"
+            >
+              <Popover.Target>
+                <div
+                  onFocusCapture={() => {
+                    if (type === "sign-up") setPassPopOpened(true);
+                  }}
+                  onBlurCapture={() => setPassPopOpened(false)}
+                >
+                  <PasswordInput
+                    required
+                    label="Password"
+                    classNames={classes4}
+                    value={form.values.password}
+                    onChange={(event) => {
+                      setPassValue(event.currentTarget.value);
+                      form.setFieldValue("password", event.currentTarget.value);
+                    }}
+                    onFocus={() => {
+                      setPasswordFocus(true);
+                    }}
+                    onBlur={() => setPasswordFocus(false)}
+                    mt="xs"
+                    error={
+                      form.errors.password &&
+                      "Password doesn not meet requirements"
+                    }
+                  />
+                </div>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Progress
+                  color={color}
+                  value={strength}
+                  size={5}
+                  style={{ marginBottom: 10 }}
+                />
+                <PasswordRequirement
+                  label="Includes at least 6 characters"
+                  meets={form.values.password.length > 5}
+                />
+                {checks}
+              </Popover.Dropdown>
+            </Popover>
             {type === "sign-up" && (
               <Checkbox
                 label="I accept terms and conditions"
                 checked={form.values.terms}
+                required
                 onChange={(event) =>
                   form.setFieldValue("terms", event.currentTarget.checked)
                 }
@@ -315,9 +404,7 @@ export default function LoginComp() {
               variant="default"
               sx={{ color: "rgba(255,255,255,0.3)" }}
               leftIcon={<IconLogin size={15} />}
-              onClick={function () {
-                setVisible(true);
-              }}
+              type="submit"
             >
               {type === "sign-up" ? "Sign up" : "Login"}
             </Button>
