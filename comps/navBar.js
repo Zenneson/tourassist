@@ -17,6 +17,8 @@ import {
   Group,
   Tooltip,
   Popover,
+  Box,
+  Text,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import Sidebar from "../comps/sidebar";
@@ -24,6 +26,7 @@ import {
   searchOpenedState,
   loginOpenedState,
   infoOpenedState,
+  mapLoadState,
 } from "../libs/atoms";
 
 export default function NavBar() {
@@ -31,6 +34,10 @@ export default function NavBar() {
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [logoutOpeened, setLogoutOpeened] = useState(false);
+  const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
+  const [mapSpin, setMapSpin] = useLocalStorage({
+    key: "mapSpin",
+  });
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
     defaultValue: false,
@@ -50,15 +57,25 @@ export default function NavBar() {
     <>
       <Header
         zIndex={120}
-        hidden={!visible || infoOpened || searchOpened || loginOpened}
+        hidden={
+          !visible || infoOpened || searchOpened || loginOpened || mapSpin
+        }
         sx={{
           display: "flex",
           padding: "15px 25px",
           alignItems: "center",
           justifyContent: "space-between",
+          transition: "all 200ms ease",
         }}
       >
-        <Link href="/">
+        <Box
+          sx={{ cursor: "pointer" }}
+          onClick={() => {
+            if (router.pathname === "/") return;
+            setMapLoaded(false);
+            router.push("/");
+          }}
+        >
           <Image
             width={"auto"}
             height={50}
@@ -66,18 +83,24 @@ export default function NavBar() {
             alt="TouraSSist_logo"
             withPlaceholder
           />
-        </Link>
-        <Group>
+        </Box>
+        <Group p={0} m={0}>
           {user && (
-            <Link href="/profile">
-              <Button variant="subtle" radius="xl" pl={0} pr={12} size="xs">
+            <Link href="/profile" style={{ marginBottom: "-4px" }}>
+              <Button variant="subtle" radius="xl" pl={0} pr={12} size="sm">
                 <Avatar
-                  size={25}
+                  size={30}
                   src={user?.providerData[0].photoURL}
                   radius="xl"
                   mr={7}
                 />
-                {user?.providerData[0].email}
+                <Text
+                  sx={{
+                    fontSize: "12px",
+                  }}
+                >
+                  {user?.providerData[0].email}
+                </Text>
               </Button>
             </Link>
           )}
@@ -103,7 +126,6 @@ export default function NavBar() {
                 <IconSearch size={17} />
               </Button>
             </Tooltip>
-
             <Tooltip
               label="TourAssist?"
               position="bottom"
@@ -120,9 +142,10 @@ export default function NavBar() {
               </Button>
             </Tooltip>
             <Popover
-              width="auto"
-              position="left"
               withArrow
+              arrowOffset={15}
+              width="auto"
+              position="bottom-end"
               shadow="md"
               opened={logoutOpeened}
               onChange={setLogoutOpeened}
@@ -151,6 +174,7 @@ export default function NavBar() {
                 <Button
                   size="xs"
                   fw={700}
+                  px={17}
                   uppercase={true}
                   variant="default"
                   sx={{ color: "rgba(255,255,255,0.3)" }}
@@ -159,6 +183,8 @@ export default function NavBar() {
                     signOut(auth)
                       .then(() => {
                         localStorage.removeItem("user");
+                        localStorage.removeItem("visible");
+                        localStorage.removeItem("mapSpin");
                         router.reload();
                       })
                       .catch((error) => {

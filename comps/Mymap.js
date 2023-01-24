@@ -59,39 +59,51 @@ export default function Mymap() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
+  const [user, setUser] = useLocalStorage({ key: "user" });
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
     defaultValue: false,
   });
-
+  const [mapSpin, setMapSpin] = useLocalStorage({
+    key: "mapSpin",
+    defaultValue: true,
+  });
   const initialViewState = {
     latitude: 30,
     longitude: -90,
     zoom: 2.5,
     pitch: 0,
   };
-
-  const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
   useEffect(() => {
     let rotationIntervalId;
-    if (!visible || mapLoaded) {
+    if (mapSpin && !user) {
       rotationIntervalId = setInterval(() => {
         mapRef.current?.easeTo({
           center: [
             mapRef.current?.getCenter().lng + 0.15,
             mapRef.current?.getCenter().lat,
           ],
-          duration: 100,
+          duration: 50,
         });
-      }, 100);
+      }, 50);
     } else {
       clearInterval(rotationIntervalId);
+      setMapSpin(false);
     }
     return () => clearInterval(rotationIntervalId);
     console.log("Region Name: ", regionName);
     console.log("ISO: ", isoName);
     console.log("Place Center: ", placeLngLat);
-  }, [regionName, isoName, placeLngLat, visible, mapLoaded]);
+  }, [
+    regionName,
+    isoName,
+    placeLngLat,
+    visible,
+    user,
+    mapLoaded,
+    mapSpin,
+    setMapSpin,
+  ]);
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -292,13 +304,14 @@ export default function Mymap() {
 
   const cityAutoRef = useRef(null);
   const countryAutoRef = useRef(null);
+  const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
 
   return (
     <>
       <LoadingOverlay
-        visible={mapLoaded}
+        visible={!mapLoaded}
         zIndex={103}
-        transitionDuration={2000}
+        transitionDuration={3000}
         overlayBlur={10}
         overlayOpacity={1}
         overlayColor="#000"
@@ -445,7 +458,8 @@ export default function Mymap() {
         !infoOpened &&
         !searchOpened &&
         visible &&
-        showPlaceSearch && (
+        showPlaceSearch &&
+        !mapSpin && (
           <Flex
             justify="center"
             align="center"
@@ -506,7 +520,7 @@ export default function Mymap() {
         maxPitch={80}
         onZoomEnd={onZoomEnd}
         onLoad={() => {
-          setMapLoaded((v) => !v);
+          setMapLoaded(true);
         }}
         keyboard={false}
         ref={mapRef}

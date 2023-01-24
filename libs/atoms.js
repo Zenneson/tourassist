@@ -17,7 +17,7 @@ export const placeSearchState = atom({
 
 export const mapLoadState = atom({
   key: "mapLoadState",
-  default: true,
+  default: false,
 });
 
 export const placeListState = atom({
