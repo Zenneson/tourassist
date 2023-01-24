@@ -1,7 +1,12 @@
 import Head from "next/head";
 import { RecoilRoot } from "recoil";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, AppShell } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
+import InfoModal from "../comps/infoModal";
+import LoginModal from "../comps/loginModal";
+import NavBar from "../comps/navBar";
+import SearchModal from "../comps/searchModal";
+
 export default function App(props) {
   const { Component, pageProps } = props;
 
@@ -40,7 +45,12 @@ export default function App(props) {
       >
         <RecoilRoot>
           <NotificationsProvider position="top-center">
-            <Component {...pageProps} />
+            <InfoModal />
+            <LoginModal />
+            <SearchModal />
+            <AppShell padding="none" header={<NavBar />}>
+              <Component {...pageProps} />
+            </AppShell>
           </NotificationsProvider>
         </RecoilRoot>
       </MantineProvider>

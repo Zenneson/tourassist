@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
@@ -48,32 +49,28 @@ export default function NavBar() {
           justifyContent: "space-between",
         }}
       >
-        <Image
-          width={"auto"}
-          height={50}
-          src={"img/blogo.png"}
-          alt="TouraSSist_logo"
-          withPlaceholder
-        />
+        <Link href="/">
+          <Image
+            width={"auto"}
+            height={50}
+            src={"img/blogo.png"}
+            alt="TouraSSist_logo"
+            withPlaceholder
+          />
+        </Link>
         <Group>
           {user && (
-            <Button
-              variant="subtle"
-              radius="xl"
-              pl={0}
-              pr={12}
-              size="xs"
-              component="a"
-              href="/profile"
-            >
-              <Avatar
-                size={25}
-                src={user?.providerData[0].photoURL}
-                radius="xl"
-                mr={7}
-              />
-              {user?.providerData[0].email}
-            </Button>
+            <Link href="/profile">
+              <Button variant="subtle" radius="xl" pl={0} pr={12} size="xs">
+                <Avatar
+                  size={25}
+                  src={user?.providerData[0].photoURL}
+                  radius="xl"
+                  mr={7}
+                />
+                {user?.providerData[0].email}
+              </Button>
+            </Link>
           )}
           <Group
             spacing={0}

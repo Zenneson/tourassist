@@ -1,6 +1,11 @@
 import {} from "react";
-import {} from "@mantine/core";
+import { Space, Title } from "@mantine/core";
 
-export default function Page() {
-  return <></>;
+export default function ProfilePage(props) {
+  return (
+    <>
+      <Space h={81} />
+      <Title order={1}>Profile Page</Title>
+    </>
+  );
 }
