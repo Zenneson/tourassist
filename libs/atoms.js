@@ -1,10 +1,5 @@
 import { atom } from "recoil";
 
-export const visibleState = atom({
-  key: "visibleState",
-  default: false,
-});
-
 export const listOpenedState = atom({
   key: "listOpenedState",
   default: false,

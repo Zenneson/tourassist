@@ -14,6 +14,7 @@ import {
   LoadingOverlay,
   Divider,
 } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 import {
   IconPlaylistAdd,
   IconMapSearch,
@@ -23,7 +24,6 @@ import {
 import { showNotification } from "@mantine/notifications";
 import { getNewCenter } from "../comps/getNewCenter";
 import {
-  visibleState,
   listOpenedState,
   searchOpenedState,
   placeSearchState,
@@ -53,13 +53,16 @@ export default function Mymap() {
   const [placeLocation, setPlaceLocation] = useState({});
   const [places, setPlaces] = useRecoilState(placeListState);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
-  const [visible, setVisible] = useRecoilState(visibleState);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
+  const [visible, setVisible] = useLocalStorage({
+    key: "visible",
+    defaultValue: false,
+  });
 
   const initialViewState = {
     latitude: 30,

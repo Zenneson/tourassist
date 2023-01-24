@@ -16,15 +16,19 @@ import {
 } from "@mantine/core";
 import { IconWorld } from "@tabler/icons";
 import LoginComp from "./loginComp";
-import { visibleState, mapLoadState, loginOpenedState } from "../libs/atoms";
+import { mapLoadState, loginOpenedState } from "../libs/atoms";
+import { useLocalStorage } from "@mantine/hooks";
 
 export default function Intro() {
-  const [visible, setVisible] = useRecoilState(visibleState);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
+  const [visible, setVisible] = useLocalStorage({
+    key: "visible",
+    defaultValue: false,
+  });
+  const [user, setUser] = useLocalStorage({ key: "user" });
 
   const auth = getAuth();
-  const user = auth.currentUser;
   useEffect(() => {
     if (user) {
       setVisible(true);
@@ -35,7 +39,7 @@ export default function Intro() {
   return (
     <>
       <LoadingOverlay
-        visible={mapLoaded}
+        visible={!visible}
         overlayColor="#000"
         overlayOpacity={1}
         zIndex={150}

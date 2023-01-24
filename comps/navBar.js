@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { getAuth, signOut } from "firebase/auth";
@@ -18,9 +18,9 @@ import {
   Tooltip,
   Popover,
 } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 import Sidebar from "../comps/sidebar";
 import {
-  visibleState,
   searchOpenedState,
   loginOpenedState,
   infoOpenedState,
@@ -29,19 +29,28 @@ import {
 export default function NavBar() {
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
-  const [visible, setVisible] = useRecoilState(visibleState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [logoutOpeened, setLogoutOpeened] = useState(false);
+  const [visible, setVisible] = useLocalStorage({
+    key: "visible",
+    defaultValue: false,
+  });
+  const [user, setUser] = useLocalStorage({ key: "user" });
+  useEffect(() => {
+    if (user) {
+      setVisible(true);
+      console.log(user?.email);
+    }
+  }, [user, setVisible]);
 
   const router = useRouter();
   const auth = getAuth();
-  const user = auth.currentUser;
 
   return (
     <>
       <Header
         zIndex={120}
-        hidden={!visible || infoOpened || searchOpened || loginOpened}
+        hidden={!visible || infoOpened || searchOpened || loginOpened || !user}
         sx={{
           display: "flex",
           padding: "15px 25px",

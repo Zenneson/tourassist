@@ -26,7 +26,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { useToggle } from "@mantine/hooks";
+import { useToggle, useLocalStorage } from "@mantine/hooks";
 import {
   IconBrandGoogle,
   IconBrandTwitter,
@@ -36,20 +36,24 @@ import {
   IconCheck,
   IconUserCheck,
 } from "@tabler/icons";
-import { loginTypeState, loginOpenedState, visibleState } from "../libs/atoms";
+import { loginTypeState, loginOpenedState } from "../libs/atoms";
 
 export default function LoginComp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
-  const [visible, setVisible] = useRecoilState(visibleState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [passPopOpened, setPassPopOpened] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const [loginType, setLoginType] = useRecoilState(loginTypeState);
+  const [visible, setVisible] = useLocalStorage({
+    key: "visible",
+    defaultValue: false,
+  });
+  const [user, setUser] = useLocalStorage({ key: "user" });
 
   const auth = getAuth(app);
 
@@ -171,7 +175,8 @@ export default function LoginComp() {
         setVisible(true);
         setLoginOpened(false);
         notify(`Signed in with ${signin}`, icon);
-        localStorage.setItem("user", JSON.stringify(auth.currentUser));
+        // localStorage.setItem("user", JSON.stringify(auth.currentUser));
+        setUser(auth.currentUser);
       })
       .catch((error) => {
         if (error.code === "auth/account-exists-with-different-credential") {
@@ -181,7 +186,8 @@ export default function LoginComp() {
               setVisible(true);
               setLoginOpened(false);
               notify(`Signed in with ${signin}`, icon);
-              localStorage.setItem("user", JSON.stringify(auth.currentUser));
+              // localStorage.setItem("user", JSON.stringify(auth.currentUser));
+              setUser(auth.currentUser);
             });
             console.log("Credential Linked");
           });
