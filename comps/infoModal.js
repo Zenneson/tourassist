@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { atom, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { Modal, Title, Text } from "@mantine/core";
 import { infoOpenedState } from "../libs/atoms";
 

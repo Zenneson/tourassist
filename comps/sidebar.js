@@ -1,5 +1,5 @@
-import { atom, useRecoilState } from "recoil";
-import { Drawer, Button, Divider, Center, Box, Stack } from "@mantine/core";
+import { useRecoilState } from "recoil";
+import { Drawer, Button, Divider, Center, Stack } from "@mantine/core";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";

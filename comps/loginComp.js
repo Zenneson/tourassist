@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { atom, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -36,12 +36,7 @@ import {
   IconCheck,
   IconUserCheck,
 } from "@tabler/icons";
-import {
-  loginTypeState,
-  loginOpenedState,
-  visibleState,
-  userState,
-} from "../libs/atoms";
+import { loginTypeState, loginOpenedState, visibleState } from "../libs/atoms";
 
 export default function LoginComp() {
   const [email, setEmail] = useState("");

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useRecoilState } from "recoil";
 import Map, { Marker, Source, Layer } from "react-map-gl";
-import bbox from "@turf/bbox";
 import centerOfMass from "@turf/center-of-mass";
-import { atom, useRecoilState } from "recoil";
+import bbox from "@turf/bbox";
 import {
   Autocomplete,
   Modal,

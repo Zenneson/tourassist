@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { atom, useRecoilState } from "recoil";
-import { Modal, Title, Text } from "@mantine/core";
+import { useRecoilState } from "recoil";
+import { Modal, Title } from "@mantine/core";
 import LoginComp from "./loginComp";
 import { loginOpenedState, loginTypeState } from "../libs/atoms";
 

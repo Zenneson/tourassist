@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { getAuth } from "firebase/auth";
 import {
   Center,
   Box,
@@ -10,6 +12,7 @@ import {
   Overlay,
   Transition,
   Image,
+  LoadingOverlay,
 } from "@mantine/core";
 import { IconWorld } from "@tabler/icons";
 import LoginComp from "./loginComp";
@@ -20,8 +23,23 @@ export default function Intro() {
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
 
+  const auth = getAuth();
+  const user = auth.currentUser;
+  useEffect(() => {
+    if (user) {
+      setVisible(true);
+      console.log(user?.email);
+    }
+  }, [user, setVisible]);
+
   return (
     <>
+      <LoadingOverlay
+        visible={mapLoaded}
+        overlayColor="#000"
+        overlayOpacity={1}
+        zIndex={150}
+      />
       {!visible && (
         <Flex
           sx={{
@@ -113,7 +131,6 @@ export default function Intro() {
                   fw={900}
                   size="md"
                   uppercase={true}
-                  loading={mapLoaded}
                   loaderProps={{ variant: "oval", size: 20 }}
                   variant="gradient"
                   gradient={{ from: "#004585", to: "#00376b", deg: 180 }}

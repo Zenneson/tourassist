@@ -1,4 +1,4 @@
-import { atom, useRecoilState } from "recoil";
+import { atom } from "recoil";
 
 export const visibleState = atom({
   key: "visibleState",
@@ -43,9 +43,4 @@ export const loginOpenedState = atom({
 export const loginTypeState = atom({
   key: "loginTypeState",
   default: "login",
-});
-
-export const userState = atom({
-  key: "userState",
-  default: null,
 });

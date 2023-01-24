@@ -1,6 +1,6 @@
 import { Avatar, Grid, Col, Text } from "@mantine/core";
 import { IconGripVertical, IconTrash } from "@tabler/icons";
-import { atom, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { Draggable } from "react-beautiful-dnd";
 import { listOpenedState, placeListState } from "../libs/atoms";
 
