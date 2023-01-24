@@ -50,7 +50,7 @@ export default function NavBar() {
     <>
       <Header
         zIndex={120}
-        hidden={!visible || infoOpened || searchOpened || loginOpened || !user}
+        hidden={!visible || infoOpened || searchOpened || loginOpened}
         sx={{
           display: "flex",
           padding: "15px 25px",
