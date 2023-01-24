@@ -118,7 +118,7 @@ export default function Home() {
                     pr={12}
                     size="xs"
                     component="a"
-                    target="/profile"
+                    href="/profile"
                   >
                     <Avatar
                       size={25}
