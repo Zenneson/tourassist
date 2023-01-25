@@ -86,15 +86,16 @@ export default function ProfileDrawer() {
   ));
 
   const animation = {
-    initial: { opacity: 0, y: 50, duration: 500 },
-    animate: { opacity: 1, y: 0, duration: 500 },
-    exit: { opacity: 0, y: -50, duration: 500 },
-    transition: { type: "linear" },
+    initial: { y: 50, duration: 500 },
+    animate: { y: 0, duration: 500 },
+    exit: { y: -50, duration: 500 },
+    transition: { type: "ease-in-out" },
   };
 
   return (
     <>
       <Drawer
+        trapFocus={false}
         zIndex={100}
         opened={profileOpened}
         padding="xl"
@@ -195,9 +196,12 @@ export default function ProfileDrawer() {
         opened={profileShow}
         padding="xl"
         size="full"
-        overlayOpacity={0.95}
+        overlayOpacity={0.8}
         overlayBlur={10}
+        transition="fade"
+        transitionDuration={200}
         withCloseButton={false}
+        trapFocus={false}
         sx={{
           ".mantine-Drawer-drawer": {
             background: "rgba(0, 0, 0, 0)",
@@ -207,7 +211,7 @@ export default function ProfileDrawer() {
         <CloseButton
           pos="absolute"
           top={140}
-          right={20}
+          right={30}
           size={30}
           title="Close"
           sx={{
@@ -221,12 +225,11 @@ export default function ProfileDrawer() {
         />
         <Box
           ml={350}
-          mt={160}
+          mt={110}
           p={20}
           h="80vh"
           bg="#0b0c0d"
           sx={{
-            overflowY: "hidden",
             borderRadius: "3px",
             border: "1px solid rgba(0, 0, 0, 0.05)",
             boxShadow:
