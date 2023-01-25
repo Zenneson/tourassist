@@ -31,6 +31,7 @@ import {
   placeListState,
   loginOpenedState,
   infoOpenedState,
+  profileOpenedState,
 } from "../libs/atoms";
 import TourList from "./tourList";
 
@@ -58,6 +59,7 @@ export default function Mymap() {
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
+  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
   const [user, setUser] = useLocalStorage({ key: "user" });
@@ -390,6 +392,7 @@ export default function Mymap() {
               gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
               onClick={() => {
                 setListOpened(true);
+                setProfileOpened(false);
                 if (checkPlace(placeLocation) === false) {
                   addPlaces(placeLocation);
                 } else {

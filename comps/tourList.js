@@ -22,7 +22,6 @@ export default function TourList() {
       >
         <Drawer
           opened={listOpened}
-          onClose={() => setListOpened(false)}
           withOverlay={false}
           withCloseButton={false}
           zIndex={100}

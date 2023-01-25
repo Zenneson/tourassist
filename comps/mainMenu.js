@@ -27,6 +27,7 @@ import {
   mapLoadState,
   profileOpenedState,
   profileLinkState,
+  listOpenedState,
 } from "../libs/atoms";
 import ProfileDrawer from "./profileDrawer";
 
@@ -36,6 +37,7 @@ export default function MainMenu() {
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [logoutOpeened, setLogoutOpeened] = useState(false);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
+  const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [active, setActive] = useRecoilState(profileLinkState);
   const [mapSpin, setMapSpin] = useLocalStorage({
@@ -91,6 +93,7 @@ export default function MainMenu() {
             withPlaceholder
             onClick={() => {
               user && setProfileOpened((o) => !o);
+              user && setListOpened(false);
               !user && setInfoOpened(true);
               setActive(-1);
             }}
@@ -106,6 +109,7 @@ export default function MainMenu() {
               size="sm"
               bg="rgba(0, 0, 0, 0.4)"
               onClick={() => {
+                setListOpened(false);
                 setProfileOpened((o) => !o);
                 setActive(-1);
               }}

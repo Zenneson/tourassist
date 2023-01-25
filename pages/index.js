@@ -1,20 +1,28 @@
 import Mymap from "../comps/Mymap";
 import { useRecoilState } from "recoil";
 import { IconList } from "@tabler/icons";
-import { listOpenedState, placeListState } from "../libs/atoms";
+import {
+  listOpenedState,
+  placeListState,
+  profileOpenedState,
+} from "../libs/atoms";
 import { Button } from "@mantine/core";
 import Intro from "../comps/intro";
 
 export default function Home(props) {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
+  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
 
   return (
     <>
       <Intro />
       {places.length >= 1 && !listOpened && (
         <Button
-          onClick={() => setListOpened(true)}
+          onClick={() => {
+            setListOpened(true);
+            setProfileOpened(false);
+          }}
           sx={{
             backgroundColor: "#020202",
             opacity: 0.7,
