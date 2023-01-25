@@ -1,5 +1,10 @@
 import { atom } from "recoil";
 
+export const profileLinkState = atom({
+  key: "profileLinkState",
+  default: -1,
+});
+
 export const profileOpenedState = atom({
   key: "profileOpenedState",
   default: false,

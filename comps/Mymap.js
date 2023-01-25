@@ -223,7 +223,6 @@ export default function Mymap() {
     setPlaces(newPlaces);
   };
 
-  // check and see if the user has already added the place to their list
   const checkPlace = (place) => {
     let placeExists = false;
     places.forEach((p) => {

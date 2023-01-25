@@ -17,18 +17,19 @@ export default function Home(props) {
           onClick={() => setListOpened(true)}
           sx={{
             backgroundColor: "#020202",
-            opacity: 0.35,
+            opacity: 0.7,
             borderRadius: "0 5px 5px 0",
             position: "absolute",
-            top: "105px",
+            top: "134px",
             left: "0",
             padding: "0 8px",
             transition: "all 100ms ease-in-out",
             zIndex: 120,
-            boxShadow: "0 0 20px rgba(255, 255, 255, 0.1)",
+            boxShadow: "0 0 10px rgba(255, 255, 255, 0.02)",
             "&:hover": {
               opacity: 1,
               backgroundColor: "#020202",
+              boxShadow: "0 0 20px rgba(255, 255, 255, 0.04)",
             },
           }}
         >

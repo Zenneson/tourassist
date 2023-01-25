@@ -2,12 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { getAuth, signOut } from "firebase/auth";
-import {
-  IconQuestionMark,
-  IconLogin,
-  IconLogout,
-  IconSearch,
-} from "@tabler/icons";
+import { useLocalStorage } from "@mantine/hooks";
 import {
   Avatar,
   Header,
@@ -19,13 +14,19 @@ import {
   Box,
   Text,
 } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
+import {
+  IconQuestionMark,
+  IconLogin,
+  IconLogout,
+  IconSearch,
+} from "@tabler/icons";
 import {
   searchOpenedState,
   loginOpenedState,
   infoOpenedState,
   mapLoadState,
   profileOpenedState,
+  profileLinkState,
 } from "../libs/atoms";
 import ProfileDrawer from "./profileDrawer";
 
@@ -36,6 +37,7 @@ export default function MainMenu() {
   const [logoutOpeened, setLogoutOpeened] = useState(false);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
+  const [active, setActive] = useRecoilState(profileLinkState);
   const [mapSpin, setMapSpin] = useLocalStorage({
     key: "mapSpin",
   });
@@ -44,6 +46,7 @@ export default function MainMenu() {
     defaultValue: false,
   });
   const [user, setUser] = useLocalStorage({ key: "user" });
+
   useEffect(() => {
     if (user) {
       setVisible(true);
@@ -89,6 +92,7 @@ export default function MainMenu() {
             onClick={() => {
               user && setProfileOpened((o) => !o);
               !user && setInfoOpened(true);
+              setActive(-1);
             }}
           />
         </Box>
@@ -101,7 +105,10 @@ export default function MainMenu() {
               pr={12}
               size="sm"
               bg="rgba(0, 0, 0, 0.4)"
-              onClick={() => setProfileOpened((o) => !o)}
+              onClick={() => {
+                setProfileOpened((o) => !o);
+                setActive(-1);
+              }}
             >
               <Avatar
                 size={30}

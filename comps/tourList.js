@@ -86,7 +86,6 @@ export default function TourList() {
             </Button>
           </Center>
           <Button
-            onClick={() => setListOpened(false)}
             sx={{
               background: "rgba(8, 7, 11, 0.95)",
               borderRadius: "0 5px 5px 0",
@@ -99,6 +98,7 @@ export default function TourList() {
                 background: "rgba(16, 17, 19, 1)",
               },
             }}
+            onClick={() => setListOpened(false)}
           >
             <IconX size={15} />
           </Button>
