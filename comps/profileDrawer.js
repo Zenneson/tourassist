@@ -1,10 +1,7 @@
-import { useState } from "react";
 import {
   Avatar,
-  Box,
   UnstyledButton,
   Drawer,
-  Divider,
   Space,
   Group,
   Flex,
@@ -40,23 +37,24 @@ export default function ProfileDrawer() {
         fontSize: "14px",
         borderRadius: "5px",
         padding: "7px 10px",
-        fontWeight: 100,
+        fontWeight: 400,
+        color: "#fff",
         border: "1px solid rgba(0, 0, 0, 0)",
+        transition: "all 200ms ease",
         "&:hover": {
-          backgroundColor: "rgba(16, 46, 74, 0.32)",
-          borderTop: "1px solid rgba(16, 46, 74, 0.32)",
-          borderBottom: "1px solid rgba(16, 46, 74, 0.32)",
-          boxShadow: "0 0 0 1px rgba(16, 46, 74, 0.32)",
+          backgroundColor: "rgba(0, 0, 0, 0.32)",
+          borderTop: "1px solid rgba(0, 0, 0, 0.32)",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.32)",
+          boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.32)",
           color: "#fff",
-          fontWeight: 500,
+          fontWeight: 600,
         },
       }}
     >
       <Group spacing={0} pl={5}>
+        <Space w={15} />
         {item.icon}
-        <Box px={10} opacity={0.5}>
-          |
-        </Box>
+        <Space w={10} />
         {item.label}
       </Group>
     </UnstyledButton>
@@ -84,12 +82,19 @@ export default function ProfileDrawer() {
         <Text ta="center" fz="xs">
           {user?.providerData[0].email}
         </Text>
-        <Divider w="70%" mx="auto" opacity={0.3} />
       </Flex>
-      <Group spacing={8} px={30}>
+      <Group
+        spacing={8}
+        py={10}
+        mx={30}
+        sx={{
+          borderRadius: "5px",
+          borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+        }}
+      >
         {items}
       </Group>
-      <Divider w="70%" mx="auto" opacity={0.3} mt={10} />
       <Button
         variant="subtle"
         w="60%"
@@ -98,6 +103,7 @@ export default function ProfileDrawer() {
         sx={{
           color: "#000",
           backgroundColor: "rgba(255, 255, 255, 0.012)",
+          transition: "all 200ms ease",
           "&:hover": {
             color: "#fff",
             backgroundColor: "rgba(0, 0, 0, 0.2)",

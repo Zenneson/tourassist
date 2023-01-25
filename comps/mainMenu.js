@@ -86,6 +86,10 @@ export default function MainMenu() {
             src={"img/blogo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
+            onClick={() => {
+              user && setProfileOpened((o) => !o);
+              !user && setInfoOpened(true);
+            }}
           />
         </Box>
         <Group px={0} py={10} m={0}>
