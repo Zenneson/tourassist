@@ -89,6 +89,7 @@ export default function ProfileDrawer() {
     initial: { opacity: 0, y: 50, duration: 500 },
     animate: { opacity: 1, y: 0, duration: 500 },
     exit: { opacity: 0, y: -50, duration: 500 },
+    transition: { type: "linear" },
   };
 
   return (
