@@ -5,6 +5,11 @@ export const profileLinkState = atom({
   default: -1,
 });
 
+export const profileShowState = atom({
+  key: "profileShowState",
+  default: false,
+});
+
 export const profileOpenedState = atom({
   key: "profileOpenedState",
   default: false,

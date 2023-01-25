@@ -5,6 +5,7 @@ import {
   listOpenedState,
   placeListState,
   profileOpenedState,
+  profileShowState,
 } from "../libs/atoms";
 import { Button } from "@mantine/core";
 import Intro from "../comps/intro";
@@ -13,6 +14,7 @@ export default function Home(props) {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
+  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
 
   return (
     <>
@@ -22,6 +24,7 @@ export default function Home(props) {
           onClick={() => {
             setListOpened(true);
             setProfileOpened(false);
+            setProfileShow(false);
           }}
           sx={{
             backgroundColor: "#020202",

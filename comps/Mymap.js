@@ -32,6 +32,7 @@ import {
   loginOpenedState,
   infoOpenedState,
   profileOpenedState,
+  profileShowState,
 } from "../libs/atoms";
 import TourList from "./tourList";
 
@@ -60,6 +61,7 @@ export default function Mymap() {
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
+  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [showPlaceSearch, setShowPlaceSearch] =
     useRecoilState(placeSearchState);
   const [user, setUser] = useLocalStorage({ key: "user" });
@@ -390,6 +392,7 @@ export default function Mymap() {
               onClick={() => {
                 setListOpened(true);
                 setProfileOpened(false);
+                setProfileShow(false);
                 if (checkPlace(placeLocation) === false) {
                   addPlaces(placeLocation);
                 } else {
@@ -483,7 +486,7 @@ export default function Mymap() {
               filter={(value, item) => item}
               style={{
                 width: "350px",
-                zIndex: 100,
+                zIndex: 98,
               }}
               onClick={function (event) {
                 event.preventDefault();
@@ -507,7 +510,7 @@ export default function Mymap() {
                 radius="xl"
                 p={10}
                 style={{
-                  zIndex: 100,
+                  zIndex: 98,
                 }}
               >
                 <IconQuestionMark size={15} />

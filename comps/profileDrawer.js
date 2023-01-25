@@ -8,12 +8,19 @@ import {
   Group,
   Flex,
   Text,
+  Title,
   Button,
   Box,
   NavLink,
+  ScrollArea,
+  CloseButton,
 } from "@mantine/core";
 import { useRecoilState } from "recoil";
-import { profileOpenedState, profileLinkState } from "../libs/atoms";
+import {
+  profileOpenedState,
+  profileLinkState,
+  profileShowState,
+} from "../libs/atoms";
 import { useLocalStorage } from "@mantine/hooks";
 import {
   IconUser,
@@ -34,7 +41,7 @@ const links = [
   {
     label: "Money",
     icon: <IconCashBanknote size={30} />,
-    description: "Bank Info and Funding Info",
+    description: "Bank and Funding Info",
   },
   {
     label: "Trips",
@@ -49,6 +56,7 @@ const links = [
 
 export default function ProfileDrawer() {
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
+  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [active, setActive] = useRecoilState(profileLinkState);
   const [user, setUser] = useLocalStorage({ key: "user" });
   const router = useRouter();
@@ -62,7 +70,10 @@ export default function ProfileDrawer() {
       description={item.description}
       rightSection={<IconChevronRight size={14} />}
       icon={item.icon}
-      onClick={() => setActive(index)}
+      onClick={() => {
+        setActive(index);
+        setProfileShow(true);
+      }}
       variant="subtle"
       sx={{
         ".mantine-NavLink-description": {
@@ -154,6 +165,7 @@ export default function ProfileDrawer() {
         <Button
           onClick={() => {
             setProfileOpened(false);
+            setProfileShow(false);
             setActive(-1);
           }}
           sx={{
@@ -172,7 +184,159 @@ export default function ProfileDrawer() {
           <IconX size={15} />
         </Button>
       </Drawer>
-      <Drawer></Drawer>
+      <Drawer
+        zIndex={99}
+        opened={profileShow}
+        padding="xl"
+        size="full"
+        overlayOpacity={0.3}
+        overlayBlur={10}
+        withCloseButton={false}
+        sx={{
+          ".mantine-Drawer-drawer": {
+            background: "rgba(0, 0, 0, 0)",
+          },
+        }}
+      >
+        <CloseButton
+          pos="absolute"
+          top={140}
+          right={20}
+          size={30}
+          title="Close"
+          sx={{
+            cursor: "pointer",
+            zIndex: 115,
+          }}
+          onClick={() => setProfileShow(false)}
+        />
+        <ScrollArea
+          ml={350}
+          mt={160}
+          p={20}
+          h="80vh"
+          hover="true"
+          scrollbarSize={7}
+          bg="#0b0c0d"
+          opacity={0.95}
+          sx={{
+            borderRadius: "5px",
+            boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <Box mb={25}>
+            <Title>Account Information</Title>
+            <Text>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo
+            </Text>
+          </Box>
+          <Box mb={25}>
+            <Title>Money</Title>
+            <Text>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo
+            </Text>
+          </Box>
+          <Box mb={25}>
+            <Title>Trips</Title>
+            <Text>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est
+              laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo
+            </Text>
+          </Box>
+        </ScrollArea>
+      </Drawer>
     </>
   );
 }
