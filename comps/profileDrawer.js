@@ -189,7 +189,7 @@ export default function ProfileDrawer() {
         opened={profileShow}
         padding="xl"
         size="full"
-        overlayOpacity={0.3}
+        overlayOpacity={0.95}
         overlayBlur={10}
         withCloseButton={false}
         sx={{
@@ -208,7 +208,10 @@ export default function ProfileDrawer() {
             cursor: "pointer",
             zIndex: 115,
           }}
-          onClick={() => setProfileShow(false)}
+          onClick={() => {
+            setProfileShow(false);
+            setActive(-1);
+          }}
         />
         <ScrollArea
           ml={350}
