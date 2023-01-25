@@ -31,14 +31,11 @@ export default function Intro() {
   const auth = getAuth();
   useEffect(() => {
     if (user) {
-      // setOpened(false);
       setVisible(true);
       setMapSpin(false);
-      console.log(user?.email);
     } else {
       setMapSpin(true);
       if (!visible) setOpened(true);
-      // setVisible(false);
     }
   }, [user, setVisible, setMapSpin, visible]);
 

@@ -52,7 +52,6 @@ export default function MainMenu() {
   useEffect(() => {
     if (user) {
       setVisible(true);
-      console.log(user?.email);
     }
   }, [user, setVisible]);
 
