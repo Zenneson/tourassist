@@ -63,6 +63,7 @@ export default function ProfileDrawer() {
 
   const items = links.map((item, index) => (
     <NavLink
+      px={25}
       key={item.label}
       active={index === active}
       label={item.label}
@@ -98,13 +99,12 @@ export default function ProfileDrawer() {
         trapFocus={false}
         zIndex={100}
         opened={profileOpened}
-        padding="xl"
         size="md"
         opacity={0.95}
         withOverlay={false}
         withCloseButton={false}
       >
-        <Space h={120} />
+        <Space h={150} />
         <Flex direction="column" gap="xs" mb={10}>
           <Avatar
             size={70}
@@ -119,10 +119,9 @@ export default function ProfileDrawer() {
         </Flex>
         <Group
           spacing={8}
-          py={10}
           sx={{
-            borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+            borderTop: "1px solid rgba(255, 255, 255, 0.02)",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.02)",
           }}
         >
           {items}
