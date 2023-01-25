@@ -4,8 +4,9 @@ import { MantineProvider, AppShell } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import InfoModal from "../comps/infoModal";
 import LoginModal from "../comps/loginModal";
-import NavBar from "../comps/navBar";
+import NavBar from "../comps/mainMenu";
 import SearchModal from "../comps/searchModal";
+import MainMenu from "../comps/mainMenu";
 
 export default function App(props) {
   const { Component, pageProps } = props;
@@ -48,7 +49,7 @@ export default function App(props) {
             <InfoModal />
             <LoginModal />
             <SearchModal />
-            <AppShell padding="none" header={<NavBar />}>
+            <AppShell padding="none" header={<MainMenu />}>
               <Component {...pageProps} />
             </AppShell>
           </NotificationsProvider>

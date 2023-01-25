@@ -32,6 +32,7 @@ import {
   loginOpenedState,
   infoOpenedState,
 } from "../libs/atoms";
+import TourList from "./tourList";
 
 export default function Mymap() {
   const mapRef = useRef();
@@ -532,6 +533,9 @@ export default function Mymap() {
         style={{ width: "100%", height: "100%" }}
         mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
       >
+        {visible && !infoOpened && !searchOpened && !loginOpened && (
+          <TourList />
+        )}
         {isCity && (
           <Marker
             longitude={placeLngLat[0]}

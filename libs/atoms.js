@@ -1,5 +1,10 @@
 import { atom } from "recoil";
 
+export const profileOpenedState = atom({
+  key: "profileOpenedState",
+  default: false,
+});
+
 export const listOpenedState = atom({
   key: "listOpenedState",
   default: false,

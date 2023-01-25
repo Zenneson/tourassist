@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
@@ -21,20 +20,22 @@ import {
   Text,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import Sidebar from "../comps/sidebar";
 import {
   searchOpenedState,
   loginOpenedState,
   infoOpenedState,
   mapLoadState,
+  profileOpenedState,
 } from "../libs/atoms";
+import ProfileDrawer from "./profileDrawer";
 
-export default function NavBar() {
+export default function MainMenu() {
   const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [logoutOpeened, setLogoutOpeened] = useState(false);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
+  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [mapSpin, setMapSpin] = useLocalStorage({
     key: "mapSpin",
   });
@@ -55,15 +56,18 @@ export default function NavBar() {
 
   return (
     <>
+      <ProfileDrawer />
       <Header
         zIndex={120}
+        bg="none"
+        withBorder={false}
         hidden={
           !visible || infoOpened || searchOpened || loginOpened || mapSpin
         }
         sx={{
           display: "flex",
           padding: "15px 25px",
-          alignItems: "center",
+          alignItems: "flex-start",
           justifyContent: "space-between",
           transition: "all 200ms ease",
         }}
@@ -78,36 +82,38 @@ export default function NavBar() {
         >
           <Image
             width={"auto"}
-            height={50}
+            height={103}
             src={"img/blogo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
         </Box>
-        <Group p={0} m={0}>
+        <Group px={0} py={10} m={0}>
           {user && (
-            <Link href="/profile" style={{ marginBottom: "-4px" }}>
-              <Button variant="subtle" radius="xl" pl={0} pr={12} size="sm">
-                <Avatar
-                  size={30}
-                  src={user?.providerData[0].photoURL}
-                  radius="xl"
-                  mr={7}
-                />
-                <Text
-                  sx={{
-                    fontSize: "12px",
-                  }}
-                >
-                  {user?.providerData[0].email}
-                </Text>
-              </Button>
-            </Link>
+            <Button
+              variant="subtle"
+              radius="xl"
+              pl={0}
+              pr={12}
+              size="sm"
+              bg="rgba(0, 0, 0, 0.4)"
+              onClick={() => setProfileOpened((o) => !o)}
+            >
+              <Avatar
+                size={30}
+                src={user?.providerData[0].photoURL}
+                radius="xl"
+                mr={7}
+              />
+              <Text fz={12} c="rgba(255, 255, 255, 0.5)">
+                {user?.providerData[0].email}
+              </Text>
+            </Button>
           )}
           <Group
             spacing={0}
             sx={{
-              backgroundColor: "rgba(0,0,0,0.2)",
+              backgroundColor: "rgba(0,0,0,0.4)",
               borderRadius: "50px",
             }}
           >
@@ -151,7 +157,7 @@ export default function NavBar() {
               onChange={setLogoutOpeened}
             >
               <Tooltip
-                label="Login"
+                label={user ? "Logout" : "Login"}
                 position="bottom"
                 openDelay={800}
                 withArrow
@@ -198,7 +204,6 @@ export default function NavBar() {
             </Popover>
           </Group>
         </Group>
-        {visible && !infoOpened && !searchOpened && !loginOpened && <Sidebar />}
       </Header>
     </>
   );

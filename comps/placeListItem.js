@@ -23,6 +23,7 @@ export default function PlaceListItem({ index, name, region, draggableId }) {
             borderRadius: "100px",
             userSelect: "none",
             transition: "all 200ms ease",
+            cursor: "pointer",
             "&:hover": {
               background: "rgba(0, 0, 0, 0.1)",
             },

@@ -5,7 +5,7 @@ import { IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
 import { listOpenedState, placeListState } from "../libs/atoms";
 
-export default function Sidebar() {
+export default function TourList() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
 
@@ -39,7 +39,7 @@ export default function Sidebar() {
             label="Tour Locations"
             sx={{
               opacity: 0.4,
-              margin: "70px 0 10px 0",
+              margin: "120px 0 10px 0",
             }}
           />
           <Droppable droppableId="places">
@@ -91,7 +91,7 @@ export default function Sidebar() {
               background: "rgba(8, 7, 11, 0.95)",
               borderRadius: "0 5px 5px 0",
               position: "absolute",
-              top: "105px",
+              top: "134px",
               right: "-33px",
               padding: "0 8px",
               transition: "all 100ms ease-in-out",
