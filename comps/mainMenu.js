@@ -107,8 +107,7 @@ export default function MainMenu() {
             <Button
               variant="subtle"
               radius="xl"
-              pl={0}
-              pr={12}
+              px={15}
               size="sm"
               bg="rgba(0, 0, 0, 0.4)"
               onClick={() => {
@@ -118,12 +117,6 @@ export default function MainMenu() {
                 setActive(-1);
               }}
             >
-              <Avatar
-                size={30}
-                src={user?.providerData[0].photoURL}
-                radius="xl"
-                mr={7}
-              />
               <Text fz={12} c="rgba(255, 255, 255, 0.5)">
                 {user?.providerData[0].email}
               </Text>
@@ -202,14 +195,15 @@ export default function MainMenu() {
               <Popover.Dropdown p={0}>
                 <Button
                   size="xs"
-                  fw={900}
-                  px={17}
+                  fw={700}
+                  px={15}
                   variant="default"
-                  leftIcon={<IconCircleX size={17} />}
+                  leftIcon={<IconCircleX size={15} />}
                   sx={{
-                    color: "rgba(120, 40, 40, 1)",
+                    opacity: 0.35,
                     "&:hover": {
-                      color: "rgba(255, 40, 40, 1)",
+                      opacity: 1,
+                      color: "rgba(255, 40, 40, 0.5)",
                     },
                   }}
                   onClick={function () {

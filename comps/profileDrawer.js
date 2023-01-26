@@ -141,6 +141,7 @@ export default function ProfileDrawer() {
         </Flex>
         <Group
           spacing={8}
+          mt={25}
           sx={{
             borderTop: "1px solid rgba(255, 255, 255, 0.02)",
             borderBottom: "1px solid rgba(255, 255, 255, 0.02)",
@@ -216,7 +217,7 @@ export default function ProfileDrawer() {
         zIndex={99}
         opened={profileShow}
         padding="xl"
-        size="75%"
+        size={1000}
         overlayOpacity={0}
         transition="slide-right"
         transitionDuration={200}
@@ -226,7 +227,7 @@ export default function ProfileDrawer() {
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         sx={{
           ".mantine-Drawer-drawer": {
-            background: "rgba(0, 0, 0, 0.35)",
+            background: "rgba(0, 0, 0, 0.5)",
             "backdrop-filter": "blur(10px)",
           },
         }}
@@ -252,7 +253,7 @@ export default function ProfileDrawer() {
           px={20}
           py={10}
           h="70vh"
-          bg="rgba(11, 12, 13, 0.92)"
+          bg="rgba(11, 12, 13, 0.95)"
           sx={{
             overflowY: "hidden",
             borderRadius: "3px",
@@ -277,12 +278,12 @@ export default function ProfileDrawer() {
                       icon={<IconUserCircle />}
                       iconWidth={50}
                       disabled
+                      w="100%"
                       rightSection={
                         <ActionIcon opacity={0.5} variant="subtle">
                           <IconPencil size={18} />
                         </ActionIcon>
                       }
-                      w="100%"
                     />
                     <Input
                       variant="filled"
@@ -298,7 +299,7 @@ export default function ProfileDrawer() {
                       }
                     />
                     <Divider label="Email Notifications" mb={-15} />
-                    <Group grow align="stretch" fw={700}>
+                    <Group grow align="stretch" fw={700} px={20}>
                       <Flex direction="column" gap={0} align="flex-end">
                         <Switch
                           p={0}

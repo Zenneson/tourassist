@@ -322,11 +322,11 @@ export default function Mymap() {
       <Modal
         centered
         opened={showModal}
-        zIndex={99}
+        zIndex={98}
         onClose={onClose}
-        overlayColor="rgba(0,0,0,1)"
-        overlayOpacity={0}
-        overlayBlur={5}
+        // closeOnClickOutside={false}
+        overlayOpacity={0.35}
+        overlayBlur={4}
         transition="pop"
         transitionDuration={800}
         transitionTimingFunction="ease"
@@ -353,7 +353,7 @@ export default function Mymap() {
         }
         styles={(theme) => ({
           modal: {
-            backgroundColor: "rgba(0,0,0,0.6)",
+            backgroundColor: "rgba(11, 12, 13, 0.95)",
           },
           close: {
             outline: "none",
