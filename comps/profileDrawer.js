@@ -15,6 +15,12 @@ import {
   Box,
   NavLink,
   CloseButton,
+  Divider,
+  Center,
+  Input,
+  Switch,
+  Stack,
+  ActionIcon,
 } from "@mantine/core";
 import {
   profileOpenedState,
@@ -26,9 +32,17 @@ import {
   IconCashBanknote,
   IconPlane,
   IconLogout,
-  IconHeartHandshake,
   IconChevronRight,
   IconX,
+  IconUserCircle,
+  IconKey,
+  IconPencil,
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandTiktok,
+  IconBrandTwitter,
+  IconHeartHandshake,
+  IconCheck,
 } from "@tabler/icons";
 
 export default function ProfileDrawer() {
@@ -87,9 +101,9 @@ export default function ProfileDrawer() {
   ));
 
   const animation = {
-    initial: { y: 50, duration: 500 },
-    animate: { y: 0, duration: 500 },
-    exit: { y: -50, duration: 500 },
+    initial: { x: -50, duration: 500 },
+    animate: { x: 0, duration: 500 },
+    exit: { x: 50, duration: 500 },
     transition: { type: "ease-in-out" },
   };
 
@@ -105,7 +119,14 @@ export default function ProfileDrawer() {
         withCloseButton={false}
       >
         <Space h={150} />
-        <Flex direction="column" gap="xs" mb={10}>
+        <Flex
+          direction="column"
+          gap="xs"
+          mb={10}
+          sx={{
+            userSelect: "none",
+          }}
+        >
           <Avatar
             size={70}
             src={user?.providerData[0].photoURL}
@@ -194,16 +215,18 @@ export default function ProfileDrawer() {
         zIndex={99}
         opened={profileShow}
         padding="xl"
-        size="full"
-        overlayOpacity={0.8}
-        overlayBlur={10}
-        transition="fade"
+        size="75%"
+        overlayOpacity={0}
+        transition="slide-right"
         transitionDuration={200}
         withCloseButton={false}
+        onClose={() => null}
         trapFocus={false}
+        shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         sx={{
           ".mantine-Drawer-drawer": {
-            background: "rgba(0, 0, 0, 0)",
+            background: "rgba(0, 0, 0, 0.1)",
+            "backdrop-filter": "blur(10px)",
           },
         }}
       >
@@ -211,7 +234,7 @@ export default function ProfileDrawer() {
           pos="absolute"
           top={140}
           right={30}
-          size={30}
+          size={25}
           title="Close"
           sx={{
             cursor: "pointer",
@@ -223,12 +246,14 @@ export default function ProfileDrawer() {
           }}
         />
         <Box
-          ml={350}
+          ml={345}
           mt={110}
-          p={20}
-          h="80vh"
-          bg="#0b0c0d"
+          px={20}
+          py={10}
+          h="70vh"
+          bg="rgba(11, 12, 13, 0.92)"
           sx={{
+            overflowY: "hidden",
             borderRadius: "3px",
             border: "1px solid rgba(0, 0, 0, 0.05)",
             boxShadow:
@@ -238,24 +263,172 @@ export default function ProfileDrawer() {
           {active === 0 && (
             <motion.div {...animation}>
               <Box h="76vh">
-                <Title>Account Info</Title>
-                <Text>Account Information</Text>
+                <Title order={6} opacity={0.25} fw={600}>
+                  Account Info
+                </Title>
+                <Divider mt={7} opacity={0.1} />
+                <Center style={{ width: "100%", height: "80%" }}>
+                  <Flex direction="column" gap="xs">
+                    <Divider label="Change E-mail or Password" />
+                    <Input
+                      variant="filled"
+                      placeholder={user?.providerData[0].email}
+                      icon={<IconUserCircle />}
+                      iconWidth={50}
+                      disabled
+                      rightSection={
+                        <ActionIcon opacity={0.3} variant="default">
+                          <IconPencil size={18} />
+                        </ActionIcon>
+                      }
+                      w="100%"
+                    />
+                    <Input
+                      variant="filled"
+                      placeholder="********"
+                      icon={<IconKey />}
+                      iconWidth={50}
+                      disabled
+                      w="100%"
+                      rightSection={
+                        <ActionIcon opacity={0.3} variant="default">
+                          <IconPencil size={18} />
+                        </ActionIcon>
+                      }
+                    />
+                    <Divider label="Social Links" />
+                    <Flex direction="column" gap={10}>
+                      <Group grow spacing={10}>
+                        <Input
+                          icon={<IconBrandFacebook />}
+                          placeholder="/denneson"
+                          rightSection={
+                            <ActionIcon opacity={0.3} variant="default">
+                              <IconPencil size={18} />
+                            </ActionIcon>
+                          }
+                        />
+                        <Input
+                          icon={<IconBrandInstagram />}
+                          placeholder="@zenneson"
+                          rightSection={
+                            <ActionIcon opacity={0.3} variant="default">
+                              <IconPencil size={18} />
+                            </ActionIcon>
+                          }
+                        />
+                      </Group>
+                      <Group grow spacing={10}>
+                        <Input
+                          icon={<IconBrandTiktok />}
+                          placeholder="@zenneson"
+                          rightSection={
+                            <ActionIcon opacity={0.3} variant="default">
+                              <IconPencil size={18} />
+                            </ActionIcon>
+                          }
+                        />
+                        <Input
+                          icon={<IconBrandTwitter />}
+                          placeholder="@zenneson"
+                          rightSection={
+                            <ActionIcon opacity={0.3} variant="default">
+                              <IconPencil size={18} />
+                            </ActionIcon>
+                          }
+                        />
+                      </Group>
+                    </Flex>
+                    <Divider label="Email Notifications" mb={-15} />
+                    <Group grow align="stretch" fw={700}>
+                      <Flex direction="column" gap={0} align="flex-end">
+                        <Switch
+                          p={0}
+                          size="xs"
+                          offLabel={<IconX size={12} />}
+                          onLabel={<IconCheck size={12} />}
+                          color="dark"
+                          radius="xs"
+                          labelPosition="left"
+                          label="Newsletter"
+                        />
+                        <Switch
+                          p={0}
+                          size="xs"
+                          offLabel={<IconX size={12} />}
+                          onLabel={<IconCheck size={12} />}
+                          color="dark"
+                          radius="xs"
+                          labelPosition="left"
+                          label="Campaign Creation"
+                        />
+                        <Switch
+                          p={0}
+                          size="xs"
+                          offLabel={<IconX size={12} />}
+                          onLabel={<IconCheck size={12} />}
+                          color="dark"
+                          radius="xs"
+                          labelPosition="left"
+                          label="New Campaign Comment"
+                        />
+                      </Flex>
+                      <Flex direction="column" gap={0} align="flex-end">
+                        <Switch
+                          p={0}
+                          size="xs"
+                          offLabel={<IconX size={12} />}
+                          onLabel={<IconCheck size={12} />}
+                          color="dark"
+                          radius="xs"
+                          labelPosition="left"
+                          label="Campaign Milestones"
+                        />
+                        <Switch
+                          p={0}
+                          size="xs"
+                          offLabel={<IconX size={12} />}
+                          onLabel={<IconCheck size={12} />}
+                          color="dark"
+                          radius="xs"
+                          labelPosition="left"
+                          label="Campaign Ending Soon"
+                        />
+                        <Switch
+                          p={0}
+                          size="xs"
+                          offLabel={<IconX size={12} />}
+                          onLabel={<IconCheck size={12} />}
+                          color="dark"
+                          radius="xs"
+                          labelPosition="left"
+                          label="Campaign Ended"
+                        />
+                      </Flex>
+                    </Group>
+                    <Divider mt={10} />
+                  </Flex>
+                </Center>
               </Box>
             </motion.div>
           )}
           {active === 1 && (
             <motion.div {...animation}>
               <Box h="76vh">
-                <Title>Money</Title>
-                <Text>Finacnes and Funding Information</Text>
+                <Title order={6} opacity={0.25} fw={600}>
+                  Money
+                </Title>
+                <Divider mt={7} opacity={0.1} />
               </Box>
             </motion.div>
           )}
           {active === 2 && (
             <motion.div {...animation}>
               <Box h="76vh">
-                <Title>Trip Campaigns</Title>
-                <Text>List of all Trip Campaigns</Text>
+                <Title order={6} opacity={0.25} fw={600}>
+                  Trip Campaigns
+                </Title>
+                <Divider mt={7} opacity={0.1} />
               </Box>
             </motion.div>
           )}

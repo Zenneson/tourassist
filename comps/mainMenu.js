@@ -17,8 +17,9 @@ import {
 import {
   IconQuestionMark,
   IconLogin,
-  IconLogout,
   IconSearch,
+  IconDoorExit,
+  IconCircleX,
 } from "@tabler/icons";
 import {
   searchOpenedState,
@@ -28,6 +29,7 @@ import {
   profileOpenedState,
   profileLinkState,
   listOpenedState,
+  profileShowState,
 } from "../libs/atoms";
 import ProfileDrawer from "./profileDrawer";
 
@@ -39,6 +41,7 @@ export default function MainMenu() {
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
+  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [active, setActive] = useRecoilState(profileLinkState);
   const [mapSpin, setMapSpin] = useLocalStorage({
     key: "mapSpin",
@@ -93,6 +96,7 @@ export default function MainMenu() {
             onClick={() => {
               user && setProfileOpened((o) => !o);
               user && setListOpened(false);
+              user && setProfileShow(false);
               !user && setInfoOpened(true);
               setActive(-1);
             }}
@@ -110,6 +114,7 @@ export default function MainMenu() {
               onClick={() => {
                 setListOpened(false);
                 setProfileOpened((o) => !o);
+                setProfileShow(false);
                 setActive(-1);
               }}
             >
@@ -186,19 +191,27 @@ export default function MainMenu() {
                     radius="xl"
                     p={10}
                   >
-                    {user ? <IconLogout size={17} /> : <IconLogin size={17} />}
+                    {user ? (
+                      <IconDoorExit size={17} />
+                    ) : (
+                      <IconLogin size={17} />
+                    )}
                   </Button>
                 </Popover.Target>
               </Tooltip>
               <Popover.Dropdown p={0}>
                 <Button
                   size="xs"
-                  fw={700}
+                  fw={900}
                   px={17}
-                  uppercase={true}
                   variant="default"
-                  sx={{ color: "rgba(255,255,255,0.3)" }}
-                  leftIcon={<IconLogout size={15} />}
+                  leftIcon={<IconCircleX size={17} />}
+                  sx={{
+                    color: "rgba(120, 40, 40, 1)",
+                    "&:hover": {
+                      color: "rgba(255, 40, 40, 1)",
+                    },
+                  }}
                   onClick={function () {
                     signOut(auth)
                       .then(() => {
@@ -212,7 +225,7 @@ export default function MainMenu() {
                       });
                   }}
                 >
-                  Logout
+                  LOGOUT
                 </Button>
               </Popover.Dropdown>
             </Popover>
