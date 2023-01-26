@@ -175,7 +175,6 @@ export default function LoginComp() {
         setVisible(true);
         setLoginOpened(false);
         notify(`Signed in with ${signin}`, icon);
-        // localStorage.setItem("user", JSON.stringify(auth.currentUser));
         setUser(auth.currentUser);
       })
       .catch((error) => {
@@ -186,7 +185,6 @@ export default function LoginComp() {
               setVisible(true);
               setLoginOpened(false);
               notify(`Signed in with ${signin}`, icon);
-              // localStorage.setItem("user", JSON.stringify(auth.currentUser));
               setUser(auth.currentUser);
             });
             console.log("Credential Linked");

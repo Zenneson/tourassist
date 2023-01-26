@@ -1,8 +1,12 @@
+import React from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { useLocalStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
+import AccountInfo from "./accountInfo";
+import Money from "./money";
+import Trips from "./trips";
 import {
   Avatar,
   Drawer,
@@ -16,11 +20,6 @@ import {
   NavLink,
   CloseButton,
   Divider,
-  Center,
-  Input,
-  Switch,
-  Stack,
-  ActionIcon,
 } from "@mantine/core";
 import {
   profileOpenedState,
@@ -29,20 +28,11 @@ import {
 } from "../libs/atoms";
 import {
   IconUser,
-  IconCashBanknote,
   IconPlane,
   IconLogout,
   IconChevronRight,
   IconX,
-  IconUserCircle,
-  IconKey,
-  IconPencil,
-  IconBrandFacebook,
-  IconBrandInstagram,
-  IconBrandTiktok,
-  IconBrandTwitter,
-  IconCheck,
-  IconCirclePlus,
+  IconWallet,
   IconHeartHandshake,
 } from "@tabler/icons";
 
@@ -62,7 +52,7 @@ export default function ProfileDrawer() {
     },
     {
       label: "Money",
-      icon: <IconCashBanknote size={30} />,
+      icon: <IconWallet size={30} />,
       description: "Bank and Funding Info",
     },
     {
@@ -216,8 +206,8 @@ export default function ProfileDrawer() {
       <Drawer
         zIndex={99}
         opened={profileShow}
-        padding="xl"
-        size={1000}
+        padding="24px 39px 24px 24px"
+        size={active === 1 ? 1200 : active === 2 ? 1440 : 1015}
         overlayOpacity={0}
         transition="slide-right"
         transitionDuration={200}
@@ -226,16 +216,18 @@ export default function ProfileDrawer() {
         trapFocus={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         sx={{
+          transition: "all 1500ms ease",
+          minWidth: `${active === 1 ? 1200 : active === 2 ? 1440 : 1015}`,
           ".mantine-Drawer-drawer": {
             background: "rgba(0, 0, 0, 0.5)",
-            "backdrop-filter": "blur(10px)",
+            backdropFilter: "blur(10px)",
           },
         }}
       >
         <CloseButton
           pos="absolute"
           top={140}
-          right={30}
+          right={45}
           size={25}
           title="Close"
           sx={{
@@ -269,148 +261,7 @@ export default function ProfileDrawer() {
                   Account Info
                 </Title>
                 <Divider mt={7} opacity={0.1} />
-                <Center style={{ width: "100%", height: "80%" }}>
-                  <Flex direction="column" gap="xs">
-                    <Divider label="Change E-mail or Password" />
-                    <Input
-                      variant="filled"
-                      placeholder={user?.providerData[0].email}
-                      icon={<IconUserCircle />}
-                      iconWidth={50}
-                      disabled
-                      w="100%"
-                      rightSection={
-                        <ActionIcon opacity={0.5} variant="subtle">
-                          <IconPencil size={18} />
-                        </ActionIcon>
-                      }
-                    />
-                    <Input
-                      variant="filled"
-                      placeholder="********"
-                      icon={<IconKey />}
-                      iconWidth={50}
-                      disabled
-                      w="100%"
-                      rightSection={
-                        <ActionIcon opacity={0.5} variant="subtle">
-                          <IconPencil size={18} />
-                        </ActionIcon>
-                      }
-                    />
-                    <Divider label="Email Notifications" mb={-15} />
-                    <Group grow align="stretch" fw={700} px={20}>
-                      <Flex direction="column" gap={0} align="flex-end">
-                        <Switch
-                          p={0}
-                          size="xs"
-                          offLabel={<IconX size={12} />}
-                          onLabel={<IconCheck size={12} />}
-                          color="dark"
-                          radius="xs"
-                          labelPosition="left"
-                          label="General Newsletter"
-                        />
-                        <Switch
-                          p={0}
-                          size="xs"
-                          offLabel={<IconX size={12} />}
-                          onLabel={<IconCheck size={12} />}
-                          color="dark"
-                          radius="xs"
-                          labelPosition="left"
-                          label="Campaign Creation"
-                        />
-                        <Switch
-                          p={0}
-                          size="xs"
-                          offLabel={<IconX size={12} />}
-                          onLabel={<IconCheck size={12} />}
-                          color="dark"
-                          radius="xs"
-                          labelPosition="left"
-                          label="New Campaign Comment"
-                        />
-                      </Flex>
-                      <Flex direction="column" gap={0} align="flex-end">
-                        <Switch
-                          p={0}
-                          size="xs"
-                          offLabel={<IconX size={12} />}
-                          onLabel={<IconCheck size={12} />}
-                          color="dark"
-                          radius="xs"
-                          labelPosition="left"
-                          label="Campaign Milestones"
-                        />
-                        <Switch
-                          p={0}
-                          size="xs"
-                          offLabel={<IconX size={12} />}
-                          onLabel={<IconCheck size={12} />}
-                          color="dark"
-                          radius="xs"
-                          labelPosition="left"
-                          label="Campaign Ending Soon"
-                        />
-                        <Switch
-                          p={0}
-                          size="xs"
-                          offLabel={<IconX size={12} />}
-                          onLabel={<IconCheck size={12} />}
-                          color="dark"
-                          radius="xs"
-                          labelPosition="left"
-                          label="Campaign Ended"
-                        />
-                      </Flex>
-                    </Group>
-                    <Divider label="Social Links" />
-                    <Flex direction="column" gap={10}>
-                      <Group grow spacing={10}>
-                        <Input
-                          icon={<IconBrandFacebook />}
-                          placeholder="/Facebook"
-                          rightSection={
-                            <ActionIcon opacity={0.5} variant="subtle">
-                              <IconCirclePlus size={16} />
-                            </ActionIcon>
-                          }
-                        />
-                        <Input
-                          icon={<IconBrandInstagram />}
-                          placeholder="@Instagram"
-                          rightSection={
-                            <ActionIcon opacity={0.5} variant="subtle">
-                              <IconCirclePlus size={16} />
-                            </ActionIcon>
-                          }
-                        />
-                      </Group>
-                      <Group grow spacing={10}>
-                        <Input
-                          icon={<IconBrandTiktok />}
-                          placeholder="@TikTok"
-                          rightSection={
-                            <ActionIcon opacity={0.5} variant="subtle">
-                              <IconCirclePlus size={16} />
-                            </ActionIcon>
-                          }
-                        />
-                        <Input
-                          icon={<IconBrandTwitter />}
-                          placeholder="@Twitter"
-                          rightSection={
-                            <ActionIcon opacity={0.5} variant="subtle">
-                              <IconCirclePlus size={16} />
-                            </ActionIcon>
-                          }
-                        />
-                      </Group>
-                    </Flex>
-                    <Divider mt={10} />
-                  </Flex>
-                </Center>
+                <AccountInfo />
               </Box>
             </motion.div>
           )}
@@ -420,7 +271,8 @@ export default function ProfileDrawer() {
                 <Title order={6} opacity={0.25} fw={600}>
                   Money
                 </Title>
-                <Divider mt={7} opacity={0.1} />
+                <Divider mt={7} opacity={0} />
+                <Money />
               </Box>
             </motion.div>
           )}
@@ -431,6 +283,7 @@ export default function ProfileDrawer() {
                   Trip Campaigns
                 </Title>
                 <Divider mt={7} opacity={0.1} />
+                <Trips />
               </Box>
             </motion.div>
           )}
