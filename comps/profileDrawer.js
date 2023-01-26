@@ -41,8 +41,9 @@ import {
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandTwitter,
-  IconHeartHandshake,
   IconCheck,
+  IconCirclePlus,
+  IconHeartHandshake,
 } from "@tabler/icons";
 
 export default function ProfileDrawer() {
@@ -220,12 +221,12 @@ export default function ProfileDrawer() {
         transition="slide-right"
         transitionDuration={200}
         withCloseButton={false}
-        onClose={() => null}
+        onClose={() => setProfileShow(false)}
         trapFocus={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         sx={{
           ".mantine-Drawer-drawer": {
-            background: "rgba(0, 0, 0, 0.1)",
+            background: "rgba(0, 0, 0, 0.35)",
             "backdrop-filter": "blur(10px)",
           },
         }}
@@ -277,7 +278,7 @@ export default function ProfileDrawer() {
                       iconWidth={50}
                       disabled
                       rightSection={
-                        <ActionIcon opacity={0.3} variant="default">
+                        <ActionIcon opacity={0.5} variant="subtle">
                           <IconPencil size={18} />
                         </ActionIcon>
                       }
@@ -291,54 +292,11 @@ export default function ProfileDrawer() {
                       disabled
                       w="100%"
                       rightSection={
-                        <ActionIcon opacity={0.3} variant="default">
+                        <ActionIcon opacity={0.5} variant="subtle">
                           <IconPencil size={18} />
                         </ActionIcon>
                       }
                     />
-                    <Divider label="Social Links" />
-                    <Flex direction="column" gap={10}>
-                      <Group grow spacing={10}>
-                        <Input
-                          icon={<IconBrandFacebook />}
-                          placeholder="/denneson"
-                          rightSection={
-                            <ActionIcon opacity={0.3} variant="default">
-                              <IconPencil size={18} />
-                            </ActionIcon>
-                          }
-                        />
-                        <Input
-                          icon={<IconBrandInstagram />}
-                          placeholder="@zenneson"
-                          rightSection={
-                            <ActionIcon opacity={0.3} variant="default">
-                              <IconPencil size={18} />
-                            </ActionIcon>
-                          }
-                        />
-                      </Group>
-                      <Group grow spacing={10}>
-                        <Input
-                          icon={<IconBrandTiktok />}
-                          placeholder="@zenneson"
-                          rightSection={
-                            <ActionIcon opacity={0.3} variant="default">
-                              <IconPencil size={18} />
-                            </ActionIcon>
-                          }
-                        />
-                        <Input
-                          icon={<IconBrandTwitter />}
-                          placeholder="@zenneson"
-                          rightSection={
-                            <ActionIcon opacity={0.3} variant="default">
-                              <IconPencil size={18} />
-                            </ActionIcon>
-                          }
-                        />
-                      </Group>
-                    </Flex>
                     <Divider label="Email Notifications" mb={-15} />
                     <Group grow align="stretch" fw={700}>
                       <Flex direction="column" gap={0} align="flex-end">
@@ -350,7 +308,7 @@ export default function ProfileDrawer() {
                           color="dark"
                           radius="xs"
                           labelPosition="left"
-                          label="Newsletter"
+                          label="General Newsletter"
                         />
                         <Switch
                           p={0}
@@ -406,6 +364,49 @@ export default function ProfileDrawer() {
                         />
                       </Flex>
                     </Group>
+                    <Divider label="Social Links" />
+                    <Flex direction="column" gap={10}>
+                      <Group grow spacing={10}>
+                        <Input
+                          icon={<IconBrandFacebook />}
+                          placeholder="/Facebook"
+                          rightSection={
+                            <ActionIcon opacity={0.5} variant="subtle">
+                              <IconCirclePlus size={16} />
+                            </ActionIcon>
+                          }
+                        />
+                        <Input
+                          icon={<IconBrandInstagram />}
+                          placeholder="@Instagram"
+                          rightSection={
+                            <ActionIcon opacity={0.5} variant="subtle">
+                              <IconCirclePlus size={16} />
+                            </ActionIcon>
+                          }
+                        />
+                      </Group>
+                      <Group grow spacing={10}>
+                        <Input
+                          icon={<IconBrandTiktok />}
+                          placeholder="@TikTok"
+                          rightSection={
+                            <ActionIcon opacity={0.5} variant="subtle">
+                              <IconCirclePlus size={16} />
+                            </ActionIcon>
+                          }
+                        />
+                        <Input
+                          icon={<IconBrandTwitter />}
+                          placeholder="@Twitter"
+                          rightSection={
+                            <ActionIcon opacity={0.5} variant="subtle">
+                              <IconCirclePlus size={16} />
+                            </ActionIcon>
+                          }
+                        />
+                      </Group>
+                    </Flex>
                     <Divider mt={10} />
                   </Flex>
                 </Center>
