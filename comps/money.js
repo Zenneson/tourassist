@@ -60,7 +60,6 @@ export default function Money() {
     {
       avatar: "",
       name: "Anonymus",
-      email: "",
       amount: 100,
       id: Math.round(Math.random() * 1000),
     },
@@ -68,7 +67,6 @@ export default function Money() {
       avatar:
         "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Jill Jailbreaker",
-      email: "jj@breaker.com",
       amount: 50,
       id: Math.round(Math.random() * 1000),
     },
@@ -76,7 +74,6 @@ export default function Money() {
       avatar:
         "https://images.unsplash.com/photo-1632922267756-9b71242b1592?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Henry Silkeater",
-      email: "henry@silkeater.io",
       amount: 20,
       id: Math.round(Math.random() * 1000),
     },
@@ -84,21 +81,18 @@ export default function Money() {
       avatar:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Bill Horsefighter",
-      email: "bhorsefighter@gmail.com",
       amount: 150,
       id: Math.round(Math.random() * 1000),
     },
     {
       avatar: "",
       name: "Anonymus",
-      email: "",
       amount: 200,
       id: Math.round(Math.random() * 1000),
     },
     {
       avatar: "",
       name: "Anonymus",
-      email: "",
       amount: 100,
       id: Math.round(Math.random() * 1000),
     },
@@ -106,7 +100,6 @@ export default function Money() {
       avatar:
         "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Jill Jailbreaker",
-      email: "jj@breaker.com",
       amount: 50,
       id: Math.round(Math.random() * 1000),
     },
@@ -114,7 +107,6 @@ export default function Money() {
       avatar:
         "https://images.unsplash.com/photo-1632922267756-9b71242b1592?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Henry Silkeater",
-      email: "henry@silkeater.io",
       amount: 20,
       id: Math.round(Math.random() * 1000),
     },
@@ -122,14 +114,12 @@ export default function Money() {
       avatar:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Bill Horsefighter",
-      email: "bhorsefighter@gmail.com",
       amount: 150,
       id: Math.round(Math.random() * 1000),
     },
     {
       avatar: "",
       name: "Anonymus",
-      email: "",
       amount: 200,
       id: Math.round(Math.random() * 1000),
     },
@@ -143,9 +133,6 @@ export default function Money() {
           <div>
             <Text size="sm" weight={500}>
               {item.name}
-            </Text>
-            <Text color="dimmed" size="xs">
-              {item.email}
             </Text>
           </div>
         </Group>
