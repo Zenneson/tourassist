@@ -4,7 +4,6 @@ import { MantineProvider, AppShell } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import InfoModal from "../comps/infoModal";
 import LoginModal from "../comps/loginModal";
-import NavBar from "../comps/mainMenu";
 import SearchModal from "../comps/searchModal";
 import MainMenu from "../comps/mainMenu";
 

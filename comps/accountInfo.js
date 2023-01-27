@@ -27,9 +27,9 @@ export default function AccountInfo() {
   const auth = getAuth();
 
   return (
-    <Center style={{ width: "100%", height: "80%" }}>
+    <Center py={50}>
       <Flex direction="column" gap="xs">
-        <Divider label="Change E-mail or Password" />
+        <Divider mb={25} label="Change E-mail or Password" />
         <Input
           variant="filled"
           placeholder={user?.providerData[0].email}
@@ -56,7 +56,7 @@ export default function AccountInfo() {
             </ActionIcon>
           }
         />
-        <Divider label="Email Notifications" mb={-15} />
+        <Divider my={25} label="Email Notifications" mb={-15} />
         <Group grow align="stretch" fw={700} px={20}>
           <Flex direction="column" gap={0} align="flex-end">
             <Switch
@@ -123,7 +123,7 @@ export default function AccountInfo() {
             />
           </Flex>
         </Group>
-        <Divider label="Social Links" />
+        <Divider my={25} label="Social Links" />
         <Flex direction="column" gap={10}>
           <Group grow spacing={10}>
             <Input
@@ -166,7 +166,7 @@ export default function AccountInfo() {
             />
           </Group>
         </Flex>
-        <Divider mt={10} />
+        <Divider mt={25} />
       </Flex>
     </Center>
   );

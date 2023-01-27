@@ -1,10 +1,9 @@
-import {} from "react";
+import { useElementSize } from "@mantine/hooks";
 import {
   Avatar,
   Tabs,
   Box,
   Divider,
-  Stack,
   Flex,
   Group,
   Text,
@@ -12,6 +11,8 @@ import {
   ScrollArea,
   Button,
   Center,
+  Grid,
+  Stack,
 } from "@mantine/core";
 import { IconCashBanknote, IconBuildingBank, IconReload } from "@tabler/icons";
 import { Line } from "react-chartjs-2";
@@ -150,18 +151,15 @@ export default function Money() {
         </Group>
       </td>
       <td>
-        <Text size="xl" w={8}>
-          {item.amount}
-        </Text>
-        <Text size="xs" color="dimmed" w={8}>
-          Amount
+        <Text size="md" ta="right">
+          ${item.amount}
         </Text>
       </td>
     </tr>
   ));
 
   return (
-    <Tabs defaultValue="finances" opacity={0.5}>
+    <Tabs defaultValue="finances">
       <Tabs.List position="right">
         <Tabs.Tab icon={<IconCashBanknote size={17} />} value="finances">
           Funding Metrics
@@ -180,21 +178,23 @@ export default function Money() {
             data={data}
           />
         </Box>
-        <Divider m={10} />
-        <Flex mt={20}>
-          <Box w="100%">
+        <Flex my={10}>
+          <Box w="80%" mr={20}>
             <Divider label="Donations" mb={10} />
-            <ScrollArea
-              scrollbarSize={8}
-              type="auto"
-              w="100%"
-              h="35vh"
-              pr={10}
+            <Box
               bg="rgba(255, 255, 255, 0.02)"
+              px={10}
+              m={0}
+              h={350}
+              type="auto"
+              scrollbarSize={8}
               sx={{
-                borderRadius: 3,
+                "&::-webkit-scrollbar": {
+                  width: "0",
+                },
+                overflow: "auto",
                 boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
-                overflowY: "hidden",
+                borderRadius: 3,
               }}
             >
               <Table verticalSpacing="xs">
@@ -211,15 +211,39 @@ export default function Money() {
                   Load More
                 </Button>
               </Center>
-            </ScrollArea>
+            </Box>
           </Box>
-          <Stack gap={0} w="30%" pl={20}>
+          <Flex direction="column" justify="center" align="center" gap={10}>
             <Flex
-              h="33%"
               direction="column"
+              bg="rgba(255, 255, 255, 0.02)"
+              h="100%"
+              w="100%"
+              p="xl"
               justify="center"
               align="center"
+              ta="center"
+              sx={{
+                borderRadius: 3,
+                boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <Text fw={900} size={25} color="lime">
+                $150
+              </Text>
+              <Text size="xs" color="dimmed">
+                Payout on the way
+              </Text>
+            </Flex>
+            <Flex
+              direction="column"
               bg="rgba(255, 255, 255, 0.02)"
+              h="100%"
+              w="100%"
+              p="xl"
+              justify="center"
+              align="center"
+              ta="center"
               sx={{
                 borderRadius: 3,
                 boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
@@ -233,42 +257,27 @@ export default function Money() {
               </Text>
             </Flex>
             <Flex
-              h="33%"
               direction="column"
+              bg="rgba(255, 255, 255, 0.02)"
+              h="100%"
+              p="xl"
               justify="center"
               align="center"
-              bg="rgba(255, 255, 255, 0.02)"
+              ta="center"
+              w="100%"
               sx={{
                 borderRadius: 3,
                 boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
               }}
             >
               <Text fw={900} size={25}>
-                $ 2,345
+                $2,345
               </Text>
               <Text size="xs" color="dimmed">
                 Total Earned
               </Text>
             </Flex>
-            <Flex
-              h="33%"
-              direction="column"
-              justify="center"
-              align="center"
-              bg="rgba(255, 255, 255, 0.02)"
-              sx={{
-                borderRadius: 3,
-                boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <Text fw={900} size={25}>
-                $ 400
-              </Text>
-              <Text size="xs" color="dimmed">
-                Total Donated
-              </Text>
-            </Flex>
-          </Stack>
+          </Flex>
         </Flex>
       </Tabs.Panel>
       <Tabs.Panel value="banking">

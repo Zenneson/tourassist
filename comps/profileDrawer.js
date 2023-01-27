@@ -20,6 +20,7 @@ import {
   NavLink,
   CloseButton,
   Divider,
+  ScrollArea,
 } from "@mantine/core";
 import {
   profileOpenedState,
@@ -207,7 +208,7 @@ export default function ProfileDrawer() {
         zIndex={99}
         opened={profileShow}
         padding="24px 39px 24px 24px"
-        size={active === 1 ? 1200 : active === 2 ? 1440 : 1015}
+        size={active === 1 ? 1200 : active === 2 ? 1350 : 1015}
         overlayOpacity={0}
         transition="slide-right"
         transitionDuration={200}
@@ -217,9 +218,8 @@ export default function ProfileDrawer() {
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         sx={{
           transition: "all 1500ms ease",
-          minWidth: `${active === 1 ? 1200 : active === 2 ? 1440 : 1015}`,
           ".mantine-Drawer-drawer": {
-            background: "rgba(0, 0, 0, 0.5)",
+            background: "rgba(0, 0, 0, 0.4)",
             backdropFilter: "blur(10px)",
           },
         }}
@@ -244,10 +244,14 @@ export default function ProfileDrawer() {
           mt={110}
           px={20}
           py={10}
-          h="70vh"
           bg="rgba(11, 12, 13, 0.95)"
           sx={{
-            overflowY: "hidden",
+            "&::-webkit-scrollbar": {
+              width: "0",
+            },
+            overflow: "auto",
+            minHeight: "700px",
+            maxHeight: "calc(100vh - 260px)",
             borderRadius: "3px",
             border: "1px solid rgba(0, 0, 0, 0.05)",
             boxShadow:
@@ -256,35 +260,29 @@ export default function ProfileDrawer() {
         >
           {active === 0 && (
             <motion.div {...animation}>
-              <Box h="76vh">
-                <Title order={6} opacity={0.25} fw={600}>
-                  Account Info
-                </Title>
-                <Divider mt={7} opacity={0.1} />
-                <AccountInfo />
-              </Box>
+              <Title order={6} opacity={0.25} fw={600}>
+                Account Info
+              </Title>
+              <Divider mt={7} opacity={0.1} />
+              <AccountInfo />
             </motion.div>
           )}
           {active === 1 && (
             <motion.div {...animation}>
-              <Box h="76vh">
-                <Title order={6} opacity={0.25} fw={600}>
-                  Money
-                </Title>
-                <Divider mt={7} opacity={0} />
-                <Money />
-              </Box>
+              <Title order={6} opacity={0.25} fw={600}>
+                Money
+              </Title>
+              <Divider mt={7} opacity={0} />
+              <Money />
             </motion.div>
           )}
           {active === 2 && (
             <motion.div {...animation}>
-              <Box h="76vh">
-                <Title order={6} opacity={0.25} fw={600}>
-                  Trip Campaigns
-                </Title>
-                <Divider mt={7} opacity={0.1} />
-                <Trips />
-              </Box>
+              <Title order={6} opacity={0.25} fw={600}>
+                Trip Campaigns
+              </Title>
+              <Divider mt={7} opacity={0.1} />
+              <Trips />
             </motion.div>
           )}
         </Box>
