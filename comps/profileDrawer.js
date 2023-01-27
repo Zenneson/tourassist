@@ -20,7 +20,6 @@ import {
   NavLink,
   CloseButton,
   Divider,
-  ScrollArea,
 } from "@mantine/core";
 import {
   profileOpenedState,
