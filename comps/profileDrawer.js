@@ -263,7 +263,7 @@ export default function ProfileDrawer() {
               <Title order={6} opacity={0.25} fw={600}>
                 Account Info
               </Title>
-              <Divider mt={7} opacity={0.1} />
+              <Divider mt={7} opacity={0.15} />
               <AccountInfo />
             </motion.div>
           )}
@@ -272,7 +272,7 @@ export default function ProfileDrawer() {
               <Title order={6} opacity={0.25} fw={600}>
                 Money
               </Title>
-              <Divider mt={7} opacity={0} />
+              <Divider mt={7} opacity={0.15} />
               <Money />
             </motion.div>
           )}
@@ -281,7 +281,7 @@ export default function ProfileDrawer() {
               <Title order={6} opacity={0.25} fw={600}>
                 Trip Campaigns
               </Title>
-              <Divider mt={7} opacity={0.1} />
+              <Divider mt={7} opacity={0.15} />
               <Trips />
             </motion.div>
           )}
