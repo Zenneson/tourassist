@@ -69,58 +69,42 @@ export default function Money() {
 
   const donateData = [
     {
-      avatar: "",
       name: "Anonymus",
       amount: 100,
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Jill Jailbreaker",
       amount: 50,
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1632922267756-9b71242b1592?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Henry Silkeater",
       amount: 20,
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Bill Horsefighter",
       amount: 150,
     },
     {
-      avatar: "",
       name: "Anonymus",
       amount: 200,
     },
     {
-      avatar: "",
       name: "Anonymus",
       amount: 100,
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Jill Jailbreaker",
       amount: 50,
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1632922267756-9b71242b1592?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Henry Silkeater",
       amount: 20,
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Bill Horsefighter",
       amount: 150,
     },
     {
-      avatar: "",
       name: "Anonymus",
       amount: 200,
     },
@@ -129,17 +113,12 @@ export default function Money() {
   const rows = donateData.map((item, index) => (
     <tr key={index}>
       <td>
-        <Group spacing="xs">
-          <Avatar size={40} src={item.avatar} radius={40} />
-          <div>
-            <Text size="sm" weight={500}>
-              {item.name}
-            </Text>
-          </div>
-        </Group>
+        <Text size="sm" weight={500}>
+          {item.name}
+        </Text>
       </td>
       <td>
-        <Text size="md" ta="right">
+        <Text size="sm" fw={300} ta="right">
           ${item.amount}
         </Text>
       </td>
@@ -173,7 +152,7 @@ export default function Money() {
               bg="rgba(255, 255, 255, 0.01)"
               p={10}
               m={0}
-              h={350}
+              h={320}
               ref={donationsRef}
               type="auto"
               sx={{
@@ -193,7 +172,7 @@ export default function Money() {
                 }`,
               }}
             >
-              <Table verticalSpacing="xs">
+              <Table verticalSpacing="md" highlightOnHover>
                 <tbody>
                   {" "}
                   {rows.length !== 0 ? (
@@ -225,7 +204,7 @@ export default function Money() {
               bg="rgba(255, 255, 255, 0.01)"
               h="100%"
               w="100%"
-              p="xl"
+              px={15}
               justify="center"
               align="center"
               ta="center"
@@ -246,7 +225,7 @@ export default function Money() {
               bg="rgba(255, 255, 255, 0.01)"
               h="100%"
               w="100%"
-              p="xl"
+              px={15}
               justify="center"
               align="center"
               ta="center"
@@ -266,7 +245,7 @@ export default function Money() {
               direction="column"
               bg="rgba(255, 255, 255, 0.01)"
               h="100%"
-              p="xl"
+              px={15}
               justify="center"
               align="center"
               ta="center"

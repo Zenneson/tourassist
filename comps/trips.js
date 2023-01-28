@@ -93,7 +93,8 @@ export default function Trips() {
         transition: "all 200ms ease",
         borderRadius: "3px",
         backgroundColor: "rgba(255, 255, 255, 0.01)",
-        boxShadow: "0 2px 5px  rgba(0,0,0, 0.15)",
+        boxShadow:
+          "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.01)",
         "&:hover": {
           backgroundColor: "rgba(0, 0, 0, 0.35)",
           boxShadow: "0 2px 15px  rgba(0,0,0, 0.2)",
@@ -111,7 +112,19 @@ export default function Trips() {
             borderBottom: "1px solid rgba(0,0,0, 0.15)",
           }}
         >
-          <Stack spacing={0} py={15} pl={20} ta="left" bg="rgba(0,0,0, 0.17)">
+          <Stack
+            spacing={0}
+            py={15}
+            pl={20}
+            ta="left"
+            bg="rgba(0,0,0, 0.17)"
+            sx={{
+              borderRadius: "3px 0 0 0",
+              borderTop: "1px solid rgba(0,0,0, 0.1)",
+              borderLeft: "1px solid rgba(0,0,0, 0.1)",
+              boxShadow: "inset 7px 7px 5px 1px rgba(0,0,0, 0.1)",
+            }}
+          >
             <Text size="xl" fw={400} color="dimmed">
               {trip.place}
             </Text>
@@ -189,7 +202,8 @@ export default function Trips() {
                 },
               ]}
               size={60}
-              thickness={1}
+              thickness={4}
+              roundCaps
               label={
                 <Text
                   color={
@@ -221,7 +235,7 @@ export default function Trips() {
       px={10}
       mb={10}
       sx={{
-        maxHeight: "calc(100vh - 500px)",
+        maxHeight: "calc(100vh - 360px)",
         overflowY: "scroll",
         "&::-webkit-scrollbar": {
           width: "0",

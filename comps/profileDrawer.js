@@ -275,7 +275,7 @@ export default function ProfileDrawer() {
               width: "0",
             },
             overflow: "auto",
-            maxHeight: "calc(100vh - 260px)",
+            maxHeight: "calc(100vh - 300px)",
             borderRadius: "3px",
             border: "1px solid rgba(0, 0, 0, 0.05)",
             boxShadow:
