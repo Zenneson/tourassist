@@ -1,4 +1,5 @@
-import { useElementSize } from "@mantine/hooks";
+import { useState } from "react";
+import { useRecoilState } from "recoil";
 import {
   Avatar,
   Tabs,
@@ -8,14 +9,12 @@ import {
   Group,
   Text,
   Table,
-  ScrollArea,
   Button,
   Center,
-  Grid,
-  Stack,
 } from "@mantine/core";
 import { IconCashBanknote, IconBuildingBank, IconReload } from "@tabler/icons";
 import { Line } from "react-chartjs-2";
+import { moneyTabState } from "../libs/atoms";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,6 +25,8 @@ import {
 } from "chart.js";
 
 export default function Money() {
+  const [activeTab, setActiveTab] = useRecoilState(moneyTabState);
+
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -35,23 +36,27 @@ export default function Money() {
   );
 
   const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
   ];
 
   const data = {
     labels,
     datasets: [
       {
-        label: "Dataset 1",
+        label: "Amount received",
         data: labels.map(() => Math.round(Math.random() * 100)),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "red",
+      },
+      {
+        label: "Donors",
+        data: labels.map(() => Math.round(Math.random() * 100)),
+        borderColor: "lime",
       },
     ],
   };
@@ -146,7 +151,7 @@ export default function Money() {
   ));
 
   return (
-    <Tabs defaultValue="finances">
+    <Tabs defaultValue="finances" value={activeTab} onTabChange={setActiveTab}>
       <Tabs.List position="right">
         <Tabs.Tab icon={<IconCashBanknote size={17} />} value="finances">
           Funding Metrics
@@ -174,7 +179,6 @@ export default function Money() {
               m={0}
               h={350}
               type="auto"
-              scrollbarSize={8}
               sx={{
                 "&::-webkit-scrollbar": {
                   width: "0",

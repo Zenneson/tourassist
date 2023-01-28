@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
@@ -25,6 +25,7 @@ import {
   profileOpenedState,
   profileLinkState,
   profileShowState,
+  moneyTabState,
 } from "../libs/atoms";
 import {
   IconUser,
@@ -33,6 +34,8 @@ import {
   IconChevronRight,
   IconX,
   IconWallet,
+  IconBuildingBank,
+  IconCashBanknote,
   IconHeartHandshake,
 } from "@tabler/icons";
 
@@ -40,6 +43,7 @@ export default function ProfileDrawer() {
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [active, setActive] = useRecoilState(profileLinkState);
+  const [activeTab, setActiveTab] = useRecoilState(moneyTabState);
   const [user, setUser] = useLocalStorage({ key: "user" });
   const router = useRouter();
   const auth = getAuth();
@@ -75,11 +79,16 @@ export default function ProfileDrawer() {
       description={item.description}
       rightSection={<IconChevronRight size={14} />}
       icon={item.icon}
+      childrenOffset={56}
+      variant="subtle"
+      opened={active === 1 && index === 1}
       onClick={() => {
         setActive(index);
         setProfileShow(true);
+        {
+          index === active ? (setProfileShow(false), setActive(-1)) : null;
+        }
       }}
-      variant="subtle"
       sx={{
         ".mantine-NavLink-description": {
           opacity: 0.4,
@@ -88,7 +97,22 @@ export default function ProfileDrawer() {
           opacity: 0.1,
         },
       }}
-    />
+    >
+      <NavLink
+        label="Funding Metrics"
+        active={activeTab === "finances"}
+        variant="subtle"
+        icon={<IconCashBanknote size={17} />}
+        onClick={() => setActiveTab("finances")}
+      />
+      <NavLink
+        label="Banking Info"
+        active={activeTab === "banking"}
+        variant="subtle"
+        icon={<IconBuildingBank size={17} />}
+        onClick={() => setActiveTab("banking")}
+      />
+    </NavLink>
   ));
 
   const animation = {

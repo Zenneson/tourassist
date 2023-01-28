@@ -1,5 +1,10 @@
 import { atom } from "recoil";
 
+export const moneyTabState = atom({
+  key: "moneyTabState",
+  default: "finances",
+});
+
 export const profileLinkState = atom({
   key: "profileLinkState",
   default: -1,
