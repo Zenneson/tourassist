@@ -234,11 +234,11 @@ export default function Money() {
                 boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <Text fw={900} size={25} color="lime">
+              <Text fw={300} size={25}>
                 $150
               </Text>
               <Text size="xs" color="dimmed">
-                Payout on the way
+                Upcoming Payout
               </Text>
             </Flex>
             <Flex
@@ -255,7 +255,7 @@ export default function Money() {
                 boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <Text fw={900} size={40}>
+              <Text fw={700} size={40} color="dimmed">
                 3
               </Text>
               <Text size="xs" color="dimmed">
@@ -276,7 +276,7 @@ export default function Money() {
                 boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <Text fw={900} size={25}>
+              <Text fw={300} size={22}>
                 $2,345
               </Text>
               <Text size="xs" color="dimmed">

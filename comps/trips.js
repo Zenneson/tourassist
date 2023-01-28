@@ -112,7 +112,7 @@ export default function Trips() {
           }}
         >
           <Stack spacing={0} py={15} pl={20} ta="left" bg="rgba(0,0,0, 0.17)">
-            <Text size="xl" fw={400}>
+            <Text size="xl" fw={400} color="dimmed">
               {trip.place}
             </Text>
             <div>
