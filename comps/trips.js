@@ -1,19 +1,28 @@
-import {} from "react";
+import { useRef } from "react";
+import { useIntersection } from "@mantine/hooks";
 import {
   Avatar,
-  ScrollArea,
+  Box,
   UnstyledButton,
   Text,
   Group,
   RingProgress,
   Divider,
   Stack,
+  Center,
+  Button,
 } from "@mantine/core";
+import { IconReload } from "@tabler/icons";
 
 export default function Trips() {
+  const tripsRef = useRef();
+  const { ref, entry } = useIntersection({
+    root: tripsRef.current,
+    threshold: 1,
+  });
+
   const tripData = [
     {
-      id: Math.round(Math.random() * 1000),
       place: "New York",
       startDate: "Jan 1, 2023",
       daysLeft: 30,
@@ -22,7 +31,6 @@ export default function Trips() {
       percent: 90,
     },
     {
-      id: Math.round(Math.random() * 1000),
       place: "Silver Spring",
       startDate: "Feb 12, 2023",
       daysLeft: 15,
@@ -31,7 +39,6 @@ export default function Trips() {
       percent: 25,
     },
     {
-      id: Math.round(Math.random() * 1000),
       place: "Tokyo",
       startDate: "Mar 16, 2023",
       daysLeft: 45,
@@ -40,19 +47,50 @@ export default function Trips() {
       percent: 45,
     },
     {
-      id: Math.round(Math.random() * 1000),
       place: "Texas",
       startDate: "Jun 5, 2023",
       daysLeft: 8,
       donations: 7,
       moneyRaised: 234,
-      percent: 20,
+      percent: 30,
+    },
+    {
+      place: "Mexico",
+      startDate: "July 4, 2023",
+      daysLeft: 36,
+      donations: 23,
+      moneyRaised: 5460,
+      percent: 75,
+    },
+    {
+      place: "China",
+      startDate: "Aug 15, 2023",
+      daysLeft: 20,
+      donations: 15,
+      moneyRaised: 2459,
+      percent: 80,
+    },
+    {
+      place: "South Africa",
+      startDate: "Sep 5, 2023",
+      daysLeft: 11,
+      donations: 20,
+      moneyRaised: 3000,
+      percent: 90,
+    },
+    {
+      place: "South Africa",
+      startDate: "Sep 5, 2023",
+      daysLeft: 11,
+      donations: 20,
+      moneyRaised: 3000,
+      percent: 90,
     },
   ];
 
-  const trips = tripData.map((trip) => (
+  const trips = tripData.map((trip, index) => (
     <UnstyledButton
-      key={trip.id}
+      key={index}
       p={10}
       w="100%"
       sx={{
@@ -165,5 +203,48 @@ export default function Trips() {
     </UnstyledButton>
   ));
 
-  return <Stack py={10}>{trips}</Stack>;
+  return (
+    <Stack
+      py={10}
+      ref={tripsRef}
+      radius={3}
+      px={10}
+      mb={10}
+      sx={{
+        maxHeight: "calc(100vh - 500px)",
+        overflowY: "scroll",
+        "&::-webkit-scrollbar": {
+          width: "0",
+        },
+        boxShadow: `${
+          entry?.isIntersecting
+            ? "none"
+            : "rgba(0, 0, 0, 0.37) 0px -10px 10px -5px inset"
+        }`,
+        borderBottom: `${
+          entry?.isIntersecting ? "none" : "1px solid rgba(0, 0, 0, .5)"
+        }`,
+      }}
+    >
+      {trips.length !== 0 ? (
+        trips
+      ) : (
+        <Text color="dimmed" ta="center" fz={12}>
+          Your trips will be listed here...
+        </Text>
+      )}
+      <Center>
+        <Button
+          variant="default"
+          compact
+          pr={10}
+          mb={10}
+          leftIcon={<IconReload size={14} />}
+        >
+          Load More
+        </Button>
+      </Center>
+      <Box ref={ref}></Box>
+    </Stack>
+  );
 }

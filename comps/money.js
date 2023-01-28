@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { useRecoilState } from "recoil";
+import { useIntersection } from "@mantine/hooks";
 import {
   Avatar,
   Tabs,
@@ -26,6 +27,11 @@ import {
 
 export default function Money() {
   const [activeTab, setActiveTab] = useRecoilState(moneyTabState);
+  const donationsRef = useRef();
+  const { ref, entry } = useIntersection({
+    root: donationsRef.current,
+    threshold: 1,
+  });
 
   ChartJS.register(
     CategoryScale,
@@ -66,72 +72,62 @@ export default function Money() {
       avatar: "",
       name: "Anonymus",
       amount: 100,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar:
         "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Jill Jailbreaker",
       amount: 50,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar:
         "https://images.unsplash.com/photo-1632922267756-9b71242b1592?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Henry Silkeater",
       amount: 20,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Bill Horsefighter",
       amount: 150,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar: "",
       name: "Anonymus",
       amount: 200,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar: "",
       name: "Anonymus",
       amount: 100,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar:
         "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Jill Jailbreaker",
       amount: 50,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar:
         "https://images.unsplash.com/photo-1632922267756-9b71242b1592?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Henry Silkeater",
       amount: 20,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
       name: "Bill Horsefighter",
       amount: 150,
-      id: Math.round(Math.random() * 1000),
     },
     {
       avatar: "",
       name: "Anonymus",
       amount: 200,
-      id: Math.round(Math.random() * 1000),
     },
   ];
 
-  const rows = donateData.map((item) => (
-    <tr key={item.id}>
+  const rows = donateData.map((item, index) => (
+    <tr key={index}>
       <td>
         <Group spacing="xs">
           <Avatar size={40} src={item.avatar} radius={40} />
@@ -161,7 +157,7 @@ export default function Money() {
         </Tabs.Tab>
       </Tabs.List>
       <Tabs.Panel value="finances">
-        <Box mt={20} h={250} w="100%">
+        <Box mt={20} h={200} w="100%">
           <Line
             options={{
               responsive: true,
@@ -178,6 +174,7 @@ export default function Money() {
               px={10}
               m={0}
               h={350}
+              ref={donationsRef}
               type="auto"
               sx={{
                 "&::-webkit-scrollbar": {
@@ -186,11 +183,20 @@ export default function Money() {
                 overflow: "auto",
                 boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
                 borderRadius: 3,
+                boxShadow: `${
+                  entry?.isIntersecting
+                    ? "none"
+                    : "rgba(0, 0, 0, 0.37) 0px -10px 10px -5px inset"
+                }`,
+                borderBottom: `${
+                  entry?.isIntersecting ? "none" : "1px solid rgba(0, 0, 0, .5)"
+                }`,
               }}
             >
               <Table verticalSpacing="xs">
                 <tbody>{rows}</tbody>
               </Table>
+              <Box ref={ref}></Box>
               <Center>
                 <Button
                   variant="default"

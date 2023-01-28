@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
@@ -273,7 +272,6 @@ export default function ProfileDrawer() {
               width: "0",
             },
             overflow: "auto",
-            minHeight: "700px",
             maxHeight: "calc(100vh - 260px)",
             borderRadius: "3px",
             border: "1px solid rgba(0, 0, 0, 0.05)",
