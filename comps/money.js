@@ -171,7 +171,7 @@ export default function Money() {
             <Divider label="Donations" mb={10} />
             <Box
               bg="rgba(255, 255, 255, 0.02)"
-              px={10}
+              p={10}
               m={0}
               h={350}
               ref={donationsRef}
