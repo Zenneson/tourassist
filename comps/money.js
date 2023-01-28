@@ -194,7 +194,16 @@ export default function Money() {
               }}
             >
               <Table verticalSpacing="xs">
-                <tbody>{rows}</tbody>
+                <tbody>
+                  {" "}
+                  {rows.length !== 0 ? (
+                    rows
+                  ) : (
+                    <Text color="dimmed" ta="center" fz={12}>
+                      Your trips will be listed here...
+                    </Text>
+                  )}
+                </tbody>
               </Table>
               <Box ref={ref}></Box>
               <Center>

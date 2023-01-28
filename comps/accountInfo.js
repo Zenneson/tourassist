@@ -129,6 +129,7 @@ export default function AccountInfo() {
             <Input
               icon={<IconBrandFacebook />}
               placeholder="/Facebook"
+              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -138,6 +139,7 @@ export default function AccountInfo() {
             <Input
               icon={<IconBrandInstagram />}
               placeholder="@Instagram"
+              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -149,6 +151,7 @@ export default function AccountInfo() {
             <Input
               icon={<IconBrandTiktok />}
               placeholder="@TikTok"
+              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -158,6 +161,7 @@ export default function AccountInfo() {
             <Input
               icon={<IconBrandTwitter />}
               placeholder="@Twitter"
+              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
