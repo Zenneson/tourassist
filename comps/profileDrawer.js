@@ -230,12 +230,15 @@ export default function ProfileDrawer() {
         zIndex={99}
         opened={profileShow}
         padding="24px 39px 24px 24px"
-        size={active === 1 ? 1200 : active === 2 ? 1350 : 1015}
+        size={1015}
         overlayOpacity={0}
         transition="slide-right"
         transitionDuration={200}
         withCloseButton={false}
-        onClose={() => setProfileShow(false)}
+        onClose={() => {
+          setProfileShow(false);
+          setActive(-1);
+        }}
         trapFocus={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         sx={{

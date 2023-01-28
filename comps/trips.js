@@ -1,13 +1,11 @@
 import { useRef } from "react";
 import { useIntersection } from "@mantine/hooks";
 import {
-  Avatar,
   Box,
   UnstyledButton,
   Text,
   Group,
   RingProgress,
-  Divider,
   Stack,
   Center,
   Button,
@@ -24,6 +22,7 @@ export default function Trips() {
   const tripData = [
     {
       place: "New York",
+      region: "New York, United States",
       startDate: "Jan 1, 2023",
       daysLeft: 30,
       donations: 22,
@@ -31,7 +30,17 @@ export default function Trips() {
       percent: 90,
     },
     {
+      place: "China",
+      region: "",
+      startDate: "Aug 15, 2023",
+      daysLeft: 20,
+      donations: 15,
+      moneyRaised: 2459,
+      percent: 80,
+    },
+    {
       place: "Silver Spring",
+      region: "Maryland, United States",
       startDate: "Feb 12, 2023",
       daysLeft: 15,
       donations: 2,
@@ -40,6 +49,7 @@ export default function Trips() {
     },
     {
       place: "Tokyo",
+      region: "Japan",
       startDate: "Mar 16, 2023",
       daysLeft: 45,
       donations: 15,
@@ -48,6 +58,7 @@ export default function Trips() {
     },
     {
       place: "Texas",
+      region: "United States",
       startDate: "Jun 5, 2023",
       daysLeft: 8,
       donations: 7,
@@ -56,6 +67,7 @@ export default function Trips() {
     },
     {
       place: "Mexico",
+      region: "",
       startDate: "July 4, 2023",
       daysLeft: 36,
       donations: 23,
@@ -63,23 +75,8 @@ export default function Trips() {
       percent: 75,
     },
     {
-      place: "China",
-      startDate: "Aug 15, 2023",
-      daysLeft: 20,
-      donations: 15,
-      moneyRaised: 2459,
-      percent: 80,
-    },
-    {
       place: "South Africa",
-      startDate: "Sep 5, 2023",
-      daysLeft: 11,
-      donations: 20,
-      moneyRaised: 3000,
-      percent: 90,
-    },
-    {
-      place: "South Africa",
+      region: "",
       startDate: "Sep 5, 2023",
       daysLeft: 11,
       donations: 20,
@@ -91,123 +88,136 @@ export default function Trips() {
   const trips = tripData.map((trip, index) => (
     <UnstyledButton
       key={index}
-      p={10}
       w="100%"
       sx={{
         transition: "all 200ms ease",
-        borderRadius: "100px",
-        backgroundColor: "rgba(255, 255, 255, 0.02)",
+        borderRadius: "3px",
+        backgroundColor: "rgba(255, 255, 255, 0.01)",
+        boxShadow: "0 2px 5px  rgba(0,0,0, 0.15)",
         "&:hover": {
-          backgroundColor: "rgba(0, 0, 0, 0.1)",
-          transform: "scale(1.002)",
+          backgroundColor: "rgba(0, 0, 0, 0.35)",
+          boxShadow: "0 2px 15px  rgba(0,0,0, 0.2)",
         },
         "&:active": {
-          backgroundColor: "rgba(0, 0, 0, 0.35)",
           transform: "scale(0.998)",
+          boxShadow: "none",
         },
       }}
     >
-      <Group position="apart">
-        <Group spacing={10} w={242} position="apart">
-          <Group
-            spacing={5}
-            sx={{
-              overflow: "hidden",
-            }}
-          >
-            <Avatar
-              variant="subtle"
-              radius={100}
-              size={65}
-              sx={{
-                background: "rgba(33, 94, 190, 0.08)",
-              }}
-            >
-              {trip.place[0]}
-            </Avatar>
-            <div style={{ padding: "0 10px" }}>
-              <Text size="lg" fw={700}>
-                {trip.place}
+      <Stack>
+        <Group
+          grow
+          sx={{
+            borderBottom: "1px solid rgba(0,0,0, 0.15)",
+          }}
+        >
+          <Stack spacing={0} py={15} pl={20} ta="left" bg="rgba(0,0,0, 0.17)">
+            <Text size="xl" fw={400}>
+              {trip.place}
+            </Text>
+            <div>
+              <Text size="xs" color="dimmed" fw={400} lineClamp={1} truncate>
+                {trip.region}
               </Text>
             </div>
-          </Group>
-          <Divider orientation="vertical" opacity={0.3} />
-        </Group>
-        <div style={{ textAlign: "center" }}>
-          <Text size="sm" fw={700}>
-            {trip.startDate}
-          </Text>
-          <Text size="xs" color="dimmed">
-            Start Date
-          </Text>
-        </div>
-        <div style={{ textAlign: "center" }}>
-          <Text size="md" fw={700}>
-            {trip.daysLeft}
-          </Text>
-          <Text size="xs" color="dimmed">
-            Days Left
-          </Text>
-        </div>
-        <div style={{ textAlign: "center" }}>
-          <Text size="md" fw={700}>
-            {trip.donations}
-          </Text>
-          <Text size="xs" color="dimmed">
-            Donations
-          </Text>
-        </div>
-        <div style={{ textAlign: "center" }}>
-          <Text size="md" fw={700} color="lime">
-            ${trip.moneyRaised}
-          </Text>
-          <Text size="xs" color="dimmed">
-            Money Raised
-          </Text>
-        </div>
-        <RingProgress
-          sections={[
-            {
-              value: trip.percent,
-              color: `${
-                trip.percent < 33
-                  ? "red"
-                  : trip.percent < 66
-                  ? "yellow"
-                  : "lime"
-              }`,
-            },
-          ]}
-          size={75}
-          thickness={7}
-          roundCaps
-          label={
-            <Text
-              color={
-                trip.percent < 33
-                  ? "red"
-                  : trip.percent < 66
-                  ? "yellow"
-                  : "lime"
-              }
-              weight={700}
-              align="center"
-              size="lg"
-              fw={900}
-            >
-              {trip.percent}
+          </Stack>
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <Text size="md" fw={700} color="#fff">
+              $
+              {trip.moneyRaised
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             </Text>
-          }
-        />
-      </Group>
+            <Text size="xs" color="dimmed">
+              Money Raised
+            </Text>
+          </div>
+        </Group>
+        <Group pb={10} px={20} ml={20} position="apart">
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <Text size="xs" fw={700}>
+              {trip.startDate}
+            </Text>
+            <Text size="xs" color="dimmed">
+              Start Date
+            </Text>
+          </div>
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <Text size="xs" fw={700}>
+              {trip.daysLeft}
+            </Text>
+            <Text size="xs" color="dimmed">
+              Days Left
+            </Text>
+          </div>
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <Text size="xs" fw={700}>
+              {trip.donations}
+            </Text>
+            <Text size="xs" color="dimmed">
+              Donations
+            </Text>
+          </div>
+          <div>
+            <RingProgress
+              sections={[
+                {
+                  value: trip.percent,
+                  color: `${
+                    trip.percent < 33
+                      ? "yellow"
+                      : trip.percent < 66
+                      ? "lime"
+                      : "#00E8FC"
+                  }`,
+                },
+              ]}
+              size={60}
+              thickness={1}
+              label={
+                <Text
+                  color={
+                    trip.percent < 33
+                      ? "yellow"
+                      : trip.percent < 66
+                      ? "lime"
+                      : "#00E8FC"
+                  }
+                  weight={700}
+                  align="center"
+                  size="md"
+                  fw={600}
+                >
+                  {trip.percent}
+                </Text>
+              }
+            />
+          </div>
+        </Group>
+      </Stack>
     </UnstyledButton>
   ));
 
   return (
     <Stack
-      py={10}
+      pt={15}
       ref={tripsRef}
-      radius={3}
       px={10}
       mb={10}
       sx={{
@@ -234,6 +244,7 @@ export default function Trips() {
         </Text>
       )}
       <Center>
+        <Box ref={ref}></Box>
         <Button
           variant="default"
           compact
@@ -244,7 +255,6 @@ export default function Trips() {
           Load More
         </Button>
       </Center>
-      <Box ref={ref}></Box>
     </Stack>
   );
 }

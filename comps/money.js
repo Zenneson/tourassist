@@ -170,7 +170,7 @@ export default function Money() {
           <Box w="80%" mr={20}>
             <Divider label="Donations" mb={10} />
             <Box
-              bg="rgba(255, 255, 255, 0.02)"
+              bg="rgba(255, 255, 255, 0.01)"
               p={10}
               m={0}
               h={350}
@@ -222,7 +222,7 @@ export default function Money() {
           <Flex direction="column" justify="center" align="center" gap={10}>
             <Flex
               direction="column"
-              bg="rgba(255, 255, 255, 0.02)"
+              bg="rgba(255, 255, 255, 0.01)"
               h="100%"
               w="100%"
               p="xl"
@@ -243,7 +243,7 @@ export default function Money() {
             </Flex>
             <Flex
               direction="column"
-              bg="rgba(255, 255, 255, 0.02)"
+              bg="rgba(255, 255, 255, 0.01)"
               h="100%"
               w="100%"
               p="xl"
@@ -264,7 +264,7 @@ export default function Money() {
             </Flex>
             <Flex
               direction="column"
-              bg="rgba(255, 255, 255, 0.02)"
+              bg="rgba(255, 255, 255, 0.01)"
               h="100%"
               p="xl"
               justify="center"
@@ -286,10 +286,7 @@ export default function Money() {
           </Flex>
         </Flex>
       </Tabs.Panel>
-      <Tabs.Panel value="banking">
-        Second tab color is blue, it gets this value from props, props have the
-        priority and will override context value
-      </Tabs.Panel>
+      <Tabs.Panel value="banking">Bank Info</Tabs.Panel>
     </Tabs>
   );
 }

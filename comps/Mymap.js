@@ -111,7 +111,7 @@ export default function Mymap() {
     if (feature == null) return;
     setIsState(feature?.properties?.STATE);
     setPlaceLngLat(feature?.center);
-    let stateZoom = 3.5;
+    let stateZoom = 5;
     let isSelection = true ? feature?.text : false;
     let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
     let location =
@@ -146,16 +146,6 @@ export default function Mymap() {
         center.current = centerOfMass(feature);
       }
 
-      if (location === "United States") {
-        setShowStates(true);
-        if (isState || isSelection) {
-          stateZoom = 5.5;
-        }
-      } else {
-        setShowStates(false);
-        stateZoom = null;
-      }
-
       let mapPitch = 40;
       let orgCenter = center.current.geometry?.coordinates;
       let { newCenter, maxZoom } = getNewCenter(orgCenter, location) || {};
@@ -188,12 +178,6 @@ export default function Mymap() {
         currentLocation = { name: location, region: "United States" };
       setPlaceLocation(currentLocation);
 
-      mapRef.current.flyTo({
-        center: newCenter,
-        zoom: stateZoom || 3.5,
-        duration: 800,
-        pitch: 0,
-      });
       setTimeout(() => {
         mapRef.current.flyTo({
           center: newCenter,
