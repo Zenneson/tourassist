@@ -45,7 +45,7 @@ export default function TripPlannerPage() {
         background: "rgba(0,0,0,0.05)",
         border: "1px solid rgba(0,0,0,0.15)",
         boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-        borderLeft: "4px solid rgba(0,0,0,0.35)",
+        borderLeft: "2px solid rgba(255,255,255,0.035)",
       }}
     >
       <Group position="apart">
@@ -55,7 +55,7 @@ export default function TripPlannerPage() {
           pt={5}
           pb={10}
           sx={{
-            borderLeft: "1px solid rgba(150,150,150,0.1)",
+            borderLeft: "5px solid rgba(150,150,150,0.035)",
           }}
         >
           <Title

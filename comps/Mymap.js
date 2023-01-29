@@ -27,7 +27,6 @@ import { getNewCenter } from "../comps/getNewCenter";
 import {
   listOpenedState,
   searchOpenedState,
-  placeSearchState,
   mapLoadState,
   placeListState,
   loginOpenedState,
@@ -63,8 +62,6 @@ export default function Mymap() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
-  const [showPlaceSearch, setShowPlaceSearch] =
-    useRecoilState(placeSearchState);
   const [user, setUser] = useLocalStorage({ key: "user" });
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
@@ -210,7 +207,6 @@ export default function Mymap() {
 
       if (location !== "United States") {
         setShowModal(true);
-        setShowPlaceSearch(false);
       }
     }
     setRegionName(location);
@@ -302,7 +298,6 @@ export default function Mymap() {
     });
     setRegionName("");
     setShowModal(false);
-    setShowPlaceSearch(true);
     setIsCity(false);
   };
 
@@ -462,67 +457,57 @@ export default function Mymap() {
           </>
         )}
       </Modal>
-      {!loginOpened &&
-        !infoOpened &&
-        !searchOpened &&
-        visible &&
-        showPlaceSearch &&
-        !mapSpin && (
-          <Flex
-            justify="center"
-            align="center"
-            gap={10}
-            sx={{
-              position: "absolute",
-              bottom: "100px",
-              width: "100%",
+      {!loginOpened && !infoOpened && !searchOpened && visible && !mapSpin && (
+        <Flex
+          justify="center"
+          align="center"
+          gap={10}
+          sx={{
+            position: "absolute",
+            bottom: "100px",
+            width: "100%",
+          }}
+        >
+          <Autocomplete
+            icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
+            size="md"
+            radius="xl"
+            defaultValue=""
+            value={countrySearch}
+            placeholder="Where in the world do you want to go?"
+            onItemSubmit={(e) => handleSelect(e)}
+            ref={countryAutoRef}
+            data={countryData}
+            filter={(value, item) => item}
+            style={{
+              width: "350px",
+              zIndex: 98,
             }}
-          >
-            <Autocomplete
-              icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-              size="md"
+            onClick={function (event) {
+              event.preventDefault();
+              countryAutoRef.current.select();
+            }}
+            onChange={function (e) {
+              const field = "country";
+              setCountrySearch(e);
+              handleChange(field, e);
+            }}
+          />
+          <Tooltip label="TourAssist?" position="top" openDelay={800} withArrow>
+            <Button
+              onClick={() => setInfoOpened(true)}
+              variant="default"
               radius="xl"
-              defaultValue=""
-              value={countrySearch}
-              placeholder="Where in the world do you want to go?"
-              onItemSubmit={(e) => handleSelect(e)}
-              ref={countryAutoRef}
-              data={countryData}
-              filter={(value, item) => item}
+              p={10}
               style={{
-                width: "350px",
                 zIndex: 98,
               }}
-              onClick={function (event) {
-                event.preventDefault();
-                countryAutoRef.current.select();
-              }}
-              onChange={function (e) {
-                const field = "country";
-                setCountrySearch(e);
-                handleChange(field, e);
-              }}
-            />
-            <Tooltip
-              label="TourAssist?"
-              position="top"
-              openDelay={800}
-              withArrow
             >
-              <Button
-                onClick={() => setInfoOpened(true)}
-                variant="default"
-                radius="xl"
-                p={10}
-                style={{
-                  zIndex: 98,
-                }}
-              >
-                <IconQuestionMark size={15} />
-              </Button>
-            </Tooltip>
-          </Flex>
-        )}
+              <IconQuestionMark size={15} />
+            </Button>
+          </Tooltip>
+        </Flex>
+      )}
       <Map
         initialViewState={initialViewState}
         maxPitch={80}

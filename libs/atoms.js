@@ -30,11 +30,6 @@ export const searchOpenedState = atom({
   default: false,
 });
 
-export const placeSearchState = atom({
-  key: "placeSearchState",
-  default: true,
-});
-
 export const mapLoadState = atom({
   key: "mapLoadState",
   default: false,

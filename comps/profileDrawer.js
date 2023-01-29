@@ -44,6 +44,10 @@ export default function ProfileDrawer() {
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [active, setActive] = useRecoilState(profileLinkState);
   const [activeTab, setActiveTab] = useRecoilState(moneyTabState);
+  const [visible, setVisible] = useLocalStorage({
+    key: "visible",
+    defaultValue: false,
+  });
   const [user, setUser] = useLocalStorage({ key: "user" });
   const router = useRouter();
   const auth = getAuth();
@@ -170,6 +174,8 @@ export default function ProfileDrawer() {
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
               onClick={() => {
+                setProfileOpened(false);
+                setProfileShow(false);
                 router.push("/");
               }}
             />
