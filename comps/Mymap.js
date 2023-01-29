@@ -97,9 +97,6 @@ export default function Mymap() {
       setMapSpin(false);
     }
     return () => clearInterval(rotationIntervalId);
-    console.log("Region Name: ", regionName);
-    console.log("ISO: ", isoName);
-    console.log("Place Center: ", placeLngLat);
   }, [
     regionName,
     isoName,

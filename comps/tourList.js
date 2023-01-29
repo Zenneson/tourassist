@@ -1,4 +1,5 @@
 import { useRecoilState } from "recoil";
+import { useRouter } from "next/router";
 import { Drawer, Button, Divider, Center, Stack } from "@mantine/core";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons";
@@ -8,6 +9,7 @@ import { listOpenedState, placeListState } from "../libs/atoms";
 export default function TourList() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
+  const router = useRouter();
 
   return (
     <>
@@ -61,6 +63,9 @@ export default function TourList() {
             <Button
               radius="xl"
               size="sm"
+              onClick={() => {
+                router.push("/tripplanner");
+              }}
               sx={(theme) => ({
                 background: "#008554",
                 border: "1px solid #008554",

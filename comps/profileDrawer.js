@@ -35,6 +35,7 @@ import {
   IconWallet,
   IconBuildingBank,
   IconCashBanknote,
+  IconWorld,
   IconHeartHandshake,
 } from "@tabler/icons";
 
@@ -125,7 +126,7 @@ export default function ProfileDrawer() {
     <>
       <Drawer
         trapFocus={false}
-        zIndex={100}
+        zIndex={102}
         opened={profileOpened}
         size="md"
         opacity={0.95}
@@ -161,6 +162,18 @@ export default function ProfileDrawer() {
           }}
         >
           {items}
+          {router.pathname !== "/" && (
+            <NavLink
+              label="Map"
+              px={25}
+              py={14}
+              icon={<IconWorld size={30} opacity={0.1} />}
+              variant="subtle"
+              onClick={() => {
+                router.push("/");
+              }}
+            />
+          )}
         </Group>
         <Box
           py={30}
