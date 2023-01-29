@@ -338,6 +338,7 @@ export default function Trips() {
       sx={{
         maxHeight: "calc(100vh - 360px)",
         overflowY: "scroll",
+        borderRadius: "3px",
         "&::-webkit-scrollbar": {
           width: "0",
         },
