@@ -1,21 +1,22 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { useIntersection } from "@mantine/hooks";
 import {
-  Avatar,
   Tabs,
   Box,
   Divider,
   Flex,
-  Group,
   Text,
   Table,
   Button,
   Center,
+  ColorSwatch,
+  Group,
+  SegmentedControl,
 } from "@mantine/core";
 import { IconCashBanknote, IconBuildingBank, IconReload } from "@tabler/icons";
 import { Line } from "react-chartjs-2";
-import { moneyTabState } from "../libs/atoms";
+import { moneyTabState, profileLinkState } from "../libs/atoms";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,6 +28,8 @@ import {
 
 export default function Money() {
   const [activeTab, setActiveTab] = useRecoilState(moneyTabState);
+  const [profileLink, setProfileLink] = useRecoilState(profileLinkState);
+  const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
   const { ref, entry } = useIntersection({
     root: donationsRef.current,
@@ -67,7 +70,7 @@ export default function Money() {
     ],
   };
 
-  const donateData = [
+  let donateData = [
     {
       name: "Anonymus",
       amount: 100,
@@ -110,7 +113,12 @@ export default function Money() {
     },
   ];
 
-  const rows = donateData.map((item, index) => (
+  const donateOrder =
+    sorted === "time"
+      ? donateData
+      : donateData.sort((a, b) => (a.amount < b.amount ? 1 : -1));
+
+  const rows = donateOrder.map((item, index) => (
     <tr key={index}>
       <td>
         <Text size="sm" weight={500}>
@@ -126,7 +134,12 @@ export default function Money() {
   ));
 
   return (
-    <Tabs defaultValue="finances" value={activeTab} onTabChange={setActiveTab}>
+    <Tabs
+      defaultValue="finances"
+      pos="relative"
+      value={activeTab}
+      onTabChange={setActiveTab}
+    >
       <Tabs.List position="right">
         <Tabs.Tab icon={<IconCashBanknote size={17} />} value="finances">
           Funding Metrics
@@ -135,6 +148,10 @@ export default function Money() {
           Banking Info
         </Tabs.Tab>
       </Tabs.List>
+      <Group pos="absolute" top={10} spacing={5} fz={9}>
+        <ColorSwatch color="red" size={5} /> DONORS
+        <ColorSwatch color="lime" size={5} /> AMOUNT RECEIVED
+      </Group>
       <Tabs.Panel value="finances">
         <Box mt={20} h={200} w="100%">
           <Line
@@ -146,10 +163,34 @@ export default function Money() {
           />
         </Box>
         <Flex my={10}>
-          <Box w="80%" mr={20}>
-            <Divider label="Donations" mb={10} />
+          <Box
+            w="100%"
+            sx={{
+              boxShadow:
+                "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
+            }}
+          >
+            <Flex gap={0}>
+              <Divider w="100%" label="Donations" />
+              <SegmentedControl
+                color="dark"
+                value={sorted}
+                onChange={setSorted}
+                data={[
+                  { label: "Time", value: "time" },
+                  { label: "Amount", value: "amount" },
+                ]}
+                size="xs"
+                top={-4}
+                right={-14}
+                w="40%"
+                sx={{
+                  backgroundColor: "rgba(0, 0, 0, 0.2)",
+                  transform: "scale(0.8)",
+                }}
+              />
+            </Flex>
             <Box
-              bg="rgba(255, 255, 255, 0.01)"
               p={10}
               m={0}
               h={320}
@@ -160,15 +201,15 @@ export default function Money() {
                   width: "0",
                 },
                 overflow: "auto",
-                boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
                 borderRadius: 3,
+                backgroundColor: "rgba(255, 255, 255, 0.005)",
                 boxShadow: `${
                   entry?.isIntersecting
                     ? "none"
                     : "rgba(0, 0, 0, 0.37) 0px -10px 10px -5px inset"
                 }`,
                 borderBottom: `${
-                  entry?.isIntersecting ? "none" : "1px solid rgba(0, 0, 0, .5)"
+                  entry?.isIntersecting ? "none" : "1px solid rgba(0, 0, 0, .4)"
                 }`,
               }}
             >
@@ -198,22 +239,29 @@ export default function Money() {
               </Center>
             </Box>
           </Box>
-          <Flex direction="column" justify="center" align="center" gap={10}>
+          <Flex
+            direction="column"
+            justify="center"
+            align="center"
+            gap={10}
+            ml={20}
+          >
             <Flex
               direction="column"
-              bg="rgba(255, 255, 255, 0.01)"
               h="100%"
               w="100%"
-              px={15}
+              px={25}
               justify="center"
               align="center"
               ta="center"
               sx={{
                 borderRadius: 3,
-                boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
+                backgroundColor: "rgba(255, 255, 255, 0.005)",
+                boxShadow:
+                  "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
               }}
             >
-              <Text fw={300} size={25}>
+              <Text fw={300} size={20}>
                 $150
               </Text>
               <Text size="xs" color="dimmed">
@@ -222,44 +270,53 @@ export default function Money() {
             </Flex>
             <Flex
               direction="column"
-              bg="rgba(255, 255, 255, 0.01)"
               h="100%"
-              w="100%"
-              px={15}
-              justify="center"
-              align="center"
-              ta="center"
-              sx={{
-                borderRadius: 3,
-                boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <Text fw={700} size={40} color="dimmed">
-                3
-              </Text>
-              <Text size="xs" color="dimmed">
-                Trips Started
-              </Text>
-            </Flex>
-            <Flex
-              direction="column"
-              bg="rgba(255, 255, 255, 0.01)"
-              h="100%"
-              px={15}
+              px={20}
               justify="center"
               align="center"
               ta="center"
               w="100%"
               sx={{
                 borderRadius: 3,
-                boxShadow: "0 2px 3px 1px rgba(0, 0, 0, 0.1)",
+                backgroundColor: "rgba(255, 255, 255, 0.005)",
+                boxShadow:
+                  "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
               }}
             >
-              <Text fw={300} size={22}>
+              <Text fw={300} size={20}>
                 $2,345
               </Text>
               <Text size="xs" color="dimmed">
                 Total Earned
+              </Text>
+            </Flex>
+            <Flex
+              direction="row"
+              bg="rgba(0, 0, 0, 0.4)"
+              h="20%"
+              w="100%"
+              px={20}
+              justify="center"
+              align="center"
+              ta="center"
+              onClick={() => setProfileLink(2)}
+              sx={{
+                borderRadius: 3,
+                cursor: "pointer",
+                transition: "all 200ms ease-in-out",
+                transform: "scale(1.05)",
+                boxShadow:
+                  "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -2px 5px 1px rgba(0,0,0, 0.08)",
+                "&:hover": {
+                  background: "rgba(0, 0, 0, 1)",
+                },
+              }}
+            >
+              <Text fw={500} size={38} color="dimmed">
+                7
+              </Text>
+              <Text size="xs" color="dimmed" ta="left" ml={5} lh={1.3}>
+                Trips Started
               </Text>
             </Flex>
           </Flex>

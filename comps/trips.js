@@ -101,7 +101,7 @@ export default function Trips() {
         borderRadius: "3px",
         backgroundColor: "rgba(255, 255, 255, 0.01)",
         boxShadow:
-          "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.01)",
+          "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
         "&:hover": {
           backgroundColor: "rgba(0, 0, 0, 0.35)",
           boxShadow: "0 2px 15px  rgba(0,0,0, 0.2)",
