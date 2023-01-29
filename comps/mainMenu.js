@@ -4,7 +4,6 @@ import { useRecoilState } from "recoil";
 import { getAuth, signOut } from "firebase/auth";
 import { useLocalStorage } from "@mantine/hooks";
 import {
-  Avatar,
   Header,
   Button,
   Image,
@@ -79,29 +78,23 @@ export default function MainMenu() {
           transition: "all 200ms ease",
         }}
       >
-        <Box
-          sx={{ cursor: "pointer" }}
-          onClick={() => {
-            if (router.pathname === "/") return;
-            setMapLoaded(false);
-            router.push("/");
+        <Image
+          width={"auto"}
+          height={103}
+          src={"img/blogo.png"}
+          alt="TouraSSist_logo"
+          withPlaceholder
+          sx={{
+            cursor: "pointer",
           }}
-        >
-          <Image
-            width={"auto"}
-            height={103}
-            src={"img/blogo.png"}
-            alt="TouraSSist_logo"
-            withPlaceholder
-            onClick={() => {
-              user && setProfileOpened((o) => !o);
-              user && setListOpened(false);
-              user && setProfileShow(false);
-              !user && setInfoOpened(true);
-              setActive(-1);
-            }}
-          />
-        </Box>
+          onClick={() => {
+            user && setProfileOpened((o) => !o);
+            user && setListOpened(false);
+            user && setProfileShow(false);
+            !user && setInfoOpened(true);
+            setActive(-1);
+          }}
+        />
         <Group px={0} py={10} m={0}>
           {user && (
             <Button

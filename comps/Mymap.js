@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import Map, { Marker, Source, Layer } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
@@ -109,6 +110,8 @@ export default function Mymap() {
     mapSpin,
     setMapSpin,
   ]);
+
+  const router = useRouter();
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -372,6 +375,9 @@ export default function Mymap() {
           <Button
             variant="gradient"
             gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+            onClick={() => {
+              router.push("/tripplanner");
+            }}
             sx={{
               width: "90%",
             }}
