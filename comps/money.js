@@ -217,7 +217,6 @@ export default function Money() {
             >
               <Table verticalSpacing="md" highlightOnHover>
                 <tbody>
-                  {" "}
                   {rows.length !== 0 ? (
                     rows
                   ) : (

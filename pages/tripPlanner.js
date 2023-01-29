@@ -2,5 +2,5 @@ import {} from "react";
 import {} from "@mantine/core";
 
 export default function TripPlannerPage() {
-  return <></>;
+  return <>Trip Planner</>;
 }

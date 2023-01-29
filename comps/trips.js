@@ -3,7 +3,6 @@ import { useIntersection } from "@mantine/hooks";
 import {
   ActionIcon,
   Box,
-  UnstyledButton,
   Text,
   Group,
   Progress,
@@ -103,7 +102,7 @@ export default function Trips() {
   ];
 
   const trips = tripData.map((trip, index) => (
-    <UnstyledButton
+    <Box
       key={index}
       w="100%"
       sx={{
@@ -132,7 +131,7 @@ export default function Trips() {
             px={15}
             ta="left"
             w="70%"
-            h={90}
+            h={84}
             justify="flex-start"
             bg="rgba(0,0,0, 0.17)"
             sx={{
@@ -142,14 +141,7 @@ export default function Trips() {
               boxShadow: "inset 7px 7px 5px 1px rgba(0,0,0, 0.1)",
             }}
           >
-            <Text
-              size="md"
-              fw={400}
-              lineClamp={1}
-              w={350}
-              color="dimmed"
-              truncate
-            >
+            <Text size="md" fw={400} lineClamp={1} w={350} color="dimmed">
               {trip.title}
             </Text>
             <div>
@@ -159,7 +151,7 @@ export default function Trips() {
                 lineClamp={2}
                 mt={3}
                 pl={10}
-                truncate
+                truncate="true"
                 sx={{
                   borderLeft: "1px solid rgba(255,255,255, 0.035)",
                 }}
@@ -325,7 +317,7 @@ export default function Trips() {
           </Group>
         </Group>
       </Stack>
-    </UnstyledButton>
+    </Box>
   ));
 
   return (
