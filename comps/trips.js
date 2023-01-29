@@ -21,6 +21,7 @@ export default function Trips() {
 
   const tripData = [
     {
+      title: "Trip to New York",
       place: "New York",
       region: "New York, United States",
       startDate: "Jan 1, 2023",
@@ -30,6 +31,7 @@ export default function Trips() {
       percent: 90,
     },
     {
+      title: "Charity Trip to China",
       place: "China",
       region: "",
       startDate: "Aug 15, 2023",
@@ -39,6 +41,7 @@ export default function Trips() {
       percent: 80,
     },
     {
+      title: "Going home to Silver Spring",
       place: "Silver Spring",
       region: "Maryland, United States",
       startDate: "Feb 12, 2023",
@@ -48,6 +51,7 @@ export default function Trips() {
       percent: 25,
     },
     {
+      title: "Adventures in Tokyo",
       place: "Tokyo",
       region: "Japan",
       startDate: "Mar 16, 2023",
@@ -57,6 +61,7 @@ export default function Trips() {
       percent: 45,
     },
     {
+      title: "University Trip to Texas",
       place: "Texas",
       region: "United States",
       startDate: "Jun 5, 2023",
@@ -66,6 +71,7 @@ export default function Trips() {
       percent: 30,
     },
     {
+      title: "Vacation in Mexico",
       place: "Mexico",
       region: "",
       startDate: "July 4, 2023",
@@ -75,6 +81,7 @@ export default function Trips() {
       percent: 75,
     },
     {
+      title: "Educational Trip to South Africa",
       place: "South Africa",
       region: "",
       startDate: "Sep 5, 2023",
@@ -109,12 +116,12 @@ export default function Trips() {
         <Group
           grow
           sx={{
-            borderBottom: "1px solid rgba(0,0,0, 0.15)",
+            backgroundColor: "rgba(255, 255, 255, 0.008)",
           }}
         >
           <Stack
             spacing={0}
-            py={15}
+            py={10}
             pl={20}
             ta="left"
             bg="rgba(0,0,0, 0.17)"
@@ -125,12 +132,20 @@ export default function Trips() {
               boxShadow: "inset 7px 7px 5px 1px rgba(0,0,0, 0.1)",
             }}
           >
-            <Text size="xl" fw={400} color="dimmed">
-              {trip.place}
+            <Text
+              size="xl"
+              fw={400}
+              lineClamp={1}
+              w={230}
+              color="dimmed"
+              truncate
+            >
+              {trip.title}
             </Text>
             <div>
-              <Text size="xs" color="dimmed" fw={400} lineClamp={1} truncate>
-                {trip.region}
+              <Text size="xs" fw={400} lineClamp={2} truncate>
+                <Text fw={700}>{trip.place}</Text>
+                {trip.region && <Text color="dimmed">{trip.region}</Text>}
               </Text>
             </div>
           </Stack>
@@ -139,7 +154,17 @@ export default function Trips() {
               textAlign: "center",
             }}
           >
-            <Text size="md" fw={700} color="#fff">
+            <Text
+              size="xl"
+              fw={500}
+              color={
+                trip.percent < 33
+                  ? "#D0F0C0"
+                  : trip.percent < 66
+                  ? "#138808"
+                  : "#7CFC00"
+              }
+            >
               $
               {trip.moneyRaised
                 .toString()
@@ -194,10 +219,10 @@ export default function Trips() {
                   value: trip.percent,
                   color: `${
                     trip.percent < 33
-                      ? "yellow"
+                      ? "#D0F0C0"
                       : trip.percent < 66
-                      ? "lime"
-                      : "#00E8FC"
+                      ? "#138808"
+                      : "#7CFC00"
                   }`,
                 },
               ]}
@@ -208,10 +233,10 @@ export default function Trips() {
                 <Text
                   color={
                     trip.percent < 33
-                      ? "yellow"
+                      ? "#D0F0C0"
                       : trip.percent < 66
-                      ? "lime"
-                      : "#00E8FC"
+                      ? "#138808"
+                      : "#7CFC00"
                   }
                   weight={700}
                   align="center"
