@@ -33,7 +33,7 @@ export default function AccountInfo() {
         <Input
           variant="filled"
           placeholder={user?.providerData[0].email}
-          icon={<IconUserCircle />}
+          icon={<IconUserCircle size={20} />}
           iconWidth={50}
           disabled
           w="100%"
@@ -46,7 +46,7 @@ export default function AccountInfo() {
         <Input
           variant="filled"
           placeholder="********"
-          icon={<IconKey />}
+          icon={<IconKey size={20} />}
           iconWidth={50}
           disabled
           w="100%"
@@ -56,6 +56,54 @@ export default function AccountInfo() {
             </ActionIcon>
           }
         />
+
+        <Divider my={25} label="Social Links" />
+        <Flex direction="column" gap={10}>
+          <Group grow spacing={10}>
+            <Input
+              icon={<IconBrandFacebook size={20} />}
+              placeholder="/Facebook"
+              variant="filled"
+              rightSection={
+                <ActionIcon opacity={0.5} variant="subtle">
+                  <IconCirclePlus size={16} />
+                </ActionIcon>
+              }
+            />
+            <Input
+              icon={<IconBrandInstagram size={20} />}
+              placeholder="@Instagram"
+              variant="filled"
+              rightSection={
+                <ActionIcon opacity={0.5} variant="subtle">
+                  <IconCirclePlus size={16} />
+                </ActionIcon>
+              }
+            />
+          </Group>
+          <Group grow spacing={10}>
+            <Input
+              icon={<IconBrandTiktok size={20} />}
+              placeholder="@TikTok"
+              variant="filled"
+              rightSection={
+                <ActionIcon opacity={0.5} variant="subtle">
+                  <IconCirclePlus size={16} />
+                </ActionIcon>
+              }
+            />
+            <Input
+              icon={<IconBrandTwitter size={20} />}
+              placeholder="@Twitter"
+              variant="filled"
+              rightSection={
+                <ActionIcon opacity={0.5} variant="subtle">
+                  <IconCirclePlus size={16} />
+                </ActionIcon>
+              }
+            />
+          </Group>
+        </Flex>
         <Divider my={25} label="Email Notifications" mb={-15} />
         <Group grow align="stretch" fw={700} px={20}>
           <Flex direction="column" gap={0} align="flex-end">
@@ -123,53 +171,6 @@ export default function AccountInfo() {
             />
           </Flex>
         </Group>
-        <Divider my={25} label="Social Links" />
-        <Flex direction="column" gap={10}>
-          <Group grow spacing={10}>
-            <Input
-              icon={<IconBrandFacebook />}
-              placeholder="/Facebook"
-              variant="filled"
-              rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
-                </ActionIcon>
-              }
-            />
-            <Input
-              icon={<IconBrandInstagram />}
-              placeholder="@Instagram"
-              variant="filled"
-              rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
-                </ActionIcon>
-              }
-            />
-          </Group>
-          <Group grow spacing={10}>
-            <Input
-              icon={<IconBrandTiktok />}
-              placeholder="@TikTok"
-              variant="filled"
-              rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
-                </ActionIcon>
-              }
-            />
-            <Input
-              icon={<IconBrandTwitter />}
-              placeholder="@Twitter"
-              variant="filled"
-              rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
-                </ActionIcon>
-              }
-            />
-          </Group>
-        </Flex>
         <Divider mt={25} />
       </Flex>
     </Center>

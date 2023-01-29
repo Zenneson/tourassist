@@ -126,7 +126,7 @@ export default function Money() {
         </Text>
       </td>
       <td>
-        <Text size="sm" fw={300} ta="right">
+        <Text size="xs" fw={400} color="dimmed" ta="right">
           ${item.amount}
         </Text>
       </td>
@@ -148,10 +148,12 @@ export default function Money() {
           Banking Info
         </Tabs.Tab>
       </Tabs.List>
-      <Group pos="absolute" top={10} spacing={5} fz={9}>
-        <ColorSwatch color="red" size={5} /> DONORS
-        <ColorSwatch color="lime" size={5} /> AMOUNT RECEIVED
-      </Group>
+      {activeTab === "finances" && (
+        <Group pos="absolute" opacity={0.4} top={10} spacing={5} fz={9}>
+          <ColorSwatch color="red" size={5} /> Donors
+          <ColorSwatch color="lime" size={5} /> Amount Received
+        </Group>
+      )}
       <Tabs.Panel value="finances">
         <Box mt={20} h={200} w="100%">
           <Line
@@ -261,12 +263,10 @@ export default function Money() {
                   "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
               }}
             >
-              <Text fw={300} size={20}>
+              <Text fw={900} size={20} color="lime">
                 $150
               </Text>
-              <Text size="xs" color="dimmed">
-                Upcoming Payout
-              </Text>
+              <Text size="xs">Upcoming Payout</Text>
             </Flex>
             <Flex
               direction="column"
@@ -283,7 +283,7 @@ export default function Money() {
                   "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
               }}
             >
-              <Text fw={300} size={20}>
+              <Text fw={900} size={20}>
                 $2,345
               </Text>
               <Text size="xs" color="dimmed">
@@ -312,7 +312,7 @@ export default function Money() {
                 },
               }}
             >
-              <Text fw={500} size={38} color="dimmed">
+              <Text fw={900} size={38} color="dimmed">
                 7
               </Text>
               <Text size="xs" color="dimmed" ta="left" ml={5} lh={1.3}>

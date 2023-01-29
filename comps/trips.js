@@ -1,16 +1,25 @@
 import { useRef } from "react";
 import { useIntersection } from "@mantine/hooks";
 import {
+  ActionIcon,
   Box,
   UnstyledButton,
   Text,
   Group,
-  RingProgress,
+  Progress,
   Stack,
   Center,
   Button,
+  Popover,
+  Tooltip,
 } from "@mantine/core";
-import { IconReload } from "@tabler/icons";
+import {
+  IconReload,
+  IconDotsVertical,
+  IconPencil,
+  IconTrash,
+  IconEye,
+} from "@tabler/icons";
 
 export default function Trips() {
   const tripsRef = useRef();
@@ -21,7 +30,7 @@ export default function Trips() {
 
   const tripData = [
     {
-      title: "Trip to New York",
+      title: "Help Me Fund a Trip to New York",
       place: "New York",
       region: "New York, United States",
       startDate: "Jan 1, 2023",
@@ -31,17 +40,8 @@ export default function Trips() {
       percent: 90,
     },
     {
-      title: "Charity Trip to China",
-      place: "China",
-      region: "",
-      startDate: "Aug 15, 2023",
-      daysLeft: 20,
-      donations: 15,
-      moneyRaised: 2459,
-      percent: 80,
-    },
-    {
-      title: "Going home to Silver Spring",
+      title:
+        "Going home to Silver Spring to see my family. It has been a while.",
       place: "Silver Spring",
       region: "Maryland, United States",
       startDate: "Feb 12, 2023",
@@ -51,7 +51,7 @@ export default function Trips() {
       percent: 25,
     },
     {
-      title: "Adventures in Tokyo",
+      title: "Adventures in Tokyo. To see the cherry blossoms.",
       place: "Tokyo",
       region: "Japan",
       startDate: "Mar 16, 2023",
@@ -90,6 +90,16 @@ export default function Trips() {
       moneyRaised: 3000,
       percent: 90,
     },
+    {
+      title: "Charity Trip to China",
+      place: "China",
+      region: "",
+      startDate: "Aug 15, 2023",
+      daysLeft: 20,
+      donations: 15,
+      moneyRaised: 2459,
+      percent: 50,
+    },
   ];
 
   const trips = tripData.map((trip, index) => (
@@ -99,31 +109,31 @@ export default function Trips() {
       sx={{
         transition: "all 200ms ease",
         borderRadius: "3px",
-        backgroundColor: "rgba(255, 255, 255, 0.01)",
+        border: "1px solid rgba(0,0,0, 0.35)",
+        position: "relative",
+        opacity: 0.7,
         boxShadow:
           "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
         "&:hover": {
-          backgroundColor: "rgba(0, 0, 0, 0.35)",
-          boxShadow: "0 2px 15px  rgba(0,0,0, 0.2)",
-        },
-        "&:active": {
-          transform: "scale(0.998)",
-          boxShadow: "none",
+          opacity: 1,
         },
       }}
     >
-      <Stack>
+      <Stack spacing={0}>
         <Group
-          grow
           sx={{
-            backgroundColor: "rgba(255, 255, 255, 0.008)",
+            borderRadius: "3px 3px 0 0",
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
           }}
         >
           <Stack
             spacing={0}
             py={10}
-            pl={20}
+            px={15}
             ta="left"
+            w="70%"
+            h={90}
+            justify="flex-start"
             bg="rgba(0,0,0, 0.17)"
             sx={{
               borderRadius: "3px 0 0 0",
@@ -133,17 +143,27 @@ export default function Trips() {
             }}
           >
             <Text
-              size="xl"
+              size="md"
               fw={400}
               lineClamp={1}
-              w={230}
+              w={350}
               color="dimmed"
               truncate
             >
               {trip.title}
             </Text>
             <div>
-              <Text size="xs" fw={400} lineClamp={2} truncate>
+              <Text
+                size={10}
+                fw={400}
+                lineClamp={2}
+                mt={3}
+                pl={10}
+                truncate
+                sx={{
+                  borderLeft: "1px solid rgba(255,255,255, 0.035)",
+                }}
+              >
                 <Text fw={700}>{trip.place}</Text>
                 {trip.region && <Text color="dimmed">{trip.region}</Text>}
               </Text>
@@ -152,10 +172,73 @@ export default function Trips() {
           <div
             style={{
               textAlign: "center",
+              paddingLeft: "25px",
+              paddingBottom: "5px",
             }}
           >
+            <Popover position="left" shadow="xl" offset={-3}>
+              <Popover.Target>
+                <ActionIcon
+                  pos="absolute"
+                  top={0}
+                  ml={97}
+                  opacity={0.2}
+                  variant="transparent"
+                >
+                  <IconDotsVertical size={17} />
+                </ActionIcon>
+              </Popover.Target>
+              <Popover.Dropdown
+                p={5}
+                sx={{
+                  border: "1px solid rgba(0,0,0, 0.2)",
+                }}
+              >
+                <Group spacing={0}>
+                  <Tooltip
+                    position="top"
+                    fz={10}
+                    openDelay={200}
+                    label="VIEW"
+                    sx={{
+                      borderRadius: "3px 3px 0 0",
+                    }}
+                  >
+                    <Button compact variant="subtle" color="dimmed">
+                      <IconEye size={15} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    position="top"
+                    fz={10}
+                    openDelay={200}
+                    label="EDIT"
+                    sx={{
+                      borderRadius: "3px 3px 0 0",
+                    }}
+                  >
+                    <Button compact variant="subtle" color="dimmed">
+                      <IconPencil size={15} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    position="top"
+                    fz={10}
+                    openDelay={200}
+                    label="DELETE"
+                    sx={{
+                      borderRadius: "3px 3px 0 0",
+                    }}
+                  >
+                    <Button compact variant="subtle" color="red">
+                      <IconTrash size={15} />
+                    </Button>
+                  </Tooltip>
+                </Group>
+              </Popover.Dropdown>
+            </Popover>
             <Text
-              size="xl"
+              size={20}
               fw={500}
               color={
                 trip.percent < 33
@@ -170,12 +253,12 @@ export default function Trips() {
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             </Text>
-            <Text size="xs" color="dimmed">
+            <Text size="xs" color="dimmed" mt={-4}>
               Money Raised
             </Text>
           </div>
         </Group>
-        <Group pb={10} px={20} ml={20} position="apart">
+        <Group py={15} px={20} position="apart" bg="rgba(0,0,0,0.25)">
           <div
             style={{
               textAlign: "center",
@@ -212,42 +295,34 @@ export default function Trips() {
               Donations
             </Text>
           </div>
-          <div>
-            <RingProgress
-              sections={[
-                {
-                  value: trip.percent,
-                  color: `${
-                    trip.percent < 33
-                      ? "#D0F0C0"
-                      : trip.percent < 66
-                      ? "#138808"
-                      : "#7CFC00"
-                  }`,
-                },
-              ]}
-              size={60}
-              thickness={4}
-              roundCaps
-              label={
-                <Text
-                  color={
-                    trip.percent < 33
-                      ? "#D0F0C0"
-                      : trip.percent < 66
-                      ? "#138808"
-                      : "#7CFC00"
-                  }
-                  weight={700}
-                  align="center"
-                  size="md"
-                  fw={600}
-                >
-                  {trip.percent}
-                </Text>
+          <Group>
+            <Progress
+              value={trip.percent}
+              w={80}
+              color={
+                trip.percent < 33
+                  ? "#D0F0C0"
+                  : trip.percent < 66
+                  ? "#138808"
+                  : "#7CFC00"
               }
             />
-          </div>
+            <Text
+              color={
+                trip.percent < 33
+                  ? "#D0F0C0"
+                  : trip.percent < 66
+                  ? "#138808"
+                  : "#7CFC00"
+              }
+              weight={700}
+              align="center"
+              size="sm"
+              fw={600}
+            >
+              {trip.percent}%
+            </Text>
+          </Group>
         </Group>
       </Stack>
     </UnstyledButton>
@@ -257,6 +332,7 @@ export default function Trips() {
     <Stack
       pt={15}
       ref={tripsRef}
+      spacing={27}
       px={10}
       mb={10}
       sx={{
