@@ -1,5 +1,10 @@
 import { atom } from "recoil";
 
+export const placeDataState = atom({
+  key: "placeDataState",
+  default: [],
+});
+
 export const moneyTabState = atom({
   key: "moneyTabState",
   default: "finances",

@@ -4,11 +4,12 @@ import { Drawer, Button, Divider, Center, Stack } from "@mantine/core";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
-import { listOpenedState, placeListState } from "../libs/atoms";
+import { listOpenedState, placeListState, placeDataState } from "../libs/atoms";
 
 export default function TourList() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
+  const [placeData, setPlaceData] = useRecoilState(placeDataState);
   const router = useRouter();
 
   return (
@@ -64,6 +65,12 @@ export default function TourList() {
               radius="xl"
               size="sm"
               onClick={() => {
+                console.log(places);
+                const newPlaceData = places.map((place) => {
+                  const { name, region } = place;
+                  return { place: name, region };
+                });
+                setPlaceData(newPlaceData);
                 router.push("/tripplanner");
               }}
               sx={(theme) => ({

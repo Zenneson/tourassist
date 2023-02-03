@@ -12,10 +12,13 @@ import {
   Divider,
   Stack,
 } from "@mantine/core";
+import { placeDataState } from "../libs/atoms";
 import { IconCurrencyDollar } from "@tabler/icons";
+import { useRecoilState } from "recoil";
 
 export default function TripPlannerPage() {
   const [active, setActive] = useState(0);
+  const [placeData, setPlaceData] = useRecoilState(placeDataState);
 
   const animation = {
     initial: { y: -50, duration: 500 },
@@ -23,17 +26,6 @@ export default function TripPlannerPage() {
     exit: { y: 50, duration: 500 },
     transition: { type: "ease-in-out" },
   };
-
-  const placeData = [
-    {
-      place: "New York",
-      region: "NewYork, United States",
-    },
-    {
-      place: "Grenada",
-      region: "",
-    },
-  ];
 
   const places = placeData.map((place, index) => (
     <Box

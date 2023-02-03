@@ -33,6 +33,7 @@ import {
   infoOpenedState,
   profileOpenedState,
   profileShowState,
+  placeDataState,
 } from "../libs/atoms";
 import TourList from "./tourList";
 
@@ -62,6 +63,7 @@ export default function Mymap() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
+  const [placeData, setPlaceData] = useRecoilState(placeDataState);
   const [user, setUser] = useLocalStorage({ key: "user" });
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
@@ -368,6 +370,12 @@ export default function Mymap() {
             variant="gradient"
             gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
             onClick={() => {
+              setPlaceData([
+                {
+                  place: regionName,
+                  region: citySubTitle,
+                },
+              ]);
               router.push("/tripplanner");
             }}
             sx={{
