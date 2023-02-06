@@ -15,16 +15,41 @@ import {
   Button,
   Input,
   Popover,
+  Flex,
 } from "@mantine/core";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForceUpdate, useWindowEvent } from "@mantine/hooks";
 import { placeDataState } from "../libs/atoms";
-import { IconCurrencyDollar, IconPlus, IconCirclePlus } from "@tabler/icons";
+import {
+  IconCurrencyDollar,
+  IconPlus,
+  IconCirclePlus,
+  IconUpload,
+  IconX,
+  IconPhoto,
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandTiktok,
+  IconBrandTwitter,
+} from "@tabler/icons";
 import { useRecoilState } from "recoil";
+import { RichTextEditor } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
 
 export default function TripPlannerPage() {
   const [active, setActive] = useState(0);
   const [placeData, setPlaceData] = useRecoilState(placeDataState);
   const forceUpdate = useForceUpdate();
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({ placeholder: "This is placeholder" }),
+    ],
+    content: "",
+  });
 
   const animation = {
     initial: { y: -50, duration: 500 },
@@ -165,7 +190,7 @@ export default function TripPlannerPage() {
                     },
                   }}
                 >
-                  <span id={index}>ANOTHER</span>
+                  <span id={index}>ADD COST</span>
                 </Button>
               </Popover.Target>
               <Popover.Dropdown>
@@ -230,7 +255,7 @@ export default function TripPlannerPage() {
             <motion.div {...animation}>
               <Places />
               <Group position="right">
-                <Title order={1} opacity={0.25} fw={600}>
+                <Title order={1} fw={600}>
                   Trip Cost Total
                 </Title>
                 <NumberInput
@@ -255,14 +280,130 @@ export default function TripPlannerPage() {
           )}
           {active === 1 && (
             <motion.div {...animation}>
-              <Title order={6} opacity={0.25} fw={600}>
-                Trip Details
+              <Title order={6} fw={600}>
+                <Stack align="center">
+                  <Input
+                    size={40}
+                    variant="subtle"
+                    placeholder="Trip Name"
+                    autoFocus
+                    w="80%"
+                    maw={800}
+                    sx={{
+                      "&.mantine-Input-wrapper": {
+                        paddingBottom: 10,
+                        borderBottom: "1px solid rgba(255,255,255,0.12)",
+                      },
+                      ".mantine-Input-input": {
+                        textAlign: "center",
+                      },
+                    }}
+                  />
+                  <Dropzone
+                    onDrop={(files) => console.log("accepted files", files)}
+                    onReject={(files) => console.log("rejected files", files)}
+                    w="80%"
+                    miw={500}
+                    maw={800}
+                    accept={IMAGE_MIME_TYPE}
+                    my={20}
+                  >
+                    <Group
+                      position="center"
+                      spacing="xl"
+                      style={{ minHeight: 220, pointerEvents: "none" }}
+                    >
+                      <Dropzone.Accept>
+                        <IconUpload size={50} />
+                      </Dropzone.Accept>
+                      <Dropzone.Reject>
+                        <IconX size={50} />
+                      </Dropzone.Reject>
+                      <Dropzone.Idle>
+                        <IconPhoto size={50} stroke={1.5} />
+                      </Dropzone.Idle>
+
+                      <div>
+                        <Text size="xl" inline>
+                          Drag images here or click to select files
+                        </Text>
+                        <Text size="sm" color="dimmed" inline mt={7}>
+                          Attach as many files as you like, each file should not
+                          exceed 5mb
+                        </Text>
+                      </div>
+                    </Group>
+                  </Dropzone>
+                  <Flex
+                    direction="column"
+                    gap={10}
+                    mb={20}
+                    w="80%"
+                    maw={800}
+                    miw={600}
+                  >
+                    <Group grow spacing={10}>
+                      <Input
+                        icon={<IconBrandFacebook size={20} />}
+                        placeholder="/Facebook"
+                        variant="filled"
+                        rightSection={
+                          <ActionIcon opacity={0.5} variant="subtle">
+                            <IconCirclePlus size={16} />
+                          </ActionIcon>
+                        }
+                      />
+                      <Input
+                        icon={<IconBrandInstagram size={20} />}
+                        placeholder="@Instagram"
+                        variant="filled"
+                        rightSection={
+                          <ActionIcon opacity={0.5} variant="subtle">
+                            <IconCirclePlus size={16} />
+                          </ActionIcon>
+                        }
+                      />
+
+                      <Input
+                        icon={<IconBrandTiktok size={20} />}
+                        placeholder="@TikTok"
+                        variant="filled"
+                        rightSection={
+                          <ActionIcon opacity={0.5} variant="subtle">
+                            <IconCirclePlus size={16} />
+                          </ActionIcon>
+                        }
+                      />
+                      <Input
+                        icon={<IconBrandTwitter size={20} />}
+                        placeholder="@Twitter"
+                        variant="filled"
+                        rightSection={
+                          <ActionIcon opacity={0.5} variant="subtle">
+                            <IconCirclePlus size={16} />
+                          </ActionIcon>
+                        }
+                      />
+                    </Group>
+                  </Flex>
+                  <RichTextEditor
+                    editor={editor}
+                    sx={{
+                      width: "80%",
+                      minWidth: "500px",
+                      maxWidth: "800px",
+                      height: "350px",
+                    }}
+                  >
+                    <RichTextEditor.Content />
+                  </RichTextEditor>
+                </Stack>
               </Title>
             </motion.div>
           )}
           {active === 2 && (
             <motion.div {...animation}>
-              <Title order={6} opacity={0.25} fw={600}>
+              <Title order={6} fw={600}>
                 Banking Info
               </Title>
             </motion.div>

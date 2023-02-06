@@ -33,6 +33,7 @@
     "@react-google-maps/marker-clusterer": "^2.16.1",
     "@tabler/icons": "^1.119.0",
     "@tiptap/extension-link": "^2.0.0-beta.205",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.212",
     "@tiptap/react": "^2.0.0-beta.205",
     "@tiptap/starter-kit": "^2.0.0-beta.205",
     "@turf/bbox": "^6.5.0",
