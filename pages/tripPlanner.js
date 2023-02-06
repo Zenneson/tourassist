@@ -12,6 +12,7 @@ import {
   Divider,
   Stack,
   Button,
+  Input,
 } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { placeDataState } from "../libs/atoms";
@@ -34,7 +35,20 @@ export default function TripPlannerPage() {
     <div key={index}>
       <Group position="right">
         <Text size={12} fs="italic" color="dimmed" mt={-25}>
-          {cost.cost || <input type="text" placeholder="New Cost" />}
+          {cost.cost || (
+            <Input
+              variant="unstyled"
+              placeholder="New Cost"
+              ta="right"
+              autoFocus
+              sx={{
+                ".mantine-Input-input": {
+                  textAlign: "right",
+                  fontStyle: "italic",
+                },
+              }}
+            />
+          )}
         </Text>
         <div
           style={{
@@ -77,10 +91,7 @@ export default function TripPlannerPage() {
 
   const Places = () =>
     placeData.map((place, index) => {
-      setNewCost((newCost) => {
-        newCost[index] = newCost[index] || [];
-        return newCost;
-      });
+      newCost[index] = newCost[index] || [];
       return (
         <Box
           key={index}
@@ -131,7 +142,7 @@ export default function TripPlannerPage() {
               ))}
             {newCost[index] &&
               newCost[index].map((index) => (
-                <Costs key={Math.floor(Math.random() * 1000)} />
+                <Costs key={Math.floor(Math.random() * 10000)} />
               ))}
           </Box>
           <Divider opacity={0.2} color="#000" />
