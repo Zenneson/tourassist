@@ -205,7 +205,12 @@ export default function MainMenu() {
                         localStorage.removeItem("user");
                         localStorage.removeItem("visible");
                         localStorage.removeItem("mapSpin");
-                        router.reload();
+                        setProfileOpened(false);
+                        setProfileShow(false);
+                        if (router.pathname !== "/") router.push("/");
+                        else {
+                          router.reload();
+                        }
                       })
                       .catch((error) => {
                         console.log(error);
