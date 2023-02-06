@@ -169,6 +169,8 @@ export default function ProfileDrawer() {
           {router.pathname !== "/" && (
             <NavLink
               label="Map"
+              description="Return to the Map"
+              rightSection={<IconChevronRight size={14} />}
               px={25}
               py={14}
               icon={<IconWorld size={30} opacity={0.1} />}
@@ -177,6 +179,11 @@ export default function ProfileDrawer() {
                 setProfileOpened(false);
                 setProfileShow(false);
                 router.push("/");
+              }}
+              sx={{
+                ".mantine-NavLink-description": {
+                  opacity: 0.4,
+                },
               }}
             />
           )}

@@ -374,6 +374,7 @@ export default function Mymap() {
                 {
                   place: regionName,
                   region: citySubTitle,
+                  costs: ["FLIGHT", "HOTEL"],
                 },
               ]);
               router.push("/tripplanner");

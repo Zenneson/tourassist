@@ -65,10 +65,9 @@ export default function TourList() {
               radius="xl"
               size="sm"
               onClick={() => {
-                console.log(places);
                 const newPlaceData = places.map((place) => {
                   const { name, region } = place;
-                  return { place: name, region };
+                  return { place: name, region, costs: ["FLIGHT", "HOTEL"] };
                 });
                 setPlaceData(newPlaceData);
                 router.push("/tripplanner");
