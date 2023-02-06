@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
+  ActionIcon,
   Space,
   Stepper,
   Title,
@@ -13,10 +14,11 @@ import {
   Stack,
   Button,
   Input,
+  Popover,
 } from "@mantine/core";
-import { useForceUpdate } from "@mantine/hooks";
+import { useForceUpdate, useWindowEvent } from "@mantine/hooks";
 import { placeDataState } from "../libs/atoms";
-import { IconCurrencyDollar, IconPlus } from "@tabler/icons";
+import { IconCurrencyDollar, IconPlus, IconCirclePlus } from "@tabler/icons";
 import { useRecoilState } from "recoil";
 
 export default function TripPlannerPage() {
@@ -35,22 +37,7 @@ export default function TripPlannerPage() {
     <div key={index}>
       <Group position="right">
         <Text size={12} fs="italic" color="dimmed" mt={-25}>
-          {cost.cost || (
-            <Input
-              variant="unstyled"
-              placeholder="NEW COST"
-              ta="right"
-              size="xs"
-              autoFocus
-              sx={{
-                ".mantine-Input-input": {
-                  textAlign: "right",
-                  fontStyle: "italic",
-                  textTransform: "uppercase",
-                },
-              }}
-            />
-          )}
+          {cost.cost || "NEW COST"}
         </Text>
         <div
           style={{
@@ -81,21 +68,28 @@ export default function TripPlannerPage() {
   );
 
   const [newCost, setNewCost] = useState([]);
+  let formValue = "";
   const AddCost = (event) => {
-    let index = event.target.id || event.target.parentElement.id;
-    newCost[index]?.push(1);
+    let index =
+      event.target.parentElement.parentElement.parentElement.parentElement
+        .parentElement.parentElement.id ||
+      event.target.parentElement.parentElement.parentElement.parentElement.id;
+    newCost[index]?.push(formValue.toUpperCase());
     forceUpdate();
   };
 
-  useEffect(() => {
-    console.log(newCost);
-  }, [newCost]);
+  useWindowEvent("keydown", (event) => {
+    if (event.key === "Enter") {
+      AddCost(event);
+    }
+  });
 
   const Places = () =>
     placeData.map((place, index) => {
       newCost[index] = newCost[index] || [];
       return (
         <Box
+          id={index}
           key={index}
           p={20}
           mb={20}
@@ -143,31 +137,64 @@ export default function TripPlannerPage() {
                 <Costs key={index} cost={cost} />
               ))}
             {newCost[index] &&
-              newCost[index].map((index) => (
-                <Costs key={Math.floor(Math.random() * 10000)} />
+              newCost[index].map((cost) => (
+                <Costs key={Math.floor(Math.random() * 10000000)} cost={cost} />
               ))}
           </Box>
           <Divider opacity={0.2} color="#000" />
           <Group mt={20} position="right">
-            <Button
-              id={index}
-              variant="subtle"
-              size="xs"
-              color="gray"
-              leftIcon={<IconPlus size={15} />}
-              onClick={(event) => {
-                AddCost(event);
-              }}
-              sx={{
-                opacity: 0.1,
-                transition: "opacity 0.2s ease-in-out",
-                "&:hover": {
-                  opacity: 0.5,
-                },
-              }}
+            <Popover
+              width={250}
+              position="left"
+              shadow="xl"
+              trapFocus
+              radius="xl"
             >
-              <span id={index}>ANOTHER</span>
-            </Button>
+              <Popover.Target>
+                <Button
+                  id={index}
+                  variant="subtle"
+                  size="xs"
+                  color="gray"
+                  leftIcon={<IconPlus size={15} />}
+                  sx={{
+                    opacity: 0.1,
+                    transition: "opacity 0.2s ease-in-out",
+                    "&:hover": {
+                      opacity: 0.5,
+                    },
+                  }}
+                >
+                  <span id={index}>ANOTHER</span>
+                </Button>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Input
+                  placeholder="NEW COST"
+                  size="xs"
+                  variant="unstyled"
+                  pl={10}
+                  onChange={(value) => (formValue = value.target.value)}
+                  sx={{
+                    ".mantine-Input-input": {
+                      textTransform: "uppercase",
+                      "&:focus": {
+                        border: "none",
+                      },
+                    },
+                  }}
+                  rightSection={
+                    <ActionIcon
+                      onClick={(event) => {
+                        AddCost(event);
+                      }}
+                    >
+                      <IconCirclePlus />
+                    </ActionIcon>
+                  }
+                />
+              </Popover.Dropdown>
+            </Popover>
           </Group>
         </Box>
       );
