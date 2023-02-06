@@ -38,13 +38,15 @@ export default function TripPlannerPage() {
           {cost.cost || (
             <Input
               variant="unstyled"
-              placeholder="New Cost"
+              placeholder="NEW COST"
               ta="right"
+              size="xs"
               autoFocus
               sx={{
                 ".mantine-Input-input": {
                   textAlign: "right",
                   fontStyle: "italic",
+                  textTransform: "uppercase",
                 },
               }}
             />
