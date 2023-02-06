@@ -46,7 +46,7 @@ export default function TripPlannerPage() {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Placeholder.configure({ placeholder: "This is placeholder" }),
+      Placeholder.configure({ placeholder: "Tell us your story..." }),
     ],
     content: "",
   });
@@ -292,52 +292,17 @@ export default function TripPlannerPage() {
                     sx={{
                       "&.mantine-Input-wrapper": {
                         paddingBottom: 10,
-                        borderBottom: "1px solid rgba(255,255,255,0.12)",
+                        borderBottom: "1px solid rgba(255,255,255,0.05)",
                       },
                       ".mantine-Input-input": {
                         textAlign: "center",
                       },
                     }}
                   />
-                  <Dropzone
-                    onDrop={(files) => console.log("accepted files", files)}
-                    onReject={(files) => console.log("rejected files", files)}
-                    w="80%"
-                    miw={500}
-                    maw={800}
-                    accept={IMAGE_MIME_TYPE}
-                    my={20}
-                  >
-                    <Group
-                      position="center"
-                      spacing="xl"
-                      style={{ minHeight: 220, pointerEvents: "none" }}
-                    >
-                      <Dropzone.Accept>
-                        <IconUpload size={50} />
-                      </Dropzone.Accept>
-                      <Dropzone.Reject>
-                        <IconX size={50} />
-                      </Dropzone.Reject>
-                      <Dropzone.Idle>
-                        <IconPhoto size={50} stroke={1.5} />
-                      </Dropzone.Idle>
-
-                      <div>
-                        <Text size="xl" inline>
-                          Drag images here or click to select files
-                        </Text>
-                        <Text size="sm" color="dimmed" inline mt={7}>
-                          Attach as many files as you like, each file should not
-                          exceed 5mb
-                        </Text>
-                      </div>
-                    </Group>
-                  </Dropzone>
                   <Flex
                     direction="column"
                     gap={10}
-                    mb={20}
+                    mt={20}
                     w="80%"
                     maw={800}
                     miw={600}
@@ -386,13 +351,47 @@ export default function TripPlannerPage() {
                       />
                     </Group>
                   </Flex>
+                  <Dropzone
+                    onDrop={(files) => console.log("accepted files", files)}
+                    onReject={(files) => console.log("rejected files", files)}
+                    w="80%"
+                    miw={500}
+                    maw={800}
+                    accept={IMAGE_MIME_TYPE}
+                    my={20}
+                  >
+                    <Group
+                      position="center"
+                      spacing="xl"
+                      style={{ minHeight: 220, pointerEvents: "none" }}
+                    >
+                      <Dropzone.Accept>
+                        <IconUpload size={50} />
+                      </Dropzone.Accept>
+                      <Dropzone.Reject>
+                        <IconX size={50} />
+                      </Dropzone.Reject>
+                      <Dropzone.Idle>
+                        <IconPhoto size={50} stroke={1.5} />
+                      </Dropzone.Idle>
+
+                      <div>
+                        <Text size="xl" inline>
+                          Drag images here or click to select files
+                        </Text>
+                        <Text size="sm" color="dimmed" inline mt={7}>
+                          Attach as many files as you like, each file should not
+                          exceed 5mb
+                        </Text>
+                      </div>
+                    </Group>
+                  </Dropzone>
                   <RichTextEditor
                     editor={editor}
                     sx={{
                       width: "80%",
                       minWidth: "500px",
                       maxWidth: "800px",
-                      height: "350px",
                     }}
                   >
                     <RichTextEditor.Content />
