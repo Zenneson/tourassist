@@ -16,6 +16,7 @@ import {
   Input,
   Popover,
   Flex,
+  Badge,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForceUpdate, useWindowEvent } from "@mantine/hooks";
@@ -34,9 +35,12 @@ import {
 } from "@tabler/icons";
 import { useRecoilState } from "recoil";
 import { RichTextEditor } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { useEditor, FloatingMenu, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import TextStyle from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
 import Placeholder from "@tiptap/extension-placeholder";
+import { Carousel } from "@mantine/carousel";
 
 export default function TripPlannerPage() {
   const [active, setActive] = useState(0);
@@ -46,7 +50,12 @@ export default function TripPlannerPage() {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Placeholder.configure({ placeholder: "Tell us your story..." }),
+      TextStyle,
+      Color,
+      Placeholder.configure({
+        placeholder:
+          "Add a detailed description to your trip to inspire support and show your commitment. The more you share about your plans and goals, the more people will be drawn to your journey. Let your words paint a picture and connect with those who want to join you on your adventure. Get creative and share why your trip means so much to you!",
+      }),
     ],
     content: "",
   });
@@ -228,186 +237,289 @@ export default function TripPlannerPage() {
   return (
     <>
       <Space h={150} />
-      <Stepper
-        active={active}
-        onStepClick={setActive}
-        orientation="vertical"
-        pos="absolute"
-        size="xs"
-        right={0}
-        mr={35}
-        sx={{}}
-        iconPosition="right"
-      >
-        <Stepper.Step
-          label="Cost Calculator"
-          description="Calculate all your trip costs"
-        />
-        <Stepper.Step label="Trip Details" description="Tell us your story" />
-        <Stepper.Step
-          label="Banking Info"
-          description="Link a Payment Account"
-        />
-      </Stepper>
       <Center>
-        <Box w="60%">
-          {active === 0 && (
-            <motion.div {...animation}>
-              <Places />
-              <Group position="right">
-                <Title order={1} fw={600}>
-                  Trip Cost Total
-                </Title>
-                <NumberInput
-                  icon={<IconCurrencyDollar />}
-                  size="xl"
-                  w={200}
-                  mb={20}
-                  stepHoldDelay={500}
-                  stepHoldInterval={100}
-                  variant="filled"
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  formatter={(value) =>
-                    !Number.isNaN(parseFloat(value))
-                      ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      : ""
-                  }
-                  precision={2}
-                  min={0}
-                />
-              </Group>
-            </motion.div>
-          )}
-          {active === 1 && (
-            <motion.div {...animation}>
-              <Title order={6} fw={600}>
-                <Stack align="center">
-                  <Input
-                    size={40}
-                    variant="subtle"
-                    placeholder="Trip Name"
-                    autoFocus
-                    w="80%"
-                    maw={800}
-                    sx={{
-                      "&.mantine-Input-wrapper": {
-                        paddingBottom: 10,
-                        borderBottom: "1px solid rgba(255,255,255,0.05)",
-                      },
-                      ".mantine-Input-input": {
-                        textAlign: "center",
-                      },
-                    }}
+        <Flex
+          w="80%"
+          maw={1200}
+          justify="flex-start"
+          align="flex-start"
+          gap={10}
+        >
+          <Box w="80%" miw={500}>
+            {active === 0 && (
+              <motion.div {...animation}>
+                <Places />
+                <Group position="right">
+                  <Title order={1} fw={600}>
+                    Trip Cost Total
+                  </Title>
+                  <NumberInput
+                    icon={<IconCurrencyDollar />}
+                    size="xl"
+                    w={200}
+                    mb={20}
+                    stepHoldDelay={500}
+                    stepHoldInterval={100}
+                    variant="filled"
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    formatter={(value) =>
+                      !Number.isNaN(parseFloat(value))
+                        ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        : ""
+                    }
+                    precision={2}
+                    min={0}
                   />
-                  <Flex
-                    direction="column"
-                    gap={10}
-                    mt={20}
-                    w="80%"
-                    maw={800}
-                    miw={600}
-                  >
-                    <Group grow spacing={10}>
-                      <Input
-                        icon={<IconBrandFacebook size={20} />}
-                        placeholder="/Facebook"
-                        variant="filled"
-                        rightSection={
-                          <ActionIcon opacity={0.5} variant="subtle">
-                            <IconCirclePlus size={16} />
-                          </ActionIcon>
-                        }
-                      />
-                      <Input
-                        icon={<IconBrandInstagram size={20} />}
-                        placeholder="@Instagram"
-                        variant="filled"
-                        rightSection={
-                          <ActionIcon opacity={0.5} variant="subtle">
-                            <IconCirclePlus size={16} />
-                          </ActionIcon>
-                        }
-                      />
-
-                      <Input
-                        icon={<IconBrandTiktok size={20} />}
-                        placeholder="@TikTok"
-                        variant="filled"
-                        rightSection={
-                          <ActionIcon opacity={0.5} variant="subtle">
-                            <IconCirclePlus size={16} />
-                          </ActionIcon>
-                        }
-                      />
-                      <Input
-                        icon={<IconBrandTwitter size={20} />}
-                        placeholder="@Twitter"
-                        variant="filled"
-                        rightSection={
-                          <ActionIcon opacity={0.5} variant="subtle">
-                            <IconCirclePlus size={16} />
-                          </ActionIcon>
-                        }
-                      />
-                    </Group>
-                  </Flex>
-                  <Dropzone
-                    onDrop={(files) => console.log("accepted files", files)}
-                    onReject={(files) => console.log("rejected files", files)}
-                    w="80%"
-                    miw={500}
-                    maw={800}
-                    accept={IMAGE_MIME_TYPE}
-                    my={20}
-                  >
-                    <Group
-                      position="center"
-                      spacing="xl"
-                      style={{ minHeight: 220, pointerEvents: "none" }}
+                </Group>
+              </motion.div>
+            )}
+            {active === 1 && (
+              <motion.div {...animation}>
+                <Title order={6} fw={600}>
+                  <Stack align="center">
+                    <Input
+                      size={40}
+                      variant="subtle"
+                      placeholder="Trip Name"
+                      autoFocus
+                      w="80%"
+                      maw={800}
+                      sx={{
+                        "&.mantine-Input-wrapper": {
+                          borderBottom: "1px solid rgba(255,255,255,0.05)",
+                        },
+                        ".mantine-Input-input": {
+                          padding: "30px 5px",
+                          "&::placeholder": {
+                            textAlign: "center",
+                            fontStyle: "italic",
+                            color: "rgba(255,255,255,0.05)",
+                          },
+                        },
+                      }}
+                    />
+                    <Flex
+                      direction="column"
+                      gap={10}
+                      mt={20}
+                      w="80%"
+                      maw={800}
+                      miw={600}
                     >
-                      <Dropzone.Accept>
-                        <IconUpload size={50} />
-                      </Dropzone.Accept>
-                      <Dropzone.Reject>
-                        <IconX size={50} />
-                      </Dropzone.Reject>
-                      <Dropzone.Idle>
-                        <IconPhoto size={50} stroke={1.5} />
-                      </Dropzone.Idle>
+                      <Group grow spacing={10}>
+                        <Input
+                          icon={<IconBrandFacebook size={20} />}
+                          placeholder="/Facebook"
+                          variant="filled"
+                          rightSection={
+                            <ActionIcon opacity={0.5} variant="subtle">
+                              <IconCirclePlus size={16} />
+                            </ActionIcon>
+                          }
+                        />
+                        <Input
+                          icon={<IconBrandInstagram size={20} />}
+                          placeholder="@Instagram"
+                          variant="filled"
+                          rightSection={
+                            <ActionIcon opacity={0.5} variant="subtle">
+                              <IconCirclePlus size={16} />
+                            </ActionIcon>
+                          }
+                        />
 
-                      <div>
-                        <Text size="xl" inline>
-                          Drag images here or click to select files
-                        </Text>
-                        <Text size="sm" color="dimmed" inline mt={7}>
-                          Attach as many files as you like, each file should not
-                          exceed 5mb
-                        </Text>
-                      </div>
+                        <Input
+                          icon={<IconBrandTiktok size={20} />}
+                          placeholder="@TikTok"
+                          variant="filled"
+                          rightSection={
+                            <ActionIcon opacity={0.5} variant="subtle">
+                              <IconCirclePlus size={16} />
+                            </ActionIcon>
+                          }
+                        />
+                        <Input
+                          icon={<IconBrandTwitter size={20} />}
+                          placeholder="@Twitter"
+                          variant="filled"
+                          rightSection={
+                            <ActionIcon opacity={0.5} variant="subtle">
+                              <IconCirclePlus size={16} />
+                            </ActionIcon>
+                          }
+                        />
+                      </Group>
+                    </Flex>
+                    <Group
+                      maw={710}
+                      spacing={35}
+                      w="100%"
+                      position="apart"
+                      grow
+                    >
+                      <Carousel
+                        sx={{
+                          border: "2px solid rgba(255,255,255,0.07)",
+                          borderRadius: 3,
+                          padding: "0 10px",
+                        }}
+                        withIndicators
+                        height={252}
+                        slideSize="100%"
+                      >
+                        <Carousel.Slide></Carousel.Slide>
+                        <Carousel.Slide></Carousel.Slide>
+                      </Carousel>
+                      <Dropzone
+                        onDrop={(files) => console.log("accepted files", files)}
+                        onReject={(files) =>
+                          console.log("rejected files", files)
+                        }
+                        accept={IMAGE_MIME_TYPE}
+                        my={20}
+                        ta="center"
+                      >
+                        <Group
+                          position="center"
+                          spacing="xl"
+                          style={{ minHeight: 220, pointerEvents: "none" }}
+                        >
+                          <Dropzone.Accept>
+                            <IconUpload size={50} />
+                          </Dropzone.Accept>
+                          <Dropzone.Reject>
+                            <IconX size={50} />
+                          </Dropzone.Reject>
+                          <Dropzone.Idle>
+                            <IconPhoto size={50} stroke={1.5} />
+                          </Dropzone.Idle>
+
+                          <div>
+                            <Text size="xl" inline>
+                              Drag images here or click to select files
+                            </Text>
+                            <Text size="sm" color="dimmed" inline mt={7}>
+                              Attach as many files as you like, each file should
+                              not exceed 5mb
+                            </Text>
+                          </div>
+                        </Group>
+                      </Dropzone>
                     </Group>
-                  </Dropzone>
-                  <RichTextEditor
-                    editor={editor}
-                    sx={{
-                      width: "80%",
-                      minWidth: "500px",
-                      maxWidth: "800px",
-                    }}
-                  >
-                    <RichTextEditor.Content />
-                  </RichTextEditor>
-                </Stack>
-              </Title>
-            </motion.div>
-          )}
-          {active === 2 && (
-            <motion.div {...animation}>
-              <Title order={6} fw={600}>
-                Banking Info
-              </Title>
-            </motion.div>
-          )}
-        </Box>
+                    <RichTextEditor
+                      editor={editor}
+                      position="relative"
+                      sx={{
+                        overflow: "auto",
+                        width: "80%",
+                        minWidth: "500px",
+                        maxWidth: "800px",
+                        minHeight: "160px",
+                        maxHeight: "250px",
+                      }}
+                    >
+                      {editor && (
+                        <>
+                          <Badge
+                            hidden={!editor.isFocused}
+                            pos="absolute"
+                            variant="dot"
+                            color="lime"
+                            opacity={0.4}
+                            top={5}
+                            left={5}
+                            radius={3}
+                            fz={7}
+                            size="xs"
+                          >
+                            Highlight text to edit
+                          </Badge>
+                          <BubbleMenu editor={editor}>
+                            <RichTextEditor.ControlsGroup>
+                              <RichTextEditor.ColorPicker
+                                colors={[
+                                  "#ff0000",
+                                  "#ffb300",
+                                  "#ff00c3",
+                                  "#0011ff",
+                                  "#00e1ff",
+                                  "#046e18",
+                                  "#01fd4d",
+                                  "#000000",
+                                  "#1a1a1a",
+                                  "#4d4d4d",
+                                  "#808080",
+                                  "#b3b3b3",
+                                  "#cccccc",
+                                  "#ffffff",
+                                ]}
+                              />
+                              <RichTextEditor.Bold />
+                              <RichTextEditor.H1 />
+                              <RichTextEditor.H2 />
+                              <RichTextEditor.H3 />
+                              <RichTextEditor.H4 />
+                              <RichTextEditor.BulletList />
+                              <RichTextEditor.OrderedList />
+                            </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                              <RichTextEditor.UnsetColor />
+                              <RichTextEditor.Italic />
+                              <RichTextEditor.AlignLeft />
+                              <RichTextEditor.AlignRight />
+                              <RichTextEditor.AlignCenter />
+                              <RichTextEditor.AlignJustify />
+                              <RichTextEditor.Link />
+                              <RichTextEditor.Unlink />
+                            </RichTextEditor.ControlsGroup>
+                          </BubbleMenu>
+                        </>
+                      )}
+                      <RichTextEditor.Content
+                        sx={{
+                          "& p": {
+                            fontSize: "1rem",
+                            textAlign: "justify",
+                            paddingTop: "10px",
+                          },
+                        }}
+                      />
+                    </RichTextEditor>
+                  </Stack>
+                </Title>
+              </motion.div>
+            )}
+            {active === 2 && (
+              <motion.div {...animation}>
+                <Title order={6} fw={600}>
+                  Banking Info
+                </Title>
+              </motion.div>
+            )}
+          </Box>
+          <Stepper
+            active={active}
+            onStepClick={setActive}
+            iconPosition="right"
+            orientation="vertical"
+            size="xs"
+            w="20%"
+            miw={205}
+          >
+            <Stepper.Step
+              label="Cost Calculator"
+              description="Calculate all your trip costs"
+            />
+            <Stepper.Step
+              label="Trip Details"
+              description="Tell us your story"
+            />
+            <Stepper.Step
+              label="Banking Info"
+              description="Link a Payment Account"
+            />
+          </Stepper>
+        </Flex>
       </Center>
     </>
   );
