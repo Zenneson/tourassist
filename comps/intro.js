@@ -11,8 +11,10 @@ import {
   Overlay,
   Transition,
   Image,
+  Card,
+  Grid,
 } from "@mantine/core";
-import { IconWorld } from "@tabler/icons";
+import { IconWorld, IconInfoSquareRounded } from "@tabler/icons";
 import LoginComp from "./loginComp";
 import { useLocalStorage } from "@mantine/hooks";
 
@@ -75,7 +77,7 @@ export default function Intro() {
                 mt={-60}
                 mb={20}
                 mr={3}
-                sx={{ width: "100%", maxWidth: "250px" }}
+                sx={{ width: "100%", maxWidth: "350px" }}
                 src={"img/blogo.png"}
                 alt="TouraSSist_logo"
                 withPlaceholder
@@ -108,7 +110,7 @@ export default function Intro() {
                   order={1}
                   fw={900}
                   sx={{
-                    fontSize: "4.5rem",
+                    fontSize: "5rem",
                     marginBottom: "30px",
                     lineHeight: "1",
                   }}
@@ -124,37 +126,107 @@ export default function Intro() {
                   </Text>{" "}
                   would you like to go?
                 </Title>
-                <Text size="md" sx={{ width: "90%", marginLeft: "5%" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam.
-                </Text>
-                <Group
-                  sx={{
-                    marginTop: "30px",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Button
-                    fw={900}
-                    size="md"
-                    uppercase={true}
-                    loaderProps={{ variant: "oval", size: 20 }}
-                    variant="gradient"
-                    gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
-                    sx={{ width: "200px" }}
-                    onClick={() => {
-                      setMapSpin(false);
-                      setOpened(false);
-                      setVisible(true);
-                    }}
-                    leftIcon={
-                      <IconWorld size={20} style={{ color: "#00E8FC" }} />
-                    }
-                  >
-                    Plan a trip
-                  </Button>
-                </Group>
+                <Grid columns={2} justify="center" gutter={30}>
+                  <Grid.Col span="auto" miw={400} maw={400}>
+                    <Card
+                      shadow="xl"
+                      p="lg"
+                      radius="xs"
+                      bg="rgba(2, 2, 2, 0.85)"
+                    >
+                      <Card.Section>
+                        <Image
+                          src="/img/mother.jpg"
+                          height={160}
+                          alt="mother"
+                        />
+                      </Card.Section>
+
+                      <Group position="apart" mt="md" mb="xs">
+                        <Text weight={500} ta="center" w="100%">
+                          Realize Your Travel Goals with the Power of
+                          Crowdfunding!
+                        </Text>
+                      </Group>
+
+                      <Text size="sm" color="dimmed">
+                        Whether you&apos;re seeking adventure, exploring new
+                        cultures, reuniting with loved ones, pursuing your
+                        passions, or making lifelong memories on your honeymoon,
+                        our platform makes it possible.
+                      </Text>
+                      <Button
+                        fullWidth
+                        fw={900}
+                        mt="md"
+                        size="md"
+                        uppercase={true}
+                        loaderProps={{ variant: "oval", size: 20 }}
+                        variant="gradient"
+                        gradient={{ from: "#393939", to: "#282828", deg: 180 }}
+                        onClick={() => {
+                          setMapSpin(false);
+                          setOpened(false);
+                          setVisible(true);
+                        }}
+                        leftIcon={
+                          <IconInfoSquareRounded
+                            size={23}
+                            color="rgba(255,255,255,0.25)"
+                          />
+                        }
+                      >
+                        Learn More
+                      </Button>
+                    </Card>
+                  </Grid.Col>
+                  <Grid.Col span="auto" miw={400} maw={400}>
+                    <Card
+                      shadow="xl"
+                      p="lg"
+                      radius="xs"
+                      bg="rgba(2, 2, 2, 0.85)"
+                    >
+                      <Card.Section>
+                        <Image src="/img/women.jpg" height={160} alt="women" />
+                      </Card.Section>
+
+                      <Group position="apart" mt="md" mb="xs">
+                        <Text weight={500} ta="center" w="100%">
+                          Make your plans a reality with the help of your
+                          community!{" "}
+                        </Text>
+                      </Group>
+
+                      <Text size="sm" color="dimmed">
+                        Share your plans and let the donations roll in. With the
+                        power of crowdfunding, you can bring your travel dreams
+                        to life. Take the first step of your journey and plan
+                        your trip today!
+                      </Text>
+                      <Button
+                        fullWidth
+                        fw={900}
+                        mt="md"
+                        size="md"
+                        uppercase={true}
+                        loaderProps={{ variant: "oval", size: 20 }}
+                        variant="gradient"
+                        gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+                        onClick={() => {
+                          setMapSpin(false);
+                          setOpened(false);
+                          setVisible(true);
+                        }}
+                        leftIcon={
+                          <IconWorld size={20} style={{ color: "#00E8FC" }} />
+                        }
+                      >
+                        Plan a trip
+                      </Button>
+                    </Card>
+                  </Grid.Col>
+                </Grid>
               </Box>
             </Center>
           </Flex>
