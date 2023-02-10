@@ -239,7 +239,7 @@ export default function TripPlannerPage() {
       <Space h={150} />
       <Center>
         <Flex
-          w="80%"
+          w="100%"
           maw={1200}
           justify="flex-start"
           align="flex-start"
@@ -282,7 +282,7 @@ export default function TripPlannerPage() {
                       variant="subtle"
                       placeholder="Trip Name"
                       autoFocus
-                      w="80%"
+                      w="100%"
                       maw={800}
                       sx={{
                         "&.mantine-Input-wrapper": {
@@ -302,7 +302,7 @@ export default function TripPlannerPage() {
                       direction="column"
                       gap={10}
                       mt={20}
-                      w="80%"
+                      w="100%"
                       maw={800}
                       miw={600}
                     >
@@ -351,7 +351,7 @@ export default function TripPlannerPage() {
                       </Group>
                     </Flex>
                     <Group
-                      maw={710}
+                      maw={800}
                       spacing={35}
                       w="100%"
                       position="apart"
@@ -411,7 +411,7 @@ export default function TripPlannerPage() {
                       position="relative"
                       sx={{
                         overflow: "auto",
-                        width: "80%",
+                        width: "100%",
                         minWidth: "500px",
                         maxWidth: "800px",
                         minHeight: "160px",
@@ -502,9 +502,10 @@ export default function TripPlannerPage() {
             onStepClick={setActive}
             iconPosition="right"
             orientation="vertical"
+            miw={205}
+            mt={50}
             size="xs"
             w="20%"
-            miw={205}
           >
             <Stepper.Step
               label="Cost Calculator"
