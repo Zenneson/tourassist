@@ -13,6 +13,7 @@ import {
   Image,
   Card,
   Grid,
+  MediaQuery,
 } from "@mantine/core";
 import { IconWorld, IconInfoSquareRounded } from "@tabler/icons";
 import LoginComp from "./loginComp";
@@ -106,26 +107,33 @@ export default function Intro() {
                   minWidth: "300px",
                 }}
               >
-                <Title
-                  order={1}
-                  fw={900}
-                  sx={{
-                    fontSize: "5rem",
-                    marginBottom: "30px",
-                    lineHeight: "1",
+                <MediaQuery
+                  query="(max-width: 1539px)"
+                  styles={{
+                    display: "none",
                   }}
                 >
-                  Where in the{" "}
-                  <Text
-                    inherit
-                    span
-                    variant="gradient"
-                    gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                  <Title
+                    order={1}
+                    fw={900}
+                    sx={{
+                      fontSize: "4vw",
+                      marginBottom: "30px",
+                      lineHeight: "1",
+                    }}
                   >
-                    world
-                  </Text>{" "}
-                  would you like to go?
-                </Title>
+                    Where in the{" "}
+                    <Text
+                      inherit
+                      span
+                      variant="gradient"
+                      gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                    >
+                      world
+                    </Text>{" "}
+                    would you like to go?
+                  </Title>
+                </MediaQuery>
                 <Grid columns={2} justify="center" gutter={30}>
                   <Grid.Col span="auto" miw={400} maw={400}>
                     <Card
@@ -242,7 +250,8 @@ export default function Intro() {
         {(styles) => (
           <Overlay
             style={styles}
-            color="rgba(0,0,0,0.9)"
+            color="#000"
+            opacity={0.77}
             blur={5}
             zIndex={102}
           />

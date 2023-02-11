@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   ActionIcon,
@@ -32,10 +32,11 @@ import {
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandTwitter,
+  IconTrash,
 } from "@tabler/icons";
 import { useRecoilState } from "recoil";
 import { RichTextEditor } from "@mantine/tiptap";
-import { useEditor, FloatingMenu, BubbleMenu } from "@tiptap/react";
+import { useEditor, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
@@ -46,6 +47,7 @@ export default function TripPlannerPage() {
   const [active, setActive] = useState(0);
   const [placeData, setPlaceData] = useRecoilState(placeDataState);
   const forceUpdate = useForceUpdate();
+  const newCostRef = useRef(null);
 
   const editor = useEditor({
     extensions: [
@@ -69,9 +71,9 @@ export default function TripPlannerPage() {
 
   const Costs = (cost, index) => (
     <div key={index}>
-      <Group position="right">
+      <Group position="right" mr={20}>
         <Text size={12} fs="italic" color="dimmed" mt={-25}>
-          {cost.cost || "NEW COST"}
+          <Badge variant="default">{cost.cost || "NEW COST"}</Badge>
         </Text>
         <div
           style={{
@@ -113,7 +115,7 @@ export default function TripPlannerPage() {
   };
 
   useWindowEvent("keydown", (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && newCostRef.current) {
       AddCost(event);
     }
   });
@@ -168,11 +170,60 @@ export default function TripPlannerPage() {
           <Box id={index}>
             {place.costs &&
               place.costs.map((cost, index) => (
-                <Costs key={index} cost={cost} />
+                <Box key={index} pos="relative">
+                  <ActionIcon
+                    pos="absolute"
+                    variant="default"
+                    opacity={0.2}
+                    right={-13}
+                    top={-1}
+                    h={43}
+                    onClick={(event) => {
+                      const placeIndex =
+                        event.target.parentElement.parentElement?.id;
+                      const costIndex = index;
+                      let newPlaceData = [...placeData];
+                      let copyData = JSON.parse(JSON.stringify(newPlaceData));
+                      copyData[placeIndex]?.costs.splice(costIndex, 1);
+                      setPlaceData(copyData);
+                    }}
+                  >
+                    <IconTrash size={17} pointerEvents="none" />
+                  </ActionIcon>
+                  <Costs cost={cost} />
+                </Box>
               ))}
             {newCost[index] &&
-              newCost[index].map((cost) => (
-                <Costs key={Math.floor(Math.random() * 10000000)} cost={cost} />
+              newCost[index].map((cost, index) => (
+                <Box key={index} pos="relative">
+                  <ActionIcon
+                    pos="absolute"
+                    variant="default"
+                    opacity={0.2}
+                    right={-13}
+                    top={-1}
+                    h={43}
+                    onClick={(event) => {
+                      const placeIndex =
+                        event.target.parentElement.parentElement?.id;
+                      const costIndex = index;
+                      let newPlaceData = [...newCost];
+                      let copyData = JSON.parse(JSON.stringify(newPlaceData));
+                      copyData[placeIndex] = copyData[placeIndex].filter(
+                        (_, i) => i !== costIndex
+                      );
+                      setNewCost(copyData);
+                    }}
+                  >
+                    <IconTrash size={17} pointerEvents="none" />
+                  </ActionIcon>
+                  <Costs
+                    cost={cost}
+                    styles={{
+                      width: "100%",
+                    }}
+                  />
+                </Box>
               ))}
           </Box>
           <Divider opacity={0.2} color="#000" />
@@ -205,9 +256,11 @@ export default function TripPlannerPage() {
               <Popover.Dropdown>
                 <Input
                   placeholder="NEW COST"
-                  size="xs"
                   variant="unstyled"
+                  ref={newCostRef}
+                  size="xs"
                   pl={10}
+                  maxLength={25}
                   onChange={(value) => (formValue = value.target.value)}
                   sx={{
                     ".mantine-Input-input": {
@@ -245,7 +298,7 @@ export default function TripPlannerPage() {
           align="flex-start"
           gap={10}
         >
-          <Box w="80%" miw={500}>
+          <Box w="80%" miw={500} px="xl">
             {active === 0 && (
               <motion.div {...animation}>
                 <Places />
@@ -503,7 +556,8 @@ export default function TripPlannerPage() {
             iconPosition="right"
             orientation="vertical"
             miw={205}
-            mt={50}
+            mt={20}
+            mr={20}
             size="xs"
             w="20%"
           >
