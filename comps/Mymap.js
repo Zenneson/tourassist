@@ -40,6 +40,7 @@ import TourList from "./tourList";
 export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
+  const router = useRouter();
   const [regionName, setRegionName] = useState("");
   const [citySubTitle, setCitySubTitle] = useState("");
   const [isoName, setIsoName] = useState("");
@@ -80,6 +81,10 @@ export default function Mymap() {
     pitch: 0,
   };
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      console.log("Latitude is :", position.coords.latitude);
+      console.log("Longitude is :", position.coords.longitude);
+    });
     let rotationIntervalId;
     if (mapSpin && !user) {
       rotationIntervalId = setInterval(() => {
@@ -106,8 +111,6 @@ export default function Mymap() {
     mapSpin,
     setMapSpin,
   ]);
-
-  const router = useRouter();
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -404,6 +407,7 @@ export default function Mymap() {
                 setProfileShow(false);
                 if (checkPlace(placeLocation) === false) {
                   addPlaces(placeLocation);
+                  onClose();
                 } else {
                   showNotification({
                     color: "red",

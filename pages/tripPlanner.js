@@ -49,6 +49,28 @@ export default function TripPlannerPage() {
   const forceUpdate = useForceUpdate();
   const newCostRef = useRef(null);
 
+  // AMADEUS API ---------------------------
+  var Amadeus = require("amadeus");
+  var amadeus = new Amadeus({
+    clientId: "Hq9S6iCxG0COAsAAYRUKfEVgMo7Eqng8",
+    clientSecret: "3duQ8ajKZtZah6ns",
+  });
+
+  amadeus.shopping.flightOffersSearch
+    .get({
+      originLocationCode: "SYD",
+      destinationLocationCode: "BKK",
+      departureDate: "2023-06-01",
+      adults: "1",
+    })
+    .then(function (response) {
+      console.log(response.data);
+    })
+    .catch(function (responseError) {
+      console.log(responseError.code);
+    });
+  // AMADEUS API END -----------------------
+
   const editor = useEditor({
     extensions: [
       StarterKit,
