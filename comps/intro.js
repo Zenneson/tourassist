@@ -13,6 +13,7 @@ import {
   Image,
   Card,
   Grid,
+  Divider,
   MediaQuery,
 } from "@mantine/core";
 import { IconWorld, IconInfoSquareRounded } from "@tabler/icons";
@@ -79,9 +80,20 @@ export default function Intro() {
                 mb={20}
                 mr={3}
                 sx={{ width: "100%", maxWidth: "350px" }}
-                src={"img/blogo.png"}
+                src={"img/TA_circle_blue.png"}
                 alt="TouraSSist_logo"
                 withPlaceholder
+              />
+              <Image
+                src={"img/tourassist_text.svg"}
+                alt="TouraSSist_text"
+                sx={{ width: "80%", maxWidth: "350px" }}
+              />
+              <Divider
+                variant="solid"
+                mt={20}
+                opacity={0.35}
+                sx={{ width: "100%", maxWidth: "380px" }}
               />
               <Box
                 sx={{
@@ -108,34 +120,44 @@ export default function Intro() {
                 }}
               >
                 <MediaQuery
-                  query="(max-width: 1539px)"
+                  query="(max-width: 1343px)"
                   styles={{
                     display: "none",
                   }}
                 >
                   <Title
                     order={1}
-                    fw={900}
+                    fw={400}
+                    fs="italic"
+                    transform="uppercase"
                     sx={{
-                      fontSize: "4vw",
+                      fontSize: "2vw",
                       marginBottom: "30px",
                       lineHeight: "1",
                     }}
                   >
-                    Where in the{" "}
                     <Text
                       inherit
                       span
                       variant="gradient"
                       gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
                     >
-                      world
+                      Tourist
                     </Text>{" "}
-                    would you like to go?
+                    or on{" "}
+                    <Text
+                      inherit
+                      span
+                      variant="gradient"
+                      gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                    >
+                      Tour
+                    </Text>
+                    , here&apos;s an assist
                   </Title>
                 </MediaQuery>
                 <Grid columns={2} justify="center" gutter={30}>
-                  <Grid.Col span="auto" miw={400} maw={400}>
+                  <Grid.Col span="auto" miw={350} maw={350}>
                     <Card
                       shadow="xl"
                       p="lg"
@@ -151,13 +173,13 @@ export default function Intro() {
                       </Card.Section>
 
                       <Group position="apart" mt="md" mb="xs">
-                        <Text weight={500} ta="center" w="100%">
+                        <Text weight={700} ta="center" w="100%">
                           Realize Your Travel Goals with the Power of
                           Crowdfunding!
                         </Text>
                       </Group>
 
-                      <Text size="sm" color="dimmed">
+                      <Text size="xs" color="dimmed">
                         Whether you&apos;re seeking adventure, exploring new
                         cultures, reuniting with loved ones, pursuing your
                         passions, or making lifelong memories on your honeymoon,
@@ -188,7 +210,7 @@ export default function Intro() {
                       </Button>
                     </Card>
                   </Grid.Col>
-                  <Grid.Col span="auto" miw={400} maw={400}>
+                  <Grid.Col span="auto" miw={350} maw={350}>
                     <Card
                       shadow="xl"
                       p="lg"
@@ -200,13 +222,13 @@ export default function Intro() {
                       </Card.Section>
 
                       <Group position="apart" mt="md" mb="xs">
-                        <Text weight={500} ta="center" w="100%">
+                        <Text weight={700} ta="center" w="100%">
                           Make your plans a reality with the help of your
                           community!{" "}
                         </Text>
                       </Group>
 
-                      <Text size="sm" color="dimmed">
+                      <Text size="xs" color="dimmed">
                         Share your plans and let the donations roll in. With the
                         power of crowdfunding, you can bring your travel dreams
                         to life. Take the first step of your journey and plan

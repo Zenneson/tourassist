@@ -27,6 +27,10 @@ export default function App(props) {
           loader: "dots",
           // colorScheme: "light",
           colorScheme: "dark",
+          headings: {
+            fontFamily: "Montserrat, sans-serif",
+          },
+          fontFamily: "Open Sans, sans-serif",
           colors: {
             dark: [
               "#C1C2C5",

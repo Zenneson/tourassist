@@ -12,6 +12,7 @@ import {
   Popover,
   Box,
   Text,
+  Flex,
 } from "@mantine/core";
 import {
   IconQuestionMark,
@@ -78,12 +79,9 @@ export default function MainMenu() {
           transition: "all 200ms ease",
         }}
       >
-        <Image
-          width={"auto"}
-          height={103}
-          src={"img/blogo.png"}
-          alt="TouraSSist_logo"
-          withPlaceholder
+        <Flex
+          align="center"
+          gap={10}
           sx={{
             cursor: "pointer",
           }}
@@ -94,7 +92,20 @@ export default function MainMenu() {
             !user && setInfoOpened(true);
             setActive(-1);
           }}
-        />
+        >
+          <Image
+            width="80px"
+            height="auto"
+            src={"img/TA_circle_blue.png"}
+            alt="TouraSSist_logo"
+            withPlaceholder
+          />
+          <Image
+            src={"img/tourassist_text.svg"}
+            alt="TouraSSist_text"
+            sx={{ maxWidth: "180px" }}
+          />
+        </Flex>
         <Group px={0} py={10} m={0}>
           {user && (
             <Button
