@@ -33,7 +33,7 @@ export default function Intro() {
     defaultValue: true,
   });
 
-  const firstDown = useMediaQuery("(max-width: 1343px)");
+  const firstDown = useMediaQuery("(max-width: 950px)");
   const autoplay = useRef(Autoplay({ delay: 5000 }));
 
   const auth = getAuth();
@@ -93,21 +93,18 @@ export default function Intro() {
             }}
           >
             <Center
+              hidden={firstDown}
               opacity={0.9}
               sx={{
                 backgroundColor: "#020202",
                 height: "100vh",
-                width: "50%",
                 minWidth: "450px",
-                maxWidth: "1000px",
                 boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
                 flexDirection: "column",
               }}
             >
               <Image
-                mt={-60}
                 mb={20}
-                mr={3}
                 sx={{ width: "100%", maxWidth: "350px" }}
                 src={"img/TA_circle_blue.png"}
                 alt="TouraSSist_logo"
@@ -142,12 +139,31 @@ export default function Intro() {
               }}
             >
               <Box
+                w={firstDown ? "90%" : "50vw"}
                 sx={{
                   textAlign: "center",
-                  width: "50vw",
                   minWidth: "300px",
                 }}
               >
+                <Flex
+                  direction="column"
+                  align="center"
+                  gap={20}
+                  my={20}
+                  hidden={!firstDown}
+                >
+                  <Image
+                    sx={{ maxWidth: "250px" }}
+                    src={"img/TA_circle_blue.png"}
+                    alt="TouraSSist_logo"
+                    withPlaceholder
+                  />
+                  <Image
+                    src={"img/tourassist_text.svg"}
+                    alt="TouraSSist_text"
+                    sx={{ maxWidth: "250px" }}
+                  />
+                </Flex>
                 <Slider {...slideSettings}>
                   {images.map((image, index) => (
                     <Image
@@ -163,10 +179,9 @@ export default function Intro() {
                   order={1}
                   fw={400}
                   mt={20}
-                  hidden={firstDown}
                   transform="uppercase"
+                  fz={firstDown ? "4.1vw" : "2.3vw"}
                   sx={{
-                    fontSize: "2.3vw",
                     lineHeight: "1.1",
                   }}
                 >
@@ -201,11 +216,16 @@ export default function Intro() {
                   </Text>
                 </Title>
                 <Divider variant="solid" my={7} opacity={0.4} w="100%" />
-                <Title order={2} fw={100} fz="1.5vw" color="#fff">
+                <Title
+                  order={2}
+                  fw={100}
+                  fz={firstDown ? "2.8vw" : "1.56vw"}
+                  color="#fff"
+                >
                   Make your travel plans a reality with the help of your
                   community!
                 </Title>
-                <Text px={20} py={10} fz="sm">
+                <Text px={20} py={10} fz=".9vw" color="dimmed">
                   Whether you&rsquo;re seeking adventure, exploring new
                   cultures, reuniting with loved ones, pursuing your passions,
                   or making lifelong memories on your honeymoon, here&rsquo;s an
@@ -262,8 +282,8 @@ export default function Intro() {
           <Overlay
             style={styles}
             color="#000"
-            opacity={0.77}
-            blur={5}
+            opacity={0.88}
+            blur={7}
             zIndex={102}
           />
         )}
