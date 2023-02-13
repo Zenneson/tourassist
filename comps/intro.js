@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getAuth } from "firebase/auth";
 import {
   Center,
@@ -11,14 +11,13 @@ import {
   Overlay,
   Transition,
   Image,
-  Card,
-  Grid,
   Divider,
-  MediaQuery,
 } from "@mantine/core";
 import { IconWorld, IconInfoSquareRounded } from "@tabler/icons";
 import LoginComp from "./loginComp";
-import { useLocalStorage } from "@mantine/hooks";
+import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
+import { Carousel } from "@mantine/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 export default function Intro() {
   const [opened, setOpened] = useState(false);
@@ -31,6 +30,9 @@ export default function Intro() {
     key: "mapSpin",
     defaultValue: true,
   });
+
+  const firstDown = useMediaQuery("(max-width: 1343px)");
+  const autoplay = useRef(Autoplay({ delay: 7500 }));
 
   const auth = getAuth();
   useEffect(() => {
@@ -91,8 +93,8 @@ export default function Intro() {
               />
               <Divider
                 variant="solid"
-                mt={20}
-                opacity={0.35}
+                mt={25}
+                opacity={0.7}
                 sx={{ width: "100%", maxWidth: "380px" }}
               />
               <Box
@@ -119,144 +121,179 @@ export default function Intro() {
                   minWidth: "300px",
                 }}
               >
-                <MediaQuery
-                  query="(max-width: 1343px)"
-                  styles={{
-                    display: "none",
+                <Carousel
+                  loop
+                  w="100%"
+                  speed={3}
+                  height={350}
+                  withControls={false}
+                  draggable={false}
+                  orientation="vertical"
+                  plugins={[autoplay.current]}
+                  onMouseEnter={autoplay.current.stop}
+                  onMouseLeave={autoplay.current.reset}
+                  sx={{ overflow: "hidden" }}
+                >
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/girl.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/concert.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/planewater.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/coast.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/planewindow.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/lady.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/blueguy.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/boat.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                  <Carousel.Slide>
+                    <Image
+                      src={"img/intro/swimmers.jpg"}
+                      alt="Women Looking at our website"
+                      height={350}
+                      radius={3}
+                    />
+                  </Carousel.Slide>
+                </Carousel>
+                <Title
+                  order={1}
+                  fw={400}
+                  mt={20}
+                  hidden={firstDown}
+                  transform="uppercase"
+                  sx={{
+                    fontSize: "2.3vw",
+                    lineHeight: "1.1",
                   }}
                 >
-                  <Title
-                    order={1}
-                    fw={400}
-                    fs="italic"
-                    transform="uppercase"
-                    sx={{
-                      fontSize: "2vw",
-                      marginBottom: "30px",
-                      lineHeight: "1",
-                    }}
+                  <Text
+                    fw={900}
+                    inherit
+                    span
+                    variant="gradient"
+                    gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
                   >
-                    <Text
-                      inherit
-                      span
-                      variant="gradient"
-                      gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
-                    >
-                      Tourist
-                    </Text>{" "}
-                    or on{" "}
-                    <Text
-                      inherit
-                      span
-                      variant="gradient"
-                      gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
-                    >
-                      Tour
-                    </Text>
-                    , here&apos;s an assist
-                  </Title>
-                </MediaQuery>
-                <Grid columns={2} justify="center" gutter={30}>
-                  <Grid.Col span="auto" miw={350} maw={350}>
-                    <Card
-                      shadow="xl"
-                      p="lg"
-                      radius="xs"
-                      bg="rgba(2, 2, 2, 0.85)"
-                    >
-                      <Card.Section>
-                        <Image
-                          src="/img/mother.jpg"
-                          height={160}
-                          alt="mother"
-                        />
-                      </Card.Section>
-
-                      <Group position="apart" mt="md" mb="xs">
-                        <Text weight={700} ta="center" w="100%">
-                          Realize Your Travel Goals with the Power of
-                          Crowdfunding!
-                        </Text>
-                      </Group>
-
-                      <Text size="xs" color="dimmed">
-                        Whether you&apos;re seeking adventure, exploring new
-                        cultures, reuniting with loved ones, pursuing your
-                        passions, or making lifelong memories on your honeymoon,
-                        our platform makes it possible.
-                      </Text>
-                      <Button
-                        fullWidth
-                        fw={900}
-                        mt="md"
-                        size="md"
-                        uppercase={true}
-                        loaderProps={{ variant: "oval", size: 20 }}
-                        variant="gradient"
-                        gradient={{ from: "#393939", to: "#282828", deg: 180 }}
-                        onClick={() => {
-                          setMapSpin(false);
-                          setOpened(false);
-                          setVisible(true);
-                        }}
-                        leftIcon={
-                          <IconInfoSquareRounded
-                            size={23}
-                            color="rgba(255,255,255,0.25)"
-                          />
-                        }
-                      >
-                        Learn More
-                      </Button>
-                    </Card>
-                  </Grid.Col>
-                  <Grid.Col span="auto" miw={350} maw={350}>
-                    <Card
-                      shadow="xl"
-                      p="lg"
-                      radius="xs"
-                      bg="rgba(2, 2, 2, 0.85)"
-                    >
-                      <Card.Section>
-                        <Image src="/img/women.jpg" height={160} alt="women" />
-                      </Card.Section>
-
-                      <Group position="apart" mt="md" mb="xs">
-                        <Text weight={700} ta="center" w="100%">
-                          Make your plans a reality with the help of your
-                          community!{" "}
-                        </Text>
-                      </Group>
-
-                      <Text size="xs" color="dimmed">
-                        Share your plans and let the donations roll in. With the
-                        power of crowdfunding, you can bring your travel dreams
-                        to life. Take the first step of your journey and plan
-                        your trip today!
-                      </Text>
-                      <Button
-                        fullWidth
-                        fw={900}
-                        mt="md"
-                        size="md"
-                        uppercase={true}
-                        loaderProps={{ variant: "oval", size: 20 }}
-                        variant="gradient"
-                        gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
-                        onClick={() => {
-                          setMapSpin(false);
-                          setOpened(false);
-                          setVisible(true);
-                        }}
-                        leftIcon={
-                          <IconWorld size={20} style={{ color: "#00E8FC" }} />
-                        }
-                      >
-                        Plan a trip
-                      </Button>
-                    </Card>
-                  </Grid.Col>
-                </Grid>
+                    Tourist
+                  </Text>{" "}
+                  or on{" "}
+                  <Text
+                    fw={900}
+                    inherit
+                    span
+                    variant="gradient"
+                    gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                  >
+                    Tour
+                  </Text>
+                  , here&apos;s an{" "}
+                  <Text
+                    fw={900}
+                    inherit
+                    span
+                    variant="gradient"
+                    gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                  >
+                    assist
+                  </Text>
+                </Title>
+                <Divider variant="solid" my={15} opacity={0.7} w="100%" />
+                <Title order={2} fw={100}>
+                  Make your travel plans a reality with the help of your
+                  community!
+                </Title>
+                <Text px={50} py={10}>
+                  Whether you&rsquo;re seeking adventure, exploring new
+                  cultures, reuniting with loved ones, pursuing your passions,
+                  or making lifelong memories on your honeymoon, here&rsquo;s an
+                  assist to make it all possible.
+                </Text>
+                <Group w="100%" position="center" mt={20}>
+                  <Button
+                    fw={900}
+                    size="md"
+                    uppercase={true}
+                    variant="gradient"
+                    gradient={{ from: "#393939", to: "#282828", deg: 180 }}
+                    onClick={() => {}}
+                    leftIcon={
+                      <IconInfoSquareRounded
+                        size={23}
+                        color="rgba(255,255,255,0.25)"
+                      />
+                    }
+                  >
+                    Learn More
+                  </Button>
+                  <Button
+                    fw={900}
+                    size="md"
+                    uppercase={true}
+                    variant="gradient"
+                    gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+                    onClick={() => {
+                      setMapSpin(false);
+                      setOpened(false);
+                      setVisible(true);
+                    }}
+                    leftIcon={
+                      <IconWorld size={20} style={{ color: "#00E8FC" }} />
+                    }
+                  >
+                    Plan a trip
+                  </Button>
+                </Group>
               </Box>
             </Center>
           </Flex>

@@ -82,6 +82,7 @@ export default function MainMenu() {
         <Flex
           align="center"
           gap={10}
+          mt={7}
           sx={{
             cursor: "pointer",
           }}
