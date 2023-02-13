@@ -14,10 +14,12 @@ import {
   Divider,
 } from "@mantine/core";
 import { IconWorld, IconInfoSquareRounded } from "@tabler/icons";
-import LoginComp from "./loginComp";
 import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
-import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import LoginComp from "./loginComp";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function Intro() {
   const [opened, setOpened] = useState(false);
@@ -32,7 +34,7 @@ export default function Intro() {
   });
 
   const firstDown = useMediaQuery("(max-width: 1343px)");
-  const autoplay = useRef(Autoplay({ delay: 7500 }));
+  const autoplay = useRef(Autoplay({ delay: 5000 }));
 
   const auth = getAuth();
   useEffect(() => {
@@ -44,6 +46,31 @@ export default function Intro() {
       if (!visible) setOpened(true);
     }
   }, [user, setVisible, setMapSpin, visible]);
+
+  const slideSettings = {
+    dots: false,
+    fade: true,
+    infinite: true,
+    autoplay: true,
+    speed: 2000,
+    autoplaySpeed: 5000,
+    cssEase: "linear",
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+  };
+
+  const images = [
+    "img/intro/girl.jpg",
+    "img/intro/concert.jpg",
+    "img/intro/planewater.jpg",
+    "img/intro/coast.jpg",
+    "img/intro/planewindow.jpg",
+    "img/intro/lady.jpg",
+    "img/intro/blueguy.jpg",
+    "img/intro/boat.jpg",
+    "img/intro/swimmers.jpg",
+  ];
 
   return (
     <>
@@ -117,96 +144,21 @@ export default function Intro() {
               <Box
                 sx={{
                   textAlign: "center",
-                  width: "75%",
+                  width: "50vw",
                   minWidth: "300px",
                 }}
               >
-                <Carousel
-                  loop
-                  w="100%"
-                  speed={3}
-                  height={350}
-                  withControls={false}
-                  draggable={false}
-                  orientation="vertical"
-                  plugins={[autoplay.current]}
-                  onMouseEnter={autoplay.current.stop}
-                  onMouseLeave={autoplay.current.reset}
-                  sx={{ overflow: "hidden" }}
-                >
-                  <Carousel.Slide>
+                <Slider {...slideSettings}>
+                  {images.map((image, index) => (
                     <Image
-                      src={"img/intro/girl.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
+                      key={index}
+                      w="100%"
+                      mb={-10}
+                      src={image}
+                      alt="intro"
                     />
-                  </Carousel.Slide>
-                  <Carousel.Slide>
-                    <Image
-                      src={"img/intro/concert.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
-                    />
-                  </Carousel.Slide>
-                  <Carousel.Slide>
-                    <Image
-                      src={"img/intro/planewater.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
-                    />
-                  </Carousel.Slide>
-                  <Carousel.Slide>
-                    <Image
-                      src={"img/intro/coast.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
-                    />
-                  </Carousel.Slide>
-                  <Carousel.Slide>
-                    <Image
-                      src={"img/intro/planewindow.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
-                    />
-                  </Carousel.Slide>
-                  <Carousel.Slide>
-                    <Image
-                      src={"img/intro/lady.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
-                    />
-                  </Carousel.Slide>
-                  <Carousel.Slide>
-                    <Image
-                      src={"img/intro/blueguy.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
-                    />
-                  </Carousel.Slide>
-                  <Carousel.Slide>
-                    <Image
-                      src={"img/intro/boat.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
-                    />
-                  </Carousel.Slide>
-                  <Carousel.Slide>
-                    <Image
-                      src={"img/intro/swimmers.jpg"}
-                      alt="Women Looking at our website"
-                      height={350}
-                      radius={3}
-                    />
-                  </Carousel.Slide>
-                </Carousel>
+                  ))}
+                </Slider>
                 <Title
                   order={1}
                   fw={400}
@@ -248,18 +200,18 @@ export default function Intro() {
                     assist
                   </Text>
                 </Title>
-                <Divider variant="solid" my={15} opacity={0.7} w="100%" />
-                <Title order={2} fw={100}>
+                <Divider variant="solid" my={7} opacity={0.4} w="100%" />
+                <Title order={2} fw={100} fz="1.5vw" color="#fff">
                   Make your travel plans a reality with the help of your
                   community!
                 </Title>
-                <Text px={50} py={10}>
+                <Text px={20} py={10} fz="sm">
                   Whether you&rsquo;re seeking adventure, exploring new
                   cultures, reuniting with loved ones, pursuing your passions,
                   or making lifelong memories on your honeymoon, here&rsquo;s an
                   assist to make it all possible.
                 </Text>
-                <Group w="100%" position="center" mt={20}>
+                <Group w="100%" position="center" mt={10}>
                   <Button
                     fw={900}
                     size="md"
