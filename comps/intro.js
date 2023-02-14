@@ -109,8 +109,8 @@ export default function Intro() {
                 }}
               >
                 <Image
-                  mb={20}
-                  sx={{ width: "100%", maxWidth: "350px" }}
+                  mb={25}
+                  sx={{ width: "100%", maxWidth: "250px" }}
                   src={"img/TA_circle_blue.png"}
                   alt="TouraSSist_logo"
                   withPlaceholder
@@ -118,13 +118,13 @@ export default function Intro() {
                 <Image
                   src={"img/tourassist_text.svg"}
                   alt="TouraSSist_text"
-                  sx={{ width: "80%", maxWidth: "350px" }}
+                  sx={{ width: "80%", maxWidth: "250px" }}
                 />
                 <Divider
                   variant="solid"
                   mt={25}
-                  opacity={0.7}
-                  sx={{ width: "100%", maxWidth: "380px" }}
+                  opacity={0.6}
+                  sx={{ width: "80%" }}
                 />
                 <Box
                   sx={{
@@ -135,23 +135,44 @@ export default function Intro() {
                   <LoginComp />
                 </Box>
               </Center>
-              <Center>
+              <Center w={"100%"}>
                 <Flex
                   direction={"column"}
                   align={"center"}
                   ta={"center"}
-                  w={"70%"}
+                  w={"100%"}
                 >
+                  <Image
+                    hidden={!firstDown}
+                    mb={25}
+                    sx={{ maxWidth: "45vw" }}
+                    src={"img/TA_circle_blue.png"}
+                    alt="TouraSSist_logo"
+                    withPlaceholder
+                  />
+                  <Image
+                    hidden={!firstDown}
+                    src={"img/tourassist_text.svg"}
+                    alt="TouraSSist_text"
+                    sx={{ maxWidth: "45vw" }}
+                  />
                   <Title
                     order={1}
                     fw={400}
                     mt={20}
                     transform="uppercase"
-                    fz={"4.3vw"}
+                    fz={!firstDown ? "4.3vw" : "7vw"}
                     sx={{
                       lineHeight: "1",
                     }}
                   >
+                    <Divider
+                      hidden={!firstDown}
+                      variant="solid"
+                      mt={5}
+                      mb={20}
+                      opacity={0.7}
+                    />
                     <Text
                       fw={900}
                       inherit
@@ -172,7 +193,7 @@ export default function Intro() {
                       Tour
                     </Text>
                     <br />
-                    <Text fz={"5.3vw"} inherit span>
+                    <Text fz={!firstDown ? "5.3vw" : "8.5vw"} inherit span>
                       here&apos;s an{" "}
                       <Text
                         fw={900}
@@ -185,17 +206,24 @@ export default function Intro() {
                       </Text>
                     </Text>
                   </Title>
-                  <Divider variant="solid" my={7} opacity={0.4} w="100%" />
+                  <Divider variant="solid" my={7} opacity={0.7} w="80%" />
                   <Title
                     order={2}
                     fw={100}
-                    fz={firstDown ? "2.8vw" : "1.56vw"}
+                    fz={!firstDown ? "1.5vw" : "2.4vw"}
                     color="#fff"
                   >
                     Make your travel plans a reality with the help of your
                     community!
                   </Title>
-                  <Text px={80} py={10} fz=".9vw" color="dimmed">
+                  <Text
+                    px={80}
+                    py={10}
+                    fz=".9vw"
+                    w={"60%"}
+                    color="dimmed"
+                    hidden={firstDown}
+                  >
                     Whether you&rsquo;re seeking adventure, exploring new
                     cultures, reuniting with loved ones, pursuing your passions,
                     or making lifelong memories on your honeymoon, here&rsquo;s
@@ -204,14 +232,14 @@ export default function Intro() {
                   <Group w="100%" position="center" mt={10}>
                     <Button
                       fw={900}
-                      size="md"
+                      size={!firstDown ? "md" : "xs"}
                       uppercase={true}
                       variant="gradient"
                       gradient={{ from: "#393939", to: "#282828", deg: 180 }}
                       onClick={() => {}}
                       leftIcon={
                         <IconInfoSquareRounded
-                          size={23}
+                          size={17}
                           color="rgba(255,255,255,0.25)"
                         />
                       }
@@ -220,7 +248,7 @@ export default function Intro() {
                     </Button>
                     <Button
                       fw={900}
-                      size="md"
+                      size={!firstDown ? "md" : "xs"}
                       uppercase={true}
                       variant="gradient"
                       gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
@@ -230,7 +258,7 @@ export default function Intro() {
                         setVisible(true);
                       }}
                       leftIcon={
-                        <IconWorld size={20} style={{ color: "#00E8FC" }} />
+                        <IconWorld size={14} style={{ color: "#00E8FC" }} />
                       }
                     >
                       Plan a trip
@@ -241,7 +269,7 @@ export default function Intro() {
             </Flex>
             <Box
               pos="absolute"
-              opacity={0.07}
+              opacity={0.08}
               w={width}
               h={height}
               sx={{
