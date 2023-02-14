@@ -206,21 +206,21 @@ export default function Intro() {
                       </Text>
                     </Text>
                   </Title>
-                  <Divider variant="solid" my={7} opacity={0.7} w="80%" />
+                  <Divider variant="solid" my={10} opacity={0.7} w="67%" />
                   <Title
                     order={2}
                     fw={100}
                     fz={!firstDown ? "1.5vw" : "2.4vw"}
                     color="#fff"
                   >
-                    Make your travel plans a reality with the help of your
+                    Make your travel plans a reality with the power of your
                     community!
                   </Title>
                   <Text
                     px={80}
                     py={10}
                     fz=".9vw"
-                    w={"60%"}
+                    w={"70%"}
                     color="dimmed"
                     hidden={firstDown}
                   >
