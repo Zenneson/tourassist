@@ -58,8 +58,8 @@ export default function Intro() {
     fade: true,
     infinite: true,
     autoplay: true,
-    speed: 2000,
-    autoplaySpeed: 8000,
+    speed: 5000,
+    autoplaySpeed: 10000,
     cssEase: "linear",
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -164,6 +164,7 @@ export default function Intro() {
                     fz={!firstDown ? "4.3vw" : "7vw"}
                     sx={{
                       lineHeight: "1",
+                      textShadow: "0 2px 5px rgba(0,0,0,0.2)",
                     }}
                   >
                     <Divider
@@ -206,22 +207,26 @@ export default function Intro() {
                       </Text>
                     </Text>
                   </Title>
-                  <Divider variant="solid" my={10} opacity={0.7} w="67%" />
+                  <Divider variant="solid" my={10} w="67%" />
                   <Title
                     order={2}
-                    fw={100}
+                    fw={300}
                     fz={!firstDown ? "1.5vw" : "2.4vw"}
                     color="#fff"
+                    sx={{
+                      textShadow: "0 2px 5px rgba(0,0,0,1)",
+                    }}
                   >
                     Make your travel plans a reality with the power of your
                     community!
                   </Title>
                   <Text
-                    px={80}
+                    px={40}
                     py={10}
                     fz=".9vw"
+                    fw={300}
                     w={"70%"}
-                    color="dimmed"
+                    color="#fff"
                     hidden={firstDown}
                   >
                     Whether you&rsquo;re seeking adventure, exploring new
@@ -269,7 +274,7 @@ export default function Intro() {
             </Flex>
             <Box
               pos="absolute"
-              opacity={0.08}
+              opacity={0.2}
               w={width}
               h={height}
               sx={{

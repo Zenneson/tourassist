@@ -231,7 +231,7 @@ export default function Trips() {
             </Popover>
             <Text
               size={20}
-              fw={500}
+              fw={900}
               color={
                 trip.percent < 33
                   ? "#D0F0C0"

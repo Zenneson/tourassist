@@ -81,10 +81,6 @@ export default function Mymap() {
     pitch: 0,
   };
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      console.log("Latitude is :", position.coords.latitude);
-      console.log("Longitude is :", position.coords.longitude);
-    });
     let rotationIntervalId;
     if (mapSpin && !user) {
       rotationIntervalId = setInterval(() => {
@@ -487,7 +483,7 @@ export default function Mymap() {
             radius="xl"
             defaultValue=""
             value={countrySearch}
-            placeholder="Where in the world do you want to go?"
+            placeholder="Where would you like to go?"
             onItemSubmit={(e) => handleSelect(e)}
             ref={countryAutoRef}
             data={countryData}
