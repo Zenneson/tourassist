@@ -40,6 +40,8 @@ import TourList from "./tourList";
 export default function Mymap() {
   const mapRef = useRef();
   const center = useRef();
+  const cityAutoRef = useRef(null);
+  const countryAutoRef = useRef(null);
   const router = useRouter();
   const [regionName, setRegionName] = useState("");
   const [citySubTitle, setCitySubTitle] = useState("");
@@ -86,7 +88,7 @@ export default function Mymap() {
       rotationIntervalId = setInterval(() => {
         mapRef.current?.easeTo({
           center: [
-            mapRef.current?.getCenter().lng + 0.15,
+            mapRef.current?.getCenter().lng + 0.5,
             mapRef.current?.getCenter().lat,
           ],
           duration: 50,
@@ -302,8 +304,6 @@ export default function Mymap() {
     setIsCity(false);
   };
 
-  const cityAutoRef = useRef(null);
-  const countryAutoRef = useRef(null);
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
 
   return (
@@ -440,9 +440,8 @@ export default function Mymap() {
               defaultValue=""
               value={citySearch}
               onChange={function (e) {
-                const field = "city";
                 setCitySearch(e);
-                handleChange(field, e);
+                handleChange("city", e);
               }}
               onItemSubmit={function (e) {
                 handleSelect(e);
@@ -471,14 +470,13 @@ export default function Mymap() {
           justify="center"
           align="center"
           gap={10}
-          sx={{
-            position: "absolute",
-            bottom: "100px",
-            width: "100%",
-          }}
+          pos={"absolute"}
+          bottom={"100px"}
+          w={"100%"}
         >
           <Autocomplete
             icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
+            dropdownPosition="top"
             size="md"
             radius="xl"
             defaultValue=""
@@ -497,9 +495,8 @@ export default function Mymap() {
               countryAutoRef.current.select();
             }}
             onChange={function (e) {
-              const field = "country";
               setCountrySearch(e);
-              handleChange(field, e);
+              handleChange("country", e);
             }}
           />
           <Tooltip label="TourAssist?" position="top" openDelay={800} withArrow>

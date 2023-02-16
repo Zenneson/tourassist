@@ -207,14 +207,20 @@ export default function Intro() {
                       </Text>
                     </Text>
                   </Title>
-                  <Divider variant="solid" my={10} w="67%" />
+                  <Divider
+                    color="#fff"
+                    variant="solid"
+                    opacity={0.25}
+                    my={10}
+                    w="67%"
+                  />
                   <Title
                     order={2}
                     fw={300}
                     fz={!firstDown ? "1.5vw" : "2.4vw"}
                     color="#fff"
                     sx={{
-                      textShadow: "0 2px 5px rgba(0,0,0,1)",
+                      textShadow: "0 2px 5px #000",
                     }}
                   >
                     Make your travel plans a reality with the power of your
@@ -224,10 +230,14 @@ export default function Intro() {
                     px={40}
                     py={10}
                     fz=".9vw"
-                    fw={300}
+                    fw={400}
                     w={"70%"}
+                    opacity={0.6}
                     color="#fff"
                     hidden={firstDown}
+                    sx={{
+                      textShadow: "0 2px 5px #000",
+                    }}
                   >
                     Whether you&rsquo;re seeking adventure, exploring new
                     cultures, reuniting with loved ones, pursuing your passions,
@@ -300,15 +310,15 @@ export default function Intro() {
         mounted={mapSpin}
         transition="fade"
         duration={100}
-        exitDuration={100}
+        exitDuration={200}
         timingFunction="linear"
       >
         {(styles) => (
           <Overlay
             style={styles}
-            color="#000"
-            opacity={0.85}
-            blur={7}
+            color="#001220"
+            opacity={0.9}
+            blur={5}
             zIndex={102}
           />
         )}
