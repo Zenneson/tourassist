@@ -45,6 +45,7 @@ import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Placeholder from "@tiptap/extension-placeholder";
+import { useRouter } from "next/router";
 
 export default function TripPlannerPage() {
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
@@ -54,6 +55,7 @@ export default function TripPlannerPage() {
   const forceUpdate = useForceUpdate();
   const startLocaleRef = useRef(null);
   const newCostRef = useRef(null);
+  const router = useRouter();
 
   const [active, setActive] = useState(0);
   const nextStep = () =>
@@ -358,7 +360,7 @@ export default function TripPlannerPage() {
           w={500}
           defaultValue=""
           value={startLocaleSearch}
-          placeholder="Trip Start Location?"
+          placeholder="Start Location?"
           onItemSubmit={(e) => handleSelect(e)}
           ref={startLocaleRef}
           data={startLocaleData}
@@ -379,8 +381,9 @@ export default function TripPlannerPage() {
               borderBottom: "1px solid rgba(255,255,255,0.2)",
               "&::placeholder": {
                 textAlign: "center",
-                fontWeight: 900,
                 fontStyle: "italic",
+                fontWeight: 1000,
+                fontSize: 30,
               },
             },
           }}
@@ -450,6 +453,7 @@ export default function TripPlannerPage() {
                               ".mantine-Input-input": {
                                 padding: "30px 5px",
                                 "&::placeholder": {
+                                  fontWeight: 1000,
                                   textAlign: "center",
                                   fontStyle: "italic",
                                   color: "rgba(255,255,255,0.05)",
@@ -681,8 +685,20 @@ export default function TripPlannerPage() {
                   >
                     <IconChevronUp />
                   </Button>
-                  <Button fullWidth variant="default" onClick={nextStep}>
-                    <IconChevronDown />
+                  <Button
+                    fullWidth
+                    variant={active === 2 ? "fill" : "default"}
+                    bg={active === 2 ? "blue" : "primary"}
+                    onClick={() => {
+                      if (active !== 2) {
+                        nextStep();
+                      }
+                      if (active === 2) {
+                        router.push("/");
+                      }
+                    }}
+                  >
+                    {active === 2 ? "Next" : <IconChevronDown />}
                   </Button>
                 </Box>
               </Flex>
