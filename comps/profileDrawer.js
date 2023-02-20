@@ -175,10 +175,10 @@ export default function ProfileDrawer() {
               py={14}
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
-              onClick={() => {
+              onClick={(e) => {
                 setProfileOpened(false);
                 setProfileShow(false);
-                router.push("/");
+                router.push("/", undefined, { shallow: true });
               }}
               sx={{
                 ".mantine-NavLink-description": {
@@ -222,7 +222,8 @@ export default function ProfileDrawer() {
                   localStorage.removeItem("mapSpin");
                   setProfileOpened(false);
                   setProfileShow(false);
-                  if (router.pathname !== "/") router.push("/");
+                  if (router.pathname !== "/")
+                    router.push("/", undefined, { shallow: true });
                   else {
                     router.reload();
                   }

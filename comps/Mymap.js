@@ -79,7 +79,7 @@ export default function Mymap() {
 
   const initialViewState = {
     latitude: 37,
-    longitude: -170,
+    longitude: -90,
     zoom: 4.2,
     pitch: 35,
   };
@@ -99,7 +99,7 @@ export default function Mymap() {
     } else {
       clearInterval(rotationIntervalId);
       setMapSpin(false);
-      mapRef.current.flyTo({
+      mapRef.current?.flyTo({
         zoom: 2.5,
         pitch: 0,
       });
@@ -382,7 +382,7 @@ export default function Mymap() {
                   costs: ["FLIGHT", "HOTEL"],
                 },
               ]);
-              router.push("/tripplanner");
+              router.push("/tripplanner", undefined, { shallow: true });
             }}
             sx={{
               width: "90%",

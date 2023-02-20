@@ -339,7 +339,8 @@ export default function TripPlannerPage() {
           geometry: feature.geometry,
           text: feature.text,
           bbox: feature.bbox,
-          shortcode: feature.properties.short_code,
+          context: feature.context,
+          all: feature,
         }));
         setStartLocaleData(data);
       } catch (error) {
@@ -350,7 +351,12 @@ export default function TripPlannerPage() {
 
   const handleSelect = (e) => {
     setStartLocale(e.value);
+    console.log(e.context);
+    console.log(e.all);
   };
+
+  // NOTE: Start Location
+  // console.log(startLocale);
 
   return (
     <>
@@ -699,7 +705,7 @@ export default function TripPlannerPage() {
                         nextStep();
                       }
                       if (active === 2) {
-                        router.push("/");
+                        router.push("/", undefined, { shallow: true });
                       }
                     }}
                   >
