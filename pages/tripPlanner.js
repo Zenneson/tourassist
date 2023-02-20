@@ -410,28 +410,6 @@ export default function TripPlannerPage() {
                   {active === 0 && (
                     <motion.div {...animation}>
                       <Places />
-                      <Group position="right">
-                        <Title order={1} fw={600}>
-                          Trip Cost Total
-                        </Title>
-                        <NumberInput
-                          icon={<IconCurrencyDollar />}
-                          size="xl"
-                          w={200}
-                          mb={20}
-                          stepHoldDelay={500}
-                          stepHoldInterval={100}
-                          variant="filled"
-                          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          formatter={(value) =>
-                            !Number.isNaN(parseFloat(value))
-                              ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              : ""
-                          }
-                          precision={2}
-                          min={0}
-                        />
-                      </Group>
                     </motion.div>
                   )}
                   {active === 1 && (
@@ -677,10 +655,37 @@ export default function TripPlannerPage() {
                       description="Link a Payment Account"
                     />
                   </Stepper>
+                  <Divider
+                    mt={-20}
+                    mb={5}
+                    opacity={0.5}
+                    size={"xs"}
+                    variant="solid"
+                    label={"Total Cost"}
+                    labelPosition="center"
+                  />
+                  <NumberInput
+                    icon={<IconCurrencyDollar />}
+                    size="xl"
+                    mb={20}
+                    w={225}
+                    stepHoldDelay={500}
+                    stepHoldInterval={100}
+                    variant="filled"
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    formatter={(value) =>
+                      !Number.isNaN(parseFloat(value))
+                        ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        : ""
+                    }
+                    precision={2}
+                    min={0}
+                  />
                   <Button
                     fullWidth
                     variant="default"
                     mb={10}
+                    hidden={active === 0}
                     onClick={prevStep}
                   >
                     <IconChevronUp />

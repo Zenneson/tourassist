@@ -76,19 +76,21 @@ export default function Mymap() {
     key: "mapSpin",
     defaultValue: true,
   });
+
   const initialViewState = {
-    latitude: 30,
-    longitude: -90,
-    zoom: 2.5,
-    pitch: 0,
+    latitude: 37,
+    longitude: -170,
+    zoom: 4.2,
+    pitch: 35,
   };
+
   useEffect(() => {
     let rotationIntervalId;
     if (mapSpin && !user) {
       rotationIntervalId = setInterval(() => {
         mapRef.current?.easeTo({
           center: [
-            mapRef.current?.getCenter().lng + 0.5,
+            mapRef.current?.getCenter().lng + 0.4,
             mapRef.current?.getCenter().lat,
           ],
           duration: 50,
@@ -97,6 +99,10 @@ export default function Mymap() {
     } else {
       clearInterval(rotationIntervalId);
       setMapSpin(false);
+      mapRef.current.flyTo({
+        zoom: 2.5,
+        pitch: 0,
+      });
     }
     return () => clearInterval(rotationIntervalId);
   }, [

@@ -67,8 +67,8 @@ export default function Intro() {
   };
 
   const images = [
-    "img/intro/bluehair.jpg",
     "img/intro/coast.jpg",
+    "img/intro/bluehair.jpg",
     "img/intro/street.jpg",
     "img/intro/concert.jpg",
     "img/intro/planewindow.jpg",
@@ -284,7 +284,7 @@ export default function Intro() {
             </Flex>
             <Box
               pos="absolute"
-              opacity={0.2}
+              opacity={0.15}
               w={width}
               h={height}
               sx={{
@@ -316,8 +316,9 @@ export default function Intro() {
         {(styles) => (
           <Overlay
             style={styles}
-            color="#001220"
-            opacity={0.9}
+            color="rgba(0, 17, 29, 0.9)"
+            // color="rgba(0, 0, 0, 0.9)"
+            opacity={1}
             blur={5}
             zIndex={102}
           />

@@ -246,6 +246,7 @@ export default function LoginComp() {
               )
                 .then((userCredential) => {
                   const user = userCredential.user;
+                  // NOTE: set map to Initial Map
                   setVisible(true);
                   setLoginOpened(false);
                   notify("Account Created", <IconDoorEnter size={15} />);
@@ -264,6 +265,7 @@ export default function LoginComp() {
               )
                 .then((userCredential) => {
                   const user = userCredential.user;
+                  // NOTE: set map to Initial Map
                   setVisible(true);
                   setLoginOpened(false);
                   notify("Signed in", <IconUserCheck size={15} />);
