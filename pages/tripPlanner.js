@@ -21,7 +21,7 @@ import {
   Transition,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { useForceUpdate, useWindowEvent, useDidUpdate } from "@mantine/hooks";
+import { useForceUpdate, useWindowEvent } from "@mantine/hooks";
 import { placeDataState } from "../libs/atoms";
 import {
   IconCurrencyDollar,
