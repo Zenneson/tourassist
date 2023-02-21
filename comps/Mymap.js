@@ -112,6 +112,7 @@ export default function Mymap() {
     visible,
     user,
     mapLoaded,
+    mapRef,
     mapSpin,
     setMapSpin,
   ]);
@@ -525,7 +526,7 @@ export default function Mymap() {
         maxPitch={80}
         onZoomEnd={onZoomEnd}
         onLoad={() => {
-          setMapLoaded(true);
+          if (!mapLoaded) setMapLoaded(true);
         }}
         keyboard={false}
         ref={mapRef}

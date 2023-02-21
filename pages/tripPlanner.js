@@ -351,7 +351,6 @@ export default function TripPlannerPage() {
 
   const handleSelect = (e) => {
     setStartLocale(e.value);
-    console.log(e.context);
     console.log(e.all);
   };
 
