@@ -121,104 +121,85 @@ export default function Mymap() {
     if (feature == null) return;
     setIsState(feature?.properties?.STATE);
     setPlaceLngLat(feature?.center);
-    let stateZoom = 3.5;
     let isSelection = true ? feature?.text : false;
     let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
+
+    let dashIndex = feature?.layer?.id.indexOf("-");
+    let placeType = feature?.layer?.id.substring(0, dashIndex);
+    placeType = isSelection ? feature?.place_type[0] : placeType;
+    setIsCountry(placeType === "country" || placeType === "country-boundries");
+
+    let border = feature?.text ? feature.bbox : bbox(feature);
+    setBorderbox(border);
+
     let location =
       feature?.properties?.name_en ||
       feature?.properties?.NAME ||
       feature?.text ||
       "";
 
-    let dashIndex = feature?.layer?.id.indexOf("-");
-    let placeType = feature?.layer?.id.substring(0, dashIndex);
-    if (isSelection) {
-      placeType = feature?.place_type[0];
-    }
-    if (placeType === "country" || placeType === "country-boundries") {
-      setIsCountry(true);
-    } else {
-      setIsCountry(false);
-    }
-
-    let border;
-    if (feature?.text) {
-      border = feature.bbox;
-    } else {
-      border = bbox(feature);
-    }
-    setBorderbox(border);
-
     if (location) {
-      if (isSelection) {
-        center.current = feature.geometry.coordinates;
-      } else {
-        center.current = centerOfMass(feature);
-      }
+      center.current = isSelection
+        ? feature.geometry.coordinates
+        : centerOfMass(feature);
+      setShowStates(location === "United States");
 
-      if (location === "United States") {
-        setShowStates(true);
-        if (isState || isSelection) {
-          stateZoom = 5.5;
-        }
-      } else {
-        setShowStates(false);
-        stateZoom = null;
-      }
-
-      let mapPitch = 40;
-      let orgCenter = center.current.geometry?.coordinates;
-      let { newCenter, maxZoom } = getNewCenter(orgCenter, location) || {};
-      if (isSelection) {
-        newCenter = feature.geometry.coordinates;
-      }
-
-      let index = feature.place_name?.indexOf(",");
-      let result = feature.place_name?.substring(index + 2);
+      const { newCenter, maxZoom } =
+        getNewCenter(center.current.geometry?.coordinates, location) || {};
+      const index = feature.place_name?.indexOf(",");
+      const result = feature.place_name?.substring(index + 2);
       setCitySubTitle(result);
-      if (
+      setIsCity(
         isSelection &&
-        (feature?.place_type[0] === "place" ||
-          feature?.place_type[1] === "place" ||
-          (feature?.place_type[0] === "region" && location === "United States"))
-      ) {
-        maxZoom = 12;
-        mapPitch = 75;
-        setIsCity(true);
-      } else {
-        setCitySubTitle("");
-        setIsCity(false);
-      }
+          (feature?.place_type.includes("place") ||
+            (feature?.place_type[0] === "region" &&
+              location === "United States"))
+      );
 
-      let currentLocation = {};
-      if (placeType === "country") currentLocation = { name: location };
-      if (placeType === "place" || placeType === "region")
-        currentLocation = { name: location, region: result };
-      if (placeType === "")
-        currentLocation = { name: location, region: "United States" };
-      setPlaceLocation(currentLocation);
+      setPlaceLocation({
+        name: location,
+        region:
+          placeType === "place" || placeType === "region"
+            ? result
+            : "United States",
+      });
 
       mapRef.current.flyTo({
-        center: newCenter,
-        zoom: stateZoom || 3.5,
+        center: isSelection ? feature.geometry.coordinates : newCenter,
+        zoom:
+          location === "United States" && (isState || isSelection) ? 5.5 : 3.5,
         duration: 800,
         pitch: 0,
       });
+
       setTimeout(() => {
         mapRef.current.flyTo({
-          center: newCenter,
+          center: isSelection ? feature.geometry.coordinates : newCenter,
           duration: 1500,
-          zoom: maxZoom,
+          zoom:
+            isSelection &&
+            (feature?.place_type.includes("place") ||
+              (feature?.place_type[0] === "region" &&
+                location === "United States"))
+              ? 12
+              : maxZoom,
           maxZoom: maxZoom,
-          pitch: mapPitch,
+          pitch:
+            isSelection &&
+            (feature?.place_type.includes("place") ||
+              (feature?.place_type[0] === "region" &&
+                location === "United States"))
+              ? 75
+              : 40,
           linear: false,
         });
-      }, 800);
+      }, 400);
 
       if (location !== "United States") {
         setShowModal(true);
       }
     }
+
     setRegionName(location);
     setIsoName(isoName);
     setCityData([]);
