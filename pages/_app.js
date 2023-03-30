@@ -6,6 +6,8 @@ import InfoModal from "../comps/infoModal";
 import LoginModal from "../comps/loginModal";
 import SearchModal from "../comps/searchModal";
 import MainMenu from "../comps/mainMenu";
+require("typeface-montserrat");
+import "@fontsource/open-sans";
 
 export default function App(props) {
   const { Component, pageProps } = props;
@@ -44,6 +46,9 @@ export default function App(props) {
               "#050506",
               "#020202",
             ],
+          },
+          TypographyStylesProvider: {
+            fontFamily: "Homemade Apple",
           },
         }}
       >

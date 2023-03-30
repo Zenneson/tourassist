@@ -212,7 +212,7 @@ export default function Intro() {
                     variant="solid"
                     opacity={0.25}
                     my={10}
-                    w="67%"
+                    w="51vw"
                   />
                   <Title
                     order={2}
