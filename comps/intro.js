@@ -22,9 +22,6 @@ import {
 } from "@mantine/hooks";
 import Autoplay from "embla-carousel-autoplay";
 import LoginComp from "./loginComp";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 export default function Intro() {
   const [opened, setOpened] = useState(false);
