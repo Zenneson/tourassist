@@ -82,7 +82,7 @@ export default function MainMenu() {
         <Flex
           align="center"
           gap={10}
-          mt={7}
+          mt={10}
           sx={{
             cursor: "pointer",
           }}
@@ -97,7 +97,7 @@ export default function MainMenu() {
           <Image
             width="80px"
             height="auto"
-            src={"img/TA_circle_blue.png"}
+            src={"img/TA_logo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />

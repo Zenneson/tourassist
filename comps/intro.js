@@ -111,7 +111,7 @@ export default function Intro() {
                 <Image
                   mb={25}
                   sx={{ width: "100%", maxWidth: "250px" }}
-                  src={"img/TA_circle_blue.png"}
+                  src={"img/TA_logo.png"}
                   alt="TouraSSist_logo"
                   withPlaceholder
                 />
@@ -146,7 +146,7 @@ export default function Intro() {
                     hidden={!firstDown}
                     mb={25}
                     sx={{ maxWidth: "45vw" }}
-                    src={"img/TA_circle_blue.png"}
+                    src={"img/TA_logo.png"}
                     alt="TouraSSist_logo"
                     withPlaceholder
                   />
@@ -179,7 +179,7 @@ export default function Intro() {
                       inherit
                       span
                       variant="gradient"
-                      gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                      gradient={{ from: "#60E4FF", to: "#07214E", deg: 45 }}
                     >
                       Tourist
                     </Text>{" "}
@@ -189,7 +189,7 @@ export default function Intro() {
                       inherit
                       span
                       variant="gradient"
-                      gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                      gradient={{ from: "#60E4FF", to: "#07214E", deg: 45 }}
                     >
                       Tour
                     </Text>
@@ -201,7 +201,7 @@ export default function Intro() {
                         inherit
                         span
                         variant="gradient"
-                        gradient={{ from: "#00E8FC", to: "#102E4A", deg: 45 }}
+                        gradient={{ from: "#60E4FF", to: "#07214E", deg: 45 }}
                       >
                         assist
                       </Text>
@@ -273,7 +273,7 @@ export default function Intro() {
                         setVisible(true);
                       }}
                       leftIcon={
-                        <IconWorld size={14} style={{ color: "#00E8FC" }} />
+                        <IconWorld size={14} style={{ color: "#60E4FF" }} />
                       }
                     >
                       Plan a trip
@@ -316,8 +316,7 @@ export default function Intro() {
         {(styles) => (
           <Overlay
             style={styles}
-            color="rgba(0, 17, 29, 0.9)"
-            // color="rgba(0, 0, 0, 0.9)"
+            gradient="linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.97) 30%, rgba(0,0,0,1) 100%)"
             opacity={1}
             blur={5}
             zIndex={102}

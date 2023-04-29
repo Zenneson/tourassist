@@ -137,7 +137,7 @@ export default function ProfileDrawer() {
         withOverlay={false}
         withCloseButton={false}
       >
-        <Space h={150} />
+        <Space h={130} />
         <Flex
           direction="column"
           gap="xs"
