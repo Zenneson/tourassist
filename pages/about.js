@@ -1,8 +1,7 @@
-import {} from "react";
 import { useRouter } from "next/router";
 import { Accordion, Button, Stack, Title } from "@mantine/core";
 
-export default function Faqs() {
+export default function About() {
   const router = useRouter();
   const questions = [
     {

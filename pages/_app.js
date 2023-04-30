@@ -2,7 +2,6 @@ import Head from "next/head";
 import { RecoilRoot } from "recoil";
 import { MantineProvider, AppShell } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
-import InfoModal from "../comps/infoModal";
 import LoginModal from "../comps/loginModal";
 import SearchModal from "../comps/searchModal";
 import MainMenu from "../comps/mainMenu";
@@ -54,7 +53,6 @@ export default function App(props) {
       >
         <RecoilRoot>
           <NotificationsProvider position="top-center">
-            <InfoModal />
             <LoginModal />
             <SearchModal />
             <AppShell padding="none" header={<MainMenu />}>

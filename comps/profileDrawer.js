@@ -37,6 +37,8 @@ import {
   IconCashBanknote,
   IconWorld,
   IconGavel,
+  IconInfoCircle,
+  IconAt,
 } from "@tabler/icons";
 
 export default function ProfileDrawer() {
@@ -68,10 +70,6 @@ export default function ProfileDrawer() {
       icon: <IconPlane size={30} />,
       description: "Your Trip Campaigns",
     },
-    // {
-    //   label: "Referral Program",
-    //   icon: <IconHeartHandshake size={20} />,
-    // },
   ];
 
   const items = links.map((item, index) => (
@@ -138,7 +136,7 @@ export default function ProfileDrawer() {
         withOverlay={false}
         withCloseButton={false}
       >
-        <Space h={150} />
+        <Space h={100} />
         <Flex
           direction="column"
           gap="xs"
@@ -166,7 +164,6 @@ export default function ProfileDrawer() {
             borderBottom: "1px solid rgba(255, 255, 255, 0.02)",
           }}
         >
-          {items}
           {router.pathname !== "/" && (
             <NavLink
               label="Map"
@@ -180,6 +177,49 @@ export default function ProfileDrawer() {
                 setProfileOpened(false);
                 setProfileShow(false);
                 router.push("/", undefined, { shallow: true });
+              }}
+              sx={{
+                ".mantine-NavLink-description": {
+                  opacity: 0.4,
+                },
+              }}
+            />
+          )}
+          {items}
+          {router.pathname !== "/about" && (
+            <NavLink
+              label="About Us"
+              description="About TourAssit | FAQs"
+              rightSection={<IconChevronRight size={14} />}
+              px={25}
+              py={14}
+              icon={<IconInfoCircle size={30} opacity={0.1} />}
+              variant="subtle"
+              onClick={(e) => {
+                setProfileOpened(false);
+                setProfileShow(false);
+                router.push("/about", undefined, { shallow: true });
+              }}
+              sx={{
+                ".mantine-NavLink-description": {
+                  opacity: 0.4,
+                },
+              }}
+            />
+          )}
+          {router.pathname !== "/contact" && (
+            <NavLink
+              label="Contact Us"
+              description="Message Us Directly"
+              rightSection={<IconChevronRight size={14} />}
+              px={25}
+              py={14}
+              icon={<IconAt size={30} opacity={0.1} />}
+              variant="subtle"
+              onClick={(e) => {
+                setProfileOpened(false);
+                setProfileShow(false);
+                router.push("/contact", undefined, { shallow: true });
               }}
               sx={{
                 ".mantine-NavLink-description": {

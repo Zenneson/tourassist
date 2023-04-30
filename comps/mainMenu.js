@@ -13,6 +13,7 @@ import {
   Box,
   Text,
   Flex,
+  Title,
 } from "@mantine/core";
 import {
   IconQuestionMark,
@@ -95,17 +96,19 @@ export default function MainMenu() {
           }}
         >
           <Image
-            width="80px"
+            ml={4} //centers the logo and text when the menu is opened
+            width="65px"
             height="auto"
             src={"img/TA_logo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
-          <Image
-            src={"img/tourassist_text.svg"}
-            alt="TouraSSist_text"
-            sx={{ maxWidth: "180px" }}
-          />
+          <Title fw={900} color="#fff" fz={28}>
+            <Text fw={500} color="#adadad" inherit span>
+              TOUR
+            </Text>
+            ASSIST
+          </Title>
         </Flex>
         <Group px={0} py={10} m={0}>
           {user && (
@@ -147,21 +150,6 @@ export default function MainMenu() {
                 p={10}
               >
                 <IconSearch size={17} />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              label="TourAssist?"
-              position="bottom"
-              openDelay={800}
-              withArrow
-            >
-              <Button
-                onClick={() => setInfoOpened(true)}
-                variant="subtle"
-                radius="xl"
-                p={10}
-              >
-                <IconQuestionMark size={17} />
               </Button>
             </Tooltip>
             <Popover

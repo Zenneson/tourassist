@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
 import {
   createStyles,
   Box,
@@ -11,6 +13,7 @@ import {
   SegmentedControl,
   Space,
 } from "@mantine/core";
+import { profileOpenedState, profileShowState } from "../libs/atoms";
 import { useScrollIntoView, useWindowScroll } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
@@ -60,12 +63,16 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Legal() {
+  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
+  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [linkState, setLinkState] = useState("terms");
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(-99);
   const [highlighted, setHighlighted] = useState(-1);
   const [scroll, scrollTo] = useWindowScroll();
   const { scrollIntoView, targetRef } = useScrollIntoView({});
+
+  const router = useRouter();
 
   const terms = [
     {
@@ -476,7 +483,7 @@ export default function Legal() {
               value={linkState}
               onChange={setLinkState}
               onClick={() => {
-                setActive(0);
+                setActive(-99);
                 setHighlighted(-1);
                 scrollTo({ y: 0 });
               }}
@@ -536,10 +543,28 @@ export default function Legal() {
                 <Box w={"calc(20% - 30px)"}>
                   {" "}
                   <Button.Group orientation="vertical">
-                    <Button variant="light" compact fz={10}>
+                    <Button
+                      variant="light"
+                      compact
+                      fz={10}
+                      onClick={(e) => {
+                        setProfileOpened(false);
+                        setProfileShow(false);
+                        router.push("/about", undefined, { shallow: true });
+                      }}
+                    >
                       About Tourassist
                     </Button>
-                    <Button variant="light" compact fz={10}>
+                    <Button
+                      variant="light"
+                      compact
+                      fz={10}
+                      onClick={(e) => {
+                        setProfileOpened(false);
+                        setProfileShow(false);
+                        router.push("/contact", undefined, { shallow: true });
+                      }}
+                    >
                       Contact Us
                     </Button>
                   </Button.Group>
