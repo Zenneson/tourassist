@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { useIntersection } from "@mantine/hooks";
 import {
   Tabs,
   Box,
@@ -14,9 +13,10 @@ import {
   Group,
   SegmentedControl,
 } from "@mantine/core";
-import { IconCashBanknote, IconBuildingBank, IconReload } from "@tabler/icons";
+import { IconCashBanknote, IconBuildingBank } from "@tabler/icons";
 import { Line } from "react-chartjs-2";
 import { moneyTabState, profileLinkState } from "../libs/atoms";
+import Donations from "./donations";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -29,12 +29,6 @@ import {
 export default function Money() {
   const [activeTab, setActiveTab] = useRecoilState(moneyTabState);
   const [profileLink, setProfileLink] = useRecoilState(profileLinkState);
-  const [sorted, setSorted] = useState("time");
-  const donationsRef = useRef();
-  const { ref, entry } = useIntersection({
-    root: donationsRef.current,
-    threshold: 1,
-  });
 
   ChartJS.register(
     CategoryScale,
@@ -70,69 +64,6 @@ export default function Money() {
     ],
   };
 
-  let donateData = [
-    {
-      name: "Anonymus",
-      amount: 100,
-    },
-    {
-      name: "Jill Jailbreaker",
-      amount: 50,
-    },
-    {
-      name: "Henry Silkeater",
-      amount: 20,
-    },
-    {
-      name: "Bill Horsefighter",
-      amount: 150,
-    },
-    {
-      name: "Anonymus",
-      amount: 200,
-    },
-    {
-      name: "Anonymus",
-      amount: 100,
-    },
-    {
-      name: "Jill Jailbreaker",
-      amount: 50,
-    },
-    {
-      name: "Henry Silkeater",
-      amount: 20,
-    },
-    {
-      name: "Bill Horsefighter",
-      amount: 150,
-    },
-    {
-      name: "Anonymus",
-      amount: 200,
-    },
-  ];
-
-  const donateOrder =
-    sorted === "time"
-      ? donateData
-      : donateData.sort((a, b) => (a.amount < b.amount ? 1 : -1));
-
-  const rows = donateOrder.map((item, index) => (
-    <tr key={index}>
-      <td>
-        <Text size="sm" weight={500}>
-          {item.name}
-        </Text>
-      </td>
-      <td>
-        <Text size="xs" fw={400} color="dimmed" ta="right">
-          ${item.amount}
-        </Text>
-      </td>
-    </tr>
-  ));
-
   return (
     <Tabs
       defaultValue="finances"
@@ -155,7 +86,7 @@ export default function Money() {
         </Group>
       )}
       <Tabs.Panel value="finances">
-        <Box mt={20} h={200} w="100%">
+        <Box mt={20} w="100%">
           <Line
             options={{
               responsive: true,
@@ -164,92 +95,20 @@ export default function Money() {
             data={data}
           />
         </Box>
-        <Flex my={10}>
+        <Flex my={10} pos={"relative"}>
           <Box
-            w="100%"
+            w={"100%"}
+            position="relative"
             sx={{
-              boxShadow:
-                "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
+              overflow: "hidden",
             }}
           >
-            <Flex gap={0}>
-              <Divider w="100%" label="Donations" />
-              <SegmentedControl
-                color="dark"
-                value={sorted}
-                onChange={setSorted}
-                data={[
-                  { label: "Time", value: "time" },
-                  { label: "Amount", value: "amount" },
-                ]}
-                size="xs"
-                top={-4}
-                right={-14}
-                w="40%"
-                sx={{
-                  backgroundColor: "rgba(0, 0, 0, 0.2)",
-                  transform: "scale(0.8)",
-                }}
-              />
-            </Flex>
-            <Box
-              p={10}
-              m={0}
-              h={320}
-              ref={donationsRef}
-              type="auto"
-              sx={{
-                "&::-webkit-scrollbar": {
-                  width: "0",
-                },
-                overflow: "auto",
-                borderRadius: 3,
-                backgroundColor: "rgba(255, 255, 255, 0.005)",
-                boxShadow: `${
-                  entry?.isIntersecting
-                    ? "none"
-                    : "rgba(0, 0, 0, 0.37) 0px -10px 10px -5px inset"
-                }`,
-                borderBottom: `${
-                  entry?.isIntersecting ? "none" : "1px solid rgba(0, 0, 0, .4)"
-                }`,
-              }}
-            >
-              <Table verticalSpacing="md" highlightOnHover>
-                <tbody>
-                  {rows.length !== 0 ? (
-                    rows
-                  ) : (
-                    <Text color="dimmed" ta="center" fz={12}>
-                      Your trips will be listed here...
-                    </Text>
-                  )}
-                </tbody>
-              </Table>
-              <Box ref={ref}></Box>
-              <Center>
-                <Button
-                  variant="default"
-                  compact
-                  pr={10}
-                  mb={10}
-                  leftIcon={<IconReload size={14} />}
-                >
-                  Load More
-                </Button>
-              </Center>
-            </Box>
+            <Donations />
           </Box>
-          <Flex
-            direction="column"
-            justify="center"
-            align="center"
-            gap={10}
-            ml={20}
-          >
+          <Flex direction="column" align="center" gap={10} ml={20}>
             <Flex
               direction="column"
-              h="100%"
+              h={200}
               w="100%"
               px={25}
               justify="center"
@@ -269,7 +128,7 @@ export default function Money() {
             </Flex>
             <Flex
               direction="column"
-              h="100%"
+              h={200}
               px={20}
               justify="center"
               align="center"
@@ -292,7 +151,7 @@ export default function Money() {
             <Flex
               direction="row"
               bg="rgba(0, 0, 0, 0.4)"
-              h="20%"
+              h={200}
               w="100%"
               px={20}
               justify="center"
@@ -303,7 +162,6 @@ export default function Money() {
                 borderRadius: 3,
                 cursor: "pointer",
                 transition: "all 200ms ease-in-out",
-                transform: "scale(1.05)",
                 boxShadow:
                   "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -2px 5px 1px rgba(0,0,0, 0.08)",
                 "&:hover": {

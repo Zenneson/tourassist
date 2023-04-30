@@ -22,6 +22,9 @@ import {
 } from "@mantine/hooks";
 import Autoplay from "embla-carousel-autoplay";
 import LoginComp from "./loginComp";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function Intro() {
   const [opened, setOpened] = useState(false);
@@ -112,11 +115,12 @@ export default function Intro() {
                   alt="TouraSSist_logo"
                   withPlaceholder
                 />
-                <Image
-                  src={"img/tourassist_text.svg"}
-                  alt="TouraSSist_text"
-                  sx={{ width: "80%", maxWidth: "250px" }}
-                />
+                <Title fw={900} color="#fff">
+                  <Text fw={500} color="#adadad" inherit span>
+                    TOUR
+                  </Text>
+                  ASSIST
+                </Title>
                 <Divider
                   variant="solid"
                   mt={25}
@@ -147,16 +151,21 @@ export default function Intro() {
                     alt="TouraSSist_logo"
                     withPlaceholder
                   />
-                  <Image
+                  <Title
+                    fw={900}
+                    fz={"2.5rem"}
+                    color="#fff"
                     hidden={!firstDown}
-                    src={"img/tourassist_text.svg"}
-                    alt="TouraSSist_text"
-                    sx={{ maxWidth: "45vw" }}
-                  />
+                  >
+                    <Text fw={500} color="#adadad" inherit span>
+                      TOUR
+                    </Text>
+                    ASSIST
+                  </Title>
                   <Title
                     order={1}
                     fw={400}
-                    mt={20}
+                    // mt={20}
                     transform="uppercase"
                     fz={!firstDown ? "4.3vw" : "7vw"}
                     sx={{
@@ -207,9 +216,9 @@ export default function Intro() {
                   <Divider
                     color="#fff"
                     variant="solid"
-                    opacity={0.25}
+                    opacity={0.15}
                     my={10}
-                    w="51vw"
+                    w="80%"
                   />
                   <Title
                     order={2}

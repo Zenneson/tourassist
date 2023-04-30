@@ -134,10 +134,11 @@ export default function ProfileDrawer() {
         opened={profileOpened}
         size="md"
         opacity={0.95}
+        lockScroll={false}
         withOverlay={false}
         withCloseButton={false}
       >
-        <Space h={130} />
+        <Space h={150} />
         <Flex
           direction="column"
           gap="xs"

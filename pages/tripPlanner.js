@@ -165,9 +165,9 @@ export default function TripPlannerPage() {
           key={index}
           p={20}
           mb={20}
+          radius={3}
+          bg={"rgba(0,0,0,0.05)"}
           sx={{
-            borderRadius: 3,
-            background: "rgba(0,0,0,0.05)",
             border: "1px solid rgba(0,0,0,0.15)",
             boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             borderLeft: "2px solid rgba(255,255,255,0.035)",
@@ -704,7 +704,7 @@ export default function TripPlannerPage() {
                         nextStep();
                       }
                       if (active === 2) {
-                        router.push("/", undefined, { shallow: true });
+                        router.push("/trippage", undefined, { shallow: true });
                       }
                     }}
                   >
