@@ -97,7 +97,7 @@ export default function Donations() {
       }}
     >
       <Flex gap={0}>
-        <Divider w="100%" label="Donations" />
+        <Divider w="100%" label="10 Donations" />
         <SegmentedControl
           color="dark"
           value={sorted}

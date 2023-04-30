@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import {
   Avatar,
-  Badge,
   Button,
   Box,
   BackgroundImage,
@@ -20,6 +19,7 @@ import {
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandTwitter,
+  IconClockHour5,
 } from "@tabler/icons";
 import Autoplay from "embla-carousel-autoplay";
 import Slider from "react-slick";
@@ -281,78 +281,14 @@ export default function Trippage() {
                 </Button>
               </>
             ) : (
-              <BackgroundImage
-                src={images}
-                h={500}
-                w={"650px"}
-                radius={3}
-                alt="intro"
-              />
+              <BackgroundImage src={images} h={500} w={"650px"} alt="intro" />
             )}
           </Group>
-          <Title order={3} p={10} ta={"center"}>
+          <Title order={2} p={10} ta={"center"}>
             Help me raise money to go on a Music Tour
           </Title>
-          <Group position="apart" w={"60%"}>
-            <Badge
-              pl={5}
-              size="md"
-              radius="xl"
-              variant="light"
-              color="gray.7"
-              leftSection={
-                <Avatar alt="Avatar for badge" size={24} bg="dark.7">
-                  <IconBrandFacebook size={15} />
-                </Avatar>
-              }
-            >
-              /Facebook
-            </Badge>
-            <Badge
-              pl={5}
-              size="md"
-              radius="xl"
-              variant="light"
-              color="gray.7"
-              leftSection={
-                <Avatar alt="Avatar for badge" size={24} bg="dark.7">
-                  <IconBrandInstagram size={15} />
-                </Avatar>
-              }
-            >
-              @Instagram
-            </Badge>
-            <Badge
-              pl={5}
-              size="md"
-              radius="xl"
-              variant="light"
-              color="gray.7"
-              leftSection={
-                <Avatar alt="Avatar for badge" size={24} bg="dark.7">
-                  <IconBrandTiktok size={15} />
-                </Avatar>
-              }
-            >
-              @TikTok
-            </Badge>
-            <Badge
-              pl={5}
-              size="md"
-              radius="xl"
-              variant="light"
-              color="gray.7"
-              leftSection={
-                <Avatar alt="Avatar for badge" size={24} bg="dark.7">
-                  <IconBrandTwitter size={15} />
-                </Avatar>
-              }
-            >
-              @Twitter
-            </Badge>
-          </Group>
-          <Center>
-            <Button.Group mt={20}>
+          <Center mt={10}>
+            <Button.Group>
               <Button data-disabled>
                 <Title order={6}>SHARE</Title>
               </Button>
@@ -371,7 +307,7 @@ export default function Trippage() {
             </Button.Group>
           </Center>
           <Box
-            radius={3}
+            radius={5}
             bg={"rgba(0,0,0,0.05)"}
             w={"92%"}
             mt={25}
@@ -379,6 +315,7 @@ export default function Trippage() {
             p={"20px 30px"}
             sx={{
               border: "1px solid rgba(0,0,0,0.15)",
+              borderTop: "1px solid rgba(255,255,255,0.1)",
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
@@ -401,10 +338,10 @@ export default function Trippage() {
             }}
           >
             <Group px={5} mb={-4} grow>
-              <Title order={1} ta={"left"} ml={30} color="lime.5">
+              <Title order={1} ta={"left"} ml={30} color="green.7">
                 $500
               </Title>
-              <Title order={1} ta={"left"} ml={30} color="gray.9">
+              <Title order={1} ta={"left"} ml={30} color="gray.7">
                 $1000
               </Title>
             </Group>
@@ -418,7 +355,7 @@ export default function Trippage() {
             </Group>
             <Progress
               value={50}
-              color="lime.9"
+              color="green.7"
               striped
               animate
               bg={"gray.6"}
@@ -426,16 +363,29 @@ export default function Trippage() {
               radius={"xl"}
               mt={20}
             />
-            <Divider
-              mt={20}
-              mb={5}
-              label="Cost Breakdown"
-              labelPosition="right"
-              opacity={0.2}
-            />
+            <Group mt={10} spacing={5} fz={12} fw={700} pr={5} position="right">
+              <IconClockHour5 size={15} /> 15 Days Left
+            </Group>
+            <Divider mb={5} label="Cost Breakdown" opacity={0.4} />
             {costs}
+            <Button
+              mt={20}
+              w={"100%"}
+              variant="gradient"
+              gradient={{ from: "green.5", to: "green.9", deg: 180 }}
+            >
+              <Title
+                order={3}
+                color="gray"
+                sx={{
+                  textShadow: "0 2px 4px rgba(0,0,0,0.07)",
+                }}
+              >
+                DONATE
+              </Title>
+            </Button>
           </Box>
-          <Box mt={30}>
+          <Box mt={20}>
             <Donations />
           </Box>
         </Flex>
