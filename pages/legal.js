@@ -524,9 +524,9 @@ export default function Legal() {
                   {linkState === "terms"
                     ? `Welcome to Tourassist, a premier crowdfunding platform
                   dedicated to travel-related projects. These Terms of Use
-                  (&quot;Terms&quot;) govern your access to and use of our
+                  ("Terms") govern your access to and use of our
                   website, applications, products, and services (collectively
-                  referred to as &quot;Services&quot;). Please read these Terms
+                  referred to as "Services"). Please read these Terms
                   carefully before using our Services. By accessing or using the
                   Services, you agree to be bound by these Terms and our Privacy
                   Policy. If you do not agree to these Terms, please do not use
