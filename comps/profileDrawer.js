@@ -36,7 +36,7 @@ import {
   IconBuildingBank,
   IconCashBanknote,
   IconWorld,
-  IconHeartHandshake,
+  IconGavel,
 } from "@tabler/icons";
 
 export default function ProfileDrawer() {
@@ -189,6 +189,29 @@ export default function ProfileDrawer() {
             />
           )}
         </Group>
+        <Button
+          variant="subtle"
+          pos={"absolute"}
+          bottom={130}
+          w={"100%"}
+          fz={10}
+          color="gray.7"
+          leftIcon={<IconGavel size={18} />}
+          hidden={router.pathname === "/legal"}
+          onClick={() => {
+            setProfileOpened(false);
+            setProfileShow(false);
+            router.push("/legal", undefined, { shallow: true });
+          }}
+          sx={{
+            "&:hover": {
+              color: "#fff",
+              backgroundColor: "rgba(0, 0, 0, 0)",
+            },
+          }}
+        >
+          Legal Documents
+        </Button>
         <Box
           py={30}
           mb={20}

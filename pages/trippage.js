@@ -30,7 +30,6 @@ import Donations from "../comps/donations";
 export default function Trippage() {
   const images = [
     "img/women.jpg",
-    "img/women_blue.jpg",
     "img/intro/coast.jpg",
     "img/intro/bluehair.jpg",
     "img/intro/street.jpg",
