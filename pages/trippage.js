@@ -110,7 +110,7 @@ export default function Trippage() {
           >
             $
           </Text>
-          {cost.flight}
+          {cost.flight.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </Title>
       </Group>
       <Group position="apart" py={1} pl={30}>
@@ -128,7 +128,7 @@ export default function Trippage() {
           >
             $
           </Text>
-          {cost.hotel}
+          {cost.hotel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </Title>
       </Group>
       {costData.length < index + 1 && <Divider opacity={0.1} />}
@@ -306,9 +306,34 @@ export default function Trippage() {
             </Button.Group>
           </Center>
           <Box
+            radius={3}
+            bg={"rgba(0,0,0,0.05)"}
+            w={"85%"}
+            mt={20}
+            py={20}
+            px={30}
+            fz={14}
+            sx={{
+              border: "1px solid rgba(0,0,0,0.15)",
+              borderTop: "3px solid rgba(255,255,255,0.1)",
+              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+            }}
+          >
+            Join me in turning my long-held dream into reality by generously
+            funding my unforgettable trip to New York City! Experience the magic
+            of the Big Apple vicariously through my adventure as I traverse
+            iconic landmarks, immerse myself in diverse cultural experiences,
+            and capture precious moments to share with my amazing supporters.
+            Your kind contributions will not only enable me to tick this item
+            off my bucket list but also create an extraordinary, life-changing
+            experience. Thank you for believing in my journey and making this
+            dream come true!
+          </Box>
+
+          <Box
             radius={5}
             bg={"rgba(0,0,0,0.05)"}
-            w={"92%"}
+            w={"85%"}
             mt={25}
             mb={50}
             p={"20px 30px"}
@@ -318,6 +343,7 @@ export default function Trippage() {
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
+            <Divider label="// COMMENTS" mb={20} />
             {comments}
           </Box>
         </Flex>
@@ -341,7 +367,7 @@ export default function Trippage() {
                 $500
               </Title>
               <Title order={1} ta={"left"} ml={30} color="gray.7">
-                $1000
+                ${(1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               </Title>
             </Group>
             <Group fw={100} fz={10} px={7} mb={10} grow>
