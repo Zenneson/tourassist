@@ -74,6 +74,12 @@ const searchData = results.map((result, index) => (
       p={20}
       spacing={0}
       sx={{
+        "&:hover": {
+          transform: "scale(1.01)",
+          background: "rgba(0,0,0,0.5)",
+        },
+        cursor: "pointer",
+        transition: "all 0.2s ease",
         border: "1px solid rgba(0,0,0,0.15)",
         borderTop: "3px solid rgba(255,255,255,0.1)",
         boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",

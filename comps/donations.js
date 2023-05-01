@@ -119,7 +119,7 @@ export default function Donations() {
       <Box
         p={10}
         m={0}
-        h={585}
+        h={480}
         ref={donationsRef}
         type="auto"
         sx={{

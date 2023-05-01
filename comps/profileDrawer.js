@@ -24,7 +24,6 @@ import {
   profileOpenedState,
   profileLinkState,
   profileShowState,
-  moneyTabState,
 } from "../libs/atoms";
 import {
   IconUser,
@@ -45,7 +44,6 @@ export default function ProfileDrawer() {
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [active, setActive] = useRecoilState(profileLinkState);
-  const [activeTab, setActiveTab] = useRecoilState(moneyTabState);
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
     defaultValue: false,
@@ -81,9 +79,7 @@ export default function ProfileDrawer() {
       description={item.description}
       rightSection={<IconChevronRight size={14} />}
       icon={item.icon}
-      childrenOffset={56}
       variant="subtle"
-      opened={active === 1 && index === 1}
       onClick={() => {
         setActive(index);
         setProfileShow(true);
@@ -99,22 +95,7 @@ export default function ProfileDrawer() {
           opacity: 0.1,
         },
       }}
-    >
-      <NavLink
-        label="Funding Metrics"
-        active={activeTab === "finances"}
-        variant="subtle"
-        icon={<IconCashBanknote size={17} />}
-        onClick={() => setActiveTab("finances")}
-      />
-      <NavLink
-        label="Banking Info"
-        active={activeTab === "banking"}
-        variant="subtle"
-        icon={<IconBuildingBank size={17} />}
-        onClick={() => setActiveTab("banking")}
-      />
-    </NavLink>
+    />
   ));
 
   const animation = {
