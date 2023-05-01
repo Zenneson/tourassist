@@ -23,7 +23,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
 
 export default function AccountInfo() {
-  const [user, setUser] = useLocalStorage({ key: "user" });
+  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const auth = getAuth();
 
   return (

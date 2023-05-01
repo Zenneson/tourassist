@@ -288,10 +288,22 @@ export default function Trippage() {
           </Title>
           <Center mt={10}>
             <Button.Group>
-              <Button data-disabled>
+              <Button
+                variant="subtle"
+                color="gray"
+                style={{
+                  pointerEvents: "none",
+                }}
+              >
                 <Title order={6}>SHARE</Title>
               </Button>
-              <Button variant="default" px={50}>
+              <Button
+                variant="default"
+                px={50}
+                style={{
+                  borderRadius: "3px 0 0 3px",
+                }}
+              >
                 <IconBrandFacebook size={20} />
               </Button>
               <Button variant="default" px={50}>
@@ -362,21 +374,23 @@ export default function Trippage() {
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
-            <Group px={5} mb={-4} grow>
-              <Title order={1} ta={"left"} ml={30} color="green.7">
-                $500
-              </Title>
-              <Title order={1} ta={"left"} ml={30} color="gray.7">
-                ${(1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-              </Title>
-            </Group>
-            <Group fw={100} fz={10} px={7} mb={10} grow>
-              <Text ta={"left"} ml={30}>
-                RAISED
-              </Text>
-              <Text ta={"left"} ml={30}>
-                GOAL
-              </Text>
+            <Group px={5} spacing={0} grow>
+              <Box>
+                <Title order={2} ta={"center"} color="green.7">
+                  $500
+                </Title>
+                <Text ta={"center"} fz={10} mt={-4}>
+                  RAISED
+                </Text>
+              </Box>
+              <Box>
+                <Title order={2} ta={"center"} color="gray.7">
+                  ${(1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </Title>
+                <Text ta={"center"} fz={10} mt={-4}>
+                  GOAL
+                </Text>
+              </Box>
             </Group>
             <Progress
               value={50}
@@ -401,9 +415,8 @@ export default function Trippage() {
             >
               <Title
                 order={3}
-                color="gray"
                 sx={{
-                  textShadow: "0 2px 4px rgba(0,0,0,0.07)",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 DONATE

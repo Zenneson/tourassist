@@ -23,14 +23,13 @@ import {
   IconLocation,
 } from "@tabler/icons";
 import { showNotification } from "@mantine/notifications";
-import { getNewCenter } from "../comps/getNewCenter";
+import { getNewCenter } from "./getNewCenter";
 import {
   listOpenedState,
   searchOpenedState,
   mapLoadState,
   placeListState,
   loginOpenedState,
-  infoOpenedState,
   profileOpenedState,
   profileShowState,
   placeDataState,
@@ -61,13 +60,12 @@ export default function Mymap() {
   const [places, setPlaces] = useRecoilState(placeListState);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
-  const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [placeData, setPlaceData] = useRecoilState(placeDataState);
-  const [user, setUser] = useLocalStorage({ key: "user" });
+  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
     defaultValue: false,
@@ -453,7 +451,7 @@ export default function Mymap() {
           </>
         )}
       </Modal>
-      {!loginOpened && !infoOpened && !searchOpened && visible && !mapSpin && (
+      {!loginOpened && !searchOpened && visible && !mapSpin && (
         <Flex
           justify="center"
           align="center"
@@ -487,19 +485,6 @@ export default function Mymap() {
               handleChange("country", e);
             }}
           />
-          <Tooltip label="TourAssist?" position="top" openDelay={800} withArrow>
-            <Button
-              onClick={() => setInfoOpened(true)}
-              variant="default"
-              radius="xl"
-              p={10}
-              style={{
-                zIndex: 98,
-              }}
-            >
-              <IconQuestionMark size={15} />
-            </Button>
-          </Tooltip>
         </Flex>
       )}
       <Map
@@ -519,9 +504,7 @@ export default function Mymap() {
         style={{ width: "100%", height: "100%" }}
         mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
       >
-        {visible && !infoOpened && !searchOpened && !loginOpened && (
-          <TourList />
-        )}
+        {visible && !searchOpened && !loginOpened && <TourList />}
         {isCity && (
           <Marker
             longitude={placeLngLat[0]}

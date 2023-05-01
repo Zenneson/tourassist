@@ -28,7 +28,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function Intro() {
   const [opened, setOpened] = useState(false);
-  const [user, setUser] = useLocalStorage({ key: "user" });
+  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
     defaultValue: false,

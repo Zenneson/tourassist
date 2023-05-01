@@ -45,17 +45,7 @@ export const placeListState = atom({
   default: [],
 });
 
-export const infoOpenedState = atom({
-  key: "infoOpenedState",
-  default: false,
-});
-
 export const loginOpenedState = atom({
   key: "loginOpenedState",
   default: false,
-});
-
-export const loginTypeState = atom({
-  key: "loginTypeState",
-  default: "login",
 });

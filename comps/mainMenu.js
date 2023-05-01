@@ -25,7 +25,6 @@ import {
 import {
   searchOpenedState,
   loginOpenedState,
-  infoOpenedState,
   mapLoadState,
   profileOpenedState,
   profileLinkState,
@@ -35,7 +34,6 @@ import {
 import ProfileDrawer from "./profileDrawer";
 
 export default function MainMenu() {
-  const [infoOpened, setInfoOpened] = useRecoilState(infoOpenedState);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [logoutOpeened, setLogoutOpeened] = useState(false);
@@ -51,7 +49,7 @@ export default function MainMenu() {
     key: "visible",
     defaultValue: false,
   });
-  const [user, setUser] = useLocalStorage({ key: "user" });
+  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
 
   useEffect(() => {
     if (user) {
@@ -69,9 +67,7 @@ export default function MainMenu() {
         zIndex={120}
         bg="none"
         withBorder={false}
-        hidden={
-          !visible || infoOpened || searchOpened || loginOpened || mapSpin
-        }
+        hidden={!visible || searchOpened || loginOpened || mapSpin}
         sx={{
           display: "flex",
           padding: "15px 25px",
@@ -91,7 +87,6 @@ export default function MainMenu() {
             user && setProfileOpened((o) => !o);
             user && setListOpened(false);
             user && setProfileShow(false);
-            !user && setInfoOpened(true);
             setActive(-1);
           }}
         >

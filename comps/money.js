@@ -83,8 +83,14 @@ export default function Money() {
             <Text fz={10}>TRIPS</Text>
           </Box>
         </Center>
-        <Button leftIcon={<IconBuildingBank />} variant="light" size="lg">
-          <Text fz={12} lh={1.3}>
+        <Button
+          leftIcon={<IconBuildingBank size={27} />}
+          variant="gradient"
+          gradient={{ from: "green.5", to: "green.9", deg: 180 }}
+          color="gray.0"
+          size="lg"
+        >
+          <Text fz={12} lh={1.1}>
             ADD BANKING
             <br />
             INFORMATION

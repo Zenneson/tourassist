@@ -119,7 +119,7 @@ export default function Donations() {
       <Box
         p={10}
         m={0}
-        h={480}
+        h={440}
         ref={donationsRef}
         type="auto"
         sx={{
@@ -156,7 +156,7 @@ export default function Donations() {
             variant="default"
             compact
             pr={10}
-            mb={10}
+            my={10}
             leftIcon={<IconReload size={14} />}
           >
             Load More

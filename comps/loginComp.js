@@ -36,7 +36,8 @@ import {
   IconCheck,
   IconUserCheck,
 } from "@tabler/icons";
-import { loginTypeState, loginOpenedState } from "../libs/atoms";
+import { loginOpenedState } from "../libs/atoms";
+import { useRouter } from "next/router";
 
 export default function LoginComp() {
   const [email, setEmail] = useState("");
@@ -48,12 +49,16 @@ export default function LoginComp() {
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
   const [type, toggle] = useToggle(["login", "sign-up"]);
-  const [loginType, setLoginType] = useRecoilState(loginTypeState);
+  const router = useRouter();
+  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
     defaultValue: false,
   });
-  const [user, setUser] = useLocalStorage({ key: "user" });
+
+  if (!user && type === "login" && router.pathname === "/tripplanner") {
+    toggle();
+  }
 
   const auth = getAuth(app);
 
@@ -364,23 +369,27 @@ export default function LoginComp() {
               />
             )}
           </Stack>
-          <Group position="apart" mt="xl">
+          <Group
+            position={router.pathname === "/tripplanner" ? "right" : "apart"}
+            mt="xl"
+          >
             <Anchor
               component="button"
               type="button"
               color="dimmed"
+              size="xs"
+              hidden={router.pathname === "/tripplanner"}
               onClick={function () {
-                setLoginType(type);
                 toggle();
               }}
-              size="xs"
             >
               {type === "sign-up"
                 ? "Already have an account?"
                 : "Don't have an account?"}
             </Anchor>
             <Button
-              size="xs"
+              size={router.pathname === "/tripplanner" ? "lg" : "sm"}
+              mt={router.pathname === "/tripplanner" ? -50 : 0}
               fw={700}
               uppercase={true}
               variant="default"

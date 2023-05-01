@@ -9,6 +9,7 @@ import {
   Center,
   Box,
   Text,
+  Image,
   NumberInput,
   Group,
   Divider,
@@ -21,7 +22,12 @@ import {
   Transition,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { useForceUpdate, useWindowEvent } from "@mantine/hooks";
+import {
+  useForceUpdate,
+  useWindowEvent,
+  useLocalStorage,
+} from "@mantine/hooks";
+import LoginComp from "../comps/loginComp";
 import { placeDataState } from "../libs/atoms";
 import {
   IconCurrencyDollar,
@@ -37,6 +43,7 @@ import {
   IconTrash,
   IconChevronUp,
   IconChevronDown,
+  IconBuildingBank,
 } from "@tabler/icons";
 import { useRecoilState } from "recoil";
 import { RichTextEditor } from "@mantine/tiptap";
@@ -56,6 +63,7 @@ export default function TripPlannerPage() {
   const startLocaleRef = useRef(null);
   const newCostRef = useRef(null);
   const router = useRouter();
+  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
 
   const [active, setActive] = useState(0);
   const nextStep = () =>
@@ -629,9 +637,54 @@ export default function TripPlannerPage() {
                   )}
                   {active === 2 && (
                     <motion.div {...animation}>
-                      <Title order={6} fw={600}>
-                        Banking Info
-                      </Title>
+                      {/* TODO - Banking Info */}
+                      <Center w={"100%"} h={"50vh"}>
+                        <Stack w={"70%"}>
+                          <Box hidden={user}>
+                            <LoginComp />
+                            <Divider mt={20} opacity={0.4} />
+                          </Box>
+                          <Center>
+                            <Button
+                              leftIcon={<IconBuildingBank size={34} />}
+                              variant="gradient"
+                              gradient={{
+                                from: "green.5",
+                                to: "green.9",
+                                deg: 180,
+                              }}
+                              color="gray.0"
+                              size="xl"
+                              w={"90%"}
+                              sx={{
+                                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                              }}
+                            >
+                              <Title order={3}>ADD BANKING INFORMATION</Title>
+                            </Button>
+                          </Center>
+                          <Divider my={3} opacity={0.4} />
+                          <Group spacing={0}>
+                            <Text fz={12} w={"70%"}>
+                              We use Stripe, a trusted payment processor, to
+                              securely handle transactions and disburse funds,
+                              ensuring the protection of your sensitive banking
+                              information.
+                            </Text>
+                            <Image
+                              src="img/stripe.png"
+                              fit="contain"
+                              display={"block"}
+                              opacity={0.3}
+                              style={{
+                                width: "30%",
+                                borderLeft: "2px solid rgba(255,255,255,0.3)",
+                              }}
+                              alt=""
+                            />
+                          </Group>
+                        </Stack>
+                      </Center>
                     </motion.div>
                   )}
                 </Box>
@@ -708,7 +761,7 @@ export default function TripPlannerPage() {
                       }
                     }}
                   >
-                    {active === 2 ? "Next" : <IconChevronDown />}
+                    {active === 2 ? "DONE" : <IconChevronDown />}
                   </Button>
                 </Box>
               </Flex>
