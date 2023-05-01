@@ -109,7 +109,7 @@ export default function Donations() {
           size="xs"
           top={-4}
           right={-14}
-          w="40%"
+          w="45%"
           sx={{
             backgroundColor: "rgba(0, 0, 0, 0.2)",
             transform: "scale(0.8)",

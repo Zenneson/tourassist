@@ -58,7 +58,7 @@ export default function ProfileDrawer() {
     {
       label: "Account Info",
       icon: <IconUser size={30} />,
-      description: "Manage Your Account Info",
+      description: "Manage Your Account",
     },
     {
       label: "Money",
@@ -167,7 +167,7 @@ export default function ProfileDrawer() {
           {router.pathname !== "/" && (
             <NavLink
               label="Map"
-              description="Return to the Map"
+              description="View the Map"
               rightSection={<IconChevronRight size={14} />}
               px={25}
               py={14}

@@ -185,7 +185,7 @@ export default function Intro() {
                       inherit
                       span
                       variant="gradient"
-                      gradient={{ from: "#60E4FF", to: "#07214E", deg: 45 }}
+                      gradient={{ from: "#2DC7F3", to: "#0D3F82", deg: 45 }}
                     >
                       Tourist
                     </Text>{" "}
@@ -195,7 +195,7 @@ export default function Intro() {
                       inherit
                       span
                       variant="gradient"
-                      gradient={{ from: "#60E4FF", to: "#07214E", deg: 45 }}
+                      gradient={{ from: "#2DC7F3", to: "#0D3F82", deg: 45 }}
                     >
                       Tour
                     </Text>
@@ -207,7 +207,7 @@ export default function Intro() {
                         inherit
                         span
                         variant="gradient"
-                        gradient={{ from: "#60E4FF", to: "#07214E", deg: 45 }}
+                        gradient={{ from: "#2DC7F3", to: "#0D3F82", deg: 45 }}
                       >
                         assist
                       </Text>
