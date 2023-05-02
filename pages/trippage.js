@@ -12,6 +12,7 @@ import {
   Title,
   Text,
 } from "@mantine/core";
+import { useHover } from "@mantine/hooks";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -28,6 +29,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Donations from "../comps/donations";
 
 export default function Trippage() {
+  const { hovered, ref } = useHover();
+
   const images = [
     "img/women.jpg",
     "img/intro/coast.jpg",
@@ -213,6 +216,7 @@ export default function Trippage() {
       <Flex gap={30} w={"80%"} maw={1200} mt={120}>
         <Flex w={"calc(70% - 30px)"} direction={"column"} align={"center"}>
           <Group
+            ref={ref}
             spacing={0}
             w={images.length > 1 ? "auto" : "650px"}
             h={500}
@@ -225,24 +229,26 @@ export default function Trippage() {
           >
             {images.length > 1 ? (
               <>
-                <Button
-                  h={500}
-                  mb={7}
-                  radius={"3px 0 0 3px"}
-                  onClick={previous}
-                  variant="outline"
-                  color={"dark.4"}
-                  p={0}
-                  sx={{
-                    border: "none",
-                    "&:hover": {
-                      color: "#fff",
-                      backgroundColor: "rgba(0,0,0,0.2)",
-                    },
-                  }}
-                >
-                  <IconChevronLeft size={50} />
-                </Button>
+                {hovered && (
+                  <Button
+                    h={500}
+                    mb={7}
+                    radius={"3px 0 0 3px"}
+                    onClick={previous}
+                    variant="outline"
+                    color={"dark.4"}
+                    p={0}
+                    sx={{
+                      border: "none",
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "rgba(0,0,0,0.2)",
+                      },
+                    }}
+                  >
+                    <IconChevronLeft size={50} />
+                  </Button>
+                )}
                 <Slider
                   ref={sliderRef}
                   {...slideSettings}
@@ -260,24 +266,26 @@ export default function Trippage() {
                     />
                   ))}
                 </Slider>
-                <Button
-                  h={500}
-                  mb={7}
-                  radius={"3px 0 0 3px"}
-                  onClick={previous}
-                  variant="outline"
-                  color={"dark.4"}
-                  p={0}
-                  sx={{
-                    border: "none",
-                    "&:hover": {
-                      color: "#fff",
-                      backgroundColor: "rgba(0,0,0,0.2)",
-                    },
-                  }}
-                >
-                  <IconChevronRight size={50} />
-                </Button>
+                {hovered && (
+                  <Button
+                    h={500}
+                    mb={7}
+                    radius={"3px 0 0 3px"}
+                    onClick={previous}
+                    variant="outline"
+                    color={"dark.4"}
+                    p={0}
+                    sx={{
+                      border: "none",
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "rgba(0,0,0,0.2)",
+                      },
+                    }}
+                  >
+                    <IconChevronRight size={50} />
+                  </Button>
+                )}
               </>
             ) : (
               <BackgroundImage src={images} h={500} w={"650px"} alt="intro" />
@@ -374,8 +382,8 @@ export default function Trippage() {
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
-            <Group px={5} spacing={0} grow>
-              <Box>
+            <Group px={5} spacing={0} w={"100%"}>
+              <Box w={"37.5%"}>
                 <Title order={2} ta={"center"} color="green.7">
                   $500
                 </Title>
@@ -383,12 +391,30 @@ export default function Trippage() {
                   RAISED
                 </Text>
               </Box>
-              <Box>
+              <Box
+                w={"37.5%"}
+                sx={{
+                  borderLeft: "1px solid rgba(255,255,255,0.1)",
+                }}
+              >
                 <Title order={2} ta={"center"} color="gray.7">
                   ${(1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </Title>
                 <Text ta={"center"} fz={10} mt={-4}>
                   GOAL
+                </Text>
+              </Box>
+              <Box
+                w={"25%"}
+                sx={{
+                  borderLeft: "1px solid rgba(255,255,255,0.1)",
+                }}
+              >
+                <Title order={2} ta={"center"} color="gray.7">
+                  15
+                </Title>
+                <Text ta={"center"} fz={10} mt={-4}>
+                  DAYS LEFT
                 </Text>
               </Box>
             </Group>
@@ -402,10 +428,7 @@ export default function Trippage() {
               radius={"xl"}
               mt={20}
             />
-            <Group mt={10} spacing={5} fz={12} fw={700} pr={5} position="right">
-              <IconClockHour5 size={15} /> 15 Days Left
-            </Group>
-            <Divider mb={5} label="Cost Breakdown" opacity={0.4} />
+            <Divider mb={5} mt={20} label="Cost Breakdown" opacity={0.4} />
             {costs}
             <Button
               mt={20}

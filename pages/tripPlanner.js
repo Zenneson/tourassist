@@ -36,10 +36,6 @@ import {
   IconUpload,
   IconX,
   IconPhoto,
-  IconBrandFacebook,
-  IconBrandInstagram,
-  IconBrandTiktok,
-  IconBrandTwitter,
   IconTrash,
   IconChevronUp,
   IconChevronDown,
@@ -445,65 +441,12 @@ export default function TripPlannerPage() {
                                 padding: "30px 5px",
                                 "&::placeholder": {
                                   fontWeight: 1000,
-                                  textAlign: "center",
                                   fontStyle: "italic",
                                   color: "rgba(255,255,255,0.05)",
                                 },
                               },
                             }}
                           />
-                          <Flex
-                            direction="column"
-                            gap={10}
-                            mt={20}
-                            w="100%"
-                            maw={800}
-                            miw={600}
-                          >
-                            <Group grow spacing={10}>
-                              <Input
-                                icon={<IconBrandFacebook size={20} />}
-                                placeholder="/Facebook"
-                                variant="filled"
-                                rightSection={
-                                  <ActionIcon opacity={0.5} variant="subtle">
-                                    <IconCirclePlus size={16} />
-                                  </ActionIcon>
-                                }
-                              />
-                              <Input
-                                icon={<IconBrandInstagram size={20} />}
-                                placeholder="@Instagram"
-                                variant="filled"
-                                rightSection={
-                                  <ActionIcon opacity={0.5} variant="subtle">
-                                    <IconCirclePlus size={16} />
-                                  </ActionIcon>
-                                }
-                              />
-
-                              <Input
-                                icon={<IconBrandTiktok size={20} />}
-                                placeholder="@TikTok"
-                                variant="filled"
-                                rightSection={
-                                  <ActionIcon opacity={0.5} variant="subtle">
-                                    <IconCirclePlus size={16} />
-                                  </ActionIcon>
-                                }
-                              />
-                              <Input
-                                icon={<IconBrandTwitter size={20} />}
-                                placeholder="@Twitter"
-                                variant="filled"
-                                rightSection={
-                                  <ActionIcon opacity={0.5} variant="subtle">
-                                    <IconCirclePlus size={16} />
-                                  </ActionIcon>
-                                }
-                              />
-                            </Group>
-                          </Flex>
                           <Group
                             maw={800}
                             spacing={35}
