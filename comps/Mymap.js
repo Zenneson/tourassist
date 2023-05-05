@@ -16,12 +16,7 @@ import {
   Divider,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import {
-  IconPlaylistAdd,
-  IconMapSearch,
-  IconQuestionMark,
-  IconLocation,
-} from "@tabler/icons";
+import { IconPlaylistAdd, IconMapSearch, IconLocation } from "@tabler/icons";
 import { showNotification } from "@mantine/notifications";
 import { getNewCenter } from "./getNewCenter";
 import {
@@ -376,7 +371,7 @@ export default function Mymap() {
             </Text>
           </Button>
           <Tooltip
-            label={`Add ${regionName} to Tour`}
+            label={`Add ${regionName} to Tour List`}
             position="top-end"
             withArrow
           >

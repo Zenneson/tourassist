@@ -1,18 +1,19 @@
 import { useRef } from "react";
 import {
   Avatar,
+  Badge,
   Button,
   Box,
   BackgroundImage,
   Center,
-  Group,
   Divider,
+  Group,
   Flex,
   Progress,
   Title,
   Text,
 } from "@mantine/core";
-import { useHover } from "@mantine/hooks";
+import { useHover, useToggle } from "@mantine/hooks";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -20,16 +21,18 @@ import {
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandTwitter,
-  IconClockHour5,
+  IconSourceCode,
+  IconBrandWhatsapp,
 } from "@tabler/icons";
-import Autoplay from "embla-carousel-autoplay";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Donations from "../comps/donations";
+import Update from "../comps/update";
 
 export default function Trippage() {
   const { hovered, ref } = useHover();
+  const [readmore, toggle] = useToggle(["closed", "open"]);
 
   const images = [
     "img/women.jpg",
@@ -43,7 +46,6 @@ export default function Trippage() {
     "img/intro/plane.jpg",
   ];
 
-  const autoplay = useRef(Autoplay({ delay: 1000 }));
   const slideSettings = {
     dots: false,
     fade: true,
@@ -227,69 +229,73 @@ export default function Trippage() {
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
             }}
           >
-            {images.length > 1 ? (
-              <>
-                {hovered && (
-                  <Button
-                    h={500}
-                    mb={7}
-                    radius={"3px 0 0 3px"}
-                    onClick={previous}
-                    variant="outline"
-                    color={"dark.4"}
-                    p={0}
-                    sx={{
-                      border: "none",
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "rgba(0,0,0,0.2)",
-                      },
-                    }}
-                  >
-                    <IconChevronLeft size={50} />
-                  </Button>
-                )}
-                <Slider
-                  ref={sliderRef}
-                  {...slideSettings}
-                  style={{
-                    width: "650px",
-                  }}
-                >
-                  {images.map((image, index) => (
-                    <BackgroundImage
-                      key={index}
-                      src={image}
+            <Center>
+              {images.length > 1 ? (
+                <>
+                  {hovered && (
+                    <Button
                       h={500}
-                      w={"650px"}
-                      alt="intro"
-                    />
-                  ))}
-                </Slider>
-                {hovered && (
-                  <Button
-                    h={500}
-                    mb={7}
-                    radius={"3px 0 0 3px"}
-                    onClick={previous}
-                    variant="outline"
-                    color={"dark.4"}
-                    p={0}
-                    sx={{
-                      border: "none",
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "rgba(0,0,0,0.2)",
-                      },
+                      mb={7}
+                      radius={"3px 0 0 3px"}
+                      onClick={previous}
+                      variant="outline"
+                      color={"dark.4"}
+                      p={0}
+                      w={"5%"}
+                      sx={{
+                        border: "none",
+                        "&:hover": {
+                          color: "#fff",
+                          backgroundColor: "rgba(0,0,0,0.2)",
+                        },
+                      }}
+                    >
+                      <IconChevronLeft size={50} />
+                    </Button>
+                  )}
+                  <Slider
+                    ref={sliderRef}
+                    {...slideSettings}
+                    style={{
+                      width: "650px",
                     }}
                   >
-                    <IconChevronRight size={50} />
-                  </Button>
-                )}
-              </>
-            ) : (
-              <BackgroundImage src={images} h={500} w={"650px"} alt="intro" />
-            )}
+                    {images.map((image, index) => (
+                      <BackgroundImage
+                        key={index}
+                        src={image}
+                        h={500}
+                        maw={650}
+                        alt="intro"
+                      />
+                    ))}
+                  </Slider>
+                  {hovered && (
+                    <Button
+                      h={500}
+                      mb={7}
+                      radius={"3px 0 0 3px"}
+                      onClick={previous}
+                      variant="outline"
+                      color={"dark.4"}
+                      p={0}
+                      w={"5%"}
+                      sx={{
+                        border: "none",
+                        "&:hover": {
+                          color: "#fff",
+                          backgroundColor: "rgba(0,0,0,0.2)",
+                        },
+                      }}
+                    >
+                      <IconChevronRight size={50} />
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <BackgroundImage src={images} h={500} w={"650px"} alt="intro" />
+              )}
+            </Center>
           </Group>
           <Title order={2} p={10} ta={"center"}>
             Help me raise money to go on a Music Tour
@@ -307,21 +313,27 @@ export default function Trippage() {
               </Button>
               <Button
                 variant="default"
-                px={50}
+                px={30}
                 style={{
                   borderRadius: "3px 0 0 3px",
                 }}
               >
                 <IconBrandFacebook size={20} />
               </Button>
-              <Button variant="default" px={50}>
+              <Button variant="default" px={30}>
                 <IconBrandInstagram size={20} />
               </Button>
-              <Button variant="default" px={50}>
+              <Button variant="default" px={30}>
                 <IconBrandTiktok size={20} />
               </Button>
-              <Button variant="default" px={50}>
+              <Button variant="default" px={30}>
                 <IconBrandTwitter size={20} />
+              </Button>
+              <Button variant="default" px={30}>
+                <IconBrandWhatsapp size={20} />
+              </Button>
+              <Button variant="default" px={30}>
+                <IconSourceCode size={20} />
               </Button>
             </Button.Group>
           </Center>
@@ -339,16 +351,73 @@ export default function Trippage() {
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
-            Join me in turning my long-held dream into reality by generously
-            funding my unforgettable trip to New York City! Experience the magic
-            of the Big Apple vicariously through my adventure as I traverse
-            iconic landmarks, immerse myself in diverse cultural experiences,
-            and capture precious moments to share with my amazing supporters.
-            Your kind contributions will not only enable me to tick this item
-            off my bucket list but also create an extraordinary, life-changing
-            experience. Thank you for believing in my journey and making this
-            dream come true!
+            <Text lineClamp={readmore === "closed" && 5}>
+              <p>
+                Are you ready to join me on an adventure of a lifetime?
+                Together, we can make my long-held dream of visiting New York
+                City a reality! I have always been captivated by the magic of
+                the Big Apple, and I am excited to explore its vibrant
+                neighborhoods, iconic landmarks, and diverse cultural
+                experiences.
+              </p>
+
+              <p>
+                With your generous support, I will be able to travel to New York
+                City and fully immerse myself in its unique atmosphere. I cannot
+                wait to see the towering skyscrapers of Manhattan, stroll
+                through Central Park, marvel at the Statue of Liberty, and
+                explore the trendy neighborhoods of Brooklyn. From Broadway
+                shows to food tours, I plan on experiencing all that this
+                incredible city has to offer.
+              </p>
+
+              <p>
+                I will document every moment of my journey, from the sights and
+                sounds to the people I meet along the way. Your contributions
+                will allow me to capture precious memories and share them with
+                my amazing supporters, so you can feel like you are right there
+                with me, experiencing the adventure in real-time.
+              </p>
+
+              <p>
+                But this trip is not just about fulfilling a dream or checking
+                an item off my bucket list. It&apos;s about creating a
+                life-changing experience that will stay with me forever. I
+                believe that travel opens our minds, broadens our horizons, and
+                connects us with people and cultures from around the world. By
+                supporting me on this journey, you are not only helping me
+                achieve my dream but also contributing to a greater cause.
+              </p>
+
+              <p>
+                So, please consider joining me on this unforgettable adventure.
+                Your kind contributions will not only enable me to travel to New
+                York City but also create a unique, transformative experience
+                that will inspire me and those around me. Thank you for
+                believing in my journey and for making this dream come true!
+              </p>
+            </Text>
           </Box>
+          <Divider
+            labelPosition="center"
+            w={"85%"}
+            label={
+              <Button
+                compact
+                size="xs"
+                radius={25}
+                px={15}
+                variant="subtle"
+                color="gray.6"
+                onClick={() => toggle()}
+              >
+                {readmore === "closed" ? "Read More..." : "Show Less"}
+              </Button>
+            }
+            mb={20}
+          />
+
+          <Update />
 
           <Box
             radius={5}
@@ -359,7 +428,7 @@ export default function Trippage() {
             p={"20px 30px"}
             sx={{
               border: "1px solid rgba(0,0,0,0.15)",
-              borderTop: "1px solid rgba(255,255,255,0.1)",
+              borderTop: "3px solid rgba(255,255,255,0.1)",
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
@@ -368,7 +437,6 @@ export default function Trippage() {
           </Box>
         </Flex>
 
-        {/* COLUMN 2 HERE */}
         <Flex w={"30%"} direction={"column"}>
           <Box
             radius={3}
@@ -443,6 +511,21 @@ export default function Trippage() {
                 }}
               >
                 DONATE
+              </Title>
+            </Button>
+            <Button
+              mt={10}
+              w={"100%"}
+              variant="gradient"
+              gradient={{ from: "yellow.5", to: "yellow.9", deg: 180 }}
+            >
+              <Title
+                order={3}
+                sx={{
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                UPDATE
               </Title>
             </Button>
           </Box>
