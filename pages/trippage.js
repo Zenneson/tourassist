@@ -347,7 +347,7 @@ export default function Trippage() {
             fz={14}
             sx={{
               border: "1px solid rgba(0,0,0,0.15)",
-              borderTop: "3px solid rgba(255,255,255,0.1)",
+              borderTop: "5px solid rgba(255,255,255,0.1)",
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
@@ -400,7 +400,7 @@ export default function Trippage() {
           </Box>
           <Divider
             labelPosition="center"
-            w={"85%"}
+            w={"80%"}
             label={
               <Button
                 compact
@@ -411,7 +411,7 @@ export default function Trippage() {
                 color="gray.6"
                 onClick={() => toggle()}
               >
-                {readmore === "closed" ? "Read More..." : "Show Less"}
+                {readmore === "closed" ? "Read More" : "Show Less"}
               </Button>
             }
             mb={20}
@@ -428,7 +428,7 @@ export default function Trippage() {
             p={"20px 30px"}
             sx={{
               border: "1px solid rgba(0,0,0,0.15)",
-              borderTop: "3px solid rgba(255,255,255,0.1)",
+              borderTop: "5px solid rgba(255,255,255,0.1)",
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
@@ -498,9 +498,14 @@ export default function Trippage() {
             />
             <Divider mb={5} mt={20} label="Cost Breakdown" opacity={0.4} />
             {costs}
+            <Group mt={20} ml={30} spacing={10} w={"calc(100% - 30px)"} grow>
+              <Button variant="default">UPDATE</Button>
+              <Button variant="default">EDIT</Button>
+            </Group>
             <Button
-              mt={20}
-              w={"100%"}
+              mt={15}
+              ml={30}
+              w={"calc(100% - 30px)"}
               variant="gradient"
               gradient={{ from: "green.5", to: "green.9", deg: 180 }}
             >
@@ -510,26 +515,11 @@ export default function Trippage() {
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
-                DONATE
-              </Title>
-            </Button>
-            <Button
-              mt={10}
-              w={"100%"}
-              variant="gradient"
-              gradient={{ from: "yellow.5", to: "yellow.9", deg: 180 }}
-            >
-              <Title
-                order={3}
-                sx={{
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                }}
-              >
-                UPDATE
+                USE FUNDS
               </Title>
             </Button>
           </Box>
-          <Box mt={20}>
+          <Box mt={10}>
             <Donations />
           </Box>
         </Flex>

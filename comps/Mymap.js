@@ -140,8 +140,10 @@ export default function Mymap() {
       const { newCenter, maxZoom } =
         getNewCenter(center.current.geometry?.coordinates, location) || {};
       const index = feature.place_name?.indexOf(",");
-      const result = feature.place_name?.substring(index + 2);
+      const result = feature.place_name?.substring(index + 1);
       setCitySubTitle(result);
+      console.log(result);
+      console.log(feature.place_name);
       setIsCity(
         isSelection &&
           (feature?.place_type.includes("place") ||
@@ -323,9 +325,14 @@ export default function Mymap() {
             >
               {regionName}
             </Title>
-            {citySubTitle && (
+            {!isCountry && (
               <Text fw={600} size="xs" color="#fff">
                 {citySubTitle}
+              </Text>
+            )}
+            {isState && (
+              <Text fw={600} size="xs" color="#fff">
+                United States
               </Text>
             )}
           </>
