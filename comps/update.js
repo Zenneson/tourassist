@@ -284,6 +284,7 @@ export default function Update() {
   const updates = updateData.map((update, index) => (
     <Flex
       key={index}
+      pos={"relative"}
       radius={3}
       bg={"rgba(0,0,0,0.05)"}
       w={"85%"}
@@ -298,6 +299,9 @@ export default function Update() {
         boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
       }}
     >
+      <ActionIcon pos={"absolute"} top={17} right={10} color="gray.7">
+        <IconPencil />
+      </ActionIcon>
       <Flex direction={"column"} w={"15%"}>
         <Stack
           spacing={0}
@@ -373,12 +377,7 @@ export default function Update() {
             borderLeft: "2px solid rgba(255,255,255,0.15)",
           }}
         >
-          <Group spacing={10} mb={10}>
-            <Title order={3}>{update.title}</Title>
-            <ActionIcon color="gray.7">
-              <IconPencil />
-            </ActionIcon>
-          </Group>
+          <Title order={3}>{update.title}</Title>
           <UpdateContent content={update.content} />
         </Box>
       </Flex>

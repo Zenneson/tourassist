@@ -20,6 +20,7 @@ import {
   Flex,
   Badge,
   Transition,
+  BackgroundImage,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import {
@@ -39,6 +40,8 @@ import {
   IconTrash,
   IconChevronUp,
   IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
   IconBuildingBank,
 } from "@tabler/icons";
 import { useRecoilState } from "recoil";
@@ -49,6 +52,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useRouter } from "next/router";
+import Slider from "react-slick";
 
 export default function TripPlannerPage() {
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
@@ -60,6 +64,36 @@ export default function TripPlannerPage() {
   const newCostRef = useRef(null);
   const router = useRouter();
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const sliderRef = useRef();
+
+  const next = () => {
+    sliderRef.current.slickNext();
+  };
+
+  const previous = () => {
+    sliderRef.current.slickPrev();
+  };
+
+  const slideSettings = {
+    dots: false,
+    fade: true,
+    infinite: true,
+    autoplay: true,
+    swipeToSlide: true,
+    speed: 250,
+    autoplaySpeed: 5000,
+    cssEase: "linear",
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    pauseOnHover: true,
+  };
+
+  const images = [
+    "img/women.jpg",
+    "img/intro/coast.jpg",
+    "img/intro/bluehair.jpg",
+  ];
 
   const [active, setActive] = useState(0);
   const nextStep = () =>
@@ -358,9 +392,6 @@ export default function TripPlannerPage() {
     console.log(e.all);
   };
 
-  // NOTE: Start Location
-  // console.log(startLocale);
-
   return (
     <>
       <Center w={"100%"} h={"100%"} hidden={startLocale}>
@@ -422,6 +453,7 @@ export default function TripPlannerPage() {
                     </motion.div>
                   )}
                   {active === 1 && (
+                    // NOTE - Trip Info
                     <motion.div {...animation}>
                       <Title order={6} fw={600}>
                         <Stack align="center">
@@ -449,51 +481,115 @@ export default function TripPlannerPage() {
                           />
                           <Group
                             maw={800}
-                            spacing={35}
+                            spacing={20}
                             w="100%"
                             position="apart"
                             grow
                           >
-                            <Dropzone
-                              onDrop={(files) =>
-                                console.log("accepted files", files)
-                              }
-                              onReject={(files) =>
-                                console.log("rejected files", files)
-                              }
-                              accept={IMAGE_MIME_TYPE}
-                              my={20}
-                              ta="center"
-                            >
-                              <Group
-                                position="center"
-                                spacing="xl"
+                            <Box>
+                              <Slider
+                                ref={sliderRef}
+                                {...slideSettings}
                                 style={{
-                                  minHeight: 220,
-                                  pointerEvents: "none",
+                                  width: "100%",
                                 }}
                               >
-                                <Dropzone.Accept>
-                                  <IconUpload size={50} />
-                                </Dropzone.Accept>
-                                <Dropzone.Reject>
-                                  <IconX size={50} />
-                                </Dropzone.Reject>
-                                <Dropzone.Idle>
-                                  <IconPhoto size={50} stroke={1.5} />
-                                </Dropzone.Idle>
-
-                                <div>
-                                  <Text size="xl" inline>
-                                    Drag images here or click to select files
-                                  </Text>
-                                  <Text size="sm" color="dimmed" inline mt={7}>
-                                    Attach as many files as you like, each file
-                                    should not exceed 5mb
-                                  </Text>
-                                </div>
+                                {images.map((image, index) => (
+                                  <BackgroundImage
+                                    radius={3}
+                                    key={index}
+                                    src={image}
+                                    h={300}
+                                    alt="intro"
+                                  />
+                                ))}
+                              </Slider>
+                              <Group mt={10} spacing={15} grow>
+                                <Button
+                                  variant="outline"
+                                  color="gray"
+                                  compact
+                                  onClick={() => {
+                                    previous();
+                                  }}
+                                >
+                                  <IconChevronLeft size={20} />
+                                </Button>
+                                <Button color="red" compact>
+                                  <IconTrash size={17} />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  color="gray"
+                                  compact
+                                  onClick={() => {
+                                    next();
+                                  }}
+                                >
+                                  <IconChevronRight size={20} />
+                                </Button>
                               </Group>
-                            </Dropzone>
+                            </Box>
+                            <Box>
+                              <Dropzone
+                                onDrop={(files) =>
+                                  console.log("accepted files", files)
+                                }
+                                onReject={(files) =>
+                                  console.log("rejected files", files)
+                                }
+                                accept={IMAGE_MIME_TYPE}
+                                ta="center"
+                                mih={300}
+                              >
+                                <Group
+                                  position="center"
+                                  spacing={5}
+                                  mt={80}
+                                  style={{
+                                    pointerEvents: "none",
+                                  }}
+                                >
+                                  <Dropzone.Accept>
+                                    <IconUpload size={50} />
+                                  </Dropzone.Accept>
+                                  <Dropzone.Reject>
+                                    <IconX size={50} />
+                                  </Dropzone.Reject>
+                                  <Dropzone.Idle>
+                                    <IconPhoto size={50} stroke={1.5} />
+                                  </Dropzone.Idle>
+
+                                  <div>
+                                    <Text size="xl" inline>
+                                      Drag images here
+                                    </Text>
+                                  </div>
+                                </Group>
+                                <Button
+                                  variant="default"
+                                  radius={"xl"}
+                                  px={50}
+                                  mt={7}
+                                  size="lg"
+                                  compact
+                                >
+                                  Select Files
+                                </Button>
+                              </Dropzone>
+                              <Title
+                                mt={15}
+                                order={6}
+                                py={4}
+                                ta={"center"}
+                                bg={"dark.5"}
+                                sx={{
+                                  borderRadius: "3px",
+                                }}
+                              >
+                                {`\[ 3 / 6 \] SPACES USED`}
+                              </Title>
+                            </Box>
                           </Group>
                           <RichTextEditor
                             editor={editor}
@@ -580,7 +676,7 @@ export default function TripPlannerPage() {
                   )}
                   {active === 2 && (
                     <motion.div {...animation}>
-                      {/* TODO - Banking Info */}
+                      {/* NOTE - Banking Info */}
                       <Center w={"100%"} h={"50vh"}>
                         <Stack w={"70%"}>
                           <Box hidden={user}>
