@@ -24,6 +24,7 @@ import {
   IconSourceCode,
   IconBrandWhatsapp,
   IconShare,
+  IconPencil,
 } from "@tabler/icons";
 import { useHover } from "@mantine/hooks";
 import Slider from "react-slick";
@@ -171,6 +172,7 @@ export default function Update() {
           src={images[0]}
           h={300}
           mx={"5%"}
+          mb={30}
           alt="intro"
         />
       );
@@ -182,11 +184,12 @@ export default function Update() {
         spacing={0}
         w={"100%"}
         h={300}
+        mb={30}
         sx={{ overflow: "hidden", borderRadius: "5px" }}
       >
         {hovered && (
           <Button
-            h={300}
+            h={"99%"}
             mb={7}
             radius={"3px 0 0 3px"}
             onClick={previous}
@@ -225,7 +228,7 @@ export default function Update() {
         </Slider>
         {hovered && (
           <Button
-            h={300}
+            h={"99%"}
             mb={7}
             radius={"3px 0 0 3px"}
             onClick={next}
@@ -363,7 +366,6 @@ export default function Update() {
           {update.updateImages && <Carousel images={update.updateImages} />}
         </Center>
         <Box
-          mt={30}
           mx={"5%"}
           py={5}
           pl={20}
@@ -371,7 +373,12 @@ export default function Update() {
             borderLeft: "2px solid rgba(255,255,255,0.15)",
           }}
         >
-          <Title order={3}>{update.title}</Title>
+          <Group spacing={10} mb={10}>
+            <Title order={3}>{update.title}</Title>
+            <ActionIcon color="gray.7">
+              <IconPencil />
+            </ActionIcon>
+          </Group>
           <UpdateContent content={update.content} />
         </Box>
       </Flex>

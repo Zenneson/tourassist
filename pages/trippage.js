@@ -23,6 +23,7 @@ import {
   IconBrandTwitter,
   IconSourceCode,
   IconBrandWhatsapp,
+  IconPencil,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -73,22 +74,22 @@ export default function Trippage() {
 
   const costData = [
     {
-      title: "New York",
+      location: "New York",
       flight: 500.45,
       hotel: 200.23,
     },
     {
-      title: "Mexico",
+      location: "Mexico",
       flight: 550.34,
       hotel: 150.65,
     },
     {
-      title: "Cuba",
+      location: "Cuba",
       flight: 980.23,
       hotel: 340.56,
     },
     {
-      title: "Grenada",
+      location: "Grenada",
       flight: 1234.56,
       hotel: 234.56,
     },
@@ -97,9 +98,9 @@ export default function Trippage() {
   const costs = costData.map((cost, index) => (
     <Flex direction={"column"} key={index} mt={5}>
       <Title order={6} mb={2}>
-        {cost.title}
+        {cost.location}
       </Title>
-      <Divider opacity={0.1} />
+      <Divider opacity={0.3} my={2} />
       <Group position="apart" py={1} pl={30} mb={-5}>
         <Text fz={10}>FLIGHT</Text>
         <Title order={4}>
@@ -216,7 +217,12 @@ export default function Trippage() {
   return (
     <Center>
       <Flex gap={30} w={"80%"} maw={1200} mt={120}>
-        <Flex w={"calc(70% - 30px)"} direction={"column"} align={"center"}>
+        <Flex
+          w={"calc(70% - 30px)"}
+          direction={"column"}
+          align={"center"}
+          pos={"relative"}
+        >
           <Group
             ref={ref}
             spacing={0}
@@ -224,17 +230,30 @@ export default function Trippage() {
             h={500}
             sx={{
               overflow: "hidden",
-              borderRadius: "5px",
-              border: images.length > 1 ? "1px solid rgba(0,0,0,0.2)" : "none",
+              borderRadius: "3px",
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
             }}
           >
+            <Button
+              hidden={!hovered}
+              pos={"absolute"}
+              top={10}
+              right={90}
+              leftIcon={<IconPencil size={20} />}
+              size="xs"
+              variant="default"
+              sx={{
+                zIndex: 1,
+              }}
+            >
+              Edit
+            </Button>
             <Center>
               {images.length > 1 ? (
                 <>
                   {hovered && (
                     <Button
-                      h={500}
+                      h={"100%"}
                       mb={7}
                       radius={"3px 0 0 3px"}
                       onClick={previous}
@@ -272,7 +291,7 @@ export default function Trippage() {
                   </Slider>
                   {hovered && (
                     <Button
-                      h={500}
+                      h={"100%"}
                       mb={7}
                       radius={"3px 0 0 3px"}
                       onClick={previous}
@@ -297,10 +316,10 @@ export default function Trippage() {
               )}
             </Center>
           </Group>
-          <Title order={2} p={10} ta={"center"}>
+          <Title order={2} mt={10} p={10} ta={"center"}>
             Help me raise money to go on a Music Tour
           </Title>
-          <Center mt={10}>
+          <Center mt={5}>
             <Button.Group>
               <Button
                 variant="subtle"
@@ -351,6 +370,24 @@ export default function Trippage() {
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
+            <Divider
+              labelPosition="right"
+              w={"100%"}
+              label={
+                <Button
+                  leftIcon={<IconPencil size={20} />}
+                  compact
+                  size="xs"
+                  radius={25}
+                  pl={10}
+                  pr={15}
+                  variant="subtle"
+                  color="gray.6"
+                >
+                  Edit
+                </Button>
+              }
+            />
             <Text lineClamp={readmore === "closed" && 5}>
               <p>
                 Are you ready to join me on an adventure of a lifetime?
@@ -400,7 +437,7 @@ export default function Trippage() {
           </Box>
           <Divider
             labelPosition="center"
-            w={"80%"}
+            w={"78%"}
             label={
               <Button
                 compact
@@ -498,14 +535,15 @@ export default function Trippage() {
             />
             <Divider mb={5} mt={20} label="Cost Breakdown" opacity={0.4} />
             {costs}
-            <Group mt={20} ml={30} spacing={10} w={"calc(100% - 30px)"} grow>
-              <Button variant="default">UPDATE</Button>
-              <Button variant="default">EDIT</Button>
+            <Divider mb={5} mt={20} opacity={0.4} />
+            <Group mt={20} spacing={10} w={"100%"} grow>
+              <Button variant="default" color="dark.4">
+                UPDATE
+              </Button>
             </Group>
             <Button
-              mt={15}
-              ml={30}
-              w={"calc(100% - 30px)"}
+              mt={10}
+              w={"100%"}
               variant="gradient"
               gradient={{ from: "green.5", to: "green.9", deg: 180 }}
             >
