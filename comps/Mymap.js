@@ -145,7 +145,9 @@ export default function Mymap() {
         getNewCenter(center.current.geometry?.coordinates, location) || {};
       const index = feature.place_name?.indexOf(",");
       const result = feature.place_name?.substring(index + 1);
-      setCitySubTitle(result);
+      {
+        isCountry ? setCitySubTitle("") : setCitySubTitle(result);
+      }
       console.log(result);
       console.log(feature.place_name);
       setIsCity(
@@ -362,7 +364,7 @@ export default function Mymap() {
         <NavLink
           icon={<IconPlaneTilt size={25} color="#9ff5fd" opacity={0.7} />}
           variant="filled"
-          description={`Stat planning your trip to ${regionName}`}
+          description={`Stat planning a trip to ${regionName}`}
           sx={{
             borderRadius: "5px",
           }}
