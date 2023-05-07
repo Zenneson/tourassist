@@ -16,7 +16,6 @@ import {
   Title,
 } from "@mantine/core";
 import {
-  IconQuestionMark,
   IconLogin,
   IconSearch,
   IconDoorExit,
