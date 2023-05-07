@@ -188,6 +188,7 @@ export default function Trips() {
               >
                 <Group spacing={0}>
                   <Tooltip
+                    color="dark"
                     position="top"
                     fz={10}
                     openDelay={200}
@@ -201,6 +202,7 @@ export default function Trips() {
                     </Button>
                   </Tooltip>
                   <Tooltip
+                    color="dark"
                     position="top"
                     fz={10}
                     openDelay={200}
@@ -214,6 +216,7 @@ export default function Trips() {
                     </Button>
                   </Tooltip>
                   <Tooltip
+                    color="dark"
                     position="top"
                     fz={10}
                     openDelay={200}

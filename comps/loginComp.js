@@ -25,7 +25,7 @@ import {
   createStyles,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications";
 import { useToggle, useLocalStorage } from "@mantine/hooks";
 import {
   IconBrandGoogle,
@@ -164,7 +164,7 @@ export default function LoginComp() {
   });
 
   function notify(message, icon) {
-    showNotification({
+    notifications.show({
       message: message,
       color: "#00E8FC",
       icon: icon,

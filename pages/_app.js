@@ -6,7 +6,8 @@ import LoginModal from "../comps/loginModal";
 import SearchModal from "../comps/searchModal";
 import MainMenu from "../comps/mainMenu";
 require("typeface-montserrat");
-import "@fontsource/open-sans";
+import "@fontsource/open-sans/400.css";
+import "@fontsource/open-sans/700.css";
 
 export default function App(props) {
   const { Component, pageProps } = props;
@@ -52,7 +53,7 @@ export default function App(props) {
         }}
       >
         <RecoilRoot>
-          <Notifications />
+          <Notifications position="top-center" />
           <LoginModal />
           <SearchModal />
           <AppShell padding="none" header={<MainMenu />}>

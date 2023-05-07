@@ -8,16 +8,20 @@ import {
   Autocomplete,
   Modal,
   Title,
-  Button,
   Flex,
-  Tooltip,
   Text,
   LoadingOverlay,
   Divider,
+  NavLink,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import { IconPlaylistAdd, IconMapSearch, IconLocation } from "@tabler/icons";
-import { showNotification } from "@mantine/notifications";
+import {
+  IconPlaylistAdd,
+  IconMapSearch,
+  IconLocation,
+  IconPlaneTilt,
+} from "@tabler/icons";
+import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "./getNewCenter";
 import {
   listOpenedState,
@@ -303,9 +307,11 @@ export default function Mymap() {
       />
       <Modal
         centered
+        zIndex={100}
         opened={showModal}
         onClose={onClose}
-        size={"xl"}
+        padding={30}
+        size={"470px"}
         title={
           <>
             <Title
@@ -337,7 +343,7 @@ export default function Mymap() {
             backgroundColor: "rgba(11, 12, 13, 0)",
           },
           content: {
-            backgroundColor: "rgba(11, 12, 13, 0.88)",
+            backgroundColor: "rgba(11, 12, 13, 0.8)",
           },
           overlay: {
             zIndex: 0,
@@ -353,61 +359,75 @@ export default function Mymap() {
           },
         })}
       >
-        <Flex gap="xs">
-          <Button
-            fullWidth
-            variant="gradient"
-            gradient={{ from: "#00274b", to: "#001930", deg: 180 }}
-            onClick={() => {
-              setPlaceData([
-                {
-                  place: regionName,
-                  region: citySubTitle,
-                  costs: ["FLIGHT", "HOTEL"],
-                },
-              ]);
-              router.push("/tripplanner", undefined, { shallow: true });
-            }}
-          >
-            <Text span color="dimmed">
-              Travel to&nbsp;{" "}
-            </Text>
-            <Text span size="md" fw={900} transform="uppercase">
-              {regionName}
-            </Text>
-          </Button>
-
-          <Button
-            fullWidth
-            variant="gradient"
-            gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
-            leftIcon={<IconPlaylistAdd size={20} />}
-            onClick={() => {
-              setListOpened(true);
-              setProfileOpened(false);
-              setProfileShow(false);
-              if (checkPlace(placeLocation) === false) {
-                addPlaces(placeLocation);
-                onClose();
-              } else {
-                showNotification({
-                  color: "red",
-                  style: { backgroundColor: "#2e2e2e" },
-                  title: "Loaction already added",
-                  message: `${regionName} was already added to your tour`,
-                });
-              }
-            }}
-          >
-            <Text color="dimmed">
-              Add{" "}
-              <Text span color="white" transform="uppercase">
+        <NavLink
+          icon={<IconPlaneTilt size={25} color="#9ff5fd" opacity={0.7} />}
+          variant="filled"
+          description={`Stat planning your trip to ${regionName}`}
+          sx={{
+            borderRadius: "5px",
+          }}
+          label={
+            <>
+              <Text inherit span color="dimmed">
+                Travel to{" "}
+              </Text>
+              <Text
+                inherit
+                span
+                color="white"
+                size="md"
+                fw={700}
+                transform="uppercase"
+              >
                 {regionName}
-              </Text>{" "}
-              to Tour List
-            </Text>
-          </Button>
-        </Flex>
+              </Text>
+            </>
+          }
+          onClick={() => {
+            setPlaceData([
+              {
+                place: regionName,
+                region: citySubTitle,
+                costs: ["FLIGHT", "HOTEL"],
+              },
+            ]);
+            router.push("/tripplanner", undefined, { shallow: true });
+          }}
+        />
+
+        <NavLink
+          icon={<IconPlaylistAdd size={25} color="#9ff5fd" opacity={0.7} />}
+          description={`Add ${regionName} to the Tour List`}
+          sx={{
+            borderRadius: "5px",
+          }}
+          label={
+            <>
+              <Text color="dimmed">
+                Add to{" "}
+                <Text span color="white" fw={700} transform="uppercase">
+                  TOUR LIST
+                </Text>{" "}
+              </Text>
+            </>
+          }
+          onClick={() => {
+            setListOpened(true);
+            setProfileOpened(false);
+            setProfileShow(false);
+            if (checkPlace(placeLocation) === false) {
+              addPlaces(placeLocation);
+              onClose();
+            } else {
+              notifications.show({
+                color: "red",
+                style: { backgroundColor: "#2e2e2e" },
+                title: "Loaction already added",
+                message: `${regionName} was already added to your tour`,
+              });
+            }
+          }}
+        />
         {!isCity && (
           <>
             <Divider
@@ -425,7 +445,8 @@ export default function Mymap() {
               placeholder={`Where in ${regionName}?`}
               defaultValue=""
               value={citySearch}
-              maxDropdownHeight={80}
+              size="sm"
+              maxDropdownHeight={160}
               onChange={function (e) {
                 setCitySearch(e);
                 handleChange("city", e);

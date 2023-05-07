@@ -132,6 +132,7 @@ export default function MainMenu() {
             }}
           >
             <Tooltip
+              color="dark"
               label="Search Trips"
               position="bottom"
               openDelay={800}
@@ -156,6 +157,7 @@ export default function MainMenu() {
               onChange={setLogoutOpeened}
             >
               <Tooltip
+                color="dark"
                 label={user ? "Logout" : "Login"}
                 position="bottom"
                 openDelay={800}

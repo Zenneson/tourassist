@@ -119,6 +119,23 @@ export default function ProfileDrawer() {
         withOverlay={false}
         withCloseButton={false}
       >
+        <Button
+          pos={"absolute"}
+          top={117}
+          right={0}
+          sx={{
+            background: "rgba(8, 7, 11, 0.95)",
+            borderRadius: "5px 0 0 5px",
+            padding: "0 8px",
+            transition: "all 100ms ease-in-out",
+            "&:hover": {
+              background: "rgba(16, 17, 19, 1)",
+            },
+          }}
+          onClick={() => setProfileOpened(false)}
+        >
+          <IconX size={15} />
+        </Button>
         <Space h={100} />
         <Flex
           direction="column"
