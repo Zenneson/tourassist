@@ -132,7 +132,10 @@ export default function ProfileDrawer() {
               background: "rgba(16, 17, 19, 1)",
             },
           }}
-          onClick={() => setProfileOpened(false)}
+          onClick={() => {
+            setProfileOpened(false);
+            setProfileShow(false);
+          }}
         >
           <IconX size={15} />
         </Button>

@@ -389,7 +389,7 @@ export default function Update() {
       {showall === "hide" ? updates[updates.length - 1] : updates}
 
       <Divider
-        labelPosition="center"
+        labelPosition="left"
         w={"80%"}
         label={
           <Button

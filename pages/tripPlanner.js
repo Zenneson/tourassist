@@ -64,7 +64,6 @@ export default function TripPlannerPage() {
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startLocale, setStartLocale] = useState("");
   const [date, setDate] = useState(null);
-  const [startInfoReady, setStartInfoReady] = useState(false);
   const [checked, setChecked] = useState(false);
   const [showToolbar, setShowToolbar] = useState(false);
   const [placeData, setPlaceData] = useRecoilState(placeDataState);
@@ -428,534 +427,542 @@ export default function TripPlannerPage() {
   return (
     <>
       {/* NOTE - Starting Info */}
-      <Collapse in={!startInfoReady}>
-        <Space h={150} />
-        <Center>
-          <Flex direction={"column"} align={"center"} gap={10} maw={"50%"}>
-            <Box
-              mt={10}
-              p={20}
-              bg={"rgba(0,0,0,0.1)"}
-              sx={{
-                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
-              }}
-            >
-              <Divider
-                label={<Text fz={15}>Trip Start Date</Text>}
-                size={"lg"}
-                mb={10}
-                w={"100%"}
-              />
-              <Group
-                spacing={5}
-                pos={"relative"}
-                top={-13}
-                left={-4}
-                sx={{
-                  opacity: 0.3,
-                  "&:hover": {
-                    opacity: 1,
-                    cursor: "none",
-                  },
-                }}
-              >
-                <Box pos={"relative"} top={2}>
-                  <IconFlag size={16} />
-                </Box>
-                <Text fz={12} m={0}>
-                  Fundraiser ends the day before the trip start date!
-                </Text>
-                <Divider w={"21%"} mt={3} color={"gray.6"} />
-              </Group>
-              <DatePicker
-                value={date}
-                size={"md"}
-                ml={44}
-                my={30}
-                onChange={setDate}
-                allowDeselect
-              />
-              <Autocomplete
-                size="sm"
-                mt={10}
-                w={388}
-                variant="filled"
-                defaultValue=""
-                value={startLocaleSearch}
-                placeholder="Trip Start Location..."
-                onItemSubmit={(e) => handleSelect(e)}
-                ref={startLocaleRef}
-                data={startLocaleData}
-                filter={(value, item) => item}
-                onClick={function (event) {
-                  event.preventDefault();
-                  startLocaleRef.current.select();
-                }}
-                onChange={function (e) {
-                  setStartLocaleSearch(e);
-                  handleChange(e);
-                }}
-                sx={{
-                  "& .mantine-Autocomplete-input": {
-                    "&::placeholder": {
-                      fontWeight: 400,
-                    },
-                  },
-                }}
-              />
-              <Group pos={"relative"}>
-                <Checkbox
-                  size={"lg"}
-                  mt={15}
-                  ml={1}
-                  icon={planeLanding}
-                  pos={"relative"}
-                  checked={checked}
-                  color="dark.9"
-                  onChange={() => setChecked(!checked)}
-                  sx={{
-                    overflow: "hidden",
-                    input: {
-                      cursor: "pointer",
-                    },
-                  }}
-                  label={
-                    <Text fw={400} fz={12} pos={"relative"} top={5}>
-                      Return flight needed ?
-                    </Text>
-                  }
-                />
-                <Divider w={"53%"} mt={15} />
-              </Group>
-              <Button
-                mt={15}
-                w={388}
-                size="xl"
-                variant="light"
-                onClick={() => setStartInfoReady(!startInfoReady)}
-                disabled={!startLocale || !date}
-              >
-                {startLocale && date ? (
-                  "NEXT"
-                ) : (
-                  <Text fw={400} fz={16} transform="uppercase">
-                    Select{" "}
-                    <Text inherit span hidden={date}>
-                      Trip Date
-                    </Text>{" "}
-                    <Text inherit span hidden={startLocale || date}>
-                      and
-                    </Text>{" "}
-                    <Text inherit span hidden={startLocale}>
-                      Starting Location
-                    </Text>
-                  </Text>
-                )}
-              </Button>
-            </Box>
-            <Group position="center" spacing={5} w={"100%"}>
-              {(startCity || startRegion) && (
-                <>
-                  <Badge variant="outline" color="gray">
-                    {startCity ? startCity : startRegion}
-                  </Badge>
-                  →
-                </>
-              )}
-              {placeData.map((place, index) => (
-                <Group key={index} spacing={5}>
-                  <Badge variant="outline" color="gray">
-                    {place.place}
-                  </Badge>
-                  {placeData.length - 1 !== index && "→"}
-                </Group>
-              ))}
-              {checked && (startCity || startRegion) && (
-                <>
-                  →
-                  <Badge variant="outline" color="gray">
-                    {startCity ? startCity : startRegion}
-                  </Badge>
-                </>
-              )}
-            </Group>
-          </Flex>
-        </Center>
-      </Collapse>
-      <Box hidden={!startInfoReady}>
-        <Space h={150} />
-        <Center>
-          <Flex
-            w="100%"
-            maw={1200}
-            justify="flex-start"
-            align="flex-start"
-            gap={10}
-          >
-            <Box w="80%" miw={500} px="xl">
-              {active === 0 && (
-                <motion.div {...animation}>
-                  <Places />
-                  {checked && (
+      <Space h={150} />
+      <Center>
+        <Flex
+          w="100%"
+          maw={1200}
+          justify="flex-start"
+          align="flex-start"
+          gap={10}
+        >
+          <Box w="80%" miw={500} px="xl">
+            {active === 0 && (
+              <motion.div {...animation}>
+                <Center>
+                  <Flex
+                    direction={"column"}
+                    align={"center"}
+                    gap={10}
+                    maw={"50%"}
+                  >
+                    <Title color="gray" order={4} h={30}>
+                      {startLocale && date ? (
+                        "Continue..."
+                      ) : (
+                        <Text>
+                          Select{" "}
+                          <Text inherit span hidden={date}>
+                            Trip Start Date
+                          </Text>{" "}
+                          <Text inherit span hidden={startLocale || date}>
+                            and
+                          </Text>{" "}
+                          <Text inherit span hidden={startLocale}>
+                            Starting Location
+                          </Text>
+                        </Text>
+                      )}
+                    </Title>
                     <Box
+                      mt={10}
                       p={20}
-                      mb={20}
-                      radius={3}
-                      bg={"rgba(0,0,0,0.05)"}
+                      bg={"rgba(0,0,0,0.1)"}
                       sx={{
-                        border: "1px solid rgba(0,0,0,0.15)",
-                        boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-                        borderLeft: "2px solid rgba(255,255,255,0.035)",
+                        boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
                       }}
                     >
-                      <Stack
-                        spacing={0}
-                        pl={10}
-                        pt={5}
-                        pb={10}
+                      <Divider
+                        label={<Text fz={15}>Trip Start Date</Text>}
+                        size={"lg"}
+                        mb={10}
+                        w={"100%"}
+                      />
+                      <Group
+                        spacing={5}
+                        pos={"relative"}
+                        top={-13}
+                        left={-4}
                         sx={{
-                          borderLeft: "5px solid rgba(150,150,150,0.1)",
+                          opacity: 0.3,
+                          "&:hover": {
+                            opacity: 1,
+                            cursor: "none",
+                          },
                         }}
                       >
-                        <Title
-                          order={4}
-                          fw={600}
-                          sx={{
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          {startCity ? startCity : startRegion}
-                        </Title>
-                        <Text size="xs" color="dimmed">
-                          {startCity ? startRegion : ""}
+                        <Box pos={"relative"} top={2}>
+                          <IconFlag size={16} />
+                        </Box>
+                        <Text fz={12} m={0}>
+                          Fundraiser ends the day before the trip start date!
                         </Text>
-                      </Stack>
-                      <Costs cost={"Return Flight"} />
-                    </Box>
-                  )}
-                </motion.div>
-              )}
-              {active === 1 && (
-                // NOTE - Trip Info
-                <motion.div {...animation}>
-                  <Title order={6} fw={600}>
-                    <Stack align="center">
-                      <Input
-                        size={"xl"}
+                        <Divider w={"21%"} mt={3} color={"gray.6"} />
+                      </Group>
+                      <DatePicker
+                        value={date}
+                        size={"md"}
+                        ml={44}
+                        my={30}
+                        onChange={setDate}
+                        allowDeselect
+                      />
+                      <Autocomplete
+                        size="sm"
+                        mt={10}
+                        w={388}
+                        dropdownPosition="top"
                         variant="filled"
-                        placeholder="Trip Name..."
-                        w="100%"
-                        maw={800}
-                        bg={"rgba(0,0,0,0)"}
+                        defaultValue=""
+                        value={startLocaleSearch}
+                        placeholder="Trip Start Location..."
+                        onItemSubmit={(e) => handleSelect(e)}
+                        ref={startLocaleRef}
+                        data={startLocaleData}
+                        filter={(value, item) => item}
+                        onClick={function (event) {
+                          event.preventDefault();
+                          startLocaleRef.current.select();
+                        }}
+                        onChange={function (e) {
+                          setStartLocaleSearch(e);
+                          handleChange(e);
+                        }}
                         sx={{
-                          ".mantine-Input-input": {
+                          "& .mantine-Autocomplete-input": {
                             "&::placeholder": {
                               fontWeight: 400,
-                              color: "rgba(255,255,255,0.0.08)",
                             },
                           },
                         }}
                       />
-                      <Group
-                        maw={800}
-                        spacing={20}
-                        w="100%"
-                        position="apart"
-                        grow
-                      >
-                        <Box>
-                          <Slider
-                            ref={sliderRef}
-                            {...slideSettings}
-                            style={{
-                              width: "100%",
-                            }}
-                          >
-                            {images.map((image, index) => (
-                              <BackgroundImage
-                                radius={3}
-                                key={index}
-                                src={image}
-                                h={300}
-                                alt="intro"
-                              />
-                            ))}
-                          </Slider>
-                          <Group mt={10} spacing={15} grow>
-                            <Button
-                              variant="default"
-                              color="gray"
-                              onClick={() => {
-                                previous();
-                              }}
-                            >
-                              <IconChevronLeft size={20} />
-                            </Button>
-                            <Button color="red">
-                              <IconTrash size={17} />
-                            </Button>
-                            <Button
-                              variant="default"
-                              color="gray"
-                              onClick={() => {
-                                next();
-                              }}
-                            >
-                              <IconChevronRight size={20} />
-                            </Button>
-                          </Group>
-                        </Box>
-                        <Box>
-                          <Dropzone
-                            onDrop={(files) =>
-                              console.log("accepted files", files)
-                            }
-                            onReject={(files) =>
-                              console.log("rejected files", files)
-                            }
-                            accept={IMAGE_MIME_TYPE}
-                            ta="center"
-                            mih={300}
-                          >
-                            <Group
-                              position="center"
-                              spacing={5}
-                              mt={80}
-                              style={{
-                                pointerEvents: "none",
-                              }}
-                            >
-                              <Dropzone.Accept>
-                                <IconUpload size={50} />
-                              </Dropzone.Accept>
-                              <Dropzone.Reject>
-                                <IconX size={50} />
-                              </Dropzone.Reject>
-                              <Dropzone.Idle>
-                                <IconPhoto size={50} stroke={1.5} />
-                              </Dropzone.Idle>
-
-                              <div>
-                                <Text size="xl" inline>
-                                  Drag images here
-                                </Text>
-                              </div>
-                            </Group>
-                            <Button
-                              variant="default"
-                              radius={"xl"}
-                              px={50}
-                              mt={7}
-                              size="lg"
-                              compact
-                            >
-                              Select Files
-                            </Button>
-                          </Dropzone>
-                          <Title
-                            mt={15}
-                            order={6}
-                            py={9}
-                            ta={"center"}
-                            bg={"dark.5"}
-                            sx={{
-                              borderRadius: "3px",
-                            }}
-                          >
-                            {`\[ 3 / 6 \] SPACES USED`}
-                          </Title>
-                        </Box>
-                      </Group>
-                      <RichTextEditor
-                        editor={editor}
-                        position="relative"
-                        onClick={() => {
-                          setShowToolbar(true);
-                          editor?.chain().focus().run();
-                        }}
-                        sx={{
-                          overflow: "auto",
-                          width: "100%",
-                          minWidth: "500px",
-                          maxWidth: "800px",
-                          minHeight: "200px",
-                          maxHeight: "300px",
-                        }}
-                      >
-                        {editor && showToolbar && (
-                          <>
-                            <RichTextEditor.Toolbar>
-                              <RichTextEditor.ControlsGroup>
-                                <RichTextEditor.Bold />
-                                <RichTextEditor.H1 />
-                                <RichTextEditor.H2 />
-                                <RichTextEditor.H3 />
-                                <RichTextEditor.H4 />
-                                <RichTextEditor.BulletList />
-                                <RichTextEditor.OrderedList />
-                              </RichTextEditor.ControlsGroup>
-                              <RichTextEditor.ControlsGroup>
-                                <RichTextEditor.Italic />
-                                <RichTextEditor.AlignLeft />
-                                <RichTextEditor.AlignCenter />
-                                <RichTextEditor.AlignRight />
-                                <RichTextEditor.AlignJustify />
-                                <RichTextEditor.Link />
-                                <RichTextEditor.Unlink />
-                              </RichTextEditor.ControlsGroup>
-                            </RichTextEditor.Toolbar>
-                          </>
-                        )}
-                        <RichTextEditor.Content
+                      <Group pos={"relative"}>
+                        <Divider w={"53%"} mt={15} />
+                        <Checkbox
+                          size={"lg"}
+                          mt={15}
+                          ml={1}
+                          icon={planeLanding}
+                          pos={"relative"}
+                          checked={checked}
+                          color="dark.9"
+                          onChange={() => setChecked(!checked)}
                           sx={{
-                            "& p": {
-                              fontSize: "1rem",
-                              textAlign: "justify",
+                            overflow: "hidden",
+                            input: {
+                              cursor: "pointer",
                             },
                           }}
-                        />
-                      </RichTextEditor>
-                    </Stack>
-                  </Title>
-                </motion.div>
-              )}
-              {active === 2 && (
-                <motion.div {...animation}>
-                  {/* NOTE - Banking Info */}
-                  <Center w={"100%"} h={"50vh"}>
-                    <Stack w={"70%"}>
-                      <Box hidden={user}>
-                        <LoginComp />
-                        <Divider mt={20} opacity={0.4} />
-                      </Box>
-                      <Center>
-                        <Button
-                          leftIcon={<IconBuildingBank size={34} />}
-                          variant="gradient"
-                          gradient={{
-                            from: "green.5",
-                            to: "green.9",
-                            deg: 180,
-                          }}
-                          color="gray.0"
-                          size="xl"
-                          w={"90%"}
-                          sx={{
-                            textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                          }}
-                        >
-                          <Title order={3}>ADD BANKING INFORMATION</Title>
-                        </Button>
-                      </Center>
-                      <Divider my={3} opacity={0.4} />
-                      <Group spacing={0}>
-                        <Text fz={12} w={"70%"} pl={20} pr={10}>
-                          We use Stripe, a trusted payment processor, to
-                          securely handle transactions and disburse funds,
-                          ensuring the protection of your sensitive banking
-                          information.
-                        </Text>
-                        <Image
-                          src="img/stripe.png"
-                          fit="contain"
-                          display={"block"}
-                          opacity={0.3}
-                          style={{
-                            width: "30%",
-                            borderLeft: "2px solid rgba(255,255,255,0.3)",
-                          }}
-                          alt=""
+                          labelPosition="left"
+                          label={
+                            <Text fw={400} fz={12} pos={"relative"} top={5}>
+                              Return flight needed ?
+                            </Text>
+                          }
                         />
                       </Group>
+                    </Box>
+                    <Group position="center" spacing={5} w={"100%"}>
+                      {(startCity || startRegion) && (
+                        <>
+                          <Badge variant="outline" color="gray">
+                            {startCity ? startCity : startRegion}
+                          </Badge>
+                          →
+                        </>
+                      )}
+                      {placeData.map((place, index) => (
+                        <Group key={index} spacing={5}>
+                          <Badge variant="outline" color="gray">
+                            {place.place}
+                          </Badge>
+                          {placeData.length - 1 !== index && "→"}
+                        </Group>
+                      ))}
+                      {checked && (startCity || startRegion) && (
+                        <>
+                          →
+                          <Badge variant="outline" color="gray">
+                            {startCity ? startCity : startRegion}
+                          </Badge>
+                        </>
+                      )}
+                    </Group>
+                  </Flex>
+                </Center>
+              </motion.div>
+            )}
+            {active === 1 && (
+              <motion.div {...animation}>
+                <Places />
+                {checked && (
+                  <Box
+                    p={20}
+                    mb={20}
+                    radius={3}
+                    bg={"rgba(0,0,0,0.05)"}
+                    sx={{
+                      border: "1px solid rgba(0,0,0,0.15)",
+                      boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+                      borderLeft: "2px solid rgba(255,255,255,0.035)",
+                    }}
+                  >
+                    <Stack
+                      spacing={0}
+                      pl={10}
+                      pt={5}
+                      pb={10}
+                      sx={{
+                        borderLeft: "5px solid rgba(150,150,150,0.1)",
+                      }}
+                    >
+                      <Title
+                        order={4}
+                        fw={600}
+                        sx={{
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {startCity ? startCity : startRegion}
+                      </Title>
+                      <Text size="xs" color="dimmed">
+                        {startCity ? startRegion : ""}
+                      </Text>
                     </Stack>
-                  </Center>
-                </motion.div>
-              )}
-            </Box>
-            <Box>
-              <Stepper
-                active={active}
-                onStepClick={setActive}
-                iconPosition="right"
-                orientation="vertical"
-                miw={205}
-                mt={20}
-                mr={20}
-                size="xs"
-                w="20%"
-              >
-                <Stepper.Step
-                  label="Cost Calculator"
-                  description="Calculate all your trip costs"
-                />
-                <Stepper.Step
-                  label="Trip Details"
-                  description="Tell us your story"
-                />
-                <Stepper.Step
-                  label="Banking Info"
-                  description="Link a Payment Account"
-                />
-              </Stepper>
-              <Divider
-                mt={-20}
-                mb={5}
-                opacity={0.5}
-                size={"xs"}
-                variant="solid"
-                label={"Total Cost"}
-                labelPosition="center"
+                    <Costs cost={"Return Flight"} />
+                  </Box>
+                )}
+              </motion.div>
+            )}
+            {active === 2 && (
+              // NOTE - Trip Info
+              <motion.div {...animation}>
+                <Title order={6} fw={600}>
+                  <Stack align="center">
+                    <Input
+                      size={"xl"}
+                      variant="filled"
+                      placeholder="Trip Title..."
+                      w="100%"
+                      maw={800}
+                      bg={"rgba(0,0,0,0)"}
+                      sx={{
+                        ".mantine-Input-input": {
+                          "&::placeholder": {
+                            fontWeight: 700,
+                            fontStyle: "italic",
+                            color: "rgba(255,255,255,0.0.08)",
+                          },
+                        },
+                      }}
+                    />
+                    <Group
+                      maw={800}
+                      spacing={20}
+                      w="100%"
+                      position="apart"
+                      grow
+                    >
+                      <Box>
+                        <Slider
+                          ref={sliderRef}
+                          {...slideSettings}
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          {images.map((image, index) => (
+                            <BackgroundImage
+                              radius={3}
+                              key={index}
+                              src={image}
+                              h={300}
+                              alt="intro"
+                            />
+                          ))}
+                        </Slider>
+                        <Group mt={10} spacing={15} grow>
+                          <Button
+                            variant="default"
+                            color="gray"
+                            onClick={() => {
+                              previous();
+                            }}
+                          >
+                            <IconChevronLeft size={20} />
+                          </Button>
+                          <Button color="red">
+                            <IconTrash size={17} />
+                          </Button>
+                          <Button
+                            variant="default"
+                            color="gray"
+                            onClick={() => {
+                              next();
+                            }}
+                          >
+                            <IconChevronRight size={20} />
+                          </Button>
+                        </Group>
+                      </Box>
+                      <Box>
+                        <Dropzone
+                          onDrop={(files) =>
+                            console.log("accepted files", files)
+                          }
+                          onReject={(files) =>
+                            console.log("rejected files", files)
+                          }
+                          accept={IMAGE_MIME_TYPE}
+                          ta="center"
+                          mih={300}
+                        >
+                          <Group
+                            position="center"
+                            spacing={5}
+                            mt={80}
+                            style={{
+                              pointerEvents: "none",
+                            }}
+                          >
+                            <Dropzone.Accept>
+                              <IconUpload size={50} />
+                            </Dropzone.Accept>
+                            <Dropzone.Reject>
+                              <IconX size={50} />
+                            </Dropzone.Reject>
+                            <Dropzone.Idle>
+                              <IconPhoto size={50} stroke={1.5} />
+                            </Dropzone.Idle>
+
+                            <div>
+                              <Text size="xl" inline>
+                                Drag images here
+                              </Text>
+                            </div>
+                          </Group>
+                          <Button
+                            variant="light"
+                            color="gray"
+                            radius={"xl"}
+                            px={50}
+                            mt={7}
+                            size="lg"
+                            compact
+                          >
+                            Select Files
+                          </Button>
+                        </Dropzone>
+                        <Title
+                          mt={15}
+                          order={6}
+                          py={9}
+                          ta={"center"}
+                          bg={"dark.5"}
+                          sx={{
+                            borderRadius: "3px",
+                          }}
+                        >
+                          {`\[ 3 / 6 \] SPACES USED`}
+                        </Title>
+                      </Box>
+                    </Group>
+                    <RichTextEditor
+                      editor={editor}
+                      position="relative"
+                      onClick={() => {
+                        setShowToolbar(true);
+                        editor?.chain().focus().run();
+                      }}
+                      sx={{
+                        overflow: "auto",
+                        width: "100%",
+                        minWidth: "500px",
+                        maxWidth: "800px",
+                        minHeight: "200px",
+                        maxHeight: "300px",
+                      }}
+                    >
+                      {editor && showToolbar && (
+                        <>
+                          <RichTextEditor.Toolbar>
+                            <RichTextEditor.ControlsGroup>
+                              <RichTextEditor.Bold />
+                              <RichTextEditor.H1 />
+                              <RichTextEditor.H2 />
+                              <RichTextEditor.H3 />
+                              <RichTextEditor.H4 />
+                              <RichTextEditor.BulletList />
+                              <RichTextEditor.OrderedList />
+                            </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                              <RichTextEditor.Italic />
+                              <RichTextEditor.AlignLeft />
+                              <RichTextEditor.AlignCenter />
+                              <RichTextEditor.AlignRight />
+                              <RichTextEditor.AlignJustify />
+                              <RichTextEditor.Link />
+                              <RichTextEditor.Unlink />
+                            </RichTextEditor.ControlsGroup>
+                          </RichTextEditor.Toolbar>
+                        </>
+                      )}
+                      <RichTextEditor.Content
+                        sx={{
+                          "& p": {
+                            fontSize: "1rem",
+                            textAlign: "justify",
+                          },
+                        }}
+                      />
+                    </RichTextEditor>
+                  </Stack>
+                </Title>
+              </motion.div>
+            )}
+            {active === 3 && (
+              <motion.div {...animation}>
+                {/* NOTE - Banking Info */}
+                <Center w={"100%"} h={"50vh"}>
+                  <Stack w={"70%"}>
+                    <Box hidden={user}>
+                      <LoginComp />
+                      <Divider mt={20} opacity={0.4} />
+                    </Box>
+                    <Center>
+                      <Button
+                        leftIcon={<IconBuildingBank size={34} />}
+                        variant="gradient"
+                        gradient={{
+                          from: "green.5",
+                          to: "green.9",
+                          deg: 180,
+                        }}
+                        color="gray.0"
+                        size="xl"
+                        w={"90%"}
+                        sx={{
+                          textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                        }}
+                      >
+                        <Title order={3}>ADD BANKING INFORMATION</Title>
+                      </Button>
+                    </Center>
+                    <Divider my={3} opacity={0.4} />
+                    <Group spacing={0}>
+                      <Text fz={12} w={"70%"} pl={20} pr={10}>
+                        We use Stripe, a trusted payment processor, to securely
+                        handle transactions and disburse funds, ensuring the
+                        protection of your sensitive banking information.
+                      </Text>
+                      <Image
+                        src="img/stripe.png"
+                        fit="contain"
+                        display={"block"}
+                        opacity={0.3}
+                        style={{
+                          width: "30%",
+                          borderLeft: "2px solid rgba(255,255,255,0.3)",
+                        }}
+                        alt=""
+                      />
+                    </Group>
+                  </Stack>
+                </Center>
+              </motion.div>
+            )}
+          </Box>
+          <Box>
+            <Stepper
+              active={active}
+              onStepClick={setActive}
+              iconPosition="right"
+              orientation="vertical"
+              miw={205}
+              mt={20}
+              mr={20}
+              size="xs"
+              w="20%"
+            >
+              <Stepper.Step
+                label="Trip Starting Info"
+                description="Trip date and starting location"
               />
-              <NumberInput
-                icon={<IconCurrencyDollar />}
-                size="xl"
-                mb={20}
-                w={225}
-                stepHoldDelay={500}
-                stepHoldInterval={100}
-                variant="filled"
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                formatter={(value) =>
-                  !Number.isNaN(parseFloat(value))
-                    ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    : ""
-                }
-                precision={2}
-                min={0}
+              <Stepper.Step
+                label="Cost Calculator"
+                description="Calculate all your trip costs"
               />
+              <Stepper.Step
+                label="Trip Details"
+                description="Tell us your story"
+              />
+              <Stepper.Step
+                label="Banking Info"
+                description="Link a Payment Account"
+              />
+            </Stepper>
+            {active > 0 && (
+              <>
+                <Divider
+                  mt={-20}
+                  mb={5}
+                  opacity={0.5}
+                  size={"xs"}
+                  variant="solid"
+                  label={"Total Cost"}
+                  labelPosition="center"
+                />
+                <NumberInput
+                  icon={<IconCurrencyDollar />}
+                  size="xl"
+                  mb={20}
+                  w={225}
+                  stepHoldDelay={500}
+                  stepHoldInterval={100}
+                  variant="filled"
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  formatter={(value) =>
+                    !Number.isNaN(parseFloat(value))
+                      ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      : ""
+                  }
+                  precision={2}
+                  min={0}
+                />
+              </>
+            )}
+            {active !== 0 && (
               <Button
                 fullWidth
                 variant="default"
                 mb={10}
                 onClick={() => {
-                  if (active === 0) {
-                    setStartInfoReady(!startInfoReady);
-                  } else {
-                    prevStep();
-                  }
+                  prevStep();
                 }}
               >
                 <IconChevronUp />
               </Button>
+            )}
+            {startLocale && date && (
               <Button
                 fullWidth
-                variant={active === 2 ? "fill" : "default"}
-                bg={active === 2 ? "blue" : "primary"}
+                variant={active === 3 ? "light" : "default"}
+                bg={active === 3 ? "blue" : "primary"}
                 onClick={() => {
-                  if (active !== 2) {
+                  if (active !== 3) {
                     nextStep();
                   }
-                  if (active === 2) {
+                  if (active === 3) {
                     router.push("/trippage", undefined, { shallow: true });
                   }
                 }}
               >
-                {active === 2 ? "DONE" : <IconChevronDown />}
+                {active === 3 ? "DONE" : <IconChevronDown />}
               </Button>
-            </Box>
-          </Flex>
-        </Center>
-      </Box>
+            )}
+          </Box>
+        </Flex>
+      </Center>
     </>
   );
 }

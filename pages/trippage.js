@@ -321,22 +321,7 @@ export default function Trippage() {
           </Title>
           <Center mt={5}>
             <Button.Group>
-              <Button
-                variant="subtle"
-                color="gray"
-                style={{
-                  pointerEvents: "none",
-                }}
-              >
-                <Title order={6}>SHARE</Title>
-              </Button>
-              <Button
-                variant="default"
-                px={30}
-                style={{
-                  borderRadius: "3px 0 0 3px",
-                }}
-              >
+              <Button variant="default" px={30}>
                 <IconBrandFacebook size={20} />
               </Button>
               <Button variant="default" px={30}>
@@ -436,7 +421,7 @@ export default function Trippage() {
             </Text>
           </Box>
           <Divider
-            labelPosition="center"
+            labelPosition="right"
             w={"78%"}
             label={
               <Button
@@ -530,24 +515,18 @@ export default function Trippage() {
             {costs}
             <Divider mb={5} mt={20} opacity={0.4} />
             <Group mt={20} spacing={10} w={"100%"} grow>
-              <Button variant="default" color="dark.4">
-                UPDATE
+              <Button variant="filled" color="dark.5">
+                POST UPDATE
               </Button>
             </Group>
-            <Button
-              mt={10}
-              w={"100%"}
-              variant="gradient"
-              gradient={{ from: "green.5", to: "green.9", deg: 180 }}
-            >
-              <Title
-                order={3}
+            <Button mt={10} w={"100%"} variant="light" color="green.7">
+              <Text
                 sx={{
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
-                USE FUNDS
-              </Title>
+                PURCHASE TICKETS
+              </Text>
             </Button>
           </Box>
           <Box mt={10}>
