@@ -487,40 +487,33 @@ export default function Trippage() {
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             }}
           >
-            <Group px={5} spacing={0} w={"100%"}>
-              <Box w={"37.5%"}>
-                <Title order={2} ta={"center"} color="green.7">
-                  $500
-                </Title>
-                <Text ta={"center"} fz={10} mt={-4}>
-                  RAISED
-                </Text>
-              </Box>
-              <Box
-                w={"37.5%"}
-                sx={{
-                  borderLeft: "1px solid rgba(255,255,255,0.1)",
-                }}
-              >
-                <Title order={2} ta={"center"} color="gray.7">
-                  ${(1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </Title>
-                <Text ta={"center"} fz={10} mt={-4}>
+            <Group spacing={0} w={"100%"}>
+              <Box w={"70%"} pl={20}>
+                <Text ta={"left"} fz={10} mb={-3}>
                   GOAL
                 </Text>
+                <Title order={2} ta={"left"} color="green.7">
+                  $500
+                  <Text ml={7} span inherit color="gray.7">
+                    <Text fw={400} span inherit>
+                      /
+                    </Text>{" "}
+                    $1,000
+                  </Text>
+                </Title>
               </Box>
               <Box
-                w={"25%"}
+                w={"30%"}
                 sx={{
                   borderLeft: "1px solid rgba(255,255,255,0.1)",
                 }}
               >
+                <Text ta={"center"} fz={10} mb={-7}>
+                  DAYS LEFT
+                </Text>
                 <Title order={2} ta={"center"} color="gray.7">
                   15
                 </Title>
-                <Text ta={"center"} fz={10} mt={-4}>
-                  DAYS LEFT
-                </Text>
               </Box>
             </Group>
             <Progress

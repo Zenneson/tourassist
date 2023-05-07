@@ -52,12 +52,15 @@ import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useRouter } from "next/router";
+import { DatePicker } from "@mantine/dates";
 import Slider from "react-slick";
 
 export default function TripPlannerPage() {
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startLocale, setStartLocale] = useState("");
+  const [date, setDate] = useState(null);
+  const [startInfoReady, setStartInfoReady] = useState(false);
   const [placeData, setPlaceData] = useRecoilState(placeDataState);
   const forceUpdate = useForceUpdate();
   const startLocaleRef = useRef(null);
@@ -394,7 +397,8 @@ export default function TripPlannerPage() {
 
   return (
     <>
-      <Center w={"100%"} h={"100%"} hidden={startLocale}>
+      {/* NOTE - Starting Info */}
+      <Center w={"100%"} h={"100%"} hidden={startInfoReady}>
         <Autocomplete
           size="xl"
           w={500}
@@ -428,9 +432,10 @@ export default function TripPlannerPage() {
             },
           }}
         />
+        <DatePicker value={date} onChange={setDate} />
       </Center>
       <Transition
-        mounted={startLocale}
+        mounted={startInfoReady}
         transition="fade"
         duration={400}
         timingFunction="ease"
@@ -580,10 +585,11 @@ export default function TripPlannerPage() {
                               <Title
                                 mt={15}
                                 order={6}
-                                py={4}
+                                py={3}
                                 ta={"center"}
                                 bg={"dark.5"}
                                 sx={{
+                                  border: "1px solid rgba(255,255,255,0.8)",
                                   borderRadius: "3px",
                                 }}
                               >
@@ -704,7 +710,7 @@ export default function TripPlannerPage() {
                           </Center>
                           <Divider my={3} opacity={0.4} />
                           <Group spacing={0}>
-                            <Text fz={12} w={"70%"}>
+                            <Text fz={12} w={"70%"} pl={20} pr={10}>
                               We use Stripe, a trusted payment processor, to
                               securely handle transactions and disburse funds,
                               ensuring the protection of your sensitive banking
