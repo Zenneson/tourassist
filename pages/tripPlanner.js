@@ -22,7 +22,6 @@ import {
   BackgroundImage,
   Collapse,
   Checkbox,
-  CheckboxProps,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import {
@@ -47,14 +46,15 @@ import {
   IconBuildingBank,
   IconPlaneArrival,
   IconCheck,
+  IconFlag,
 } from "@tabler/icons";
 import { useRecoilState } from "recoil";
-import { RichTextEditor } from "@mantine/tiptap";
+import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
-import { Color } from "@tiptap/extension-color";
 import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import Slider from "react-slick";
@@ -66,6 +66,7 @@ export default function TripPlannerPage() {
   const [date, setDate] = useState(null);
   const [startInfoReady, setStartInfoReady] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [showToolbar, setShowToolbar] = useState(false);
   const [placeData, setPlaceData] = useRecoilState(placeDataState);
   const forceUpdate = useForceUpdate();
   const startLocaleRef = useRef(null);
@@ -133,12 +134,13 @@ export default function TripPlannerPage() {
 
   const editor = useEditor({
     extensions: [
+      Link,
       StarterKit,
       TextStyle,
-      Color,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({
         placeholder:
-          "Add a detailed description to your trip to inspire support and show your commitment. The more you share about your plans and goals, the more people will be drawn to your journey. Let your words paint a picture and connect with those who want to join you on your adventure. Get creative and share why your trip means so much to you!",
+          "Add a detailed description to your trip here, to inspire support...",
       }),
     ],
     content: "",
@@ -412,7 +414,7 @@ export default function TripPlannerPage() {
       {checked ? (
         <IconCheck size={20} />
       ) : (
-        <IconPlaneArrival size={20} opacity={0.4} />
+        <IconPlaneArrival size={20} opacity={0.2} />
       )}
     </Box>
   );
@@ -430,6 +432,127 @@ export default function TripPlannerPage() {
         <Space h={150} />
         <Center>
           <Flex direction={"column"} align={"center"} gap={10} maw={"50%"}>
+            <Box
+              mt={10}
+              p={20}
+              bg={"rgba(0,0,0,0.1)"}
+              sx={{
+                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
+              }}
+            >
+              <Divider
+                label={<Text fz={15}>Trip Start Date</Text>}
+                size={"lg"}
+                mb={10}
+                w={"100%"}
+              />
+              <Group
+                spacing={5}
+                pos={"relative"}
+                top={-13}
+                left={-4}
+                sx={{
+                  opacity: 0.3,
+                  "&:hover": {
+                    opacity: 1,
+                    cursor: "none",
+                  },
+                }}
+              >
+                <Box pos={"relative"} top={2}>
+                  <IconFlag size={16} />
+                </Box>
+                <Text fz={12} m={0}>
+                  Fundraiser ends the day before the trip start date!
+                </Text>
+                <Divider w={"21%"} mt={3} color={"gray.6"} />
+              </Group>
+              <DatePicker
+                value={date}
+                size={"md"}
+                ml={44}
+                my={30}
+                onChange={setDate}
+                allowDeselect
+              />
+              <Autocomplete
+                size="sm"
+                mt={10}
+                w={388}
+                variant="filled"
+                defaultValue=""
+                value={startLocaleSearch}
+                placeholder="Trip Start Location..."
+                onItemSubmit={(e) => handleSelect(e)}
+                ref={startLocaleRef}
+                data={startLocaleData}
+                filter={(value, item) => item}
+                onClick={function (event) {
+                  event.preventDefault();
+                  startLocaleRef.current.select();
+                }}
+                onChange={function (e) {
+                  setStartLocaleSearch(e);
+                  handleChange(e);
+                }}
+                sx={{
+                  "& .mantine-Autocomplete-input": {
+                    "&::placeholder": {
+                      fontWeight: 400,
+                    },
+                  },
+                }}
+              />
+              <Group pos={"relative"}>
+                <Checkbox
+                  size={"lg"}
+                  mt={15}
+                  ml={1}
+                  icon={planeLanding}
+                  pos={"relative"}
+                  checked={checked}
+                  color="dark.9"
+                  onChange={() => setChecked(!checked)}
+                  sx={{
+                    overflow: "hidden",
+                    input: {
+                      cursor: "pointer",
+                    },
+                  }}
+                  label={
+                    <Text fw={400} fz={12} pos={"relative"} top={5}>
+                      Return flight needed ?
+                    </Text>
+                  }
+                />
+                <Divider w={"53%"} mt={15} />
+              </Group>
+              <Button
+                mt={15}
+                w={388}
+                size="xl"
+                variant="light"
+                onClick={() => setStartInfoReady(!startInfoReady)}
+                disabled={!startLocale || !date}
+              >
+                {startLocale && date ? (
+                  "NEXT"
+                ) : (
+                  <Text fw={400} fz={16} transform="uppercase">
+                    Select{" "}
+                    <Text inherit span hidden={date}>
+                      Trip Date
+                    </Text>{" "}
+                    <Text inherit span hidden={startLocale || date}>
+                      and
+                    </Text>{" "}
+                    <Text inherit span hidden={startLocale}>
+                      Starting Location
+                    </Text>
+                  </Text>
+                )}
+              </Button>
+            </Box>
             <Group position="center" spacing={5} w={"100%"}>
               {(startCity || startRegion) && (
                 <>
@@ -456,104 +579,6 @@ export default function TripPlannerPage() {
                 </>
               )}
             </Group>
-            <Box
-              mt={10}
-              p={20}
-              bg={"rgba(0,0,0,0.1)"}
-              sx={{
-                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
-              }}
-            >
-              <Divider label={"Trip Start Date"} mb={10} w={"100%"} />
-              <DatePicker
-                value={date}
-                size={"md"}
-                ml={44}
-                my={30}
-                onChange={setDate}
-                allowDeselect
-              />
-              <Autocomplete
-                size="sm"
-                mt={10}
-                w={388}
-                variant="filled"
-                defaultValue=""
-                value={startLocaleSearch}
-                placeholder="Current Location..."
-                onItemSubmit={(e) => handleSelect(e)}
-                ref={startLocaleRef}
-                data={startLocaleData}
-                filter={(value, item) => item}
-                onClick={function (event) {
-                  event.preventDefault();
-                  startLocaleRef.current.select();
-                }}
-                onChange={function (e) {
-                  setStartLocaleSearch(e);
-                  handleChange(e);
-                }}
-                sx={{
-                  "& .mantine-Autocomplete-input": {
-                    "&::placeholder": {
-                      fontWeight: 400,
-                      // fontSize: 14,
-                      // position: "relative",
-                      // top: -2,
-                    },
-                  },
-                }}
-              />
-              <Group pos={"relative"}>
-                <Divider w={"55%"} mt={15} />
-                <Checkbox
-                  size={"lg"}
-                  mt={15}
-                  icon={planeLanding}
-                  labelPosition="left"
-                  pos={"relative"}
-                  checked={checked}
-                  color="dark.9"
-                  onChange={() => setChecked(!checked)}
-                  sx={{
-                    overflow: "hidden",
-                    input: {
-                      cursor: "pointer",
-                    },
-                  }}
-                  label={
-                    <Text fw={400} fz={12} pos={"relative"} top={5}>
-                      Return flight needed
-                    </Text>
-                  }
-                />
-              </Group>
-              <Button
-                mt={15}
-                w={388}
-                size="lg"
-                variant="light"
-                onClick={() => setStartInfoReady(!startInfoReady)}
-                disabled={!startLocale || !date}
-              >
-                {startLocale && date ? (
-                  "NEXT"
-                ) : (
-                  <Text fw={400} fz={16} transform="uppercase">
-                    Select{" "}
-                    <Text inherit span hidden={date}>
-                      Trip Date
-                    </Text>{" "}
-                    <Text inherit span hidden={startLocale || date}>
-                      and
-                    </Text>{" "}
-                    <Text inherit span hidden={startLocale}>
-                      Starting Location
-                    </Text>
-                  </Text>
-                )}
-              </Button>
-            </Box>
           </Flex>
         </Center>
       </Collapse>
@@ -744,51 +769,23 @@ export default function TripPlannerPage() {
                       <RichTextEditor
                         editor={editor}
                         position="relative"
+                        onClick={() => {
+                          setShowToolbar(true);
+                          editor?.chain().focus().run();
+                        }}
                         sx={{
                           overflow: "auto",
                           width: "100%",
                           minWidth: "500px",
                           maxWidth: "800px",
-                          minHeight: "160px",
-                          maxHeight: "250px",
+                          minHeight: "200px",
+                          maxHeight: "300px",
                         }}
                       >
-                        {editor && (
+                        {editor && showToolbar && (
                           <>
-                            <Badge
-                              hidden={!editor.isFocused}
-                              pos="absolute"
-                              variant="dot"
-                              color="lime"
-                              opacity={0.4}
-                              top={5}
-                              left={5}
-                              radius={3}
-                              fz={7}
-                              size="xs"
-                            >
-                              Highlight text to edit
-                            </Badge>
-                            <BubbleMenu editor={editor}>
+                            <RichTextEditor.Toolbar>
                               <RichTextEditor.ControlsGroup>
-                                <RichTextEditor.ColorPicker
-                                  colors={[
-                                    "#ff0000",
-                                    "#ffb300",
-                                    "#ff00c3",
-                                    "#0011ff",
-                                    "#00e1ff",
-                                    "#046e18",
-                                    "#01fd4d",
-                                    "#000000",
-                                    "#1a1a1a",
-                                    "#4d4d4d",
-                                    "#808080",
-                                    "#b3b3b3",
-                                    "#cccccc",
-                                    "#ffffff",
-                                  ]}
-                                />
                                 <RichTextEditor.Bold />
                                 <RichTextEditor.H1 />
                                 <RichTextEditor.H2 />
@@ -798,16 +795,15 @@ export default function TripPlannerPage() {
                                 <RichTextEditor.OrderedList />
                               </RichTextEditor.ControlsGroup>
                               <RichTextEditor.ControlsGroup>
-                                <RichTextEditor.UnsetColor />
                                 <RichTextEditor.Italic />
                                 <RichTextEditor.AlignLeft />
-                                <RichTextEditor.AlignRight />
                                 <RichTextEditor.AlignCenter />
+                                <RichTextEditor.AlignRight />
                                 <RichTextEditor.AlignJustify />
                                 <RichTextEditor.Link />
                                 <RichTextEditor.Unlink />
                               </RichTextEditor.ControlsGroup>
-                            </BubbleMenu>
+                            </RichTextEditor.Toolbar>
                           </>
                         )}
                         <RichTextEditor.Content
@@ -815,7 +811,6 @@ export default function TripPlannerPage() {
                             "& p": {
                               fontSize: "1rem",
                               textAlign: "justify",
-                              paddingTop: "10px",
                             },
                           }}
                         />
