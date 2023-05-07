@@ -50,7 +50,7 @@ import {
 } from "@tabler/icons";
 import { useRecoilState } from "recoil";
 import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor, BubbleMenu } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
