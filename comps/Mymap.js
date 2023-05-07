@@ -304,13 +304,8 @@ export default function Mymap() {
       <Modal
         centered
         opened={showModal}
-        zIndex={98}
         onClose={onClose}
-        overlayOpacity={0.35}
-        overlayBlur={4}
-        transition="pop"
-        transitionDuration={800}
-        transitionTimingFunction="ease"
+        size={"xl"}
         title={
           <>
             <Title
@@ -338,8 +333,14 @@ export default function Mymap() {
           </>
         }
         styles={(theme) => ({
-          modal: {
-            backgroundColor: "rgba(11, 12, 13, 0.95)",
+          header: {
+            backgroundColor: "rgba(11, 12, 13, 0)",
+          },
+          content: {
+            backgroundColor: "rgba(11, 12, 13, 0.88)",
+          },
+          overlay: {
+            zIndex: 0,
           },
           close: {
             outline: "none",
@@ -354,8 +355,9 @@ export default function Mymap() {
       >
         <Flex gap="xs">
           <Button
+            fullWidth
             variant="gradient"
-            gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+            gradient={{ from: "#00274b", to: "#001930", deg: 180 }}
             onClick={() => {
               setPlaceData([
                 {
@@ -366,9 +368,6 @@ export default function Mymap() {
               ]);
               router.push("/tripplanner", undefined, { shallow: true });
             }}
-            sx={{
-              width: "90%",
-            }}
           >
             <Text span color="dimmed">
               Travel to&nbsp;{" "}
@@ -377,38 +376,37 @@ export default function Mymap() {
               {regionName}
             </Text>
           </Button>
-          <Tooltip
-            label={`Add ${regionName} to Tour List`}
-            position="top-end"
-            withArrow
+
+          <Button
+            fullWidth
+            variant="gradient"
+            gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+            leftIcon={<IconPlaylistAdd size={20} />}
+            onClick={() => {
+              setListOpened(true);
+              setProfileOpened(false);
+              setProfileShow(false);
+              if (checkPlace(placeLocation) === false) {
+                addPlaces(placeLocation);
+                onClose();
+              } else {
+                showNotification({
+                  color: "red",
+                  style: { backgroundColor: "#2e2e2e" },
+                  title: "Loaction already added",
+                  message: `${regionName} was already added to your tour`,
+                });
+              }
+            }}
           >
-            <Button
-              variant="gradient"
-              gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
-              onClick={() => {
-                setListOpened(true);
-                setProfileOpened(false);
-                setProfileShow(false);
-                if (checkPlace(placeLocation) === false) {
-                  addPlaces(placeLocation);
-                  onClose();
-                } else {
-                  showNotification({
-                    color: "red",
-                    style: { backgroundColor: "#2e2e2e" },
-                    title: "Loaction already added",
-                    message: `${regionName} was already added to your tour`,
-                  });
-                }
-              }}
-              sx={{
-                width: "10%",
-                padding: "0",
-              }}
-            >
-              <IconPlaylistAdd size={20} />
-            </Button>
-          </Tooltip>
+            <Text color="dimmed">
+              Add{" "}
+              <Text span color="white" transform="uppercase">
+                {regionName}
+              </Text>{" "}
+              to Tour List
+            </Text>
+          </Button>
         </Flex>
         {!isCity && (
           <>
@@ -427,6 +425,7 @@ export default function Mymap() {
               placeholder={`Where in ${regionName}?`}
               defaultValue=""
               value={citySearch}
+              maxDropdownHeight={80}
               onChange={function (e) {
                 setCitySearch(e);
                 handleChange("city", e);
@@ -457,7 +456,6 @@ export default function Mymap() {
         <Flex
           justify="center"
           align="center"
-          gap={10}
           pos={"absolute"}
           bottom={"100px"}
           w={"100%"}

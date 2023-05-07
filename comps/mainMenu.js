@@ -63,7 +63,7 @@ export default function MainMenu() {
     <>
       <ProfileDrawer />
       <Header
-        zIndex={120}
+        zIndex={999}
         bg="none"
         withBorder={false}
         hidden={!visible || searchOpened || loginOpened || mapSpin}

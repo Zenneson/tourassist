@@ -107,12 +107,14 @@ export default function ProfileDrawer() {
 
   return (
     <>
+      {/* NOTE - top Drawer */}
       <Drawer
+        zIndex={500}
+        pos={"relative"}
         trapFocus={false}
-        zIndex={102}
+        padding={0}
         opened={profileOpened}
-        size="md"
-        opacity={0.95}
+        size="xs"
         lockScroll={false}
         withOverlay={false}
         withCloseButton={false}
@@ -281,48 +283,22 @@ export default function ProfileDrawer() {
             Logout
           </Button>
         </Box>
-        <Button
-          onClick={() => {
-            setProfileOpened(false);
-            setProfileShow(false);
-            setActive(-1);
-          }}
-          sx={{
-            background: "rgba(8, 7, 11, 0.95)",
-            borderRadius: "0 5px 5px 0",
-            position: "absolute",
-            top: "134px",
-            right: "-33px",
-            padding: "0 8px",
-            transition: "all 100ms ease-in-out",
-            "&:hover": {
-              background: "rgba(16, 17, 19, 1)",
-            },
-          }}
-        >
-          <IconX size={15} />
-        </Button>
       </Drawer>
+      {/* NOTE - bottom Drawer */}
       <Drawer
-        zIndex={99}
         opened={profileShow}
         padding="24px 39px 24px 24px"
         size={1015}
-        overlayOpacity={0}
-        transition="slide-right"
-        transitionDuration={200}
         withCloseButton={false}
+        trapFocus={false}
+        shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         onClose={() => {
           setProfileShow(false);
           setActive(-1);
         }}
-        trapFocus={false}
-        shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         sx={{
-          transition: "all 1500ms ease",
-          ".mantine-Drawer-drawer": {
-            background: "rgba(0, 0, 0, 0.4)",
-            backdropFilter: "blur(10px)",
+          ".mantine-Drawer-content": {
+            background: "rgba(0, 0, 0, 0.5)",
           },
         }}
       >

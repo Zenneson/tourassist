@@ -24,12 +24,12 @@ export default function TourList() {
         }}
       >
         <Drawer
+          zIndex={999}
           opened={listOpened}
           withOverlay={false}
           withCloseButton={false}
-          zIndex={100}
           padding="xl"
-          size="md"
+          size="xs"
           opacity={0.95}
           styles={{
             drawer: {
@@ -96,12 +96,12 @@ export default function TourList() {
             </Button>
           </Center>
           <Button
+            pos={"absolute"}
+            top={134}
+            right={0}
             sx={{
               background: "rgba(8, 7, 11, 0.95)",
               borderRadius: "0 5px 5px 0",
-              position: "absolute",
-              top: "134px",
-              right: "-33px",
               padding: "0 8px",
               transition: "all 100ms ease-in-out",
               "&:hover": {
