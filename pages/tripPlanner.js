@@ -20,7 +20,6 @@ import {
   Flex,
   Badge,
   BackgroundImage,
-  Collapse,
   Checkbox,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";

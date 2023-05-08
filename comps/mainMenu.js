@@ -10,7 +10,6 @@ import {
   Group,
   Tooltip,
   Popover,
-  Box,
   Text,
   Flex,
   Title,
@@ -66,7 +65,7 @@ export default function MainMenu() {
         zIndex={999}
         bg="none"
         withBorder={false}
-        hidden={!visible || searchOpened || loginOpened || mapSpin}
+        opacity={!visible || searchOpened || loginOpened || mapSpin ? 0 : 1}
         sx={{
           display: "flex",
           padding: "15px 25px",
@@ -139,7 +138,7 @@ export default function MainMenu() {
               withArrow
             >
               <Button
-                onClick={() => setSearchOpened(true)}
+                onClick={() => setSearchOpened(!searchOpened)}
                 variant="subtle"
                 radius="xl"
                 p={10}
