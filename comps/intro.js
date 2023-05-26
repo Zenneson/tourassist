@@ -99,11 +99,11 @@ export default function Intro() {
               }}
             >
               <Center
-                hidden={firstDown}
+                opacity={firstDown ? 0 : 1}
+                w={firstDown ? 0 : 700}
+                h={"100vh"}
+                bg={"#020202"}
                 sx={{
-                  backgroundColor: "#020202",
-                  height: "100vh",
-                  minWidth: "450px",
                   boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
                   flexDirection: "column",
                 }}
@@ -111,7 +111,7 @@ export default function Intro() {
                 <Image
                   mb={25}
                   sx={{ width: "100%", maxWidth: "250px" }}
-                  src={"img/TA_logo.png"}
+                  src={"img/TA_JetLogo.png"}
                   alt="TouraSSist_logo"
                   withPlaceholder
                 />
@@ -147,7 +147,7 @@ export default function Intro() {
                     hidden={!firstDown}
                     mb={25}
                     sx={{ maxWidth: "45vw" }}
-                    src={"img/TA_logo.png"}
+                    src={"img/TA_JetLogo.png"}
                     alt="TouraSSist_logo"
                     withPlaceholder
                   />

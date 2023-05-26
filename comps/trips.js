@@ -330,8 +330,8 @@ export default function Trips() {
       spacing={27}
       px={10}
       mb={10}
+      h={"calc(100vh - 197px)"}
       sx={{
-        maxHeight: "calc(100vh - 360px)",
         overflowY: "scroll",
         borderRadius: "3px",
         "&::-webkit-scrollbar": {

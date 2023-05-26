@@ -32,8 +32,6 @@ import {
   IconChevronRight,
   IconX,
   IconWallet,
-  IconBuildingBank,
-  IconCashBanknote,
   IconWorld,
   IconGavel,
   IconInfoCircle,
@@ -92,7 +90,7 @@ export default function ProfileDrawer() {
           opacity: 0.4,
         },
         ".mantine-NavLink-icon": {
-          opacity: 0.1,
+          opacity: index === active ? 0.7 : 0.1,
         },
       }}
     />
@@ -114,20 +112,20 @@ export default function ProfileDrawer() {
         trapFocus={false}
         padding={0}
         opened={profileOpened}
-        size="xs"
+        size={250}
         lockScroll={false}
         withOverlay={false}
         withCloseButton={false}
       >
         <Button
           pos={"absolute"}
-          top={117}
+          top={175}
           right={0}
+          bg={"rgba(8, 7, 11, 0.95)"}
+          radius={"5px 0 0 5px"}
+          p={"0 8px"}
           sx={{
-            background: "rgba(8, 7, 11, 0.95)",
-            borderRadius: "5px 0 0 5px",
-            padding: "0 8px",
-            transition: "all 100ms ease-in-out",
+            transition: "all 250ms ease-in-out",
             "&:hover": {
               background: "rgba(16, 17, 19, 1)",
             },
@@ -139,7 +137,8 @@ export default function ProfileDrawer() {
         >
           <IconX size={15} />
         </Button>
-        <Space h={100} />
+        <Space h={160} />
+        <Divider mb={15} ml={"15%"} w={"70%"} opacity={0.4} />
         <Flex
           direction="column"
           gap="xs"
@@ -171,9 +170,8 @@ export default function ProfileDrawer() {
             <NavLink
               label="Map"
               description="View the Map"
-              rightSection={<IconChevronRight size={14} />}
               px={25}
-              py={14}
+              py={8}
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
               onClick={(e) => {
@@ -193,9 +191,8 @@ export default function ProfileDrawer() {
             <NavLink
               label="About Us"
               description="About TourAssit | FAQs"
-              rightSection={<IconChevronRight size={14} />}
               px={25}
-              py={14}
+              py={8}
               icon={<IconInfoCircle size={30} opacity={0.1} />}
               variant="subtle"
               onClick={(e) => {
@@ -214,9 +211,8 @@ export default function ProfileDrawer() {
             <NavLink
               label="Contact Us"
               description="Message Us Directly"
-              rightSection={<IconChevronRight size={14} />}
               px={25}
-              py={14}
+              py={8}
               icon={<IconAt size={30} opacity={0.1} />}
               variant="subtle"
               onClick={(e) => {
@@ -307,27 +303,28 @@ export default function ProfileDrawer() {
       {/* NOTE - bottom Drawer */}
       <Drawer
         opened={profileShow}
-        padding="24px 39px 24px 24px"
-        size={1015}
+        padding="24px 25px 24px 275px"
+        size={1000}
         withCloseButton={false}
         trapFocus={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+        sx={{
+          ".mantine-Drawer-content": { background: "rgba(11, 12, 13, 0.98)" },
+        }}
         onClose={() => {
           setProfileShow(false);
           setActive(-1);
         }}
-        sx={{
-          ".mantine-Drawer-content": {
-            background: "rgba(0, 0, 0, 0.5)",
-          },
-        }}
       >
         <CloseButton
           pos="absolute"
-          top={140}
-          right={45}
-          size={25}
+          top={175}
+          right={0}
           title="Close"
+          bg={"rgba(8, 7, 11, 0.95)"}
+          radius={"5px 0 0 5px"}
+          p={"0 8px"}
+          size={30}
           sx={{
             cursor: "pointer",
             zIndex: 115,
@@ -337,52 +334,33 @@ export default function ProfileDrawer() {
             setActive(-1);
           }}
         />
-        <Box
-          ml={345}
-          mt={110}
-          px={20}
-          py={10}
-          bg="rgba(11, 12, 13, 0.95)"
-          sx={{
-            "&::-webkit-scrollbar": {
-              width: "0",
-            },
-            overflow: "auto",
-            maxHeight: "calc(100vh - 300px)",
-            borderRadius: "3px",
-            border: "1px solid rgba(0, 0, 0, 0.05)",
-            boxShadow:
-              "inset 0 0 5px 0 rgba(12, 14, 20, 0.3), 0 0 5px 0 rgba(0, 0, 0, 0.2)",
-          }}
-        >
-          {active === 0 && (
-            <motion.div {...animation}>
-              <Title order={6} opacity={0.25} fw={600}>
-                Account Info
-              </Title>
-              <Divider mt={7} opacity={0.15} />
-              <AccountInfo />
-            </motion.div>
-          )}
-          {active === 1 && (
-            <motion.div {...animation}>
-              <Title order={6} opacity={0.25} fw={600}>
-                Money
-              </Title>
-              <Divider mt={7} opacity={0.15} />
-              <Money />
-            </motion.div>
-          )}
-          {active === 2 && (
-            <motion.div {...animation}>
-              <Title order={6} opacity={0.25} fw={600}>
-                Trip Campaigns
-              </Title>
-              <Divider mt={7} opacity={0.15} />
-              <Trips />
-            </motion.div>
-          )}
-        </Box>
+        {active === 0 && (
+          <motion.div {...animation}>
+            <Title mt={65} opacity={0.1} fw={600} fz={50}>
+              Account Info
+            </Title>
+            <Divider mt={7} opacity={0.15} />
+            <AccountInfo />
+          </motion.div>
+        )}
+        {active === 1 && (
+          <motion.div {...animation}>
+            <Title mt={65} opacity={0.1} fw={600} fz={50}>
+              Money
+            </Title>
+            <Divider mt={7} opacity={0.15} />
+            <Money />
+          </motion.div>
+        )}
+        {active === 2 && (
+          <motion.div {...animation}>
+            <Title mt={65} opacity={0.1} fw={600} fz={50}>
+              Trip Campaigns
+            </Title>
+            <Divider mt={7} opacity={0.15} />
+            <Trips />
+          </motion.div>
+        )}
       </Drawer>
     </>
   );

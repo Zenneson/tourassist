@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useRouter } from "next/router";
 import {
   Avatar,
   Badge,
@@ -32,6 +33,7 @@ import Donations from "../comps/donations";
 import Update from "../comps/update";
 
 export default function Trippage() {
+  const router = useRouter();
   const { hovered, ref } = useHover();
   const [readmore, toggle] = useToggle(["closed", "open"]);
 
@@ -519,7 +521,15 @@ export default function Trippage() {
                 POST UPDATE
               </Button>
             </Group>
-            <Button mt={10} w={"100%"} variant="light" color="green.7">
+            <Button
+              mt={10}
+              w={"100%"}
+              variant="light"
+              color="green.7"
+              onClick={() => {
+                router.push("/purchase", undefined, { shallow: true });
+              }}
+            >
               <Text
                 sx={{
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",

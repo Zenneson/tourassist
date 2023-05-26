@@ -27,8 +27,8 @@ export default function AccountInfo() {
   const auth = getAuth();
 
   return (
-    <Center py={50}>
-      <Flex direction="column" gap="xs">
+    <Center mt={30}>
+      <Flex direction="column" gap="xs" w={"90%"}>
         <Divider mb={25} label="Change E-mail or Password" />
         <Input
           variant="filled"

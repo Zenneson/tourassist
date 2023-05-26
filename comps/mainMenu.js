@@ -62,7 +62,7 @@ export default function MainMenu() {
     <>
       <ProfileDrawer />
       <Header
-        zIndex={999}
+        zIndex={998}
         bg="none"
         withBorder={false}
         opacity={!visible || searchOpened || loginOpened || mapSpin ? 0 : 1}
@@ -71,13 +71,14 @@ export default function MainMenu() {
           padding: "15px 25px",
           alignItems: "flex-start",
           justifyContent: "space-between",
-          transition: "all 200ms ease",
         }}
       >
         <Flex
+          direction={profileOpened ? "column" : "row"}
           align="center"
-          gap={10}
-          mt={10}
+          gap={profileOpened ? 10 : 0}
+          mt={profileOpened ? 10 : 0}
+          ml={profileOpened ? 35 : -15}
           sx={{
             cursor: "pointer",
           }}
@@ -90,13 +91,13 @@ export default function MainMenu() {
         >
           <Image
             ml={4} //centers the logo and text when the menu is opened
-            width="65px"
-            height="auto"
-            src={"img/TA_logo.png"}
+            width={"auto"}
+            height="86px"
+            src={"img/TA_JetLogo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
-          <Title fw={900} color="#fff" fz={28}>
+          <Title fw={900} color="#fff" fz={20}>
             <Text fw={500} color="#adadad" inherit span>
               TOUR
             </Text>
