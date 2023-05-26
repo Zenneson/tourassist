@@ -212,9 +212,8 @@ export default function TripPlannerPage() {
           p={20}
           mb={20}
           radius={3}
-          bg={"rgba(0,0,0,0.05)"}
+          bg={"rgba(0,0,0,0.3)"}
           sx={{
-            border: "1px solid rgba(0,0,0,0.15)",
             boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
             borderLeft: "2px solid rgba(255,255,255,0.035)",
           }}
@@ -245,7 +244,7 @@ export default function TripPlannerPage() {
             <div
               style={{
                 width: "40%",
-                border: "1px solid rgba(0,0,0,0.15)",
+                border: "1px solid rgba(255,255,255,0.08)",
               }}
             ></div>
           </Group>
@@ -425,7 +424,6 @@ export default function TripPlannerPage() {
 
   return (
     <>
-      {/* NOTE - Starting Info */}
       <Space h={150} />
       <Center>
         <Flex
@@ -599,42 +597,48 @@ export default function TripPlannerPage() {
                     p={20}
                     mb={20}
                     radius={3}
-                    bg={"rgba(0,0,0,0.05)"}
+                    bg={"rgba(0,0,0,0.3)"}
                     sx={{
-                      border: "1px solid rgba(0,0,0,0.15)",
                       boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
                       borderLeft: "2px solid rgba(255,255,255,0.035)",
                     }}
                   >
-                    <Stack
-                      spacing={0}
-                      pl={10}
-                      pt={5}
-                      pb={10}
-                      sx={{
-                        borderLeft: "5px solid rgba(150,150,150,0.1)",
-                      }}
-                    >
-                      <Title
-                        order={4}
-                        fw={600}
+                    <Group position="apart">
+                      <Stack
+                        spacing={0}
+                        pl={10}
+                        pt={5}
+                        pb={10}
                         sx={{
-                          textTransform: "uppercase",
+                          borderLeft: "5px solid rgba(150,150,150,0.1)",
                         }}
                       >
-                        {startCity ? startCity : startRegion}
-                      </Title>
-                      <Text size="xs" color="dimmed">
-                        {startCity ? startRegion : ""}
-                      </Text>
-                    </Stack>
+                        <Title
+                          order={4}
+                          fw={600}
+                          sx={{
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {startCity ? startCity : startRegion}
+                        </Title>
+                        <Text size="xs" color="dimmed">
+                          {startCity ? startRegion : ""}
+                        </Text>
+                      </Stack>
+                      <div
+                        style={{
+                          width: "40%",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                        }}
+                      ></div>
+                    </Group>
                     <Costs cost={"Return Flight"} />
                   </Box>
                 )}
               </motion.div>
             )}
             {active === 2 && (
-              // NOTE - Trip Info
               <motion.div {...animation}>
                 <Title order={6} fw={600}>
                   <Stack align="center">
@@ -822,7 +826,6 @@ export default function TripPlannerPage() {
             )}
             {active === 3 && (
               <motion.div {...animation}>
-                {/* NOTE - Banking Info */}
                 <Center w={"100%"} h={"50vh"}>
                   <Stack w={"70%"}>
                     <Box hidden={user}>

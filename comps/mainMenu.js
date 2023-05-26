@@ -90,14 +90,14 @@ export default function MainMenu() {
           }}
         >
           <Image
-            ml={4} //centers the logo and text when the menu is opened
+            ml={5}
             width={"auto"}
             height="86px"
             src={"img/TA_JetLogo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
-          <Title fw={900} color="#fff" fz={20}>
+          <Title fw={900} color="#fff" fz={profileOpened ? 20 : 35}>
             <Text fw={500} color="#adadad" inherit span>
               TOUR
             </Text>

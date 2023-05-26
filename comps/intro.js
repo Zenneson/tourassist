@@ -115,7 +115,7 @@ export default function Intro() {
                   alt="TouraSSist_logo"
                   withPlaceholder
                 />
-                <Title fw={900} color="#fff">
+                <Title fw={900} color="#fff" fz={"2.2rem"}>
                   <Text fw={500} color="#adadad" inherit span>
                     TOUR
                   </Text>
@@ -153,7 +153,7 @@ export default function Intro() {
                   />
                   <Title
                     fw={900}
-                    fz={"2.5rem"}
+                    fz={"3.5rem"}
                     color="#fff"
                     hidden={!firstDown}
                   >
