@@ -124,6 +124,7 @@ export default function Trips() {
             borderRadius: "3px 3px 0 0",
             backgroundColor: "rgba(0, 0, 0, 0.4)",
           }}
+          spacing={0}
         >
           <Stack
             spacing={0}
@@ -161,97 +162,29 @@ export default function Trips() {
               </Text>
             </div>
           </Stack>
-          <div
-            style={{
-              textAlign: "center",
-              paddingLeft: "25px",
-              paddingBottom: "5px",
-            }}
-          >
-            <Popover position="left" shadow="xl" offset={-3}>
-              <Popover.Target>
-                <ActionIcon
-                  pos="absolute"
-                  top={0}
-                  ml={97}
-                  opacity={0.2}
-                  variant="transparent"
-                >
-                  <IconDotsVertical size={17} />
-                </ActionIcon>
-              </Popover.Target>
-              <Popover.Dropdown
-                p={5}
-                sx={{
-                  border: "1px solid rgba(0,0,0, 0.2)",
-                }}
+          <Center w="30%" ta={"center"}>
+            <Box>
+              <Text
+                size={20}
+                fw={900}
+                color={
+                  trip.percent < 33
+                    ? "#D0F0C0"
+                    : trip.percent < 66
+                    ? "#138808"
+                    : "#7CFC00"
+                }
               >
-                <Group spacing={0}>
-                  <Tooltip
-                    color="dark"
-                    position="top"
-                    fz={10}
-                    openDelay={200}
-                    label="VIEW"
-                    sx={{
-                      borderRadius: "3px 3px 0 0",
-                    }}
-                  >
-                    <Button compact variant="subtle" color="dimmed">
-                      <IconEye size={15} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    color="dark"
-                    position="top"
-                    fz={10}
-                    openDelay={200}
-                    label="EDIT"
-                    sx={{
-                      borderRadius: "3px 3px 0 0",
-                    }}
-                  >
-                    <Button compact variant="subtle" color="dimmed">
-                      <IconPencil size={15} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    color="dark"
-                    position="top"
-                    fz={10}
-                    openDelay={200}
-                    label="DELETE"
-                    sx={{
-                      borderRadius: "3px 3px 0 0",
-                    }}
-                  >
-                    <Button compact variant="subtle" color="red">
-                      <IconTrash size={15} />
-                    </Button>
-                  </Tooltip>
-                </Group>
-              </Popover.Dropdown>
-            </Popover>
-            <Text
-              size={20}
-              fw={900}
-              color={
-                trip.percent < 33
-                  ? "#D0F0C0"
-                  : trip.percent < 66
-                  ? "#138808"
-                  : "#7CFC00"
-              }
-            >
-              $
-              {trip.moneyRaised
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-            </Text>
-            <Text size="xs" color="dimmed" mt={-4}>
-              Money Raised
-            </Text>
-          </div>
+                $
+                {trip.moneyRaised
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </Text>
+              <Text size="xs" color="dimmed" mt={-4}>
+                Money Raised
+              </Text>
+            </Box>
+          </Center>
         </Group>
         <Group py={15} px={20} position="apart" bg="rgba(0,0,0,0.25)">
           <div
