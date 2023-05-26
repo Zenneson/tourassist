@@ -438,6 +438,24 @@ export default function TripPlannerPage() {
           <Box w="80%" miw={500} px="xl">
             {active === 0 && (
               <motion.div {...animation}>
+                <Title color="gray" h={30} ta={"center"}>
+                  {startLocale && date ? (
+                    "Continue..."
+                  ) : (
+                    <Text opacity={0.4}>
+                      Select{" "}
+                      <Text inherit span hidden={date}>
+                        Trip Start Date
+                      </Text>{" "}
+                      <Text inherit span hidden={startLocale || date}>
+                        and
+                      </Text>{" "}
+                      <Text inherit span hidden={startLocale}>
+                        Starting Location
+                      </Text>
+                    </Text>
+                  )}
+                </Title>
                 <Center>
                   <Flex
                     direction={"column"}
@@ -445,26 +463,8 @@ export default function TripPlannerPage() {
                     gap={10}
                     maw={"50%"}
                   >
-                    <Title color="gray" order={4} h={30}>
-                      {startLocale && date ? (
-                        "Continue..."
-                      ) : (
-                        <Text>
-                          Select{" "}
-                          <Text inherit span hidden={date}>
-                            Trip Start Date
-                          </Text>{" "}
-                          <Text inherit span hidden={startLocale || date}>
-                            and
-                          </Text>{" "}
-                          <Text inherit span hidden={startLocale}>
-                            Starting Location
-                          </Text>
-                        </Text>
-                      )}
-                    </Title>
                     <Box
-                      mt={10}
+                      mt={40}
                       p={20}
                       bg={"rgba(0,0,0,0.1)"}
                       sx={{
@@ -758,6 +758,7 @@ export default function TripPlannerPage() {
                           py={9}
                           ta={"center"}
                           bg={"dark.5"}
+                          opacity={0.3}
                           sx={{
                             borderRadius: "3px",
                           }}

@@ -401,7 +401,7 @@ export default function Update() {
             color="gray.6"
             onClick={() => toggle()}
           >
-            Show {showall === "hide" ? "All Updates" : "Latest Update"}
+            Show {showall === "hide" ? "All Updates" : "Last Update Only"}
           </Button>
         }
         mb={20}
