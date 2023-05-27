@@ -76,7 +76,7 @@ export default function MainMenu() {
         <Flex
           direction={profileOpened ? "column" : "row"}
           align="center"
-          gap={profileOpened ? 10 : 0}
+          gap={10}
           mt={profileOpened ? 10 : 0}
           ml={profileOpened ? 35 : -15}
           sx={{
@@ -92,12 +92,13 @@ export default function MainMenu() {
           <Image
             ml={5}
             width={"auto"}
-            height="86px"
-            src={"img/TA_JetLogo.png"}
+            // height="86px"
+            height={profileOpened ? "86px" : "60px"}
+            src={"img/TA_GlobeLogo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
-          <Title fw={900} color="#fff" fz={profileOpened ? 20 : 35}>
+          <Title fw={900} color="#fff" fz={profileOpened ? 20 : 30}>
             <Text fw={500} color="#adadad" inherit span>
               TOUR
             </Text>

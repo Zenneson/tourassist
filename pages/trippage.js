@@ -254,7 +254,7 @@ export default function Trippage() {
                 <>
                   {hovered && (
                     <Button
-                      h={"100%"}
+                      h={500}
                       mb={7}
                       radius={"3px 0 0 3px"}
                       onClick={previous}
@@ -292,7 +292,7 @@ export default function Trippage() {
                   </Slider>
                   {hovered && (
                     <Button
-                      h={"100%"}
+                      h={500}
                       mb={7}
                       radius={"3px 0 0 3px"}
                       onClick={previous}

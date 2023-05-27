@@ -25,6 +25,7 @@ import {
   IconHourglass,
   IconArrowBigLeft,
   IconArrowBigRight,
+  IconRefresh,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -32,6 +33,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function Purchase() {
   const [viewAlts, setViewAlts] = useState(false);
+  const [viewAlts2, setViewAlts2] = useState(false);
   const [isStartOfFlights, setIsStartOfFlights] = useState(true);
   const [isEndOfFlights, setIsEndOfFlights] = useState(false);
   const [isStartOfHotels, setIsStartOfHotels] = useState(true);
@@ -174,15 +176,31 @@ export default function Purchase() {
   ];
 
   const flights = flightData.map((flight, index) => (
-    <Card key={index} p={"lg"} maw={"95%"} ml={"2.5%"} bg={"rgba(0,0,0,0.25)"}>
+    <Card
+      key={index}
+      p={"lg"}
+      pb={25}
+      maw={"95%"}
+      ml={"2.5%"}
+      bg={"rgba(0,0,0,1)"}
+      sx={{
+        transition: "all 250ms ease",
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: "rgba(255,255,255,0.05)",
+          transform: "scale(1.01)",
+        },
+      }}
+    >
       <Group position="apart">
         <Badge size={"sm"}>{flight.airline}</Badge>
-        <Title order={2} mr={5} ta={"right"} color="lime">
+        <Title order={3} mr={5} ta={"right"} color="lime">
           ${flight.price}
         </Title>
       </Group>
       <Divider
-        mt={5}
+        mt={8}
+        opacity={0.4}
         labelPosition="center"
         label={<Text fw={700}>{flight.duration}</Text>}
         w={"100%"}
@@ -263,7 +281,21 @@ export default function Purchase() {
   ];
 
   const hotels = hotelData.map((hotel, index) => (
-    <Card key={index} p={"lg"} maw={"95%"} ml={"2.5%"} bg={"rgba(0,0,0,0.25)"}>
+    <Card
+      key={index}
+      p={"lg"}
+      maw={"95%"}
+      ml={"2.5%"}
+      bg={"rgba(0,0,0,1)"}
+      sx={{
+        transition: "all 250ms ease",
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: "rgba(255,255,255,0.05)",
+          transform: "scale(1.01)",
+        },
+      }}
+    >
       <Card.Section mb={10}>
         <Image src={hotel.image} alt="Hotel Image" />
       </Card.Section>
@@ -274,15 +306,14 @@ export default function Purchase() {
         <IconMapPin size={12} /> {hotel.location}
       </Text>
       <Divider
-        mt={10}
-        mb={5}
+        my={10}
         labelPosition="center"
-        label={<Rating defaultValue={4} color="blue" />}
+        label={<Rating count={5} value={hotel.rating} size="xs" readOnly />}
         w={"100%"}
       />
       <Group position="apart">
         <Badge size={"md"}>{hotel.feature}</Badge>
-        <Title order={2} ta={"right"} color="lime">
+        <Title order={3} ta={"right"} color="lime">
           ${hotel.price}
         </Title>
       </Group>
@@ -296,7 +327,7 @@ export default function Purchase() {
         <Box w={"70%"} miw={700} maw={1600}>
           <Group w={"100%"} position="apart" mb={30}>
             <Box w={"60%"}>
-              <Title order={4} opacity={0.3} fs={"italic"}>
+              <Title order={3} opacity={0.3} fs={"italic"} lineClamp={2}>
                 Help me raise money to go on a Music Tour
               </Title>
               <Box
@@ -329,12 +360,12 @@ export default function Purchase() {
               ta={"right"}
               pl={20}
               pr={5}
-              pb={15}
+              pb={18}
               pt={5}
               sx={{
                 borderRadius: "0 0 0 25px",
-                borderBottom: "2px solid rgba(255,255,255,0.025)",
-                borderLeft: "2px solid rgba(255,255,255,0.025)",
+                borderBottom: "2px solid rgba(255,255,255,0.05)",
+                borderLeft: "2px solid rgba(255,255,255,0.05)",
               }}
             >
               <Title opacity={0.2} fz={45}>
@@ -345,23 +376,26 @@ export default function Purchase() {
               </Text>
             </Box>
           </Group>
+          {/* NOTE - First Box */}
           <Box
             p={20}
-            mb={20}
-            radius={3}
-            bg={"rgba(0,0,0,0.3)"}
+            mb={40}
+            bg={"rgba(0,0,0,0.1)"}
             w={"100%"}
             sx={{
-              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-              borderLeft: "2px solid rgba(255,255,255,0.035)",
+              borderRadius: "25px 3px 3px 3px",
+              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.4)",
+              borderLeft: "3px solid rgba(255,255,255,0.1)",
+              borderTop: "3px solid rgba(255,255,255,0.1)",
             }}
           >
             <Group position="apart">
               <Stack
                 spacing={0}
                 pl={10}
-                pt={5}
+                pt={7}
                 pb={10}
+                mb={25}
                 sx={{
                   borderLeft: "5px solid rgba(150,150,150,0.1)",
                 }}
@@ -372,15 +406,24 @@ export default function Purchase() {
                     textTransform: "uppercase",
                   }}
                 >
-                  MEXICO
+                  <Flex align={"center"}>
+                    Silver Spring →{" "}
+                    {viewAlts ? (
+                      <>
+                        <Space w={5} />
+                        <IconRefresh size={30} />
+                      </>
+                    ) : (
+                      <Text ml={7} color="blue.2" inherit>
+                        Mexico
+                      </Text>
+                    )}
+                  </Flex>
                 </Title>
-                <Text size="xs" color="dimmed">
-                  Mexico, Region
-                </Text>
               </Stack>
               <Flex gap={5} mr={5} mt={viewAlts ? 0 : -28}>
                 <Stack pt={2} spacing={5}>
-                  <Group spacing={7}>
+                  <Group spacing={10}>
                     {viewAlts && <Checkbox mr={5} checked color="gray" />}
                     <Badge variant="outline" color="gray" size="xs">
                       Silver Spring
@@ -391,7 +434,7 @@ export default function Purchase() {
                     </Badge>
                   </Group>
                   {viewAlts && (
-                    <Group spacing={7}>
+                    <Group spacing={10}>
                       <Checkbox mr={5} color="gray" />
                       <Badge variant="outline" color="gray" size="xs">
                         Silver Spring
@@ -426,9 +469,8 @@ export default function Purchase() {
             </Group>
             <Divider
               mt={15}
-              color="dark"
               mb={10}
-              size={"sm"}
+              w={"96%"}
               label={
                 <Text fw={700} fz={14} fs={"italic"}>
                   <IconPlaneDeparture size={15} /> FLIGHTS
@@ -459,11 +501,17 @@ export default function Purchase() {
                   variant="filled"
                   color="dark"
                   size="xs"
-                  display={
+                  opacity={
                     flightData.length > flightSettings.slidesToShow &&
                     !isEndOfFlights
-                      ? "inline-block"
-                      : "none"
+                      ? 1
+                      : 0
+                  }
+                  disabled={
+                    flightData.length > flightSettings.slidesToShow &&
+                    !isEndOfFlights
+                      ? false
+                      : true
                   }
                   onClick={nextFlightSlide}
                 >
@@ -476,9 +524,8 @@ export default function Purchase() {
             </Box>
             <Divider
               mt={15}
-              color="dark"
               mb={10}
-              size={"sm"}
+              w={"96%"}
               label={
                 <Text fw={700} fz={14} fs={"italic"}>
                   <IconBuildingSkyscraper size={15} /> HOTELS
@@ -491,7 +538,7 @@ export default function Purchase() {
                 top={-35}
                 right={0}
                 opacity={
-                  flightData.length >= hotelSettings.slidesToShow
+                  hotelData.length >= hotelSettings.slidesToShow
                     ? "inline-block"
                     : "none"
                 }
@@ -509,11 +556,17 @@ export default function Purchase() {
                   variant="filled"
                   color="dark"
                   size="xs"
-                  display={
-                    hotelData.length > hotelSettings.slidesToShow &&
+                  opacity={
+                    hotelData.length > flightSettings.slidesToShow &&
                     !isEndOfHotels
-                      ? "inline-block"
-                      : "none"
+                      ? 1
+                      : 0
+                  }
+                  disabled={
+                    hotelData.length > flightSettings.slidesToShow &&
+                    !isEndOfHotels
+                      ? false
+                      : true
                   }
                   onClick={nextHotelSlide}
                 >
@@ -522,6 +575,314 @@ export default function Purchase() {
               </Button.Group>
               <Slider ref={hotelSlider} {...hotelSettings}>
                 {hotels}
+              </Slider>
+            </Box>
+          </Box>
+          {/* NOTE - Second Box */}
+          <Box
+            p={20}
+            mb={40}
+            bg={"rgba(0,0,0,0.1)"}
+            w={"100%"}
+            sx={{
+              borderRadius: "25px 3px 3px 3px",
+              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.4)",
+              borderLeft: "3px solid rgba(255,255,255,0.1)",
+              borderTop: "3px solid rgba(255,255,255,0.1)",
+            }}
+          >
+            <Group position="apart">
+              <Stack
+                spacing={0}
+                pl={10}
+                pt={7}
+                pb={10}
+                mb={25}
+                sx={{
+                  borderLeft: "5px solid rgba(150,150,150,0.1)",
+                }}
+              >
+                <Title
+                  order={4}
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <Flex align={"center"}>
+                    Mexico →{" "}
+                    {viewAlts2 ? (
+                      <>
+                        <Space w={5} />
+                        <IconRefresh size={30} />
+                      </>
+                    ) : (
+                      <Text ml={7} color="blue.2" inherit>
+                        Grenada
+                      </Text>
+                    )}
+                  </Flex>
+                </Title>
+              </Stack>
+              <Flex gap={5} mr={5} mt={viewAlts2 ? 0 : -28}>
+                <Stack pt={2} spacing={5}>
+                  <Group spacing={10}>
+                    {viewAlts2 && <Checkbox mr={5} checked color="gray" />}
+                    <Badge variant="outline" color="gray" size="xs">
+                      Mexico
+                    </Badge>
+                    <Text opacity={0.4}>→</Text>
+                    <Badge variant="outline" color="gray" size="xs">
+                      Grenada
+                    </Badge>
+                  </Group>
+                  {viewAlts2 && (
+                    <Group spacing={10}>
+                      <Checkbox mr={5} color="gray" />
+                      <Badge variant="outline" color="gray" size="xs">
+                        Mexico
+                      </Badge>
+                      <Text opacity={0.4}>→</Text>
+                      <Badge variant="outline" color="gray" size="xs">
+                        Silver Spring
+                      </Badge>
+                    </Group>
+                  )}
+                </Stack>
+                <Box
+                  ml={5}
+                  pl={2}
+                  sx={{
+                    borderLeft: "1px solid rgba(255,255,255,0.05)",
+                  }}
+                >
+                  <Button
+                    variant="light"
+                    radius={"xl"}
+                    ml={5}
+                    fz={8}
+                    px={15}
+                    compact
+                    onClick={() => setViewAlts2(!viewAlts2)}
+                  >
+                    {viewAlts2 ? "HIDE" : "VIEW"} ALTS
+                  </Button>
+                </Box>
+              </Flex>
+            </Group>
+            <Divider
+              mt={15}
+              mb={10}
+              w={"96%"}
+              label={
+                <Text fw={700} fz={14} fs={"italic"}>
+                  <IconPlaneDeparture size={15} /> FLIGHTS
+                </Text>
+              }
+            />
+            <Box pos={"relative"}>
+              <Button.Group
+                pos={"absolute"}
+                top={-35}
+                right={0}
+                display={
+                  flightData.length >= flightSettings.slidesToShow
+                    ? "inline-block"
+                    : "none"
+                }
+              >
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  onClick={prevFlightSlide}
+                  display={!isStartOfFlights ? "inline-block" : "none"}
+                >
+                  <IconArrowBigLeft size={15} />
+                </Button>
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  opacity={
+                    flightData.length > flightSettings.slidesToShow &&
+                    !isEndOfFlights
+                      ? 1
+                      : 0
+                  }
+                  disabled={
+                    flightData.length > flightSettings.slidesToShow &&
+                    !isEndOfFlights
+                      ? false
+                      : true
+                  }
+                  onClick={nextFlightSlide}
+                >
+                  <IconArrowBigRight size={15} />
+                </Button>
+              </Button.Group>
+              <Slider ref={flightSlider} {...flightSettings}>
+                {flights}
+              </Slider>
+            </Box>
+            <Divider
+              mt={15}
+              mb={10}
+              w={"96%"}
+              label={
+                <Text fw={700} fz={14} fs={"italic"}>
+                  <IconBuildingSkyscraper size={15} /> HOTELS
+                </Text>
+              }
+            />
+            <Box pos={"relative"}>
+              <Button.Group
+                pos={"absolute"}
+                top={-35}
+                right={0}
+                opacity={
+                  hotelData.length >= hotelSettings.slidesToShow
+                    ? "inline-block"
+                    : "none"
+                }
+              >
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  onClick={prevHotelSlide}
+                  display={!isStartOfHotels ? "inline-block" : "none"}
+                >
+                  <IconArrowBigLeft size={15} />
+                </Button>
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  opacity={
+                    hotelData.length > flightSettings.slidesToShow &&
+                    !isEndOfHotels
+                      ? 1
+                      : 0
+                  }
+                  disabled={
+                    hotelData.length > flightSettings.slidesToShow &&
+                    !isEndOfHotels
+                      ? false
+                      : true
+                  }
+                  onClick={nextHotelSlide}
+                >
+                  <IconArrowBigRight size={15} />
+                </Button>
+              </Button.Group>
+              <Slider ref={hotelSlider} {...hotelSettings}>
+                {hotels}
+              </Slider>
+            </Box>
+          </Box>
+          {/* NOTE - Return Box */}
+          <Box
+            p={20}
+            mb={40}
+            bg={"rgba(0,0,0,0.1)"}
+            w={"100%"}
+            sx={{
+              borderRadius: "25px 3px 3px 3px",
+              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.4)",
+              borderLeft: "3px solid rgba(255,255,255,0.1)",
+              borderTop: "3px solid rgba(255,255,255,0.1)",
+            }}
+          >
+            <Group position="apart">
+              <Stack
+                spacing={0}
+                pl={10}
+                pt={7}
+                pb={10}
+                mb={10}
+                sx={{
+                  borderLeft: "5px solid rgba(150,150,150,0.1)",
+                }}
+              >
+                <Title
+                  order={4}
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <Flex align={"center"}>
+                    Return flight{" "}
+                    <Text
+                      span
+                      inherit
+                      fw={400}
+                      fz={12}
+                      fs={"italic"}
+                      color="blue.2"
+                      ml={5}
+                      sx={{
+                        borderBottom: "1px solid rgba(165, 216, 255, 0.8)",
+                      }}
+                    >
+                      to Silver Spring
+                    </Text>
+                  </Flex>
+                </Title>
+              </Stack>
+            </Group>
+            <Divider
+              mt={15}
+              mb={10}
+              w={"96%"}
+              label={
+                <Text fw={700} fz={14} fs={"italic"}>
+                  <IconPlaneDeparture size={15} /> FLIGHTS
+                </Text>
+              }
+            />
+            <Box pos={"relative"}>
+              <Button.Group
+                pos={"absolute"}
+                top={-35}
+                right={0}
+                display={
+                  flightData.length >= flightSettings.slidesToShow
+                    ? "inline-block"
+                    : "none"
+                }
+              >
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  onClick={prevFlightSlide}
+                  display={!isStartOfFlights ? "inline-block" : "none"}
+                >
+                  <IconArrowBigLeft size={15} />
+                </Button>
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  opacity={
+                    flightData.length > flightSettings.slidesToShow &&
+                    !isEndOfFlights
+                      ? 1
+                      : 0
+                  }
+                  disabled={
+                    flightData.length > flightSettings.slidesToShow &&
+                    !isEndOfFlights
+                      ? false
+                      : true
+                  }
+                  onClick={nextFlightSlide}
+                >
+                  <IconArrowBigRight size={15} />
+                </Button>
+              </Button.Group>
+              <Slider ref={flightSlider} {...flightSettings}>
+                {flights}
               </Slider>
             </Box>
           </Box>

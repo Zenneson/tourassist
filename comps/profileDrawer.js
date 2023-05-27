@@ -336,7 +336,15 @@ export default function ProfileDrawer() {
         />
         {active === 0 && (
           <motion.div {...animation}>
-            <Title mt={65} opacity={0.1} fw={600} fz={50}>
+            <Title
+              mt={65}
+              opacity={0.2}
+              fw={600}
+              fz={50}
+              sx={{
+                textTransform: "uppercase",
+              }}
+            >
               Account Info
             </Title>
             <Divider mt={7} opacity={0.15} />
@@ -345,7 +353,15 @@ export default function ProfileDrawer() {
         )}
         {active === 1 && (
           <motion.div {...animation}>
-            <Title mt={65} opacity={0.1} fw={600} fz={50}>
+            <Title
+              mt={65}
+              opacity={0.2}
+              fw={600}
+              fz={50}
+              sx={{
+                textTransform: "uppercase",
+              }}
+            >
               Money
             </Title>
             <Divider mt={7} opacity={0.15} />
@@ -354,7 +370,15 @@ export default function ProfileDrawer() {
         )}
         {active === 2 && (
           <motion.div {...animation}>
-            <Title mt={65} opacity={0.1} fw={600} fz={50}>
+            <Title
+              mt={65}
+              opacity={0.2}
+              fw={600}
+              fz={50}
+              sx={{
+                textTransform: "uppercase",
+              }}
+            >
               Trip Campaigns
             </Title>
             <Divider mt={7} opacity={0.15} />

@@ -109,7 +109,7 @@ export default function Intro() {
                 <Image
                   mb={25}
                   sx={{ width: "100%", maxWidth: "250px" }}
-                  src={"img/TA_JetLogo.png"}
+                  src={"img/TA_GlobeLogo.png"}
                   alt="TouraSSist_logo"
                   withPlaceholder
                 />
@@ -145,7 +145,7 @@ export default function Intro() {
                     hidden={!firstDown}
                     mb={25}
                     sx={{ maxWidth: "45vw" }}
-                    src={"img/TA_JetLogo.png"}
+                    src={"img/TA_GlobeLogo.png"}
                     alt="TouraSSist_logo"
                     withPlaceholder
                   />

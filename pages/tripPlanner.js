@@ -47,6 +47,7 @@ import {
   IconPlaneArrival,
   IconCheck,
   IconFlag,
+  IconAppWindow,
 } from "@tabler/icons";
 import { useRecoilState } from "recoil";
 import { RichTextEditor, Link } from "@mantine/tiptap";
@@ -215,8 +216,10 @@ export default function TripPlannerPage() {
           radius={3}
           bg={"rgba(0,0,0,0.3)"}
           sx={{
-            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-            borderLeft: "2px solid rgba(255,255,255,0.035)",
+            borderRadius: "25px 3px 3px 3px",
+            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.7)",
+            borderLeft: "3px solid rgba(255,255,255,0.1)",
+            borderTop: "3px solid rgba(255,255,255,0.1)",
           }}
         >
           <Group position="apart">
@@ -437,7 +440,14 @@ export default function TripPlannerPage() {
           <Box w="80%" miw={500} px="xl">
             {active === 0 && (
               <motion.div {...animation}>
-                <Title color="gray" h={30} ta={"center"} mb={20}>
+                <Title
+                  order={2}
+                  h={50}
+                  fs={"italic"}
+                  sx={{
+                    borderBottom: "3px solid rgba(255,255,255,0.1)",
+                  }}
+                >
                   {startLocale && date ? (
                     "Continue..."
                   ) : (
@@ -450,18 +460,13 @@ export default function TripPlannerPage() {
                         and
                       </Text>{" "}
                       <Text inherit span hidden={startLocale}>
-                        Starting Location
+                        Starting Location...
                       </Text>
                     </Text>
                   )}
                 </Title>
                 <Center>
-                  <Flex
-                    direction={"column"}
-                    align={"center"}
-                    gap={10}
-                    maw={"50%"}
-                  >
+                  <Flex direction={"column"} align={"center"} gap={10}>
                     <Box
                       mt={40}
                       p={20}
@@ -472,7 +477,6 @@ export default function TripPlannerPage() {
                     >
                       <Divider
                         label={<Text fz={15}>Trip Start Date</Text>}
-                        size={"lg"}
                         mb={10}
                         w={"100%"}
                       />
@@ -595,8 +599,10 @@ export default function TripPlannerPage() {
                     radius={3}
                     bg={"rgba(0,0,0,0.3)"}
                     sx={{
-                      boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-                      borderLeft: "2px solid rgba(255,255,255,0.035)",
+                      borderRadius: "25px 3px 3px 3px",
+                      boxShadow: "0 7px 10px 0 rgba(0,0,0,0.7)",
+                      borderLeft: "3px solid rgba(255,255,255,0.1)",
+                      borderTop: "3px solid rgba(255,255,255,0.1)",
                     }}
                   >
                     <Group position="apart">
@@ -662,48 +668,50 @@ export default function TripPlannerPage() {
                       position="apart"
                       grow
                     >
-                      <Box>
-                        <Slider
-                          ref={sliderRef}
-                          {...slideSettings}
-                          style={{
-                            width: "100%",
-                          }}
-                        >
-                          {images.map((image, index) => (
-                            <BackgroundImage
-                              radius={3}
-                              key={index}
-                              src={image}
-                              h={300}
-                              alt="intro"
-                            />
-                          ))}
-                        </Slider>
-                        <Group mt={10} spacing={15} grow>
-                          <Button
-                            variant="default"
-                            color="gray"
-                            onClick={() => {
-                              previous();
+                      {images.length > 0 && (
+                        <Box>
+                          <Slider
+                            ref={sliderRef}
+                            {...slideSettings}
+                            style={{
+                              width: "100%",
                             }}
                           >
-                            <IconChevronLeft size={20} />
-                          </Button>
-                          <Button color="red">
-                            <IconTrash size={17} />
-                          </Button>
-                          <Button
-                            variant="default"
-                            color="gray"
-                            onClick={() => {
-                              next();
-                            }}
-                          >
-                            <IconChevronRight size={20} />
-                          </Button>
-                        </Group>
-                      </Box>
+                            {images.map((image, index) => (
+                              <BackgroundImage
+                                radius={3}
+                                key={index}
+                                src={image}
+                                h={300}
+                                alt="intro"
+                              />
+                            ))}
+                          </Slider>
+                          <Group mt={10} spacing={15} grow>
+                            <Button
+                              variant="subtle"
+                              color="gray"
+                              onClick={() => {
+                                previous();
+                              }}
+                            >
+                              <IconChevronLeft size={20} />
+                            </Button>
+                            <Button color="red">
+                              <IconTrash size={17} />
+                            </Button>
+                            <Button
+                              variant="subtle"
+                              color="gray"
+                              onClick={() => {
+                                next();
+                              }}
+                            >
+                              <IconChevronRight size={20} />
+                            </Button>
+                          </Group>
+                        </Box>
+                      )}
                       <Box>
                         <Dropzone
                           onDrop={(files) =>
@@ -725,46 +733,54 @@ export default function TripPlannerPage() {
                             }}
                           >
                             <Dropzone.Accept>
-                              <IconUpload size={50} />
+                              <IconUpload size={50} opacity={0.3} />
                             </Dropzone.Accept>
                             <Dropzone.Reject>
-                              <IconX size={50} />
+                              <IconX size={50} opacity={0.3} />
                             </Dropzone.Reject>
                             <Dropzone.Idle>
-                              <IconPhoto size={50} stroke={1.5} />
+                              <IconPhoto size={50} opacity={0.3} />
                             </Dropzone.Idle>
 
                             <div>
                               <Text size="xl" inline>
-                                Drag images here
+                                DRAG IMAGES HERE
                               </Text>
                             </div>
                           </Group>
+                          <Center>
+                            <Divider
+                              label="OR"
+                              labelPosition="center"
+                              my={5}
+                              w={"60%"}
+                              opacity={0.7}
+                            />
+                          </Center>
                           <Button
                             variant="light"
                             color="gray"
                             radius={"xl"}
-                            px={50}
+                            px={70}
                             mt={7}
+                            fz={14}
                             size="lg"
                             compact
                           >
                             Select Files
                           </Button>
                         </Dropzone>
-                        <Title
-                          mt={15}
-                          order={6}
-                          py={9}
-                          ta={"center"}
-                          bg={"dark.5"}
-                          opacity={0.3}
-                          sx={{
-                            borderRadius: "3px",
-                          }}
-                        >
-                          {`\[ 3 / 6 \] SPACES USED`}
-                        </Title>
+                        {images.length > 0 && (
+                          <Title
+                            mt={15}
+                            order={6}
+                            py={9}
+                            ta={"center"}
+                            opacity={0.5}
+                          >
+                            {`${images.length} / 6 SPACES USED`}
+                          </Title>
+                        )}
                       </Box>
                     </Group>
                     <RichTextEditor
