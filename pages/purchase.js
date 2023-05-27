@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Box,
   Badge,
@@ -23,17 +23,278 @@ import {
   IconBuildingSkyscraper,
   IconCalendarEvent,
   IconHourglass,
+  IconArrowBigLeft,
+  IconArrowBigRight,
 } from "@tabler/icons";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function Purchase() {
   const [viewAlts, setViewAlts] = useState(false);
+  const [isStartOfFlights, setIsStartOfFlights] = useState(true);
+  const [isEndOfFlights, setIsEndOfFlights] = useState(false);
+  const [isStartOfHotels, setIsStartOfHotels] = useState(true);
+  const [isEndOfHotels, setIsEndOfHotels] = useState(false);
+
+  const flightSettings = {
+    swipeToSlide: true,
+    speed: 250,
+    cssEase: "linear",
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    infinite: false,
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1390,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 1055,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+    ],
+    afterChange: function (currentSlide) {
+      setIsEndOfFlights(
+        currentSlide + flightSettings.slidesToShow >= flightData.length
+      );
+      setIsStartOfFlights(currentSlide === 0);
+    },
+  };
+
+  const hotelSettings = {
+    swipeToSlide: true,
+    speed: 250,
+    cssEase: "linear",
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    infinite: false,
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1390,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 1055,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+    ],
+    afterChange: function (currentSlide) {
+      setIsEndOfHotels(
+        currentSlide + hotelSettings.slidesToShow >= hotelData.length
+      );
+      setIsStartOfHotels(currentSlide === 0);
+    },
+  };
+
+  const flightSlider = useRef();
+  const hotelSlider = useRef();
+
+  const nextFlightSlide = () => {
+    flightSlider.current.slickNext();
+  };
+
+  const prevFlightSlide = () => {
+    flightSlider.current.slickPrev();
+  };
+
+  const nextHotelSlide = () => {
+    hotelSlider.current.slickNext();
+  };
+
+  const prevHotelSlide = () => {
+    hotelSlider.current.slickPrev();
+  };
+
+  const flightData = [
+    {
+      airline: "American",
+      price: 617,
+      duration: "16h 40m ( 1 stop )",
+      depatureLocale: "DCA",
+      arrivalLocale: "MEX",
+      depatureTime: "6:30 AM",
+      arrivalTime: "11:10 PM",
+    },
+    {
+      airline: "United",
+      price: 530,
+      duration: "10h 40m ( 1 stop )",
+      depatureLocale: "DCA",
+      arrivalLocale: "MEX",
+      depatureTime: "6:30 AM",
+      arrivalTime: "6:10 PM",
+    },
+    {
+      airline: "Delta",
+      price: 584,
+      duration: "13h 40m ( 1 stop )",
+      depatureLocale: "BWI",
+      arrivalLocale: "MEX",
+      depatureTime: "9:30 AM",
+      arrivalTime: "11:10 PM",
+    },
+    {
+      airline: "Southwest",
+      price: 640,
+      duration: "12h 40m",
+      depatureLocale: "BWI",
+      arrivalLocale: "MEX",
+      depatureTime: "10:30 AM",
+      arrivalTime: "11:10 PM",
+    },
+    {
+      airline: "Spirit",
+      price: 570,
+      duration: "8h 10m",
+      depatureLocale: "DCA",
+      arrivalLocale: "MEX",
+      depatureTime: "10:00 AM",
+      arrivalTime: "7:10 PM",
+    },
+    {
+      airline: "Emirates",
+      price: 1000,
+      duration: "8h 10m",
+      depatureLocale: "DCA",
+      arrivalLocale: "MEX",
+      depatureTime: "10:00 AM",
+      arrivalTime: "7:10 PM",
+    },
+  ];
+
+  const flights = flightData.map((flight, index) => (
+    <Card key={index} p={"lg"} maw={"95%"} ml={"2.5%"} bg={"rgba(0,0,0,0.25)"}>
+      <Group position="apart">
+        <Badge size={"sm"}>{flight.airline}</Badge>
+        <Title order={2} mr={5} ta={"right"} color="lime">
+          ${flight.price}
+        </Title>
+      </Group>
+      <Divider
+        mt={5}
+        labelPosition="center"
+        label={<Text fw={700}>{flight.duration}</Text>}
+        w={"100%"}
+      />
+      <Group position="apart" px={10} mt={10} spacing={0}>
+        <Box ta={"center"}>
+          <Title order={2}>{flight.depatureLocale}</Title>
+          <Text size="xs" color="dimmed">
+            {flight.depatureTime}
+          </Text>
+        </Box>
+        <Group pb={15} opacity={0.4} spacing={5}>
+          - <IconPlane size={20} /> -
+        </Group>
+        <Box ta={"center"}>
+          <Title order={2}>{flight.arrivalLocale}</Title>
+          <Text size="xs" color="dimmed">
+            {flight.arrivalTime}
+          </Text>
+        </Box>
+      </Group>
+    </Card>
+  ));
+
+  const hotelData = [
+    {
+      image: "/img/intro/beach.jpg",
+      name: "Hermoso alojamiento en Villa Cardiel Real Ibiza Playa del Carmen",
+      location: "Av Revolucion 333, Tacubaya, Mexico City, Mexico",
+      rating: 4,
+      feature: "1 King Bed",
+      price: 111,
+    },
+    {
+      image: "/img/intro/coast.jpg",
+      name: "El Serafin Hotel BoutiqueOpens in new window",
+      location: "Independencia 22, 76000 Querétaro, Mexico",
+      rating: 3,
+      feature: "2 Queen Beds",
+      price: 120,
+    },
+    {
+      image: "/img/intro/boat.jpg",
+      name: "Un Sueño Cabañas del Pacífico",
+      location:
+        "Calle Principal, Lado Playa, Playa San Agustinillo, 70946 San Agustinillo, Mexico",
+      rating: 5,
+      feature: "1 King Bed",
+      price: 240,
+    },
+    {
+      image: "/img/intro/planewindow.jpg",
+      name: "Hotel Kavia Plus",
+      location:
+        "Av. Yaxchilan, Mz 15, Lote 13, SM 22 Entre calle Gladiolas y calle Orquideas, 77500 Cancún, Mexico ",
+      rating: 4,
+      feature: "1 Queen Bed",
+      price: 111,
+    },
+    {
+      image: "/img/intro/plane.jpg",
+      name: "Quinta Maria en la Ruta del Vino",
+      location:
+        "Calle Grenache, 1. Rancho Jesus Maria. San Antonio de las Minas, 22760 Valle de Guadalupe, Mexico",
+      rating: 4,
+      feature: "1 King Bed",
+      price: 150,
+    },
+    {
+      image: "/img/intro/concert.jpg",
+      name: "Quinta Maria en la Ruta del Vino",
+      location:
+        "Calle Grenache, 1. Rancho Jesus Maria. San Antonio de las Minas, 22760 Valle de Guadalupe, Mexico",
+      rating: 4,
+      feature: "1 King Bed",
+      price: 150,
+    },
+  ];
+
+  const hotels = hotelData.map((hotel, index) => (
+    <Card key={index} p={"lg"} maw={"95%"} ml={"2.5%"} bg={"rgba(0,0,0,0.25)"}>
+      <Card.Section mb={10}>
+        <Image src={hotel.image} alt="Hotel Image" />
+      </Card.Section>
+      <Title order={6} lineClamp={1}>
+        {hotel.name}
+      </Title>
+      <Text size="xs" color="dimmed" lineClamp={1}>
+        <IconMapPin size={12} /> {hotel.location}
+      </Text>
+      <Divider
+        mt={10}
+        mb={5}
+        labelPosition="center"
+        label={<Rating defaultValue={4} color="blue" />}
+        w={"100%"}
+      />
+      <Group position="apart">
+        <Badge size={"md"}>{hotel.feature}</Badge>
+        <Title order={2} ta={"right"} color="lime">
+          ${hotel.price}
+        </Title>
+      </Group>
+    </Card>
+  ));
 
   return (
     <>
       <Space h={150} />
       <Center>
-        <Box w={"70%"} maw={1600}>
-          <Group w={"100%"} position="apart" mb={20}>
+        <Box w={"70%"} miw={700} maw={1600}>
+          <Group w={"100%"} position="apart" mb={30}>
             <Box w={"60%"}>
               <Title order={4} opacity={0.3} fs={"italic"}>
                 Help me raise money to go on a Music Tour
@@ -66,17 +327,17 @@ export default function Purchase() {
             </Box>
             <Box
               ta={"right"}
-              pl={25}
+              pl={20}
               pr={5}
-              pb={25}
+              pb={15}
               pt={5}
               sx={{
-                borderRadius: "0 0 0 5px",
+                borderRadius: "0 0 0 25px",
                 borderBottom: "2px solid rgba(255,255,255,0.025)",
                 borderLeft: "2px solid rgba(255,255,255,0.025)",
               }}
             >
-              <Title opacity={0.2} fz={50}>
+              <Title opacity={0.2} fz={45}>
                 $1,234.56
               </Title>
               <Text size="xs" color="dimmed" mt={-5}>
@@ -89,7 +350,6 @@ export default function Purchase() {
             mb={20}
             radius={3}
             bg={"rgba(0,0,0,0.3)"}
-            // bg={"rgba(255,255,255,0.3)"}
             w={"100%"}
             sx={{
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
@@ -107,7 +367,7 @@ export default function Purchase() {
                 }}
               >
                 <Title
-                  order={2}
+                  order={4}
                   sx={{
                     textTransform: "uppercase",
                   }}
@@ -175,37 +435,45 @@ export default function Purchase() {
                 </Text>
               }
             />
-            <Card w={350} p={"lg"} py={15}>
-              <Group position="apart">
-                <Badge size={"sm"}>American</Badge>
-                <Title order={2} mr={5} ta={"right"} color="lime">
-                  $617
-                </Title>
-              </Group>
-              <Divider
-                mt={5}
-                labelPosition="center"
-                label={<Text fw={700}>16h 40m ( 1 stop )</Text>}
-                w={"100%"}
-              />
-              <Group position="apart" px={10} mt={10} spacing={0}>
-                <Box ta={"center"}>
-                  <Title>DCA</Title>
-                  <Text size="xs" color="dimmed">
-                    6:30 AM
-                  </Text>
-                </Box>
-                <Group pb={15} opacity={0.4}>
-                  - <IconPlane size={20} /> -
-                </Group>
-                <Box ta={"center"}>
-                  <Title>MEX</Title>
-                  <Text size="xs" color="dimmed">
-                    11:10 PM
-                  </Text>
-                </Box>
-              </Group>
-            </Card>
+            <Box pos={"relative"}>
+              <Button.Group
+                pos={"absolute"}
+                top={-35}
+                right={0}
+                display={
+                  flightData.length >= flightSettings.slidesToShow
+                    ? "inline-block"
+                    : "none"
+                }
+              >
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  onClick={prevFlightSlide}
+                  display={!isStartOfFlights ? "inline-block" : "none"}
+                >
+                  <IconArrowBigLeft size={15} />
+                </Button>
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  display={
+                    flightData.length > flightSettings.slidesToShow &&
+                    !isEndOfFlights
+                      ? "inline-block"
+                      : "none"
+                  }
+                  onClick={nextFlightSlide}
+                >
+                  <IconArrowBigRight size={15} />
+                </Button>
+              </Button.Group>
+              <Slider ref={flightSlider} {...flightSettings}>
+                {flights}
+              </Slider>
+            </Box>
             <Divider
               mt={15}
               color="dark"
@@ -217,31 +485,45 @@ export default function Purchase() {
                 </Text>
               }
             />
-            <Card w={350} p={"lg"} pb={20}>
-              <Card.Section mb={10}>
-                <Image src={"/img/intro/beach.jpg"} alt="Hotel Image" />
-              </Card.Section>
-              <Title order={6} lineClamp={1}>
-                Hermoso alojamiento en Villa Cardiel Real Ibiza Playa del Carmen
-              </Title>
-              <Text size="xs" color="dimmed" lineClamp={1}>
-                <IconMapPin size={12} /> Av Revolucion 333, Tacubaya, Mexico
-                City
-              </Text>
-              <Divider
-                mt={10}
-                mb={5}
-                labelPosition="center"
-                label={<Rating defaultValue={4} color="blue" />}
-                w={"100%"}
-              />
-              <Group position="apart">
-                <Badge size={"md"}>1 King Bed</Badge>
-                <Title order={2} ta={"right"} color="lime">
-                  $111
-                </Title>
-              </Group>
-            </Card>
+            <Box pos={"relative"}>
+              <Button.Group
+                pos={"absolute"}
+                top={-35}
+                right={0}
+                opacity={
+                  flightData.length >= hotelSettings.slidesToShow
+                    ? "inline-block"
+                    : "none"
+                }
+              >
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  onClick={prevHotelSlide}
+                  display={!isStartOfHotels ? "inline-block" : "none"}
+                >
+                  <IconArrowBigLeft size={15} />
+                </Button>
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="xs"
+                  display={
+                    hotelData.length > hotelSettings.slidesToShow &&
+                    !isEndOfHotels
+                      ? "inline-block"
+                      : "none"
+                  }
+                  onClick={nextHotelSlide}
+                >
+                  <IconArrowBigRight size={15} />
+                </Button>
+              </Button.Group>
+              <Slider ref={hotelSlider} {...hotelSettings}>
+                {hotels}
+              </Slider>
+            </Box>
           </Box>
         </Box>
       </Center>

@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { useRouter } from "next/router";
 import {
   Avatar,
-  Badge,
   Button,
   Box,
   BackgroundImage,
