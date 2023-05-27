@@ -21,6 +21,7 @@ import {
   Badge,
   BackgroundImage,
   Checkbox,
+  Switch,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import {
@@ -436,7 +437,7 @@ export default function TripPlannerPage() {
           <Box w="80%" miw={500} px="xl">
             {active === 0 && (
               <motion.div {...animation}>
-                <Title color="gray" h={30} ta={"center"}>
+                <Title color="gray" h={30} ta={"center"} mb={20}>
                   {startLocale && date ? (
                     "Continue..."
                   ) : (
@@ -475,32 +476,36 @@ export default function TripPlannerPage() {
                         mb={10}
                         w={"100%"}
                       />
-                      <Group
-                        spacing={5}
-                        pos={"relative"}
-                        top={-13}
-                        left={-4}
-                        sx={{
-                          opacity: 0.3,
-                          "&:hover": {
-                            opacity: 1,
-                            cursor: "none",
-                          },
-                        }}
-                      >
-                        <Box pos={"relative"} top={2}>
-                          <IconFlag size={16} />
-                        </Box>
-                        <Text fz={12} m={0}>
-                          Fundraiser ends the day before the trip start date!
-                        </Text>
-                        <Divider w={"21%"} mt={3} color={"gray.6"} />
-                      </Group>
+                      <Center>
+                        <Group
+                          spacing={5}
+                          pos={"relative"}
+                          top={-13}
+                          p={10}
+                          sx={{
+                            opacity: 0.3,
+                            "&:hover": {
+                              opacity: 1,
+                              cursor: "none",
+                              transform: "scale(1.1)",
+                              textTransform: "uppercase",
+                              transition: "all 350ms ease-in-out",
+                            },
+                          }}
+                        >
+                          <Box pos={"relative"} top={2}>
+                            <IconFlag size={16} />
+                          </Box>
+                          <Text fz={12} m={0}>
+                            Fundraiser ends the day before the trip start date!
+                          </Text>
+                        </Group>
+                      </Center>
                       <DatePicker
                         value={date}
                         size={"md"}
                         ml={44}
-                        my={30}
+                        mb={30}
                         onChange={setDate}
                         allowDeselect
                       />
@@ -534,32 +539,23 @@ export default function TripPlannerPage() {
                         }}
                       />
                       <Group pos={"relative"}>
-                        <Divider w={"53%"} mt={15} />
-                        <Checkbox
-                          size={"lg"}
+                        <Divider
+                          w={"100%"}
                           mt={15}
-                          ml={1}
-                          icon={planeLanding}
-                          pos={"relative"}
-                          checked={checked}
-                          color="dark.9"
-                          onChange={() => setChecked(!checked)}
-                          sx={{
-                            overflow: "hidden",
-                            input: {
-                              cursor: "pointer",
-                            },
-                          }}
-                          labelPosition="left"
+                          labelPosition="right"
                           label={
-                            <Text fw={400} fz={12} pos={"relative"} top={5}>
-                              Return flight needed ?
-                            </Text>
+                            <Switch
+                              label={<Text fz={12}>Round Trip?</Text>}
+                              labelPosition="left"
+                              onLabel="YES"
+                              offLabel="NO"
+                              onChange={() => setChecked(!checked)}
+                            />
                           }
                         />
                       </Group>
                     </Box>
-                    <Group position="center" spacing={5} w={"100%"}>
+                    <Group position="center" spacing={5} w={"100%"} mt={15}>
                       {(startCity || startRegion) && (
                         <>
                           <Badge variant="outline" color="gray">

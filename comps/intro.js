@@ -20,7 +20,6 @@ import {
   useMediaQuery,
   useViewportSize,
 } from "@mantine/hooks";
-import Autoplay from "embla-carousel-autoplay";
 import LoginComp from "./loginComp";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -40,7 +39,6 @@ export default function Intro() {
 
   const { height, width } = useViewportSize();
   const firstDown = useMediaQuery("(max-width: 950px)");
-  const autoplay = useRef(Autoplay({ delay: 5000 }));
 
   const auth = getAuth();
   useEffect(() => {
