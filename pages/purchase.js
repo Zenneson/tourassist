@@ -342,13 +342,7 @@ export default function Purchase() {
                   cursor: "default",
                 }}
               >
-                <Group fz={11} mt={5} ml={2}>
-                  <Text color="blue.2">Silver Spring</Text>→
-                  <Text color="blue.2">Mexico</Text>→
-                  <Text color="blue.2">Grenada</Text>→
-                  <Text color="blue.2">Silver Spring</Text>
-                </Group>
-                <Flex align={"center"} gap={15} fz={13} mt={5}>
+                <Flex align={"center"} gap={15} fw={700} fz={15} mt={5}>
                   <Group spacing={5}>
                     <IconCalendarEvent size={15} opacity={0.5} /> May 5, 2024{" "}
                   </Group>
@@ -368,6 +362,12 @@ export default function Purchase() {
                     $0 Spent
                   </Group>
                 </Flex>
+                <Group fz={11} mt={5} ml={2}>
+                  <Text color="blue.2">Silver Spring</Text>→
+                  <Text color="blue.2">Mexico</Text>→
+                  <Text color="blue.2">Grenada</Text>→
+                  <Text color="blue.2">Silver Spring</Text>
+                </Group>
               </Box>
             </Box>
             <Box

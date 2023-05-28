@@ -236,20 +236,6 @@ export default function Trippage() {
               boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
             }}
           >
-            <Button
-              hidden={!hovered}
-              pos={"absolute"}
-              top={10}
-              right={90}
-              leftIcon={<IconPencil size={20} />}
-              size="xs"
-              variant="default"
-              sx={{
-                zIndex: 1,
-              }}
-            >
-              Edit
-            </Button>
             <Center>
               {images.length > 1 ? (
                 <>
@@ -318,7 +304,7 @@ export default function Trippage() {
               )}
             </Center>
           </Group>
-          <Title order={2} mt={10} p={10} ta={"center"}>
+          <Title order={2} p={10} color="blue.2" maw={"650px"}>
             Help me raise money to go on a Music Tour
           </Title>
           <Center mt={5}>
@@ -371,7 +357,7 @@ export default function Trippage() {
                   variant="subtle"
                   color="gray.6"
                 >
-                  Edit
+                  Edit Post
                 </Button>
               }
             />
@@ -461,7 +447,13 @@ export default function Trippage() {
           </Box>
         </Flex>
 
-        <Flex w={"30%"} direction={"column"}>
+        <Flex
+          w={"30%"}
+          direction={"column"}
+          sx={{
+            borderTop: "5px solid rgba(255,255,255,0.1)",
+          }}
+        >
           <Box
             radius={3}
             bg={"rgba(0,0,0,0.05)"}
