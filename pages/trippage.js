@@ -519,7 +519,7 @@ export default function Trippage() {
                 variant="filled"
                 color="green.9"
                 onClick={() => {
-                  router.push("/purchase", undefined, { shallow: true });
+                  router.push("/purchase");
                 }}
               >
                 <Text>USE FUNDS</Text>

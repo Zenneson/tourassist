@@ -244,12 +244,19 @@ export default function TripPlannerPage() {
                 {place.region}
               </Text>
             </Stack>
-            <div
-              style={{
-                width: "40%",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }}
-            ></div>
+            {/* NOTE */}
+            <Divider
+              w={"40%"}
+              labelPosition="right"
+              label={
+                placeData.length === 1 &&
+                checked && (
+                  <Text color="dimmed" fs={"italic"}>
+                    ROUND TRIP
+                  </Text>
+                )
+              }
+            />
           </Group>
           <Box id={index}>
             {place.costs &&
@@ -422,8 +429,7 @@ export default function TripPlannerPage() {
   const index = startLocale?.indexOf(",");
   const startCity = startLocale?.substring(0, index);
   const startRegion = startLocale?.substring(index + 1);
-  console.log(startCity);
-  console.log(startRegion);
+  console.log(startLocaleSearch);
 
   return (
     <>
@@ -436,152 +442,158 @@ export default function TripPlannerPage() {
           align="flex-start"
           gap={10}
         >
-          <Box w="80%" miw={500} px="xl">
+          <Box w="100%" miw={500} px="xl">
             {active === 0 && (
               <motion.div {...animation}>
-                <Title
-                  order={2}
-                  h={50}
-                  fs={"italic"}
-                  sx={{
-                    borderBottom: "2px solid rgba(255,255,255,0.1)",
-                  }}
-                >
-                  {startLocale && date ? (
-                    "Continue..."
-                  ) : (
-                    <Text opacity={0.4}>
-                      Select{" "}
-                      <Text inherit span hidden={date}>
-                        Trip Start Date
-                      </Text>{" "}
-                      <Text inherit span hidden={startLocale || date}>
-                        and
-                      </Text>{" "}
-                      <Text inherit span hidden={startLocale}>
-                        Starting Location...
+                <Box ml={"10%"} w={"80%"}>
+                  <Title
+                    order={2}
+                    h={50}
+                    sx={{
+                      borderBottom: "1px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    {startLocale && date ? (
+                      "Continue..."
+                    ) : (
+                      <Text opacity={0.4}>
+                        Select{" "}
+                        <Text inherit span hidden={date}>
+                          Travel Start Date{startLocale && ":"}
+                        </Text>{" "}
+                        <Text inherit span hidden={startLocale || date}>
+                          and
+                        </Text>{" "}
+                        <Text inherit span hidden={startLocale}>
+                          {date && "Starting"} Location:
+                        </Text>
                       </Text>
-                    </Text>
-                  )}
-                </Title>
-                <Group spacing={5} w={"100%"} mt={15}>
-                  <IconMapPin size={25} opacity={0.4} />
-                  {(startCity || startRegion) && (
-                    <>
-                      <Badge variant="outline" color="gray">
-                        {startCity ? startCity : startRegion}
-                      </Badge>
-                      →
-                    </>
-                  )}
-                  {placeData.map((place, index) => (
-                    <Group key={index} spacing={5}>
-                      <Badge variant="outline" color="gray">
-                        {place.place}
-                      </Badge>
-                      {placeData.length - 1 !== index && "→"}
-                    </Group>
-                  ))}
-                  {checked && (startCity || startRegion) && (
-                    <>
-                      →
-                      <Badge variant="outline" color="gray">
-                        {startCity ? startCity : startRegion}
-                      </Badge>
-                    </>
-                  )}
-                </Group>
-                <Center>
-                  <Flex direction={"column"} align={"center"} gap={10}>
-                    <Box
-                      mt={40}
-                      py={15}
-                      px={20}
-                      bg={"rgba(0,0,0,0.1)"}
-                      sx={{
-                        borderRadius: "25px 3px 3px 3px",
-                        borderTop: "2px solid rgba(255,255,255,0.1)",
-                        borderLeft: "2px solid rgba(255,255,255,0.1)",
-                        boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
-                      }}
-                    >
-                      <Divider
-                        label={<Text fz={15}>Trip Start Date</Text>}
-                        mb={10}
-                        w={"100%"}
-                      />
-                      <Center>
-                        <Group spacing={5} pos={"relative"} top={-13} p={10}>
-                          <Box pos={"relative"} top={2}>
-                            <IconFlag size={16} />
-                          </Box>
-                          <Text fz={12} m={0}>
-                            Fundraiser ends the day before the trip start date!
-                          </Text>
-                        </Group>
-                      </Center>
-                      <DatePicker
-                        value={date}
-                        size={"md"}
-                        ml={44}
-                        mb={30}
-                        onChange={setDate}
-                        allowDeselect
-                      />
-                      <Autocomplete
-                        size="sm"
-                        mt={10}
-                        w={388}
-                        dropdownPosition="top"
-                        variant="filled"
-                        defaultValue=""
-                        value={startLocaleSearch}
-                        placeholder="Trip Start Location..."
-                        onItemSubmit={(e) => handleSelect(e)}
-                        ref={startLocaleRef}
-                        data={startLocaleData}
-                        filter={(value, item) => item}
-                        onClick={function (event) {
-                          event.preventDefault();
-                          startLocaleRef.current.select();
-                        }}
-                        onChange={function (e) {
-                          setStartLocaleSearch(e);
-                          handleChange(e);
-                        }}
-                        sx={{
-                          "& .mantine-Autocomplete-input": {
-                            "&::placeholder": {
-                              fontWeight: 400,
-                            },
-                          },
-                        }}
-                      />
-                      <Group pos={"relative"}>
-                        <Divider
-                          w={"100%"}
-                          mt={15}
-                          labelPosition="right"
-                          label={
-                            <Switch
-                              label={<Text fz={12}>Round Trip?</Text>}
-                              labelPosition="left"
-                              onLabel="YES"
-                              offLabel="NO"
-                              onChange={() => setChecked(!checked)}
-                            />
-                          }
-                        />
+                    )}
+                  </Title>
+                  <Group spacing={5} w={"100%"} mt={15}>
+                    <IconMapPin size={25} opacity={0.4} />
+                    {(startCity || startRegion) && (
+                      <>
+                        <Badge variant="outline" color="gray">
+                          {startCity ? startCity : startRegion}
+                        </Badge>
+                        →
+                      </>
+                    )}
+                    {placeData.map((place, index) => (
+                      <Group key={index} spacing={5}>
+                        <Badge variant="outline" color="gray">
+                          {place.place}
+                        </Badge>
+                        {placeData.length - 1 !== index && "→"}
                       </Group>
-                    </Box>
-                  </Flex>
-                </Center>
+                    ))}
+                    {checked && (startCity || startRegion) && (
+                      <>
+                        →
+                        <Badge variant="outline" color="gray">
+                          {startCity ? startCity : startRegion}
+                        </Badge>
+                      </>
+                    )}
+                  </Group>
+                  <Center>
+                    <Flex direction={"column"} align={"center"} gap={10}>
+                      <Box
+                        mt={40}
+                        py={15}
+                        px={20}
+                        bg={"rgba(0,0,0,0.1)"}
+                        sx={{
+                          borderRadius: "25px 3px 3px 3px",
+                          borderTop: "2px solid rgba(255,255,255,0.1)",
+                          borderLeft: "2px solid rgba(255,255,255,0.1)",
+                          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
+                        }}
+                      >
+                        <Divider
+                          label={<Text fz={15}>Travel Start Date</Text>}
+                          mb={10}
+                          w={"100%"}
+                        />
+                        <Center>
+                          <Group spacing={5} pos={"relative"} top={-13} p={10}>
+                            <Box pos={"relative"} top={2}>
+                              <IconFlag size={16} />
+                            </Box>
+                            <Text fz={12} m={0}>
+                              Fundraiser ends the day before the travel start
+                              date!
+                            </Text>
+                          </Group>
+                        </Center>
+                        <DatePicker
+                          value={date}
+                          size={"md"}
+                          ml={44}
+                          mb={30}
+                          onChange={setDate}
+                          allowDeselect
+                        />
+                        <Autocomplete
+                          size="sm"
+                          mt={10}
+                          w={388}
+                          dropdownPosition="top"
+                          variant="filled"
+                          defaultValue=""
+                          value={startLocaleSearch}
+                          placeholder="Starting Location..."
+                          onItemSubmit={(e) => handleSelect(e)}
+                          ref={startLocaleRef}
+                          data={startLocaleData}
+                          filter={(value, item) => item}
+                          onClick={function (event) {
+                            event.preventDefault();
+                            startLocaleRef.current.select();
+                          }}
+                          onChange={function (e) {
+                            setStartLocaleSearch(e);
+                            handleChange(e);
+                            if (startLocaleRef.current.value === "") {
+                              setStartLocale("");
+                            }
+                          }}
+                          sx={{
+                            "& .mantine-Autocomplete-input": {
+                              "&::placeholder": {
+                                fontWeight: 400,
+                              },
+                            },
+                          }}
+                        />
+                        <Group pos={"relative"}>
+                          <Divider
+                            w={"100%"}
+                            mt={15}
+                            labelPosition="right"
+                            label={
+                              <Switch
+                                label={<Text fz={12}>Round Trip?</Text>}
+                                labelPosition="left"
+                                onLabel="YES"
+                                offLabel="NO"
+                                checked={checked}
+                                onChange={() => setChecked(!checked)}
+                              />
+                            }
+                          />
+                        </Group>
+                      </Box>
+                    </Flex>
+                  </Center>
+                </Box>
               </motion.div>
             )}
             {active === 1 && (
               <motion.div {...animation}>
                 <Places />
-                {checked && (
+                {checked && placeData.length > 1 && (
                   <Box
                     p={20}
                     mb={20}
@@ -617,12 +629,7 @@ export default function TripPlannerPage() {
                           {startCity ? startRegion : ""}
                         </Text>
                       </Stack>
-                      <div
-                        style={{
-                          width: "40%",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                        }}
-                      ></div>
+                      <Divider w={"40%"} />
                     </Group>
                     <Costs cost={"Return Flight"} />
                   </Box>
@@ -636,7 +643,7 @@ export default function TripPlannerPage() {
                     <Input
                       size={"xl"}
                       variant="filled"
-                      placeholder="Trip Title..."
+                      placeholder="Title..."
                       w="100%"
                       maw={800}
                       bg={"rgba(0,0,0,0)"}
@@ -957,7 +964,7 @@ export default function TripPlannerPage() {
                     nextStep();
                   }
                   if (active === 3) {
-                    router.push("/trippage", undefined, { shallow: true });
+                    router.push("/trippage");
                   }
                 }}
               >

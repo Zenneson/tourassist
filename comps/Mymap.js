@@ -390,7 +390,7 @@ export default function Mymap() {
                 costs: ["FLIGHT", "HOTEL"],
               },
             ]);
-            router.push("/tripplanner", undefined, { shallow: true });
+            router.push("/tripplanner");
           }}
         />
 

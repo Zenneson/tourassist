@@ -550,7 +550,7 @@ export default function Legal() {
                       onClick={(e) => {
                         setProfileOpened(false);
                         setProfileShow(false);
-                        router.push("/about", undefined, { shallow: true });
+                        router.push("/about");
                       }}
                     >
                       About Tourassist
@@ -562,7 +562,7 @@ export default function Legal() {
                       onClick={(e) => {
                         setProfileOpened(false);
                         setProfileShow(false);
-                        router.push("/contact", undefined, { shallow: true });
+                        router.push("/contact");
                       }}
                     >
                       Contact Us

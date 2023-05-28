@@ -170,7 +170,7 @@ export default function ProfileDrawer() {
               onClick={(e) => {
                 setProfileOpened(false);
                 setProfileShow(false);
-                router.push("/", undefined, { shallow: true });
+                router.push("/");
               }}
               sx={{
                 ".mantine-NavLink-description": {
@@ -191,7 +191,7 @@ export default function ProfileDrawer() {
               onClick={(e) => {
                 setProfileOpened(false);
                 setProfileShow(false);
-                router.push("/about", undefined, { shallow: true });
+                router.push("/about");
               }}
               sx={{
                 ".mantine-NavLink-description": {
@@ -211,7 +211,7 @@ export default function ProfileDrawer() {
               onClick={(e) => {
                 setProfileOpened(false);
                 setProfileShow(false);
-                router.push("/contact", undefined, { shallow: true });
+                router.push("/contact");
               }}
               sx={{
                 ".mantine-NavLink-description": {
@@ -233,7 +233,7 @@ export default function ProfileDrawer() {
           onClick={() => {
             setProfileOpened(false);
             setProfileShow(false);
-            router.push("/legal", undefined, { shallow: true });
+            router.push("/legal");
           }}
           sx={{
             "&:hover": {
@@ -278,8 +278,7 @@ export default function ProfileDrawer() {
                   localStorage.removeItem("mapSpin");
                   setProfileOpened(false);
                   setProfileShow(false);
-                  if (router.pathname !== "/")
-                    router.push("/", undefined, { shallow: true });
+                  if (router.pathname !== "/") router.push("/");
                   else {
                     router.reload();
                   }

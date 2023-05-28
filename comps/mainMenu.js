@@ -204,8 +204,7 @@ export default function MainMenu() {
                         localStorage.removeItem("mapSpin");
                         setProfileOpened(false);
                         setProfileShow(false);
-                        if (router.pathname !== "/")
-                          router.push("/", undefined, { shallow: true });
+                        if (router.pathname !== "/") router.push("/");
                         else {
                           router.reload();
                         }

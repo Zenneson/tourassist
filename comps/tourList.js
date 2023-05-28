@@ -70,7 +70,7 @@ export default function TourList() {
                   return { place: name, region, costs: ["FLIGHT", "HOTEL"] };
                 });
                 setPlaceData(newPlaceData);
-                router.push("/tripplanner", undefined, { shallow: true });
+                router.push("/tripplanner");
               }}
               sx={(theme) => ({
                 background: "#008554",
