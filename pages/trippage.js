@@ -24,6 +24,7 @@ import {
   IconSourceCode,
   IconBrandWhatsapp,
   IconPencil,
+  IconHeartHandshake,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -512,29 +513,43 @@ export default function Trippage() {
               radius={"xl"}
               mt={20}
             />
-            <Divider mb={5} mt={20} label="Cost Breakdown" opacity={0.4} />
+            <Divider
+              mb={5}
+              mt={20}
+              size={"md"}
+              label="Cost Breakdown"
+              opacity={0.4}
+            />
             {costs}
-            <Divider mb={5} mt={20} opacity={0.4} />
-            <Group mt={20} spacing={10} w={"100%"} grow>
-              <Button variant="filled" color="dark.5">
-                POST UPDATE
-              </Button>
-            </Group>
+            <Button
+              mt={10}
+              variant="gradient"
+              gradient={{ from: "dark.4", to: "dark.2", deg: 45 }}
+              fullWidth
+            >
+              POST UPDATE
+            </Button>
             <Button
               mt={10}
               w={"100%"}
-              variant="light"
-              color="green.7"
+              variant="gradient"
+              gradient={{ from: "green.9", to: "lime.5", deg: 45 }}
               onClick={() => {
                 router.push("/purchase", undefined, { shallow: true });
               }}
             >
-              <Text
-                sx={{
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                }}
-              >
-                PURCHASE TICKETS
+              <Text>PURCHASE TICKETS</Text>
+            </Button>
+            <Button
+              mt={10}
+              variant="gradient"
+              gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
+              fullWidth
+            >
+              <Text fz={20} color="blue.2">
+                <Flex align={"center"} gap={5}>
+                  DONATE <IconHeartHandshake size={23} />
+                </Flex>
               </Text>
             </Button>
           </Box>

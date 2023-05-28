@@ -73,7 +73,7 @@ export default function ProfileDrawer() {
       px={25}
       key={item.label}
       active={index === active}
-      label={item.label}
+      label={<Text fw={700}>{item.label}</Text>}
       description={item.description}
       rightSection={<IconChevronRight size={14} />}
       icon={item.icon}
@@ -112,22 +112,22 @@ export default function ProfileDrawer() {
         trapFocus={false}
         padding={0}
         opened={profileOpened}
-        size={250}
+        size={305}
         lockScroll={false}
         withOverlay={false}
         withCloseButton={false}
       >
         <Button
           pos={"absolute"}
-          top={175}
+          top={77}
           right={0}
-          bg={"rgba(8, 7, 11, 0.95)"}
+          bg={"dark.5"}
           radius={"5px 0 0 5px"}
-          p={"0 8px"}
+          p={"5px 10px"}
           sx={{
             transition: "all 250ms ease-in-out",
             "&:hover": {
-              background: "rgba(16, 17, 19, 1)",
+              background: "rgba(8, 7, 11, 1)",
             },
           }}
           onClick={() => {
@@ -137,8 +137,8 @@ export default function ProfileDrawer() {
         >
           <IconX size={15} />
         </Button>
-        <Space h={160} />
-        <Divider mb={15} ml={"15%"} w={"70%"} opacity={0.4} />
+        <Space h={95} />
+        <Divider mt={0} mb={20} w={"253px"} ml={"15px"} opacity={0.4} />
         <Flex
           direction="column"
           gap="xs"
@@ -154,21 +154,14 @@ export default function ProfileDrawer() {
             mr={7}
             mx="auto"
           />
-          <Text ta="center" fz="xs">
+          <Text ta="center" fz={10}>
             {user?.providerData[0].email}
           </Text>
         </Flex>
-        <Group
-          spacing={8}
-          mt={25}
-          sx={{
-            borderTop: "1px solid rgba(255, 255, 255, 0.02)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.02)",
-          }}
-        >
+        <Group spacing={8} mt={15}>
           {router.pathname !== "/" && (
             <NavLink
-              label="Map"
+              label={<Text fw={700}>Map</Text>}
               description="View the Map"
               px={25}
               py={8}
@@ -189,7 +182,7 @@ export default function ProfileDrawer() {
           {items}
           {router.pathname !== "/about" && (
             <NavLink
-              label="About Us"
+              label={<Text fw={700}>About Us</Text>}
               description="About TourAssit | FAQs"
               px={25}
               py={8}
@@ -209,7 +202,7 @@ export default function ProfileDrawer() {
           )}
           {router.pathname !== "/contact" && (
             <NavLink
-              label="Contact Us"
+              label={<Text fw={700}>Contact Us</Text>}
               description="Message Us Directly"
               px={25}
               py={8}
@@ -303,85 +296,90 @@ export default function ProfileDrawer() {
       {/* NOTE - bottom Drawer */}
       <Drawer
         opened={profileShow}
-        padding="24px 25px 24px 275px"
-        size={1000}
+        padding="24px 25px 24px 330px"
+        size={900}
         withCloseButton={false}
         trapFocus={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         sx={{
-          ".mantine-Drawer-content": { background: "rgba(11, 12, 13, 0.98)" },
+          ".mantine-Drawer-content": { background: "rgba(11, 12, 13, 0.95)" },
         }}
         onClose={() => {
           setProfileShow(false);
           setActive(-1);
         }}
       >
-        <CloseButton
-          pos="absolute"
-          top={175}
+        <Button
+          pos={"absolute"}
+          top={77}
           right={0}
-          title="Close"
-          bg={"rgba(8, 7, 11, 0.95)"}
+          bg={"dark.5"}
           radius={"5px 0 0 5px"}
-          p={"0 8px"}
-          size={30}
+          p={"5px 10px"}
           sx={{
-            cursor: "pointer",
-            zIndex: 115,
+            transition: "all 250ms ease-in-out",
+            "&:hover": {
+              background: "rgba(8, 7, 11, 1)",
+            },
           }}
           onClick={() => {
             setProfileShow(false);
             setActive(-1);
           }}
-        />
+        >
+          <IconX size={15} />
+        </Button>
         {active === 0 && (
           <motion.div {...animation}>
             <Title
-              mt={65}
-              opacity={0.2}
+              mt={-5}
+              opacity={0.15}
               fw={600}
-              fz={50}
+              fz={40}
               sx={{
                 textTransform: "uppercase",
               }}
             >
-              Account Info
+              <Flex align={"center"} gap={10}>
+                Account Info <IconUser size={40} />
+              </Flex>
             </Title>
-            <Divider mt={7} opacity={0.15} />
             <AccountInfo />
           </motion.div>
         )}
         {active === 1 && (
           <motion.div {...animation}>
             <Title
-              mt={65}
-              opacity={0.2}
+              mt={-5}
+              opacity={0.15}
               fw={600}
-              fz={50}
+              fz={40}
               sx={{
                 textTransform: "uppercase",
               }}
             >
-              Money
+              <Flex align={"center"} gap={10}>
+                Money <IconWallet size={40} />
+              </Flex>
             </Title>
-            <Divider mt={7} opacity={0.15} />
             <Money />
           </motion.div>
         )}
         {active === 2 && (
           <motion.div {...animation}>
             <Title
-              mt={65}
-              opacity={0.2}
+              mt={-5}
+              opacity={0.15}
               fw={600}
-              fz={50}
+              fz={40}
               sx={{
                 textTransform: "uppercase",
               }}
             >
-              Trip Campaigns
+              <Flex align={"center"} gap={10}>
+                Trip Campaigns <IconPlane size={40} />
+              </Flex>
             </Title>
-            <Divider mt={7} opacity={0.15} />
             <Trips />
           </motion.div>
         )}

@@ -301,9 +301,6 @@ export default function Mymap() {
         visible={!mapLoaded}
         zIndex={103}
         transitionDuration={3000}
-        overlayBlur={10}
-        overlayOpacity={1}
-        overlayColor="#000"
         loader={<div></div>}
         style={{ pointerEvents: "none" }}
       />

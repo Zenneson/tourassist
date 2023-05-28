@@ -12,8 +12,6 @@ export default function SearchModal() {
       opened={searchOpened}
       onClose={() => setSearchOpened(false)}
       withCloseButton={false}
-      overlayColor="rgba(0,0,0,0)"
-      overlayBlur={10}
       padding={0}
       radius="xl"
     >

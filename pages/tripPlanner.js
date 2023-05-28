@@ -20,7 +20,6 @@ import {
   Flex,
   Badge,
   BackgroundImage,
-  Checkbox,
   Switch,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -47,7 +46,7 @@ import {
   IconPlaneArrival,
   IconCheck,
   IconFlag,
-  IconAppWindow,
+  IconMapPin,
 } from "@tabler/icons";
 import { useRecoilState } from "recoil";
 import { RichTextEditor, Link } from "@mantine/tiptap";
@@ -217,7 +216,7 @@ export default function TripPlannerPage() {
           bg={"rgba(0,0,0,0.3)"}
           sx={{
             borderRadius: "25px 3px 3px 3px",
-            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.7)",
+            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.2)",
             borderLeft: "3px solid rgba(255,255,255,0.1)",
             borderTop: "3px solid rgba(255,255,255,0.1)",
           }}
@@ -445,7 +444,7 @@ export default function TripPlannerPage() {
                   h={50}
                   fs={"italic"}
                   sx={{
-                    borderBottom: "3px solid rgba(255,255,255,0.1)",
+                    borderBottom: "2px solid rgba(255,255,255,0.1)",
                   }}
                 >
                   {startLocale && date ? (
@@ -465,13 +464,44 @@ export default function TripPlannerPage() {
                     </Text>
                   )}
                 </Title>
+                <Group spacing={5} w={"100%"} mt={15}>
+                  <IconMapPin size={25} opacity={0.4} />
+                  {(startCity || startRegion) && (
+                    <>
+                      <Badge variant="outline" color="gray">
+                        {startCity ? startCity : startRegion}
+                      </Badge>
+                      →
+                    </>
+                  )}
+                  {placeData.map((place, index) => (
+                    <Group key={index} spacing={5}>
+                      <Badge variant="outline" color="gray">
+                        {place.place}
+                      </Badge>
+                      {placeData.length - 1 !== index && "→"}
+                    </Group>
+                  ))}
+                  {checked && (startCity || startRegion) && (
+                    <>
+                      →
+                      <Badge variant="outline" color="gray">
+                        {startCity ? startCity : startRegion}
+                      </Badge>
+                    </>
+                  )}
+                </Group>
                 <Center>
                   <Flex direction={"column"} align={"center"} gap={10}>
                     <Box
                       mt={40}
-                      p={20}
+                      py={15}
+                      px={20}
                       bg={"rgba(0,0,0,0.1)"}
                       sx={{
+                        borderRadius: "25px 3px 3px 3px",
+                        borderTop: "2px solid rgba(255,255,255,0.1)",
+                        borderLeft: "2px solid rgba(255,255,255,0.1)",
                         boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
                       }}
                     >
@@ -481,22 +511,7 @@ export default function TripPlannerPage() {
                         w={"100%"}
                       />
                       <Center>
-                        <Group
-                          spacing={5}
-                          pos={"relative"}
-                          top={-13}
-                          p={10}
-                          sx={{
-                            opacity: 0.3,
-                            "&:hover": {
-                              opacity: 1,
-                              cursor: "none",
-                              transform: "scale(1.1)",
-                              textTransform: "uppercase",
-                              transition: "all 350ms ease-in-out",
-                            },
-                          }}
-                        >
+                        <Group spacing={5} pos={"relative"} top={-13} p={10}>
                           <Box pos={"relative"} top={2}>
                             <IconFlag size={16} />
                           </Box>
@@ -559,32 +574,6 @@ export default function TripPlannerPage() {
                         />
                       </Group>
                     </Box>
-                    <Group position="center" spacing={5} w={"100%"} mt={15}>
-                      {(startCity || startRegion) && (
-                        <>
-                          <Badge variant="outline" color="gray">
-                            {startCity ? startCity : startRegion}
-                          </Badge>
-                          →
-                        </>
-                      )}
-                      {placeData.map((place, index) => (
-                        <Group key={index} spacing={5}>
-                          <Badge variant="outline" color="gray">
-                            {place.place}
-                          </Badge>
-                          {placeData.length - 1 !== index && "→"}
-                        </Group>
-                      ))}
-                      {checked && (startCity || startRegion) && (
-                        <>
-                          →
-                          <Badge variant="outline" color="gray">
-                            {startCity ? startCity : startRegion}
-                          </Badge>
-                        </>
-                      )}
-                    </Group>
                   </Flex>
                 </Center>
               </motion.div>
@@ -600,7 +589,7 @@ export default function TripPlannerPage() {
                     bg={"rgba(0,0,0,0.3)"}
                     sx={{
                       borderRadius: "25px 3px 3px 3px",
-                      boxShadow: "0 7px 10px 0 rgba(0,0,0,0.7)",
+                      boxShadow: "0 7px 10px 0 rgba(0,0,0,0.2)",
                       borderLeft: "3px solid rgba(255,255,255,0.1)",
                       borderTop: "3px solid rgba(255,255,255,0.1)",
                     }}

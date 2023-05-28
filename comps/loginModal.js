@@ -9,9 +9,6 @@ export default function LoginModal() {
   return (
     <>
       <Modal
-        overlayColor="#fff"
-        overlayOpacity={0.1}
-        overlayBlur={10}
         opened={loginOpened}
         onClose={() => setLoginOpened(false)}
         centered

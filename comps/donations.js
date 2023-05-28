@@ -10,6 +10,7 @@ import {
   SegmentedControl,
   Text,
   Table,
+  Title,
 } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
 import { IconReload } from "@tabler/icons";
@@ -97,7 +98,14 @@ export default function Donations() {
       }}
     >
       <Flex gap={0}>
-        <Divider w="100%" label="10 Donations" />
+        <Divider
+          w="100%"
+          label={
+            <Title order={6} opacity={0.4} mr={20}>
+              10 Donations
+            </Title>
+          }
+        />
         <SegmentedControl
           color="dark"
           value={sorted}
@@ -119,7 +127,7 @@ export default function Donations() {
       <Box
         p={10}
         m={0}
-        h={"calc(100vh - 490px)"}
+        h={"calc(100vh - 430px)"}
         mih={390}
         ref={donationsRef}
         type="auto"

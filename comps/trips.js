@@ -261,9 +261,10 @@ export default function Trips() {
       pt={15}
       ref={tripsRef}
       spacing={27}
-      px={10}
+      pl={5}
+      pr={30}
       mb={10}
-      h={"calc(100vh - 197px)"}
+      h={"calc(100vh - 100px)"}
       sx={{
         overflowY: "scroll",
         borderRadius: "3px",

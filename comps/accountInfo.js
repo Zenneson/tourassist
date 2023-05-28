@@ -1,10 +1,12 @@
 import {
   ActionIcon,
+  Box,
   Center,
   Flex,
-  Divider,
   Input,
   Group,
+  Text,
+  Title,
   Switch,
 } from "@mantine/core";
 import {
@@ -27,38 +29,77 @@ export default function AccountInfo() {
   const auth = getAuth();
 
   return (
-    <Center mt={30}>
-      <Flex direction="column" gap="xs" w={"90%"}>
-        <Divider mb={25} label="Change E-mail or Password" />
-        <Input
-          variant="filled"
-          placeholder={user?.providerData[0].email}
-          icon={<IconUserCircle size={20} />}
-          iconWidth={50}
-          disabled
-          w="100%"
-          rightSection={
-            <ActionIcon opacity={0.5} variant="subtle">
-              <IconPencil size={18} />
-            </ActionIcon>
-          }
-        />
-        <Input
-          variant="filled"
-          placeholder="********"
-          icon={<IconKey size={20} />}
-          iconWidth={50}
-          disabled
-          w="100%"
-          rightSection={
-            <ActionIcon opacity={0.5} variant="subtle">
-              <IconPencil size={18} />
-            </ActionIcon>
-          }
-        />
-
-        <Divider my={25} label="Social Links" />
-        <Flex direction="column" gap={10}>
+    <Center mt={30} pr={30}>
+      <Flex direction="column" gap="xs" w={"100%"}>
+        <Title
+          order={6}
+          opacity={0.4}
+          pb={5}
+          mb={10}
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
+          Change E-mail or Password
+        </Title>
+        <Box
+          pl={20}
+          pt={10}
+          pb={15}
+          sx={{
+            borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
+          }}
+        >
+          <Input
+            variant="filled"
+            placeholder={user?.providerData[0].email}
+            icon={<IconUserCircle size={20} />}
+            iconWidth={50}
+            disabled
+            mb={10}
+            w="100%"
+            rightSection={
+              <ActionIcon opacity={0.5} variant="subtle">
+                <IconPencil size={18} />
+              </ActionIcon>
+            }
+          />
+          <Input
+            variant="filled"
+            placeholder="********"
+            icon={<IconKey size={20} />}
+            iconWidth={50}
+            disabled
+            w="100%"
+            rightSection={
+              <ActionIcon opacity={0.5} variant="subtle">
+                <IconPencil size={18} />
+              </ActionIcon>
+            }
+          />
+        </Box>
+        <Title
+          order={6}
+          mt={25}
+          opacity={0.4}
+          pb={5}
+          mb={10}
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
+          Social Links
+        </Title>
+        <Flex
+          direction="column"
+          gap={10}
+          pl={20}
+          pt={10}
+          pb={15}
+          sx={{
+            borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
+          }}
+        >
           <Group grow spacing={10}>
             <Input
               icon={<IconBrandFacebook size={20} />}
@@ -104,9 +145,29 @@ export default function AccountInfo() {
             />
           </Group>
         </Flex>
-        <Divider my={25} label="Email Notifications" mb={-15} />
-        <Group grow align="stretch" fw={700} px={20}>
-          <Flex direction="column" gap={0} align="flex-end">
+        <Title
+          order={6}
+          mt={25}
+          opacity={0.4}
+          pb={5}
+          mb={10}
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
+          Email Notifications
+        </Title>
+        <Group
+          grow
+          align="stretch"
+          fw={700}
+          pt={10}
+          pb={15}
+          sx={{
+            borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
+          }}
+        >
+          <Flex direction="column" gap={5} align="flex-start" pl={20}>
             <Switch
               p={0}
               size="xs"
@@ -114,7 +175,7 @@ export default function AccountInfo() {
               onLabel={<IconCheck size={12} />}
               color="dark"
               radius="xs"
-              labelPosition="left"
+              labelPosition="right"
               label="General Newsletter"
             />
             <Switch
@@ -124,7 +185,7 @@ export default function AccountInfo() {
               onLabel={<IconCheck size={12} />}
               color="dark"
               radius="xs"
-              labelPosition="left"
+              labelPosition="right"
               label="Campaign Creation"
             />
             <Switch
@@ -134,11 +195,11 @@ export default function AccountInfo() {
               onLabel={<IconCheck size={12} />}
               color="dark"
               radius="xs"
-              labelPosition="left"
+              labelPosition="right"
               label="New Campaign Comment"
             />
           </Flex>
-          <Flex direction="column" gap={0} align="flex-end">
+          <Flex direction="column" gap={5} align="flex-start">
             <Switch
               p={0}
               size="xs"
@@ -146,7 +207,7 @@ export default function AccountInfo() {
               onLabel={<IconCheck size={12} />}
               color="dark"
               radius="xs"
-              labelPosition="left"
+              labelPosition="right"
               label="Campaign Milestones"
             />
             <Switch
@@ -156,7 +217,7 @@ export default function AccountInfo() {
               onLabel={<IconCheck size={12} />}
               color="dark"
               radius="xs"
-              labelPosition="left"
+              labelPosition="right"
               label="Campaign Ending Soon"
             />
             <Switch
@@ -166,12 +227,11 @@ export default function AccountInfo() {
               onLabel={<IconCheck size={12} />}
               color="dark"
               radius="xs"
-              labelPosition="left"
+              labelPosition="right"
               label="Campaign Ended"
             />
           </Flex>
         </Group>
-        <Divider mt={25} />
       </Flex>
     </Center>
   );

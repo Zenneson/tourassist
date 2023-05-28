@@ -64,6 +64,7 @@ export default function MainMenu() {
       <Header
         zIndex={998}
         bg="none"
+        pb={0}
         withBorder={false}
         opacity={!visible || searchOpened || loginOpened || mapSpin ? 0 : 1}
         sx={{
@@ -74,11 +75,11 @@ export default function MainMenu() {
         }}
       >
         <Flex
-          direction={profileOpened ? "column" : "row"}
+          direction={"row"}
           align="center"
           gap={10}
-          mt={profileOpened ? 10 : 0}
-          ml={profileOpened ? 35 : -15}
+          mt={0}
+          ml={-15}
           sx={{
             cursor: "pointer",
           }}
@@ -92,13 +93,12 @@ export default function MainMenu() {
           <Image
             ml={5}
             width={"auto"}
-            // height="86px"
-            height={profileOpened ? "86px" : "60px"}
+            height={"60px"}
             src={"img/TA_GlobeLogo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
-          <Title fw={900} color="#fff" fz={profileOpened ? 20 : 30}>
+          <Title fw={900} color="#fff" fz={30}>
             <Text fw={500} color="#adadad" inherit span>
               TOUR
             </Text>

@@ -1,6 +1,15 @@
 import { useRef, useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { Box, Center, Flex, Button, Group, Title, Text } from "@mantine/core";
+import {
+  Box,
+  Center,
+  Flex,
+  Button,
+  Group,
+  Title,
+  Text,
+  Divider,
+} from "@mantine/core";
 import { Line } from "react-chartjs-2";
 import { profileLinkState } from "../libs/atoms";
 import Donations from "./donations";
@@ -52,8 +61,17 @@ export default function Money() {
   };
 
   return (
-    <>
-      <Box mt={20} w="100%">
+    <Box pr={20}>
+      <Box
+        my={20}
+        w="100%"
+        px={10}
+        py={15}
+        sx={{
+          borderLeft: "3px solid rgba(204, 204, 204, 0.15)",
+          borderBottom: "3px solid rgba(204, 204, 204, 0.15)",
+        }}
+      >
         <Line
           options={{
             responsive: true,
@@ -73,7 +91,7 @@ export default function Money() {
         </Center>
         <Center
           sx={{
-            borderLeft: "1px solid rgba(255,255,255,0.2)",
+            borderLeft: "3px solid rgba(255,255,255,0.2)",
           }}
         >
           <Box>
@@ -108,6 +126,6 @@ export default function Money() {
           <Donations />
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 }

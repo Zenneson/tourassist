@@ -163,7 +163,6 @@ export default function Intro() {
                   <Title
                     order={1}
                     fw={400}
-                    // mt={20}
                     transform="uppercase"
                     fz={!firstDown ? "4.3vw" : "7vw"}
                     sx={{
