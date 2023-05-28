@@ -26,6 +26,8 @@ import {
   IconArrowBigLeft,
   IconArrowBigRight,
   IconRefresh,
+  IconArrowBigUpLine,
+  IconArrowBigDownLine,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -283,7 +285,7 @@ export default function Purchase() {
   const hotels = hotelData.map((hotel, index) => (
     <Card
       key={index}
-      p={"lg"}
+      padding={"lg"}
       maw={"95%"}
       ml={"2.5%"}
       bg={"rgba(0,0,0,1)"}
@@ -336,7 +338,7 @@ export default function Purchase() {
                 pt={1}
                 pb={10}
                 sx={{
-                  borderLeft: "2px solid rgba(255,255,255,0.035)",
+                  borderLeft: "2px solid rgba(255,255,255,0.08)",
                   cursor: "default",
                 }}
               >
@@ -348,10 +350,22 @@ export default function Purchase() {
                 </Group>
                 <Flex align={"center"} gap={15} fz={13} mt={5}>
                   <Group spacing={5}>
-                    <IconCalendarEvent size={15} opacity={0.2} /> May 5, 2024{" "}
+                    <IconCalendarEvent size={15} opacity={0.5} /> May 5, 2024{" "}
                   </Group>
                   <Group spacing={5}>
-                    <IconHourglass size={15} opacity={0.2} /> 45 Days Left
+                    <IconHourglass size={15} opacity={0.5} /> 45 Days Left
+                  </Group>
+                  <Group spacing={5}>
+                    <IconArrowBigUpLine size={15} opacity={0.5} color="lime" />{" "}
+                    $1234.56 | $5000 Raised
+                  </Group>
+                  <Group spacing={5}>
+                    <IconArrowBigDownLine
+                      size={15}
+                      opacity={0.5}
+                      color="pink"
+                    />{" "}
+                    $0 Spent
                   </Group>
                 </Flex>
               </Box>
@@ -411,7 +425,7 @@ export default function Purchase() {
                     {viewAlts ? (
                       <>
                         <Space w={5} />
-                        <IconRefresh size={30} />
+                        <IconRefresh size={25} />
                       </>
                     ) : (
                       <Text ml={7} color="blue.2" inherit>
@@ -613,7 +627,7 @@ export default function Purchase() {
                     {viewAlts2 ? (
                       <>
                         <Space w={5} />
-                        <IconRefresh size={30} />
+                        <IconRefresh size={25} />
                       </>
                     ) : (
                       <Text ml={7} color="blue.2" inherit>

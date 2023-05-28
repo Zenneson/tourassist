@@ -521,25 +521,21 @@ export default function Trippage() {
               opacity={0.4}
             />
             {costs}
-            <Button
-              mt={10}
-              variant="gradient"
-              gradient={{ from: "dark.4", to: "dark.2", deg: 45 }}
-              fullWidth
-            >
-              POST UPDATE
-            </Button>
-            <Button
-              mt={10}
-              w={"100%"}
-              variant="gradient"
-              gradient={{ from: "green.9", to: "lime.5", deg: 45 }}
-              onClick={() => {
-                router.push("/purchase", undefined, { shallow: true });
-              }}
-            >
-              <Text>PURCHASE TICKETS</Text>
-            </Button>
+            <Button.Group mt={10} w={"100%"}>
+              <Button
+                w={"100%"}
+                variant="filled"
+                color="green.9"
+                onClick={() => {
+                  router.push("/purchase", undefined, { shallow: true });
+                }}
+              >
+                <Text>USE FUNDS</Text>
+              </Button>
+              <Button variant="filled" color="blue" fullWidth>
+                POST UPDATE
+              </Button>
+            </Button.Group>
             <Button
               mt={10}
               variant="gradient"

@@ -82,7 +82,7 @@ export default function Donations() {
         </Group>
       </td>
       <td>
-        <Text size="xs" fw={400} color="dimmed" ta="right">
+        <Text size="xs" fw={700} color="dimmed" ta="center">
           ${item.amount}
         </Text>
       </td>
@@ -148,7 +148,7 @@ export default function Donations() {
           }`,
         }}
       >
-        <Table verticalSpacing="md" highlightOnHover>
+        <Table verticalSpacing="xs" highlightOnHover striped withColumnBorders>
           <tbody>
             {rows.length !== 0 ? (
               rows
