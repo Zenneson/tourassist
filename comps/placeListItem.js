@@ -1,4 +1,4 @@
-import { Avatar, Grid, Col, Text } from "@mantine/core";
+import { Avatar, Grid, Text } from "@mantine/core";
 import { IconGripVertical, IconTrash } from "@tabler/icons";
 import { useRecoilState } from "recoil";
 import { Draggable } from "react-beautiful-dnd";
@@ -35,11 +35,11 @@ export default function PlaceListItem({ index, name, region, draggableId }) {
           }}
         >
           {places.length > 1 ? (
-            <Col
+            <Grid.Col
               {...provided.dragHandleProps}
               span="content"
               sx={{
-                padding: "3px 0 0 10px",
+                padding: "0 0 2px 10px",
                 opacity: 0.2,
                 cursor: "grab",
                 "&:hover": {
@@ -51,18 +51,18 @@ export default function PlaceListItem({ index, name, region, draggableId }) {
               }}
             >
               <IconGripVertical size={15} />
-            </Col>
+            </Grid.Col>
           ) : (
-            <Col
+            <Grid.Col
               {...provided.dragHandleProps}
               span="content"
               sx={{
                 padding: 0,
                 opacity: 0.2,
               }}
-            ></Col>
+            ></Grid.Col>
           )}
-          <Col
+          <Grid.Col
             span="content"
             sx={{
               padding: "0 0 0 5px",
@@ -76,16 +76,16 @@ export default function PlaceListItem({ index, name, region, draggableId }) {
             >
               {name[0]}
             </Avatar>
-          </Col>
-          <Col span="auto">
+          </Grid.Col>
+          <Grid.Col span="auto">
             <Text size="md" fw={700}>
               {name}
             </Text>
             <Text size="xs" sx={{ color: "rgba(255,255,255,0.3)" }}>
               {region}
             </Text>
-          </Col>
-          <Col span="content">
+          </Grid.Col>
+          <Grid.Col span="content">
             <Avatar
               radius="xl"
               variant="outline"
@@ -112,7 +112,7 @@ export default function PlaceListItem({ index, name, region, draggableId }) {
             >
               <IconTrash size={17} color="rgba(255, 0, 0, 0.8)" />
             </Avatar>
-          </Col>
+          </Grid.Col>
         </Grid>
       )}
     </Draggable>

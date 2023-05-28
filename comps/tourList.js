@@ -64,6 +64,7 @@ export default function TourList() {
             <Button
               radius="xl"
               size="sm"
+              fw={700}
               onClick={() => {
                 const newPlaceData = places.map((place) => {
                   const { name, region } = place;
@@ -88,7 +89,6 @@ export default function TourList() {
                   boxShadow: "0px 0px 15px 0px rgba(255, 255, 255, 0.03)",
                   transform: "scale(1.02)",
                   border: "1px solid rgba(255, 255, 255, 0.05)",
-                  fontWeight: 700,
                 },
               })}
             >
