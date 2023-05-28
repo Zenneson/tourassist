@@ -17,7 +17,6 @@ import {
   Button,
   Box,
   NavLink,
-  CloseButton,
   Divider,
 } from "@mantine/core";
 import {
@@ -105,7 +104,6 @@ export default function ProfileDrawer() {
 
   return (
     <>
-      {/* NOTE - top Drawer */}
       <Drawer
         zIndex={500}
         pos={"relative"}
@@ -167,7 +165,7 @@ export default function ProfileDrawer() {
               py={8}
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
-              onClick={(e) => {
+              onClick={() => {
                 setProfileOpened(false);
                 setProfileShow(false);
                 router.push("/");
@@ -292,7 +290,6 @@ export default function ProfileDrawer() {
           </Button>
         </Box>
       </Drawer>
-      {/* NOTE - bottom Drawer */}
       <Drawer
         opened={profileShow}
         padding="24px 25px 24px 330px"

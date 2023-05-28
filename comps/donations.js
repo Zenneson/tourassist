@@ -127,7 +127,7 @@ export default function Donations() {
       <Box
         p={10}
         m={0}
-        h={"calc(100vh - 430px)"}
+        h={"calc(100vh - 435px)"}
         mih={390}
         ref={donationsRef}
         type="auto"
