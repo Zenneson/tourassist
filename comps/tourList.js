@@ -1,15 +1,19 @@
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import { Drawer, Button, Divider, Center, Stack } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
-import { listOpenedState, placeListState, placeDataState } from "../libs/atoms";
+import { listOpenedState, placeListState } from "../libs/atoms";
 
 export default function TourList() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
-  const [placeData, setPlaceData] = useRecoilState(placeDataState);
+  const [placeData, setPlaceData] = useLocalStorage({
+    key: "placeDataState",
+    defaultValue: [],
+  });
   const router = useRouter();
 
   return (

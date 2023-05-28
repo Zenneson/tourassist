@@ -35,7 +35,6 @@ import {
   loginOpenedState,
   profileOpenedState,
   profileShowState,
-  placeDataState,
 } from "../libs/atoms";
 import TourList from "./tourList";
 
@@ -68,8 +67,11 @@ export default function Mymap() {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
-  const [placeData, setPlaceData] = useRecoilState(placeDataState);
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const [placeData, setPlaceData] = useLocalStorage({
+    key: "placeDataState",
+    defaultValue: [],
+  });
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
     defaultValue: false,

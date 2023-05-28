@@ -29,7 +29,6 @@ import {
   useLocalStorage,
 } from "@mantine/hooks";
 import LoginComp from "../comps/loginComp";
-import { placeDataState } from "../libs/atoms";
 import {
   IconCurrencyDollar,
   IconPlus,
@@ -48,7 +47,6 @@ import {
   IconFlag,
   IconMapPin,
 } from "@tabler/icons";
-import { useRecoilState } from "recoil";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -66,11 +64,14 @@ export default function TripPlannerPage() {
   const [date, setDate] = useState(null);
   const [checked, setChecked] = useState(false);
   const [showToolbar, setShowToolbar] = useState(false);
-  const [placeData, setPlaceData] = useRecoilState(placeDataState);
   const forceUpdate = useForceUpdate();
   const startLocaleRef = useRef(null);
   const newCostRef = useRef(null);
   const router = useRouter();
+  const [placeData, setPlaceData] = useLocalStorage({
+    key: "placeDataState",
+    defaultValue: [],
+  });
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const sliderRef = useRef();
 
@@ -244,7 +245,6 @@ export default function TripPlannerPage() {
                 {place.region}
               </Text>
             </Stack>
-            {/* NOTE */}
             <Divider
               w={"40%"}
               labelPosition="right"
@@ -426,6 +426,10 @@ export default function TripPlannerPage() {
     </Box>
   );
 
+  const slides = images.map((image, index) => (
+    <BackgroundImage radius={3} key={index} src={image} h={300} alt="image" />
+  ));
+
   const index = startLocale?.indexOf(",");
   const startCity = startLocale?.substring(0, index);
   const startRegion = startLocale?.substring(index + 1);
@@ -446,13 +450,7 @@ export default function TripPlannerPage() {
             {active === 0 && (
               <motion.div {...animation}>
                 <Box ml={"10%"} w={"80%"}>
-                  <Title
-                    order={2}
-                    h={50}
-                    sx={{
-                      borderBottom: "1px solid rgba(255,255,255,0.1)",
-                    }}
-                  >
+                  <Title order={2} h={30} ml={12}>
                     {startLocale && date ? (
                       "Continue..."
                     ) : (
@@ -470,7 +468,18 @@ export default function TripPlannerPage() {
                       </Text>
                     )}
                   </Title>
-                  <Group spacing={5} w={"100%"} mt={15}>
+                  <Group
+                    spacing={5}
+                    w={"100%"}
+                    mt={15}
+                    p={10}
+                    pb={15}
+                    sx={{
+                      borderRadius: "25px 3px 3px 3px",
+                      borderTop: "2px solid rgba(255,255,255,0.1)",
+                      borderLeft: "2px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
                     <IconMapPin size={25} opacity={0.4} />
                     {(startCity || startRegion) && (
                       <>
@@ -512,21 +521,20 @@ export default function TripPlannerPage() {
                         }}
                       >
                         <Divider
-                          label={<Text fz={15}>Travel Start Date</Text>}
+                          label={
+                            <Flex align={"center"} gap={5}>
+                              <Box pos={"relative"} top={2}>
+                                <IconFlag size={16} />
+                              </Box>
+                              <Text fz={12} m={0}>
+                                Fundraiser ends the day before the travel start
+                                date!
+                              </Text>
+                            </Flex>
+                          }
                           mb={10}
                           w={"100%"}
                         />
-                        <Center>
-                          <Group spacing={5} pos={"relative"} top={-13} p={10}>
-                            <Box pos={"relative"} top={2}>
-                              <IconFlag size={16} />
-                            </Box>
-                            <Text fz={12} m={0}>
-                              Fundraiser ends the day before the travel start
-                              date!
-                            </Text>
-                          </Group>
-                        </Center>
                         <DatePicker
                           value={date}
                           size={"md"}
@@ -638,198 +646,181 @@ export default function TripPlannerPage() {
             )}
             {active === 2 && (
               <motion.div {...animation}>
-                <Title order={6} fw={600}>
-                  <Stack align="center">
-                    <Input
-                      size={"xl"}
-                      variant="filled"
-                      placeholder="Title..."
-                      w="100%"
-                      maw={800}
-                      bg={"rgba(0,0,0,0)"}
+                <Stack align="center">
+                  <Input
+                    size={"xl"}
+                    variant="filled"
+                    placeholder="Title..."
+                    w="100%"
+                    maw={800}
+                    bg={"rgba(0,0,0,0)"}
+                    sx={{
+                      ".mantine-Input-input": {
+                        "&::placeholder": {
+                          fontWeight: 700,
+                          fontStyle: "italic",
+                          color: "rgba(255,255,255,0.0.08)",
+                        },
+                      },
+                    }}
+                  />
+                  <Group maw={800} spacing={20} w="100%" position="apart" grow>
+                    {images.length > 0 && (
+                      <Box>
+                        <Slider
+                          ref={sliderRef}
+                          {...slideSettings}
+                          style={{
+                            width: "390px",
+                            height: "300px",
+                          }}
+                        >
+                          {slides}
+                        </Slider>
+                        <Group mt={10} spacing={15} grow>
+                          <Button
+                            variant="subtle"
+                            color="gray"
+                            onClick={() => {
+                              previous();
+                            }}
+                          >
+                            <IconChevronLeft size={20} />
+                          </Button>
+                          <Button color="red">
+                            <IconTrash size={17} />
+                          </Button>
+                          <Button
+                            variant="subtle"
+                            color="gray"
+                            onClick={() => {
+                              next();
+                            }}
+                          >
+                            <IconChevronRight size={20} />
+                          </Button>
+                        </Group>
+                      </Box>
+                    )}
+                    <Box mt={5}>
+                      <Dropzone
+                        onDrop={(files) => console.log("accepted files", files)}
+                        onReject={(files) =>
+                          console.log("rejected files", files)
+                        }
+                        accept={IMAGE_MIME_TYPE}
+                        ta="center"
+                        h={300}
+                      >
+                        <Group
+                          position="center"
+                          spacing={5}
+                          mt={80}
+                          style={{
+                            pointerEvents: "none",
+                          }}
+                        >
+                          <Dropzone.Accept>
+                            <IconUpload size={50} opacity={0.3} />
+                          </Dropzone.Accept>
+                          <Dropzone.Reject>
+                            <IconX size={50} opacity={0.3} />
+                          </Dropzone.Reject>
+                          <Dropzone.Idle>
+                            <IconPhoto size={50} opacity={0.3} />
+                          </Dropzone.Idle>
+
+                          <div>
+                            <Text size="xl" fw={700} inline>
+                              DRAG IMAGES HERE
+                            </Text>
+                          </div>
+                        </Group>
+                        <Center>
+                          <Divider
+                            label="OR"
+                            labelPosition="center"
+                            my={5}
+                            w={"60%"}
+                            opacity={0.7}
+                          />
+                        </Center>
+                        <Button
+                          variant="light"
+                          color="gray"
+                          radius={"xl"}
+                          px={70}
+                          mt={7}
+                          fz={14}
+                          size="lg"
+                          compact
+                        >
+                          Select Files
+                        </Button>
+                      </Dropzone>
+                      {images.length > 0 && (
+                        <Title
+                          mt={15}
+                          order={6}
+                          py={9}
+                          ta={"center"}
+                          opacity={0.5}
+                        >
+                          {`${images.length} / 6 SPACES USED`}
+                        </Title>
+                      )}
+                    </Box>
+                  </Group>
+                  <RichTextEditor
+                    editor={editor}
+                    position="relative"
+                    onClick={() => {
+                      setShowToolbar(true);
+                      editor?.chain().focus().run();
+                    }}
+                    sx={{
+                      overflow: "auto",
+                      width: "100%",
+                      minWidth: "500px",
+                      maxWidth: "800px",
+                      minHeight: "200px",
+                      maxHeight: "300px",
+                    }}
+                  >
+                    {editor && showToolbar && (
+                      <>
+                        <RichTextEditor.Toolbar>
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.Bold />
+                            <RichTextEditor.H1 />
+                            <RichTextEditor.H2 />
+                            <RichTextEditor.H3 />
+                            <RichTextEditor.H4 />
+                            <RichTextEditor.BulletList />
+                            <RichTextEditor.OrderedList />
+                          </RichTextEditor.ControlsGroup>
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.Italic />
+                            <RichTextEditor.AlignLeft />
+                            <RichTextEditor.AlignCenter />
+                            <RichTextEditor.AlignRight />
+                            <RichTextEditor.AlignJustify />
+                            <RichTextEditor.Link />
+                            <RichTextEditor.Unlink />
+                          </RichTextEditor.ControlsGroup>
+                        </RichTextEditor.Toolbar>
+                      </>
+                    )}
+                    <RichTextEditor.Content
                       sx={{
-                        ".mantine-Input-input": {
-                          "&::placeholder": {
-                            fontWeight: 700,
-                            fontStyle: "italic",
-                            color: "rgba(255,255,255,0.0.08)",
-                          },
+                        "& p": {
+                          fontSize: "1rem",
+                          textAlign: "justify",
                         },
                       }}
                     />
-                    <Group
-                      maw={800}
-                      spacing={20}
-                      w="100%"
-                      position="apart"
-                      grow
-                    >
-                      {images.length > 0 && (
-                        <Box>
-                          <Slider
-                            ref={sliderRef}
-                            {...slideSettings}
-                            style={{
-                              width: "100%",
-                            }}
-                          >
-                            {images.map((image, index) => (
-                              <BackgroundImage
-                                radius={3}
-                                key={index}
-                                src={image}
-                                h={300}
-                                alt="intro"
-                              />
-                            ))}
-                          </Slider>
-                          <Group mt={10} spacing={15} grow>
-                            <Button
-                              variant="subtle"
-                              color="gray"
-                              onClick={() => {
-                                previous();
-                              }}
-                            >
-                              <IconChevronLeft size={20} />
-                            </Button>
-                            <Button color="red">
-                              <IconTrash size={17} />
-                            </Button>
-                            <Button
-                              variant="subtle"
-                              color="gray"
-                              onClick={() => {
-                                next();
-                              }}
-                            >
-                              <IconChevronRight size={20} />
-                            </Button>
-                          </Group>
-                        </Box>
-                      )}
-                      <Box>
-                        <Dropzone
-                          onDrop={(files) =>
-                            console.log("accepted files", files)
-                          }
-                          onReject={(files) =>
-                            console.log("rejected files", files)
-                          }
-                          accept={IMAGE_MIME_TYPE}
-                          ta="center"
-                          mih={300}
-                        >
-                          <Group
-                            position="center"
-                            spacing={5}
-                            mt={80}
-                            style={{
-                              pointerEvents: "none",
-                            }}
-                          >
-                            <Dropzone.Accept>
-                              <IconUpload size={50} opacity={0.3} />
-                            </Dropzone.Accept>
-                            <Dropzone.Reject>
-                              <IconX size={50} opacity={0.3} />
-                            </Dropzone.Reject>
-                            <Dropzone.Idle>
-                              <IconPhoto size={50} opacity={0.3} />
-                            </Dropzone.Idle>
-
-                            <div>
-                              <Text size="xl" inline>
-                                DRAG IMAGES HERE
-                              </Text>
-                            </div>
-                          </Group>
-                          <Center>
-                            <Divider
-                              label="OR"
-                              labelPosition="center"
-                              my={5}
-                              w={"60%"}
-                              opacity={0.7}
-                            />
-                          </Center>
-                          <Button
-                            variant="light"
-                            color="gray"
-                            radius={"xl"}
-                            px={70}
-                            mt={7}
-                            fz={14}
-                            size="lg"
-                            compact
-                          >
-                            Select Files
-                          </Button>
-                        </Dropzone>
-                        {images.length > 0 && (
-                          <Title
-                            mt={15}
-                            order={6}
-                            py={9}
-                            ta={"center"}
-                            opacity={0.5}
-                          >
-                            {`${images.length} / 6 SPACES USED`}
-                          </Title>
-                        )}
-                      </Box>
-                    </Group>
-                    <RichTextEditor
-                      editor={editor}
-                      position="relative"
-                      onClick={() => {
-                        setShowToolbar(true);
-                        editor?.chain().focus().run();
-                      }}
-                      sx={{
-                        overflow: "auto",
-                        width: "100%",
-                        minWidth: "500px",
-                        maxWidth: "800px",
-                        minHeight: "200px",
-                        maxHeight: "300px",
-                      }}
-                    >
-                      {editor && showToolbar && (
-                        <>
-                          <RichTextEditor.Toolbar>
-                            <RichTextEditor.ControlsGroup>
-                              <RichTextEditor.Bold />
-                              <RichTextEditor.H1 />
-                              <RichTextEditor.H2 />
-                              <RichTextEditor.H3 />
-                              <RichTextEditor.H4 />
-                              <RichTextEditor.BulletList />
-                              <RichTextEditor.OrderedList />
-                            </RichTextEditor.ControlsGroup>
-                            <RichTextEditor.ControlsGroup>
-                              <RichTextEditor.Italic />
-                              <RichTextEditor.AlignLeft />
-                              <RichTextEditor.AlignCenter />
-                              <RichTextEditor.AlignRight />
-                              <RichTextEditor.AlignJustify />
-                              <RichTextEditor.Link />
-                              <RichTextEditor.Unlink />
-                            </RichTextEditor.ControlsGroup>
-                          </RichTextEditor.Toolbar>
-                        </>
-                      )}
-                      <RichTextEditor.Content
-                        sx={{
-                          "& p": {
-                            fontSize: "1rem",
-                            textAlign: "justify",
-                          },
-                        }}
-                      />
-                    </RichTextEditor>
-                  </Stack>
-                </Title>
+                  </RichTextEditor>
+                </Stack>
               </motion.div>
             )}
             {active === 3 && (
