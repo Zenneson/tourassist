@@ -10,9 +10,12 @@ import {
   Title,
   Flex,
   Text,
+  Group,
   LoadingOverlay,
   Divider,
   NavLink,
+  Popover,
+  Button,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import {
@@ -20,6 +23,7 @@ import {
   IconMapSearch,
   IconLocation,
   IconPlaneTilt,
+  IconFlag3,
 } from "@tabler/icons";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "./getNewCenter";
@@ -56,6 +60,7 @@ export default function Mymap() {
   const [isCity, setIsCity] = useState(false);
   const [isCountry, setIsCountry] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
+  const [tourListDropDown, setTourListDropDown] = useState(false);
   const [places, setPlaces] = useRecoilState(placeListState);
   const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
@@ -291,6 +296,7 @@ export default function Mymap() {
     setRegionName("");
     setShowModal(false);
     setIsCity(false);
+    setTourListDropDown(false);
   };
 
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
@@ -358,41 +364,107 @@ export default function Mymap() {
           },
         })}
       >
-        <NavLink
-          icon={<IconPlaneTilt size={25} color="#9ff5fd" opacity={0.7} />}
-          variant="filled"
-          description={`Stat planning a trip to ${regionName}`}
-          sx={{
-            borderRadius: "5px",
+        <Popover
+          opened={tourListDropDown}
+          offset={-60}
+          closeOnClickOutside={true}
+          width={"target"}
+          styles={{
+            dropdown: {
+              border: "none",
+            },
           }}
-          label={
-            <>
-              <Text inherit span color="dimmed">
-                Travel to{" "}
-              </Text>
-              <Text
-                inherit
-                span
-                color="white"
-                size="md"
-                fw={700}
-                transform="uppercase"
-              >
-                {regionName}
-              </Text>
-            </>
-          }
           onClick={() => {
-            setPlaceData([
-              {
-                place: regionName,
-                region: citySubTitle,
-                costs: ["FLIGHT", "HOTEL"],
-              },
-            ]);
-            router.push("/tripplanner");
+            if (places.length > 0) {
+              setListOpened(true);
+              setTourListDropDown(!tourListDropDown);
+            } else {
+              setPlaceData([
+                {
+                  place: regionName,
+                  region: citySubTitle,
+                  costs: ["FLIGHT", "HOTEL"],
+                },
+              ]);
+              router.push("/tripplanner");
+            }
           }}
-        />
+        >
+          <Popover.Target>
+            <NavLink
+              icon={<IconPlaneTilt size={25} color="#9ff5fd" opacity={0.7} />}
+              variant="filled"
+              description={`Start planning a trip to ${regionName}`}
+              sx={{
+                borderRadius: "5px",
+              }}
+              label={
+                <>
+                  <Text inherit span color="dimmed">
+                    Travel to{" "}
+                  </Text>
+                  <Text
+                    inherit
+                    span
+                    color="white"
+                    size="md"
+                    fw={700}
+                    transform="uppercase"
+                  >
+                    {regionName}
+                  </Text>
+                </>
+              }
+            />
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Flex align={"center"} gap={3} fz={12}>
+              <IconFlag3 size={20} opacity={0.2} /> Clear Tour List and Travel
+              to
+              <Text fw={700}>
+                <Text
+                  span
+                  color="blue.2"
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {regionName}
+                </Text>
+                ?
+              </Text>
+            </Flex>
+            <Group spacing={10} mt={10} grow>
+              <Button
+                variant="light"
+                color="blue.0"
+                onClick={() => {
+                  setListOpened(false);
+                  setPlaces([]);
+                  setPlaceData([
+                    {
+                      place: regionName,
+                      region: citySubTitle,
+                      costs: ["FLIGHT", "HOTEL"],
+                    },
+                  ]);
+                  router.push("/tripplanner");
+                }}
+              >
+                YES
+              </Button>
+              <Button
+                variant="light"
+                color="red.0"
+                onClick={() => {
+                  setTourListDropDown(false);
+                }}
+              >
+                NO
+              </Button>
+            </Group>
+          </Popover.Dropdown>
+        </Popover>
 
         <NavLink
           icon={<IconPlaylistAdd size={25} color="#9ff5fd" opacity={0.7} />}
