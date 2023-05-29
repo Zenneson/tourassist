@@ -46,6 +46,7 @@ import {
   IconCheck,
   IconFlag,
   IconMapPin,
+  IconCalendarEvent,
 } from "@tabler/icons";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
@@ -56,6 +57,8 @@ import TextAlign from "@tiptap/extension-text-align";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function TripPlannerPage() {
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
@@ -86,7 +89,7 @@ export default function TripPlannerPage() {
   const slideSettings = {
     dots: false,
     fade: true,
-    infinite: true,
+    // infinite: true,
     swipeToSlide: true,
     speed: 250,
     cssEase: "linear",
@@ -402,7 +405,13 @@ export default function TripPlannerPage() {
   );
 
   const slides = images.map((image, index) => (
-    <BackgroundImage radius={3} key={index} src={image} h={300} alt="image" />
+    <BackgroundImage
+      radius={3}
+      key={index}
+      src={image}
+      h={300}
+      alt={`Image number ${index + 1}`}
+    />
   ));
 
   const index = startLocale?.indexOf(",");
@@ -443,48 +452,55 @@ export default function TripPlannerPage() {
                       </Text>
                     )}
                   </Title>
-                  <Group
-                    spacing={5}
-                    w={"100%"}
-                    mt={15}
-                    p={10}
-                    pb={15}
-                    sx={{
-                      borderRadius: "25px 3px 3px 3px",
-                      borderTop: "2px solid rgba(255,255,255,0.1)",
-                      borderLeft: "2px solid rgba(255,255,255,0.1)",
-                    }}
-                  >
-                    <IconMapPin size={25} opacity={0.4} />
-                    {(startCity || startRegion) && (
-                      <>
-                        <Badge variant="outline" color="gray">
-                          {startCity ? startCity : startRegion}
-                        </Badge>
-                        →
-                      </>
-                    )}
-                    {placeData.map((place, index) => (
-                      <Group key={index} spacing={5}>
-                        <Badge variant="outline" color="gray">
-                          {place.place}
-                        </Badge>
-                        {placeData.length - 1 !== index && "→"}
+                  <Box h={100}>
+                    <Box
+                      p={10}
+                      pb={15}
+                      mt={15}
+                      sx={{
+                        borderRadius: "25px 3px 3px 3px",
+                        borderTop: "2px solid rgba(255,255,255,0.1)",
+                        borderLeft: "2px solid rgba(255,255,255,0.1)",
+                      }}
+                    >
+                      <Group spacing={5} w={"100%"}>
+                        <IconMapPin size={18} opacity={0.4} />
+                        {(startCity || startRegion) && (
+                          <>
+                            <Badge variant="outline" color="gray" size="xs">
+                              {startCity ? startCity : startRegion}
+                            </Badge>
+                            →
+                          </>
+                        )}
+                        {placeData.map((place, index) => (
+                          <Group key={index} spacing={5}>
+                            <Badge variant="outline" color="gray" size="xs">
+                              {place.place}
+                            </Badge>
+                            {placeData.length - 1 !== index && "→"}
+                          </Group>
+                        ))}
+                        {checked && (startCity || startRegion) && (
+                          <>
+                            →
+                            <Badge variant="outline" color="gray" size="xs">
+                              {startCity ? startCity : startRegion}
+                            </Badge>
+                          </>
+                        )}
                       </Group>
-                    ))}
-                    {checked && (startCity || startRegion) && (
-                      <>
-                        →
-                        <Badge variant="outline" color="gray">
-                          {startCity ? startCity : startRegion}
-                        </Badge>
-                      </>
-                    )}
-                  </Group>
+                      {date && (
+                        <Group spacing={5} w={"100%"} fz={12} mt={5}>
+                          <IconCalendarEvent size={18} opacity={0.4} />
+                          {date}
+                        </Group>
+                      )}
+                    </Box>
+                  </Box>
                   <Center>
                     <Flex direction={"column"} align={"center"} gap={10}>
                       <Box
-                        mt={40}
                         py={15}
                         px={20}
                         bg={"rgba(0,0,0,0.1)"}
@@ -514,8 +530,21 @@ export default function TripPlannerPage() {
                           value={date}
                           size={"md"}
                           ml={44}
-                          mb={30}
-                          onChange={setDate}
+                          mb={20}
+                          onChange={(e) => {
+                            if (date === null) {
+                              setDate(
+                                new Date(e).toLocaleDateString("en-us", {
+                                  weekday: "long",
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                })
+                              );
+                            } else {
+                              setDate(null);
+                            }
+                          }}
                           allowDeselect
                         />
                         <Autocomplete
