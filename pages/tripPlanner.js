@@ -87,15 +87,12 @@ export default function TripPlannerPage() {
     dots: false,
     fade: true,
     infinite: true,
-    autoplay: true,
     swipeToSlide: true,
     speed: 250,
-    autoplaySpeed: 5000,
     cssEase: "linear",
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
-    pauseOnHover: true,
   };
 
   const images = [
@@ -109,28 +106,6 @@ export default function TripPlannerPage() {
     setActive((current) => (current < 3 ? current + 1 : current));
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
-
-  // AMADEUS API ---------------------------
-  var Amadeus = require("amadeus");
-  var amadeus = new Amadeus({
-    clientId: "Hq9S6iCxG0COAsAAYRUKfEVgMo7Eqng8",
-    clientSecret: "3duQ8ajKZtZah6ns",
-  });
-
-  // amadeus.shopping.flightOffersSearch
-  //   .get({
-  //     originLocationCode: "SYD",
-  //     destinationLocationCode: "BKK",
-  //     departureDate: "2023-06-01",
-  //     adults: "1",
-  //   })
-  //   .then(function (response) {
-  //     console.log(response.data);
-  //   })
-  //   .catch(function (responseError) {
-  //     console.log(responseError.code);
-  //   });
-  // AMADEUS API END -----------------------
 
   const editor = useEditor({
     extensions: [
@@ -664,7 +639,7 @@ export default function TripPlannerPage() {
                       },
                     }}
                   />
-                  <Group maw={800} spacing={20} w="100%" position="apart" grow>
+                  <Group maw={800} spacing={20} w="100%" grow>
                     {images.length > 0 && (
                       <Box>
                         <Slider
@@ -758,17 +733,19 @@ export default function TripPlannerPage() {
                           Select Files
                         </Button>
                       </Dropzone>
-                      {images.length > 0 && (
-                        <Title
-                          mt={15}
-                          order={6}
-                          py={9}
-                          ta={"center"}
-                          opacity={0.5}
-                        >
-                          {`${images.length} / 6 SPACES USED`}
-                        </Title>
-                      )}
+                      <Title
+                        mt={15}
+                        order={6}
+                        py={9}
+                        ta={"center"}
+                        opacity={0.6}
+                        bg={"dark.5"}
+                        sx={{
+                          borderRadius: "3px",
+                        }}
+                      >
+                        {`${images.length} / 6 SPACES USED`}
+                      </Title>
                     </Box>
                   </Group>
                   <RichTextEditor
