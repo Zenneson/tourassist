@@ -77,6 +77,9 @@ export default function TripPlannerPage() {
   });
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const sliderRef = useRef();
+  const dayjs = require("dayjs");
+  var localizedFormat = require("dayjs/plugin/localizedFormat");
+  dayjs.extend(localizedFormat);
 
   const next = () => {
     sliderRef.current.slickNext();
@@ -528,29 +531,40 @@ export default function TripPlannerPage() {
                         />
                         <DatePicker
                           value={date}
-                          size={"md"}
-                          ml={44}
+                          size={"xl"}
+                          mx={20}
                           mb={20}
+                          allowDeselect
+                          firstDayOfWeek={0}
+                          getDayProps={() => {
+                            return {
+                              style: {
+                                fontWeight: "bold",
+                              },
+                            };
+                          }}
+                          sx={{
+                            ".mantine-DatePicker-day[data-selected]": {
+                              backgroundColor: "#E7F5FF",
+                              color: "#000",
+                            },
+                            ".mantine-DatePicker-day[data-weekend]": {
+                              color: "#74C0FC",
+                            },
+                          }}
                           onChange={(e) => {
                             if (date === null) {
-                              setDate(
-                                new Date(e).toLocaleDateString("en-us", {
-                                  weekday: "long",
-                                  year: "numeric",
-                                  month: "short",
-                                  day: "numeric",
-                                })
-                              );
+                              // NOTE
+                              setDate(dayjs(e).format("LL"));
                             } else {
                               setDate(null);
                             }
                           }}
-                          allowDeselect
                         />
                         <Autocomplete
                           size="sm"
                           mt={10}
-                          w={388}
+                          w={"100%"}
                           dropdownPosition="top"
                           variant="filled"
                           defaultValue=""
@@ -961,6 +975,7 @@ export default function TripPlannerPage() {
                     nextStep();
                   }
                   if (active === 3) {
+                    localStorage.removeItem("placeDataState");
                     router.push("/trippage");
                   }
                 }}

@@ -394,7 +394,16 @@ export default function Mymap() {
         >
           <Popover.Target>
             <NavLink
-              icon={<IconPlaneTilt size={25} color="#9ff5fd" opacity={0.7} />}
+              icon={
+                <IconPlaneTilt
+                  size={25}
+                  color="#9ff5fd"
+                  opacity={0.7}
+                  style={{
+                    marginTop: "3px",
+                  }}
+                />
+              }
               variant="filled"
               description={`Start planning a trip to ${regionName}`}
               sx={{
@@ -469,7 +478,16 @@ export default function Mymap() {
         </Popover>
 
         <NavLink
-          icon={<IconPlaylistAdd size={25} color="#9ff5fd" opacity={0.7} />}
+          icon={
+            <IconPlaylistAdd
+              size={25}
+              color="#9ff5fd"
+              opacity={0.7}
+              style={{
+                marginTop: "3px",
+              }}
+            />
+          }
           description={`Add ${regionName} to the Tour List`}
           sx={{
             borderRadius: "5px",
