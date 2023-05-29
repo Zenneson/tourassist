@@ -44,3 +44,28 @@ export const loginOpenedState = atom({
   key: "loginOpenedState",
   default: false,
 });
+
+export const newPostModalState = atom({
+  key: "newPostModalState",
+  default: false,
+});
+
+export const editUpdateState = atom({
+  key: "editUpdateState",
+  default: "",
+});
+
+export const addTripDecriptionState = atom({
+  key: "addTripDecriptionState",
+  default: false,
+});
+
+export const addUpdateDecriptionState = atom({
+  key: "addUpdateDecriptionState",
+  default: false,
+});
+
+export const commentState = atom({
+  key: "commentState",
+  default: false,
+});

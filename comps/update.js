@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useRecoilState } from "recoil";
 import {
   ActionIcon,
   BackgroundImage,
@@ -26,13 +27,25 @@ import {
   IconShare,
   IconPencil,
 } from "@tabler/icons";
+import {
+  newPostModalState,
+  editUpdateState,
+  commentState,
+  addUpdateDecriptionState,
+} from "../libs/atoms";
 import { useHover } from "@mantine/hooks";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Update() {
-  const { hovered, ref } = useHover();
+  const [newPostModal, setNewPostModal] = useRecoilState(newPostModalState);
+  const [editUpdate, setEditUpdate] = useRecoilState(editUpdateState);
+  const [commenting, setCommenting] = useRecoilState(commentState);
+  const [addUpdateDesc, setAddUpdateDesc] = useRecoilState(
+    addUpdateDecriptionState
+  );
+
   const [showall, toggle] = useToggle(["hide", "show"]);
 
   const sliderRef = useRef();
@@ -92,7 +105,6 @@ export default function Update() {
       month: "June",
       day: "1",
       year: "2023",
-      // updateImages: undefined,
       title: "Another upadate on the Trip",
       content: (
         <pre
@@ -299,7 +311,18 @@ export default function Update() {
         boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
       }}
     >
-      <ActionIcon pos={"absolute"} top={17} right={10} color="gray.7">
+      <ActionIcon
+        pos={"absolute"}
+        top={17}
+        right={10}
+        color="gray.7"
+        onClick={() => {
+          setEditUpdate(true);
+          setNewPostModal(true);
+          setAddUpdateDesc(true);
+          setCommenting(false);
+        }}
+      >
         <IconPencil />
       </ActionIcon>
       <Flex direction={"column"} w={"15%"}>

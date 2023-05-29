@@ -1,17 +1,22 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
 import {
   Avatar,
   Button,
   Box,
   BackgroundImage,
+  Input,
   Center,
   Divider,
+  Modal,
   Group,
   Flex,
   Progress,
   Title,
   Text,
+  Stack,
+  CloseButton,
 } from "@mantine/core";
 import { useHover, useToggle } from "@mantine/hooks";
 import {
@@ -25,17 +30,35 @@ import {
   IconBrandWhatsapp,
   IconPencil,
   IconHeartHandshake,
+  IconQuote,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Donations from "../comps/donations";
 import Update from "../comps/update";
+import {
+  newPostModalState,
+  editUpdateState,
+  addTripDecriptionState,
+  addUpdateDecriptionState,
+  commentState,
+} from "../libs/atoms";
+import TripContent from "../comps/tripContent";
+import { DateInput } from "@mantine/dates";
 
 export default function Trippage() {
-  const router = useRouter();
   const { hovered, ref } = useHover();
+  const [editPostModal, setEditPostModal] = useState(false);
+  const [newPostModal, setNewPostModal] = useRecoilState(newPostModalState);
+  const [editUpdate, setEditUpdate] = useRecoilState(editUpdateState);
+  const [addTripDesc, setAddTripDesc] = useRecoilState(addTripDecriptionState);
+  const [addUpdateDesc, setAddUpdateDesc] = useRecoilState(
+    addUpdateDecriptionState
+  );
+  const [commenting, setCommenting] = useRecoilState(commentState);
   const [readmore, toggle] = useToggle(["closed", "open"]);
+  const router = useRouter();
 
   const images = [
     "img/women.jpg",
@@ -48,6 +71,10 @@ export default function Trippage() {
     "img/intro/boat.jpg",
     "img/intro/plane.jpg",
   ];
+
+  const slides = images.map((image, index) => (
+    <BackgroundImage key={index} src={image} h={500} maw={650} alt="intro" />
+  ));
 
   const slideSettings = {
     dots: false,
@@ -216,336 +243,475 @@ export default function Trippage() {
     </>
   ));
 
+  const closePostModal = () => {
+    setEditPostModal(false);
+    setAddTripDesc(false);
+    setAddUpdateDesc(false);
+  };
+  const closeUpdateModal = () => {
+    setNewPostModal(false);
+    setAddTripDesc(false);
+    setEditUpdate("");
+  };
+
   return (
-    <Center>
-      <Flex gap={30} w={"80%"} maw={1200} mt={120}>
-        <Flex
-          w={"calc(70% - 30px)"}
-          direction={"column"}
-          align={"center"}
-          pos={"relative"}
-        >
-          <Group
-            ref={ref}
-            spacing={0}
-            w={images.length > 1 ? "auto" : "650px"}
-            h={500}
-            sx={{
-              overflow: "hidden",
-              borderRadius: "3px",
-              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
-            }}
+    <>
+      <Center>
+        <Flex gap={30} w={"80%"} maw={1200} mt={120}>
+          <Flex
+            w={"calc(70% - 30px)"}
+            direction={"column"}
+            align={"center"}
+            pos={"relative"}
           >
-            <Center>
-              {images.length > 1 ? (
-                <>
-                  {hovered && (
-                    <Button
-                      h={500}
-                      mb={7}
-                      radius={"3px 0 0 3px"}
-                      onClick={previous}
-                      variant="outline"
-                      color={"dark.4"}
-                      p={0}
-                      w={"5%"}
-                      sx={{
-                        border: "none",
-                        "&:hover": {
-                          color: "#fff",
-                          backgroundColor: "rgba(0,0,0,0.2)",
-                        },
+            <Group
+              ref={ref}
+              spacing={0}
+              w={images.length > 1 ? "auto" : "650px"}
+              h={500}
+              sx={{
+                overflow: "hidden",
+                borderRadius: "3px",
+                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
+              }}
+            >
+              <Center>
+                {images.length > 1 ? (
+                  <>
+                    {hovered && (
+                      <Button
+                        h={500}
+                        mb={7}
+                        radius={"3px 0 0 3px"}
+                        onClick={previous}
+                        variant="outline"
+                        color={"dark.4"}
+                        p={0}
+                        w={"5%"}
+                        sx={{
+                          border: "none",
+                          "&:hover": {
+                            color: "#fff",
+                            backgroundColor: "rgba(0,0,0,0.2)",
+                          },
+                        }}
+                      >
+                        <IconChevronLeft size={50} />
+                      </Button>
+                    )}
+                    <Slider
+                      ref={sliderRef}
+                      {...slideSettings}
+                      style={{
+                        width: "650px",
                       }}
                     >
-                      <IconChevronLeft size={50} />
-                    </Button>
-                  )}
-                  <Slider
-                    ref={sliderRef}
-                    {...slideSettings}
-                    style={{
-                      width: "650px",
+                      {slides}
+                    </Slider>
+                    {hovered && (
+                      <Button
+                        h={500}
+                        mb={7}
+                        radius={"3px 0 0 3px"}
+                        onClick={previous}
+                        variant="outline"
+                        color={"dark.4"}
+                        p={0}
+                        w={"5%"}
+                        sx={{
+                          border: "none",
+                          "&:hover": {
+                            color: "#fff",
+                            backgroundColor: "rgba(0,0,0,0.2)",
+                          },
+                        }}
+                      >
+                        <IconChevronRight size={50} />
+                      </Button>
+                    )}
+                  </>
+                ) : (
+                  <BackgroundImage
+                    src={images}
+                    h={500}
+                    w={"650px"}
+                    alt="intro"
+                  />
+                )}
+              </Center>
+            </Group>
+            <Title order={2} p={10} maw={"650px"}>
+              Help me raise money to go on a Music Tour
+            </Title>
+            <Center mt={5}>
+              <Button.Group>
+                <Button variant="default" px={30}>
+                  <IconBrandFacebook size={20} />
+                </Button>
+                <Button variant="default" px={30}>
+                  <IconBrandInstagram size={20} />
+                </Button>
+                <Button variant="default" px={30}>
+                  <IconBrandTiktok size={20} />
+                </Button>
+                <Button variant="default" px={30}>
+                  <IconBrandTwitter size={20} />
+                </Button>
+                <Button variant="default" px={30}>
+                  <IconBrandWhatsapp size={20} />
+                </Button>
+                <Button variant="default" px={30}>
+                  <IconSourceCode size={20} />
+                </Button>
+              </Button.Group>
+            </Center>
+            <Box
+              radius={3}
+              bg={"rgba(0,0,0,0.05)"}
+              w={"85%"}
+              mt={20}
+              py={20}
+              px={30}
+              fz={14}
+              sx={{
+                border: "1px solid rgba(0,0,0,0.15)",
+                borderTop: "5px solid rgba(255,255,255,0.1)",
+                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+              }}
+            >
+              <Divider
+                labelPosition="right"
+                w={"100%"}
+                label={
+                  <Button
+                    compact
+                    size="xs"
+                    radius={25}
+                    pl={10}
+                    pr={15}
+                    variant="subtle"
+                    color="gray.6"
+                    leftIcon={<IconPencil size={20} />}
+                    onClick={() => {
+                      setEditPostModal(true);
+                      setAddTripDesc(true);
+                      setCommenting(false);
                     }}
                   >
-                    {images.map((image, index) => (
-                      <BackgroundImage
-                        key={index}
-                        src={image}
-                        h={500}
-                        maw={650}
-                        alt="intro"
-                      />
-                    ))}
-                  </Slider>
-                  {hovered && (
-                    <Button
-                      h={500}
-                      mb={7}
-                      radius={"3px 0 0 3px"}
-                      onClick={previous}
-                      variant="outline"
-                      color={"dark.4"}
-                      p={0}
-                      w={"5%"}
-                      sx={{
-                        border: "none",
-                        "&:hover": {
-                          color: "#fff",
-                          backgroundColor: "rgba(0,0,0,0.2)",
-                        },
-                      }}
-                    >
-                      <IconChevronRight size={50} />
-                    </Button>
-                  )}
-                </>
-              ) : (
-                <BackgroundImage src={images} h={500} w={"650px"} alt="intro" />
-              )}
-            </Center>
-          </Group>
-          <Title order={2} p={10} color="blue.2" maw={"650px"}>
-            Help me raise money to go on a Music Tour
-          </Title>
-          <Center mt={5}>
-            <Button.Group>
-              <Button variant="default" px={30}>
-                <IconBrandFacebook size={20} />
-              </Button>
-              <Button variant="default" px={30}>
-                <IconBrandInstagram size={20} />
-              </Button>
-              <Button variant="default" px={30}>
-                <IconBrandTiktok size={20} />
-              </Button>
-              <Button variant="default" px={30}>
-                <IconBrandTwitter size={20} />
-              </Button>
-              <Button variant="default" px={30}>
-                <IconBrandWhatsapp size={20} />
-              </Button>
-              <Button variant="default" px={30}>
-                <IconSourceCode size={20} />
-              </Button>
-            </Button.Group>
-          </Center>
-          <Box
-            radius={3}
-            bg={"rgba(0,0,0,0.05)"}
-            w={"85%"}
-            mt={20}
-            py={20}
-            px={30}
-            fz={14}
-            sx={{
-              border: "1px solid rgba(0,0,0,0.15)",
-              borderTop: "5px solid rgba(255,255,255,0.1)",
-              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-            }}
-          >
+                    Edit Travel Details
+                  </Button>
+                }
+              />
+              <Text lineClamp={readmore === "closed" && 5}>
+                <p>
+                  Are you ready to join me on an adventure of a lifetime?
+                  Together, we can make my long-held dream of visiting New York
+                  City a reality! I have always been captivated by the magic of
+                  the Big Apple, and I am excited to explore its vibrant
+                  neighborhoods, iconic landmarks, and diverse cultural
+                  experiences.
+                </p>
+
+                <p>
+                  With your generous support, I will be able to travel to New
+                  York City and fully immerse myself in its unique atmosphere. I
+                  cannot wait to see the towering skyscrapers of Manhattan,
+                  stroll through Central Park, marvel at the Statue of Liberty,
+                  and explore the trendy neighborhoods of Brooklyn. From
+                  Broadway shows to food tours, I plan on experiencing all that
+                  this incredible city has to offer.
+                </p>
+
+                <p>
+                  I will document every moment of my journey, from the sights
+                  and sounds to the people I meet along the way. Your
+                  contributions will allow me to capture precious memories and
+                  share them with my amazing supporters, so you can feel like
+                  you are right there with me, experiencing the adventure in
+                  real-time.
+                </p>
+
+                <p>
+                  But this trip is not just about fulfilling a dream or checking
+                  an item off my bucket list. It&apos;s about creating a
+                  life-changing experience that will stay with me forever. I
+                  believe that travel opens our minds, broadens our horizons,
+                  and connects us with people and cultures from around the
+                  world. By supporting me on this journey, you are not only
+                  helping me achieve my dream but also contributing to a greater
+                  cause.
+                </p>
+
+                <p>
+                  So, please consider joining me on this unforgettable
+                  adventure. Your kind contributions will not only enable me to
+                  travel to New York City but also create a unique,
+                  transformative experience that will inspire me and those
+                  around me. Thank you for believing in my journey and for
+                  making this dream come true!
+                </p>
+              </Text>
+            </Box>
             <Divider
               labelPosition="right"
-              w={"100%"}
+              w={"78%"}
               label={
                 <Button
-                  leftIcon={<IconPencil size={20} />}
                   compact
                   size="xs"
                   radius={25}
-                  pl={10}
-                  pr={15}
+                  px={15}
                   variant="subtle"
                   color="gray.6"
+                  onClick={() => toggle()}
                 >
-                  Edit Post
+                  {readmore === "closed" ? "Read More" : "Show Less"}
                 </Button>
               }
+              mb={20}
             />
-            <Text lineClamp={readmore === "closed" && 5}>
-              <p>
-                Are you ready to join me on an adventure of a lifetime?
-                Together, we can make my long-held dream of visiting New York
-                City a reality! I have always been captivated by the magic of
-                the Big Apple, and I am excited to explore its vibrant
-                neighborhoods, iconic landmarks, and diverse cultural
-                experiences.
-              </p>
-
-              <p>
-                With your generous support, I will be able to travel to New York
-                City and fully immerse myself in its unique atmosphere. I cannot
-                wait to see the towering skyscrapers of Manhattan, stroll
-                through Central Park, marvel at the Statue of Liberty, and
-                explore the trendy neighborhoods of Brooklyn. From Broadway
-                shows to food tours, I plan on experiencing all that this
-                incredible city has to offer.
-              </p>
-
-              <p>
-                I will document every moment of my journey, from the sights and
-                sounds to the people I meet along the way. Your contributions
-                will allow me to capture precious memories and share them with
-                my amazing supporters, so you can feel like you are right there
-                with me, experiencing the adventure in real-time.
-              </p>
-
-              <p>
-                But this trip is not just about fulfilling a dream or checking
-                an item off my bucket list. It&apos;s about creating a
-                life-changing experience that will stay with me forever. I
-                believe that travel opens our minds, broadens our horizons, and
-                connects us with people and cultures from around the world. By
-                supporting me on this journey, you are not only helping me
-                achieve my dream but also contributing to a greater cause.
-              </p>
-
-              <p>
-                So, please consider joining me on this unforgettable adventure.
-                Your kind contributions will not only enable me to travel to New
-                York City but also create a unique, transformative experience
-                that will inspire me and those around me. Thank you for
-                believing in my journey and for making this dream come true!
-              </p>
-            </Text>
-          </Box>
-          <Divider
-            labelPosition="right"
-            w={"78%"}
-            label={
-              <Button
-                compact
-                size="xs"
-                radius={25}
-                px={15}
-                variant="subtle"
-                color="gray.6"
-                onClick={() => toggle()}
-              >
-                {readmore === "closed" ? "Read More" : "Show Less"}
-              </Button>
-            }
-            mb={20}
-          />
-
-          <Update />
-
-          <Box
-            radius={5}
-            bg={"rgba(0,0,0,0.05)"}
-            w={"85%"}
-            mt={25}
-            mb={50}
-            p={"20px 30px"}
-            sx={{
-              border: "1px solid rgba(0,0,0,0.15)",
-              borderTop: "5px solid rgba(255,255,255,0.1)",
-              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-            }}
-          >
-            <Divider label="// COMMENTS" mb={20} />
-            {comments}
-          </Box>
-        </Flex>
-
-        <Flex
-          w={"30%"}
-          direction={"column"}
-          sx={{
-            borderTop: "5px solid rgba(255,255,255,0.1)",
-          }}
-        >
-          <Box
-            radius={3}
-            bg={"rgba(0,0,0,0.05)"}
-            w={"100%"}
-            pt={12}
-            pb={22}
-            px={20}
-            sx={{
-              border: "1px solid rgba(0,0,0,0.15)",
-              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-            }}
-          >
-            <Group spacing={0} w={"100%"}>
-              <Box w={"70%"} pl={20}>
-                <Text ta={"left"} fz={10} mb={-3}>
-                  GOAL
-                </Text>
-                <Title order={2} ta={"left"} color="green.7">
-                  $500
-                  <Text ml={7} span inherit color="gray.7">
-                    <Text fw={400} span inherit>
-                      /
-                    </Text>{" "}
-                    $1,000
-                  </Text>
-                </Title>
-              </Box>
-              <Box
-                w={"30%"}
-                sx={{
-                  borderLeft: "1px solid rgba(255,255,255,0.1)",
-                }}
-              >
-                <Text ta={"center"} fz={10} mb={-7}>
-                  DAYS LEFT
-                </Text>
-                <Title order={2} ta={"center"} color="gray.7">
-                  15
-                </Title>
-              </Box>
-            </Group>
-            <Progress
-              value={50}
-              color="green.7"
-              striped
-              animate
-              bg={"gray.6"}
-              size={"xl"}
-              radius={"xl"}
-              mt={20}
-            />
-            <Divider
-              mb={5}
-              mt={20}
-              size={"md"}
-              label="Cost Breakdown"
-              opacity={0.4}
-            />
-            {costs}
-            <Button.Group mt={10} w={"100%"}>
-              <Button
-                w={"100%"}
-                variant="filled"
-                color="green.9"
-                onClick={() => {
-                  router.push("/purchase");
-                }}
-              >
-                <Text>USE FUNDS</Text>
-              </Button>
-              <Button variant="filled" color="blue" fullWidth>
-                POST UPDATE
-              </Button>
-            </Button.Group>
-            <Button
-              mt={10}
-              variant="gradient"
-              gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
-              fullWidth
+            <Update />
+            <Box
+              radius={5}
+              bg={"rgba(0,0,0,0.05)"}
+              w={"85%"}
+              mt={25}
+              mb={50}
+              p={"20px 30px"}
+              sx={{
+                border: "1px solid rgba(0,0,0,0.15)",
+                borderTop: "5px solid rgba(255,255,255,0.1)",
+                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+              }}
             >
-              <Text fz={20} color="blue.2">
-                <Flex align={"center"} gap={5}>
-                  DONATE <IconHeartHandshake size={23} />
-                </Flex>
-              </Text>
-            </Button>
-          </Box>
-          <Box mt={10}>
-            <Donations />
-          </Box>
+              <Divider
+                labelPosition="right"
+                label={
+                  <Button
+                    size="xs"
+                    radius={25}
+                    px={15}
+                    variant="subtle"
+                    color="gray.6"
+                    onClick={() => {
+                      setCommenting(true);
+                      setNewPostModal(true);
+                    }}
+                  >
+                    <Flex align={"center"} gap={5}>
+                      <IconQuote size={20} /> ADD COMMENT
+                    </Flex>
+                  </Button>
+                }
+                mb={20}
+                w={"100%"}
+              />{" "}
+              {comments}
+            </Box>
+          </Flex>
+
+          <Flex w={"30%"} direction={"column"}>
+            <Box
+              radius={3}
+              bg={"rgba(0,0,0,0.05)"}
+              w={"100%"}
+              pt={12}
+              pb={22}
+              px={20}
+              sx={{
+                border: "1px solid rgba(0,0,0,0.15)",
+                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+              }}
+            >
+              <Group spacing={0} w={"100%"}>
+                <Box w={"70%"} pl={20}>
+                  <Text ta={"left"} fz={10} mb={-3}>
+                    GOAL
+                  </Text>
+                  <Title order={2} ta={"left"} color="green.7">
+                    $500
+                    <Text ml={7} span inherit color="gray.7">
+                      <Text fw={400} span inherit>
+                        /
+                      </Text>{" "}
+                      $1,000
+                    </Text>
+                  </Title>
+                </Box>
+                <Box
+                  w={"30%"}
+                  sx={{
+                    borderLeft: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <Text ta={"center"} fz={10} mb={-7}>
+                    DAYS LEFT
+                  </Text>
+                  <Title order={2} ta={"center"} color="gray.7">
+                    15
+                  </Title>
+                </Box>
+              </Group>
+              <Progress
+                value={50}
+                color="green.7"
+                striped
+                animate
+                bg={"gray.6"}
+                size={"xl"}
+                radius={"xl"}
+                mt={20}
+              />
+              <Divider
+                mb={5}
+                mt={20}
+                size={"md"}
+                label="Cost Breakdown"
+                opacity={0.4}
+              />
+              {costs}
+              <Button.Group mt={10} w={"100%"}>
+                <Button
+                  w={"100%"}
+                  variant="filled"
+                  color="green.9"
+                  onClick={() => {
+                    router.push("/purchase");
+                  }}
+                >
+                  <Text>USE FUNDS</Text>
+                </Button>
+                <Button
+                  variant="filled"
+                  color="blue"
+                  fullWidth
+                  onClick={() => {
+                    setNewPostModal(true);
+                    setCommenting(false);
+                  }}
+                >
+                  POST UPDATE
+                </Button>
+              </Button.Group>
+              <Button
+                mt={10}
+                variant="gradient"
+                gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
+                fullWidth
+              >
+                <Text fz={20}>
+                  <Flex align={"center"} gap={5}>
+                    DONATE <IconHeartHandshake size={23} />
+                  </Flex>
+                </Text>
+              </Button>
+            </Box>
+            <Box mt={10}>
+              <Donations />
+            </Box>
+          </Flex>
         </Flex>
-      </Flex>
-    </Center>
+      </Center>
+      <Modal
+        // NOTE EDIT POST  MODAL
+        withCloseButton={false}
+        size={850}
+        padding={"xl"}
+        opened={editPostModal}
+        centered
+        onClose={closePostModal}
+      >
+        <CloseButton
+          pos={"absolute"}
+          top={21}
+          right={21}
+          size={25}
+          onClick={closePostModal}
+        />
+        <Stack align="center">
+          <Title order={4} w={"100%"} ta={"left"} mb={-10} fs={"italic"}>
+            EDIT TRIP DETAILS:
+          </Title>
+          <Box
+            w={"100%"}
+            pl={15}
+            pt={5}
+            pb={10}
+            ml={-3}
+            mb={-10}
+            sx={{
+              borderLeft: "3px solid rgba(255,255,255,0.05)",
+            }}
+          >
+            <Text
+              color="blue.2"
+              fw={400}
+              mb={7}
+              fs={"italic"}
+              w={"100%"}
+              ta={"left"}
+            >
+              Help me raise money to go on a Music Tour
+            </Text>
+            <Flex w={"100%"} justify={"flex-start"} align={"center"} gap={10}>
+              <Text w={185} fz={12} fs={"italic"} fw={700}>
+                Change Travel Date:
+              </Text>
+              <DateInput variant="filled" defaultValue={new Date()} size="sm" />
+              <Divider w={"100%"} size={"sm"} />
+            </Flex>
+          </Box>
+          <TripContent />
+        </Stack>
+      </Modal>
+      <Modal
+        // NOTE UPDATE POST MODAL
+        pos={"relative"}
+        withCloseButton={false}
+        size={850}
+        padding={"xl"}
+        centered
+        opened={newPostModal}
+        onClose={closeUpdateModal}
+      >
+        <CloseButton
+          pos={"absolute"}
+          top={21}
+          right={21}
+          size={25}
+          onClick={closeUpdateModal}
+        />
+        <Title order={4} w={"100%"} ta={"left"} mb={10} fs={"italic"}>
+          {editUpdate
+            ? "EDIT UPDATE:"
+            : commenting
+            ? "ADD COMMENT:"
+            : "POST UPDATE:"}
+        </Title>
+        <Stack align="center">
+          {!commenting && (
+            <Input
+              size={"xl"}
+              variant="filled"
+              value={editUpdate && "Update number 3 of the trip"}
+              w="100%"
+              placeholder="Update Title..."
+              maw={800}
+              bg={"rgba(0,0,0,0)"}
+              sx={{
+                ".mantine-Input-input": {
+                  "&::placeholder": {
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    color: "rgba(255,255,255,0.0.08)",
+                  },
+                },
+              }}
+            />
+          )}
+          <TripContent />
+        </Stack>
+      </Modal>
+    </>
   );
 }
