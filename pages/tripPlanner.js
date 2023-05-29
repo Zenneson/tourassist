@@ -544,12 +544,12 @@ export default function TripPlannerPage() {
                             };
                           }}
                           sx={{
-                            ".mantine-DatePicker-day[data-selected]": {
-                              backgroundColor: "#E7F5FF",
-                              color: "#000",
-                            },
                             ".mantine-DatePicker-day[data-weekend]": {
                               color: "#74C0FC",
+                            },
+                            ".mantine-DatePicker-day[data-selected]": {
+                              backgroundColor: "#74C0FC",
+                              color: "#000",
                             },
                           }}
                           onChange={(e) => {
