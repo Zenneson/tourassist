@@ -17,8 +17,11 @@ import {
   Text,
   Stack,
   CloseButton,
+  NumberInput,
+  TextInput,
+  Select,
 } from "@mantine/core";
-import { useHover, useToggle } from "@mantine/hooks";
+import { useHover, useToggle, useLocalStorage } from "@mantine/hooks";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -31,6 +34,13 @@ import {
   IconPencil,
   IconHeartHandshake,
   IconQuote,
+  IconCurrencyDollar,
+  IconCreditCard,
+  IconBrandApple,
+  IconBrandGoogle,
+  IconBrandPaypal,
+  IconAt,
+  IconUser,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -38,27 +48,31 @@ import "slick-carousel/slick/slick-theme.css";
 import Donations from "../comps/donations";
 import Update from "../comps/update";
 import {
-  newPostModalState,
+  editContentModalState,
   editUpdateState,
   addTripDecriptionState,
   addUpdateDecriptionState,
-  commentState,
+  donateState,
 } from "../libs/atoms";
 import TripContent from "../comps/tripContent";
 import { DateInput } from "@mantine/dates";
 
 export default function Trippage() {
   const { hovered, ref } = useHover();
-  const [editPostModal, setEditPostModal] = useState(false);
-  const [newPostModal, setNewPostModal] = useRecoilState(newPostModalState);
+  const [altModal, setAltModal] = useState(false);
+  const [editContentModal, setEditContentModal] = useRecoilState(
+    editContentModalState
+  );
   const [editUpdate, setEditUpdate] = useRecoilState(editUpdateState);
   const [addTripDesc, setAddTripDesc] = useRecoilState(addTripDecriptionState);
   const [addUpdateDesc, setAddUpdateDesc] = useRecoilState(
     addUpdateDecriptionState
   );
-  const [commenting, setCommenting] = useRecoilState(commentState);
+  const [donating, setDonating] = useRecoilState(donateState);
   const [readmore, toggle] = useToggle(["closed", "open"]);
   const router = useRouter();
+
+  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
 
   const images = [
     "img/women.jpg",
@@ -243,13 +257,13 @@ export default function Trippage() {
     </>
   ));
 
-  const closePostModal = () => {
-    setEditPostModal(false);
+  const closeAltModal = () => {
+    setAltModal(false);
     setAddTripDesc(false);
     setAddUpdateDesc(false);
   };
-  const closeUpdateModal = () => {
-    setNewPostModal(false);
+  const closeEditContentModal = () => {
+    setEditContentModal(false);
     setAddTripDesc(false);
     setEditUpdate("");
   };
@@ -345,22 +359,22 @@ export default function Trippage() {
             </Title>
             <Center mt={5}>
               <Button.Group>
-                <Button variant="default" px={30}>
+                <Button variant="default" px={40}>
                   <IconBrandFacebook size={20} />
                 </Button>
-                <Button variant="default" px={30}>
+                <Button variant="default" px={40}>
                   <IconBrandInstagram size={20} />
                 </Button>
-                <Button variant="default" px={30}>
+                <Button variant="default" px={40}>
                   <IconBrandTiktok size={20} />
                 </Button>
-                <Button variant="default" px={30}>
+                <Button variant="default" px={40}>
                   <IconBrandTwitter size={20} />
                 </Button>
-                <Button variant="default" px={30}>
+                <Button variant="default" px={40}>
                   <IconBrandWhatsapp size={20} />
                 </Button>
-                <Button variant="default" px={30}>
+                <Button variant="default" px={40}>
                   <IconSourceCode size={20} />
                 </Button>
               </Button.Group>
@@ -393,9 +407,9 @@ export default function Trippage() {
                     color="gray.6"
                     leftIcon={<IconPencil size={20} />}
                     onClick={() => {
-                      setEditPostModal(true);
+                      setAltModal(true);
                       setAddTripDesc(true);
-                      setCommenting(false);
+                      setDonating(false);
                     }}
                   >
                     Edit Travel Details
@@ -474,39 +488,51 @@ export default function Trippage() {
             <Box
               radius={5}
               bg={"rgba(0,0,0,0.05)"}
-              w={"85%"}
+              w={"90%"}
               mt={25}
               mb={50}
               p={"20px 30px"}
               sx={{
                 border: "1px solid rgba(0,0,0,0.15)",
-                borderTop: "5px solid rgba(255,255,255,0.1)",
                 boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
               }}
             >
               <Divider
-                labelPosition="right"
-                label={
-                  <Button
-                    size="xs"
-                    radius={25}
-                    px={15}
-                    variant="subtle"
-                    color="gray.6"
-                    onClick={() => {
-                      setCommenting(true);
-                      setNewPostModal(true);
-                    }}
-                  >
-                    <Flex align={"center"} gap={5}>
-                      <IconQuote size={20} /> ADD COMMENT
-                    </Flex>
-                  </Button>
-                }
-                mb={20}
+                size={"xl"}
                 w={"100%"}
-              />{" "}
-              {comments}
+                label={
+                  <Flex align={"center"}>
+                    <IconQuote size={40} opacity={0.2} />
+                    <Title order={4}>WORDS OF SUPPORT</Title>
+                  </Flex>
+                }
+              />
+              <Box pl={10}>
+                <Divider
+                  labelPosition="right"
+                  label={
+                    <Button
+                      size="xs"
+                      radius={25}
+                      px={15}
+                      variant="light"
+                      color="gray.6"
+                      onClick={() => {
+                        setDonating(true);
+                        setEditContentModal(true);
+                      }}
+                    >
+                      <Flex align={"center"} gap={5}>
+                        DONATE
+                        <IconHeartHandshake size={20} />
+                      </Flex>
+                    </Button>
+                  }
+                  mb={20}
+                  w={"100%"}
+                />{" "}
+                {comments}
+              </Box>
             </Box>
           </Flex>
 
@@ -586,8 +612,8 @@ export default function Trippage() {
                   color="blue"
                   fullWidth
                   onClick={() => {
-                    setNewPostModal(true);
-                    setCommenting(false);
+                    setEditContentModal(true);
+                    setDonating(false);
                   }}
                 >
                   POST UPDATE
@@ -595,9 +621,13 @@ export default function Trippage() {
               </Button.Group>
               <Button
                 mt={10}
+                fullWidth
                 variant="gradient"
                 gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
-                fullWidth
+                onClick={() => {
+                  setDonating(true);
+                  setEditContentModal(true);
+                }}
               >
                 <Text fz={20}>
                   <Flex align={"center"} gap={5}>
@@ -615,21 +645,22 @@ export default function Trippage() {
       <Modal
         // NOTE EDIT POST  MODAL
         withCloseButton={false}
+        closeOnClickOutside={false}
         size={850}
         padding={"xl"}
-        opened={editPostModal}
+        opened={altModal}
         centered
-        onClose={closePostModal}
+        onClose={closeAltModal}
       >
         <CloseButton
           pos={"absolute"}
           top={21}
           right={21}
           size={25}
-          onClick={closePostModal}
+          onClick={closeAltModal}
         />
         <Stack align="center">
-          <Title order={4} w={"100%"} ta={"left"} mb={-10} fs={"italic"}>
+          <Title order={4} w={"100%"} ta={"left"} fs={"italic"}>
             EDIT TRIP DETAILS:
           </Title>
           <Box
@@ -638,7 +669,6 @@ export default function Trippage() {
             pt={5}
             pb={10}
             ml={-3}
-            mb={-10}
             sx={{
               borderLeft: "3px solid rgba(255,255,255,0.05)",
             }}
@@ -668,28 +698,136 @@ export default function Trippage() {
         // NOTE UPDATE POST MODAL
         pos={"relative"}
         withCloseButton={false}
+        closeOnClickOutside={false}
         size={850}
         padding={"xl"}
         centered
-        opened={newPostModal}
-        onClose={closeUpdateModal}
+        opened={editContentModal}
+        onClose={closeEditContentModal}
       >
         <CloseButton
           pos={"absolute"}
           top={21}
           right={21}
           size={25}
-          onClick={closeUpdateModal}
+          onClick={closeEditContentModal}
         />
-        <Title order={4} w={"100%"} ta={"left"} mb={10} fs={"italic"}>
-          {editUpdate
-            ? "EDIT UPDATE:"
-            : commenting
-            ? "ADD COMMENT:"
-            : "POST UPDATE:"}
+        {donating && (
+          <>
+            <Title mb={5} color="#00E8FC">
+              <Flex align={"center"} gap={5}>
+                DONATE
+                <IconHeartHandshake size={35} />
+              </Flex>
+            </Title>
+            <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
+            <Group mb={15} grow>
+              <Stack h={268}>
+                <Button.Group>
+                  <Button variant="default" size="xl" w={"25%"}>
+                    <IconCreditCard size={30} />
+                  </Button>
+                  <Button variant="default" size="xl" w={"25%"}>
+                    <IconBrandApple size={30} />
+                  </Button>
+                  <Button variant="default" size="xl" w={"25%"}>
+                    <IconBrandGoogle size={30} />
+                  </Button>
+                  <Button variant="default" size="xl" w={"25%"}>
+                    <IconBrandPaypal size={30} />
+                  </Button>
+                </Button.Group>
+                <TextInput
+                  placeholder="E-mail Address"
+                  icon={<IconAt size={20} opacity={0.4} />}
+                />
+                <TextInput
+                  placeholder="Name on Card"
+                  icon={<IconUser size={20} opacity={0.4} />}
+                />
+                <Flex gap={10}>
+                  <Input
+                    placeholder="Card Number"
+                    w={"60%"}
+                    icon={<IconCreditCard size={20} opacity={0.4} />}
+                  />
+                  <Input placeholder="MM/YY" w={"20%"} />
+                  <Input placeholder="CVV" w={"20%"} />
+                </Flex>
+                <Flex gap={10}>
+                  <Select placeholder="Country" data={[]} w={"60%"} />
+                  <Input placeholder="Postal Code" w={"40%"} />
+                </Flex>
+              </Stack>
+              <Stack h={268} spacing={5}>
+                <NumberInput
+                  icon={<IconCurrencyDollar size={35} />}
+                  type="number"
+                  size="xl"
+                  mb={10}
+                  hideControls
+                  precision={2}
+                  placeholder="Enter Amount..."
+                  sx={{
+                    ".mantine-NumberInput-input": {
+                      textAlign: "right",
+                      fontWeight: 700,
+                    },
+                  }}
+                />
+                <Box
+                  pl={15}
+                  pt={5}
+                  pb={10}
+                  sx={{
+                    borderLeft: "3px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <Flex align={"center"} gap={10}>
+                    <Divider label="Processing fee" w={"100%"} />{" "}
+                    <Text fz={12}>$0.00</Text>
+                  </Flex>
+                  <Flex align={"center"} gap={10}>
+                    <Divider
+                      label={
+                        <Text fz={15} fw={700}>
+                          Total
+                        </Text>
+                      }
+                      w={"100%"}
+                    />
+                    <Text fz={12}>$0.00</Text>
+                  </Flex>
+                </Box>
+                {/* TODO: Add Stripe Notice   */}
+                <Box bg={"#1f1f1f"} w={"100%"} h={50} my={10}></Box>
+                <Button variant="filled" size="xl" w={"100%"}>
+                  DONATE NOW
+                </Button>
+              </Stack>
+            </Group>
+          </>
+        )}
+        <Title order={4} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
+          {editUpdate ? (
+            "EDIT UPDATE:"
+          ) : donating ? (
+            <Divider
+              label={
+                <Flex align={"center"} gap={2}>
+                  <IconQuote opacity={0.4} />
+                  <Text fz={12}>LEAVE WORDS OF SUPPORT:</Text>
+                </Flex>
+              }
+              w={"100%"}
+              size={"sm"}
+            />
+          ) : (
+            "POST UPDATE:"
+          )}
         </Title>
         <Stack align="center">
-          {!commenting && (
+          {!donating && (
             <Input
               size={"xl"}
               variant="filled"

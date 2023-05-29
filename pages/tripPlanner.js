@@ -91,6 +91,7 @@ export default function TripPlannerPage() {
           }}
         ></div>
         <NumberInput
+          type="number"
           icon={<IconCurrencyDollar />}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
           formatter={(value) =>
@@ -106,6 +107,11 @@ export default function TripPlannerPage() {
           w={150}
           mb={20}
           variant="filled"
+          sx={{
+            ".mantine-NumberInput-input": {
+              textAlign: "right",
+            },
+          }}
         />
       </Group>
     </div>
@@ -439,6 +445,7 @@ export default function TripPlannerPage() {
                       <Box
                         py={15}
                         px={20}
+                        ml={40}
                         bg={"rgba(0,0,0,0.1)"}
                         sx={{
                           borderRadius: "25px 3px 3px 3px",
@@ -713,6 +720,7 @@ export default function TripPlannerPage() {
                 <NumberInput
                   icon={<IconCurrencyDollar />}
                   size="xl"
+                  type="number"
                   mb={20}
                   w={225}
                   stepHoldDelay={500}
@@ -726,6 +734,11 @@ export default function TripPlannerPage() {
                   }
                   precision={2}
                   min={0}
+                  sx={{
+                    ".mantine-NumberInput-input": {
+                      textAlign: "right",
+                    },
+                  }}
                 />
               </>
             )}

@@ -22,7 +22,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import {
-  commentState,
+  donateState,
   editUpdateState,
   addTripDecriptionState,
   addUpdateDecriptionState,
@@ -38,7 +38,7 @@ import {
 
 export default function TripContent() {
   const [showToolbar, setShowToolbar] = useState(false);
-  const [commenting, setCommenting] = useRecoilState(commentState);
+  const [donating, setDonating] = useRecoilState(donateState);
   const [addTripDesc, setAddTripDesc] = useRecoilState(addTripDecriptionState);
   const [addUpdateDesc, setAddUpdateDesc] = useRecoilState(
     addUpdateDecriptionState
@@ -96,12 +96,12 @@ export default function TripContent() {
         placeholder:
           router.pathname === "/tripplanner"
             ? "Add a detailed description to your trip here, to inspire support..."
-            : commenting
+            : donating
             ? "Add a comment here..."
             : "Update us here...",
       }),
     ],
-    content: commenting
+    content: donating
       ? ""
       : addTripDesc
       ? tripDesc
@@ -112,7 +112,7 @@ export default function TripContent() {
 
   return (
     <>
-      {!commenting && (
+      {!donating && (
         <Group maw={800} spacing={20} w="100%" grow>
           {images.length > 0 && (
             <Box>
@@ -126,7 +126,7 @@ export default function TripContent() {
               >
                 {slides}
               </Slider>
-              <Group mt={10} spacing={15} grow>
+              <Group mt={15} spacing={15} grow>
                 <Button
                   variant="subtle"
                   color="gray"
@@ -151,7 +151,7 @@ export default function TripContent() {
               </Group>
             </Box>
           )}
-          <Box mt={5}>
+          <Box>
             <Dropzone
               onDrop={(files) => console.log("accepted files", files)}
               onReject={(files) => console.log("rejected files", files)}
@@ -233,8 +233,8 @@ export default function TripContent() {
           width: "100%",
           minWidth: "500px",
           maxWidth: "800px",
-          minHeight: "200px",
-          maxHeight: "300px",
+          minHeight: donating ? "100px" : "200px",
+          maxHeight: donating ? "100px" : "300px",
         }}
       >
         {editor && showToolbar && (

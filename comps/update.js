@@ -28,9 +28,9 @@ import {
   IconPencil,
 } from "@tabler/icons";
 import {
-  newPostModalState,
+  editContentModalState,
   editUpdateState,
-  commentState,
+  donateState,
   addUpdateDecriptionState,
 } from "../libs/atoms";
 import { useHover } from "@mantine/hooks";
@@ -39,9 +39,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Update() {
-  const [newPostModal, setNewPostModal] = useRecoilState(newPostModalState);
+  const [editContentModal, setEditContentModal] = useRecoilState(
+    editContentModalState
+  );
   const [editUpdate, setEditUpdate] = useRecoilState(editUpdateState);
-  const [commenting, setCommenting] = useRecoilState(commentState);
+  const [donating, setDonating] = useRecoilState(donateState);
   const [addUpdateDesc, setAddUpdateDesc] = useRecoilState(
     addUpdateDecriptionState
   );
@@ -318,9 +320,9 @@ export default function Update() {
         color="gray.7"
         onClick={() => {
           setEditUpdate(true);
-          setNewPostModal(true);
+          setEditContentModal(true);
           setAddUpdateDesc(true);
-          setCommenting(false);
+          setDonating(false);
         }}
       >
         <IconPencil />

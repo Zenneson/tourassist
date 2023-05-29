@@ -45,8 +45,8 @@ export const loginOpenedState = atom({
   default: false,
 });
 
-export const newPostModalState = atom({
-  key: "newPostModalState",
+export const editContentModalState = atom({
+  key: "editContentModalState",
   default: false,
 });
 
@@ -65,7 +65,7 @@ export const addUpdateDecriptionState = atom({
   default: false,
 });
 
-export const commentState = atom({
-  key: "commentState",
+export const donateState = atom({
+  key: "donateState",
   default: false,
 });
