@@ -315,7 +315,7 @@ export default function Mymap() {
         zIndex={100}
         opened={showModal}
         onClose={onClose}
-        padding={30}
+        padding={"15px 30px"}
         size={"470px"}
         title={
           <Box>
@@ -530,6 +530,7 @@ export default function Mymap() {
               defaultValue=""
               value={citySearch}
               size="sm"
+              mb={10}
               maxDropdownHeight={160}
               onChange={function (e) {
                 setCitySearch(e);

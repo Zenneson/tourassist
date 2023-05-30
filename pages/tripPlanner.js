@@ -147,7 +147,7 @@ export default function TripPlannerPage() {
           bg={"rgba(0,0,0,0.3)"}
           sx={{
             borderRadius: "25px 3px 3px 3px",
-            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.2)",
+            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
             borderLeft: "3px solid rgba(255,255,255,0.1)",
             borderTop: "3px solid rgba(255,255,255,0.1)",
           }}
@@ -181,7 +181,7 @@ export default function TripPlannerPage() {
               label={
                 placeData.length === 1 &&
                 checked && (
-                  <Text color="dimmed" fs={"italic"}>
+                  <Text color="dimmed" fz={10} fs={"italic"}>
                     ROUND TRIP
                   </Text>
                 )
@@ -446,12 +446,12 @@ export default function TripPlannerPage() {
                         py={15}
                         px={20}
                         ml={40}
-                        bg={"rgba(0,0,0,0.1)"}
+                        bg={"rgba(0,0,0,0.25)"}
                         sx={{
                           borderRadius: "25px 3px 3px 3px",
                           borderTop: "2px solid rgba(255,255,255,0.1)",
                           borderLeft: "2px solid rgba(255,255,255,0.1)",
-                          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+                          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.3)",
                         }}
                       >
                         <Divider
@@ -536,6 +536,7 @@ export default function TripPlannerPage() {
                           <Divider
                             w={"100%"}
                             mt={15}
+                            mb={5}
                             labelPosition="right"
                             label={
                               <Switch
@@ -566,7 +567,7 @@ export default function TripPlannerPage() {
                     bg={"rgba(0,0,0,0.3)"}
                     sx={{
                       borderRadius: "25px 3px 3px 3px",
-                      boxShadow: "0 7px 10px 0 rgba(0,0,0,0.2)",
+                      boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
                       borderLeft: "3px solid rgba(255,255,255,0.1)",
                       borderTop: "3px solid rgba(255,255,255,0.1)",
                     }}
@@ -594,22 +595,40 @@ export default function TripPlannerPage() {
                           {startCity ? startRegion : ""}
                         </Text>
                       </Stack>
-                      <Divider w={"40%"} />
+                      <Divider
+                        w={"40%"}
+                        labelPosition="right"
+                        label={
+                          <Text color="dimmed" fz={10} fs={"italic"}>
+                            RETURN FLIGHT
+                          </Text>
+                        }
+                      />
                     </Group>
-                    <Costs cost={"Return Flight"} />
+                    <Costs cost={"Flight"} />
                   </Box>
                 )}
               </motion.div>
             )}
             {active === 2 && (
               <motion.div {...animation}>
-                <Stack align="center">
+                <Stack
+                  align="center"
+                  py={50}
+                  bg={"rgba(0,0,0,0.3)"}
+                  sx={{
+                    borderRadius: "25px 3px 3px 3px",
+                    boxShadow: "0 7px 10px 0 rgba(0,0,0,0.4)",
+                    borderLeft: "3px solid rgba(255,255,255,0.1)",
+                    borderTop: "3px solid rgba(255,255,255,0.1)",
+                  }}
+                >
                   <Input
                     size={"xl"}
+                    variant="filled"
                     placeholder="Title..."
                     w="100%"
                     maw={800}
-                    bg={"rgba(0,0,0,0)"}
                     sx={{
                       ".mantine-Input-input": {
                         "&::placeholder": {

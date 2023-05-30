@@ -224,6 +224,7 @@ export default function TripContent() {
       <RichTextEditor
         editor={editor}
         position="relative"
+        bg={"dark.7"}
         onClick={() => {
           setShowToolbar(true);
           editor?.chain().focus().run();

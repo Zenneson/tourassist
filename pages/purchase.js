@@ -312,6 +312,9 @@ export default function Purchase() {
         labelPosition="center"
         label={<Rating count={5} value={hotel.rating} size="xs" readOnly />}
         w={"100%"}
+        sx={{
+          pointerEvents: "none",
+        }}
       />
       <Group position="apart">
         <Badge size={"md"}>{hotel.feature}</Badge>
