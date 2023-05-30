@@ -41,7 +41,7 @@ import {
   IconBrandPaypal,
   IconAt,
   IconUser,
-  IconWorld,
+  IconPlaneTilt,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -274,13 +274,14 @@ export default function Trippage() {
       <Center>
         <Divider
           w={"65%"}
+          miw={1100}
           mt={90}
           ml={25}
-          mb={30}
+          mb={15}
           size={"xl"}
           label={
             <>
-              <IconWorld size={35} opacity={0.15} />
+              <IconPlaneTilt size={35} opacity={0.12} />
               <Title order={3} p={10} maw={"650px"}>
                 Help me raise money to go on a Music Tour
               </Title>
@@ -372,24 +373,24 @@ export default function Trippage() {
                 )}
               </Center>
             </Group>
-            <Center mt={5}>
+            <Center mt={20}>
               <Button.Group>
-                <Button variant="default" px={40}>
+                <Button variant="default" px={44}>
                   <IconBrandFacebook size={20} />
                 </Button>
-                <Button variant="default" px={40}>
+                <Button variant="default" px={44}>
                   <IconBrandInstagram size={20} />
                 </Button>
-                <Button variant="default" px={40}>
+                <Button variant="default" px={44}>
                   <IconBrandTiktok size={20} />
                 </Button>
-                <Button variant="default" px={40}>
+                <Button variant="default" px={44}>
                   <IconBrandTwitter size={20} />
                 </Button>
-                <Button variant="default" px={40}>
+                <Button variant="default" px={44}>
                   <IconBrandWhatsapp size={20} />
                 </Button>
-                <Button variant="default" px={40}>
+                <Button variant="default" px={44}>
                   <IconSourceCode size={20} />
                 </Button>
               </Button.Group>
@@ -660,7 +661,6 @@ export default function Trippage() {
       <Modal
         // NOTE EDIT POST  MODAL
         withCloseButton={false}
-        closeOnClickOutside={false}
         size={850}
         padding={"xl"}
         opened={altModal}
@@ -713,7 +713,6 @@ export default function Trippage() {
         // NOTE UPDATE POST MODAL
         pos={"relative"}
         withCloseButton={false}
-        closeOnClickOutside={false}
         size={850}
         padding={"xl"}
         centered
@@ -816,7 +815,12 @@ export default function Trippage() {
                 </Box>
                 {/* TODO: Add Stripe Notice   */}
                 <Box bg={"#1f1f1f"} w={"100%"} h={50} my={10}></Box>
-                <Button variant="filled" size="xl" w={"100%"}>
+                <Button
+                  variant="filled"
+                  size="xl"
+                  w={"100%"}
+                  onClick={() => router.push("/thankyou")}
+                >
                   DONATE NOW
                 </Button>
               </Stack>
