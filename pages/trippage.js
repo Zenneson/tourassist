@@ -41,7 +41,7 @@ import {
   IconBrandPaypal,
   IconAt,
   IconUser,
-  IconPlaneTilt,
+  IconChevronsRight,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -276,13 +276,14 @@ export default function Trippage() {
           w={"65%"}
           miw={1100}
           mt={90}
-          ml={25}
+          ml={30}
           mb={15}
+          color="dark.4"
           size={"xl"}
           label={
             <>
-              <IconPlaneTilt size={35} opacity={0.12} />
-              <Title order={3} p={10} maw={"650px"}>
+              <IconChevronsRight size={40} opacity={0.7} />
+              <Title order={3} px={5} maw={"650px"} color="dark.0">
                 Help me raise money to go on a Music Tour
               </Title>
             </>

@@ -27,7 +27,7 @@ import {
   IconArrowBigRight,
   IconRefresh,
   IconArrowBigUpLine,
-  IconArrowBigDownLine,
+  IconTicket,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -324,7 +324,7 @@ export default function Purchase() {
 
   return (
     <>
-      <Space h={150} />
+      <Space h={100} />
       <Center>
         <Box w={"70%"} miw={700} maw={1600}>
           <Group w={"100%"} position="apart" mb={30}>
@@ -342,24 +342,32 @@ export default function Purchase() {
                   cursor: "default",
                 }}
               >
-                <Flex align={"center"} gap={15} fw={700} fz={15} mt={5}>
+                <Flex align={"center"} gap={40} fw={700} fz={17} mt={5}>
                   <Group spacing={5}>
                     <IconCalendarEvent size={15} opacity={0.5} /> May 5, 2024{" "}
                   </Group>
                   <Group spacing={5}>
-                    <IconHourglass size={15} opacity={0.5} /> 45 Days Left
+                    <IconHourglass size={15} opacity={0.5} /> 45{" "}
+                    <Text fw={100} fz={10}>
+                      DAYS LEFT
+                    </Text>
                   </Group>
                   <Group spacing={5}>
                     <IconArrowBigUpLine size={15} opacity={0.5} color="lime" />{" "}
-                    $1234.56 | $5000 Raised
+                    $1234.56{" "}
+                    <Text opacity={0.4} fz={25}>
+                      /
+                    </Text>{" "}
+                    $5000{" "}
+                    <Text fw={100} fz={10}>
+                      RAISED
+                    </Text>
                   </Group>
                   <Group spacing={5}>
-                    <IconArrowBigDownLine
-                      size={15}
-                      opacity={0.5}
-                      color="pink"
-                    />{" "}
-                    $0 Spent
+                    <IconTicket size={15} opacity={0.5} color="pink" /> $0{" "}
+                    <Text fw={100} fz={10}>
+                      SPENT
+                    </Text>
                   </Group>
                 </Flex>
                 <Group fz={11} mt={5} ml={2}>

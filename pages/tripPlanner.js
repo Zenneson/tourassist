@@ -401,8 +401,8 @@ export default function TripPlannerPage() {
                       mt={15}
                       sx={{
                         borderRadius: "25px 3px 3px 3px",
-                        borderTop: "2px solid rgba(255,255,255,0.1)",
-                        borderLeft: "2px solid rgba(255,255,255,0.1)",
+                        borderTop: "2px solid rgba(255,255,255,0.05)",
+                        borderLeft: "2px solid rgba(255,255,255,0.05)",
                       }}
                     >
                       <Group spacing={5} w={"100%"}>
@@ -451,7 +451,7 @@ export default function TripPlannerPage() {
                           borderRadius: "25px 3px 3px 3px",
                           borderTop: "2px solid rgba(255,255,255,0.1)",
                           borderLeft: "2px solid rgba(255,255,255,0.1)",
-                          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
+                          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
                         }}
                       >
                         <Divider
@@ -689,20 +689,20 @@ export default function TripPlannerPage() {
               w="20%"
             >
               <Stepper.Step
-                label="Trip Starting Info"
-                description="Trip date and starting location"
+                label="Travel Starting Info"
+                description="Travel date and starting location"
               />
               <Stepper.Step
                 label="Cost Calculator"
-                description="Calculate all your trip costs"
+                description="Calculate all your travel costs"
               />
               <Stepper.Step
-                label="Trip Details"
+                label="Travel Details"
                 description="Tell us your story"
               />
               <Stepper.Step
-                label="Banking Info"
-                description="Link a Payment Account"
+                label="Account Info"
+                description="Provide account details"
               />
             </Stepper>
             {active > 0 && (
