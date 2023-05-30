@@ -191,12 +191,12 @@ export default function TripPlannerPage() {
           <Box id={index}>
             {place.costs &&
               place.costs.map((cost, index) => (
-                <Box key={index} pos="relative">
+                <Box key={index} pos="relative" pr={10}>
                   <ActionIcon
                     pos="absolute"
                     variant="default"
                     opacity={0.2}
-                    right={-13}
+                    right={-3}
                     top={-1}
                     h={43}
                     onClick={(event) => {
@@ -248,7 +248,7 @@ export default function TripPlannerPage() {
               ))}
           </Box>
           <Divider opacity={0.2} color="#000" />
-          <Group mt={20} position="right">
+          <Group position="right">
             <Popover
               width={250}
               position="left"
@@ -264,7 +264,7 @@ export default function TripPlannerPage() {
                   color="gray"
                   leftIcon={<IconPlus size={15} />}
                   sx={{
-                    opacity: 0.1,
+                    opacity: 0.25,
                     transition: "opacity 0.2s ease-in-out",
                     "&:hover": {
                       opacity: 0.5,

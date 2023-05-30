@@ -168,9 +168,6 @@ export default function Mymap() {
       setPlaceLocation({
         name: location,
         region: result,
-        // placeType === "place" || placeType === "region"
-        //   ? result
-        //   : "United States",
       });
 
       mapRef.current.flyTo({
