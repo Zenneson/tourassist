@@ -140,7 +140,10 @@ export default function MainMenu() {
               withArrow
             >
               <Button
-                onClick={() => setSearchOpened(!searchOpened)}
+                onClick={() => {
+                  setSearchOpened(!searchOpened);
+                  setProfileOpened(false);
+                }}
                 variant="subtle"
                 radius="xl"
                 p={10}
