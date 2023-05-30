@@ -45,7 +45,7 @@ export default function TourList() {
             label="Tour Locations"
             sx={{
               opacity: 0.4,
-              margin: "120px 0 10px 0",
+              margin: "80px 0 10px 0",
             }}
           />
           <Droppable droppableId="places">

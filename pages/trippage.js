@@ -11,6 +11,7 @@ import {
   Divider,
   Modal,
   Group,
+  Image,
   Flex,
   Progress,
   Title,
@@ -737,7 +738,7 @@ export default function Trippage() {
             </Title>
             <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
             <Group mb={15} grow>
-              <Stack h={268}>
+              <Stack>
                 <Button.Group>
                   <Button variant="default" size="xl" w={"25%"}>
                     <IconCreditCard size={30} />
@@ -752,6 +753,7 @@ export default function Trippage() {
                     <IconBrandPaypal size={30} />
                   </Button>
                 </Button.Group>
+                <Divider />
                 <TextInput
                   placeholder="E-mail Address"
                   icon={<IconAt size={20} opacity={0.4} />}
@@ -771,10 +773,10 @@ export default function Trippage() {
                 </Flex>
                 <Flex gap={10}>
                   <Select placeholder="Country" data={[]} w={"60%"} />
-                  <Input placeholder="Postal Code" w={"40%"} />
+                  <Input placeholder="Postal Code" w={"calc(40% + 10px)"} />
                 </Flex>
               </Stack>
-              <Stack h={268} spacing={5}>
+              <Stack spacing={5}>
                 <NumberInput
                   icon={<IconCurrencyDollar size={35} />}
                   type="number"
@@ -792,8 +794,7 @@ export default function Trippage() {
                 />
                 <Box
                   pl={15}
-                  pt={5}
-                  pb={10}
+                  py={5}
                   sx={{
                     borderLeft: "3px solid rgba(255,255,255,0.1)",
                   }}
@@ -811,11 +812,30 @@ export default function Trippage() {
                       }
                       w={"100%"}
                     />
-                    <Text fz={12}>$0.00</Text>
+                    <Text fz={14} fw={700}>
+                      $0.00
+                    </Text>
                   </Flex>
                 </Box>
                 {/* TODO: Add Stripe Notice   */}
-                <Box bg={"#1f1f1f"} w={"100%"} h={50} my={10}></Box>
+                <Group spacing={0} my={8}>
+                  <Text fz={11} w={"70%"} pr={10}>
+                    We use Stripe, a trusted payment processor, to securely
+                    handle transactions and disburse funds, ensuring the
+                    protection of your sensitive banking information.
+                  </Text>
+                  <Image
+                    src="img/stripe.png"
+                    fit="contain"
+                    display={"block"}
+                    opacity={0.3}
+                    style={{
+                      width: "30%",
+                      borderLeft: "2px solid rgba(255,255,255,0.3)",
+                    }}
+                    alt=""
+                  />
+                </Group>
                 <Button
                   variant="filled"
                   size="xl"
@@ -829,22 +849,7 @@ export default function Trippage() {
           </>
         )}
         <Title order={4} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
-          {editUpdate ? (
-            "EDIT UPDATE:"
-          ) : donating ? (
-            <Divider
-              label={
-                <Flex align={"center"} gap={2}>
-                  <IconQuote opacity={0.4} />
-                  <Text fz={12}>LEAVE WORDS OF SUPPORT:</Text>
-                </Flex>
-              }
-              w={"100%"}
-              size={"sm"}
-            />
-          ) : (
-            "POST UPDATE:"
-          )}
+          {editUpdate ? "EDIT UPDATE:" : !donating ? "POST UPDATE:" : ""}
         </Title>
         <Stack align="center">
           {!donating && (
@@ -867,7 +872,7 @@ export default function Trippage() {
               }}
             />
           )}
-          <TripContent />
+          {!donating && <TripContent />}
         </Stack>
       </Modal>
     </>
