@@ -41,6 +41,7 @@ import {
   IconBrandPaypal,
   IconAt,
   IconUser,
+  IconWorld,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -271,7 +272,24 @@ export default function Trippage() {
   return (
     <>
       <Center>
-        <Flex gap={30} w={"80%"} maw={1200} mt={120}>
+        <Divider
+          w={"65%"}
+          mt={90}
+          ml={25}
+          mb={30}
+          size={"xl"}
+          label={
+            <>
+              <IconWorld size={35} opacity={0.15} />
+              <Title order={3} p={10} maw={"650px"}>
+                Help me raise money to go on a Music Tour
+              </Title>
+            </>
+          }
+        />
+      </Center>
+      <Center>
+        <Flex gap={30} w={"80%"} maw={1200}>
           <Flex
             w={"calc(70% - 30px)"}
             direction={"column"}
@@ -294,7 +312,7 @@ export default function Trippage() {
                   <>
                     {hovered && (
                       <Button
-                        h={500}
+                        h={498}
                         mb={7}
                         radius={"3px 0 0 3px"}
                         onClick={previous}
@@ -324,7 +342,7 @@ export default function Trippage() {
                     </Slider>
                     {hovered && (
                       <Button
-                        h={500}
+                        h={498}
                         mb={7}
                         radius={"3px 0 0 3px"}
                         onClick={previous}
@@ -354,9 +372,6 @@ export default function Trippage() {
                 )}
               </Center>
             </Group>
-            <Title order={2} p={10} maw={"650px"}>
-              Help me raise money to go on a Music Tour
-            </Title>
             <Center mt={5}>
               <Button.Group>
                 <Button variant="default" px={40}>
@@ -509,6 +524,8 @@ export default function Trippage() {
               />
               <Box pl={10}>
                 <Divider
+                  mb={20}
+                  w={"100%"}
                   labelPosition="right"
                   label={
                     <Button
@@ -528,8 +545,6 @@ export default function Trippage() {
                       </Flex>
                     </Button>
                   }
-                  mb={20}
-                  w={"100%"}
                 />{" "}
                 {comments}
               </Box>
@@ -636,7 +651,7 @@ export default function Trippage() {
                 </Text>
               </Button>
             </Box>
-            <Box mt={10}>
+            <Box>
               <Donations />
             </Box>
           </Flex>

@@ -606,7 +606,6 @@ export default function TripPlannerPage() {
                 <Stack align="center">
                   <Input
                     size={"xl"}
-                    variant="filled"
                     placeholder="Title..."
                     w="100%"
                     maw={800}

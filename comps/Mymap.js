@@ -6,6 +6,7 @@ import centerOfMass from "@turf/center-of-mass";
 import bbox from "@turf/bbox";
 import {
   Autocomplete,
+  Box,
   Modal,
   Title,
   Flex,
@@ -166,10 +167,10 @@ export default function Mymap() {
 
       setPlaceLocation({
         name: location,
-        region:
-          placeType === "place" || placeType === "region"
-            ? result
-            : "United States",
+        region: result,
+        // placeType === "place" || placeType === "region"
+        //   ? result
+        //   : "United States",
       });
 
       mapRef.current.flyTo({
@@ -320,7 +321,7 @@ export default function Mymap() {
         padding={30}
         size={"470px"}
         title={
-          <>
+          <Box>
             <Title
               order={1}
               fw={900}
@@ -335,15 +336,10 @@ export default function Mymap() {
             </Title>
             {!isCountry && (
               <Text fw={600} size="xs" color="#fff">
-                {citySubTitle}
+                {citySubTitle ? citySubTitle : placeLocation.region}
               </Text>
             )}
-            {isState && (
-              <Text fw={600} size="xs" color="#fff">
-                United States
-              </Text>
-            )}
-          </>
+          </Box>
         }
         styles={(theme) => ({
           header: {
@@ -400,7 +396,7 @@ export default function Mymap() {
                   color="#9ff5fd"
                   opacity={0.7}
                   style={{
-                    marginTop: "3px",
+                    margin: "3px 2px 0 3px",
                   }}
                 />
               }
@@ -484,7 +480,7 @@ export default function Mymap() {
               color="#9ff5fd"
               opacity={0.7}
               style={{
-                marginTop: "3px",
+                margin: "3px 2px 0 3px",
               }}
             />
           }
