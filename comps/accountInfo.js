@@ -1,7 +1,7 @@
 import {
   ActionIcon,
   Box,
-  Center,
+  Button,
   Flex,
   Input,
   Group,
@@ -20,6 +20,7 @@ import {
   IconBrandTiktok,
   IconBrandTwitter,
   IconCirclePlus,
+  IconUserX,
 } from "@tabler/icons";
 import { useLocalStorage } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
@@ -29,7 +30,7 @@ export default function AccountInfo() {
   const auth = getAuth();
 
   return (
-    <Center mt={30} pr={30}>
+    <Box mt={30} pr={30}>
       <Flex direction="column" gap="xs" w={"100%"}>
         <Title
           order={6}
@@ -233,6 +234,21 @@ export default function AccountInfo() {
           </Flex>
         </Group>
       </Flex>
-    </Center>
+      <Group mt={20} position="right" w={"100%"}>
+        <Button
+          variant="default"
+          size="xs"
+          leftIcon={<IconUserX size={18} stroke={2} />}
+          sx={{
+            opacity: 0.2,
+            "&:hover": {
+              opacity: 1,
+            },
+          }}
+        >
+          DELETE ACCOUNT
+        </Button>
+      </Group>
+    </Box>
   );
 }
