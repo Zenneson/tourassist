@@ -793,7 +793,7 @@ export default function Trippage() {
                   }}
                 />
                 <Box
-                  pl={15}
+                  pl={20}
                   py={5}
                   sx={{
                     borderLeft: "3px solid rgba(255,255,255,0.1)",
@@ -829,6 +829,7 @@ export default function Trippage() {
                     fit="contain"
                     display={"block"}
                     opacity={0.3}
+                    pl={10}
                     style={{
                       width: "30%",
                       borderLeft: "2px solid rgba(255,255,255,0.3)",

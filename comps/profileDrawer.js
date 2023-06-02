@@ -18,6 +18,7 @@ import {
   Box,
   NavLink,
   Divider,
+  Badge,
 } from "@mantine/core";
 import {
   profileOpenedState,
@@ -137,25 +138,36 @@ export default function ProfileDrawer() {
         </Button>
         <Space h={95} />
         <Divider mt={0} mb={20} w={"253px"} ml={"15px"} opacity={0.4} />
-        <Flex
-          direction="column"
-          gap="xs"
-          mb={10}
-          sx={{
-            userSelect: "none",
-          }}
-        >
-          <Avatar
-            size={70}
-            src={user?.providerData[0].photoURL}
-            radius="xl"
-            mr={7}
-            mx="auto"
-          />
-          <Text ta="center" fz={10}>
-            {user?.providerData[0].email}
-          </Text>
-        </Flex>
+        {user && (
+          <Flex
+            direction="column"
+            gap="xs"
+            mb={10}
+            sx={{
+              userSelect: "none",
+            }}
+          >
+            <Avatar
+              size={70}
+              src={user?.providerData[0].photoURL}
+              radius="xl"
+              mr={7}
+              mx="auto"
+            />
+            <Text
+              variant="outline"
+              ta="center"
+              w={"50%"}
+              ml={"25%"}
+              fz={9}
+              sx={{
+                textTransform: "uppercase",
+              }}
+            >
+              {user?.providerData[0].email}
+            </Text>
+          </Flex>
+        )}
         <Group spacing={8} mt={15}>
           {router.pathname !== "/" && (
             <NavLink
@@ -177,7 +189,8 @@ export default function ProfileDrawer() {
               }}
             />
           )}
-          {items}
+
+          {user && items}
           {router.pathname !== "/about" && (
             <NavLink
               label={<Text fw={700}>About Us</Text>}
@@ -222,7 +235,7 @@ export default function ProfileDrawer() {
         <Button
           variant="subtle"
           pos={"absolute"}
-          bottom={130}
+          bottom={user ? 130 : 30}
           w={"100%"}
           fz={10}
           color="gray.7"
@@ -242,54 +255,56 @@ export default function ProfileDrawer() {
         >
           Legal Documents
         </Button>
-        <Box
-          py={30}
-          mb={20}
-          sx={{
-            borderTop: "1px solid rgba(255, 255, 255, 0.03)",
-            position: "absolute",
-            left: "15%",
-            bottom: 0,
-            width: "70%",
-          }}
-        >
-          <Button
-            variant="subtle"
-            w="60%"
-            ml="20%"
-            mt={10}
-            leftIcon={<IconLogout size={18} />}
+        {user && (
+          <Box
+            py={30}
+            mb={20}
             sx={{
-              color: "rgba(255, 255, 255, 0.1)",
-              backgroundColor: "rgba(255, 255, 255, 0.012)",
-              transition: "all 200ms ease",
-              "&:hover": {
-                color: "#fff",
-                backgroundColor: "rgba(0, 0, 0, 0.2)",
-              },
-            }}
-            onClick={() => {
-              signOut(auth)
-                .then(() => {
-                  localStorage.removeItem("user");
-                  localStorage.removeItem("visible");
-                  localStorage.removeItem("mapSpin");
-                  localStorage.removeItem("placeDataState");
-                  setProfileOpened(false);
-                  setProfileShow(false);
-                  if (router.pathname !== "/") router.push("/");
-                  else {
-                    router.reload();
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+              borderTop: "1px solid rgba(255, 255, 255, 0.03)",
+              position: "absolute",
+              left: "15%",
+              bottom: 0,
+              width: "70%",
             }}
           >
-            Logout
-          </Button>
-        </Box>
+            <Button
+              variant="subtle"
+              w="60%"
+              ml="20%"
+              mt={10}
+              leftIcon={<IconLogout size={18} />}
+              sx={{
+                color: "rgba(255, 255, 255, 0.1)",
+                backgroundColor: "rgba(255, 255, 255, 0.012)",
+                transition: "all 200ms ease",
+                "&:hover": {
+                  color: "#fff",
+                  backgroundColor: "rgba(0, 0, 0, 0.2)",
+                },
+              }}
+              onClick={() => {
+                signOut(auth)
+                  .then(() => {
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("visible");
+                    localStorage.removeItem("mapSpin");
+                    localStorage.removeItem("placeDataState");
+                    setProfileOpened(false);
+                    setProfileShow(false);
+                    if (router.pathname !== "/") router.push("/");
+                    else {
+                      router.reload();
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
+            >
+              Logout
+            </Button>
+          </Box>
+        )}
       </Drawer>
       <Drawer
         opened={profileShow}

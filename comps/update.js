@@ -50,16 +50,6 @@ export default function Update() {
 
   const [showall, toggle] = useToggle(["hide", "show"]);
 
-  const sliderRef = useRef();
-
-  const next = () => {
-    sliderRef.current.slickNext();
-  };
-
-  const previous = () => {
-    sliderRef.current.slickPrev();
-  };
-
   const slideSettings = {
     dots: false,
     fade: true,

@@ -83,8 +83,22 @@ export default function Money() {
       <Group my={20} w={"100%"} grow spacing={0}>
         <Center>
           <Box>
-            <Title order={2}>$1000</Title>
-            <Text ta={"center"} fz={10}>
+            <Title order={3} ta={"center"}>
+              $1234
+            </Title>
+            <Text fz={10}>AVAILABLE FUNDS</Text>
+          </Box>
+        </Center>
+        <Center
+          sx={{
+            borderLeft: "3px solid rgba(255,255,255,0.2)",
+          }}
+        >
+          <Box>
+            <Title order={3} ta={"center"}>
+              $1500
+            </Title>
+            <Text ta={"right"} mr={4} fz={10}>
               RAISED
             </Text>
           </Box>
@@ -95,25 +109,12 @@ export default function Money() {
           }}
         >
           <Box>
-            <Title order={2} ta={"center"}>
-              2
-            </Title>
-            <Text fz={10}>TRIPS</Text>
+            <Title order={3}>$5000</Title>
+            <Text ta={"right"} mr={4} fz={10}>
+              GOAL
+            </Text>
           </Box>
         </Center>
-        <Button
-          leftIcon={<IconBuildingBank size={27} />}
-          variant="gradient"
-          gradient={{ from: "green.5", to: "green.9", deg: 180 }}
-          color="gray.0"
-          size="lg"
-        >
-          <Text fz={12} lh={1.1}>
-            ADD BANKING
-            <br />
-            INFORMATION
-          </Text>
-        </Button>
       </Group>
       <Flex my={10} pos={"relative"}>
         <Box

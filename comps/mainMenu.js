@@ -84,9 +84,9 @@ export default function MainMenu() {
             cursor: "pointer",
           }}
           onClick={() => {
-            user && setProfileOpened((o) => !o);
-            user && setListOpened(false);
-            user && setProfileShow(false);
+            setProfileOpened((o) => !o);
+            setListOpened(false);
+            setProfileShow(false);
             setActive(-1);
           }}
         >
@@ -151,77 +151,78 @@ export default function MainMenu() {
                 <IconSearch size={17} />
               </Button>
             </Tooltip>
-            <Popover
-              withArrow
-              arrowOffset={15}
-              width="auto"
-              position="bottom-end"
-              shadow="md"
-              opened={logoutOpeened}
-              onChange={setLogoutOpeened}
-            >
-              <Tooltip
-                color="dark"
-                label={user ? "Logout" : "Login"}
-                position="bottom"
-                openDelay={800}
+            {user && (
+              <Popover
                 withArrow
+                arrowOffset={15}
+                width="auto"
+                position="bottom-end"
+                shadow="md"
+                opened={logoutOpeened}
+                onChange={setLogoutOpeened}
               >
-                <Popover.Target>
-                  <Button
-                    onClick={() => {
-                      if (!user) setLoginOpened(true);
-                      if (user) setLogoutOpeened((o) => !o);
-                    }}
-                    variant="subtle"
-                    radius="xl"
-                    p={10}
-                  >
-                    {user ? (
-                      <IconDoorExit size={17} />
-                    ) : (
-                      <IconLogin size={17} />
-                    )}
-                  </Button>
-                </Popover.Target>
-              </Tooltip>
-              <Popover.Dropdown p={0}>
-                <Button
-                  size="xs"
-                  fw={700}
-                  px={15}
-                  variant="default"
-                  leftIcon={<IconCircleX size={15} />}
-                  sx={{
-                    opacity: 0.35,
-                    "&:hover": {
-                      opacity: 1,
-                      color: "rgba(255, 40, 40, 0.5)",
-                    },
-                  }}
-                  onClick={function () {
-                    signOut(auth)
-                      .then(() => {
-                        localStorage.removeItem("user");
-                        localStorage.removeItem("visible");
-                        localStorage.removeItem("mapSpin");
-                        localStorage.removeItem("placeDataState");
-                        setProfileOpened(false);
-                        setProfileShow(false);
-                        if (router.pathname !== "/") router.push("/");
-                        else {
-                          router.reload();
-                        }
-                      })
-                      .catch((error) => {
-                        console.log(error);
-                      });
-                  }}
+                <Tooltip
+                  color="dark"
+                  label={user ? "Logout" : "Login"}
+                  position="bottom"
+                  openDelay={800}
+                  withArrow
                 >
-                  LOGOUT
-                </Button>
-              </Popover.Dropdown>
-            </Popover>
+                  <Popover.Target>
+                    <Button
+                      onClick={() => {
+                        setLogoutOpeened((o) => !o);
+                      }}
+                      variant="subtle"
+                      radius="xl"
+                      p={10}
+                    >
+                      {user ? (
+                        <IconDoorExit size={17} />
+                      ) : (
+                        <IconLogin size={17} />
+                      )}
+                    </Button>
+                  </Popover.Target>
+                </Tooltip>
+                <Popover.Dropdown p={0}>
+                  <Button
+                    size="xs"
+                    fw={700}
+                    px={15}
+                    variant="default"
+                    leftIcon={<IconCircleX size={15} />}
+                    sx={{
+                      opacity: 0.35,
+                      "&:hover": {
+                        opacity: 1,
+                        color: "rgba(255, 40, 40, 0.5)",
+                      },
+                    }}
+                    onClick={function () {
+                      signOut(auth)
+                        .then(() => {
+                          localStorage.removeItem("user");
+                          localStorage.removeItem("visible");
+                          localStorage.removeItem("mapSpin");
+                          localStorage.removeItem("placeDataState");
+                          setProfileOpened(false);
+                          setProfileShow(false);
+                          if (router.pathname !== "/") router.push("/");
+                          else {
+                            router.reload();
+                          }
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    }}
+                  >
+                    LOGOUT
+                  </Button>
+                </Popover.Dropdown>
+              </Popover>
+            )}
           </Group>
         </Group>
       </Header>

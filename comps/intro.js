@@ -119,12 +119,6 @@ export default function Intro() {
                   </Text>
                   ASSIST
                 </Title>
-                <Divider
-                  variant="solid"
-                  mt={25}
-                  opacity={0.6}
-                  sx={{ width: "80%" }}
-                />
                 <Box
                   sx={{
                     width: "80%",

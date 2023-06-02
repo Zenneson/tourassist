@@ -40,6 +40,7 @@ import {
   IconTrash,
   IconMapPin,
   IconCalendarEvent,
+  IconChevronsRight,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
@@ -363,7 +364,30 @@ export default function TripPlannerPage() {
 
   return (
     <>
-      <Space h={150} />
+      {/* NOTE   */}
+      <Space h={110} />
+      <Center>
+        <Divider
+          w={"100%"}
+          maw={1200}
+          mb={50}
+          opacity={0.4}
+          label={
+            <Flex>
+              <IconChevronsRight size={20} />
+              <Text>
+                {active === 0
+                  ? "Travel Starting Info"
+                  : active === 1
+                  ? "Cost Calculator"
+                  : active === 2
+                  ? "Travel Details"
+                  : "Account Information"}
+              </Text>
+            </Flex>
+          }
+        />
+      </Center>
       <Center>
         <Flex
           w="100%"
@@ -376,7 +400,7 @@ export default function TripPlannerPage() {
             {active === 0 && (
               <motion.div {...animation}>
                 <Box ml={"10%"} w={"80%"}>
-                  <Title order={2} h={30} ml={12}>
+                  <Title order={3} h={25} ml={5}>
                     {startLocale && date ? (
                       "Continue..."
                     ) : (
@@ -397,6 +421,7 @@ export default function TripPlannerPage() {
                   <Box h={100}>
                     <Box
                       p={10}
+                      pl={15}
                       pb={15}
                       mt={15}
                       sx={{
@@ -405,7 +430,7 @@ export default function TripPlannerPage() {
                         borderLeft: "2px solid rgba(255,255,255,0.05)",
                       }}
                     >
-                      <Group spacing={5} w={"100%"}>
+                      <Group spacing={5} w={"100%"} h={30}>
                         <IconMapPin size={18} opacity={0.4} />
                         {(startCity || startRegion) && (
                           <>
@@ -625,7 +650,6 @@ export default function TripPlannerPage() {
                 >
                   <Input
                     size={"xl"}
-                    variant="filled"
                     placeholder="Title..."
                     w="100%"
                     maw={800}
@@ -648,15 +672,16 @@ export default function TripPlannerPage() {
                 <Center w={"100%"} h={"50vh"}>
                   <Stack w={"70%"}>
                     <Box hidden={user}>
-                      <LoginComp />
-                      <Divider mt={20} opacity={0.4} />
+                      <Box px={30}>
+                        <LoginComp />
+                      </Box>
                     </Box>
                     <Center>
                       <Button
                         leftIcon={<IconBuildingBank size={34} />}
                         variant="gradient"
                         gradient={{
-                          from: "green.5",
+                          from: "green.8",
                           to: "green.9",
                           deg: 180,
                         }}
@@ -670,7 +695,7 @@ export default function TripPlannerPage() {
                         <Title order={3}>ADD BANKING INFORMATION</Title>
                       </Button>
                     </Center>
-                    <Divider my={3} opacity={0.4} />
+                    <Divider my={3} opacity={0.7} />
                     <Group spacing={0}>
                       <Text fz={12} w={"70%"} pl={20} pr={10}>
                         We use Stripe, a trusted payment processor, to securely
@@ -717,7 +742,7 @@ export default function TripPlannerPage() {
               />
               <Stepper.Step
                 label="Travel Details"
-                description="Tell us your story"
+                description="Information for your supporters"
               />
               <Stepper.Step
                 label="Account Info"

@@ -35,6 +35,7 @@ import {
   IconX,
   IconCheck,
   IconUserCheck,
+  IconUserCircle,
 } from "@tabler/icons";
 import { loginOpenedState } from "../libs/atoms";
 import { useRouter } from "next/router";
@@ -120,7 +121,7 @@ export default function LoginComp() {
       color: "#fff",
       transition:
         "transform 150ms ease, color 150ms ease, font-size 150ms ease",
-      transform: floating ? `translate(-${theme.spacing.sm}px, -28px)` : "none",
+      transform: floating ? `translate(0, -28px)` : "none",
       fontSize: floating ? theme.fontSizes.xs : theme.fontSizes.sm,
       fontWeight: floating ? 500 : 400,
     },
@@ -203,6 +204,29 @@ export default function LoginComp() {
   return (
     <>
       <Box w="100%" mt="xl">
+        {type === "sign-up" && (
+          <Divider
+            label={
+              <>
+                <IconUserCircle size={17} />
+                <Text
+                  ml={5}
+                  fz={10}
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Create Account
+                </Text>
+              </>
+            }
+            labelPosition="left"
+            color="rgba(255,255,255,0.3)"
+            mt={16}
+            mb={20}
+            opacity={0.7}
+          />
+        )}
         <Group grow spacing={20}>
           <Button
             onClick={() =>
@@ -285,16 +309,6 @@ export default function LoginComp() {
           })}
         >
           <Stack>
-            {type === "sign-up" && (
-              <Divider
-                label="Create Account"
-                labelPosition="left"
-                color="rgba(255,255,255,0.3)"
-                mt={16}
-                mb={-22}
-                opacity={0.4}
-              />
-            )}
             <TextInput
               required
               label="Email"
@@ -388,13 +402,12 @@ export default function LoginComp() {
                 : "Don't have an account?"}
             </Anchor>
             <Button
-              size={router.pathname === "/tripplanner" ? "lg" : "sm"}
-              mt={router.pathname === "/tripplanner" ? -50 : 0}
+              size={"sm"}
+              mt={router.pathname === "/tripplanner" ? -45 : 0}
               fw={700}
               uppercase={true}
               variant="default"
               sx={{ color: "rgba(255,255,255,0.3)" }}
-              leftIcon={<IconLogin size={15} />}
               type="submit"
             >
               {type === "sign-up" ? "Sign up" : "Login"}
