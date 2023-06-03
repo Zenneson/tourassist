@@ -141,7 +141,7 @@ export default function Money() {
           }}
         >
           <Button
-            variant="outline"
+            variant="subtle"
             color="dark.0"
             size="sm"
             onClick={() => {

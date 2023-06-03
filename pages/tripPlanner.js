@@ -637,8 +637,8 @@ export default function TripPlannerPage() {
                 <Stack
                   w={855}
                   align="center"
-                  py={25}
-                  bg={"rgba(0,0,0,0.3)"}
+                  py={30}
+                  bg={"rgba(0,0,0,0.25)"}
                   sx={{
                     borderRadius: "3px",
                     boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
