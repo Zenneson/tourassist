@@ -211,7 +211,6 @@ export default function TripPlannerPage() {
               }
             />
           </Group>
-          {/* NOTE COSTS   */}
           <Box id={index}>
             {place.costs &&
               place.costs.map(
@@ -365,8 +364,6 @@ export default function TripPlannerPage() {
   const index = startLocale?.indexOf(",");
   const startCity = startLocale?.substring(0, index);
   const startRegion = startLocale?.substring(index + 1);
-
-  // NOTE
 
   return (
     <>
