@@ -168,7 +168,7 @@ export default function AccountInfo() {
             borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
           }}
         >
-          <Flex direction="column" gap={5} align="flex-start" pl={20}>
+          <Flex direction="column" gap={7} align="flex-start" pl={20}>
             <Switch
               p={0}
               size="xs"

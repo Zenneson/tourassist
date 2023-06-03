@@ -1,4 +1,5 @@
 import { useRecoilState } from "recoil";
+import { useRouter } from "next/router";
 import { IconPlayerPlay } from "@tabler/icons";
 import {
   Box,
@@ -12,7 +13,7 @@ import {
   Progress,
 } from "@mantine/core";
 import { Line } from "react-chartjs-2";
-import { profileLinkState } from "../libs/atoms";
+import { profileOpenedState, profileShowState } from "../libs/atoms";
 import Donations from "./donations";
 import {
   Chart as ChartJS,
@@ -24,6 +25,10 @@ import {
 } from "chart.js";
 
 export default function Money() {
+  const router = useRouter();
+  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
+  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
+
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -89,7 +94,7 @@ export default function Money() {
         </Center>
         <Center
           sx={{
-            borderLeft: "3px solid rgba(255,255,255,0.2)",
+            borderLeft: "2px solid rgba(255,255,255,0.2)",
           }}
         >
           <Box>
@@ -103,7 +108,7 @@ export default function Money() {
           </Box>
         </Center>
       </Group>
-      <Divider />
+      <Divider size={"md"} />
       <Group my={20} w={"100%"} grow spacing={0}>
         <Center>
           <Box>
@@ -117,7 +122,7 @@ export default function Money() {
         </Center>
         <Center
           sx={{
-            borderLeft: "3px solid rgba(255,255,255,0.2)",
+            borderLeft: "2px solid rgba(255,255,255,0.2)",
           }}
         >
           <Box>
@@ -132,10 +137,19 @@ export default function Money() {
         <Center
           py={3}
           sx={{
-            borderLeft: "3px solid rgba(255,255,255,0.2)",
+            borderLeft: "2px solid rgba(255,255,255,0.2)",
           }}
         >
-          <Button variant="light" size="sm">
+          <Button
+            variant="outline"
+            color="dark.0"
+            size="sm"
+            onClick={() => {
+              setProfileOpened(false);
+              setProfileShow(false);
+              router.push("/trippage");
+            }}
+          >
             VIEW <IconPlayerPlay size={17} />
           </Button>
         </Center>
