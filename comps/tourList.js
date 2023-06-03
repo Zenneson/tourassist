@@ -72,7 +72,12 @@ export default function TourList() {
               onClick={() => {
                 const newPlaceData = places.map((place) => {
                   const { name, region } = place;
-                  return { place: name, region, costs: ["FLIGHT", "HOTEL"] };
+                  return {
+                    place: name === "東京都" ? "Tokyo" : name,
+                    region:
+                      region && region.replace("ecture東京都", "., Japan"),
+                    costs: ["FLIGHT", "HOTEL"],
+                  };
                 });
                 setPlaceData(newPlaceData);
                 router.push("/tripplanner");

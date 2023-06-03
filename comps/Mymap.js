@@ -329,11 +329,12 @@ export default function Mymap() {
                 textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
               }}
             >
-              {regionName}
+              {regionName === "東京都" ? "Tokyo" : regionName}
             </Title>
             {!isCountry && (
               <Text fw={600} size="xs" color="#fff">
-                {citySubTitle ? citySubTitle : placeLocation.region}
+                {citySubTitle &&
+                  citySubTitle.replace("ecture東京都", "., Japan")}
               </Text>
             )}
           </Box>
@@ -376,8 +377,10 @@ export default function Mymap() {
             } else {
               setPlaceData([
                 {
-                  place: regionName,
-                  region: citySubTitle,
+                  place: regionName === "東京都" ? "Tokyo" : regionName,
+                  region:
+                    citySubTitle &&
+                    citySubTitle.replace("ecture東京都", "., Japan"),
                   costs: ["FLIGHT", "HOTEL"],
                 },
               ]);
@@ -398,7 +401,9 @@ export default function Mymap() {
                 />
               }
               variant="filled"
-              description={`Start planning a trip to ${regionName}`}
+              description={`Start planning a trip to ${
+                regionName === "東京都" ? "Tokyo" : regionName
+              }`}
               sx={{
                 borderRadius: "5px",
               }}
@@ -415,7 +420,7 @@ export default function Mymap() {
                     fw={700}
                     transform="uppercase"
                   >
-                    {regionName}
+                    {regionName === "東京都" ? "Tokyo" : regionName}
                   </Text>
                 </>
               }
@@ -433,7 +438,7 @@ export default function Mymap() {
                     textTransform: "uppercase",
                   }}
                 >
-                  {regionName}
+                  {regionName === "東京都" ? "Tokyo" : regionName}
                 </Text>
                 ?
               </Text>
@@ -447,8 +452,10 @@ export default function Mymap() {
                   setPlaces([]);
                   setPlaceData([
                     {
-                      place: regionName,
-                      region: citySubTitle,
+                      place: regionName === "東京都" ? "Tokyo" : regionName,
+                      region:
+                        citySubTitle &&
+                        citySubTitle.replace("ecture東京都", "., Japan"),
                       costs: ["FLIGHT", "HOTEL"],
                     },
                   ]);
@@ -481,7 +488,9 @@ export default function Mymap() {
               }}
             />
           }
-          description={`Add ${regionName} to the Tour List`}
+          description={`Add ${
+            regionName === "東京都" ? "Tokyo" : regionName
+          } to the Tour List`}
           sx={{
             borderRadius: "5px",
           }}
@@ -507,7 +516,9 @@ export default function Mymap() {
                 color: "red",
                 style: { backgroundColor: "#2e2e2e" },
                 title: "Loaction already added",
-                message: `${regionName} was already added to your tour`,
+                message: `${
+                  regionName === "東京都" ? "Tokyo" : regionName
+                } was already added to your tour`,
               });
             }
           }}
@@ -526,7 +537,9 @@ export default function Mymap() {
             />
             <Autocomplete
               icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-              placeholder={`Where in ${regionName}?`}
+              placeholder={`Where in ${
+                regionName === "東京都" ? "Tokyo" : regionName
+              }?`}
               defaultValue=""
               value={citySearch}
               size="sm"

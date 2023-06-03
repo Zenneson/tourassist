@@ -230,12 +230,14 @@ export default function TripContent() {
           editor?.chain().focus().run();
         }}
         sx={{
+          border: "none",
           overflow: "auto",
           width: "100%",
           minWidth: "500px",
           maxWidth: "800px",
           minHeight: donating ? "100px" : "200px",
           maxHeight: donating ? "100px" : "300px",
+          borderTop: "2px solid rgba(255,255,255,0.2)",
         }}
       >
         {editor && showToolbar && (

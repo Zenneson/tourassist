@@ -47,6 +47,7 @@ import { DatePicker } from "@mantine/dates";
 import TripContent from "../comps/tripContent";
 
 export default function TripPlannerPage() {
+  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startLocale, setStartLocale] = useState("");
@@ -54,13 +55,13 @@ export default function TripPlannerPage() {
   const [checked, setChecked] = useState(false);
   const forceUpdate = useForceUpdate();
   const startLocaleRef = useRef(null);
+  const [newCost, setNewCost] = useState([]);
   const newCostRef = useRef(null);
   const router = useRouter();
   const [placeData, setPlaceData] = useLocalStorage({
     key: "placeDataState",
     defaultValue: [],
   });
-  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const dayjs = require("dayjs");
   var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
@@ -78,11 +79,22 @@ export default function TripPlannerPage() {
     transition: { type: "ease-in-out" },
   };
 
-  const Costs = (cost, index) => (
+  // TODO - Have create into a function that fetches the costs and adds them below
+  const [fetchedCosts, setfetchedCosts] = useState([]);
+  function createCosts() {
+    let fetchedData = [{}];
+    placeData.map((place) => {
+      fetchedData[place.place + "_FLIGHT"] = 123;
+      fetchedData[place.place + "_HOTEL"] = 234;
+    });
+    setfetchedCosts(fetchedData);
+  }
+
+  const Costs = ({ cost, costid }) => (
     <div key={index}>
       <Group position="right" mr={20}>
         <Text size={12} fs="italic" color="dimmed" mt={-25}>
-          <Badge variant="default">{cost.cost || "NEW COST"}</Badge>
+          <Badge variant="default">{cost || "NEW COST"}</Badge>
         </Text>
         <div
           style={{
@@ -92,7 +104,17 @@ export default function TripPlannerPage() {
           }}
         ></div>
         <NumberInput
-          type="number"
+          costid={costid}
+          onChange={(e) => {
+            let data = fetchedCosts;
+            data[costid] = e;
+            setfetchedCosts(data);
+            console.log(data);
+          }}
+          onClick={(e) => {
+            e.target.select();
+          }}
+          defaultValue={fetchedCosts[costid] || 0}
           icon={<IconCurrencyDollar />}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
           formatter={(value) =>
@@ -118,7 +140,6 @@ export default function TripPlannerPage() {
     </div>
   );
 
-  const [newCost, setNewCost] = useState([]);
   let formValue = "";
   const AddCost = (event) => {
     let index =
@@ -135,6 +156,8 @@ export default function TripPlannerPage() {
     }
   });
 
+  console.log(placeData);
+
   const Places = () =>
     placeData.map((place, index) => {
       newCost[index] = newCost[index] || [];
@@ -147,10 +170,9 @@ export default function TripPlannerPage() {
           radius={3}
           bg={"rgba(0,0,0,0.3)"}
           sx={{
-            borderRadius: "25px 3px 3px 3px",
+            borderRadius: "3px",
             boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
-            borderLeft: "3px solid rgba(255,255,255,0.1)",
-            borderTop: "3px solid rgba(255,255,255,0.1)",
+            borderTop: "2px solid rgba(255,255,255,0.1)",
           }}
         >
           <Group position="apart">
@@ -189,40 +211,46 @@ export default function TripPlannerPage() {
               }
             />
           </Group>
+          {/* NOTE COSTS   */}
           <Box id={index}>
             {place.costs &&
-              place.costs.map((cost, index) => (
+              place.costs.map(
+                (cost, index) =>
+                  (cost === "FLIGHT" || cost === "HOTEL") && (
+                    <Box key={index} pos="relative" pr={10}>
+                      <ActionIcon
+                        pos="absolute"
+                        variant="default"
+                        opacity={0.2}
+                        right={-3}
+                        top={-1}
+                        h={43}
+                        onClick={(event) => {
+                          const placeIndex =
+                            event.target.parentElement.parentElement?.id;
+                          const costIndex = index;
+                          let newPlaceData = [...placeData];
+                          let copyData = JSON.parse(
+                            JSON.stringify(newPlaceData)
+                          );
+                          copyData[placeIndex]?.costs.splice(costIndex, 1);
+                          setPlaceData(copyData);
+                        }}
+                      >
+                        <IconTrash size={17} pointerEvents="none" />
+                      </ActionIcon>
+                      <Costs costid={place.place + "_" + cost} cost={cost} />
+                    </Box>
+                  )
+              )}
+            {newCost[index] &&
+              newCost[index].map((cost, index) => (
                 <Box key={index} pos="relative" pr={10}>
                   <ActionIcon
                     pos="absolute"
                     variant="default"
                     opacity={0.2}
                     right={-3}
-                    top={-1}
-                    h={43}
-                    onClick={(event) => {
-                      const placeIndex =
-                        event.target.parentElement.parentElement?.id;
-                      const costIndex = index;
-                      let newPlaceData = [...placeData];
-                      let copyData = JSON.parse(JSON.stringify(newPlaceData));
-                      copyData[placeIndex]?.costs.splice(costIndex, 1);
-                      setPlaceData(copyData);
-                    }}
-                  >
-                    <IconTrash size={17} pointerEvents="none" />
-                  </ActionIcon>
-                  <Costs cost={cost} />
-                </Box>
-              ))}
-            {newCost[index] &&
-              newCost[index].map((cost, index) => (
-                <Box key={index} pos="relative">
-                  <ActionIcon
-                    pos="absolute"
-                    variant="default"
-                    opacity={0.2}
-                    right={-13}
                     top={-1}
                     h={43}
                     onClick={(event) => {
@@ -239,12 +267,7 @@ export default function TripPlannerPage() {
                   >
                     <IconTrash size={17} pointerEvents="none" />
                   </ActionIcon>
-                  <Costs
-                    cost={cost}
-                    styles={{
-                      width: "100%",
-                    }}
-                  />
+                  <Costs costid={place.place + "_" + cost} cost={cost} />
                 </Box>
               ))}
           </Box>
@@ -337,34 +360,16 @@ export default function TripPlannerPage() {
 
   const handleSelect = (e) => {
     setStartLocale(e.value);
-    console.log(e.all);
   };
-
-  const planeLanding = () => (
-    <Box
-      pos={"absolute"}
-      top={5}
-      left={5}
-      sx={{
-        pointerEvents: "none",
-      }}
-    >
-      {checked ? (
-        <IconCheck size={20} />
-      ) : (
-        <IconPlaneArrival size={20} opacity={0.2} />
-      )}
-    </Box>
-  );
 
   const index = startLocale?.indexOf(",");
   const startCity = startLocale?.substring(0, index);
   const startRegion = startLocale?.substring(index + 1);
-  console.log(startLocaleSearch);
+
+  // NOTE
 
   return (
     <>
-      {/* NOTE   */}
       <Space h={110} />
       <Center>
         <Divider
@@ -420,14 +425,13 @@ export default function TripPlannerPage() {
                   </Title>
                   <Box h={100}>
                     <Box
-                      p={10}
-                      pl={15}
+                      py={10}
+                      pl={5}
                       pb={15}
                       mt={15}
                       sx={{
-                        borderRadius: "25px 3px 3px 3px",
+                        borderRadius: "3px",
                         borderTop: "2px solid rgba(255,255,255,0.05)",
-                        borderLeft: "2px solid rgba(255,255,255,0.05)",
                       }}
                     >
                       <Group spacing={5} w={"100%"} h={30}>
@@ -471,11 +475,10 @@ export default function TripPlannerPage() {
                         py={15}
                         px={20}
                         ml={40}
-                        bg={"rgba(0,0,0,0.25)"}
+                        bg={"rgba(0,0,0,0.3)"}
                         sx={{
-                          borderRadius: "25px 3px 3px 3px",
+                          borderRadius: "3px",
                           borderTop: "2px solid rgba(255,255,255,0.1)",
-                          borderLeft: "2px solid rgba(255,255,255,0.1)",
                           boxShadow: "0 7px 10px 0 rgba(0,0,0,0.3)",
                         }}
                       >
@@ -591,10 +594,10 @@ export default function TripPlannerPage() {
                     radius={3}
                     bg={"rgba(0,0,0,0.3)"}
                     sx={{
-                      borderRadius: "25px 3px 3px 3px",
+                      borderRadius: "3px",
                       boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
-                      borderLeft: "3px solid rgba(255,255,255,0.1)",
-                      borderTop: "3px solid rgba(255,255,255,0.1)",
+
+                      borderTop: "2px solid rgba(255,255,255,0.1)",
                     }}
                   >
                     <Group position="apart">
@@ -639,22 +642,26 @@ export default function TripPlannerPage() {
               <motion.div {...animation}>
                 <Stack
                   align="center"
-                  py={50}
-                  bg={"rgba(0,0,0,0.3)"}
+                  py={25}
+                  bg={"rgba(0,0,0,0.4)"}
                   sx={{
-                    borderRadius: "25px 3px 3px 3px",
+                    borderRadius: "3px",
                     boxShadow: "0 7px 10px 0 rgba(0,0,0,0.4)",
-                    borderLeft: "3px solid rgba(255,255,255,0.1)",
-                    borderTop: "3px solid rgba(255,255,255,0.1)",
+
+                    borderTop: "2px solid rgba(255,255,255,0.1)",
                   }}
                 >
                   <Input
                     size={"xl"}
                     placeholder="Title..."
+                    bg={"dark.7"}
+                    variant="filled"
                     w="100%"
                     maw={800}
                     sx={{
                       ".mantine-Input-input": {
+                        borderTop: "2px solid rgba(255,255,255,0.2)",
+                        background: "#0b0c0d",
                         "&::placeholder": {
                           fontWeight: 700,
                           fontStyle: "italic",
@@ -763,7 +770,6 @@ export default function TripPlannerPage() {
                 <NumberInput
                   icon={<IconCurrencyDollar />}
                   size="xl"
-                  type="number"
                   mb={20}
                   w={225}
                   stepHoldDelay={500}
@@ -805,6 +811,9 @@ export default function TripPlannerPage() {
                 onClick={() => {
                   if (active !== 3) {
                     nextStep();
+                  }
+                  if (active === 0 && fetchedCosts.length === 0) {
+                    createCosts();
                   }
                   if (active === 3) {
                     // localStorage.removeItem("placeDataState");

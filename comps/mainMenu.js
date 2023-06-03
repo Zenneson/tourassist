@@ -66,6 +66,7 @@ export default function MainMenu() {
         bg="none"
         pb={0}
         withBorder={false}
+        height={1} // that that the header does not block the middele of the top
         opacity={!visible || searchOpened || loginOpened || mapSpin ? 0 : 1}
         sx={{
           display: "flex",

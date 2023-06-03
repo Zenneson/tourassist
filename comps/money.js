@@ -1,19 +1,8 @@
-import { useRef, useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import {
-  Box,
-  Center,
-  Flex,
-  Button,
-  Group,
-  Title,
-  Text,
-  Divider,
-} from "@mantine/core";
+import { Box, Center, Flex, Group, Title, Text } from "@mantine/core";
 import { Line } from "react-chartjs-2";
 import { profileLinkState } from "../libs/atoms";
 import Donations from "./donations";
-import { IconBuildingBank } from "@tabler/icons";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,8 +13,6 @@ import {
 } from "chart.js";
 
 export default function Money() {
-  const [profileLink, setProfileLink] = useRecoilState(profileLinkState);
-
   ChartJS.register(
     CategoryScale,
     LinearScale,

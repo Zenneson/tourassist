@@ -606,7 +606,7 @@ export default function Purchase() {
               pb={18}
               pt={5}
               sx={{
-                borderRadius: "0 0 0 25px",
+                borderRadius: "3px",
                 borderBottom: "2px solid rgba(255,255,255,0.05)",
                 borderLeft: "2px solid rgba(255,255,255,0.05)",
               }}
@@ -628,7 +628,7 @@ export default function Purchase() {
               bg={"rgba(0,0,0,0.1)"}
               w={"100%"}
               sx={{
-                borderRadius: "25px 3px 3px 3px",
+                borderRadius: "3px",
                 boxShadow: "0 7px 10px 0 rgba(0,0,0,0.4)",
                 borderLeft: "3px solid rgba(255,255,255,0.1)",
                 borderTop: "3px solid rgba(255,255,255,0.1)",

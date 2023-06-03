@@ -79,10 +79,10 @@ export default function PlaceListItem({ index, name, region, draggableId }) {
           </Grid.Col>
           <Grid.Col span="auto">
             <Text size="md" fw={700}>
-              {name}
+              {name === "東京都" ? "Tokyo" : name}
             </Text>
             <Text size="xs" sx={{ color: "rgba(255,255,255,0.3)" }}>
-              {region}
+              {region && region.replace("ecture東京都", "., Japan")}
             </Text>
           </Grid.Col>
           <Grid.Col span="content">

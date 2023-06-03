@@ -21,6 +21,8 @@ import {
   NumberInput,
   TextInput,
   Select,
+  SegmentedControl,
+  Tooltip,
 } from "@mantine/core";
 import { useHover, useToggle, useLocalStorage } from "@mantine/hooks";
 import {
@@ -72,6 +74,7 @@ export default function Trippage() {
   );
   const [donating, setDonating] = useRecoilState(donateState);
   const [readmore, toggle] = useToggle(["closed", "open"]);
+  const [showCosts, toggleCosts] = useToggle(["show", "hide"]);
   const router = useRouter();
 
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
@@ -141,7 +144,12 @@ export default function Trippage() {
   ];
 
   const costs = costData.map((cost, index) => (
-    <Flex direction={"column"} key={index} mt={5}>
+    <Flex
+      direction={"column"}
+      key={index}
+      mt={5}
+      opacity={showCosts === "show" ? 1 : 0.3}
+    >
       <Title order={6} mb={2}>
         {cost.location}
       </Title>
@@ -280,11 +288,18 @@ export default function Trippage() {
           ml={30}
           mb={15}
           color="dark.4"
-          size={"xl"}
+          size={"xs"}
           label={
             <>
-              <IconChevronsRight size={40} opacity={0.7} />
-              <Title order={3} px={5} maw={"650px"} color="dark.0">
+              <IconChevronsRight size={40} stroke={0.5} />
+              <Title
+                order={3}
+                px={5}
+                maw={"650px"}
+                color="dark.0"
+                fw={400}
+                italic
+              >
                 Help me raise money to go on a Music Tour
               </Title>
             </>
@@ -606,13 +621,33 @@ export default function Trippage() {
                 radius={"xl"}
                 mt={20}
               />
-              <Divider
-                mb={5}
-                mt={20}
-                size={"md"}
-                label="Cost Breakdown"
-                opacity={0.4}
-              />
+              <Box pos={"relative"}>
+                <Divider
+                  mb={10}
+                  mt={20}
+                  size={"md"}
+                  label="Cost Breakdown"
+                  opacity={0.7}
+                />
+                <Tooltip
+                  label="Show or Hide from viewers"
+                  color="dark.4"
+                  position="left"
+                >
+                  <SegmentedControl
+                    pos={"absolute"}
+                    top={-8}
+                    right={0}
+                    size="xs"
+                    value={showCosts}
+                    onChange={() => toggleCosts()}
+                    data={[
+                      { label: "SHOW", value: "show" },
+                      { label: "HIDE", value: "hide" },
+                    ]}
+                  />
+                </Tooltip>
+              </Box>
               {costs}
               <Button.Group mt={10} w={"100%"}>
                 <Button
@@ -661,7 +696,6 @@ export default function Trippage() {
         </Flex>
       </Center>
       <Modal
-        // NOTE EDIT POST  MODAL
         withCloseButton={false}
         size={850}
         padding={"xl"}
@@ -712,7 +746,6 @@ export default function Trippage() {
         </Stack>
       </Modal>
       <Modal
-        // NOTE UPDATE POST MODAL
         pos={"relative"}
         withCloseButton={false}
         size={850}
@@ -817,7 +850,6 @@ export default function Trippage() {
                     </Text>
                   </Flex>
                 </Box>
-                {/* TODO: Add Stripe Notice   */}
                 <Group spacing={0} my={8}>
                   <Text fz={11} w={"70%"} pr={10}>
                     We use Stripe, a trusted payment processor, to securely
