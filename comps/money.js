@@ -1,5 +1,16 @@
 import { useRecoilState } from "recoil";
-import { Box, Center, Flex, Group, Title, Text } from "@mantine/core";
+import { IconPlayerPlay } from "@tabler/icons";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Group,
+  Title,
+  Text,
+  Divider,
+  Progress,
+} from "@mantine/core";
 import { Line } from "react-chartjs-2";
 import { profileLinkState } from "../libs/atoms";
 import Donations from "./donations";
@@ -67,7 +78,7 @@ export default function Money() {
           data={data}
         />
       </Box>
-      <Group my={20} w={"100%"} grow spacing={0}>
+      <Group my={20} w={"100%"} spacing={0} grow>
         <Center>
           <Box>
             <Title order={3} ta={"center"}>
@@ -82,11 +93,25 @@ export default function Money() {
           }}
         >
           <Box>
+            <Progress color="blue" value={30} mb={5} size={"xs"} w={"100%"} />
             <Title order={3} ta={"center"}>
-              $1500
+              $1500 / $5000
             </Title>
             <Text ta={"right"} mr={4} fz={10}>
               RAISED
+            </Text>
+          </Box>
+        </Center>
+      </Group>
+      <Divider />
+      <Group my={20} w={"100%"} grow spacing={0}>
+        <Center>
+          <Box>
+            <Title order={6} ta={"center"}>
+              Feb 12, 2023
+            </Title>
+            <Text fz={10} ta={"center"}>
+              TRAVEL DATE
             </Text>
           </Box>
         </Center>
@@ -96,11 +121,23 @@ export default function Money() {
           }}
         >
           <Box>
-            <Title order={3}>$5000</Title>
-            <Text ta={"right"} mr={4} fz={10}>
-              GOAL
+            <Title order={4} ta={"center"}>
+              15
+            </Title>
+            <Text ta={"center"} mr={4} fz={10}>
+              DAYS LEFT
             </Text>
           </Box>
+        </Center>
+        <Center
+          py={3}
+          sx={{
+            borderLeft: "3px solid rgba(255,255,255,0.2)",
+          }}
+        >
+          <Button variant="light" size="sm">
+            VIEW <IconPlayerPlay size={17} />
+          </Button>
         </Center>
       </Group>
       <Flex my={10} pos={"relative"}>

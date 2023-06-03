@@ -106,7 +106,7 @@ export default function TourList() {
           </Center>
           <Button
             pos={"absolute"}
-            top={134}
+            top={94}
             right={0}
             sx={{
               background: "rgba(8, 7, 11, 0.95)",

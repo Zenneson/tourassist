@@ -238,6 +238,7 @@ export default function TripContent() {
           minHeight: donating ? "100px" : "200px",
           maxHeight: donating ? "100px" : "300px",
           borderTop: "2px solid rgba(255,255,255,0.2)",
+          boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
         }}
       >
         {editor && showToolbar && (

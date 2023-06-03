@@ -619,9 +619,9 @@ export default function Trippage() {
                 bg={"gray.6"}
                 size={"xl"}
                 radius={"xl"}
-                mt={20}
+                mt={5}
               />
-              <Box pos={"relative"}>
+              {/* <Box pos={"relative"}>
                 <Divider
                   mb={10}
                   mt={20}
@@ -647,8 +647,8 @@ export default function Trippage() {
                     ]}
                   />
                 </Tooltip>
-              </Box>
-              {costs}
+              </Box> */}
+              {/* {costs} */}
               <Button.Group mt={10} w={"100%"}>
                 <Button
                   w={"100%"}
@@ -702,6 +702,14 @@ export default function Trippage() {
         opened={altModal}
         centered
         onClose={closeAltModal}
+        styles={(theme) => ({
+          header: {
+            backgroundColor: "rgba(0,0,0,0.3)",
+          },
+          content: {
+            backgroundColor: "rgba(0,0,0,0.9)",
+          },
+        })}
       >
         <CloseButton
           pos={"absolute"}
@@ -753,6 +761,14 @@ export default function Trippage() {
         centered
         opened={editContentModal}
         onClose={closeEditContentModal}
+        styles={(theme) => ({
+          header: {
+            backgroundColor: "rgba(0,0,0,0.3)",
+          },
+          content: {
+            backgroundColor: "rgba(0,0,0,0.9)",
+          },
+        })}
       >
         <CloseButton
           pos={"absolute"}

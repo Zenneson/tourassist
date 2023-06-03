@@ -109,7 +109,6 @@ export default function TripPlannerPage() {
             let data = fetchedCosts;
             data[costid] = e;
             setfetchedCosts(data);
-            console.log(data);
           }}
           onClick={(e) => {
             e.target.select();
@@ -155,8 +154,6 @@ export default function TripPlannerPage() {
       AddCost(event);
     }
   });
-
-  console.log(placeData);
 
   const Places = () =>
     placeData.map((place, index) => {
@@ -638,13 +635,13 @@ export default function TripPlannerPage() {
             {active === 2 && (
               <motion.div {...animation}>
                 <Stack
+                  w={855}
                   align="center"
                   py={25}
-                  bg={"rgba(0,0,0,0.4)"}
+                  bg={"rgba(0,0,0,0.3)"}
                   sx={{
                     borderRadius: "3px",
-                    boxShadow: "0 7px 10px 0 rgba(0,0,0,0.4)",
-
+                    boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
                     borderTop: "2px solid rgba(255,255,255,0.1)",
                   }}
                 >

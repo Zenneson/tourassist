@@ -5,7 +5,6 @@ import { useLocalStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
 import Money from "./money";
-import Trips from "./trips";
 import {
   Avatar,
   Drawer,
@@ -19,6 +18,7 @@ import {
   NavLink,
   Divider,
   Badge,
+  Select,
 } from "@mantine/core";
 import {
   profileOpenedState,
@@ -57,14 +57,9 @@ export default function ProfileDrawer() {
       description: "Manage Your Account",
     },
     {
-      label: "Money",
+      label: "Trip Info",
       icon: <IconWallet size={30} />,
-      description: "Bank and Funding Info",
-    },
-    {
-      label: "Trips",
-      icon: <IconPlane size={30} />,
-      description: "Your Trip Campaigns",
+      description: "Trip and Funding Info",
     },
   ];
 
@@ -374,25 +369,13 @@ export default function ProfileDrawer() {
                 Money <IconWallet size={40} />
               </Flex>
             </Title>
+            <Select
+              w={"95%"}
+              mt={7}
+              placeholder="Help me raise money to go on a Music Tour"
+              data={["Help me raise money to go on a Music Tour"]}
+            />
             <Money />
-          </motion.div>
-        )}
-        {active === 2 && (
-          <motion.div {...animation}>
-            <Title
-              mt={-5}
-              opacity={0.15}
-              fw={600}
-              fz={40}
-              sx={{
-                textTransform: "uppercase",
-              }}
-            >
-              <Flex align={"center"} gap={10}>
-                Trip Campaigns <IconPlane size={40} />
-              </Flex>
-            </Title>
-            <Trips />
           </motion.div>
         )}
       </Drawer>

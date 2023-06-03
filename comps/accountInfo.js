@@ -30,7 +30,7 @@ export default function AccountInfo() {
   const auth = getAuth();
 
   return (
-    <Box mt={30} pr={30}>
+    <Box mt={15} pr={30}>
       <Flex direction="column" gap="xs" w={"100%"}>
         <Title
           order={6}
