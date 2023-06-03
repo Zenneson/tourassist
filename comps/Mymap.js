@@ -69,6 +69,9 @@ export default function Mymap() {
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const [geoLat, setGeoLat] = useState(0);
+  const [geoLng, setGeoLng] = useState(0);
+  const [mapReady, setMapReady] = useState(false);
   const [placeData, setPlaceData] = useLocalStorage({
     key: "placeDataState",
     defaultValue: [],
@@ -82,14 +85,29 @@ export default function Mymap() {
     defaultValue: true,
   });
 
-  const initialViewState = {
-    latitude: 37,
-    longitude: -90,
-    zoom: 4.2,
-    pitch: 35,
-  };
+  const initialViewState =
+    mapSpin && !mapReady
+      ? {
+          latitude: geoLat || 37,
+          longitude: geoLng || -90,
+          zoom: 4.2,
+          pitch: 35,
+        }
+      : {
+          latitude: geoLat || 37,
+          longitude: geoLng || -90,
+          zoom: 2.5,
+          pitch: 0,
+        };
 
   useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        let { latitude, longitude } = position.coords;
+        setGeoLat(latitude);
+        setGeoLng(longitude);
+      });
+    }
     let rotationIntervalId;
     if (mapSpin && !user) {
       rotationIntervalId = setInterval(() => {
@@ -98,16 +116,23 @@ export default function Mymap() {
             mapRef.current?.getCenter().lng + 0.4,
             mapRef.current?.getCenter().lat,
           ],
-          duration: 50,
+          duration: 25,
         });
-      }, 50);
+      }, 25);
     } else {
       clearInterval(rotationIntervalId);
       setMapSpin(false);
-      mapRef.current?.flyTo({
-        zoom: 2.5,
-        pitch: 0,
-      });
+      if (geoLat && geoLng) {
+        if (!mapReady) {
+          mapRef.current?.flyTo({
+            center: [geoLng, geoLat],
+            zoom: 2.5,
+            pitch: 0,
+            duration: 1500,
+          });
+          setMapReady(true);
+        }
+      }
     }
     return () => clearInterval(rotationIntervalId);
   }, [
@@ -120,6 +145,9 @@ export default function Mymap() {
     mapRef,
     mapSpin,
     setMapSpin,
+    geoLat,
+    geoLng,
+    mapReady,
   ]);
 
   function goToCountry(feature) {

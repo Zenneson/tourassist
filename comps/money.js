@@ -149,6 +149,7 @@ export default function Money() {
             sx={{
               "&:hover": {
                 cursor: "pointer",
+                backgroundColor: "rgba(255,255,255,0.1)",
               },
             }}
             onClick={() => {
