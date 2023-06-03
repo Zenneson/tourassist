@@ -152,12 +152,13 @@ export default function Mymap() {
       const { newCenter, maxZoom } =
         getNewCenter(center.current.geometry?.coordinates, location) || {};
       const index = feature.place_name?.indexOf(",");
-      const result = feature.place_name?.substring(index + 1);
+      let result = feature.place_name?.substring(index + 1);
       {
-        isCountry ? setCitySubTitle("") : setCitySubTitle(result);
+        feature.layer?.source === "states-boundaries"
+          ? (result = "United States")
+          : result;
       }
-      console.log(result);
-      console.log(feature.place_name);
+      setCitySubTitle(result);
       setIsCity(
         isSelection &&
           (feature?.place_type.includes("place") ||
@@ -331,17 +332,15 @@ export default function Mymap() {
             >
               {regionName === "東京都" ? "Tokyo" : regionName}
             </Title>
-            {!isCountry && (
-              <Text fw={600} size="xs" color="#fff">
-                {citySubTitle &&
-                  citySubTitle.replace("ecture東京都", "., Japan")}
-              </Text>
-            )}
+            <Text fw={600} size="xs" color="#fff">
+              {citySubTitle && citySubTitle.replace("ecture東京都", "., Japan")}
+            </Text>
           </Box>
         }
         styles={(theme) => ({
           header: {
             backgroundColor: "rgba(11, 12, 13, 0)",
+            zIndex: 1,
           },
           content: {
             backgroundColor: "rgba(11, 12, 13, 0.8)",

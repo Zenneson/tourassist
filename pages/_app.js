@@ -1,7 +1,10 @@
 import Head from "next/head";
+import { useEffect } from "react";
 import { RecoilRoot } from "recoil";
 import { MantineProvider, AppShell } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { useRouter } from "next/router";
+import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import LoginModal from "../comps/loginModal";
 import SearchModal from "../comps/searchModal";
 import MainMenu from "../comps/mainMenu";
@@ -57,10 +60,32 @@ export default function App(props) {
           <LoginModal />
           <SearchModal />
           <AppShell padding="none" header={<MainMenu />}>
+            <RouterTransition />
             <Component {...pageProps} />
           </AppShell>
         </RecoilRoot>
       </MantineProvider>
     </>
   );
+}
+
+function RouterTransition() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleStart = (url) => url !== router.asPath && nprogress.start();
+    const handleComplete = () => nprogress.complete();
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  }, [router.asPath, router.events]);
+
+  return <NavigationProgress autoReset={true} />;
 }

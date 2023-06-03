@@ -248,8 +248,8 @@ export default function Trippage() {
   ];
 
   const comments = commentData.map((comment, index) => (
-    <>
-      <Group key={index}>
+    <Box key={index}>
+      <Group>
         <Avatar alt="" radius="xl">
           {comment.name.charAt(0)}
         </Avatar>
@@ -264,7 +264,7 @@ export default function Trippage() {
         {comment.text}
       </Text>
       {commentData.length !== index + 1 && <Divider opacity={0.25} my={10} />}
-    </>
+    </Box>
   ));
 
   const closeAltModal = () => {
