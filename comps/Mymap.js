@@ -107,6 +107,9 @@ export default function Mymap() {
         setGeoLat(latitude);
         setGeoLng(longitude);
       });
+    } else {
+      setGeoLat(37);
+      setGeoLng(-90);
     }
     let rotationIntervalId;
     if (mapSpin && !user) {
