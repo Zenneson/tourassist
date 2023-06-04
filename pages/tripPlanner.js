@@ -582,7 +582,6 @@ export default function TripPlannerPage() {
                             },
                           }}
                         />
-                        {/* NOTE NUMBER   */}
                         <Group mt={15} spacing={0}>
                           <Divider
                             w={"60%"}
@@ -636,7 +635,7 @@ export default function TripPlannerPage() {
                         <Group pos={"relative"}>
                           <Divider
                             w={"100%"}
-                            my={15}
+                            my={12}
                             labelPosition="right"
                             variant="dashed"
                             label={

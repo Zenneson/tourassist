@@ -550,7 +550,7 @@ export default function Legal() {
                       onClick={(e) => {
                         setProfileOpened(false);
                         setProfileShow(false);
-                        router.push("/about");
+                        router.push("/help");
                       }}
                     >
                       About Tourassist

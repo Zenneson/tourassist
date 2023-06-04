@@ -209,17 +209,18 @@ export default function ProfileDrawer() {
           )}
 
           {user && items}
-          {router.pathname !== "/about" && (
+          {router.pathname !== "/help" && (
             <NavLink
               label={
                 <Text
                   fw={700}
                   fz={12}
+                  fs={"italic"}
                   sx={{
                     textTransform: "uppercase",
                   }}
                 >
-                  About Us
+                  How?
                 </Text>
               }
               description="About TourAssit | FAQs"
@@ -230,37 +231,7 @@ export default function ProfileDrawer() {
               onClick={(e) => {
                 setProfileOpened(false);
                 setProfileShow(false);
-                router.push("/about");
-              }}
-              sx={{
-                ".mantine-NavLink-description": {
-                  opacity: 0.4,
-                },
-              }}
-            />
-          )}
-          {router.pathname !== "/contact" && (
-            <NavLink
-              label={
-                <Text
-                  fw={700}
-                  fz={12}
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Contact Us
-                </Text>
-              }
-              description="Message Us Directly"
-              px={25}
-              py={8}
-              icon={<IconAt size={30} opacity={0.1} />}
-              variant="subtle"
-              onClick={(e) => {
-                setProfileOpened(false);
-                setProfileShow(false);
-                router.push("/contact");
+                router.push("/help");
               }}
               sx={{
                 ".mantine-NavLink-description": {
