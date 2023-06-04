@@ -42,6 +42,8 @@ import {
   IconChevronsRight,
   IconArrowRightTail,
   IconAlertTriangle,
+  IconFriends,
+  IconRotate360,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
@@ -52,6 +54,8 @@ export default function TripPlannerPage() {
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startLocale, setStartLocale] = useState("");
+  const [travelers, setTravelers] = useState(1);
+  const travelersHandlerRef = useRef(null);
   const [date, setDate] = useState(null);
   const [checked, setChecked] = useState(false);
   const forceUpdate = useForceUpdate();
@@ -359,7 +363,6 @@ export default function TripPlannerPage() {
     setStartLocale(e.value);
   };
 
-  // NOTE START
   const index = startLocale?.indexOf(",");
   const startCity = startLocale.substring(0, index);
   const startRegion = startLocale?.substring(index + 1);
@@ -380,7 +383,6 @@ export default function TripPlannerPage() {
       }
     });
   };
-  // console.log("PLACE DATA ", placeData);
 
   return (
     <>
@@ -441,7 +443,7 @@ export default function TripPlannerPage() {
                       </Text>
                     )}
                   </Title>
-                  <Box h={100}>
+                  <Box h={76} mb={20}>
                     <Box
                       py={10}
                       pl={5}
@@ -580,15 +582,78 @@ export default function TripPlannerPage() {
                             },
                           }}
                         />
+                        {/* NOTE NUMBER   */}
+                        <Group mt={15} spacing={0}>
+                          <Divider
+                            w={"60%"}
+                            pr={10}
+                            labelPosition="right"
+                            variant="dashed"
+                            label={
+                              <Flex align={"center"}>
+                                <IconFriends size={16} />
+                                <Text ta={"right"} ml={5} fz={13} opacity={0.4}>
+                                  Travelers:
+                                </Text>
+                              </Flex>
+                            }
+                          />
+                          <Group spacing={5} w={"40%"} grow>
+                            <Button
+                              variant="filled"
+                              color="dark.5"
+                              fz={25}
+                              onClick={() =>
+                                travelersHandlerRef.current.decrement()
+                              }
+                            >
+                              -
+                            </Button>
+                            <NumberInput
+                              hideControls
+                              value={travelers}
+                              onChange={(e) => setTravelers(e)}
+                              handlersRef={travelersHandlerRef}
+                              defaultValue={1}
+                              styles={{
+                                input: {
+                                  textAlign: "center",
+                                },
+                              }}
+                            />
+                            <Button
+                              variant="filled"
+                              color="dark.5"
+                              fz={25}
+                              onClick={() =>
+                                travelersHandlerRef.current.increment()
+                              }
+                            >
+                              +
+                            </Button>
+                          </Group>
+                        </Group>
                         <Group pos={"relative"}>
                           <Divider
                             w={"100%"}
-                            mt={15}
-                            mb={5}
+                            my={15}
                             labelPosition="right"
+                            variant="dashed"
                             label={
                               <Switch
-                                label={<Text fz={12}>Round Trip?</Text>}
+                                label={
+                                  <Flex align={"center"}>
+                                    <IconRotate360 size={16} />
+                                    <Text
+                                      ta={"right"}
+                                      ml={5}
+                                      fz={12}
+                                      opacity={0.4}
+                                    >
+                                      Round Trip?
+                                    </Text>
+                                  </Flex>
+                                }
                                 labelPosition="left"
                                 onLabel="YES"
                                 offLabel="NO"
