@@ -347,13 +347,12 @@ export default function Mymap() {
         padding={"15px 30px"}
         size={"470px"}
         title={
-          <Box>
+          <Box mb={isCountry || isState ? -15 : 0}>
             <Title
               order={1}
               fw={900}
               variant="gradient"
               gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
-              mb={isCountry ? -15 : 0}
               sx={{
                 textTransform: "uppercase",
                 textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
@@ -390,7 +389,8 @@ export default function Mymap() {
           },
         })}
       >
-        {!isCountry && (
+        {/* NOTE   */}
+        {isCity && !isCountry && !isState && (
           <>
             <Popover
               opened={tourListDropDown}
@@ -558,7 +558,7 @@ export default function Mymap() {
             />
           </>
         )}
-        {!isCity && (
+        {!isCity && (isCountry || isState) && (
           <>
             <Divider
               label={<IconMapSearch size={17} />}
