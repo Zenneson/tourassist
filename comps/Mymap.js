@@ -25,6 +25,7 @@ import {
   IconLocation,
   IconPlaneTilt,
   IconFlag3,
+  IconAlertTriangle,
 } from "@tabler/icons";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "./getNewCenter";
@@ -269,13 +270,13 @@ export default function Mymap() {
     let endpoint;
     switch (field) {
       case "country":
-        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion%2Ccountry&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place%2Ccountry&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
         break;
       case "city":
         const [minLng, minLat, maxLng, maxLat] = borderBox;
-        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
         if (isCountry)
-          endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+          endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
         break;
       default:
         break;
@@ -315,8 +316,8 @@ export default function Mymap() {
 
   const onClose = () => {
     mapRef.current.flyTo({
-      zoom: 3,
-      duration: 1200,
+      zoom: 2.5,
+      duration: 1000,
       pitch: 0,
     });
     setRegionName("");
@@ -352,6 +353,7 @@ export default function Mymap() {
               fw={900}
               variant="gradient"
               gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
+              mb={isCountry ? -15 : 0}
               sx={{
                 textTransform: "uppercase",
                 textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
@@ -360,7 +362,9 @@ export default function Mymap() {
               {regionName === "東京都" ? "Tokyo" : regionName}
             </Title>
             <Text fw={600} size="xs" color="#fff">
-              {citySubTitle && citySubTitle.replace("ecture東京都", "., Japan")}
+              {!isCountry &&
+                citySubTitle &&
+                citySubTitle.replace("ecture東京都", "., Japan")}
             </Text>
           </Box>
         }
@@ -386,96 +390,23 @@ export default function Mymap() {
           },
         })}
       >
-        <Popover
-          opened={tourListDropDown}
-          offset={-60}
-          closeOnClickOutside={true}
-          width={"target"}
-          styles={{
-            dropdown: {
-              border: "none",
-            },
-          }}
-          onClick={() => {
-            if (places.length > 0) {
-              setListOpened(true);
-              setTourListDropDown(!tourListDropDown);
-            } else {
-              setPlaceData([
-                {
-                  place: regionName === "東京都" ? "Tokyo" : regionName,
-                  region:
-                    citySubTitle &&
-                    citySubTitle.replace("ecture東京都", "., Japan"),
-                  costs: ["FLIGHT", "HOTEL"],
+        {!isCountry && (
+          <>
+            <Popover
+              opened={tourListDropDown}
+              offset={-60}
+              closeOnClickOutside={true}
+              width={"target"}
+              styles={{
+                dropdown: {
+                  border: "none",
                 },
-              ]);
-              router.push("/tripplanner");
-            }
-          }}
-        >
-          <Popover.Target>
-            <NavLink
-              icon={
-                <IconPlaneTilt
-                  size={25}
-                  color="#9ff5fd"
-                  opacity={0.7}
-                  style={{
-                    margin: "3px 2px 0 3px",
-                  }}
-                />
-              }
-              variant="filled"
-              description={`Start planning a trip to ${
-                regionName === "東京都" ? "Tokyo" : regionName
-              }`}
-              sx={{
-                borderRadius: "5px",
               }}
-              label={
-                <>
-                  <Text inherit span color="dimmed">
-                    Travel to{" "}
-                  </Text>
-                  <Text
-                    inherit
-                    span
-                    color="white"
-                    size="md"
-                    fw={700}
-                    transform="uppercase"
-                  >
-                    {regionName === "東京都" ? "Tokyo" : regionName}
-                  </Text>
-                </>
-              }
-            />
-          </Popover.Target>
-          <Popover.Dropdown>
-            <Flex align={"center"} gap={3} fz={12}>
-              <IconFlag3 size={20} opacity={0.2} /> Clear Tour List and Travel
-              to
-              <Text fw={700}>
-                <Text
-                  span
-                  color="blue.2"
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {regionName === "東京都" ? "Tokyo" : regionName}
-                </Text>
-                ?
-              </Text>
-            </Flex>
-            <Group spacing={10} mt={10} grow>
-              <Button
-                variant="light"
-                color="blue.0"
-                onClick={() => {
-                  setListOpened(false);
-                  setPlaces([]);
+              onClick={() => {
+                if (places.length > 0) {
+                  setListOpened(true);
+                  setTourListDropDown(!tourListDropDown);
+                } else {
                   setPlaceData([
                     {
                       place: regionName === "東京都" ? "Tokyo" : regionName,
@@ -486,69 +417,147 @@ export default function Mymap() {
                     },
                   ]);
                   router.push("/tripplanner");
-                }}
-              >
-                YES
-              </Button>
-              <Button
-                variant="light"
-                color="red.0"
-                onClick={() => {
-                  setTourListDropDown(false);
-                }}
-              >
-                NO
-              </Button>
-            </Group>
-          </Popover.Dropdown>
-        </Popover>
+                }
+              }}
+            >
+              <Popover.Target>
+                <NavLink
+                  icon={
+                    <IconPlaneTilt
+                      size={25}
+                      color="#9ff5fd"
+                      opacity={0.7}
+                      style={{
+                        margin: "3px 2px 0 3px",
+                      }}
+                    />
+                  }
+                  variant="filled"
+                  description={`Start planning a trip to ${
+                    regionName === "東京都" ? "Tokyo" : regionName
+                  }`}
+                  sx={{
+                    borderRadius: "5px",
+                  }}
+                  label={
+                    <>
+                      <Text inherit span color="dimmed">
+                        Travel to{" "}
+                      </Text>
+                      <Text
+                        inherit
+                        span
+                        color="white"
+                        size="md"
+                        fw={700}
+                        transform="uppercase"
+                      >
+                        {regionName === "東京都" ? "Tokyo" : regionName}
+                      </Text>
+                    </>
+                  }
+                />
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Flex align={"center"} gap={3} fz={12}>
+                  <IconFlag3 size={20} opacity={0.2} /> Clear Tour List and
+                  Travel to
+                  <Text fw={700}>
+                    <Text
+                      span
+                      color="blue.2"
+                      sx={{
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {regionName === "東京都" ? "Tokyo" : regionName}
+                    </Text>
+                    ?
+                  </Text>
+                </Flex>
+                <Group spacing={10} mt={10} grow>
+                  <Button
+                    variant="light"
+                    color="blue.0"
+                    onClick={() => {
+                      setListOpened(false);
+                      setPlaces([]);
+                      setPlaceData([
+                        {
+                          place: regionName === "東京都" ? "Tokyo" : regionName,
+                          region:
+                            citySubTitle &&
+                            citySubTitle.replace("ecture東京都", "., Japan"),
+                          costs: ["FLIGHT", "HOTEL"],
+                        },
+                      ]);
+                      router.push("/tripplanner");
+                    }}
+                  >
+                    YES
+                  </Button>
+                  <Button
+                    variant="light"
+                    color="red.0"
+                    onClick={() => {
+                      setTourListDropDown(false);
+                    }}
+                  >
+                    NO
+                  </Button>
+                </Group>
+              </Popover.Dropdown>
+            </Popover>
 
-        <NavLink
-          icon={
-            <IconPlaylistAdd
-              size={25}
-              color="#9ff5fd"
-              opacity={0.7}
-              style={{
-                margin: "3px 2px 0 3px",
+            <NavLink
+              icon={
+                <IconPlaylistAdd
+                  size={25}
+                  color="#9ff5fd"
+                  opacity={0.7}
+                  style={{
+                    margin: "3px 2px 0 3px",
+                  }}
+                />
+              }
+              description={`Add ${
+                regionName === "東京都" ? "Tokyo" : regionName
+              } to the Tour List`}
+              sx={{
+                borderRadius: "5px",
+              }}
+              label={
+                <>
+                  <Text color="dimmed">
+                    Add to{" "}
+                    <Text span color="white" fw={700} transform="uppercase">
+                      TOUR LIST
+                    </Text>{" "}
+                  </Text>
+                </>
+              }
+              onClick={() => {
+                setListOpened(true);
+                setProfileOpened(false);
+                setProfileShow(false);
+                if (checkPlace(placeLocation) === false) {
+                  addPlaces(placeLocation);
+                  onClose();
+                } else {
+                  notifications.show({
+                    color: "red",
+                    style: { backgroundColor: "#2e2e2e" },
+                    title: "Loaction already added",
+                    icon: <IconAlertTriangle size={17} />,
+                    message: `${
+                      regionName === "東京都" ? "Tokyo" : regionName
+                    } was already added to your tour`,
+                  });
+                }
               }}
             />
-          }
-          description={`Add ${
-            regionName === "東京都" ? "Tokyo" : regionName
-          } to the Tour List`}
-          sx={{
-            borderRadius: "5px",
-          }}
-          label={
-            <>
-              <Text color="dimmed">
-                Add to{" "}
-                <Text span color="white" fw={700} transform="uppercase">
-                  TOUR LIST
-                </Text>{" "}
-              </Text>
-            </>
-          }
-          onClick={() => {
-            setListOpened(true);
-            setProfileOpened(false);
-            setProfileShow(false);
-            if (checkPlace(placeLocation) === false) {
-              addPlaces(placeLocation);
-              onClose();
-            } else {
-              notifications.show({
-                color: "red",
-                style: { backgroundColor: "#2e2e2e" },
-                title: "Loaction already added",
-                message: `${
-                  regionName === "東京都" ? "Tokyo" : regionName
-                } was already added to your tour`,
-              });
-            }
-          }}
-        />
+          </>
+        )}
         {!isCity && (
           <>
             <Divider

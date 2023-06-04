@@ -68,7 +68,17 @@ export default function ProfileDrawer() {
       px={25}
       key={item.label}
       active={index === active}
-      label={<Text fw={700}>{item.label}</Text>}
+      label={
+        <Text
+          fw={700}
+          fz={12}
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
+          {item.label}
+        </Text>
+      }
       description={item.description}
       rightSection={<IconChevronRight size={14} />}
       icon={item.icon}
@@ -166,7 +176,17 @@ export default function ProfileDrawer() {
         <Group spacing={8} mt={15}>
           {router.pathname !== "/" && (
             <NavLink
-              label={<Text fw={700}>Map</Text>}
+              label={
+                <Text
+                  fw={700}
+                  fz={12}
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Map
+                </Text>
+              }
               description="View the Map"
               px={25}
               py={8}
@@ -191,7 +211,17 @@ export default function ProfileDrawer() {
           {user && items}
           {router.pathname !== "/about" && (
             <NavLink
-              label={<Text fw={700}>About Us</Text>}
+              label={
+                <Text
+                  fw={700}
+                  fz={12}
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
+                  About Us
+                </Text>
+              }
               description="About TourAssit | FAQs"
               px={25}
               py={8}
@@ -211,7 +241,17 @@ export default function ProfileDrawer() {
           )}
           {router.pathname !== "/contact" && (
             <NavLink
-              label={<Text fw={700}>Contact Us</Text>}
+              label={
+                <Text
+                  fw={700}
+                  fz={12}
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Contact Us
+                </Text>
+              }
               description="Message Us Directly"
               px={25}
               py={8}

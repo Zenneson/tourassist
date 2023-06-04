@@ -26,6 +26,7 @@ import {
   useWindowEvent,
   useLocalStorage,
 } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import LoginComp from "../comps/loginComp";
 import {
   IconCurrencyDollar,
@@ -34,14 +35,13 @@ import {
   IconChevronUp,
   IconChevronDown,
   IconBuildingBank,
-  IconPlaneArrival,
-  IconCheck,
   IconFlag,
   IconTrash,
   IconMapPin,
   IconCalendarEvent,
   IconChevronsRight,
   IconArrowRightTail,
+  IconAlertTriangle,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
@@ -330,7 +330,7 @@ export default function TripPlannerPage() {
     });
 
   const handleChange = async (e) => {
-    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion%2Ccountry&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
 
     if (startLocaleSearch.length > 1) {
       try {
@@ -359,9 +359,28 @@ export default function TripPlannerPage() {
     setStartLocale(e.value);
   };
 
+  // NOTE START
   const index = startLocale?.indexOf(",");
-  const startCity = startLocale?.substring(0, index);
+  const startCity = startLocale.substring(0, index);
   const startRegion = startLocale?.substring(index + 1);
+  const placeCheck = () => {
+    placeData.map((place) => {
+      if (place.place === startCity) {
+        const wrongPlace = startCity;
+        notifications.show({
+          title: "Loaction already added",
+          message: `You already have ${wrongPlace} in your list.`,
+          color: "red",
+          style: { backgroundColor: "#2e2e2e" },
+          icon: <IconAlertTriangle size={17} />,
+          autoClose: 2500,
+          style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+        });
+        setStartLocale("");
+      }
+    });
+  };
+  // console.log("PLACE DATA ", placeData);
 
   return (
     <>
@@ -435,10 +454,10 @@ export default function TripPlannerPage() {
                     >
                       <Group spacing={5} w={"100%"} h={30}>
                         <IconMapPin size={18} opacity={0.4} />
-                        {(startCity || startRegion) && (
+                        {startCity && (
                           <>
                             <Badge variant="outline" color="gray" size="xs">
-                              {startCity ? startCity : startRegion}
+                              {startCity}
                             </Badge>
                             <IconArrowRightTail size={18} opacity={0.4} />
                           </>
@@ -453,16 +472,15 @@ export default function TripPlannerPage() {
                             )}
                           </Group>
                         ))}
-                        {checked && (startCity || startRegion) && (
+                        {checked && startCity && (
                           <>
                             <IconArrowRightTail size={18} opacity={0.4} />
                             <Badge variant="outline" color="gray" size="xs">
-                              {startCity ? startCity : startRegion}
+                              {startCity}
                             </Badge>
                           </>
                         )}
                       </Group>
-                      {/* NOTE DATE 2 */}
                       {date && date[1] !== null && (
                         <Group spacing={5} w={"100%"} fz={12} mt={5}>
                           <IconCalendarEvent size={18} opacity={0.4} />
@@ -501,7 +519,6 @@ export default function TripPlannerPage() {
                           mb={10}
                           w={"100%"}
                         />
-                        {/* NOTE DATE */}
                         <DatePicker
                           type="range"
                           size={"xl"}
@@ -543,9 +560,11 @@ export default function TripPlannerPage() {
                           data={startLocaleData}
                           filter={(value, item) => item}
                           onClick={function (event) {
+                            placeCheck();
                             event.preventDefault();
                             startLocaleRef.current.select();
                           }}
+                          onSelect={() => placeCheck()}
                           onChange={function (e) {
                             setStartLocaleSearch(e);
                             handleChange(e);
@@ -618,10 +637,10 @@ export default function TripPlannerPage() {
                             textTransform: "uppercase",
                           }}
                         >
-                          {startCity ? startCity : startRegion}
+                          {startCity}
                         </Title>
                         <Text size="xs" color="dimmed">
-                          {startCity ? startRegion : ""}
+                          {startRegion}
                         </Text>
                       </Stack>
                       <Divider
