@@ -314,6 +314,7 @@ export default function Mymap() {
     }
   };
 
+  // NOTE CLOSE
   const onClose = () => {
     mapRef.current.flyTo({
       zoom: 2.5,
@@ -324,6 +325,10 @@ export default function Mymap() {
     setShowModal(false);
     setIsCity(false);
     setTourListDropDown(false);
+    setCityData([]);
+    setCountryData([]);
+    setCitySearch("");
+    setCountrySearch("");
   };
 
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
@@ -389,7 +394,6 @@ export default function Mymap() {
           },
         })}
       >
-        {/* NOTE   */}
         {isCity && !isCountry && !isState && (
           <>
             <Popover
@@ -579,7 +583,7 @@ export default function Mymap() {
               value={citySearch}
               size="sm"
               mb={10}
-              maxDropdownHeight={160}
+              withinPortal
               onChange={function (e) {
                 setCitySearch(e);
                 handleChange("city", e);
