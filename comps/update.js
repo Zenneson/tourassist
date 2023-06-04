@@ -300,7 +300,7 @@ export default function Update() {
       sx={{
         border: "1px solid rgba(0,0,0,0.15)",
         borderTop: "3px solid rgba(255,255,255,0.1)",
-        boxShadow: "0 4px 10px 0 rgba(0,0,0,0.3)",
+        boxShadow: "0 2px 5px 0 rgba(0,0,0,0.3)",
       }}
     >
       <ActionIcon

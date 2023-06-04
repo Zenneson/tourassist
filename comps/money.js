@@ -143,7 +143,7 @@ export default function Money() {
             </Box>
           </Center>
           <Center
-            py={18}
+            py={19}
             bg={"rgba(255,255,255,0.05)"}
             fw={600}
             sx={{

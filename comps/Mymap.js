@@ -106,7 +106,7 @@ export default function Mymap() {
     if (mapSpin && !user) {
       router.query = {};
       rotationIntervalId = setInterval(() => {
-        mapRef.current?.easeTo({
+        mapRef.current?.flyTo({
           center: [
             mapRef.current?.getCenter().lng + 0.4,
             mapRef.current?.getCenter().lat,
@@ -647,10 +647,7 @@ export default function Mymap() {
         style={{ width: "100%", height: "100%" }}
         mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
       >
-        {visible &&
-          !searchOpened &&
-          !loginOpened &&
-          router.pathname !== "/" && <TourList />}
+        {visible && !searchOpened && !loginOpened && <TourList />}
         {isCity && (
           <Marker
             longitude={placeLngLat[0]}
