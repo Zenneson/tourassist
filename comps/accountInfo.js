@@ -5,9 +5,9 @@ import {
   Flex,
   Input,
   Group,
-  Text,
   Title,
   Switch,
+  Divider,
 } from "@mantine/core";
 import {
   IconUserCircle,
@@ -28,7 +28,7 @@ export default function AccountInfo() {
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
 
   return (
-    <Box mt={15} pr={30}>
+    <Box mt={15} pr={30} pos={"relative"} h={"calc(100vh - 110px)"}>
       <Flex direction="column" gap="xs" w={"100%"}>
         <Title
           order={6}
@@ -232,7 +232,13 @@ export default function AccountInfo() {
           </Flex>
         </Group>
       </Flex>
-      <Group mt={20} position="right" w={"100%"}>
+      <Group
+        position="right"
+        w={"100%"}
+        pos={"absolute"}
+        bottom={10}
+        right={30}
+      >
         <Button
           variant="default"
           size="xs"

@@ -299,8 +299,8 @@ export default function Update() {
       gap={10}
       sx={{
         border: "1px solid rgba(0,0,0,0.15)",
-        borderTop: "5px solid rgba(255,255,255,0.1)",
-        boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+        borderTop: "3px solid rgba(255,255,255,0.1)",
+        boxShadow: "0 4px 10px 0 rgba(0,0,0,0.3)",
       }}
     >
       <ActionIcon
@@ -406,6 +406,7 @@ export default function Update() {
       <Divider
         labelPosition="left"
         w={"80%"}
+        mt={20}
         label={
           <Button
             compact

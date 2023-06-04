@@ -21,8 +21,6 @@ import {
   NumberInput,
   TextInput,
   Select,
-  SegmentedControl,
-  Tooltip,
 } from "@mantine/core";
 import { useHover, useToggle, useLocalStorage } from "@mantine/hooks";
 import {
@@ -74,7 +72,6 @@ export default function Trippage() {
   );
   const [donating, setDonating] = useRecoilState(donateState);
   const [readmore, toggle] = useToggle(["closed", "open"]);
-  const [showCosts, toggleCosts] = useToggle(["show", "hide"]);
   const router = useRouter();
 
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
@@ -119,80 +116,6 @@ export default function Trippage() {
   const previous = () => {
     sliderRef.current.slickPrev();
   };
-
-  const costData = [
-    {
-      location: "New York",
-      flight: 500.45,
-      hotel: 200.23,
-    },
-    {
-      location: "Mexico",
-      flight: 550.34,
-      hotel: 150.65,
-    },
-    {
-      location: "Cuba",
-      flight: 980.23,
-      hotel: 340.56,
-    },
-    {
-      location: "Grenada",
-      flight: 1234.56,
-      hotel: 234.56,
-    },
-  ];
-
-  const costs = costData.map((cost, index) => (
-    <Flex
-      direction={"column"}
-      key={index}
-      mt={5}
-      opacity={showCosts === "show" ? 1 : 0.3}
-    >
-      <Title order={6} mb={2}>
-        {cost.location}
-      </Title>
-      <Divider opacity={0.3} my={2} />
-      <Group position="apart" py={1} pl={30} mb={-5}>
-        <Text fz={10}>FLIGHT</Text>
-        <Title order={4}>
-          <Text
-            inherit
-            span
-            fz={12}
-            fw={700}
-            color="dark.4"
-            pos={"relative"}
-            top={-5}
-            right={3}
-          >
-            $
-          </Text>
-          {cost.flight.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-        </Title>
-      </Group>
-      <Group position="apart" py={1} pl={30}>
-        <Text fz={10}>HOTEL</Text>
-        <Title order={4}>
-          <Text
-            inherit
-            span
-            fz={12}
-            fw={700}
-            color="dark.4"
-            pos={"relative"}
-            top={-5}
-            right={3}
-          >
-            $
-          </Text>
-          {cost.hotel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-        </Title>
-      </Group>
-      {costData.length < index + 1 && <Divider opacity={0.1} />}
-    </Flex>
-  ));
 
   const commentData = [
     {
@@ -282,8 +205,8 @@ export default function Trippage() {
     <>
       <Center>
         <Divider
-          w={"65%"}
-          miw={1100}
+          w={"100%"}
+          maw={1200}
           mt={90}
           ml={30}
           mb={15}
@@ -295,7 +218,7 @@ export default function Trippage() {
               <Title
                 order={3}
                 px={5}
-                maw={"650px"}
+                maw={"800px"}
                 color="dark.0"
                 fw={400}
                 italic
@@ -306,8 +229,19 @@ export default function Trippage() {
           }
         />
       </Center>
+      {/* TODO   */}
       <Center>
-        <Flex gap={30} w={"80%"} maw={1200}>
+        <Flex
+          gap={30}
+          w={"80%"}
+          maw={1200}
+          pos={"relative"}
+          h={"100%"}
+          align={"flex-start"}
+          sx={{
+            overflow: "visible",
+          }}
+        >
           <Flex
             w={"calc(70% - 30px)"}
             direction={"column"}
@@ -422,8 +356,8 @@ export default function Trippage() {
               fz={14}
               sx={{
                 border: "1px solid rgba(0,0,0,0.15)",
-                borderTop: "5px solid rgba(255,255,255,0.1)",
-                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+                borderTop: "3px solid rgba(255,255,255,0.1)",
+                boxShadow: "0 4px 10px 0 rgba(0,0,0,0.3)",
               }}
             >
               <Divider
@@ -502,6 +436,7 @@ export default function Trippage() {
             <Divider
               labelPosition="right"
               w={"78%"}
+              mt={20}
               label={
                 <Button
                   compact
@@ -527,7 +462,8 @@ export default function Trippage() {
               p={"20px 30px"}
               sx={{
                 border: "1px solid rgba(0,0,0,0.15)",
-                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+                borderTop: "3px solid rgba(255,255,255,0.1)",
+                boxShadow: "0 4px 10px 0 rgba(0,0,0,0.3)",
               }}
             >
               <Divider
@@ -568,18 +504,27 @@ export default function Trippage() {
               </Box>
             </Box>
           </Flex>
-
-          <Flex w={"30%"} direction={"column"}>
+          {/* NOTE   */}
+          <Flex
+            w={"30%"}
+            h={"100%"}
+            direction={"column"}
+            pos={"sticky"}
+            top={30}
+            maw={360}
+          >
             <Box
               radius={3}
               bg={"rgba(0,0,0,0.05)"}
               w={"100%"}
-              pt={12}
-              pb={22}
+              pt={15}
+              pb={25}
               px={20}
+              mb={20}
               sx={{
                 border: "1px solid rgba(0,0,0,0.15)",
-                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+                borderTop: "3px solid rgba(255,255,255,0.1)",
+                boxShadow: "0 4px 10px 0 rgba(0,0,0,0.3)",
               }}
             >
               <Group spacing={0} w={"100%"}>
@@ -621,34 +566,6 @@ export default function Trippage() {
                 radius={"xl"}
                 mt={5}
               />
-              {/* <Box pos={"relative"}>
-                <Divider
-                  mb={10}
-                  mt={20}
-                  size={"md"}
-                  label="Cost Breakdown"
-                  opacity={0.7}
-                />
-                <Tooltip
-                  label="Show or Hide from viewers"
-                  color="dark.4"
-                  position="left"
-                >
-                  <SegmentedControl
-                    pos={"absolute"}
-                    top={-8}
-                    right={0}
-                    size="xs"
-                    value={showCosts}
-                    onChange={() => toggleCosts()}
-                    data={[
-                      { label: "SHOW", value: "show" },
-                      { label: "HIDE", value: "hide" },
-                    ]}
-                  />
-                </Tooltip>
-              </Box> */}
-              {/* {costs} */}
               <Button.Group mt={10} w={"100%"}>
                 <Button
                   w={"100%"}
@@ -690,7 +607,7 @@ export default function Trippage() {
               </Button>
             </Box>
             <Box>
-              <Donations />
+              <Donations dHeight={"calc(100vh - 330px)"} />
             </Box>
           </Flex>
         </Flex>
@@ -910,6 +827,7 @@ export default function Trippage() {
               placeholder="Update Title..."
               maw={800}
               bg={"rgba(0,0,0,0)"}
+              onChange={(e) => e.preventDefault()}
               sx={{
                 ".mantine-Input-input": {
                   "&::placeholder": {

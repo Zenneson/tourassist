@@ -375,6 +375,7 @@ export default function ProfileDrawer() {
             <Select
               w={"95%"}
               mt={7}
+              variant="filled"
               placeholder="Help me raise money to go on a Music Tour"
               data={["Help me raise money to go on a Music Tour"]}
             />

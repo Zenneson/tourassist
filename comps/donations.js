@@ -15,7 +15,7 @@ import {
 import { useIntersection } from "@mantine/hooks";
 import { IconReload } from "@tabler/icons";
 
-export default function Donations() {
+export default function Donations({ dHeight }) {
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
   const { ref, entry } = useIntersection({
@@ -93,6 +93,7 @@ export default function Donations() {
     <Box
       w="100%"
       sx={{
+        radius: 3,
         boxShadow:
           "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
       }}
@@ -127,7 +128,7 @@ export default function Donations() {
       <Box
         p={10}
         m={0}
-        h={"calc(100vh - 555px)"}
+        mah={dHeight}
         mih={390}
         ref={donationsRef}
         type="auto"

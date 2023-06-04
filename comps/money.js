@@ -170,7 +170,7 @@ export default function Money() {
             overflow: "hidden",
           }}
         >
-          <Donations />
+          <Donations dHeight={"calc(100vh - 557px)"} />
         </Box>
       </Flex>
     </Box>
