@@ -330,8 +330,10 @@ export default function Mymap() {
   return (
     <>
       <LoadingOverlay
-        hidden={mapLoaded}
-        zIndex={103}
+        visible={!mapLoaded}
+        overlayColor="#000"
+        overlayOpacity={1}
+        zIndex={1000}
         transitionDuration={3000}
         loader={<div></div>}
         style={{ pointerEvents: "none" }}
@@ -634,7 +636,6 @@ export default function Mymap() {
         initialViewState={initialViewState}
         maxPitch={80}
         onZoomEnd={onZoomEnd}
-        hidden={!mapLoaded}
         onLoad={() => setMapLoaded(true)}
         keyboard={false}
         ref={mapRef}
