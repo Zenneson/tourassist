@@ -41,6 +41,7 @@ import {
   IconMapPin,
   IconCalendarEvent,
   IconChevronsRight,
+  IconArrowRightTail,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
@@ -400,19 +401,23 @@ export default function TripPlannerPage() {
               <motion.div {...animation}>
                 <Box ml={"10%"} w={"80%"}>
                   <Title order={3} h={25} ml={5}>
-                    {startLocale && date ? (
+                    {startLocale && date && date[1] ? (
                       "Continue..."
                     ) : (
                       <Text opacity={0.4}>
                         Select{" "}
-                        <Text inherit span hidden={date}>
-                          Travel Start Date{startLocale && ":"}
+                        <Text inherit span hidden={date && date[1]}>
+                          Travel Start and End Dates{startLocale && ":"}
                         </Text>{" "}
-                        <Text inherit span hidden={startLocale || date}>
+                        <Text
+                          inherit
+                          span
+                          hidden={startLocale || (date && date[1])}
+                        >
                           and
                         </Text>{" "}
                         <Text inherit span hidden={startLocale}>
-                          {date && "Starting"} Location:
+                          {date && date[1] && "Starting"} Location:
                         </Text>
                       </Text>
                     )}
@@ -435,7 +440,7 @@ export default function TripPlannerPage() {
                             <Badge variant="outline" color="gray" size="xs">
                               {startCity ? startCity : startRegion}
                             </Badge>
-                            →
+                            <IconArrowRightTail size={18} opacity={0.4} />
                           </>
                         )}
                         {placeData.map((place, index) => (
@@ -443,22 +448,27 @@ export default function TripPlannerPage() {
                             <Badge variant="outline" color="gray" size="xs">
                               {place.place}
                             </Badge>
-                            {placeData.length - 1 !== index && "→"}
+                            {placeData.length - 1 !== index && (
+                              <IconArrowRightTail size={18} opacity={0.4} />
+                            )}
                           </Group>
                         ))}
                         {checked && (startCity || startRegion) && (
                           <>
-                            →
+                            <IconArrowRightTail size={18} opacity={0.4} />
                             <Badge variant="outline" color="gray" size="xs">
                               {startCity ? startCity : startRegion}
                             </Badge>
                           </>
                         )}
                       </Group>
-                      {date && (
+                      {/* NOTE DATE 2 */}
+                      {date && date[1] !== null && (
                         <Group spacing={5} w={"100%"} fz={12} mt={5}>
                           <IconCalendarEvent size={18} opacity={0.4} />
-                          {date}
+                          {dayjs(date[0]).format("LL")}
+                          <IconArrowRightTail size={18} opacity={0.4} />
+                          {dayjs(date[1]).format("LL")}
                         </Group>
                       )}
                     </Box>
@@ -491,8 +501,9 @@ export default function TripPlannerPage() {
                           mb={10}
                           w={"100%"}
                         />
+                        {/* NOTE DATE */}
                         <DatePicker
-                          value={date}
+                          type="range"
                           size={"xl"}
                           mx={20}
                           mb={20}
@@ -510,16 +521,12 @@ export default function TripPlannerPage() {
                               color: "#74C0FC",
                             },
                             ".mantine-DatePicker-day[data-selected]": {
-                              backgroundColor: "#74C0FC",
+                              backgroundColor: "#aaa",
                               color: "#000",
                             },
                           }}
                           onChange={(e) => {
-                            if (date === null) {
-                              setDate(dayjs(e).format("LL"));
-                            } else {
-                              setDate(null);
-                            }
+                            setDate(e);
                           }}
                         />
                         <Autocomplete
@@ -671,13 +678,22 @@ export default function TripPlannerPage() {
             {active === 3 && (
               <motion.div {...animation}>
                 <Center w={"100%"} h={"50vh"}>
-                  <Stack w={"70%"}>
+                  <Stack
+                    p={10}
+                    pb={30}
+                    w={"70%"}
+                    bg={"rgba(0,0,0,0.2)"}
+                    sx={{
+                      borderTop: "2px solid rgba(255,255,255,0.2)",
+                      borderRadius: "3px",
+                    }}
+                  >
                     <Box hidden={user}>
                       <Box px={30}>
                         <LoginComp />
                       </Box>
                     </Box>
-                    <Center>
+                    <Center mt={user ? 20 : 0}>
                       <Button
                         leftIcon={<IconBuildingBank size={34} />}
                         variant="gradient"
@@ -696,9 +712,9 @@ export default function TripPlannerPage() {
                         <Title order={3}>ADD BANKING INFORMATION</Title>
                       </Button>
                     </Center>
-                    <Divider my={3} opacity={0.7} />
-                    <Group spacing={0}>
-                      <Text fz={12} w={"70%"} pl={20} pr={10}>
+
+                    <Group spacing={0} px={15}>
+                      <Text fz={12} w={"70%"} pl={20}>
                         We use Stripe, a trusted payment processor, to securely
                         handle transactions and disburse funds, ensuring the
                         protection of your sensitive banking information.
@@ -708,6 +724,7 @@ export default function TripPlannerPage() {
                         fit="contain"
                         display={"block"}
                         opacity={0.3}
+                        pl={20}
                         style={{
                           width: "30%",
                           borderLeft: "2px solid rgba(255,255,255,0.3)",
@@ -797,7 +814,7 @@ export default function TripPlannerPage() {
                 <IconChevronUp />
               </Button>
             )}
-            {startLocale && date && (
+            {startLocale && date && date[1] && (
               <Button
                 fullWidth
                 variant={active === 3 ? "light" : "default"}

@@ -158,6 +158,9 @@ export default function TripContent() {
               accept={IMAGE_MIME_TYPE}
               ta="center"
               h={300}
+              style={{
+                border: "none",
+              }}
             >
               <Group
                 position="center"

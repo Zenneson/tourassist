@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { getAuth } from "firebase/auth";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import {
   Center,
   Box,
@@ -34,22 +34,24 @@ export default function Intro() {
   });
   const [mapSpin, setMapSpin] = useLocalStorage({
     key: "mapSpin",
-    defaultValue: true,
+    defaultValue: false,
   });
+
+  const router = useRouter();
+  const justMap = router.query.visible;
 
   const { height, width } = useViewportSize();
   const firstDown = useMediaQuery("(max-width: 950px)");
 
-  const auth = getAuth();
   useEffect(() => {
-    if (user) {
+    if (user || justMap) {
       setVisible(true);
       setMapSpin(false);
     } else {
       setMapSpin(true);
       if (!visible) setOpened(true);
     }
-  }, [user, setVisible, setMapSpin, visible]);
+  }, [user, setVisible, setMapSpin, visible, justMap]);
 
   const slideSettings = {
     dots: false,

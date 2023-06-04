@@ -35,7 +35,6 @@ export default function MainMenu() {
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [logoutOpeened, setLogoutOpeened] = useState(false);
-  const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);

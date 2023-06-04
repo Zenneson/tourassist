@@ -28,6 +28,7 @@ import {
   IconRefresh,
   IconArrowBigUpLine,
   IconTicket,
+  IconArrowRightTail,
 } from "@tabler/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -284,15 +285,14 @@ export default function Purchase() {
               textTransform: "uppercase",
             }}
           >
-            <Flex align={"center"}>
-              {start} →{" "}
+            <Flex align={"center"} gap={10}>
+              {start} <IconArrowRightTail size={18} opacity={0.4} />
               {viewAlts ? (
                 <>
-                  <Space w={5} />
-                  <IconRefresh size={25} />
+                  <IconRefresh size={22} stroke={2.5} />
                 </>
               ) : (
-                <Text ml={7} color="blue.2" inherit>
+                <Text color="blue.3" inherit>
                   {end}
                 </Text>
               )}
@@ -307,7 +307,9 @@ export default function Purchase() {
                 <Badge variant="outline" color="gray" size="xs">
                   {start}
                 </Badge>
-                <Text opacity={0.2}>→</Text>
+                <Text opacity={0.2}>
+                  <IconArrowRightTail size={18} opacity={0.4} />
+                </Text>
                 <Badge variant="outline" color="gray" size="xs">
                   {end}
                 </Badge>
@@ -318,7 +320,9 @@ export default function Purchase() {
                   <Badge variant="outline" color="gray" size="xs">
                     {start}
                   </Badge>
-                  <Text opacity={0.2}>→</Text>
+                  <Text opacity={0.2}>
+                    <IconArrowRightTail size={18} opacity={0.4} />
+                  </Text>
                   <Badge variant="outline" color="gray" size="xs">
                     {next}
                   </Badge>
@@ -591,10 +595,13 @@ export default function Purchase() {
                     </Text>
                   </Group>
                 </Flex>
-                <Group fz={11} mt={5} ml={2}>
-                  <Text color="blue.2">Silver Spring</Text>→
-                  <Text color="blue.2">Mexico</Text>→
-                  <Text color="blue.2">Grenada</Text>→
+                <Group fz={11} mt={5} ml={2} spacing={10}>
+                  <Text color="blue.2">Silver Spring</Text>
+                  <IconArrowRightTail size={18} opacity={0.4} />
+                  <Text color="blue.2">Mexico</Text>
+                  <IconArrowRightTail size={18} opacity={0.4} />
+                  <Text color="blue.2">Grenada</Text>
+                  <IconArrowRightTail size={18} opacity={0.4} />
                   <Text color="blue.2">Silver Spring</Text>
                 </Group>
               </Box>

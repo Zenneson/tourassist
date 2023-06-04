@@ -31,7 +31,6 @@ import { getNewCenter } from "./getNewCenter";
 import {
   listOpenedState,
   searchOpenedState,
-  mapLoadState,
   placeListState,
   loginOpenedState,
   profileOpenedState,
@@ -62,7 +61,7 @@ export default function Mymap() {
   const [placeLocation, setPlaceLocation] = useState({});
   const [tourListDropDown, setTourListDropDown] = useState(false);
   const [places, setPlaces] = useRecoilState(placeListState);
-  const [mapLoaded, setMapLoaded] = useRecoilState(mapLoadState);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
   const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
@@ -85,20 +84,12 @@ export default function Mymap() {
     defaultValue: true,
   });
 
-  const initialViewState =
-    mapSpin && !mapReady
-      ? {
-          latitude: geoLat || 37,
-          longitude: geoLng || -90,
-          zoom: 4.2,
-          pitch: 35,
-        }
-      : {
-          latitude: geoLat || 37,
-          longitude: geoLng || -90,
-          zoom: 2.5,
-          pitch: 0,
-        };
+  const initialViewState = {
+    latitude: geoLat || 37,
+    longitude: geoLng || -90,
+    zoom: 2.5,
+    pitch: 0,
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -113,12 +104,15 @@ export default function Mymap() {
     }
     let rotationIntervalId;
     if (mapSpin && !user) {
+      router.query = {};
       rotationIntervalId = setInterval(() => {
         mapRef.current?.easeTo({
           center: [
             mapRef.current?.getCenter().lng + 0.4,
             mapRef.current?.getCenter().lat,
           ],
+          zoom: 4.2,
+          pitch: 35,
           duration: 25,
         });
       }, 25);
@@ -144,13 +138,13 @@ export default function Mymap() {
     placeLngLat,
     visible,
     user,
-    mapLoaded,
     mapRef,
     mapSpin,
     setMapSpin,
     geoLat,
     geoLng,
     mapReady,
+    router,
   ]);
 
   function goToCountry(feature) {
@@ -336,7 +330,7 @@ export default function Mymap() {
   return (
     <>
       <LoadingOverlay
-        visible={!mapLoaded}
+        hidden={mapLoaded}
         zIndex={103}
         transitionDuration={3000}
         loader={<div></div>}
@@ -640,9 +634,8 @@ export default function Mymap() {
         initialViewState={initialViewState}
         maxPitch={80}
         onZoomEnd={onZoomEnd}
-        onLoad={() => {
-          if (!mapLoaded) setMapLoaded(true);
-        }}
+        hidden={!mapLoaded}
+        onLoad={() => setMapLoaded(true)}
         keyboard={false}
         ref={mapRef}
         onClick={onEvent}
@@ -653,7 +646,10 @@ export default function Mymap() {
         style={{ width: "100%", height: "100%" }}
         mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
       >
-        {visible && !searchOpened && !loginOpened && <TourList />}
+        {visible &&
+          !searchOpened &&
+          !loginOpened &&
+          router.pathname !== "/" && <TourList />}
         {isCity && (
           <Marker
             longitude={placeLngLat[0]}

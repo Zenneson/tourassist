@@ -175,7 +175,10 @@ export default function ProfileDrawer() {
               onClick={() => {
                 setProfileOpened(false);
                 setProfileShow(false);
-                router.push("/");
+                router.push({
+                  pathname: "/",
+                  query: !user && { visible: "true" },
+                });
               }}
               sx={{
                 ".mantine-NavLink-description": {
