@@ -423,19 +423,18 @@ export default function TripPlannerPage() {
             {active === 0 && (
               <motion.div {...animation}>
                 <Box w={"100%"}>
-                  <Title order={4} h={20} ml={5}>
+                  <Title order={5} h={17} ml={5} fw={100} fs={"italic"}>
                     {startLocale && travelDates && travelDates[1] ? (
                       "Continue..."
                     ) : (
                       <Text opacity={0.4}>
-                        Select{" "}
+                        Provide the{" "}
                         <Text
                           inherit
                           span
                           hidden={travelDates && travelDates[1]}
                         >
-                          Travel Start {startLocale ? "and" : "Date, "} End Date
-                          {startLocale ? "s" : ""}
+                          Trip Length
                           {startLocale && ":"}
                         </Text>{" "}
                         <Text
@@ -448,8 +447,7 @@ export default function TripPlannerPage() {
                           and
                         </Text>{" "}
                         <Text inherit span hidden={startLocale}>
-                          {travelDates && travelDates[1] && "Starting"}{" "}
-                          Location:
+                          Depataure Location
                         </Text>
                       </Text>
                     )}
@@ -544,7 +542,6 @@ export default function TripPlannerPage() {
                         }}
                       >
                         <Center>
-                          {/* NOTE   */}
                           <DatePicker
                             type="range"
                             size={"lg"}
@@ -608,7 +605,7 @@ export default function TripPlannerPage() {
                           variant="filled"
                           defaultValue=""
                           value={startLocaleSearch}
-                          placeholder="Starting Location..."
+                          placeholder="Leaving From..."
                           onItemSubmit={(e) => setStartLocale(e.value)}
                           ref={startLocaleRef}
                           data={startLocaleData}
