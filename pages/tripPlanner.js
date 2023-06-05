@@ -20,6 +20,7 @@ import {
   Flex,
   Badge,
   Switch,
+  Indicator,
 } from "@mantine/core";
 import {
   useForceUpdate,
@@ -35,7 +36,6 @@ import {
   IconChevronUp,
   IconChevronDown,
   IconBuildingBank,
-  IconFlag,
   IconTrash,
   IconMapPin,
   IconCalendarEvent,
@@ -56,7 +56,7 @@ export default function TripPlannerPage() {
   const [startLocale, setStartLocale] = useState("");
   const [travelers, setTravelers] = useState(1);
   const travelersHandlerRef = useRef(null);
-  const [date, setDate] = useState(null);
+  const [travelDates, setTravelDates] = useState(null);
   const [checked, setChecked] = useState(false);
   const forceUpdate = useForceUpdate();
   const startLocaleRef = useRef(null);
@@ -359,19 +359,12 @@ export default function TripPlannerPage() {
     }
   };
 
-  const handleSelect = (e) => {
-    setStartLocale(e.value);
-  };
-
-  const index = startLocale?.indexOf(",");
-  const startCity = startLocale.substring(0, index);
-  const startRegion = startLocale?.substring(index + 1);
   const placeCheck = () => {
     placeData.map((place) => {
-      if (place.place === startCity) {
-        const wrongPlace = startCity;
+      if (place.fullName === startLocale) {
+        const wrongPlace = startLocale;
         notifications.show({
-          title: "Loaction already added",
+          title: "Already set as destination",
           message: `You already have ${wrongPlace} in your list.`,
           color: "red",
           style: { backgroundColor: "#2e2e2e" },
@@ -380,9 +373,15 @@ export default function TripPlannerPage() {
           style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
         });
         setStartLocale("");
+        setStartLocaleSearch("");
+        setStartLocaleData([]);
       }
     });
   };
+
+  const index = startLocale?.indexOf(",");
+  const startCity = startLocale.substring(0, index);
+  const startRegion = startLocale?.substring(index + 1);
 
   return (
     <>
@@ -420,25 +419,34 @@ export default function TripPlannerPage() {
           <Box w="100%" miw={500} px="xl">
             {active === 0 && (
               <motion.div {...animation}>
-                <Box ml={"10%"} w={"80%"}>
-                  <Title order={3} h={25} ml={5}>
-                    {startLocale && date && date[1] ? (
+                <Box w={"100%"}>
+                  <Title order={4} h={20} ml={5}>
+                    {startLocale && travelDates && travelDates[1] ? (
                       "Continue..."
                     ) : (
                       <Text opacity={0.4}>
                         Select{" "}
-                        <Text inherit span hidden={date && date[1]}>
-                          Travel Start and End Dates{startLocale && ":"}
+                        <Text
+                          inherit
+                          span
+                          hidden={travelDates && travelDates[1]}
+                        >
+                          Travel Start {startLocale ? "and" : "Date, "} End Date
+                          {startLocale ? "s" : ""}
+                          {startLocale && ":"}
                         </Text>{" "}
                         <Text
                           inherit
                           span
-                          hidden={startLocale || (date && date[1])}
+                          hidden={
+                            startLocale || (travelDates && travelDates[1])
+                          }
                         >
                           and
                         </Text>{" "}
                         <Text inherit span hidden={startLocale}>
-                          {date && date[1] && "Starting"} Location:
+                          {travelDates && travelDates[1] && "Starting"}{" "}
+                          Location:
                         </Text>
                       </Text>
                     )}
@@ -454,9 +462,9 @@ export default function TripPlannerPage() {
                         borderTop: "2px solid rgba(255,255,255,0.05)",
                       }}
                     >
-                      <Group spacing={5} w={"100%"} h={30}>
-                        <IconMapPin size={18} opacity={0.4} />
-                        {startCity && (
+                      <Group spacing={7} w={"100%"} mb={5}>
+                        <IconMapPin size={20} opacity={0.4} />
+                        {startLocale && (
                           <>
                             <Badge variant="outline" color="gray" size="xs">
                               {startCity}
@@ -474,7 +482,7 @@ export default function TripPlannerPage() {
                             )}
                           </Group>
                         ))}
-                        {checked && startCity && (
+                        {checked && startLocale && (
                           <>
                             <IconArrowRightTail size={18} opacity={0.4} />
                             <Badge variant="outline" color="gray" size="xs">
@@ -483,20 +491,47 @@ export default function TripPlannerPage() {
                           </>
                         )}
                       </Group>
-                      {date && date[1] !== null && (
-                        <Group spacing={5} w={"100%"} fz={12} mt={5}>
-                          <IconCalendarEvent size={18} opacity={0.4} />
-                          {dayjs(date[0]).format("LL")}
-                          <IconArrowRightTail size={18} opacity={0.4} />
-                          {dayjs(date[1]).format("LL")}
-                        </Group>
+                      {/* NOTE   */}
+                      {travelDates && travelDates[1] !== null && (
+                        <Flex align={"center"}>
+                          <Group spacing={7} fz={14} fw={700}>
+                            <IconCalendarEvent size={20} opacity={0.4} />
+                            {dayjs(travelDates[0]).format("LL")}
+                            <Divider w={10} size={"md"} mx={3} />
+                            {dayjs(travelDates[1]).format("LL")}
+                          </Group>
+                          <Divider
+                            orientation="vertical"
+                            ml={10}
+                            mr={7}
+                            size={"sm"}
+                          />
+                          <Group spacing={5} fz={12}>
+                            <Title color="red" order={3}>
+                              •
+                            </Title>
+                            {dayjs(travelDates[0])
+                              .subtract(1, "day")
+                              .format("LL")}
+                            <Text
+                              fw={700}
+                              fz={9}
+                              color="gray.7"
+                              sx={{
+                                textTransform: "uppercase",
+                              }}
+                            >
+                              ( Campgain Ends Day Before Travel )
+                            </Text>
+                          </Group>
+                        </Flex>
                       )}
                     </Box>
                   </Box>
                   <Center>
                     <Flex direction={"column"} align={"center"} gap={10}>
                       <Box
-                        py={15}
+                        pb={10}
                         px={20}
                         ml={40}
                         bg={"rgba(0,0,0,0.3)"}
@@ -506,48 +541,60 @@ export default function TripPlannerPage() {
                           boxShadow: "0 7px 10px 0 rgba(0,0,0,0.3)",
                         }}
                       >
-                        <Divider
-                          label={
-                            <Flex align={"center"} gap={5}>
-                              <Box pos={"relative"} top={2}>
-                                <IconFlag size={16} />
-                              </Box>
-                              <Text fz={12} m={0}>
-                                Fundraiser ends the day before the travel start
-                                date!
-                              </Text>
-                            </Flex>
-                          }
-                          mb={10}
-                          w={"100%"}
-                        />
-                        <DatePicker
-                          type="range"
-                          size={"xl"}
-                          mx={20}
-                          mb={20}
-                          allowDeselect
-                          firstDayOfWeek={0}
-                          getDayProps={() => {
-                            return {
-                              style: {
-                                fontWeight: "bold",
+                        <Center>
+                          <DatePicker
+                            type="range"
+                            size={"lg"}
+                            mt={20}
+                            mb={25}
+                            allowDeselect
+                            firstDayOfWeek={0}
+                            onChange={(e) => {
+                              setTravelDates(e);
+                            }}
+                            getDayProps={() => {
+                              return {
+                                style: {
+                                  fontWeight: "bold",
+                                },
+                              };
+                            }}
+                            renderDay={(date) => {
+                              const day = date.getDate();
+                              const month = date.getMonth();
+                              const year = date.getFullYear();
+
+                              let isSpecificDay;
+                              if (travelDates && travelDates[0]) {
+                                isSpecificDay =
+                                  day === dayjs(travelDates[0]).date() - 1 &&
+                                  month === dayjs(travelDates[0]).month() &&
+                                  year === dayjs(travelDates[0]).year();
+                              }
+
+                              return (
+                                <Indicator
+                                  size={6}
+                                  color="red"
+                                  offset={-5}
+                                  disabled={!isSpecificDay}
+                                >
+                                  <div>{day}</div>
+                                </Indicator>
+                              );
+                            }}
+                            sx={{
+                              ".mantine-DatePicker-day[data-weekend]": {
+                                color: "#74C0FC",
                               },
-                            };
-                          }}
-                          sx={{
-                            ".mantine-DatePicker-day[data-weekend]": {
-                              color: "#74C0FC",
-                            },
-                            ".mantine-DatePicker-day[data-selected]": {
-                              backgroundColor: "#aaa",
-                              color: "#000",
-                            },
-                          }}
-                          onChange={(e) => {
-                            setDate(e);
-                          }}
-                        />
+                              ".mantine-DatePicker-day[data-selected]": {
+                                backgroundColor: "#aaa",
+                                color: "#000",
+                              },
+                            }}
+                          />
+                        </Center>
+                        <Divider w={"100%"} mb={15} size={"sm"} opacity={0.5} />
                         <Autocomplete
                           size="sm"
                           mt={10}
@@ -557,12 +604,11 @@ export default function TripPlannerPage() {
                           defaultValue=""
                           value={startLocaleSearch}
                           placeholder="Starting Location..."
-                          onItemSubmit={(e) => handleSelect(e)}
+                          onItemSubmit={(e) => setStartLocale(e.value)}
                           ref={startLocaleRef}
                           data={startLocaleData}
                           filter={(value, item) => item}
                           onClick={function (event) {
-                            placeCheck();
                             event.preventDefault();
                             startLocaleRef.current.select();
                           }}
@@ -588,10 +634,17 @@ export default function TripPlannerPage() {
                             pr={10}
                             labelPosition="right"
                             variant="dashed"
+                            color={"rgba(255,255,255,0.08)"}
                             label={
                               <Flex align={"center"}>
-                                <IconFriends size={16} />
-                                <Text ta={"right"} ml={5} fz={13} opacity={0.4}>
+                                <IconFriends size={16} color="#fff" />
+                                <Text
+                                  ta={"right"}
+                                  color="gray.0"
+                                  ml={5}
+                                  fz={13}
+                                  opacity={0.4}
+                                >
                                   Travelers:
                                 </Text>
                               </Flex>
@@ -638,13 +691,15 @@ export default function TripPlannerPage() {
                             my={12}
                             labelPosition="right"
                             variant="dashed"
+                            color={"rgba(255,255,255,0.08)"}
                             label={
                               <Switch
                                 label={
                                   <Flex align={"center"}>
-                                    <IconRotate360 size={16} />
+                                    <IconRotate360 size={16} color="#fff" />
                                     <Text
                                       ta={"right"}
+                                      color="gray.0"
                                       ml={5}
                                       fz={12}
                                       opacity={0.4}
@@ -897,7 +952,7 @@ export default function TripPlannerPage() {
                 <IconChevronUp />
               </Button>
             )}
-            {startLocale && date && date[1] && (
+            {startLocale && travelDates && travelDates[1] && (
               <Button
                 fullWidth
                 variant={active === 3 ? "light" : "default"}

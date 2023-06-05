@@ -247,10 +247,11 @@ export default function Mymap() {
     setPlaces(newPlaces);
   };
 
+  // NOTE
   const checkPlace = (place) => {
     let placeExists = false;
     places.forEach((p) => {
-      if (p.name === place.name) {
+      if (p.name === place.name && p.region === place.region) {
         placeExists = true;
       }
     });
@@ -314,7 +315,6 @@ export default function Mymap() {
     }
   };
 
-  // NOTE CLOSE
   const onClose = () => {
     mapRef.current.flyTo({
       zoom: 2.5,
@@ -365,7 +365,7 @@ export default function Mymap() {
             >
               {regionName === "東京都" ? "Tokyo" : regionName}
             </Title>
-            <Text fw={600} size="xs" color="#fff">
+            <Text fw={600} size="xs" color="#c0c0c0">
               {!isCountry &&
                 citySubTitle &&
                 citySubTitle.replace("ecture東京都", "., Japan")}
@@ -417,6 +417,7 @@ export default function Mymap() {
                       region:
                         citySubTitle &&
                         citySubTitle.replace("ecture東京都", "., Japan"),
+                      fullName: regionName + "," + citySubTitle,
                       costs: ["FLIGHT", "HOTEL"],
                     },
                   ]);
@@ -492,6 +493,7 @@ export default function Mymap() {
                           region:
                             citySubTitle &&
                             citySubTitle.replace("ecture東京都", "., Japan"),
+                          fullName: regionName + "," + citySubTitle,
                           costs: ["FLIGHT", "HOTEL"],
                         },
                       ]);

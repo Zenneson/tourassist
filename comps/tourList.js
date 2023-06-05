@@ -53,7 +53,7 @@ export default function TourList() {
               <Stack ref={provided.innerRef} {...provided.droppableProps}>
                 {places.map((place, index) => (
                   <PlaceListItem
-                    key={place.name}
+                    key={index}
                     draggableId={place.name}
                     index={index}
                     name={place.name}
@@ -76,6 +76,7 @@ export default function TourList() {
                     place: name === "東京都" ? "Tokyo" : name,
                     region:
                       region && region.replace("ecture東京都", "., Japan"),
+                    fullName: name + "," + region,
                     costs: ["FLIGHT", "HOTEL"],
                   };
                 });
