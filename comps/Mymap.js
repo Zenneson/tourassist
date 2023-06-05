@@ -69,8 +69,14 @@ export default function Mymap() {
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
-  const [geoLat, setGeoLat] = useState(0);
-  const [geoLng, setGeoLng] = useState(0);
+  const [geoLat, setGeoLat] = useLocalStorage({
+    key: "geoLatState",
+    defaultValue: null,
+  });
+  const [geoLng, setGeoLng] = useLocalStorage({
+    key: "geoLngState",
+    defaultValue: null,
+  });
   const [mapReady, setMapReady] = useState(false);
   const [placeData, setPlaceData] = useLocalStorage({
     key: "placeDataState",
@@ -148,6 +154,8 @@ export default function Mymap() {
     geoLng,
     mapReady,
     router,
+    setGeoLat,
+    setGeoLng,
   ]);
 
   function goToCountry(feature) {

@@ -23,7 +23,6 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import {
   donateState,
-  editUpdateState,
   addTripDecriptionState,
   addUpdateDecriptionState,
 } from "../libs/atoms";
