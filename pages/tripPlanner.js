@@ -383,6 +383,9 @@ export default function TripPlannerPage() {
   const startCity = startLocale.substring(0, index);
   const startRegion = startLocale?.substring(index + 1);
 
+  const today = new Date();
+  const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+
   return (
     <>
       <Space h={110} />
@@ -491,7 +494,6 @@ export default function TripPlannerPage() {
                           </>
                         )}
                       </Group>
-                      {/* NOTE   */}
                       {travelDates && travelDates[1] !== null && (
                         <Flex align={"center"}>
                           <Group spacing={7} fz={14} fw={700}>
@@ -542,6 +544,7 @@ export default function TripPlannerPage() {
                         }}
                       >
                         <Center>
+                          {/* NOTE   */}
                           <DatePicker
                             type="range"
                             size={"lg"}
@@ -549,6 +552,8 @@ export default function TripPlannerPage() {
                             mb={25}
                             allowDeselect
                             firstDayOfWeek={0}
+                            defaultDate={today}
+                            minDate={weekAhead}
                             onChange={(e) => {
                               setTravelDates(e);
                             }}

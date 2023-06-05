@@ -93,8 +93,8 @@ export default function Mymap() {
 
   const initialViewState = useMemo(
     () => ({
-      latitude: geoLat,
-      longitude: geoLng,
+      latitude: geoLat || 37,
+      longitude: geoLng || -90,
       zoom: 2.5,
       pitch: 0,
     }),
@@ -350,7 +350,7 @@ export default function Mymap() {
         overlayOpacity={1}
         zIndex={1000}
         transitionDuration={250}
-        loader={<div></div>}
+        // loader={<div></div>}
         style={{ pointerEvents: "none" }}
       />
       <Modal
