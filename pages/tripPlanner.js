@@ -831,6 +831,7 @@ export default function TripPlannerPage() {
                         <LoginComp />
                       </Box>
                     </Box>
+                    <Divider hidden={user} w={"90%"} ml={"5%"} mb={5} />
                     <Center mt={user ? 20 : 0}>
                       <Button
                         leftIcon={<IconBuildingBank size={34} />}

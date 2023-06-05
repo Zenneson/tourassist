@@ -159,7 +159,8 @@ export default function TripContent() {
               ta="center"
               h={300}
               style={{
-                border: "none",
+                border: "2px dashed rgba(255,255,255,0.05)",
+                backgroundColor: "rgba(255,255,255,0.01)",
               }}
             >
               <Group
