@@ -85,15 +85,66 @@ export default function TripPlannerPage() {
   };
 
   // TODO - Have create into a function that fetches the costs and adds them below
-  const [fetchedCosts, setfetchedCosts] = useState([]);
-  function createCosts() {
-    let fetchedData = [{}];
-    placeData.map((place) => {
-      fetchedData[place.place + "_FLIGHT"] = 123;
-      fetchedData[place.place + "_HOTEL"] = 234;
-    });
-    setfetchedCosts(fetchedData);
-  }
+  const [costList, setCostList] = useState({});
+  const [costsSum, setCostsSum] = useState(0);
+  let delayTimer = null; // Declare timer variable at top level
+
+  const handleInputChange = (value, costid) => {
+    if (delayTimer) {
+      clearTimeout(delayTimer);
+    }
+
+    delayTimer = setTimeout(() => {
+      let updatedCosts = { ...costList, [costid]: parseFloat(value) };
+      let sum = Object.values(updatedCosts).reduce(
+        (acc, current) => acc + current,
+        0
+      );
+      setCostList(updatedCosts);
+      setCostsSum(sum);
+    }, 500);
+  };
+
+  const handleCostRemoval = (
+    costId,
+    placeIndex,
+    costIndex,
+    originalArray,
+    setOriginalArray
+  ) => {
+    let copyData = JSON.parse(JSON.stringify(originalArray));
+    let newCostList = { ...costList };
+
+    // remove the cost from the original array
+    if (Array.isArray(copyData[placeIndex])) {
+      copyData[placeIndex] = copyData[placeIndex].filter(
+        (_, i) => i !== costIndex
+      ); // If it's an array, remove the cost
+    } else if (
+      typeof copyData[placeIndex] === "object" &&
+      copyData[placeIndex] !== null &&
+      Array.isArray(copyData[placeIndex].costs)
+    ) {
+      copyData[placeIndex].costs = copyData[placeIndex].costs.filter(
+        (_, i) => i !== costIndex
+      ); // If it's an object, remove the cost from the `costs` array
+    }
+
+    // remove the cost from costList
+    if (newCostList[costId] !== undefined) {
+      delete newCostList[costId];
+    }
+
+    setOriginalArray(copyData);
+    setCostList(newCostList);
+
+    // recalculate the total cost
+    let sum = Object.values(newCostList).reduce(
+      (acc, current) => acc + current,
+      0
+    );
+    setCostsSum(sum);
+  };
 
   const Costs = ({ cost, costid }) => (
     <div key={index}>
@@ -110,15 +161,11 @@ export default function TripPlannerPage() {
         ></div>
         <NumberInput
           costid={costid}
-          onChange={(e) => {
-            let data = fetchedCosts;
-            data[costid] = e;
-            setfetchedCosts(data);
-          }}
+          onChange={(value) => handleInputChange(value, costid)}
           onClick={(e) => {
             e.target.select();
           }}
-          defaultValue={fetchedCosts[costid] || 0}
+          defaultValue={costList[costid] || 0}
           icon={<IconCurrencyDollar />}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
           formatter={(value) =>
@@ -229,13 +276,14 @@ export default function TripPlannerPage() {
                         onClick={(event) => {
                           const placeIndex =
                             event.target.parentElement.parentElement?.id;
-                          const costIndex = index;
-                          let newPlaceData = [...placeData];
-                          let copyData = JSON.parse(
-                            JSON.stringify(newPlaceData)
+                          const costId = place.place + "_" + cost;
+                          handleCostRemoval(
+                            costId,
+                            placeIndex,
+                            index,
+                            placeData,
+                            setPlaceData
                           );
-                          copyData[placeIndex]?.costs.splice(costIndex, 1);
-                          setPlaceData(copyData);
                         }}
                       >
                         <IconTrash size={17} pointerEvents="none" />
@@ -257,13 +305,14 @@ export default function TripPlannerPage() {
                     onClick={(event) => {
                       const placeIndex =
                         event.target.parentElement.parentElement?.id;
-                      const costIndex = index;
-                      let newPlaceData = [...newCost];
-                      let copyData = JSON.parse(JSON.stringify(newPlaceData));
-                      copyData[placeIndex] = copyData[placeIndex].filter(
-                        (_, i) => i !== costIndex
+                      const costId = place.place + "_" + cost;
+                      handleCostRemoval(
+                        costId,
+                        placeIndex,
+                        index,
+                        newCost,
+                        setNewCost
                       );
-                      setNewCost(copyData);
                     }}
                   >
                     <IconTrash size={17} pointerEvents="none" />
@@ -774,7 +823,7 @@ export default function TripPlannerPage() {
                         }
                       />
                     </Group>
-                    <Costs cost={"Flight"} />
+                    <Costs costid={"RETURN_FLIGHT"} cost={"Flight"} />
                   </Box>
                 )}
               </motion.div>
@@ -924,6 +973,13 @@ export default function TripPlannerPage() {
                   size="xl"
                   mb={20}
                   w={225}
+                  value={costsSum}
+                  onChange={(value) => {
+                    const numericValue = parseFloat(value);
+                    if (!Number.isNaN(numericValue)) {
+                      setCostsSum(numericValue);
+                    }
+                  }}
                   stepHoldDelay={500}
                   stepHoldInterval={100}
                   variant="filled"
@@ -963,9 +1019,6 @@ export default function TripPlannerPage() {
                 onClick={() => {
                   if (active !== 3) {
                     nextStep();
-                  }
-                  if (active === 0 && fetchedCosts.length === 0) {
-                    createCosts();
                   }
                   if (active === 3) {
                     // localStorage.removeItem("placeDataState");
