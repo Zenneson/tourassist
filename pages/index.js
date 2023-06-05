@@ -1,4 +1,4 @@
-import Mymap from "../comps/myMap";
+import Mymap from "../comps/mymap";
 import { useRecoilState } from "recoil";
 import { IconList } from "@tabler/icons";
 import {

@@ -830,6 +830,8 @@ export default function Trippage() {
               onChange={(e) => e.preventDefault()}
               sx={{
                 ".mantine-Input-input": {
+                  borderTop: "2px solid rgba(255,255,255,0.2)",
+                  background: "#0b0c0d",
                   "&::placeholder": {
                     fontWeight: 700,
                     fontStyle: "italic",
