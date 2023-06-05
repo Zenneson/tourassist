@@ -193,12 +193,10 @@ export default function ProfileDrawer() {
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
               onClick={() => {
+                localStorage.setItem("noLogin", "true");
                 setProfileOpened(false);
                 setProfileShow(false);
-                router.push({
-                  pathname: "/",
-                  query: !user && { visible: "true" },
-                });
+                router.push("/");
               }}
               sx={{
                 ".mantine-NavLink-description": {

@@ -38,20 +38,19 @@ export default function Intro() {
   });
 
   const router = useRouter();
-  const justMap = router.query.visible;
 
   const { height, width } = useViewportSize();
   const firstDown = useMediaQuery("(max-width: 950px)");
 
   useEffect(() => {
-    if (user || justMap) {
+    if (user || localStorage.getItem("noLogin")) {
       setVisible(true);
       setMapSpin(false);
     } else {
       setMapSpin(true);
       if (!visible) setOpened(true);
     }
-  }, [user, setVisible, setMapSpin, visible, justMap]);
+  }, [user, setVisible, setMapSpin, visible]);
 
   const slideSettings = {
     dots: false,
