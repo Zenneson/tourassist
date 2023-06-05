@@ -91,15 +91,12 @@ export default function Mymap() {
     defaultValue: true,
   });
 
-  const initialViewState = useMemo(
-    () => ({
-      latitude: geoLat || 37,
-      longitude: geoLng || -90,
-      zoom: 2.5,
-      pitch: 0,
-    }),
-    [geoLat, geoLng]
-  );
+  const initialViewState = {
+    latitude: geoLat || 37,
+    longitude: geoLng || -90,
+    zoom: 2.5,
+    pitch: 0,
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -345,7 +342,7 @@ export default function Mymap() {
   return (
     <>
       <LoadingOverlay
-        visible={!mapLoaded && !geoLat && !geoLng}
+        visible={!mapLoaded}
         overlayColor="#000"
         overlayOpacity={1}
         zIndex={1000}
@@ -657,106 +654,112 @@ export default function Mymap() {
         </Flex>
       )}
 
-      <Map
-        initialViewState={initialViewState}
-        maxPitch={80}
-        onZoomEnd={onZoomEnd}
-        onLoad={() => {
-          setMapLoaded(true);
-          localStorage.removeItem("noLogin");
-        }}
-        keyboard={false}
-        ref={mapRef}
-        onClick={onEvent}
-        projection="globe"
-        doubleClickZoom={false}
-        interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-        mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
-        style={{ width: "100%", height: "100%" }}
-        mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
-      >
-        {visible && !searchOpened && !loginOpened && <TourList />}
-        {isCity && (
-          <Marker
-            longitude={placeLngLat[0]}
-            latitude={placeLngLat[1]}
-            offsetLeft={-20}
-            offsetTop={-10}
-            scale={4.5}
-          ></Marker>
-        )}
-        <Source
-          id="country-boundaries"
-          type="vector"
-          url="mapbox://mapbox.country-boundaries-v1"
+      {geoLat && geoLng && (
+        <Map
+          initialViewState={initialViewState}
+          maxPitch={80}
+          onZoomEnd={onZoomEnd}
+          onLoad={() => {
+            setMapLoaded(true);
+            localStorage.removeItem("noLogin");
+          }}
+          keyboard={false}
+          ref={mapRef}
+          onClick={onEvent}
+          projection="globe"
+          doubleClickZoom={false}
+          interactiveLayerIds={[
+            "states",
+            "country-boundaries",
+            "clicked-state",
+          ]}
+          mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
+          style={{ width: "100%", height: "100%" }}
+          mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
         >
-          <Layer
+          {visible && !searchOpened && !loginOpened && <TourList />}
+          {isCity && (
+            <Marker
+              longitude={placeLngLat[0]}
+              latitude={placeLngLat[1]}
+              offsetLeft={-20}
+              offsetTop={-10}
+              scale={4.5}
+            ></Marker>
+          )}
+          <Source
             id="country-boundaries"
-            source="country-boundaries"
-            source-layer="country_boundaries"
-            type="fill"
-            paint={{
-              "fill-color": "rgba(0,0,0,0)",
-            }}
-          />
-          <Layer
-            id="country-boundaries-fill"
-            source="country-boundaries"
-            source-layer="country_boundaries"
-            type="fill"
-            filter={!showStates ? filter : ["in", "name", "United States"]}
-            paint={{
-              "fill-color": "rgba( 0,232,250, .8 )",
-            }}
-          />
-          <Layer
-            id="country-boundaries-lines"
-            source="country-boundaries"
-            source-layer="country_boundaries"
-            type="line"
-            filter={filter}
-            paint={{
-              "line-color": "rgba(255, 255, 255, 1)",
-              "line-width": 4,
-            }}
-          />
-        </Source>
-        <Source
-          id="states-boundaries"
-          type="geojson"
-          data="data/states.geojson"
-        >
-          <Layer
-            id="states"
-            type="fill"
-            source="states-boundaries"
-            paint={{
-              "fill-color": "rgba(0,0,0,0)",
-            }}
-            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
-          />
-          <Layer
+            type="vector"
+            url="mapbox://mapbox.country-boundaries-v1"
+          >
+            <Layer
+              id="country-boundaries"
+              source="country-boundaries"
+              source-layer="country_boundaries"
+              type="fill"
+              paint={{
+                "fill-color": "rgba(0,0,0,0)",
+              }}
+            />
+            <Layer
+              id="country-boundaries-fill"
+              source="country-boundaries"
+              source-layer="country_boundaries"
+              type="fill"
+              filter={!showStates ? filter : ["in", "name", "United States"]}
+              paint={{
+                "fill-color": "rgba( 0,232,250, .8 )",
+              }}
+            />
+            <Layer
+              id="country-boundaries-lines"
+              source="country-boundaries"
+              source-layer="country_boundaries"
+              type="line"
+              filter={filter}
+              paint={{
+                "line-color": "rgba(255, 255, 255, 1)",
+                "line-width": 4,
+              }}
+            />
+          </Source>
+          <Source
             id="states-boundaries"
-            type="line"
-            source="states-boundaries"
-            paint={{
-              "line-color": "rgba(255, 255, 255, 1)",
-              "line-width": 4,
-            }}
-            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
-          />
-        </Source>
-        <Source id="clicked-state" type="geojson" data="data/states.geojson">
-          <Layer
-            id="clicked-state"
-            type="fill"
-            paint={{
-              "fill-color": "rgba( 0,232,250, .8 )",
-            }}
-            filter={isCity ? false : ["==", "NAME", regionName]}
-          />
-        </Source>
-      </Map>
+            type="geojson"
+            data="data/states.geojson"
+          >
+            <Layer
+              id="states"
+              type="fill"
+              source="states-boundaries"
+              paint={{
+                "fill-color": "rgba(0,0,0,0)",
+              }}
+              filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+            />
+            <Layer
+              id="states-boundaries"
+              type="line"
+              source="states-boundaries"
+              paint={{
+                "line-color": "rgba(255, 255, 255, 1)",
+                "line-width": 4,
+              }}
+              filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+            />
+          </Source>
+          <Source id="clicked-state" type="geojson" data="data/states.geojson">
+            <Layer
+              id="clicked-state"
+              type="fill"
+              paint={{
+                "fill-color": "rgba( 0,232,250, .8 )",
+              }}
+              filter={isCity ? false : ["==", "NAME", regionName]}
+            />
+          </Source>
+        </Map>
+      )}
     </>
   );
 }
