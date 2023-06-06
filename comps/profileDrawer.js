@@ -97,6 +97,7 @@ export default function ProfileDrawer() {
         ".mantine-NavLink-icon": {
           opacity: index === active ? 0.7 : 0.1,
         },
+        "&:hover": { transform: "scale(1.02)", transition: "all 200ms ease" },
       }}
     />
   ));
@@ -202,6 +203,10 @@ export default function ProfileDrawer() {
                 ".mantine-NavLink-description": {
                   opacity: 0.4,
                 },
+                "&:hover": {
+                  transform: "scale(1.02)",
+                  transition: "all 200ms ease",
+                },
               }}
             />
           )}
@@ -234,6 +239,10 @@ export default function ProfileDrawer() {
               sx={{
                 ".mantine-NavLink-description": {
                   opacity: 0.4,
+                },
+                "&:hover": {
+                  transform: "scale(1.02)",
+                  transition: "all 200ms ease",
                 },
               }}
             />

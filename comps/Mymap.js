@@ -21,11 +21,12 @@ import {
 import { useLocalStorage } from "@mantine/hooks";
 import {
   IconPlaylistAdd,
-  IconMapSearch,
   IconLocation,
   IconPlaneTilt,
   IconFlag3,
   IconAlertTriangle,
+  IconMapPin,
+  IconUsers,
 } from "@tabler/icons";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "./getNewCenter";
@@ -97,6 +98,41 @@ export default function Mymap() {
     zoom: 2.5,
     pitch: 0,
   };
+
+  const topCities = [
+    {
+      name: "Baltimore",
+      location: [],
+      population: 593490,
+    },
+    { name: "Frederick", location: [], population: 72306 },
+    { name: "Gaithersburg", location: [], population: 65831 },
+    { name: "Rockville", location: [], population: 61209 },
+    { name: "Bowie", location: [], population: 58787 },
+  ];
+
+  const topCitiesList = topCities.map((city, index) => (
+    <NavLink
+      key={index}
+      icon={<IconMapPin size={22} color="#9ff5fd" opacity={0.7} />}
+      label={
+        <Flex align={"center"}>
+          <Text span color="white" fw={700} maw={200} truncate>
+            {city.name}
+          </Text>
+          <Text span color="#fff" fs={"italic"} ml={5} transform="uppercase">
+            ~ {city.population.toLocaleString()}
+          </Text>
+        </Flex>
+      }
+      onClick={() => {
+        console.log("clicked");
+      }}
+      sx={{
+        "&:hover": { transform: "scale(1.02)", transition: "all 200ms ease" },
+      }}
+    />
+  ));
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -573,16 +609,25 @@ export default function Mymap() {
         {!isCity && (isCountry || isState) && (
           <>
             <Divider
-              label={<IconMapSearch size={17} />}
-              labelPosition="center"
-              color="#fff"
+              label={
+                <Text fz={14} fs={"italic"}>
+                  <Text opacity={0.5} span>
+                    ➤
+                  </Text>{" "}
+                  Top Cities in {regionName === "東京都" ? "Tokyo" : regionName}{" "}
+                  by population
+                </Text>
+              }
+              labelPosition="left"
               size="xs"
               my="xs"
               style={{
-                opacity: 0.2,
+                opacity: 0.7,
               }}
             />
+            {topCitiesList}
             <Autocomplete
+              mt={15}
               icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
               placeholder={`Where in ${
                 regionName === "東京都" ? "Tokyo" : regionName

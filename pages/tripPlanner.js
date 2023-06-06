@@ -102,7 +102,7 @@ export default function TripPlannerPage() {
       );
       setCostList(updatedCosts);
       setCostsSum(sum);
-    }, 500);
+    }, 300);
   };
 
   const handleCostRemoval = (
@@ -184,6 +184,8 @@ export default function TripPlannerPage() {
           sx={{
             ".mantine-NumberInput-input": {
               textAlign: "right",
+              fontWeight: 700,
+              paddingRight: 40,
             },
           }}
         />
@@ -473,26 +475,16 @@ export default function TripPlannerPage() {
               <motion.div {...animation}>
                 <Box w={"100%"}>
                   <Title order={5} h={17} ml={5} fw={100} fs={"italic"}>
-                    {startLocale && travelDates && travelDates[1] ? (
+                    {startLocale && travelDates ? (
                       "Continue..."
                     ) : (
                       <Text opacity={0.4}>
                         Provide the{" "}
-                        <Text
-                          inherit
-                          span
-                          hidden={travelDates && travelDates[1]}
-                        >
-                          Trip Length
+                        <Text inherit span hidden={travelDates}>
+                          Start Travel Date
                           {startLocale && ":"}
                         </Text>{" "}
-                        <Text
-                          inherit
-                          span
-                          hidden={
-                            startLocale || (travelDates && travelDates[1])
-                          }
-                        >
+                        <Text inherit span hidden={startLocale || travelDates}>
                           and
                         </Text>{" "}
                         <Text inherit span hidden={startLocale}>
@@ -541,13 +533,11 @@ export default function TripPlannerPage() {
                           </>
                         )}
                       </Group>
-                      {travelDates && travelDates[1] !== null && (
+                      {travelDates !== null && (
                         <Flex align={"center"}>
                           <Group spacing={7} fz={14} fw={700}>
                             <IconCalendarEvent size={20} opacity={0.4} />
-                            {dayjs(travelDates[0]).format("LL")}
-                            <Divider w={10} size={"md"} mx={3} />
-                            {dayjs(travelDates[1]).format("LL")}
+                            {dayjs(travelDates).format("LL")}
                           </Group>
                           <Divider
                             orientation="vertical"
@@ -559,9 +549,7 @@ export default function TripPlannerPage() {
                             <Title color="red" order={3}>
                               •
                             </Title>
-                            {dayjs(travelDates[0])
-                              .subtract(1, "day")
-                              .format("LL")}
+                            {dayjs(travelDates).subtract(1, "day").format("LL")}
                             <Text
                               fw={700}
                               fz={9}
@@ -592,7 +580,7 @@ export default function TripPlannerPage() {
                       >
                         <Center>
                           <DatePicker
-                            type="range"
+                            // type="range"
                             size={"lg"}
                             mt={20}
                             mb={25}
@@ -616,11 +604,11 @@ export default function TripPlannerPage() {
                               const year = date.getFullYear();
 
                               let isSpecificDay;
-                              if (travelDates && travelDates[0]) {
+                              if (travelDates) {
                                 isSpecificDay =
-                                  day === dayjs(travelDates[0]).date() - 1 &&
-                                  month === dayjs(travelDates[0]).month() &&
-                                  year === dayjs(travelDates[0]).year();
+                                  day === dayjs(travelDates).date() - 1 &&
+                                  month === dayjs(travelDates).month() &&
+                                  year === dayjs(travelDates).year();
                               }
 
                               return (
@@ -994,6 +982,8 @@ export default function TripPlannerPage() {
                   sx={{
                     ".mantine-NumberInput-input": {
                       textAlign: "right",
+                      fontWeight: 700,
+                      paddingRight: 50,
                     },
                   }}
                 />
@@ -1011,7 +1001,7 @@ export default function TripPlannerPage() {
                 <IconChevronUp />
               </Button>
             )}
-            {startLocale && travelDates && travelDates[1] && (
+            {startLocale && travelDates && (
               <Button
                 fullWidth
                 variant={active === 3 ? "light" : "default"}
