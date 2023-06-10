@@ -27,7 +27,7 @@ import {
   IconFlag3,
   IconAlertTriangle,
   IconMapPin,
-  IconUsers,
+  IconMapSearch,
 } from "@tabler/icons";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../public/data/getNewCenter";
@@ -405,6 +405,7 @@ export default function Mymap() {
     setCountryData([]);
     setCitySearch("");
     setCountrySearch("");
+    setTopCities([]);
   };
 
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
@@ -644,19 +645,26 @@ export default function Mymap() {
           <>
             <Divider
               label={
-                <Text fz={12} fs={"italic"}>
-                  Top Cities in {regionName === "東京都" ? "Tokyo" : regionName}{" "}
-                  by population
-                </Text>
+                topCities.length > 0 ? (
+                  <Text fz={12} fs={"italic"}>
+                    Top {topCities.length === 1 ? "City" : "Cities"} in{" "}
+                    {regionName === "東京都" ? "Tokyo" : regionName} by
+                    population
+                  </Text>
+                ) : (
+                  <IconMapSearch size={20} />
+                )
               }
-              labelPosition="left"
+              labelPosition={topCities.length === 0 ? "center" : "left"}
               size="xs"
               my="xs"
               style={{
                 opacity: 0.7,
               }}
             />
-            {topCitiesList}
+            <Box display={topCities.length === 0 ? "none" : "block"}>
+              {topCitiesList}
+            </Box>
             <Autocomplete
               mt={15}
               icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
