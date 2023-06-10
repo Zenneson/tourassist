@@ -343,6 +343,10 @@ export default function ProfileDrawer() {
         withCloseButton={false}
         trapFocus={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+        overlayProps={{
+          opacity: 0.7,
+          blur: 9,
+        }}
         sx={{
           ".mantine-Drawer-content": { background: "rgba(11, 12, 13, 0.95)" },
         }}

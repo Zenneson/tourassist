@@ -203,24 +203,33 @@ export default function Mymap() {
       icon={<IconMapPin size={15} color="#9ff5fd" />}
       label={
         <Flex align={"center"} fs={"italic"} fz={13}>
-          <Text span color="white" maw={200} truncate>
-            {city.city}
+          <Text
+            span
+            color="white"
+            w={350}
+            truncate
+            sx={{
+              textTransform: "capitalize",
+            }}
+          >
+            {city.city.toLowerCase()}
           </Text>
         </Flex>
       }
-      onClick={() => {
-        console.log("clicked");
-      }}
       sx={{
-        opacity: 0.8,
+        opacity: 0.7,
         "&:hover": {
-          transform: "scale(1.05)",
-          transition: "all 200ms ease",
+          transform: "scale(1.25) translateX(40px)",
+          transition: "all 250ms ease",
+          backgroundColor: "rgba(0,0,0,0)",
           opacity: 1,
         },
         "&:active": {
           transform: "scale(1)",
         },
+      }}
+      onClick={() => {
+        console.log("clicked");
       }}
     />
   ));
@@ -428,6 +437,10 @@ export default function Mymap() {
         onClose={onClose}
         padding={"15px 30px"}
         size={"470px"}
+        overlayProps={{
+          opacity: 0.5,
+          blur: 5,
+        }}
         title={
           <Box mb={isCountry || isState ? -15 : 0}>
             <Title
