@@ -17,6 +17,7 @@ import {
   NavLink,
   Popover,
   Button,
+  Select,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import {
@@ -29,7 +30,7 @@ import {
   IconUsers,
 } from "@tabler/icons";
 import { notifications } from "@mantine/notifications";
-import { getNewCenter } from "./getNewCenter";
+import { getNewCenter } from "../public/data/getNewCenter";
 import {
   listOpenedState,
   searchOpenedState,
@@ -70,6 +71,7 @@ export default function Mymap() {
   const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const [topCities, setTopCities] = useState([]);
   const [geoLat, setGeoLat] = useLocalStorage({
     key: "geoLatState",
     defaultValue: null,
@@ -98,41 +100,6 @@ export default function Mymap() {
     zoom: 2.5,
     pitch: 0,
   };
-
-  const topCities = [
-    {
-      name: "Baltimore",
-      location: [],
-      population: 593490,
-    },
-    { name: "Frederick", location: [], population: 72306 },
-    { name: "Gaithersburg", location: [], population: 65831 },
-    { name: "Rockville", location: [], population: 61209 },
-    { name: "Bowie", location: [], population: 58787 },
-  ];
-
-  const topCitiesList = topCities.map((city, index) => (
-    <NavLink
-      key={index}
-      icon={<IconMapPin size={22} color="#9ff5fd" opacity={0.7} />}
-      label={
-        <Flex align={"center"}>
-          <Text span color="white" fw={700} maw={200} truncate>
-            {city.name}
-          </Text>
-          <Text span color="#fff" fs={"italic"} ml={5} transform="uppercase">
-            ~ {city.population.toLocaleString()}
-          </Text>
-        </Flex>
-      }
-      onClick={() => {
-        console.log("clicked");
-      }}
-      sx={{
-        "&:hover": { transform: "scale(1.02)", transition: "all 200ms ease" },
-      }}
-    />
-  ));
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -190,6 +157,73 @@ export default function Mymap() {
     setGeoLat,
     setGeoLng,
   ]);
+
+  // TODO - add top trips and population data
+  const fetchCities = async (regionName) => {
+    try {
+      const res = await fetch(
+        "https://countriesnow.space/api/v0.1/countries/population/cities/filter",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            country: `${regionName}`,
+          }),
+        }
+      );
+      const data = await res.json();
+
+      if (!data) {
+        return {
+          notFound: true,
+        };
+      }
+      let dataArray = Object.keys(data.data).map((key) => {
+        return data.data[key];
+      });
+      dataArray.sort(
+        (a, b) => b.populationCounts[0].value - a.populationCounts[0].value
+      );
+      let topFive = dataArray.slice(0, 5);
+      setTopCities(topFive);
+    } catch (error) {
+      console.error("Error:", error);
+      return {
+        notFound: true,
+      };
+    }
+  };
+
+  const topCitiesList = topCities.map((city, index) => (
+    <NavLink
+      py={5}
+      key={index}
+      icon={<IconMapPin size={15} color="#9ff5fd" />}
+      label={
+        <Flex align={"center"} fs={"italic"} fz={13}>
+          <Text span color="white" maw={200} truncate>
+            {city.city}
+          </Text>
+        </Flex>
+      }
+      onClick={() => {
+        console.log("clicked");
+      }}
+      sx={{
+        opacity: 0.8,
+        "&:hover": {
+          transform: "scale(1.05)",
+          transition: "all 200ms ease",
+          opacity: 1,
+        },
+        "&:active": {
+          transform: "scale(1)",
+        },
+      }}
+    />
+  ));
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -275,7 +309,7 @@ export default function Mymap() {
         setShowModal(true);
       }
     }
-
+    fetchCities(location);
     setRegionName(location);
     setIsoName(isoName);
     setCityData([]);
@@ -610,10 +644,7 @@ export default function Mymap() {
           <>
             <Divider
               label={
-                <Text fz={14} fs={"italic"}>
-                  <Text opacity={0.5} span>
-                    ➤
-                  </Text>{" "}
+                <Text fz={12} fs={"italic"}>
                   Top Cities in {regionName === "東京都" ? "Tokyo" : regionName}{" "}
                   by population
                 </Text>

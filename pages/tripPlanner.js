@@ -481,7 +481,7 @@ export default function TripPlannerPage() {
                       <Text opacity={0.4}>
                         Provide the{" "}
                         <Text inherit span hidden={travelDates}>
-                          Start Travel Date
+                          Travel Start Date
                           {startLocale && ":"}
                         </Text>{" "}
                         <Text inherit span hidden={startLocale || travelDates}>

@@ -98,6 +98,9 @@ export default function ProfileDrawer() {
           opacity: index === active ? 0.7 : 0.1,
         },
         "&:hover": { transform: "scale(1.02)", transition: "all 200ms ease" },
+        "&:active": {
+          transform: "scale(1)",
+        },
       }}
     />
   ));
@@ -121,6 +124,11 @@ export default function ProfileDrawer() {
         lockScroll={false}
         withOverlay={false}
         withCloseButton={false}
+        styles={{
+          content: {
+            overflow: "hidden",
+          },
+        }}
       >
         <Button
           pos={"absolute"}
@@ -207,6 +215,9 @@ export default function ProfileDrawer() {
                   transform: "scale(1.02)",
                   transition: "all 200ms ease",
                 },
+                "&:active": {
+                  transform: "scale(1)",
+                },
               }}
             />
           )}
@@ -243,6 +254,9 @@ export default function ProfileDrawer() {
                 "&:hover": {
                   transform: "scale(1.02)",
                   transition: "all 200ms ease",
+                },
+                "&:active": {
+                  transform: "scale(1)",
                 },
               }}
             />
