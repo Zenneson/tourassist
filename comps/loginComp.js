@@ -372,46 +372,48 @@ export default function LoginComp() {
               </Popover.Dropdown>
             </Popover>
             {type === "sign-up" && (
-              <Checkbox
-                label="I accept terms and conditions"
-                checked={form.values.terms}
-                required
-                onChange={(event) =>
-                  form.setFieldValue("terms", event.currentTarget.checked)
-                }
-              />
+              <Group
+                position={router.pathname !== "/tripplanner" ? "left" : "right"}
+              >
+                <Checkbox
+                  label="I accept terms and conditions"
+                  checked={form.values.terms}
+                  required
+                  onChange={(event) =>
+                    form.setFieldValue("terms", event.currentTarget.checked)
+                  }
+                />
+              </Group>
             )}
           </Stack>
-          <Group
-            position={router.pathname === "/tripplanner" ? "right" : "apart"}
-            mt="xl"
-          >
-            <Anchor
-              component="button"
-              type="button"
-              color="dimmed"
-              size="xs"
-              hidden={router.pathname === "/tripplanner"}
-              onClick={function () {
-                toggle();
-              }}
-            >
-              {type === "sign-up"
-                ? "Already have an account?"
-                : "Don't have an account?"}
-            </Anchor>
-            <Button
-              size={"sm"}
-              mt={router.pathname === "/tripplanner" ? -45 : 0}
-              fw={700}
-              uppercase={true}
-              variant="default"
-              sx={{ color: "rgba(255,255,255,0.3)" }}
-              type="submit"
-            >
-              {type === "sign-up" ? "Sign up" : "Login"}
-            </Button>
-          </Group>
+          {router.pathname !== "/tripplanner" && (
+            <Group position={"apart"} mt="xl">
+              <Anchor
+                component="button"
+                type="button"
+                color="dimmed"
+                size="xs"
+                onClick={function () {
+                  toggle();
+                }}
+              >
+                {type === "sign-up"
+                  ? "Already have an account?"
+                  : "Don't have an account?"}
+              </Anchor>
+              <Button
+                size={"sm"}
+                mt={0}
+                fw={700}
+                uppercase={true}
+                variant="default"
+                sx={{ color: "rgba(255,255,255,0.3)" }}
+                type="submit"
+              >
+                {type === "sign-up" ? "Sign up" : "Login"}
+              </Button>
+            </Group>
+          )}
         </form>
       </Box>
     </>

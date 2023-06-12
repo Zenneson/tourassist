@@ -72,6 +72,7 @@ export default function Mymap() {
   const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [topCities, setTopCities] = useState([]);
+  const [cityListSet, setCityListSet] = useState(false);
   const [geoLat, setGeoLat] = useLocalStorage({
     key: "geoLatState",
     defaultValue: null,
@@ -173,6 +174,7 @@ export default function Mymap() {
         }
       );
       const data = await res.json();
+      setCityListSet(true);
 
       if (!data) {
         return {
@@ -442,6 +444,7 @@ export default function Mymap() {
     setCitySearch("");
     setCountrySearch("");
     setTopCities([]);
+    setCityListSet(false);
   };
 
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
@@ -683,7 +686,12 @@ export default function Mymap() {
           </>
         )}
         {!isCity && (isCountry || isState) && (
-          <>
+          <Box pos={"relative"}>
+            <LoadingOverlay
+              overlayOpacity={0}
+              overlayBlur={2}
+              visible={cityListSet === false}
+            />
             <Divider
               label={
                 topCities.length > 0 ? (
@@ -740,7 +748,7 @@ export default function Mymap() {
                 },
               })}
             />
-          </>
+          </Box>
         )}
       </Modal>
       {!loginOpened && !searchOpened && visible && !mapSpin && (
