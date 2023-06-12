@@ -158,7 +158,6 @@ export default function Mymap() {
     setGeoLng,
   ]);
 
-  // TODO - add top trips and population data
   const fetchCities = async (regionName) => {
     try {
       const res = await fetch(
@@ -219,8 +218,8 @@ export default function Mymap() {
       sx={{
         opacity: 0.7,
         "&:hover": {
-          transform: "scale(1.25) translateX(40px)",
-          transition: "all 250ms ease",
+          transform: "scale(1.1) translateX(17px)",
+          transition: "all 150ms ease",
           backgroundColor: "rgba(0,0,0,0)",
           opacity: 1,
         },
@@ -229,10 +228,38 @@ export default function Mymap() {
         },
       }}
       onClick={() => {
-        console.log("clicked");
+        getTopCitiesSpot(city.city);
+        console.log(city.city);
       }}
     />
   ));
+
+  // TODO - search for Top Citites location
+  const getTopCitiesSpot = async (field, e) => {
+    try {
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${field}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&types=place&limit=1&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`
+      );
+      const results = await response.json();
+      const data = results.features.map((feature) => ({
+        label: feature.label,
+        value: feature.place_name,
+        place_name: feature.place_name,
+        place_type: feature.place_type,
+        center: feature.center,
+        geometry: feature.geometry,
+        text: feature.text,
+        bbox: feature.bbox,
+        shortcode: feature.properties.short_code,
+      }));
+      if (field === "city") setCityData(data);
+      if (field === "country") setCountryData(data);
+      goToCountry(data[0]);
+      console.log(data[0]);
+    } catch (error) {
+      console.log("Error fetching data for Country Autocomplete: ", error);
+    }
+  };
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -469,6 +496,7 @@ export default function Mymap() {
           },
           content: {
             backgroundColor: "rgba(11, 12, 13, 0.8)",
+            overflow: "hidden",
           },
           overlay: {
             zIndex: 0,
