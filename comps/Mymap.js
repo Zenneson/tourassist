@@ -18,7 +18,7 @@ import {
   Popover,
   Button,
 } from "@mantine/core";
-import { useLocalStorage, useForceUpdate } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import {
   IconPlaylistAdd,
   IconLocation,
@@ -72,6 +72,7 @@ export default function Mymap() {
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [topCities, setTopCities] = useState([]);
   const [cityListSet, setCityListSet] = useState(false);
+  const [tripSelected, setTripSelected] = useState(false);
   const [geoLat, setGeoLat] = useLocalStorage({
     key: "geoLatState",
     defaultValue: null,
@@ -524,7 +525,7 @@ export default function Mymap() {
   return (
     <>
       <LoadingOverlay
-        visible={!mapLoaded}
+        visible={!mapLoaded || tripSelected}
         overlayColor="#000"
         overlayOpacity={1}
         zIndex={1000}
@@ -604,6 +605,7 @@ export default function Mymap() {
                   setListOpened(true);
                   setTourListDropDown(!tourListDropDown);
                 } else {
+                  setTripSelected(true);
                   setPlaceData([
                     {
                       place: regionName === "東京都" ? "Tokyo" : regionName,
@@ -678,6 +680,7 @@ export default function Mymap() {
                     variant="light"
                     color="blue.0"
                     onClick={() => {
+                      setTripSelected(true);
                       setListOpened(false);
                       setPlaces([]);
                       setPlaceData([
@@ -884,7 +887,9 @@ export default function Mymap() {
           style={{ width: "100%", height: "100%" }}
           mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
         >
-          {visible && !searchOpened && !loginOpened && <TourList />}
+          {visible && !searchOpened && !loginOpened && (
+            <TourList setTripSelected={setTripSelected} />
+          )}
           {isCity && (
             <Marker
               longitude={placeLngLat[0]}

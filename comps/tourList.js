@@ -7,7 +7,7 @@ import { IconX } from "@tabler/icons";
 import PlaceListItem from "./placeListItem";
 import { listOpenedState, placeListState } from "../libs/atoms";
 
-export default function TourList() {
+export default function TourList({ setTripSelected }) {
   const [listOpened, setListOpened] = useRecoilState(listOpenedState);
   const [places, setPlaces] = useRecoilState(placeListState);
   const [placeData, setPlaceData] = useLocalStorage({
@@ -15,6 +15,9 @@ export default function TourList() {
     defaultValue: [],
   });
   const router = useRouter();
+  const showLoader = () => {
+    setTripSelected(true);
+  };
 
   return (
     <>
@@ -70,6 +73,7 @@ export default function TourList() {
               size="sm"
               fw={700}
               onClick={() => {
+                setTripSelected(true);
                 const newPlaceData = places.map((place) => {
                   const { name, region } = place;
                   return {
