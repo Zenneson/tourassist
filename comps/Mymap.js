@@ -252,7 +252,16 @@ export default function Mymap() {
       setCitySubTitle("United States");
       fetchUSCities(location);
     } else if (feature.layer?.source === "country-boundaries") {
-      fetchWorldCities(location);
+      if (
+        location === "Angola" ||
+        location === "Russia" ||
+        location === "United Arab Emirates" ||
+        location === "United Kingdom"
+      ) {
+        fetchAltCities(location);
+      } else {
+        fetchWorldCities(location);
+      }
     }
     setRegionName(location);
     setIsoName(isoName);
@@ -373,6 +382,36 @@ export default function Mymap() {
     }
   };
 
+  const fetchAltCities = async (regionName) => {
+    try {
+      const res = await fetch("/data/alt_cities.json");
+      const data = await res.json();
+      setCityListSet(true);
+
+      if (!data) {
+        return {
+          notFound: true,
+        };
+      }
+
+      const dataArray = data.filter(
+        (country) => country.country === regionName
+      );
+      const countryCities = dataArray[0]?.cities;
+      let topFive = [];
+      countryCities &&
+        countryCities.map((city) => {
+          topFive.push(city.name);
+        });
+      setTopCities(topFive);
+    } catch (error) {
+      console.error("Error:", error);
+      return {
+        notFound: true,
+      };
+    }
+  };
+
   const fetchUSCities = async (regionName) => {
     try {
       const res = await fetch("/data/usa_cities_june2023.json");
@@ -389,8 +428,8 @@ export default function Mymap() {
       const stateCities = dataArray[0]?.cities;
       let topFive = [];
       stateCities &&
-        stateCities.map((state) => {
-          topFive.push(state.name);
+        stateCities.map((city) => {
+          topFive.push(city.name);
         });
       setTopCities(topFive);
     } catch (error) {
