@@ -8,6 +8,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { firestore } from "../libs/firebase";
 import {
   Anchor,
   Box,
@@ -24,15 +26,12 @@ import {
   createStyles,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
 import { useToggle, useLocalStorage } from "@mantine/hooks";
 import {
   IconBrandGoogle,
   IconBrandTwitter,
-  IconDoorEnter,
   IconX,
   IconCheck,
-  IconUserCheck,
   IconUserCircle,
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
@@ -155,28 +154,31 @@ export default function LoginComp() {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
       password: (val) =>
         getStrength(val) !== 100
-          ? "Password doesn not meet requirements"
+          ? "Password does not meet the requirements"
           : null,
     },
   });
 
-  function notify(message, icon) {
-    notifications.show({
-      message: message,
-      color: "#00E8FC",
-      icon: icon,
-      autoClose: 2500,
-      style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
-    });
-  }
+  // TODO - get Auth working correctly
+  const addUser = async (user) => {
+    await setDoc(
+      doc(firestore, "users", user?.email || user?.providerData[0].email),
+      {
+        name: user.displayName || user?.providerData[0].displayName,
+        email: user.email || user?.providerData[0].email,
+        avi: user.photoURL || user?.providerData[0].photoURL,
+      }
+    );
+  };
 
   async function signInWith(signin, provider, icon) {
     const userCred = await signInWithPopup(auth, new provider())
       .then((result) => {
         const credential = provider.credentialFromResult(result);
         setVisible(true);
-        notify(`Signed in with ${signin}`, icon);
         setUser(auth.currentUser);
+        addUser(auth.currentUser);
+        console.log("User: ", auth.currentUser);
       })
       .catch((error) => {
         if (error.code === "auth/account-exists-with-different-credential") {
@@ -184,8 +186,9 @@ export default function LoginComp() {
           signInWithPopup(auth, new provider()).then((result) => {
             result.user.linkWithCredential(pendingCred).then(() => {
               setVisible(true);
-              notify(`Signed in with ${signin}`, icon);
               setUser(auth.currentUser);
+              addUser(auth.currentUser);
+              console.log("User: ", auth.currentUser);
             });
             console.log("Credential Linked");
           });
@@ -269,10 +272,8 @@ export default function LoginComp() {
               )
                 .then((userCredential) => {
                   const user = userCredential.user;
-                  // NOTE: set map to Initial Map
                   setVisible(true);
                   // (false);
-                  notify("Account Created", <IconDoorEnter size={15} />);
                 })
                 .catch((error) => {
                   const errorCode = error.code;
@@ -288,9 +289,7 @@ export default function LoginComp() {
               )
                 .then((userCredential) => {
                   const user = userCredential.user;
-                  // NOTE: set map to Initial Map
                   setVisible(true);
-                  notify("Signed in", <IconUserCheck size={15} />);
                 })
                 .catch((error) => {
                   const errorCode = error.code;

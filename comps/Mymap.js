@@ -92,8 +92,8 @@ export default function Mymap({
   });
 
   const initialViewState = {
-    latitude: geoLat || 37,
-    longitude: geoLng || -90,
+    latitude: geoLat,
+    longitude: geoLng,
     zoom: 2.5,
     pitch: 0,
   };
@@ -101,15 +101,18 @@ export default function Mymap({
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        let { latitude, longitude } = position.coords;
-        setGeoLat(latitude);
-        setGeoLng(longitude);
-      });
-    } else {
-      setGeoLat(37);
-      setGeoLng(-90);
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          let { latitude, longitude } = position.coords;
+          setGeoLat(latitude);
+          setGeoLng(longitude);
+        },
+        function (error) {
+          setGeoLat(37);
+          setGeoLng(-95);
+        }
+      );
     }
     let rotationIntervalId;
     if (mapSpin && !user) {
@@ -885,7 +888,7 @@ export default function Mymap({
           />
         </Flex>
       )}
-
+      {/* TODO    */}
       {geoLat && geoLng && (
         <Map
           initialViewState={initialViewState}
