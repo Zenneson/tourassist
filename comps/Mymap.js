@@ -17,9 +17,8 @@ import {
   NavLink,
   Popover,
   Button,
-  Select,
 } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
+import { useLocalStorage, useForceUpdate } from "@mantine/hooks";
 import {
   IconPlaylistAdd,
   IconLocation,
@@ -102,6 +101,8 @@ export default function Mymap() {
     pitch: 0,
   };
 
+  const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -158,110 +159,6 @@ export default function Mymap() {
     setGeoLat,
     setGeoLng,
   ]);
-
-  const fetchCities = async (regionName) => {
-    try {
-      const res = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/population/cities/filter",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            country: `${regionName}`,
-          }),
-        }
-      );
-      const data = await res.json();
-      setCityListSet(true);
-
-      if (!data) {
-        return {
-          notFound: true,
-        };
-      }
-      let dataArray = Object.keys(data.data).map((key) => {
-        return data.data[key];
-      });
-      dataArray.sort(
-        (a, b) => b.populationCounts[0].value - a.populationCounts[0].value
-      );
-      let topFive = dataArray.slice(0, 5);
-      setTopCities(topFive);
-    } catch (error) {
-      console.error("Error:", error);
-      return {
-        notFound: true,
-      };
-    }
-  };
-
-  const topCitiesList = topCities.map((city, index) => (
-    <NavLink
-      py={5}
-      key={index}
-      icon={<IconMapPin size={15} color="#9ff5fd" />}
-      label={
-        <Flex align={"center"} fs={"italic"} fz={13}>
-          <Text
-            span
-            color="white"
-            w={350}
-            truncate
-            sx={{
-              textTransform: "capitalize",
-            }}
-          >
-            {city.city.toLowerCase()}
-          </Text>
-        </Flex>
-      }
-      sx={{
-        opacity: 0.7,
-        "&:hover": {
-          transform: "scale(1.1) translateX(17px)",
-          transition: "all 150ms ease",
-          backgroundColor: "rgba(0,0,0,0)",
-          opacity: 1,
-        },
-        "&:active": {
-          transform: "scale(1)",
-        },
-      }}
-      onClick={() => {
-        getTopCitiesSpot(city.city);
-        console.log(city.city);
-      }}
-    />
-  ));
-
-  // TODO - search for Top Citites location
-  const getTopCitiesSpot = async (field, e) => {
-    try {
-      const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${field}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&types=place&limit=1&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`
-      );
-      const results = await response.json();
-      const data = results.features.map((feature) => ({
-        label: feature.label,
-        value: feature.place_name,
-        place_name: feature.place_name,
-        place_type: feature.place_type,
-        center: feature.center,
-        geometry: feature.geometry,
-        text: feature.text,
-        bbox: feature.bbox,
-        shortcode: feature.properties.short_code,
-      }));
-      if (field === "city") setCityData(data);
-      if (field === "country") setCountryData(data);
-      goToCountry(data[0]);
-      console.log(data[0]);
-    } catch (error) {
-      console.log("Error fetching data for Country Autocomplete: ", error);
-    }
-  };
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -347,7 +244,16 @@ export default function Mymap() {
         setShowModal(true);
       }
     }
-    fetchCities(location);
+
+    if (
+      feature.layer?.source === "states-boundaries" ||
+      location === "United States"
+    ) {
+      setCitySubTitle("United States");
+      fetchUSCities(location);
+    } else if (feature.layer?.source === "country-boundaries") {
+      fetchWorldCities(location);
+    }
     setRegionName(location);
     setIsoName(isoName);
     setCityData([]);
@@ -429,6 +335,135 @@ export default function Mymap() {
     }
   };
 
+  const fetchWorldCities = async (regionName) => {
+    try {
+      const res = await fetch(
+        "https://countriesnow.space/api/v0.1/countries/population/cities/filter",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            country: `${regionName}`,
+          }),
+        }
+      );
+      const data = await res.json();
+      setCityListSet(true);
+
+      if (!data) {
+        return {
+          notFound: true,
+        };
+      }
+      let dataArray = Object.keys(data.data).map((key) => {
+        return data.data[key];
+      });
+      dataArray.sort(
+        (a, b) => b.populationCounts[0].value - a.populationCounts[0].value
+      );
+      let topFive = dataArray.slice(0, 5);
+      setTopCities(topFive);
+    } catch (error) {
+      console.error("Error:", error);
+      return {
+        notFound: true,
+      };
+    }
+  };
+
+  const fetchUSCities = async (regionName) => {
+    try {
+      const res = await fetch("/data/usa_cities_june2023.json");
+      const data = await res.json();
+      setCityListSet(true);
+
+      if (!data) {
+        return {
+          notFound: true,
+        };
+      }
+
+      const dataArray = data.filter((state) => state.state === regionName);
+      const stateCities = dataArray[0]?.cities;
+      let topFive = [];
+      stateCities &&
+        stateCities.map((state) => {
+          topFive.push(state.name);
+        });
+      setTopCities(topFive);
+    } catch (error) {
+      console.error("Error:", error);
+      return {
+        notFound: true,
+      };
+    }
+  };
+
+  const topCitiesList = topCities.map((city, index) => (
+    <NavLink
+      py={5}
+      key={index}
+      icon={<IconMapPin size={15} color="#9ff5fd" />}
+      label={
+        <Flex align={"center"} fs={"italic"} fz={13}>
+          <Text
+            span
+            color="white"
+            w={350}
+            truncate
+            sx={{
+              textTransform: "capitalize",
+            }}
+          >
+            {city.city ? city.city.toLowerCase() : city}
+          </Text>
+        </Flex>
+      }
+      sx={{
+        opacity: 0.7,
+        "&:hover": {
+          transform: "scale(1.1) translateX(17px)",
+          transition: "all 150ms ease",
+          backgroundColor: "rgba(0,0,0,0)",
+          opacity: 1,
+        },
+        "&:active": {
+          transform: "scale(1)",
+        },
+      }}
+      onClick={() => {
+        getTopCitiesSpot(city.city ? city.city.toLowerCase() : city);
+      }}
+    />
+  ));
+
+  const getTopCitiesSpot = async (field, e) => {
+    try {
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${field}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&types=place&limit=1&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`
+      );
+      const results = await response.json();
+      const data = results.features.map((feature) => ({
+        label: feature.label,
+        value: feature.place_name,
+        place_name: feature.place_name,
+        place_type: feature.place_type,
+        center: feature.center,
+        geometry: feature.geometry,
+        text: feature.text,
+        bbox: feature.bbox,
+        shortcode: feature.properties.short_code,
+      }));
+      if (field === "city") setCityData(data);
+      if (field === "country") setCountryData(data);
+      goToCountry(data[0]);
+    } catch (error) {
+      console.log("Error fetching data for Country Autocomplete: ", error);
+    }
+  };
+
   const onClose = () => {
     mapRef.current.flyTo({
       zoom: 2.5,
@@ -446,8 +481,6 @@ export default function Mymap() {
     setTopCities([]);
     setCityListSet(false);
   };
-
-  const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
 
   return (
     <>
@@ -798,7 +831,9 @@ export default function Mymap() {
           }}
           keyboard={false}
           ref={mapRef}
-          onClick={onEvent}
+          onClick={(e) => {
+            onEvent(e);
+          }}
           projection="globe"
           doubleClickZoom={false}
           interactiveLayerIds={[
