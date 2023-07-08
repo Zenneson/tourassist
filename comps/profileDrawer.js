@@ -27,7 +27,7 @@ import {
   IconWorld,
   IconGavel,
   IconInfoCircle,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 
 export default function ProfileDrawer({
   active,

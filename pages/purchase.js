@@ -29,7 +29,7 @@ import {
   IconArrowBigUpLine,
   IconTicket,
   IconArrowRightTail,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

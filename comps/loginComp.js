@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { app } from "../libs/firebase";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -7,7 +8,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { app } from "../libs/firebase";
 import {
   Anchor,
   Box,
@@ -34,7 +34,7 @@ import {
   IconCheck,
   IconUserCheck,
   IconUserCircle,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { useRouter } from "next/router";
 
 export default function LoginComp() {
@@ -184,7 +184,6 @@ export default function LoginComp() {
           signInWithPopup(auth, new provider()).then((result) => {
             result.user.linkWithCredential(pendingCred).then(() => {
               setVisible(true);
-              // (false);
               notify(`Signed in with ${signin}`, icon);
               setUser(auth.currentUser);
             });

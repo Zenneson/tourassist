@@ -7,7 +7,6 @@ import {
   Group,
   Title,
   Switch,
-  Divider,
 } from "@mantine/core";
 import {
   IconUserCircle,
@@ -21,7 +20,7 @@ import {
   IconBrandTwitter,
   IconCirclePlus,
   IconUserX,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { useLocalStorage } from "@mantine/hooks";
 
 export default function AccountInfo() {

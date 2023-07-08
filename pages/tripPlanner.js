@@ -44,7 +44,7 @@ import {
   IconAlertTriangle,
   IconFriends,
   IconRotate360,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import TripContent from "../comps/tripContent";

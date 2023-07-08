@@ -25,7 +25,7 @@ import {
   IconBrandWhatsapp,
   IconShare,
   IconPencil,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { useHover } from "@mantine/hooks";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";

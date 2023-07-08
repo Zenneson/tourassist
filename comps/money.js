@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { IconPlayerPlay } from "@tabler/icons";
+import { IconPlayerPlay } from "@tabler/icons-react";
 import {
   Box,
   Button,

@@ -6,7 +6,6 @@ import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB_LeZwAqankwio7WIUYQx7UUhloVuNq7Y",
-  // TODO: Update authDomain
   authDomain: "tourassist-836db.firebaseapp.com",
   projectId: "tourassist-836db",
   storageBucket: "tourassist-836db.appspot.com",
@@ -16,6 +15,7 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 export const storage = getStorage(app);
 // export const analytics = getAnalytics(app);

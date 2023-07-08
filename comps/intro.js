@@ -14,7 +14,7 @@ import {
   Divider,
   BackgroundImage,
 } from "@mantine/core";
-import { IconWorld, IconInfoSquareRounded } from "@tabler/icons";
+import { IconWorld, IconInfoSquareRounded } from "@tabler/icons-react";
 import {
   useLocalStorage,
   useMediaQuery,

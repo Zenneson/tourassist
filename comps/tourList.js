@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { Drawer, Button, Divider, Center, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { IconX } from "@tabler/icons";
+import { IconX } from "@tabler/icons-react";
 import PlaceListItem from "./placeListItem";
 
 export default function TourList({

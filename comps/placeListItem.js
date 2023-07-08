@@ -1,5 +1,5 @@
 import { Avatar, Grid, Text } from "@mantine/core";
-import { IconGripVertical, IconTrash } from "@tabler/icons";
+import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { Draggable } from "react-beautiful-dnd";
 
 export default function PlaceListItem({

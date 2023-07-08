@@ -27,7 +27,7 @@ import {
   IconUpload,
   IconX,
   IconPhoto,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 
 export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
   const [showToolbar, setShowToolbar] = useState(false);

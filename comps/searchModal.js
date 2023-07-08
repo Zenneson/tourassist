@@ -1,6 +1,6 @@
 import {} from "react";
 import { Modal, TextInput } from "@mantine/core";
-import { IconSearch } from "@tabler/icons";
+import { IconSearch } from "@tabler/icons-react";
 
 export default function SearchModal({ searchOpened, setSearchOpened }) {
   return (

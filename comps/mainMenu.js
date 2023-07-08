@@ -18,7 +18,7 @@ import {
   IconSearch,
   IconDoorExit,
   IconCircleX,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
 
 export default function MainMenu({

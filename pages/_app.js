@@ -61,6 +61,7 @@ export default function App(props) {
           },
         }}
       >
+        {/* <UserContext.Provider value={[userData]}> */}
         <Notifications position="top-center" />
         <SearchModal
           searchOpened={searchOpened}
@@ -99,6 +100,7 @@ export default function App(props) {
             setTripSelected={setTripSelected}
           />
         </AppShell>
+        {/* </UserContext.Provider> */}
       </MantineProvider>
     </>
   );

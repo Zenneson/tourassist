@@ -13,7 +13,7 @@ import {
   Title,
 } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
-import { IconReload } from "@tabler/icons";
+import { IconReload } from "@tabler/icons-react";
 
 export default function Donations({ dHeight }) {
   const [sorted, setSorted] = useState("time");
