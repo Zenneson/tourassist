@@ -1,12 +1,16 @@
 import { Avatar, Grid, Text } from "@mantine/core";
 import { IconGripVertical, IconTrash } from "@tabler/icons";
-import { useRecoilState } from "recoil";
 import { Draggable } from "react-beautiful-dnd";
-import { listOpenedState, placeListState } from "../libs/atoms";
 
-export default function PlaceListItem({ index, name, region, draggableId }) {
-  const [places, setPlaces] = useRecoilState(placeListState);
-  const [listOpened, setListOpened] = useRecoilState(listOpenedState);
+export default function PlaceListItem({
+  index,
+  name,
+  region,
+  draggableId,
+  setListOpened,
+  places,
+  setPlaces,
+}) {
   const handleRemove = () => {
     setPlaces(places.filter((place) => place.name !== name));
   };

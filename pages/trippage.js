@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
 import {
   Avatar,
   Button,
@@ -49,28 +48,17 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Donations from "../comps/donations";
 import Update from "../comps/update";
-import {
-  editContentModalState,
-  editUpdateState,
-  addTripDecriptionState,
-  addUpdateDecriptionState,
-  donateState,
-} from "../libs/atoms";
 import TripContent from "../comps/tripContent";
 import { DateInput } from "@mantine/dates";
 
 export default function Trippage() {
   const { hovered, ref } = useHover();
   const [altModal, setAltModal] = useState(false);
-  const [editContentModal, setEditContentModal] = useRecoilState(
-    editContentModalState
-  );
-  const [editUpdate, setEditUpdate] = useRecoilState(editUpdateState);
-  const [addTripDesc, setAddTripDesc] = useRecoilState(addTripDecriptionState);
-  const [addUpdateDesc, setAddUpdateDesc] = useRecoilState(
-    addUpdateDecriptionState
-  );
-  const [donating, setDonating] = useRecoilState(donateState);
+  const [editContentModal, setEditContentModal] = useState(false);
+  const [editUpdate, setEditUpdate] = useState("");
+  const [addTripDesc, setAddTripDesc] = useState(false);
+  const [addUpdateDesc, setAddUpdateDesc] = useState(false);
+  const [donating, setDonating] = useState(false);
   const [readmore, toggle] = useToggle(["closed", "open"]);
   const router = useRouter();
 
@@ -452,7 +440,12 @@ export default function Trippage() {
               }
               mb={20}
             />
-            <Update />
+            <Update
+              setEditContentModal={setEditContentModal}
+              setEditUpdate={setEditUpdate}
+              setAddUpdateDesc={setAddUpdateDesc}
+              setDonating={setDonating}
+            />
             <Box
               radius={5}
               bg={"rgba(0,0,0,0.05)"}
@@ -667,7 +660,11 @@ export default function Trippage() {
               <Divider w={"100%"} size={"sm"} />
             </Flex>
           </Box>
-          <TripContent />
+          <TripContent
+            addTripDesc={addTripDesc}
+            addUpdateDesc={addUpdateDesc}
+            donating={donating}
+          />
         </Stack>
       </Modal>
       <Modal
@@ -841,7 +838,13 @@ export default function Trippage() {
               }}
             />
           )}
-          {!donating && <TripContent />}
+          {!donating && (
+            <TripContent
+              addTripDesc={addTripDesc}
+              addUpdateDesc={addUpdateDesc}
+              donating={donating}
+            />
+          )}
         </Stack>
       </Modal>
     </>

@@ -1,12 +1,8 @@
 import {} from "react";
-import { useRecoilState } from "recoil";
 import { Modal, TextInput } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
-import { searchOpenedState } from "../libs/atoms";
 
-export default function SearchModal() {
-  const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
-
+export default function SearchModal({ searchOpened, setSearchOpened }) {
   return (
     <Modal
       opened={searchOpened}

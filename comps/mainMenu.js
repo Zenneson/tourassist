@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
 import { getAuth, signOut } from "firebase/auth";
 import { useLocalStorage } from "@mantine/hooks";
 import {
@@ -20,25 +19,22 @@ import {
   IconDoorExit,
   IconCircleX,
 } from "@tabler/icons";
-import {
-  searchOpenedState,
-  loginOpenedState,
-  mapLoadState,
-  profileOpenedState,
-  profileLinkState,
-  listOpenedState,
-  profileShowState,
-} from "../libs/atoms";
 import ProfileDrawer from "./profileDrawer";
 
-export default function MainMenu() {
-  const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
-  const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
+export default function MainMenu({
+  active,
+  setActive,
+  profileShow,
+  setProfileShow,
+  profileOpened,
+  setProfileOpened,
+  setListOpened,
+  searchOpened,
+  setSearchOpened,
+  loginOpened,
+  setTripSelected,
+}) {
   const [logoutOpeened, setLogoutOpeened] = useState(false);
-  const [listOpened, setListOpened] = useRecoilState(listOpenedState);
-  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
-  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
-  const [active, setActive] = useRecoilState(profileLinkState);
   const [mapSpin, setMapSpin] = useLocalStorage({
     key: "mapSpin",
   });
@@ -59,7 +55,15 @@ export default function MainMenu() {
 
   return (
     <>
-      <ProfileDrawer />
+      <ProfileDrawer
+        active={active}
+        setActive={setActive}
+        profileShow={profileShow}
+        setProfileShow={setProfileShow}
+        profileOpened={profileOpened}
+        setProfileOpened={setProfileOpened}
+        setTripSelected={setTripSelected}
+      />
       <Header
         zIndex={998}
         bg="none"
@@ -143,6 +147,7 @@ export default function MainMenu() {
                 onClick={() => {
                   setSearchOpened(!searchOpened);
                   setProfileOpened(false);
+                  setProfileShow(false);
                 }}
                 variant="subtle"
                 radius="xl"

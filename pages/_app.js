@@ -1,6 +1,5 @@
 import Head from "next/head";
-import { useEffect } from "react";
-import { RecoilRoot } from "recoil";
+import { useEffect, useState } from "react";
 import { MantineProvider, AppShell } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
@@ -14,6 +13,14 @@ import "@fontsource/open-sans/700.css";
 
 export default function App(props) {
   const { Component, pageProps } = props;
+  const [loginOpened, setLoginOpened] = useState(false);
+  const [active, setActive] = useState(-1);
+  const [profileShow, setProfileShow] = useState(false);
+  const [profileOpened, setProfileOpened] = useState(false);
+  const [listOpened, setListOpened] = useState(false);
+  const [searchOpened, setSearchOpened] = useState(false);
+  const [tripSelected, setTripSelected] = useState(false);
+  const [places, setPlaces] = useState([]);
 
   return (
     <>
@@ -55,15 +62,45 @@ export default function App(props) {
           },
         }}
       >
-        <RecoilRoot>
-          <Notifications position="top-center" />
-          <LoginModal />
-          <SearchModal />
-          <AppShell padding="none" header={<MainMenu />}>
-            <RouterTransition />
-            <Component {...pageProps} />
-          </AppShell>
-        </RecoilRoot>
+        <Notifications position="top-center" />
+        <LoginModal loginOpened={loginOpened} setLoginOpened={setLoginOpened} />
+        <SearchModal
+          searchOpened={searchOpened}
+          setSearchOpened={setSearchOpened}
+        />
+        <AppShell
+          padding="none"
+          header={
+            <MainMenu
+              active={active}
+              setActive={setActive}
+              profileShow={profileShow}
+              setProfileShow={setProfileShow}
+              profileOpened={profileOpened}
+              setProfileOpened={setProfileOpened}
+              setListOpened={setListOpened}
+              searchOpened={searchOpened}
+              setSearchOpened={setSearchOpened}
+              loginOpened={loginOpened}
+              setTripSelected={setTripSelected}
+            />
+          }
+        >
+          <RouterTransition />
+          <Component
+            {...pageProps}
+            setProfileShow={setProfileShow}
+            setProfileOpened={setProfileOpened}
+            listOpened={listOpened}
+            setListOpened={setListOpened}
+            searchOpened={searchOpened}
+            places={places}
+            setPlaces={setPlaces}
+            loginOpened={loginOpened}
+            tripSelected={tripSelected}
+            setTripSelected={setTripSelected}
+          />
+        </AppShell>
       </MantineProvider>
     </>
   );

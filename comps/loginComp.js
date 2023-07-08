@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useRecoilState } from "recoil";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -36,15 +35,13 @@ import {
   IconUserCheck,
   IconUserCircle,
 } from "@tabler/icons";
-import { loginOpenedState } from "../libs/atoms";
 import { useRouter } from "next/router";
 
-export default function LoginComp() {
+export default function LoginComp({ setLoginOpened }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
-  const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
   const [passPopOpened, setPassPopOpened] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");

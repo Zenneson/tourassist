@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import {
   BackgroundImage,
@@ -22,11 +21,6 @@ import TextStyle from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import {
-  donateState,
-  addTripDecriptionState,
-  addUpdateDecriptionState,
-} from "../libs/atoms";
-import {
   IconChevronLeft,
   IconChevronRight,
   IconTrash,
@@ -35,13 +29,8 @@ import {
   IconPhoto,
 } from "@tabler/icons";
 
-export default function TripContent() {
+export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
   const [showToolbar, setShowToolbar] = useState(false);
-  const [donating, setDonating] = useRecoilState(donateState);
-  const [addTripDesc, setAddTripDesc] = useRecoilState(addTripDecriptionState);
-  const [addUpdateDesc, setAddUpdateDesc] = useRecoilState(
-    addUpdateDecriptionState
-  );
   const router = useRouter();
 
   const tripDesc = "Content for trip description";

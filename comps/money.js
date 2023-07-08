@@ -1,4 +1,3 @@
-import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import { IconPlayerPlay } from "@tabler/icons";
 import {
@@ -13,7 +12,6 @@ import {
   Progress,
 } from "@mantine/core";
 import { Line } from "react-chartjs-2";
-import { profileOpenedState, profileShowState } from "../libs/atoms";
 import Donations from "./donations";
 import {
   Chart as ChartJS,
@@ -24,10 +22,12 @@ import {
   Tooltip,
 } from "chart.js";
 
-export default function Money() {
+export default function Money({
+  setProfileShow,
+  setProfileOpened,
+  setTripSelected,
+}) {
   const router = useRouter();
-  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
-  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
 
   ChartJS.register(
     CategoryScale,
@@ -153,6 +153,7 @@ export default function Money() {
               },
             }}
             onClick={() => {
+              setTripSelected(true);
               setProfileOpened(false);
               setProfileShow(false);
               router.push("/trippage");

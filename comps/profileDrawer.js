@@ -1,6 +1,5 @@
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
 import { useLocalStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
@@ -17,17 +16,10 @@ import {
   Box,
   NavLink,
   Divider,
-  Badge,
   Select,
 } from "@mantine/core";
 import {
-  profileOpenedState,
-  profileLinkState,
-  profileShowState,
-} from "../libs/atoms";
-import {
   IconUser,
-  IconPlane,
   IconLogout,
   IconChevronRight,
   IconX,
@@ -35,13 +27,17 @@ import {
   IconWorld,
   IconGavel,
   IconInfoCircle,
-  IconAt,
 } from "@tabler/icons";
 
-export default function ProfileDrawer() {
-  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
-  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
-  const [active, setActive] = useRecoilState(profileLinkState);
+export default function ProfileDrawer({
+  active,
+  setActive,
+  profileShow,
+  setProfileShow,
+  profileOpened,
+  setProfileOpened,
+  setTripSelected,
+}) {
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
     defaultValue: false,
@@ -415,7 +411,11 @@ export default function ProfileDrawer() {
               placeholder="Help me raise money to go on a Music Tour"
               data={["Help me raise money to go on a Music Tour"]}
             />
-            <Money />
+            <Money
+              setProfileShow={setProfileShow}
+              setProfileOpened={setProfileOpened}
+              setTripSelected={setTripSelected}
+            />
           </motion.div>
         )}
       </Drawer>

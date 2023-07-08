@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { useRecoilState } from "recoil";
 import {
   ActionIcon,
   BackgroundImage,
@@ -27,27 +26,17 @@ import {
   IconShare,
   IconPencil,
 } from "@tabler/icons";
-import {
-  editContentModalState,
-  editUpdateState,
-  donateState,
-  addUpdateDecriptionState,
-} from "../libs/atoms";
 import { useHover } from "@mantine/hooks";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Update() {
-  const [editContentModal, setEditContentModal] = useRecoilState(
-    editContentModalState
-  );
-  const [editUpdate, setEditUpdate] = useRecoilState(editUpdateState);
-  const [donating, setDonating] = useRecoilState(donateState);
-  const [addUpdateDesc, setAddUpdateDesc] = useRecoilState(
-    addUpdateDecriptionState
-  );
-
+export default function Update({
+  setEditContentModal,
+  setEditUpdate,
+  setAddUpdateDesc,
+  setDonating,
+}) {
   const [showall, toggle] = useToggle(["hide", "show"]);
 
   const slideSettings = {

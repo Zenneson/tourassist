@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
 import Map, { Marker, Source, Layer } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
 import bbox from "@turf/bbox";
@@ -27,20 +26,24 @@ import {
   IconAlertTriangle,
   IconMapPin,
   IconMapSearch,
+  IconList,
 } from "@tabler/icons";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../public/data/getNewCenter";
-import {
-  listOpenedState,
-  searchOpenedState,
-  placeListState,
-  loginOpenedState,
-  profileOpenedState,
-  profileShowState,
-} from "../libs/atoms";
 import TourList from "./tourList";
 
-export default function Mymap() {
+export default function Mymap({
+  setProfileShow,
+  setProfileOpened,
+  listOpened,
+  setListOpened,
+  searchOpened,
+  places,
+  setPlaces,
+  loginOpened,
+  tripSelected,
+  setTripSelected,
+}) {
   const mapRef = useRef();
   const center = useRef();
   const cityAutoRef = useRef(null);
@@ -62,17 +65,10 @@ export default function Mymap() {
   const [isCountry, setIsCountry] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
   const [tourListDropDown, setTourListDropDown] = useState(false);
-  const [places, setPlaces] = useRecoilState(placeListState);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [searchOpened, setSearchOpened] = useRecoilState(searchOpenedState);
-  const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
-  const [listOpened, setListOpened] = useRecoilState(listOpenedState);
-  const [profileOpened, setProfileOpened] = useRecoilState(profileOpenedState);
-  const [profileShow, setProfileShow] = useRecoilState(profileShowState);
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [topCities, setTopCities] = useState([]);
   const [cityListSet, setCityListSet] = useState(false);
-  const [tripSelected, setTripSelected] = useState(false);
   const [geoLat, setGeoLat] = useLocalStorage({
     key: "geoLatState",
     defaultValue: null,
@@ -533,6 +529,34 @@ export default function Mymap() {
         // loader={<div></div>}
         style={{ pointerEvents: "none" }}
       />
+      {places.length >= 1 && !listOpened && (
+        <Button
+          onClick={() => {
+            setListOpened(true);
+            setProfileOpened(false);
+            setProfileShow(false);
+          }}
+          sx={{
+            backgroundColor: "#020202",
+            opacity: 0.7,
+            borderRadius: "0 5px 5px 0",
+            position: "absolute",
+            top: "134px",
+            left: "0",
+            padding: "0 8px",
+            transition: "all 100ms ease-in-out",
+            zIndex: 120,
+            boxShadow: "0 0 10px rgba(255, 255, 255, 0.02)",
+            "&:hover": {
+              opacity: 1,
+              backgroundColor: "#020202",
+              boxShadow: "0 0 20px rgba(255, 255, 255, 0.04)",
+            },
+          }}
+        >
+          <IconList size={15} />
+        </Button>
+      )}
       <Modal
         centered
         zIndex={100}
@@ -869,6 +893,7 @@ export default function Mymap() {
           onZoomEnd={onZoomEnd}
           onLoad={() => {
             setMapLoaded(true);
+            setTripSelected(false);
             localStorage.removeItem("noLogin");
           }}
           keyboard={false}
@@ -888,7 +913,13 @@ export default function Mymap() {
           mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
         >
           {visible && !searchOpened && !loginOpened && (
-            <TourList setTripSelected={setTripSelected} />
+            <TourList
+              setTripSelected={setTripSelected}
+              listOpened={listOpened}
+              setListOpened={setListOpened}
+              places={places}
+              setPlaces={setPlaces}
+            />
           )}
           {isCity && (
             <Marker

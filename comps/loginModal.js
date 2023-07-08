@@ -1,11 +1,7 @@
-import { useRecoilState } from "recoil";
 import { Modal, Title } from "@mantine/core";
 import LoginComp from "./loginComp";
-import { loginOpenedState } from "../libs/atoms";
 
-export default function LoginModal() {
-  const [loginOpened, setLoginOpened] = useRecoilState(loginOpenedState);
-
+export default function LoginModal({ loginOpened, setLoginOpened }) {
   return (
     <>
       <Modal
@@ -32,7 +28,7 @@ export default function LoginModal() {
           },
         })}
       >
-        <LoginComp />
+        <LoginComp setLoginOpened={setLoginOpened} />
       </Modal>
     </>
   );
