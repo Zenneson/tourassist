@@ -37,7 +37,7 @@ import {
 } from "@tabler/icons";
 import { useRouter } from "next/router";
 
-export default function LoginComp({ setLoginOpened }) {
+export default function LoginComp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordFocus, setPasswordFocus] = useState(false);
@@ -175,7 +175,6 @@ export default function LoginComp({ setLoginOpened }) {
       .then((result) => {
         const credential = provider.credentialFromResult(result);
         setVisible(true);
-        setLoginOpened(false);
         notify(`Signed in with ${signin}`, icon);
         setUser(auth.currentUser);
       })
@@ -185,7 +184,7 @@ export default function LoginComp({ setLoginOpened }) {
           signInWithPopup(auth, new provider()).then((result) => {
             result.user.linkWithCredential(pendingCred).then(() => {
               setVisible(true);
-              setLoginOpened(false);
+              // (false);
               notify(`Signed in with ${signin}`, icon);
               setUser(auth.currentUser);
             });
@@ -273,7 +272,7 @@ export default function LoginComp({ setLoginOpened }) {
                   const user = userCredential.user;
                   // NOTE: set map to Initial Map
                   setVisible(true);
-                  setLoginOpened(false);
+                  // (false);
                   notify("Account Created", <IconDoorEnter size={15} />);
                 })
                 .catch((error) => {
@@ -292,7 +291,6 @@ export default function LoginComp({ setLoginOpened }) {
                   const user = userCredential.user;
                   // NOTE: set map to Initial Map
                   setVisible(true);
-                  setLoginOpened(false);
                   notify("Signed in", <IconUserCheck size={15} />);
                 })
                 .catch((error) => {

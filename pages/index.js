@@ -10,12 +10,13 @@ export default function Home(props) {
   let places = props.places;
   let setPlaces = props.setPlaces;
   let loginOpened = props.loginOpened;
+  let setLoginOpened = props.setLoginOpened;
   let tripSelected = props.tripSelected;
   let setTripSelected = props.setTripSelected;
 
   return (
     <>
-      <Intro />
+      <Intro setLoginOpened={setLoginOpened} />
       <Mymap
         setProfileShow={setProfileShow}
         setProfileOpened={setProfileOpened}

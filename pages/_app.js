@@ -4,7 +4,6 @@ import { MantineProvider, AppShell } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
-import LoginModal from "../comps/loginModal";
 import SearchModal from "../comps/searchModal";
 import MainMenu from "../comps/mainMenu";
 require("typeface-montserrat");
@@ -63,7 +62,6 @@ export default function App(props) {
         }}
       >
         <Notifications position="top-center" />
-        <LoginModal loginOpened={loginOpened} setLoginOpened={setLoginOpened} />
         <SearchModal
           searchOpened={searchOpened}
           setSearchOpened={setSearchOpened}
