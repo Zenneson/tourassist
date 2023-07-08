@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import SearchModal from "../comps/searchModal";
 import MainMenu from "../comps/mainMenu";
+import { getAuth } from "firebase/auth";
+import { app } from "../libs/firebase";
 require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
@@ -20,6 +22,7 @@ export default function App(props) {
   const [searchOpened, setSearchOpened] = useState(false);
   const [tripSelected, setTripSelected] = useState(false);
   const [places, setPlaces] = useState([]);
+  const auth = getAuth(app);
 
   return (
     <>
@@ -82,6 +85,7 @@ export default function App(props) {
               setSearchOpened={setSearchOpened}
               loginOpened={loginOpened}
               setTripSelected={setTripSelected}
+              auth={auth}
             />
           }
         >
@@ -98,6 +102,7 @@ export default function App(props) {
             loginOpened={loginOpened}
             tripSelected={tripSelected}
             setTripSelected={setTripSelected}
+            auth={auth}
           />
         </AppShell>
         {/* </UserContext.Provider> */}

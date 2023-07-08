@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { app } from "../libs/firebase";
 import {
-  getAuth,
   GoogleAuthProvider,
   TwitterAuthProvider,
   signInWithPopup,
@@ -36,7 +34,7 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 
-export default function LoginComp() {
+export default function LoginComp({ auth }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordFocus, setPasswordFocus] = useState(false);
@@ -55,8 +53,6 @@ export default function LoginComp() {
   if (!user && type === "login" && router.pathname === "/tripplanner") {
     toggle();
   }
-
-  const auth = getAuth(app);
 
   const requirements = [
     { re: /[0-9]/, label: "Includes number" },

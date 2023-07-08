@@ -1,4 +1,4 @@
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
@@ -37,6 +37,7 @@ export default function ProfileDrawer({
   profileOpened,
   setProfileOpened,
   setTripSelected,
+  auth,
 }) {
   const [visible, setVisible] = useLocalStorage({
     key: "visible",
@@ -44,7 +45,6 @@ export default function ProfileDrawer({
   });
   const [user, setUser] = useLocalStorage({ key: "user" });
   const router = useRouter();
-  const auth = getAuth();
 
   const links = [
     {

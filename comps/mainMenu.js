@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useLocalStorage } from "@mantine/hooks";
 import {
   Header,
@@ -33,6 +33,7 @@ export default function MainMenu({
   setSearchOpened,
   loginOpened,
   setTripSelected,
+  auth,
 }) {
   const [logoutOpeened, setLogoutOpeened] = useState(false);
   const [mapSpin, setMapSpin] = useLocalStorage({
@@ -51,7 +52,6 @@ export default function MainMenu({
   }, [user, setVisible]);
 
   const router = useRouter();
-  const auth = getAuth();
 
   return (
     <>
@@ -63,6 +63,7 @@ export default function MainMenu({
         profileOpened={profileOpened}
         setProfileOpened={setProfileOpened}
         setTripSelected={setTripSelected}
+        auth={auth}
       />
       <Header
         zIndex={998}

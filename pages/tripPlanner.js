@@ -49,7 +49,8 @@ import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import TripContent from "../comps/tripContent";
 
-export default function TripPlannerPage() {
+export default function TripPlannerPage(props) {
+  let auth = props.auth;
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
@@ -867,7 +868,7 @@ export default function TripPlannerPage() {
                   >
                     <Box hidden={user}>
                       <Box px={30}>
-                        <LoginComp />
+                        <LoginComp auth={auth} />
                       </Box>
                     </Box>
                     <Divider hidden={user} w={"90%"} ml={"5%"} mb={5} />

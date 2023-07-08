@@ -25,7 +25,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Intro() {
+export default function Intro({ auth }) {
   const [opened, setOpened] = useState(false);
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
   const [visible, setVisible] = useLocalStorage({
@@ -126,7 +126,7 @@ export default function Intro() {
                     maxWidth: "380px",
                   }}
                 >
-                  <LoginComp />
+                  <LoginComp auth={auth} />
                 </Box>
               </Center>
               <Center w={"100%"}>
