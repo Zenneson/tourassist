@@ -831,6 +831,7 @@ export default function TripPlannerPage(props) {
                   align="center"
                   py={30}
                   bg={"rgba(0,0,0,0.25)"}
+                  spacing={25}
                   sx={{
                     borderRadius: "3px",
                     boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
@@ -854,7 +855,6 @@ export default function TripPlannerPage(props) {
                         "&::placeholder": {
                           fontWeight: 700,
                           fontStyle: "italic",
-                          color: "rgba(255,255,255,0.0.08)",
                         },
                       },
                     }}

@@ -145,8 +145,6 @@ export default function TripContent({
     }
   }
 
-  console.log("IMAGES: ", images);
-
   return (
     <>
       {!donating && (
@@ -171,11 +169,12 @@ export default function TripContent({
               >
                 {slides}
               </Slider>
-              <Group mt={15} spacing={15} grow>
+              <Group mt={25} spacing={15} h={40} grow>
                 {images.length > 1 && (
                   <Button
                     variant="subtle"
                     color="gray"
+                    h={"100%"}
                     onClick={() => {
                       previous();
                     }}
@@ -183,13 +182,25 @@ export default function TripContent({
                     <IconChevronLeft size={20} />
                   </Button>
                 )}
-                <Button color="red" onClick={() => removeImage(activeSlide)}>
-                  <IconTrash size={17} />
+                <Button
+                  h={"100%"}
+                  color="red.9"
+                  opacity={0.3}
+                  onClick={() => removeImage(activeSlide)}
+                  sx={{
+                    transitions: "opacity 250ms ease",
+                    "&:hover": {
+                      opacity: 1,
+                    },
+                  }}
+                >
+                  <IconTrash size={23} />
                 </Button>
                 {images.length > 1 && (
                   <Button
                     variant="subtle"
                     color="gray"
+                    h={"100%"}
                     onClick={() => {
                       next();
                     }}
@@ -265,12 +276,12 @@ export default function TripContent({
               </Button>
             </Dropzone>
             <Title
-              mt={15}
-              order={6}
-              py={9}
+              mt={25}
+              py={12}
+              fz={12}
               ta={"center"}
-              opacity={0.6}
-              bg={"dark.6"}
+              bg={"dark.7"}
+              color="gray"
               sx={{
                 borderRadius: "3px",
               }}
@@ -340,7 +351,7 @@ export default function TripContent({
         <>
           <Box
             pos={"absolute"}
-            top={20}
+            top={50}
             sx={{
               zIndex: 1000,
               opacity: loading ? 0 : 1,
@@ -358,6 +369,9 @@ export default function TripContent({
               scale={scale}
               onWheel={handleScroll}
               onLoadSuccess={() => setLoading(false)}
+              style={{
+                borderTop: "2px solid rgba(255,255,255,0.1)",
+              }}
             />
             <MantineSlider
               mt={20}
@@ -386,7 +400,10 @@ export default function TripContent({
                 size="xl"
                 variant="default"
                 opacity={0.3}
-                onClick={() => setImageUpload(null)}
+                onClick={() => {
+                  setImageUpload(null);
+                  setScale(1);
+                }}
               >
                 <IconX stroke={5} size={35} />
               </Button>
