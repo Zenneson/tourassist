@@ -254,6 +254,7 @@ export default function Mymap({
     } else if (feature.layer?.source === "country-boundaries") {
       if (
         location === "Angola" ||
+        location === "Nigeria" ||
         location === "Russia" ||
         location === "United Arab Emirates" ||
         location === "United Kingdom"
@@ -542,7 +543,7 @@ export default function Mymap({
           sx={{
             backgroundColor: "#020202",
             opacity: 0.7,
-            borderRadius: "0 5px 5px 0",
+            borderRadius: "0 3px 3px 0",
             position: "absolute",
             top: "134px",
             left: "0",
@@ -605,13 +606,9 @@ export default function Mymap({
             zIndex: 0,
           },
           close: {
-            outline: "none",
             position: "absolute",
             top: "10px",
             right: "10px",
-            ":focus": {
-              outline: "none",
-            },
           },
         })}
       >
@@ -664,7 +661,7 @@ export default function Mymap({
                     regionName === "東京都" ? "Tokyo" : regionName
                   }`}
                   sx={{
-                    borderRadius: "5px",
+                    borderRadius: "3px",
                   }}
                   label={
                     <>
@@ -753,7 +750,7 @@ export default function Mymap({
                 regionName === "東京都" ? "Tokyo" : regionName
               } to the Tour List`}
               sx={{
-                borderRadius: "5px",
+                borderRadius: "3px",
               }}
               label={
                 <>

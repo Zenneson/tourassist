@@ -60,7 +60,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function Legal({ setProfileShow, setProfileOpened }) {
+export default function Legal({ setProfileOpened }) {
   const [linkState, setLinkState] = useState("terms");
   const [active, setActive] = useState(-99);
   const [highlighted, setHighlighted] = useState(-1);
@@ -472,8 +472,6 @@ export default function Legal({ setProfileShow, setProfileOpened }) {
 
   const exitLink = () => {
     setProfileOpened(false);
-    setProfileShow(false);
-    router.push("/help");
   };
 
   return (
@@ -545,10 +543,26 @@ export default function Legal({ setProfileShow, setProfileOpened }) {
                 <Box w={"calc(20% - 30px)"}>
                   {" "}
                   <Button.Group orientation="vertical">
-                    <Button variant="light" compact fz={10} onClick={exitLink}>
+                    <Button
+                      variant="light"
+                      compact
+                      fz={10}
+                      onClick={() => {
+                        exitLink();
+                        router.push("/help");
+                      }}
+                    >
                       About Tourassist
                     </Button>
-                    <Button variant="light" compact fz={10} onClick={exitLink}>
+                    <Button
+                      variant="light"
+                      compact
+                      fz={10}
+                      onClick={() => {
+                        exitLink();
+                        router.push("/contact");
+                      }}
+                    >
                       Contact Us
                     </Button>
                   </Button.Group>

@@ -120,7 +120,7 @@ export default function TourList({
             right={0}
             sx={{
               background: "rgba(8, 7, 11, 0.95)",
-              borderRadius: "5px 0 0 5px",
+              borderRadius: "3px 0 0 3px",
               padding: "0 8px",
               transition: "all 100ms ease-in-out",
               "&:hover": {

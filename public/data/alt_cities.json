@@ -20,6 +20,26 @@
     ]
   },
   {
+    "country": "Nigeria",
+    "cities": [
+      {
+        "name": "Lagos"
+      },
+      {
+        "name": "Kano"
+      },
+      {
+        "name": "Ibadan"
+      },
+      {
+        "name": "Port Harcourt"
+      },
+      {
+        "name": "Abuja"
+      }
+    ]
+  },
+  {
     "country": "Russia",
     "cities": [
       {

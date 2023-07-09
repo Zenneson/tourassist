@@ -18,10 +18,6 @@ export default function SearchModal({ searchOpened, setSearchOpened }) {
         placeholder="Search Trips..."
         styles={({ theme }) => ({
           input: {
-            ":focus": {
-              outline: "none",
-              border: "none",
-            },
             "::placeholder": {
               fontStyle: "italic",
             },

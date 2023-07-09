@@ -38,9 +38,11 @@ export default function App(props) {
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          loader: "dots",
           // colorScheme: "light",
+          defaultRadius: 3,
           colorScheme: "dark",
+          loader: "dots",
+          focusRing: "never",
           headings: {
             fontFamily: "Montserrat, sans-serif",
           },
@@ -64,7 +66,6 @@ export default function App(props) {
           },
         }}
       >
-        {/* <UserContext.Provider value={[userData]}> */}
         <Notifications position="top-center" />
         <SearchModal
           searchOpened={searchOpened}
@@ -105,7 +106,6 @@ export default function App(props) {
             auth={auth}
           />
         </AppShell>
-        {/* </UserContext.Provider> */}
       </MantineProvider>
     </>
   );

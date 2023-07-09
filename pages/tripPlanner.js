@@ -370,9 +370,6 @@ export default function TripPlannerPage(props) {
                   sx={{
                     ".mantine-Input-input": {
                       textTransform: "uppercase",
-                      "&:focus": {
-                        border: "none",
-                      },
                     },
                   }}
                   rightSection={
@@ -482,7 +479,7 @@ export default function TripPlannerPage(props) {
             {active === 0 && (
               <motion.div {...animation}>
                 <Box w={"100%"}>
-                  <Title order={5} h={17} ml={5} fw={100} fs={"italic"}>
+                  <Title order={3} h={24} ml={5} fw={100} fs={"italic"}>
                     {startLocale && travelDates ? (
                       "Continue..."
                     ) : (
@@ -590,7 +587,7 @@ export default function TripPlannerPage(props) {
                           <DatePicker
                             size={"lg"}
                             mt={20}
-                            mb={25}
+                            mb={10}
                             allowDeselect
                             firstDayOfWeek={0}
                             defaultDate={today}
@@ -620,9 +617,9 @@ export default function TripPlannerPage(props) {
 
                               return (
                                 <Indicator
-                                  size={6}
+                                  size={7}
                                   color="red"
-                                  offset={-5}
+                                  offset={-3}
                                   disabled={!isSpecificDay}
                                 >
                                   <div>{day}</div>
@@ -630,20 +627,32 @@ export default function TripPlannerPage(props) {
                               );
                             }}
                             sx={{
+                              ".mantine-DatePicker-day[data-disabled]": {
+                                opacity: 0.25,
+                              },
                               ".mantine-DatePicker-day[data-weekend]": {
-                                color: "#74C0FC",
+                                color: "#4c8fb8",
                               },
                               ".mantine-DatePicker-day[data-selected]": {
-                                backgroundColor: "#aaa",
-                                color: "#000",
+                                backgroundColor: "#063068",
+                                color: "#fff",
+                                textShadow: "0 2px 3px rgba(0,0,0,0.4)",
+                                transform: "scale(1.1)",
+                                transition: "all 0.2s ease-in-out",
+                                fontSize: "1.6rem",
                               },
                             }}
                           />
                         </Center>
-                        <Divider w={"100%"} mb={15} size={"sm"} opacity={0.5} />
+                        <Divider
+                          w={"100%"}
+                          mb={15}
+                          size={"sm"}
+                          opacity={0.15}
+                        />
                         <Autocomplete
                           size="sm"
-                          mt={10}
+                          mt={17}
                           w={"100%"}
                           dropdownPosition="top"
                           variant="filled"
@@ -680,7 +689,7 @@ export default function TripPlannerPage(props) {
                             pr={10}
                             labelPosition="right"
                             variant="dashed"
-                            color={"rgba(255,255,255,0.08)"}
+                            color={"rgba(255,255,255,0.2)"}
                             label={
                               <Flex align={"center"}>
                                 <IconFriends size={16} color="#fff" />
@@ -737,7 +746,7 @@ export default function TripPlannerPage(props) {
                             my={12}
                             labelPosition="right"
                             variant="dashed"
-                            color={"rgba(255,255,255,0.08)"}
+                            color={"rgba(255,255,255,0.2)"}
                             label={
                               <Switch
                                 label={
@@ -833,7 +842,6 @@ export default function TripPlannerPage(props) {
                   bg={"rgba(0,0,0,0.25)"}
                   spacing={25}
                   sx={{
-                    borderRadius: "3px",
                     boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
                     borderTop: "2px solid rgba(255,255,255,0.1)",
                   }}
@@ -848,10 +856,8 @@ export default function TripPlannerPage(props) {
                     onChange={(e) => setTripTitle(e.target.value)}
                     sx={{
                       ".mantine-Input-input": {
-                        border: "none",
                         borderTop: "2px solid rgba(255,255,255,0.2)",
                         background: "#0b0c0d",
-                        outline: "none",
                         "&::placeholder": {
                           fontWeight: 700,
                           fontStyle: "italic",
@@ -877,7 +883,6 @@ export default function TripPlannerPage(props) {
                     bg={"rgba(0,0,0,0.2)"}
                     sx={{
                       borderTop: "2px solid rgba(255,255,255,0.2)",
-                      borderRadius: "3px",
                     }}
                   >
                     <Box hidden={user}>

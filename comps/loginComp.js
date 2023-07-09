@@ -174,7 +174,6 @@ export default function LoginComp({ auth }) {
         setVisible(true);
         setUser(auth.currentUser);
         addUser(auth.currentUser);
-        console.log("User: ", auth.currentUser);
       })
       .catch((error) => {
         if (error.code === "auth/account-exists-with-different-credential") {
@@ -184,7 +183,6 @@ export default function LoginComp({ auth }) {
               setVisible(true);
               setUser(auth.currentUser);
               addUser(auth.currentUser);
-              console.log("User: ", auth.currentUser);
             });
             console.log("Credential Linked");
           });

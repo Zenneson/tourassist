@@ -217,7 +217,6 @@ export default function Trippage() {
           }
         />
       </Center>
-      {/* TODO   */}
       <Center>
         <Flex
           gap={30}

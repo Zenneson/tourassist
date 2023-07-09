@@ -178,11 +178,11 @@ export default function Update({
         w={"100%"}
         h={300}
         mb={30}
-        sx={{ overflow: "hidden", borderRadius: "5px" }}
+        sx={{ overflow: "hidden" }}
       >
         {hovered && (
           <Button
-            h={"99%"}
+            h={"80%"}
             mb={7}
             radius={"3px 0 0 3px"}
             onClick={previous}
@@ -194,7 +194,6 @@ export default function Update({
               border: "none",
               "&:hover": {
                 color: "#fff",
-                backgroundColor: "rgba(0,0,0,0.2)",
               },
             }}
           >
@@ -221,7 +220,7 @@ export default function Update({
         </Slider>
         {hovered && (
           <Button
-            h={"99%"}
+            h={"80%"}
             mb={7}
             radius={"3px 0 0 3px"}
             onClick={next}
@@ -233,7 +232,6 @@ export default function Update({
               border: "none",
               "&:hover": {
                 color: "#fff",
-                backgroundColor: "rgba(0,0,0,0.2)",
               },
             }}
           >
