@@ -52,6 +52,10 @@ import TripContent from "../comps/tripContent";
 export default function TripPlannerPage(props) {
   let auth = props.auth;
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const [images, setImages] = useLocalStorage({
+    key: "images",
+    defaultValue: [],
+  });
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startLocale, setStartLocale] = useState("");
@@ -85,11 +89,14 @@ export default function TripPlannerPage(props) {
     transition: { type: "ease-in-out" },
   };
 
-  // TODO - Have create into a function that fetches the costs and adds them below
+  const [tripTitle, setTripTitle] = useState("");
+  const [tripImages, setTripImages] = useState([]);
+  const [tripDesc, setTripDesc] = useState("");
+
   const [costList, setCostList] = useState({});
   const [costsSum, setCostsSum] = useState(0);
-  let delayTimer = null; // Declare timer variable at top level
 
+  let delayTimer = null;
   const handleInputChange = (value, costid) => {
     if (delayTimer) {
       clearTimeout(delayTimer);
@@ -581,7 +588,6 @@ export default function TripPlannerPage(props) {
                       >
                         <Center>
                           <DatePicker
-                            // type="range"
                             size={"lg"}
                             mt={20}
                             mb={25}
@@ -820,6 +826,7 @@ export default function TripPlannerPage(props) {
             {active === 2 && (
               <motion.div {...animation}>
                 <Stack
+                  pos={"relative"}
                   w={855}
                   align="center"
                   py={30}
@@ -837,10 +844,13 @@ export default function TripPlannerPage(props) {
                     variant="filled"
                     w="100%"
                     maw={800}
+                    onChange={(e) => setTripTitle(e.target.value)}
                     sx={{
                       ".mantine-Input-input": {
+                        border: "none",
                         borderTop: "2px solid rgba(255,255,255,0.2)",
                         background: "#0b0c0d",
+                        outline: "none",
                         "&::placeholder": {
                           fontWeight: 700,
                           fontStyle: "italic",
@@ -849,7 +859,11 @@ export default function TripPlannerPage(props) {
                       },
                     }}
                   />
-                  <TripContent />
+                  <TripContent
+                    images={images}
+                    setImages={setImages}
+                    setTripDesc={setTripDesc}
+                  />
                 </Stack>
               </motion.div>
             )}
@@ -1013,6 +1027,7 @@ export default function TripPlannerPage(props) {
                   }
                   if (active === 3) {
                     // localStorage.removeItem("placeDataState");
+                    setImages([]);
                     router.push("/trippage");
                   }
                 }}

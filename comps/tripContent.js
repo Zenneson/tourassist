@@ -9,13 +9,14 @@ import {
   Title,
   Text,
   Group,
+  Overlay,
+  LoadingOverlay,
+  Slider as MantineSlider,
 } from "@mantine/core";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { useEditor } from "@tiptap/react";
+import imageCompression from "browser-image-compression";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -27,16 +28,36 @@ import {
   IconUpload,
   IconX,
   IconPhoto,
+  IconCheck,
+  IconFrame,
 } from "@tabler/icons-react";
+import AvatarEditor from "react-avatar-editor";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
+export default function TripContent({
+  addTripDesc,
+  addUpdateDesc,
+  donating,
+  setTripDesc,
+  images,
+  setImages,
+}) {
   const [showToolbar, setShowToolbar] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [scale, setScale] = useState(1);
+  const [processingImage, setProcessingImage] = useState(false);
+
   const router = useRouter();
 
-  const tripDesc = "Content for trip description";
+  const tripSummary = "Content for trip description";
   const updateDetails = "Update Content";
 
   const sliderRef = useRef();
+  const cropperRef = useRef(null);
 
   const next = () => {
     sliderRef.current.slickNext();
@@ -57,12 +78,6 @@ export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
     slidesToScroll: 1,
     arrows: false,
   };
-
-  const images = [
-    "img/women.jpg",
-    "img/intro/coast.jpg",
-    "img/intro/bluehair.jpg",
-  ];
 
   const slides = images.map((image, index) => (
     <BackgroundImage
@@ -92,20 +107,62 @@ export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
     content: donating
       ? ""
       : addTripDesc
-      ? tripDesc
+      ? tripSummary
       : addUpdateDesc
       ? updateDetails
       : "",
   });
+
+  const handleScroll = (event) => {
+    let newScale = scale - event.deltaY * 0.005;
+    newScale = Math.min(Math.max(newScale, 1), 5);
+    setScale(newScale);
+  };
+
+  function removeImage(activeSlide) {
+    setImages(images.filter((_, imgIndex) => imgIndex !== activeSlide));
+  }
+
+  async function addCroppedImage() {
+    const canvas = cropperRef.current.getImage();
+    const dataUrl = canvas.toDataURL();
+
+    const blob = await (await fetch(dataUrl)).blob(); // convert dataUrl to Blob
+
+    const options = {
+      maxSizeMB: 0.5,
+      maxWidthOrHeight: 650,
+    };
+
+    try {
+      const compressedFile = await imageCompression(blob, options); // compress image
+      const compressedDataUrl = URL.createObjectURL(compressedFile); // convert Blob to dataUrl
+
+      setImages((prevImages) => [...prevImages, compressedDataUrl]); // add compressed image to the images array
+      setProcessingImage(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  console.log("IMAGES: ", images);
 
   return (
     <>
       {!donating && (
         <Group maw={800} spacing={20} w="100%" grow>
           {images.length > 0 && (
-            <Box>
+            <Box
+              pos="relative"
+              sx={{
+                borderRadius: 3,
+                overflow: "hidden",
+              }}
+            >
+              <LoadingOverlay visible={processingImage} overlayBlur={3} />
               <Slider
                 ref={sliderRef}
+                afterChange={setActiveSlide}
                 {...slideSettings}
                 style={{
                   width: "390px",
@@ -115,40 +172,50 @@ export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
                 {slides}
               </Slider>
               <Group mt={15} spacing={15} grow>
-                <Button
-                  variant="subtle"
-                  color="gray"
-                  onClick={() => {
-                    previous();
-                  }}
-                >
-                  <IconChevronLeft size={20} />
-                </Button>
-                <Button color="red">
+                {images.length > 1 && (
+                  <Button
+                    variant="subtle"
+                    color="gray"
+                    onClick={() => {
+                      previous();
+                    }}
+                  >
+                    <IconChevronLeft size={20} />
+                  </Button>
+                )}
+                <Button color="red" onClick={() => removeImage(activeSlide)}>
                   <IconTrash size={17} />
                 </Button>
-                <Button
-                  variant="subtle"
-                  color="gray"
-                  onClick={() => {
-                    next();
-                  }}
-                >
-                  <IconChevronRight size={20} />
-                </Button>
+                {images.length > 1 && (
+                  <Button
+                    variant="subtle"
+                    color="gray"
+                    onClick={() => {
+                      next();
+                    }}
+                  >
+                    <IconChevronRight size={20} />
+                  </Button>
+                )}
               </Group>
             </Box>
           )}
           <Box>
             <Dropzone
-              onDrop={(files) => console.log("accepted files", files)}
+              onDrop={(files) => {
+                setImageUpload(files[0]);
+                setLoading(true);
+              }}
               onReject={(files) => console.log("rejected files", files)}
               accept={IMAGE_MIME_TYPE}
               ta="center"
               h={300}
+              opacity={images.length === 6 ? 0.3 : 1}
+              disabled={images.length === 6}
               style={{
                 border: "2px dashed rgba(255,255,255,0.05)",
                 backgroundColor: "rgba(255,255,255,0.01)",
+                cursor: images.length === 6 ? "not-allowed" : "pointer",
               }}
             >
               <Group
@@ -203,12 +270,12 @@ export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
               py={9}
               ta={"center"}
               opacity={0.6}
-              bg={"dark.5"}
+              bg={"dark.6"}
               sx={{
                 borderRadius: "3px",
               }}
             >
-              {`${images.length} / 6 SPACES USED`}
+              {`${images.length} / 6 IMAGES UPLOADED`}
             </Title>
           </Box>
         </Group>
@@ -220,6 +287,9 @@ export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
         onClick={() => {
           setShowToolbar(true);
           editor?.chain().focus().run();
+        }}
+        onBlur={() => {
+          setTripDesc(editor.getHTML());
         }}
         sx={{
           border: "none",
@@ -266,6 +336,78 @@ export default function TripContent({ addTripDesc, addUpdateDesc, donating }) {
           }}
         />
       </RichTextEditor>
+      {imageUpload && (
+        <>
+          <Box
+            pos={"absolute"}
+            top={20}
+            sx={{
+              zIndex: 1000,
+              opacity: loading ? 0 : 1,
+              transition: "opacity 0.2s ease-in-out",
+            }}
+          >
+            <AvatarEditor
+              ref={cropperRef}
+              width={585}
+              height={450}
+              border={40}
+              color={[0, 0, 0, 0.95]} // RGBA
+              image={imageUpload}
+              borderRadius={3}
+              scale={scale}
+              onWheel={handleScroll}
+              onLoadSuccess={() => setLoading(false)}
+            />
+            <MantineSlider
+              mt={20}
+              min={1}
+              max={5}
+              step={0.05}
+              thumbSize={20}
+              thumbChildren={<IconFrame size={14} stroke={3} />}
+              defaultValue={1}
+              color="blue.3"
+              label={null}
+              showLabelOnHover={false}
+              value={scale}
+              onChange={setScale}
+              sx={{
+                zIndex: 1000,
+                width: "100%",
+                height: 5,
+                "	.mantine-Slider-thumb": {
+                  border: "none",
+                },
+              }}
+            />
+            <Group w={"100%"} mt={30} grow>
+              <Button
+                size="xl"
+                variant="default"
+                opacity={0.3}
+                onClick={() => setImageUpload(null)}
+              >
+                <IconX stroke={5} size={35} />
+              </Button>
+              <Button
+                size="xl"
+                variant="default"
+                opacity={0.3}
+                onClick={() => {
+                  setProcessingImage(true);
+                  addCroppedImage();
+                  setImageUpload(null);
+                  setScale(1);
+                }}
+              >
+                <IconCheck stroke={5} size={35} />
+              </Button>
+            </Group>
+          </Box>
+          <Overlay opacity={0.3} blur={7} />
+        </>
+      )}
     </>
   );
 }
