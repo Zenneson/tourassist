@@ -58,6 +58,7 @@ export default function TripContent({
 
   const sliderRef = useRef();
   const cropperRef = useRef(null);
+  const cropperContainerRef = useRef(null);
 
   const next = () => {
     sliderRef.current.slickNext();
@@ -71,12 +72,15 @@ export default function TripContent({
     dots: false,
     fade: true,
     infinite: true,
+    autoplay: true,
     swipeToSlide: true,
     speed: 250,
+    autoplaySpeed: 4000,
     cssEase: "linear",
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
+    pauseOnHover: true,
   };
 
   const slides = images.map((image, index) => (
@@ -152,6 +156,7 @@ export default function TripContent({
           {images.length > 0 && (
             <Box
               pos="relative"
+              top={4}
               sx={{
                 borderRadius: 3,
                 overflow: "hidden",
@@ -169,7 +174,12 @@ export default function TripContent({
               >
                 {slides}
               </Slider>
-              <Group mt={25} spacing={15} h={40} grow>
+              <Group
+                mt={images.length === 1 ? 18 : 25}
+                spacing={15}
+                h={40}
+                grow
+              >
                 {images.length > 1 && (
                   <Button
                     variant="subtle"
@@ -184,8 +194,9 @@ export default function TripContent({
                 )}
                 <Button
                   h={"100%"}
+                  variant="light"
                   color="red.9"
-                  opacity={0.3}
+                  opacity={0.7}
                   onClick={() => removeImage(activeSlide)}
                   sx={{
                     transitions: "opacity 250ms ease",
@@ -194,7 +205,7 @@ export default function TripContent({
                     },
                   }}
                 >
-                  <IconTrash size={23} />
+                  <IconTrash size={21} />
                 </Button>
                 {images.length > 1 && (
                   <Button
@@ -213,6 +224,7 @@ export default function TripContent({
           )}
           <Box>
             <Dropzone
+              mt={5}
               onDrop={(files) => {
                 setImageUpload(files[0]);
                 setLoading(true);
@@ -350,6 +362,7 @@ export default function TripContent({
       {imageUpload && (
         <>
           <Box
+            ref={cropperContainerRef}
             pos={"absolute"}
             top={50}
             sx={{
@@ -412,6 +425,7 @@ export default function TripContent({
                 variant="default"
                 opacity={0.3}
                 onClick={() => {
+                  cropperContainerRef.current.style.opacity = 0;
                   setProcessingImage(true);
                   addCroppedImage();
                   setImageUpload(null);

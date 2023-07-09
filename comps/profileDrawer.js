@@ -80,6 +80,7 @@ export default function ProfileDrawer({
       icon={item.icon}
       variant="subtle"
       onClick={() => {
+        localStorage.removeItem("images");
         setActive(index);
         setProfileShow(true);
         {
@@ -198,6 +199,7 @@ export default function ProfileDrawer({
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
               onClick={() => {
+                localStorage.removeItem("images");
                 localStorage.setItem("noLogin", "true");
                 setProfileOpened(false);
                 setProfileShow(false);
@@ -239,6 +241,7 @@ export default function ProfileDrawer({
               icon={<IconInfoCircle size={30} opacity={0.1} />}
               variant="subtle"
               onClick={(e) => {
+                localStorage.removeItem("images");
                 setProfileOpened(false);
                 setProfileShow(false);
                 router.push("/help");
@@ -311,6 +314,7 @@ export default function ProfileDrawer({
               onClick={() => {
                 signOut(auth)
                   .then(() => {
+                    localStorage.removeItem("images");
                     localStorage.removeItem("user");
                     localStorage.removeItem("visible");
                     localStorage.removeItem("mapSpin");

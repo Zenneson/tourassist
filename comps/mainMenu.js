@@ -208,6 +208,7 @@ export default function MainMenu({
                     onClick={function () {
                       signOut(auth)
                         .then(() => {
+                          localStorage.removeItem("images");
                           localStorage.removeItem("user");
                           localStorage.removeItem("visible");
                           localStorage.removeItem("mapSpin");
