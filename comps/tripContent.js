@@ -50,6 +50,7 @@ export default function TripContent({
   const [imageUpload, setImageUpload] = useState(null);
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
+  const [editorFocused, setEditorFocused] = useState(false);
 
   const router = useRouter();
 
@@ -293,7 +294,7 @@ export default function TripContent({
               fz={12}
               ta={"center"}
               bg={"dark.7"}
-              color="gray"
+              opacity={0.3}
               sx={{
                 borderRadius: "3px",
               }}
@@ -306,15 +307,21 @@ export default function TripContent({
       <RichTextEditor
         editor={editor}
         position="relative"
-        bg={"dark.7"}
+        bg={editorFocused ? "rgba(43, 43, 43, 0.3)" : "dark.7"}
         onClick={() => {
           setShowToolbar(true);
           editor?.chain().focus().run();
         }}
+        onFocus={() => {
+          setEditorFocused(true);
+        }}
         onBlur={() => {
           setTripDesc(editor.getHTML());
+          setEditorFocused(false);
         }}
         sx={{
+          transition: "border-top 0.2s ease",
+          boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
           border: "none",
           overflow: "auto",
           width: "100%",
@@ -323,7 +330,12 @@ export default function TripContent({
           minHeight: donating ? "100px" : "200px",
           maxHeight: donating ? "100px" : "300px",
           borderTop: "2px solid rgba(255,255,255,0.2)",
-          boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
+          ".mantine-RichTextEditor-content": {
+            background: editorFocused && "rgba(0, 0, 0, 0)",
+          },
+          ".mantine-RichTextEditor-toolbar": {
+            background: editorFocused && "rgba(0, 0, 0, 0)",
+          },
         }}
       >
         {editor && showToolbar && (

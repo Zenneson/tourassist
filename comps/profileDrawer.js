@@ -124,6 +124,7 @@ export default function ProfileDrawer({
         styles={{
           content: {
             overflow: "hidden",
+            background: "rgba(11, 12, 13, 0.95)",
           },
         }}
       >
@@ -379,7 +380,7 @@ export default function ProfileDrawer({
           <motion.div {...animation}>
             <Title
               mt={-5}
-              opacity={0.15}
+              opacity={0.08}
               fw={600}
               fz={40}
               sx={{
@@ -397,7 +398,7 @@ export default function ProfileDrawer({
           <motion.div {...animation}>
             <Title
               mt={-5}
-              opacity={0.15}
+              opacity={0.08}
               fw={600}
               fz={40}
               sx={{

@@ -42,7 +42,16 @@ export default function App(props) {
           defaultRadius: 3,
           colorScheme: "dark",
           loader: "dots",
-          focusRing: "never",
+          focusRing: "auto",
+          focusRingStyles: {
+            resetStyles: () => ({ outline: "none" }),
+            styles: (theme) => ({ outline: "none" }),
+            inputStyles: (theme) => ({
+              outline: "none",
+              background: "rgba(43, 43, 43, 0.15)",
+              transition: "background 0.2s ease",
+            }),
+          },
           headings: {
             fontFamily: "Montserrat, sans-serif",
           },

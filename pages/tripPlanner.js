@@ -894,13 +894,8 @@ export default function TripPlannerPage(props) {
                     <Center mt={user ? 20 : 0}>
                       <Button
                         leftIcon={<IconBuildingBank size={34} />}
-                        variant="gradient"
-                        gradient={{
-                          from: "green.8",
-                          to: "green.9",
-                          deg: 180,
-                        }}
-                        color="gray.0"
+                        variant="light"
+                        color="#0D3F82"
                         size="xl"
                         w={"90%"}
                         sx={{

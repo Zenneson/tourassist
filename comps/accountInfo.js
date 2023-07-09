@@ -20,6 +20,10 @@ import {
   IconBrandTwitter,
   IconCirclePlus,
   IconUserX,
+  IconDeviceSim1,
+  IconDeviceSim2,
+  IconPhone,
+  IconBuildingBank,
 } from "@tabler/icons-react";
 import { useLocalStorage } from "@mantine/hooks";
 
@@ -27,20 +31,21 @@ export default function AccountInfo() {
   const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
 
   return (
-    <Box mt={15} pr={30} pos={"relative"} h={"calc(100vh - 110px)"}>
+    <Box pr={30} mt={15} pos={"relative"} h={"calc(100vh - 120px)"}>
       <Flex direction="column" gap="xs" w={"100%"}>
         <Title
           order={6}
           opacity={0.4}
           pb={5}
-          mb={10}
           sx={{
             textTransform: "uppercase",
           }}
         >
-          Change E-mail or Password
+          Personal Info
         </Title>
-        <Box
+        <Flex
+          direction="column"
+          gap={10}
           pl={20}
           pt={10}
           pb={15}
@@ -48,40 +53,67 @@ export default function AccountInfo() {
             borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
           }}
         >
-          <Input
-            variant="filled"
-            placeholder={user?.providerData[0].email}
-            icon={<IconUserCircle size={20} />}
-            iconWidth={50}
-            disabled
-            mb={10}
-            w="100%"
-            rightSection={
-              <ActionIcon opacity={0.5} variant="subtle">
-                <IconPencil size={18} />
-              </ActionIcon>
-            }
-          />
-          <Input
-            variant="filled"
-            placeholder="********"
-            icon={<IconKey size={20} />}
-            iconWidth={50}
-            disabled
-            w="100%"
-            rightSection={
-              <ActionIcon opacity={0.5} variant="subtle">
-                <IconPencil size={18} />
-              </ActionIcon>
-            }
-          />
-        </Box>
+          <Group grow spacing={10}>
+            <Input
+              icon={<IconDeviceSim1 size={20} />}
+              placeholder="First Name"
+              variant="filled"
+              rightSection={
+                <ActionIcon opacity={0.5} variant="subtle">
+                  <IconCirclePlus size={16} />
+                </ActionIcon>
+              }
+            />
+            <Input
+              icon={<IconDeviceSim2 size={20} />}
+              placeholder="Last Name"
+              variant="filled"
+              rightSection={
+                <ActionIcon opacity={0.5} variant="subtle">
+                  <IconCirclePlus size={16} />
+                </ActionIcon>
+              }
+            />
+          </Group>
+          <Group grow spacing={10}>
+            <Input
+              icon={<IconPhone size={20} />}
+              placeholder="Phone #"
+              variant="filled"
+              rightSection={
+                <ActionIcon opacity={0.5} variant="subtle">
+                  <IconCirclePlus size={16} />
+                </ActionIcon>
+              }
+            />
+            <Button variant="light" bg="#0D3F82" fz={12}>
+              ADD{" "}
+              <IconBuildingBank
+                size={15}
+                stroke={3}
+                style={{
+                  margin: "0 5px",
+                  marginBottom: "2px",
+                }}
+              />{" "}
+              BANKING INFO
+            </Button>
+            {/* <Input
+              icon={<IconBrandTwitter size={20} />}
+              placeholder="@Twitter"
+              variant="filled"
+              rightSection={
+                <ActionIcon opacity={0.5} variant="subtle">
+                  <IconCirclePlus size={16} />
+                </ActionIcon>
+              }
+            /> */}
+          </Group>
+        </Flex>
         <Title
           order={6}
-          mt={25}
           opacity={0.4}
           pb={5}
-          mb={10}
           sx={{
             textTransform: "uppercase",
           }}
@@ -145,10 +177,8 @@ export default function AccountInfo() {
         </Flex>
         <Title
           order={6}
-          mt={25}
           opacity={0.4}
           pb={5}
-          mb={10}
           sx={{
             textTransform: "uppercase",
           }}
@@ -165,7 +195,7 @@ export default function AccountInfo() {
             borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
           }}
         >
-          <Flex direction="column" gap={7} align="flex-start" pl={20}>
+          <Flex direction="column" gap={8} align="flex-start" pl={20}>
             <Switch
               p={0}
               size="xs"
@@ -197,7 +227,7 @@ export default function AccountInfo() {
               label="New Campaign Comment"
             />
           </Flex>
-          <Flex direction="column" gap={5} align="flex-start">
+          <Flex direction="column" gap={8} align="flex-start">
             <Switch
               p={0}
               size="xs"
@@ -238,19 +268,34 @@ export default function AccountInfo() {
         bottom={10}
         right={30}
       >
-        <Button
-          variant="default"
-          size="xs"
-          leftIcon={<IconUserX size={18} stroke={2} />}
-          sx={{
-            opacity: 0.2,
-            "&:hover": {
-              opacity: 1,
-            },
-          }}
-        >
-          DELETE ACCOUNT
-        </Button>
+        <Button.Group>
+          <Button
+            variant="default"
+            size="xs"
+            leftIcon={<IconKey size={18} stroke={2} />}
+            sx={{
+              opacity: 0.2,
+              "&:hover": {
+                opacity: 1,
+              },
+            }}
+          >
+            CHANGE PASSWORD
+          </Button>
+          <Button
+            variant="default"
+            size="xs"
+            leftIcon={<IconUserX size={18} stroke={2} />}
+            sx={{
+              opacity: 0.2,
+              "&:hover": {
+                opacity: 1,
+              },
+            }}
+          >
+            DELETE ACCOUNT
+          </Button>
+        </Button.Group>
       </Group>
     </Box>
   );
