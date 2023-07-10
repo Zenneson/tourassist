@@ -651,39 +651,32 @@ export default function TripPlannerPage(props) {
                             sx={{
                               borderTop: "2px solid rgba(255,255,255,0.1)",
                               borderRadius: "3px",
-                              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
+                              boxShadow: "0 4px 7px 0 rgba(0,0,0,0.05)",
                               ".mantine-DatePicker-day[data-disabled]": {
                                 opacity: 0.25,
                               },
                               ".mantine-DatePicker-day[data-weekend]": {
-                                color: "#5fc5ee",
+                                color: "#91d4ee",
                               },
                               ".mantine-DatePicker-day[data-selected]": {
                                 backgroundColor: "#c4c4c4",
-                                borderTop: "5px solid #5fc5ee",
+                                borderTop: "5px solid #4096b8",
                                 color: "#404040",
                                 transition: "all 0.15s ease-in-out",
                                 borderRadius: "0 0 3px 3px",
-                                fontSize: "1.6rem",
+                                fontSize: "1.8rem",
                               },
                             }}
                           />
                         </Center>
-                        <Divider
-                          w={"100%"}
-                          mb={15}
-                          size={"sm"}
-                          opacity={0.15}
-                        />
                         <Autocomplete
                           size="sm"
-                          mt={17}
                           w={"100%"}
                           dropdownPosition="top"
                           variant="filled"
                           defaultValue=""
                           value={startLocaleSearch}
-                          placeholder="Leaving From..."
+                          placeholder="Departure Location..."
                           onItemSubmit={(e) => setStartLocale(e.value)}
                           ref={startLocaleRef}
                           data={startLocaleData}
@@ -879,7 +872,6 @@ export default function TripPlannerPage(props) {
                   <Input
                     size={"xl"}
                     placeholder="Title..."
-                    bg={"dark.7"}
                     variant="filled"
                     w="100%"
                     maw={800}
@@ -887,7 +879,7 @@ export default function TripPlannerPage(props) {
                     sx={{
                       ".mantine-Input-input": {
                         borderTop: "2px solid rgba(255,255,255,0.2)",
-                        background: "#0b0c0d",
+                        background: "dark.6",
                         "&::placeholder": {
                           fontWeight: 700,
                           fontStyle: "italic",

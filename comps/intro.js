@@ -252,7 +252,7 @@ export default function Intro({ auth }) {
                       onClick={() => {}}
                       leftIcon={
                         <IconInfoSquareRounded
-                          size={17}
+                          size={22}
                           color="rgba(255,255,255,0.25)"
                         />
                       }
@@ -271,7 +271,7 @@ export default function Intro({ auth }) {
                         setVisible(true);
                       }}
                       leftIcon={
-                        <IconWorld size={14} style={{ color: "#60E4FF" }} />
+                        <IconWorld size={20} style={{ color: "#60E4FF" }} />
                       }
                     >
                       Plan a trip

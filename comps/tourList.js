@@ -74,9 +74,10 @@ export default function TourList({
           </Droppable>
           <Center>
             <Button
-              radius="xl"
               size="sm"
               fw={700}
+              mt={30}
+              fullWidth
               onClick={() => {
                 setTripSelected(true);
                 const newPlaceData = places.map((place) => {
@@ -93,21 +94,13 @@ export default function TourList({
                 router.push("/tripplanner");
               }}
               sx={(theme) => ({
-                background: "#008554",
-                border: "1px solid #008554",
                 transition: "all 200ms ease-in-out",
-                color: "#003a24",
-                width: "80%",
-                marginTop: "20px",
-                opacity: 0.5,
+                opacity: 0.7,
                 fontWeight: 400,
                 "&:hover": {
                   opacity: 1,
                   color: "#fff",
-                  background: "#003a24",
-                  boxShadow: "0px 0px 15px 0px rgba(255, 255, 255, 0.03)",
                   transform: "scale(1.02)",
-                  border: "1px solid rgba(255, 255, 255, 0.05)",
                 },
               })}
             >
@@ -118,8 +111,8 @@ export default function TourList({
             pos={"absolute"}
             top={94}
             right={0}
+            bg={"dark.5"}
             sx={{
-              background: "rgba(8, 7, 11, 0.95)",
               borderRadius: "3px 0 0 3px",
               padding: "0 8px",
               transition: "all 100ms ease-in-out",

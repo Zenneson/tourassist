@@ -98,16 +98,6 @@ export default function AccountInfo() {
               />{" "}
               ADD BANKING INFO
             </Button>
-            {/* <Input
-              icon={<IconBrandTwitter size={20} />}
-              placeholder="@Twitter"
-              variant="filled"
-              rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
-                </ActionIcon>
-              }
-            /> */}
           </Group>
         </Flex>
         <Title
@@ -266,7 +256,10 @@ export default function AccountInfo() {
         w={"100%"}
         pos={"absolute"}
         bottom={10}
-        right={30}
+        right={-20}
+        sx={{
+          transform: "scale(0.85)",
+        }}
       >
         <Button.Group>
           <Button

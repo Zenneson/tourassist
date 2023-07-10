@@ -235,7 +235,7 @@ export default function TripContent({
               disabled={images.length === 6}
               style={{
                 border: "2px dashed rgba(255,255,255,0.05)",
-                backgroundColor: "rgba(255,255,255,0.01)",
+                backgroundColor: "#0c0c0c",
                 cursor: images.length === 6 ? "not-allowed" : "pointer",
               }}
             >
@@ -303,7 +303,7 @@ export default function TripContent({
       <RichTextEditor
         editor={editor}
         position="relative"
-        bg={editorFocused ? "#060607" : "dark.7"}
+        bg={editorFocused ? "#131314" : "dark.5"}
         onClick={() => {
           setShowToolbar(true);
           editor?.chain().focus().run();
@@ -326,11 +326,11 @@ export default function TripContent({
           maxHeight: donating ? "100px" : "300px",
           borderTop: "2px solid rgba(255,255,255,0.2)",
           ".mantine-RichTextEditor-content": {
-            background: editorFocused && "rgba(0, 0, 0, 0)",
-            color: editorFocused && "white",
+            background: "rgba(0, 0, 0, 0)",
+            color: editorFocused && "#fff",
           },
           ".mantine-RichTextEditor-toolbar": {
-            background: editorFocused && "rgba(0, 0, 0, 0)",
+            background: "rgba(0, 0, 0, 0)",
           },
         }}
       >

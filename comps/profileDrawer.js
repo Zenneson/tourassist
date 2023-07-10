@@ -178,9 +178,10 @@ export default function ProfileDrawer({
             >
               {user?.providerData[0].email}
             </Text>
+            <Divider w={"90%"} mt={5} ml={"5%"} opacity={0.2} />
           </Flex>
         )}
-        <Group spacing={8} mt={15}>
+        <Group spacing={8} mt={10}>
           {router.pathname !== "/" && (
             <NavLink
               label={
@@ -265,7 +266,7 @@ export default function ProfileDrawer({
         <Button
           variant="subtle"
           pos={"absolute"}
-          bottom={user ? 130 : 30}
+          bottom={user ? 100 : 30}
           w={"100%"}
           fz={10}
           color="gray.7"
@@ -287,8 +288,8 @@ export default function ProfileDrawer({
         </Button>
         {user && (
           <Box
-            py={30}
-            mb={20}
+            pt={10}
+            mb={30}
             sx={{
               borderTop: "1px solid rgba(255, 255, 255, 0.03)",
               position: "absolute",

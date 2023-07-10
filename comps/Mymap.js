@@ -616,12 +616,14 @@ export default function Mymap({
           <>
             <Popover
               opened={tourListDropDown}
-              offset={-60}
-              closeOnClickOutside={true}
+              offset={-85}
               width={"target"}
               styles={{
                 dropdown: {
+                  backgroundColor: "rgba(7, 7, 7, 1)",
                   border: "none",
+                  borderRadius: "0 0 3px 3px",
+                  borderTop: "2px solid rgba(255, 255, 255, 0.3)",
                 },
               }}
               onClick={() => {
@@ -630,6 +632,7 @@ export default function Mymap({
                   setProfileOpened(false);
                   setTourListDropDown(!tourListDropDown);
                 } else {
+                  setListOpened(false);
                   setTripSelected(true);
                   setPlaceData([
                     {
@@ -662,9 +665,9 @@ export default function Mymap({
                     regionName === "東京都" ? "Tokyo" : regionName
                   }`}
                   sx={{
-                    borderLeft: "2px solid rgba(0, 0, 0, 0)",
+                    borderLeft: "3px solid rgba(0, 0, 0, 0)",
                     "&:hover": {
-                      borderLeft: "2px solid  rgba(159, 245, 253, 0.7)",
+                      borderLeft: "3px solid  rgba(159, 245, 253, 0.4)",
                       transition: "all 0.2s ease-in-out",
                     },
                   }}
@@ -688,13 +691,14 @@ export default function Mymap({
                 />
               </Popover.Target>
               <Popover.Dropdown>
-                <Flex align={"center"} gap={3} fz={12}>
+                <Flex align={"flex-end"} gap={3} fz={12} fw={700}>
                   <IconFlag3 size={20} opacity={0.2} /> Clear Tour List and
                   Travel to
-                  <Text fw={700}>
+                  <Text fz={14}>
                     <Text
                       span
-                      color="blue.2"
+                      color="#81eaf4"
+                      mr={2}
                       sx={{
                         textTransform: "uppercase",
                       }}
@@ -707,10 +711,11 @@ export default function Mymap({
                 <Group spacing={10} mt={10} grow>
                   <Button
                     variant="light"
-                    color="blue.0"
+                    color="blue"
                     onClick={() => {
                       setTripSelected(true);
                       setProfileOpened(false);
+                      setListOpened(false);
                       setPlaces([]);
                       setPlaceData([
                         {
@@ -729,7 +734,7 @@ export default function Mymap({
                   </Button>
                   <Button
                     variant="light"
-                    color="red.0"
+                    color="red"
                     onClick={() => {
                       setTourListDropDown(false);
                     }}
@@ -739,7 +744,14 @@ export default function Mymap({
                 </Group>
               </Popover.Dropdown>
             </Popover>
-
+            <LoadingOverlay
+              visible={tourListDropDown}
+              overlayBlur={5}
+              overlayColor="#000"
+              overlayOpacity={0.15}
+              zIndex={3}
+              loader={<div></div>}
+            />
             <NavLink
               mb={10}
               icon={
@@ -756,9 +768,9 @@ export default function Mymap({
                 regionName === "東京都" ? "Tokyo" : regionName
               } to the Tour List`}
               sx={{
-                borderLeft: "2px solid rgba(0, 0, 0, 0)",
+                borderLeft: "3px solid rgba(0, 0, 0, 0)",
                 "&:hover": {
-                  borderLeft: "2px solid  rgba(159, 245, 253, 0.7)",
+                  borderLeft: "3px solid  rgba(159, 245, 253, 0.4)",
                   transition: "all 0.2s ease-in-out",
                 },
               }}
@@ -795,10 +807,10 @@ export default function Mymap({
           </>
         )}
         {!isCity && (isCountry || isState) && (
-          <Box pos={"relative"}>
+          <Box>
             <LoadingOverlay
               overlayOpacity={0}
-              overlayBlur={2}
+              overlayBlur={5}
               visible={cityListSet === false}
             />
             <Divider
@@ -827,7 +839,7 @@ export default function Mymap({
               mt={15}
               variant={"filled"}
               icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-              placeholder={`Pick a city in ${
+              placeholder={`Search for a city in ${
                 regionName === "東京都" ? "Tokyo" : regionName
               }?`}
               defaultValue=""
