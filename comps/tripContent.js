@@ -133,7 +133,8 @@ export default function TripContent({
     const canvas = cropperRef.current.getImage();
     const dataUrl = canvas.toDataURL();
 
-    const blob = await (await fetch(dataUrl)).blob(); // convert dataUrl to Blob
+    const response = await fetch(dataUrl);
+    const blob = await response.blob(); // convert dataUrl to Blob
 
     const options = {
       maxSizeMB: 0.5,
@@ -142,23 +143,27 @@ export default function TripContent({
 
     try {
       const compressedFile = await imageCompression(blob, options); // compress image
-      const compressedDataUrl = URL.createObjectURL(compressedFile); // convert Blob to dataUrl
 
-      setImages((prevImages) => {
-        const newImages = [...prevImages, compressedDataUrl]; // create new images array
-        return newImages; // return new images array to update state
-      });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const compressedDataUrl = reader.result; // convert Blob to dataUrl
 
-      // use setTimeout to ensure that the state has been updated before calling slickGoTo
-      setTimeout(() => {
-        sliderRef.current.slickGoTo(images.length); // go to the last slide
-      }, 0);
+        setImages((prevImages) => {
+          const newImages = [...prevImages, compressedDataUrl]; // create new images array
+          return newImages; // return new images array to update state
+        });
 
-      setProcessingImage(false);
-      setImageUpload(null);
-      setScale(1);
+        // use setTimeout to ensure that the state has been updated before calling slickGoTo
+        setTimeout(() => {
+          sliderRef.current.slickGoTo(images.length); // go to the last slide
+        }, 0);
 
-      cropperContainerRef.current.style.display = "block"; // show the cropper again
+        setProcessingImage(false);
+        setImageUpload(null);
+        setScale(1);
+      };
+      reader.onerror = (error) => console.error("Error: ", error);
+      reader.readAsDataURL(compressedFile);
     } catch (error) {
       console.error(error);
     }
