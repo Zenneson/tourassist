@@ -21,6 +21,7 @@ export default function App(props) {
   const [searchOpened, setSearchOpened] = useState(false);
   const [tripSelected, setTripSelected] = useState(false);
   const [places, setPlaces] = useState([]);
+  const [dropDownOpened, setDropDownOpened] = useState(false);
   const auth = getAuth(app);
 
   return (
@@ -98,6 +99,8 @@ export default function App(props) {
               setSearchOpened={setSearchOpened}
               loginOpened={loginOpened}
               setTripSelected={setTripSelected}
+              dropDownOpened={dropDownOpened}
+              setDropDownOpened={setDropDownOpened}
               auth={auth}
             />
           }
@@ -115,6 +118,8 @@ export default function App(props) {
             loginOpened={loginOpened}
             tripSelected={tripSelected}
             setTripSelected={setTripSelected}
+            dropDownOpened={dropDownOpened}
+            setDropDownOpened={setDropDownOpened}
             auth={auth}
           />
         </AppShell>

@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
 import { useLocalStorage } from "@mantine/hooks";
+import { motion } from "framer-motion";
 import {
+  Box,
   Header,
   Button,
   Image,
@@ -18,6 +20,7 @@ import {
   IconSearch,
   IconDoorExit,
   IconCircleX,
+  IconInfoCircleFilled,
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
 
@@ -33,6 +36,8 @@ export default function MainMenu({
   setSearchOpened,
   loginOpened,
   setTripSelected,
+  dropDownOpened,
+  setDropDownOpened,
   auth,
 }) {
   const [logoutOpeened, setLogoutOpeened] = useState(false);
@@ -83,8 +88,8 @@ export default function MainMenu({
           direction={"row"}
           align="center"
           gap={10}
-          mt={0}
-          ml={-15}
+          mt={5}
+          ml={-10}
           sx={{
             cursor: "pointer",
           }}
@@ -110,7 +115,7 @@ export default function MainMenu({
             ASSIST
           </Title>
         </Flex>
-        <Group px={0} py={10} m={0}>
+        <Flex align={"center"} gap={10} px={0} py={10} m={0} mt={5} mr={5}>
           {user && (
             <Button
               variant="subtle"
@@ -125,7 +130,7 @@ export default function MainMenu({
                 setActive(-1);
               }}
             >
-              <Text fz={12} c="rgba(255, 255, 255, 0.5)">
+              <Text fz={12} c="#a5d8ff">
                 {user?.providerData[0].email}
               </Text>
             </Button>
@@ -149,6 +154,7 @@ export default function MainMenu({
                   setSearchOpened(!searchOpened);
                   setProfileOpened(false);
                   setProfileShow(false);
+                  setDropDownOpened(false);
                 }}
                 variant="subtle"
                 radius="xl"
@@ -231,7 +237,30 @@ export default function MainMenu({
               </Popover>
             )}
           </Group>
-        </Group>
+          <motion.div
+            animate={{
+              opacity: [
+                1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 0.3, 0, 0.3, 0, 1,
+              ],
+            }}
+            transition={{ duration: 4, repeat: Infinity }}
+          >
+            <IconInfoCircleFilled
+              stroke={1}
+              size={30}
+              style={{
+                color: "#a5d8ff",
+                paddingTop: "2px",
+                cursor: "pointer",
+                transform: "scale(1.05)",
+              }}
+              onClick={() => {
+                setDropDownOpened((o) => !o);
+              }}
+            />
+          </motion.div>
+        </Flex>
       </Header>
     </>
   );

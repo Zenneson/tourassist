@@ -1,5 +1,6 @@
 import Mymap from "../comps/mymap";
 import Intro from "../comps/intro";
+import DropDown from "../comps/dropdown";
 
 export default function Home(props) {
   let setProfileShow = props.setProfileShow;
@@ -12,11 +13,17 @@ export default function Home(props) {
   let loginOpened = props.loginOpened;
   let tripSelected = props.tripSelected;
   let setTripSelected = props.setTripSelected;
+  let dropDownOpened = props.dropDownOpened;
+  let setDropDownOpened = props.setDropDownOpened;
   let auth = props.auth;
 
   return (
     <>
       <Intro auth={auth} />
+      <DropDown
+        dropDownOpened={dropDownOpened}
+        setDropDownOpened={setDropDownOpened}
+      />
       <Mymap
         setProfileShow={setProfileShow}
         setProfileOpened={setProfileOpened}
@@ -28,6 +35,7 @@ export default function Home(props) {
         loginOpened={loginOpened}
         tripSelected={tripSelected}
         setTripSelected={setTripSelected}
+        dropDownOpened={dropDownOpened}
       />
     </>
   );

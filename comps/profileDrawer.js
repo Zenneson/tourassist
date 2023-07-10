@@ -339,6 +339,7 @@ export default function ProfileDrawer({
         )}
       </Drawer>
       <Drawer
+        zIndex={499}
         opened={profileShow}
         padding="24px 25px 24px 330px"
         size={900}

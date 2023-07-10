@@ -43,6 +43,7 @@ export default function Mymap({
   loginOpened,
   tripSelected,
   setTripSelected,
+  dropDownOpened,
 }) {
   const mapRef = useRef();
   const center = useRef();
@@ -526,7 +527,7 @@ export default function Mymap({
     <>
       <LoadingOverlay
         visible={!mapLoaded || tripSelected}
-        overlayColor="#000"
+        overlayColor="#0b0c0d"
         overlayOpacity={1}
         zIndex={1000}
         transitionDuration={250}
@@ -747,7 +748,7 @@ export default function Mymap({
             <LoadingOverlay
               visible={tourListDropDown}
               overlayBlur={5}
-              overlayColor="#000"
+              overlayColor="#0b0c0d"
               overlayOpacity={0.15}
               zIndex={3}
               loader={<div></div>}
@@ -809,8 +810,8 @@ export default function Mymap({
         {!isCity && (isCountry || isState) && (
           <Box>
             <LoadingOverlay
-              overlayOpacity={0}
-              overlayBlur={5}
+              overlayOpacity={0.7}
+              overlayBlur={3}
               visible={cityListSet === false}
             />
             <Divider
@@ -873,42 +874,46 @@ export default function Mymap({
           </Box>
         )}
       </Modal>
-      {!loginOpened && !searchOpened && visible && !mapSpin && (
-        <Flex
-          justify="center"
-          align="center"
-          pos={"absolute"}
-          bottom={"100px"}
-          w={"100%"}
-        >
-          <Autocomplete
-            icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-            dropdownPosition="top"
-            variant={"filled"}
-            size="md"
-            radius="xl"
-            defaultValue=""
-            value={countrySearch}
-            placeholder="Where would you like to go?"
-            onItemSubmit={(e) => handleSelect(e)}
-            ref={countryAutoRef}
-            data={countryData}
-            filter={(value, item) => item}
-            style={{
-              width: "350px",
-              zIndex: 98,
-            }}
-            onClick={function (event) {
-              event.preventDefault();
-              countryAutoRef.current.select();
-            }}
-            onChange={function (e) {
-              setCountrySearch(e);
-              handleChange("country", e);
-            }}
-          />
-        </Flex>
-      )}
+      {!loginOpened &&
+        !searchOpened &&
+        visible &&
+        !mapSpin &&
+        !dropDownOpened && (
+          <Flex
+            justify="center"
+            align="center"
+            pos={"absolute"}
+            bottom={"100px"}
+            w={"100%"}
+          >
+            <Autocomplete
+              icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
+              dropdownPosition="top"
+              variant={"filled"}
+              size="md"
+              radius="xl"
+              defaultValue=""
+              value={countrySearch}
+              placeholder="Where would you like to go?"
+              onItemSubmit={(e) => handleSelect(e)}
+              ref={countryAutoRef}
+              data={countryData}
+              filter={(value, item) => item}
+              style={{
+                width: "350px",
+                zIndex: 98,
+              }}
+              onClick={function (event) {
+                event.preventDefault();
+                countryAutoRef.current.select();
+              }}
+              onChange={function (e) {
+                setCountrySearch(e);
+                handleChange("country", e);
+              }}
+            />
+          </Flex>
+        )}
       {/* TODO    */}
       {geoLat && geoLng && (
         <Map
