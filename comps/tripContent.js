@@ -48,6 +48,7 @@ export default function TripContent({
   const [loading, setLoading] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
   const [imageUpload, setImageUpload] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
   const [editorFocused, setEditorFocused] = useState(false);
@@ -143,12 +144,32 @@ export default function TripContent({
       const compressedFile = await imageCompression(blob, options); // compress image
       const compressedDataUrl = URL.createObjectURL(compressedFile); // convert Blob to dataUrl
 
-      setImages((prevImages) => [...prevImages, compressedDataUrl]); // add compressed image to the images array
+      setImages((prevImages) => {
+        const newImages = [...prevImages, compressedDataUrl]; // create new images array
+        return newImages; // return new images array to update state
+      });
+
+      // use setTimeout to ensure that the state has been updated before calling slickGoTo
+      setTimeout(() => {
+        sliderRef.current.slickGoTo(images.length); // go to the last slide
+      }, 0);
+
       setProcessingImage(false);
+      setImageUpload(null);
+      setScale(1);
+
+      cropperContainerRef.current.style.display = "block"; // show the cropper again
     } catch (error) {
       console.error(error);
     }
   }
+
+  const addImage = () => {
+    cropperContainerRef.current.style.display = "none"; // hide the cropper
+    setProcessingImage(true);
+    // Start the image compression operation in a new event loop
+    setTimeout(() => addCroppedImage(), 0);
+  };
 
   return (
     <>
@@ -161,7 +182,6 @@ export default function TripContent({
                 overflow: "hidden",
               }}
             >
-              <LoadingOverlay visible={processingImage} overlayBlur={3} />
               <Slider
                 ref={sliderRef}
                 afterChange={setActiveSlide}
@@ -226,6 +246,7 @@ export default function TripContent({
               onDrop={(files) => {
                 setImageUpload(files[0]);
                 setLoading(true);
+                setShowCropper(true);
               }}
               onReject={(files) => console.log("rejected files", files)}
               accept={IMAGE_MIME_TYPE}
@@ -290,7 +311,7 @@ export default function TripContent({
               py={12}
               fz={12}
               ta={"center"}
-              bg={"dark.7"}
+              bg={"#131314"}
               sx={{
                 borderRadius: "3px",
               }}
@@ -303,7 +324,7 @@ export default function TripContent({
       <RichTextEditor
         editor={editor}
         position="relative"
-        bg={editorFocused ? "#131314" : "dark.5"}
+        bg={editorFocused ? "#373A40" : "dark.5"}
         onClick={() => {
           setShowToolbar(true);
           editor?.chain().focus().run();
@@ -331,6 +352,7 @@ export default function TripContent({
           },
           ".mantine-RichTextEditor-toolbar": {
             background: "rgba(0, 0, 0, 0)",
+            borderColor: "rgba(255,255,255,0.2)",
           },
         }}
       >
@@ -367,12 +389,12 @@ export default function TripContent({
           }}
         />
       </RichTextEditor>
-      {imageUpload && (
+      {showCropper && imageUpload && (
         <>
           <Box
             ref={cropperContainerRef}
             pos={"absolute"}
-            top={50}
+            top={40}
             sx={{
               zIndex: 1000,
               opacity: loading ? 0 : 1,
@@ -383,8 +405,8 @@ export default function TripContent({
               ref={cropperRef}
               width={585}
               height={450}
-              border={40}
-              color={[0, 0, 0, 0.95]} // RGBA
+              border={50}
+              color={[0, 0, 0, 0.7]} // RGBA
               image={imageUpload}
               borderRadius={3}
               scale={scale}
@@ -432,19 +454,18 @@ export default function TripContent({
                 size="xl"
                 variant="default"
                 opacity={0.3}
-                onClick={() => {
-                  cropperContainerRef.current.style.opacity = 0;
-                  setProcessingImage(true);
-                  addCroppedImage();
-                  setImageUpload(null);
-                  setScale(1);
-                }}
+                onClick={addImage}
               >
                 <IconCheck stroke={5} size={35} />
               </Button>
             </Group>
           </Box>
           <Overlay opacity={0.3} blur={7} />
+          <LoadingOverlay
+            visible={processingImage}
+            overlayBlur={0}
+            overlayOpacity={0}
+          />
         </>
       )}
     </>

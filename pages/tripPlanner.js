@@ -224,10 +224,10 @@ export default function TripPlannerPage(props) {
           p={20}
           mb={20}
           radius={3}
-          bg={"rgba(0,0,0,0.2)"}
+          bg={"rgba(0,0,0,0.3)"}
           sx={{
             borderRadius: "3px",
-            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
+            boxShadow: "0px 4px 10px rgba(0,0,0,0.3)",
             borderTop: "2px solid rgba(255,255,255,0.1)",
           }}
         >
@@ -597,7 +597,7 @@ export default function TripPlannerPage(props) {
                         pb={10}
                         px={20}
                         ml={40}
-                        bg={"rgba(0,0,0,0.08)"}
+                        bg={"rgba(0,0,0,0.3)"}
                         sx={{
                           borderRadius: "3px",
                           borderTop: "2px solid rgba(255,255,255,0.1)",
@@ -665,6 +665,9 @@ export default function TripPlannerPage(props) {
                                 transition: "all 0.15s ease-in-out",
                                 borderRadius: "0 0 3px 3px",
                                 fontSize: "1.8rem",
+                                "&:hover": {
+                                  backgroundColor: "#e2e2e2",
+                                },
                               },
                             }}
                           />
@@ -809,7 +812,7 @@ export default function TripPlannerPage(props) {
                     p={20}
                     mb={20}
                     radius={3}
-                    bg={"rgba(0,0,0,0.1)"}
+                    bg={"rgba(0,0,0,0.3)"}
                     sx={{
                       borderRadius: "3px",
                       boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
@@ -862,7 +865,7 @@ export default function TripPlannerPage(props) {
                   w={855}
                   align="center"
                   py={30}
-                  bg={"rgba(0,0,0,0.1)"}
+                  bg={"rgba(0,0,0,0.3)"}
                   spacing={25}
                   sx={{
                     boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
@@ -902,7 +905,7 @@ export default function TripPlannerPage(props) {
                     p={10}
                     pb={30}
                     w={"70%"}
-                    bg={"rgba(0,0,0,0.1)"}
+                    bg={"rgba(0,0,0,0.3)"}
                     sx={{
                       borderTop: "2px solid rgba(255,255,255,0.2)",
                     }}
@@ -921,7 +924,7 @@ export default function TripPlannerPage(props) {
                         size="xl"
                         w={"90%"}
                         sx={{
-                          textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                          textShadow: "0 2px 4px rgba(0,0,0,0.2)",
                         }}
                       >
                         <Title order={3}>ADD BANKING INFORMATION</Title>

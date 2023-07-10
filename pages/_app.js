@@ -7,6 +7,7 @@ import { Notifications } from "@mantine/notifications";
 import { RouterTransition } from "../comps/routertransition";
 import SearchModal from "../comps/searchModal";
 import MainMenu from "../comps/mainMenu";
+import DropDown from "../comps/dropdown";
 require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
@@ -20,7 +21,6 @@ export default function App(props) {
   const [listOpened, setListOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
   const [tripSelected, setTripSelected] = useState(false);
-  const [places, setPlaces] = useState([]);
   const [dropDownOpened, setDropDownOpened] = useState(false);
   const auth = getAuth(app);
 
@@ -48,7 +48,7 @@ export default function App(props) {
             styles: (theme) => ({ outline: "none" }),
             inputStyles: (theme) => ({
               outline: "none",
-              background: "#131314",
+              background: "#373A40",
               transition: "background 0.2s ease",
               color: "#fff",
               "&::placeholder": {
@@ -67,7 +67,7 @@ export default function App(props) {
               "#909296",
               "#5C5F66",
               "#373A40",
-              "#0c0c0c",
+              "#131314",
               "#101113",
               "#0b0c0d",
               "#050506",
@@ -77,12 +77,22 @@ export default function App(props) {
           TypographyStylesProvider: {
             fontFamily: "Homemade Apple",
           },
+          globalStyles: (theme) => ({
+            body: {
+              backgroundColor:
+                theme.colorScheme === "dark" ? "#0c0c0c" : theme.white,
+            },
+          }),
         }}
       >
         <Notifications position="top-center" />
         <SearchModal
           searchOpened={searchOpened}
           setSearchOpened={setSearchOpened}
+        />
+        <DropDown
+          dropDownOpened={dropDownOpened}
+          setDropDownOpened={setDropDownOpened}
         />
         <AppShell
           padding="none"
@@ -113,8 +123,6 @@ export default function App(props) {
             listOpened={listOpened}
             setListOpened={setListOpened}
             searchOpened={searchOpened}
-            places={places}
-            setPlaces={setPlaces}
             loginOpened={loginOpened}
             tripSelected={tripSelected}
             setTripSelected={setTripSelected}

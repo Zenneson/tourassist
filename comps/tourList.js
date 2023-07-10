@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { Drawer, Button, Divider, Center, Stack } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons-react";
 import PlaceListItem from "./placeListItem";
@@ -12,14 +11,7 @@ export default function TourList({
   places,
   setPlaces,
 }) {
-  const [placeData, setPlaceData] = useLocalStorage({
-    key: "placeDataState",
-    defaultValue: [],
-  });
   const router = useRouter();
-  const showLoader = () => {
-    setTripSelected(true);
-  };
 
   return (
     <>
@@ -59,9 +51,9 @@ export default function TourList({
                 {places.map((place, index) => (
                   <PlaceListItem
                     key={index}
-                    draggableId={place.name}
+                    draggableId={place.place}
                     index={index}
-                    name={place.name}
+                    place={place.place}
                     region={place.region}
                     setListOpened={setListOpened}
                     places={places}
@@ -80,17 +72,17 @@ export default function TourList({
               fullWidth
               onClick={() => {
                 setTripSelected(true);
-                const newPlaceData = places.map((place) => {
-                  const { name, region } = place;
+                const newPlaceData = places.map((location) => {
+                  const { place, region } = location;
                   return {
-                    place: name === "東京都" ? "Tokyo" : name,
+                    place: place === "東京都" ? "Tokyo" : place,
                     region:
                       region && region.replace("ecture東京都", "., Japan"),
-                    fullName: name + "," + region,
+                    fullName: place + "," + region,
                     costs: ["FLIGHT", "HOTEL"],
                   };
                 });
-                setPlaceData(newPlaceData);
+                setPlaces(newPlaceData);
                 router.push("/tripplanner");
               }}
               sx={(theme) => ({

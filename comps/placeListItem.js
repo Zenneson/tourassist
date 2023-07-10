@@ -4,7 +4,7 @@ import { Draggable } from "react-beautiful-dnd";
 
 export default function PlaceListItem({
   index,
-  name,
+  place,
   region,
   draggableId,
   setListOpened,
@@ -12,11 +12,17 @@ export default function PlaceListItem({
   setPlaces,
 }) {
   const handleRemove = () => {
-    setPlaces(places.filter((place) => place.name !== name));
+    setPlaces(places.filter((location) => location.place !== place));
+  };
+
+  const firstLetters = (str) => {
+    let words = str.split(" ");
+    let firstLetters = words.map((word) => word[0]);
+    return firstLetters.join("");
   };
 
   return (
-    <Draggable key={name} draggableId={draggableId} index={index}>
+    <Draggable key={place} draggableId={draggableId} index={index}>
       {(provided) => (
         <Grid
           {...provided.draggableProps}
@@ -78,12 +84,12 @@ export default function PlaceListItem({
               radius="xl"
               color="#00E8FC"
             >
-              {name[0]}
+              {firstLetters(place)}
             </Avatar>
           </Grid.Col>
           <Grid.Col span="auto">
             <Text size="md" fw={700}>
-              {name === "東京都" ? "Tokyo" : name}
+              {place === "東京都" ? "Tokyo" : place}
             </Text>
             <Text size="xs" sx={{ color: "rgba(255,255,255,0.3)" }}>
               {region && region.replace("ecture東京都", "., Japan")}

@@ -22,11 +22,12 @@ import {
   IconPlaylistAdd,
   IconLocation,
   IconPlaneTilt,
-  IconFlag3,
   IconAlertTriangle,
   IconMapPin,
   IconMapSearch,
   IconList,
+  IconX,
+  IconCheck,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../public/data/getNewCenter";
@@ -38,8 +39,6 @@ export default function Mymap({
   listOpened,
   setListOpened,
   searchOpened,
-  places,
-  setPlaces,
   loginOpened,
   tripSelected,
   setTripSelected,
@@ -79,7 +78,7 @@ export default function Mymap({
     defaultValue: null,
   });
   const [mapReady, setMapReady] = useState(false);
-  const [placeData, setPlaceData] = useLocalStorage({
+  const [places, setPlaces] = useLocalStorage({
     key: "placeDataState",
     defaultValue: [],
   });
@@ -206,7 +205,7 @@ export default function Mymap({
       );
 
       setPlaceLocation({
-        name: location,
+        place: location,
         region: result,
       });
 
@@ -282,7 +281,7 @@ export default function Mymap({
   const checkPlace = (place) => {
     let placeExists = false;
     places.forEach((p) => {
-      if (p.name === place.name && p.region === place.region) {
+      if (p.place === place.place && p.region === place.region) {
         placeExists = true;
       }
     });
@@ -635,7 +634,7 @@ export default function Mymap({
                 } else {
                   setListOpened(false);
                   setTripSelected(true);
-                  setPlaceData([
+                  setPlaces([
                     {
                       place: regionName === "東京都" ? "Tokyo" : regionName,
                       region:
@@ -692,18 +691,18 @@ export default function Mymap({
                 />
               </Popover.Target>
               <Popover.Dropdown>
-                <Flex align={"flex-end"} gap={3} fz={12} fw={700}>
-                  <IconFlag3 size={20} opacity={0.2} /> Clear Tour List and
-                  Travel to
-                  <Text fz={14}>
-                    <Text
-                      span
-                      color="#81eaf4"
-                      mr={2}
-                      sx={{
-                        textTransform: "uppercase",
-                      }}
-                    >
+                <Flex
+                  align={"center"}
+                  gap={3}
+                  fz={12}
+                  fw={100}
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Clear Tour List and Travel to
+                  <Text>
+                    <Text span color="#81eaf4" fw={700} mx={2}>
                       {regionName === "東京都" ? "Tokyo" : regionName}
                     </Text>
                     ?
@@ -711,14 +710,24 @@ export default function Mymap({
                 </Flex>
                 <Group spacing={10} mt={10} grow>
                   <Button
-                    variant="light"
-                    color="blue"
+                    variant="filled"
+                    opacity={0.7}
+                    color="red"
+                    onClick={() => {
+                      setTourListDropDown(false);
+                    }}
+                  >
+                    <IconX size={20} stroke={5} />
+                  </Button>
+                  <Button
+                    variant="filled"
+                    opacity={0.7}
                     onClick={() => {
                       setTripSelected(true);
                       setProfileOpened(false);
                       setListOpened(false);
                       setPlaces([]);
-                      setPlaceData([
+                      setPlaces([
                         {
                           place: regionName === "東京都" ? "Tokyo" : regionName,
                           region:
@@ -731,16 +740,7 @@ export default function Mymap({
                       router.push("/tripplanner");
                     }}
                   >
-                    YES
-                  </Button>
-                  <Button
-                    variant="light"
-                    color="red"
-                    onClick={() => {
-                      setTourListDropDown(false);
-                    }}
-                  >
-                    NO
+                    <IconCheck size={20} stroke={5} />
                   </Button>
                 </Group>
               </Popover.Dropdown>

@@ -7,6 +7,7 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
   return (
     <>
       <Drawer
+        zIndex={450}
         opened={dropDownOpened}
         position="top"
         size={"100%"}
@@ -15,7 +16,7 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
         styles={{
           content: {
             overflow: "hidden",
-            background: "rgba(11, 12, 13, 0.95)",
+            background: "rgba(11, 12, 13, 0.9)",
           },
           header: {
             background: "transparent",

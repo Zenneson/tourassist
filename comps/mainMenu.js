@@ -245,7 +245,7 @@ export default function MainMenu({
                 1, 1, 1, 1, 1, 1, 0.3, 0, 0.3, 0, 1,
               ],
             }}
-            transition={{ duration: 10, repeat: Infinity }}
+            transition={{ duration: 7, repeat: Infinity }}
           >
             <IconInfoCircleFilled
               stroke={1}
@@ -257,7 +257,7 @@ export default function MainMenu({
                 transform: "scale(1.25)",
               }}
               onClick={() => {
-                setDropDownOpened(true);
+                setDropDownOpened((o) => !o);
               }}
             />
           </motion.div>
