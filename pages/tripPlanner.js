@@ -170,9 +170,6 @@ export default function TripPlannerPage(props) {
         <NumberInput
           costid={costid}
           onChange={(value) => handleInputChange(value, costid)}
-          onClick={(e) => {
-            e.target.select();
-          }}
           defaultValue={costList[costid] || 0}
           icon={<IconCurrencyDollar />}
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
@@ -227,7 +224,7 @@ export default function TripPlannerPage(props) {
           p={20}
           mb={20}
           radius={3}
-          bg={"rgba(0,0,0,0.3)"}
+          bg={"rgba(0,0,0,0.2)"}
           sx={{
             borderRadius: "3px",
             boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
@@ -483,7 +480,7 @@ export default function TripPlannerPage(props) {
                     {startLocale && travelDates ? (
                       "Continue..."
                     ) : (
-                      <Text opacity={0.4}>
+                      <Text opacity={0.7}>
                         Provide the{" "}
                         <Text inherit span hidden={travelDates}>
                           Travel Start Date
@@ -549,22 +546,46 @@ export default function TripPlannerPage(props) {
                             ml={10}
                             mr={7}
                             size={"sm"}
+                            opacity={0.7}
                           />
                           <Group spacing={5} fz={12}>
                             <Title color="red" order={3}>
                               •
                             </Title>
                             {dayjs(travelDates).subtract(1, "day").format("LL")}
-                            <Text
-                              fw={700}
-                              fz={9}
-                              color="gray.7"
+                            <Flex
+                              align={"center"}
+                              gap={7}
+                              mt={-4}
+                              ml={-7}
                               sx={{
-                                textTransform: "uppercase",
+                                transform: "scale(0.85)",
                               }}
                             >
-                              ( Campgain Ends Day Before Travel )
-                            </Text>
+                              <Text fz={25} opacity={0.2}>
+                                (
+                              </Text>
+                              <Text
+                                mt={4}
+                                fw={700}
+                                fz={9}
+                                lh={1}
+                                ta={"center"}
+                                color="gray.7"
+                                sx={{
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                <Text fz={".68rem"} span>
+                                  Campgain Ends
+                                </Text>
+                                <br />
+                                Day Before Travel
+                              </Text>
+                              <Text fz={25} opacity={0.2}>
+                                )
+                              </Text>
+                            </Flex>
                           </Group>
                         </Flex>
                       )}
@@ -576,18 +597,19 @@ export default function TripPlannerPage(props) {
                         pb={10}
                         px={20}
                         ml={40}
-                        bg={"rgba(0,0,0,0.3)"}
+                        bg={"rgba(0,0,0,0.08)"}
                         sx={{
                           borderRadius: "3px",
                           borderTop: "2px solid rgba(255,255,255,0.1)",
-                          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.3)",
+                          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
                         }}
                       >
                         <Center>
                           <DatePicker
                             size={"lg"}
-                            mt={20}
-                            mb={10}
+                            my={30}
+                            p={10}
+                            bg={"rgba(255,255,255,0.005)"}
                             allowDeselect
                             firstDayOfWeek={0}
                             defaultDate={today}
@@ -627,18 +649,21 @@ export default function TripPlannerPage(props) {
                               );
                             }}
                             sx={{
+                              borderTop: "2px solid rgba(255,255,255,0.1)",
+                              borderRadius: "3px",
+                              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
                               ".mantine-DatePicker-day[data-disabled]": {
                                 opacity: 0.25,
                               },
                               ".mantine-DatePicker-day[data-weekend]": {
-                                color: "#4c8fb8",
+                                color: "#5fc5ee",
                               },
                               ".mantine-DatePicker-day[data-selected]": {
-                                backgroundColor: "#063068",
-                                color: "#fff",
-                                textShadow: "0 2px 3px rgba(0,0,0,0.4)",
-                                transform: "scale(1.1)",
-                                transition: "all 0.2s ease-in-out",
+                                backgroundColor: "#c4c4c4",
+                                borderTop: "5px solid #5fc5ee",
+                                color: "#404040",
+                                transition: "all 0.15s ease-in-out",
+                                borderRadius: "0 0 3px 3px",
                                 fontSize: "1.6rem",
                               },
                             }}
@@ -709,7 +734,7 @@ export default function TripPlannerPage(props) {
                             <Button
                               variant="filled"
                               color="dark.5"
-                              fz={25}
+                              fz={15}
                               onClick={() =>
                                 travelersHandlerRef.current.decrement()
                               }
@@ -718,20 +743,25 @@ export default function TripPlannerPage(props) {
                             </Button>
                             <NumberInput
                               hideControls
+                              variant="filled"
+                              type="number"
                               value={travelers}
                               onChange={(e) => setTravelers(e)}
                               handlersRef={travelersHandlerRef}
                               defaultValue={1}
+                              min={1}
                               styles={{
                                 input: {
                                   textAlign: "center",
+                                  fontWeight: 700,
+                                  fontSize: "1.1rem",
                                 },
                               }}
                             />
                             <Button
                               variant="filled"
                               color="dark.5"
-                              fz={25}
+                              fz={15}
                               onClick={() =>
                                 travelersHandlerRef.current.increment()
                               }
@@ -786,7 +816,7 @@ export default function TripPlannerPage(props) {
                     p={20}
                     mb={20}
                     radius={3}
-                    bg={"rgba(0,0,0,0.3)"}
+                    bg={"rgba(0,0,0,0.1)"}
                     sx={{
                       borderRadius: "3px",
                       boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
@@ -839,7 +869,7 @@ export default function TripPlannerPage(props) {
                   w={855}
                   align="center"
                   py={30}
-                  bg={"rgba(0,0,0,0.25)"}
+                  bg={"rgba(0,0,0,0.1)"}
                   spacing={25}
                   sx={{
                     boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
@@ -880,7 +910,7 @@ export default function TripPlannerPage(props) {
                     p={10}
                     pb={30}
                     w={"70%"}
-                    bg={"rgba(0,0,0,0.2)"}
+                    bg={"rgba(0,0,0,0.1)"}
                     sx={{
                       borderTop: "2px solid rgba(255,255,255,0.2)",
                     }}
@@ -939,6 +969,7 @@ export default function TripPlannerPage(props) {
               allowNextStepsSelect={false}
               miw={205}
               mt={20}
+              mb={-20}
               mr={20}
               size="xs"
               w="20%"
@@ -963,7 +994,6 @@ export default function TripPlannerPage(props) {
             {active > 0 && (
               <>
                 <Divider
-                  mt={-20}
                   mb={5}
                   opacity={0.5}
                   size={"xs"}
@@ -974,7 +1004,6 @@ export default function TripPlannerPage(props) {
                 <NumberInput
                   icon={<IconCurrencyDollar />}
                   size="xl"
-                  mb={20}
                   w={225}
                   value={costsSum}
                   onChange={(value) => {
@@ -1004,10 +1033,15 @@ export default function TripPlannerPage(props) {
                 />
               </>
             )}
+            {startLocale && travelDates && (
+              <Divider w={"100%"} my={15} opacity={0.5} />
+            )}
             {active !== 0 && (
               <Button
                 fullWidth
-                variant="default"
+                variant={"light"}
+                bg={"dark.5"}
+                c={"white"}
                 mb={10}
                 onClick={() => {
                   prevStep();
@@ -1019,8 +1053,9 @@ export default function TripPlannerPage(props) {
             {startLocale && travelDates && (
               <Button
                 fullWidth
-                variant={active === 3 ? "light" : "default"}
-                bg={active === 3 ? "blue" : "primary"}
+                variant={"light"}
+                bg={active === 3 ? "blue" : "dark.5"}
+                c={"white"}
                 onClick={() => {
                   if (active !== 3) {
                     nextStep();

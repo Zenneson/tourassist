@@ -14,6 +14,7 @@ export default function SearchModal({ searchOpened, setSearchOpened }) {
       <TextInput
         radius="xl"
         size="xl"
+        variant={"filled"}
         icon={<IconSearch />}
         placeholder="Search Trips..."
         styles={({ theme }) => ({

@@ -48,8 +48,12 @@ export default function App(props) {
             styles: (theme) => ({ outline: "none" }),
             inputStyles: (theme) => ({
               outline: "none",
-              background: "rgba(43, 43, 43, 0.15)",
+              background: "#060607",
               transition: "background 0.2s ease",
+              color: "#fff",
+              "&::placeholder": {
+                color: "#fff",
+              },
             }),
           },
           headings: {

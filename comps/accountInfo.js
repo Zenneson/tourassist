@@ -48,7 +48,7 @@ export default function AccountInfo() {
           gap={10}
           pl={20}
           pt={10}
-          pb={15}
+          pb={12}
           sx={{
             borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
           }}
@@ -87,16 +87,16 @@ export default function AccountInfo() {
               }
             />
             <Button variant="light" bg="#0D3F82" fz={12}>
-              ADD{" "}
               <IconBuildingBank
                 size={15}
                 stroke={3}
+                opacity={0.4}
                 style={{
-                  margin: "0 5px",
+                  marginRight: "5px",
                   marginBottom: "2px",
                 }}
               />{" "}
-              BANKING INFO
+              ADD BANKING INFO
             </Button>
             {/* <Input
               icon={<IconBrandTwitter size={20} />}
@@ -125,7 +125,7 @@ export default function AccountInfo() {
           gap={10}
           pl={20}
           pt={10}
-          pb={15}
+          pb={12}
           sx={{
             borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
           }}
@@ -183,14 +183,14 @@ export default function AccountInfo() {
             textTransform: "uppercase",
           }}
         >
-          Email Notifications
+          Notifications
         </Title>
         <Group
           grow
           align="stretch"
           fw={700}
           pt={10}
-          pb={15}
+          pb={12}
           sx={{
             borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
           }}

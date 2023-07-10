@@ -447,10 +447,9 @@ export default function Mymap({
       key={index}
       icon={<IconMapPin size={15} color="#9ff5fd" />}
       label={
-        <Flex align={"center"} fs={"italic"} fz={13}>
+        <Flex align={"center"} fs={"italic"} fz={13} fw={600}>
           <Text
             span
-            color="white"
             w={350}
             truncate
             sx={{
@@ -468,6 +467,7 @@ export default function Mymap({
           transition: "all 150ms ease",
           backgroundColor: "rgba(0,0,0,0)",
           opacity: 1,
+          color: "#fff",
         },
         "&:active": {
           transform: "scale(1)",
@@ -566,7 +566,7 @@ export default function Mymap({
         zIndex={100}
         opened={showModal}
         onClose={onClose}
-        padding={"15px 30px"}
+        padding={"15px 30px 20px 30px"}
         size={"470px"}
         overlayProps={{
           opacity: 0.5,
@@ -627,6 +627,7 @@ export default function Mymap({
               onClick={() => {
                 if (places.length > 0) {
                   setListOpened(true);
+                  setProfileOpened(false);
                   setTourListDropDown(!tourListDropDown);
                 } else {
                   setTripSelected(true);
@@ -661,7 +662,11 @@ export default function Mymap({
                     regionName === "東京都" ? "Tokyo" : regionName
                   }`}
                   sx={{
-                    borderRadius: "3px",
+                    borderLeft: "2px solid rgba(0, 0, 0, 0)",
+                    "&:hover": {
+                      borderLeft: "2px solid  rgba(159, 245, 253, 0.7)",
+                      transition: "all 0.2s ease-in-out",
+                    },
                   }}
                   label={
                     <>
@@ -705,7 +710,7 @@ export default function Mymap({
                     color="blue.0"
                     onClick={() => {
                       setTripSelected(true);
-                      setListOpened(false);
+                      setProfileOpened(false);
                       setPlaces([]);
                       setPlaceData([
                         {
@@ -736,6 +741,7 @@ export default function Mymap({
             </Popover>
 
             <NavLink
+              mb={10}
               icon={
                 <IconPlaylistAdd
                   size={25}
@@ -750,7 +756,11 @@ export default function Mymap({
                 regionName === "東京都" ? "Tokyo" : regionName
               } to the Tour List`}
               sx={{
-                borderRadius: "3px",
+                borderLeft: "2px solid rgba(0, 0, 0, 0)",
+                "&:hover": {
+                  borderLeft: "2px solid  rgba(159, 245, 253, 0.7)",
+                  transition: "all 0.2s ease-in-out",
+                },
               }}
               label={
                 <>
@@ -815,8 +825,9 @@ export default function Mymap({
             </Box>
             <Autocomplete
               mt={15}
+              variant={"filled"}
               icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-              placeholder={`Where in ${
+              placeholder={`Pick a city in ${
                 regionName === "東京都" ? "Tokyo" : regionName
               }?`}
               defaultValue=""
@@ -861,6 +872,7 @@ export default function Mymap({
           <Autocomplete
             icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
             dropdownPosition="top"
+            variant={"filled"}
             size="md"
             radius="xl"
             defaultValue=""

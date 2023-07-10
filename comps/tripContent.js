@@ -156,8 +156,6 @@ export default function TripContent({
         <Group maw={800} spacing={20} w="100%" grow>
           {images.length > 0 && (
             <Box
-              pos="relative"
-              top={4}
               sx={{
                 borderRadius: 3,
                 overflow: "hidden",
@@ -225,7 +223,6 @@ export default function TripContent({
           )}
           <Box>
             <Dropzone
-              mt={5}
               onDrop={(files) => {
                 setImageUpload(files[0]);
                 setLoading(true);
@@ -294,7 +291,6 @@ export default function TripContent({
               fz={12}
               ta={"center"}
               bg={"dark.7"}
-              opacity={0.3}
               sx={{
                 borderRadius: "3px",
               }}
@@ -307,7 +303,7 @@ export default function TripContent({
       <RichTextEditor
         editor={editor}
         position="relative"
-        bg={editorFocused ? "rgba(43, 43, 43, 0.3)" : "dark.7"}
+        bg={editorFocused ? "#060607" : "dark.7"}
         onClick={() => {
           setShowToolbar(true);
           editor?.chain().focus().run();
@@ -321,7 +317,6 @@ export default function TripContent({
         }}
         sx={{
           transition: "border-top 0.2s ease",
-          boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
           border: "none",
           overflow: "auto",
           width: "100%",
@@ -332,6 +327,7 @@ export default function TripContent({
           borderTop: "2px solid rgba(255,255,255,0.2)",
           ".mantine-RichTextEditor-content": {
             background: editorFocused && "rgba(0, 0, 0, 0)",
+            color: editorFocused && "white",
           },
           ".mantine-RichTextEditor-toolbar": {
             background: editorFocused && "rgba(0, 0, 0, 0)",
