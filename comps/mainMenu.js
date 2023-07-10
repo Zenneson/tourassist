@@ -82,6 +82,7 @@ export default function MainMenu({
           padding: "15px 25px",
           alignItems: "flex-start",
           justifyContent: "space-between",
+          pointerEvents: !visible && "none",
         }}
       >
         <Flex
@@ -244,19 +245,19 @@ export default function MainMenu({
                 1, 1, 1, 1, 1, 1, 0.3, 0, 0.3, 0, 1,
               ],
             }}
-            transition={{ duration: 4, repeat: Infinity }}
+            transition={{ duration: 10, repeat: Infinity }}
           >
             <IconInfoCircleFilled
               stroke={1}
               size={30}
               style={{
                 color: "#a5d8ff",
-                paddingTop: "2px",
+                paddingTop: "6px",
                 cursor: "pointer",
-                transform: "scale(1.05)",
+                transform: "scale(1.25)",
               }}
               onClick={() => {
-                setDropDownOpened((o) => !o);
+                setDropDownOpened(true);
               }}
             />
           </motion.div>
