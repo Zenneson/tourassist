@@ -25,10 +25,13 @@ import {
   IconPhone,
   IconBuildingBank,
 } from "@tabler/icons-react";
-import { useLocalStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 
 export default function AccountInfo() {
-  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
 
   return (
     <Box pr={30} mt={15} pos={"relative"} h={"calc(100vh - 120px)"}>

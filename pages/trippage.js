@@ -21,7 +21,7 @@ import {
   TextInput,
   Select,
 } from "@mantine/core";
-import { useHover, useToggle, useLocalStorage } from "@mantine/hooks";
+import { useHover, useToggle, useSessionStorage } from "@mantine/hooks";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -62,7 +62,10 @@ export default function Trippage() {
   const [readmore, toggle] = useToggle(["closed", "open"]);
   const router = useRouter();
 
-  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
 
   const images = [
     "img/women.jpg",

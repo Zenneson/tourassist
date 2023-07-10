@@ -1,6 +1,6 @@
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { useLocalStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
 import Money from "./money";
@@ -39,11 +39,7 @@ export default function ProfileDrawer({
   setTripSelected,
   auth,
 }) {
-  const [visible, setVisible] = useLocalStorage({
-    key: "visible",
-    defaultValue: false,
-  });
-  const [user, setUser] = useLocalStorage({ key: "user" });
+  const [user, setUser] = useSessionStorage({ key: "user" });
   const router = useRouter();
 
   const links = [
@@ -80,7 +76,7 @@ export default function ProfileDrawer({
       icon={item.icon}
       variant="subtle"
       onClick={() => {
-        localStorage.removeItem("images");
+        sessionStorage.removeItem("images");
         setActive(index);
         setProfileShow(true);
         {
@@ -201,10 +197,8 @@ export default function ProfileDrawer({
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
               onClick={() => {
-                localStorage.removeItem("images");
-                localStorage.setItem("noLogin", "true");
-                setProfileOpened(false);
-                setProfileShow(false);
+                sessionStorage.removeItem("images");
+                sessionStorage.setItem("noLogin", "true");
                 router.push("/");
               }}
               sx={{
@@ -243,9 +237,6 @@ export default function ProfileDrawer({
               icon={<IconInfoCircle size={30} opacity={0.1} />}
               variant="subtle"
               onClick={(e) => {
-                localStorage.removeItem("images");
-                setProfileOpened(false);
-                setProfileShow(false);
                 router.push("/help");
               }}
               sx={{
@@ -273,8 +264,6 @@ export default function ProfileDrawer({
           leftIcon={<IconGavel size={18} />}
           hidden={router.pathname === "/legal"}
           onClick={() => {
-            setProfileOpened(false);
-            setProfileShow(false);
             router.push("/legal");
           }}
           sx={{
@@ -316,13 +305,11 @@ export default function ProfileDrawer({
               onClick={() => {
                 signOut(auth)
                   .then(() => {
-                    localStorage.removeItem("images");
-                    localStorage.removeItem("user");
-                    localStorage.removeItem("visible");
-                    localStorage.removeItem("mapSpin");
-                    localStorage.removeItem("placeDataState");
-                    setProfileOpened(false);
-                    setProfileShow(false);
+                    sessionStorage.removeItem("images");
+                    sessionStorage.removeItem("user");
+                    sessionStorage.removeItem("visible");
+                    sessionStorage.removeItem("mapSpin");
+                    sessionStorage.removeItem("placeDataState");
                     if (router.pathname !== "/") router.push("/");
                     else {
                       router.reload();
@@ -418,11 +405,7 @@ export default function ProfileDrawer({
               placeholder="Help me raise money to go on a Music Tour"
               data={["Help me raise money to go on a Music Tour"]}
             />
-            <Money
-              setProfileShow={setProfileShow}
-              setProfileOpened={setProfileOpened}
-              setTripSelected={setTripSelected}
-            />
+            <Money setTripSelected={setTripSelected} />
           </motion.div>
         )}
       </Drawer>

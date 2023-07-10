@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
-import { useLocalStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import {
   Box,
@@ -34,21 +34,22 @@ export default function MainMenu({
   setListOpened,
   searchOpened,
   setSearchOpened,
-  loginOpened,
   setTripSelected,
-  dropDownOpened,
   setDropDownOpened,
   auth,
 }) {
   const [logoutOpeened, setLogoutOpeened] = useState(false);
-  const [mapSpin, setMapSpin] = useLocalStorage({
+  const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
   });
-  const [visible, setVisible] = useLocalStorage({
+  const [visible, setVisible] = useSessionStorage({
     key: "visible",
     defaultValue: false,
   });
-  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
 
   useEffect(() => {
     if (user) {
@@ -76,7 +77,7 @@ export default function MainMenu({
         pb={0}
         withBorder={false}
         height={1} // that that the header does not block the middele of the top
-        opacity={!visible || searchOpened || loginOpened || mapSpin ? 0 : 1}
+        opacity={!visible || searchOpened || mapSpin ? 0 : 1}
         sx={{
           display: "flex",
           padding: "15px 25px",
@@ -215,13 +216,11 @@ export default function MainMenu({
                     onClick={function () {
                       signOut(auth)
                         .then(() => {
-                          localStorage.removeItem("images");
-                          localStorage.removeItem("user");
-                          localStorage.removeItem("visible");
-                          localStorage.removeItem("mapSpin");
-                          localStorage.removeItem("placeDataState");
-                          setProfileOpened(false);
-                          setProfileShow(false);
+                          sessionStorage.removeItem("images");
+                          sessionStorage.removeItem("user");
+                          sessionStorage.removeItem("visible");
+                          sessionStorage.removeItem("mapSpin");
+                          sessionStorage.removeItem("placeDataState");
                           if (router.pathname !== "/") router.push("/");
                           else {
                             router.reload();
@@ -252,7 +251,7 @@ export default function MainMenu({
               size={30}
               style={{
                 color: "#a5d8ff",
-                paddingTop: "6px",
+                paddingTop: "3px",
                 cursor: "pointer",
                 transform: "scale(1.25)",
               }}

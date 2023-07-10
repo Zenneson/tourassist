@@ -22,11 +22,7 @@ import {
   Tooltip,
 } from "chart.js";
 
-export default function Money({
-  setProfileShow,
-  setProfileOpened,
-  setTripSelected,
-}) {
+export default function Money({ setTripSelected }) {
   const router = useRouter();
 
   ChartJS.register(
@@ -154,8 +150,6 @@ export default function Money({
             }}
             onClick={() => {
               setTripSelected(true);
-              setProfileOpened(false);
-              setProfileShow(false);
               router.push("/trippage");
             }}
           >

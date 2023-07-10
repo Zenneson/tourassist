@@ -2,11 +2,20 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 
-export function RouterTransition() {
+export function RouterTransition({
+  setProfileShow,
+  setProfileOpened,
+  setDropDownOpened,
+}) {
   const router = useRouter();
 
   useEffect(() => {
-    const handleStart = (url) => url !== router.asPath && nprogress.start();
+    const handleStart = (url) => {
+      url !== router.asPath && nprogress.start();
+      setProfileShow(false);
+      setProfileOpened(false);
+      setDropDownOpened(false);
+    };
     const handleComplete = () => nprogress.complete();
 
     router.events.on("routeChangeStart", handleStart);
@@ -18,7 +27,13 @@ export function RouterTransition() {
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
-  }, [router.asPath, router.events]);
+  }, [
+    router.asPath,
+    router.events,
+    setProfileShow,
+    setProfileOpened,
+    setDropDownOpened,
+  ]);
 
   return (
     <NavigationProgress

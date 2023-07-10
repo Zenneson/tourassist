@@ -16,7 +16,7 @@ import {
 } from "@mantine/core";
 import { IconWorld, IconInfoSquareRounded } from "@tabler/icons-react";
 import {
-  useLocalStorage,
+  useSessionStorage,
   useMediaQuery,
   useViewportSize,
 } from "@mantine/hooks";
@@ -27,12 +27,15 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function Intro({ auth }) {
   const [opened, setOpened] = useState(false);
-  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
-  const [visible, setVisible] = useLocalStorage({
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
+  const [visible, setVisible] = useSessionStorage({
     key: "visible",
     defaultValue: false,
   });
-  const [mapSpin, setMapSpin] = useLocalStorage({
+  const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
     defaultValue: false,
   });
@@ -43,7 +46,7 @@ export default function Intro({ auth }) {
   const firstDown = useMediaQuery("(max-width: 950px)");
 
   useEffect(() => {
-    if (user || localStorage.getItem("noLogin")) {
+    if (user || sessionStorage.getItem("noLogin")) {
       setVisible(true);
       setMapSpin(false);
     } else {

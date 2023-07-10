@@ -12,9 +12,8 @@ require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
 
-export default function App(props) {
+export default function Money(props) {
   const { Component, pageProps } = props;
-  const [loginOpened, setLoginOpened] = useState(false);
   const [active, setActive] = useState(-1);
   const [profileShow, setProfileShow] = useState(false);
   const [profileOpened, setProfileOpened] = useState(false);
@@ -107,15 +106,17 @@ export default function App(props) {
               setListOpened={setListOpened}
               searchOpened={searchOpened}
               setSearchOpened={setSearchOpened}
-              loginOpened={loginOpened}
               setTripSelected={setTripSelected}
-              dropDownOpened={dropDownOpened}
               setDropDownOpened={setDropDownOpened}
               auth={auth}
             />
           }
         >
-          <RouterTransition />
+          <RouterTransition
+            setProfileOpened={setProfileOpened}
+            setProfileShow={setProfileShow}
+            setDropDownOpened={setDropDownOpened}
+          />
           <Component
             {...pageProps}
             setProfileShow={setProfileShow}
@@ -123,7 +124,6 @@ export default function App(props) {
             listOpened={listOpened}
             setListOpened={setListOpened}
             searchOpened={searchOpened}
-            loginOpened={loginOpened}
             tripSelected={tripSelected}
             setTripSelected={setTripSelected}
             dropDownOpened={dropDownOpened}

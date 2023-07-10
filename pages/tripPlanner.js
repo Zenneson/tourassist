@@ -25,7 +25,7 @@ import {
 import {
   useForceUpdate,
   useWindowEvent,
-  useLocalStorage,
+  useSessionStorage,
 } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import LoginComp from "../comps/loginComp";
@@ -51,8 +51,11 @@ import TripContent from "../comps/tripContent";
 
 export default function TripPlannerPage(props) {
   let auth = props.auth;
-  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
-  const [images, setImages] = useLocalStorage({
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
+  const [images, setImages] = useSessionStorage({
     key: "images",
     defaultValue: [],
   });
@@ -68,7 +71,7 @@ export default function TripPlannerPage(props) {
   const [newCost, setNewCost] = useState([]);
   const newCostRef = useRef(null);
   const router = useRouter();
-  const [placeData, setPlaceData] = useLocalStorage({
+  const [placeData, setPlaceData] = useSessionStorage({
     key: "placeDataState",
     defaultValue: [],
   });
@@ -1056,7 +1059,7 @@ export default function TripPlannerPage(props) {
                     nextStep();
                   }
                   if (active === 3) {
-                    // localStorage.removeItem("placeDataState");
+                    // sessionStorage.removeItem("placeDataState");
                     setImages([]);
                     router.push("/trippage");
                   }

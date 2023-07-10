@@ -24,7 +24,7 @@ import {
   createStyles,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useToggle, useLocalStorage } from "@mantine/hooks";
+import { useToggle, useSessionStorage } from "@mantine/hooks";
 import {
   IconBrandGoogle,
   IconBrandTwitter,
@@ -44,8 +44,11 @@ export default function LoginComp({ auth }) {
   const [passValue, setPassValue] = useState("");
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const router = useRouter();
-  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
-  const [visible, setVisible] = useLocalStorage({
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
+  const [visible, setVisible] = useSessionStorage({
     key: "visible",
     defaultValue: false,
   });
@@ -227,13 +230,12 @@ export default function LoginComp({ auth }) {
                 <IconBrandGoogle size={15} />
               )
             }
-            variant="default"
+            variant="light"
+            bg="dark.5"
+            color="gray.5"
             size="sm"
             py={5}
             leftIcon={<IconBrandGoogle size={15} />}
-            sx={{
-              color: "rgba(255,255,255,0.3)",
-            }}
           >
             Google
           </Button>
@@ -245,13 +247,12 @@ export default function LoginComp({ auth }) {
                 <IconBrandTwitter size={15} />
               )
             }
-            variant="default"
+            variant="light"
+            bg="dark.5"
+            color="gray.5"
             size="sm"
             py={5}
             leftIcon={<IconBrandTwitter size={15} />}
-            sx={{
-              color: "rgba(255,255,255,0.3)",
-            }}
           >
             Twitter
           </Button>
@@ -298,6 +299,7 @@ export default function LoginComp({ auth }) {
             <TextInput
               required
               label="Email"
+              variant="filled"
               placeholder="johndoe@gmail.com"
               classNames={classes3}
               value={form.values.email}
@@ -326,6 +328,7 @@ export default function LoginComp({ auth }) {
                   <PasswordInput
                     required
                     label="Password"
+                    variant="filled"
                     classNames={classes4}
                     value={form.values.password}
                     onChange={(event) => {
@@ -393,7 +396,9 @@ export default function LoginComp({ auth }) {
                 mt={0}
                 fw={700}
                 uppercase={true}
-                variant="default"
+                variant="light"
+                bg="dark.5"
+                c="gray.5"
                 sx={{ color: "rgba(255,255,255,0.3)" }}
                 type="submit"
               >

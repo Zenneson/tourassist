@@ -17,7 +17,7 @@ import {
   Popover,
   Button,
 } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   IconPlaylistAdd,
   IconLocation,
@@ -39,7 +39,6 @@ export default function Mymap({
   listOpened,
   setListOpened,
   searchOpened,
-  loginOpened,
   tripSelected,
   setTripSelected,
   dropDownOpened,
@@ -66,27 +65,30 @@ export default function Mymap({
   const [placeLocation, setPlaceLocation] = useState({});
   const [tourListDropDown, setTourListDropDown] = useState(false);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [user, setUser] = useLocalStorage({ key: "user", defaultValue: null });
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
   const [topCities, setTopCities] = useState([]);
   const [cityListSet, setCityListSet] = useState(false);
-  const [geoLat, setGeoLat] = useLocalStorage({
+  const [geoLat, setGeoLat] = useSessionStorage({
     key: "geoLatState",
     defaultValue: null,
   });
-  const [geoLng, setGeoLng] = useLocalStorage({
+  const [geoLng, setGeoLng] = useSessionStorage({
     key: "geoLngState",
     defaultValue: null,
   });
   const [mapReady, setMapReady] = useState(false);
-  const [places, setPlaces] = useLocalStorage({
+  const [places, setPlaces] = useSessionStorage({
     key: "placeDataState",
     defaultValue: [],
   });
-  const [visible, setVisible] = useLocalStorage({
+  const [visible, setVisible] = useSessionStorage({
     key: "visible",
     defaultValue: false,
   });
-  const [mapSpin, setMapSpin] = useLocalStorage({
+  const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
     defaultValue: true,
   });
@@ -632,7 +634,6 @@ export default function Mymap({
                   setProfileOpened(false);
                   setTourListDropDown(!tourListDropDown);
                 } else {
-                  setListOpened(false);
                   setTripSelected(true);
                   setPlaces([
                     {
@@ -724,9 +725,6 @@ export default function Mymap({
                     opacity={0.7}
                     onClick={() => {
                       setTripSelected(true);
-                      setProfileOpened(false);
-                      setListOpened(false);
-                      setPlaces([]);
                       setPlaces([
                         {
                           place: regionName === "東京都" ? "Tokyo" : regionName,
@@ -874,46 +872,42 @@ export default function Mymap({
           </Box>
         )}
       </Modal>
-      {!loginOpened &&
-        !searchOpened &&
-        visible &&
-        !mapSpin &&
-        !dropDownOpened && (
-          <Flex
-            justify="center"
-            align="center"
-            pos={"absolute"}
-            bottom={"100px"}
-            w={"100%"}
-          >
-            <Autocomplete
-              icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-              dropdownPosition="top"
-              variant={"filled"}
-              size="md"
-              radius="xl"
-              defaultValue=""
-              value={countrySearch}
-              placeholder="Where would you like to go?"
-              onItemSubmit={(e) => handleSelect(e)}
-              ref={countryAutoRef}
-              data={countryData}
-              filter={(value, item) => item}
-              style={{
-                width: "350px",
-                zIndex: 98,
-              }}
-              onClick={function (event) {
-                event.preventDefault();
-                countryAutoRef.current.select();
-              }}
-              onChange={function (e) {
-                setCountrySearch(e);
-                handleChange("country", e);
-              }}
-            />
-          </Flex>
-        )}
+      {!searchOpened && visible && !mapSpin && !dropDownOpened && (
+        <Flex
+          justify="center"
+          align="center"
+          pos={"absolute"}
+          bottom={"100px"}
+          w={"100%"}
+        >
+          <Autocomplete
+            icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
+            dropdownPosition="top"
+            variant={"filled"}
+            size="md"
+            radius="xl"
+            defaultValue=""
+            value={countrySearch}
+            placeholder="Where would you like to go?"
+            onItemSubmit={(e) => handleSelect(e)}
+            ref={countryAutoRef}
+            data={countryData}
+            filter={(value, item) => item}
+            style={{
+              width: "350px",
+              zIndex: 98,
+            }}
+            onClick={function (event) {
+              event.preventDefault();
+              countryAutoRef.current.select();
+            }}
+            onChange={function (e) {
+              setCountrySearch(e);
+              handleChange("country", e);
+            }}
+          />
+        </Flex>
+      )}
       {/* TODO    */}
       {geoLat && geoLng && (
         <Map
@@ -923,7 +917,7 @@ export default function Mymap({
           onLoad={() => {
             setMapLoaded(true);
             setTripSelected(false);
-            localStorage.removeItem("noLogin");
+            sessionStorage.removeItem("noLogin");
           }}
           keyboard={false}
           ref={mapRef}
@@ -941,7 +935,7 @@ export default function Mymap({
           style={{ width: "100%", height: "100%" }}
           mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
         >
-          {visible && !searchOpened && !loginOpened && (
+          {visible && !searchOpened && (
             <TourList
               setTripSelected={setTripSelected}
               listOpened={listOpened}

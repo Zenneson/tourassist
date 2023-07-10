@@ -470,10 +470,6 @@ export default function Legal({ setProfileOpened }) {
     </Box>
   ));
 
-  const exitLink = () => {
-    setProfileOpened(false);
-  };
-
   return (
     <>
       <Center mt={120} mb={50}>
@@ -548,7 +544,6 @@ export default function Legal({ setProfileOpened }) {
                       compact
                       fz={10}
                       onClick={() => {
-                        exitLink();
                         router.push("/help");
                       }}
                     >
@@ -559,7 +554,6 @@ export default function Legal({ setProfileOpened }) {
                       compact
                       fz={10}
                       onClick={() => {
-                        exitLink();
                         router.push("/contact");
                       }}
                     >
