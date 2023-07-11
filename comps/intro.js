@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import {
   Center,
   Box,
@@ -39,8 +38,6 @@ export default function Intro({ auth }) {
     key: "mapSpin",
     defaultValue: false,
   });
-
-  const router = useRouter();
 
   const { height, width } = useViewportSize();
   const firstDown = useMediaQuery("(max-width: 950px)");

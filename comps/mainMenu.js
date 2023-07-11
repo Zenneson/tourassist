@@ -244,8 +244,8 @@ export default function MainMenu({
           <motion.div
             animate={{
               opacity: [
-                1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1, 1, 0.3, 0, 0.3, 0, 1,
+                1, 1, 1, 0.3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.3, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 0.3, 1, 0.3, 1,
               ],
             }}
             transition={{ duration: 7, repeat: Infinity }}
