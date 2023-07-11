@@ -32,12 +32,12 @@ import {
 export default function ProfileDrawer({
   active,
   setActive,
-  profileShow,
-  setProfileShow,
-  profileOpened,
-  setProfileOpened,
+  panelShow,
+  setPanelShow,
+  mainMenuOpened,
   setTripSelected,
-  auth,
+  openMenu,
+  signOutFunc,
 }) {
   const [user, setUser] = useSessionStorage({ key: "user" });
   const router = useRouter();
@@ -55,7 +55,16 @@ export default function ProfileDrawer({
     },
   ];
 
+  const menuLinkFunc = (index) => {
+    {
+      index === active
+        ? (setPanelShow(false), setActive(-1))
+        : (setPanelShow(true), setActive(index));
+    }
+  };
+
   const items = links.map((item, index) => (
+    // Main menu items
     <NavLink
       px={25}
       key={item.label}
@@ -75,14 +84,7 @@ export default function ProfileDrawer({
       rightSection={<IconChevronRight size={14} />}
       icon={item.icon}
       variant="subtle"
-      onClick={() => {
-        sessionStorage.removeItem("images");
-        setActive(index);
-        setProfileShow(true);
-        {
-          index === active ? (setProfileShow(false), setActive(-1)) : null;
-        }
-      }}
+      onClick={() => menuLinkFunc(index)}
       sx={{
         ".mantine-NavLink-description": {
           opacity: 0.4,
@@ -105,14 +107,18 @@ export default function ProfileDrawer({
     transition: { type: "ease-in-out" },
   };
 
+  const closePanel = () => {
+    setPanelShow(false);
+    setActive(-1);
+  };
+
   return (
     <>
       <Drawer
         zIndex={500}
         pos={"relative"}
-        trapFocus={false}
         padding={0}
-        opened={profileOpened}
+        opened={mainMenuOpened}
         size={305}
         lockScroll={false}
         withOverlay={false}
@@ -124,6 +130,7 @@ export default function ProfileDrawer({
           },
         }}
       >
+        {/* Close Main Menu Button */}
         <Button
           pos={"absolute"}
           top={77}
@@ -137,10 +144,7 @@ export default function ProfileDrawer({
               background: "rgba(8, 7, 11, 1)",
             },
           }}
-          onClick={() => {
-            setProfileOpened(false);
-            setProfileShow(false);
-          }}
+          onClick={openMenu}
         >
           <IconX size={15} />
         </Button>
@@ -179,6 +183,7 @@ export default function ProfileDrawer({
         )}
         <Group spacing={8} mt={10}>
           {router.pathname !== "/" && (
+            // Map Main Menu Button
             <NavLink
               label={
                 <Text
@@ -197,7 +202,6 @@ export default function ProfileDrawer({
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
               onClick={() => {
-                sessionStorage.removeItem("images");
                 sessionStorage.setItem("noLogin", "true");
                 router.push("/");
               }}
@@ -218,6 +222,7 @@ export default function ProfileDrawer({
 
           {user && items}
           {router.pathname !== "/help" && (
+            // Help Main Menu Button
             <NavLink
               label={
                 <Text
@@ -236,7 +241,7 @@ export default function ProfileDrawer({
               py={8}
               icon={<IconInfoCircle size={30} opacity={0.1} />}
               variant="subtle"
-              onClick={(e) => {
+              onClick={() => {
                 router.push("/help");
               }}
               sx={{
@@ -254,6 +259,7 @@ export default function ProfileDrawer({
             />
           )}
         </Group>
+        {/* Legal Documents Main Menu Button */}
         <Button
           variant="subtle"
           pos={"absolute"}
@@ -287,6 +293,7 @@ export default function ProfileDrawer({
               width: "70%",
             }}
           >
+            {/* SignOut Button */}
             <Button
               variant="subtle"
               w="60%"
@@ -302,23 +309,7 @@ export default function ProfileDrawer({
                   backgroundColor: "rgba(0, 0, 0, 0.2)",
                 },
               }}
-              onClick={() => {
-                signOut(auth)
-                  .then(() => {
-                    sessionStorage.removeItem("images");
-                    sessionStorage.removeItem("user");
-                    sessionStorage.removeItem("visible");
-                    sessionStorage.removeItem("mapSpin");
-                    sessionStorage.removeItem("placeDataState");
-                    if (router.pathname !== "/") router.push("/");
-                    else {
-                      router.reload();
-                    }
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              }}
+              onClick={signOutFunc}
             >
               Logout
             </Button>
@@ -327,11 +318,10 @@ export default function ProfileDrawer({
       </Drawer>
       <Drawer
         zIndex={499}
-        opened={profileShow}
+        opened={panelShow}
         padding="24px 25px 24px 330px"
         size={900}
         withCloseButton={false}
-        trapFocus={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         overlayProps={{
           opacity: 0.7,
@@ -340,11 +330,9 @@ export default function ProfileDrawer({
         sx={{
           ".mantine-Drawer-content": { background: "rgba(11, 12, 13, 0.95)" },
         }}
-        onClose={() => {
-          setProfileShow(false);
-          setActive(-1);
-        }}
+        onClose={closePanel}
       >
+        {/* Close Panel Button */}
         <Button
           pos={"absolute"}
           top={77}
@@ -358,10 +346,7 @@ export default function ProfileDrawer({
               background: "rgba(8, 7, 11, 1)",
             },
           }}
-          onClick={() => {
-            setProfileShow(false);
-            setActive(-1);
-          }}
+          onClick={closePanel}
         >
           <IconX size={15} />
         </Button>

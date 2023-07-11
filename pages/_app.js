@@ -15,8 +15,8 @@ import "@fontsource/open-sans/700.css";
 export default function Money(props) {
   const { Component, pageProps } = props;
   const [active, setActive] = useState(-1);
-  const [profileShow, setProfileShow] = useState(false);
-  const [profileOpened, setProfileOpened] = useState(false);
+  const [panelShow, setPanelShow] = useState(false);
+  const [mainMenuOpened, setMainMenuOpened] = useState(false);
   const [listOpened, setListOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
   const [tripSelected, setTripSelected] = useState(false);
@@ -99,10 +99,10 @@ export default function Money(props) {
             <MainMenu
               active={active}
               setActive={setActive}
-              profileShow={profileShow}
-              setProfileShow={setProfileShow}
-              profileOpened={profileOpened}
-              setProfileOpened={setProfileOpened}
+              panelShow={panelShow}
+              setPanelShow={setPanelShow}
+              mainMenuOpened={mainMenuOpened}
+              setMainMenuOpened={setMainMenuOpened}
               setListOpened={setListOpened}
               searchOpened={searchOpened}
               setSearchOpened={setSearchOpened}
@@ -113,14 +113,14 @@ export default function Money(props) {
           }
         >
           <RouterTransition
-            setProfileOpened={setProfileOpened}
-            setProfileShow={setProfileShow}
+            setMainMenuOpened={setMainMenuOpened}
+            setPanelShow={setPanelShow}
             setDropDownOpened={setDropDownOpened}
           />
           <Component
             {...pageProps}
-            setProfileShow={setProfileShow}
-            setProfileOpened={setProfileOpened}
+            setPanelShow={setPanelShow}
+            setMainMenuOpened={setMainMenuOpened}
             listOpened={listOpened}
             setListOpened={setListOpened}
             searchOpened={searchOpened}

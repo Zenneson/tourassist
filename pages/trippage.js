@@ -51,7 +51,8 @@ import Update from "../comps/update";
 import TripContent from "../comps/tripContent";
 import { DateInput } from "@mantine/dates";
 
-export default function Trippage() {
+export default function Trippage(props) {
+  // let images = props.images || [];
   const { hovered, ref } = useHover();
   const [altModal, setAltModal] = useState(false);
   const [editContentModal, setEditContentModal] = useState(false);
@@ -181,15 +182,32 @@ export default function Trippage() {
     </Box>
   ));
 
-  const closeAltModal = () => {
-    setAltModal(false);
-    setAddTripDesc(false);
-    setAddUpdateDesc(false);
+  const showEditContentModal = () => {
+    setAltModal(true);
+    setAddTripDesc(true);
+    setDonating(false);
   };
+
+  const showUpdateModal = () => {
+    setEditContentModal(true);
+    setDonating(false);
+  };
+
+  const showDonateModal = () => {
+    setDonating(true);
+    setEditContentModal(true);
+  };
+
   const closeEditContentModal = () => {
     setEditContentModal(false);
     setAddTripDesc(false);
     setEditUpdate("");
+  };
+
+  const closeAltModal = () => {
+    setAltModal(false);
+    setAddTripDesc(false);
+    setAddUpdateDesc(false);
   };
 
   return (
@@ -253,6 +271,7 @@ export default function Trippage() {
                 {images.length > 1 ? (
                   <>
                     {hovered && (
+                      // Previous Slider Button
                       <Button
                         h={498}
                         mb={7}
@@ -283,11 +302,12 @@ export default function Trippage() {
                       {slides}
                     </Slider>
                     {hovered && (
+                      // Next Slider Button
                       <Button
                         h={498}
                         mb={7}
                         radius={"3px 0 0 3px"}
-                        onClick={previous}
+                        onClick={next}
                         variant="outline"
                         color={"dark.4"}
                         p={0}
@@ -354,6 +374,7 @@ export default function Trippage() {
                 labelPosition="right"
                 w={"100%"}
                 label={
+                  // Edit Trip Details
                   <Button
                     compact
                     size="xs"
@@ -362,12 +383,16 @@ export default function Trippage() {
                     pr={15}
                     variant="subtle"
                     color="gray.6"
-                    leftIcon={<IconPencil size={20} />}
-                    onClick={() => {
-                      setAltModal(true);
-                      setAddTripDesc(true);
-                      setDonating(false);
-                    }}
+                    leftIcon={
+                      <IconPencil
+                        size={17}
+                        style={{
+                          marginRight: -5,
+                          marginTop: -3,
+                        }}
+                      />
+                    }
+                    onClick={showEditContentModal}
                   >
                     Edit Travel Details
                   </Button>
@@ -428,6 +453,7 @@ export default function Trippage() {
               w={"78%"}
               mt={20}
               label={
+                // Read More Toggle
                 <Button
                   compact
                   size="xs"
@@ -435,7 +461,7 @@ export default function Trippage() {
                   px={15}
                   variant="subtle"
                   color="gray.6"
-                  onClick={() => toggle()}
+                  onClick={toggle}
                 >
                   {readmore === "closed" ? "Read More" : "Show Less"}
                 </Button>
@@ -447,6 +473,8 @@ export default function Trippage() {
               setEditUpdate={setEditUpdate}
               setAddUpdateDesc={setAddUpdateDesc}
               setDonating={setDonating}
+              images={images}
+              // setImages={setImages}
             />
             <Box
               radius={5}
@@ -477,16 +505,14 @@ export default function Trippage() {
                   w={"100%"}
                   labelPosition="right"
                   label={
+                    // Show Donate Modal Button Near Comments
                     <Button
                       size="xs"
                       radius={25}
                       px={15}
                       variant="light"
                       color="gray.6"
-                      onClick={() => {
-                        setDonating(true);
-                        setEditContentModal(true);
-                      }}
+                      onClick={showDonateModal}
                     >
                       <Flex align={"center"} gap={5}>
                         DONATE
@@ -562,6 +588,7 @@ export default function Trippage() {
                 mt={5}
               />
               <Button.Group mt={10} w={"100%"}>
+                {/* Go to Purchase Page  */}
                 <Button
                   w={"100%"}
                   variant="filled"
@@ -572,27 +599,23 @@ export default function Trippage() {
                 >
                   <Text>USE FUNDS</Text>
                 </Button>
+                {/* // Show Update Modal */}
                 <Button
                   variant="filled"
                   color="blue"
                   fullWidth
-                  onClick={() => {
-                    setEditContentModal(true);
-                    setDonating(false);
-                  }}
+                  onClick={showUpdateModal}
                 >
                   POST UPDATE
                 </Button>
               </Button.Group>
+              {/* Show Donate Modal Button The Goal Section */}
               <Button
                 mt={10}
                 fullWidth
                 variant="gradient"
                 gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
-                onClick={() => {
-                  setDonating(true);
-                  setEditContentModal(true);
-                }}
+                onClick={showDonateModal}
               >
                 <Text fz={20}>
                   <Flex align={"center"} gap={5}>
@@ -623,6 +646,7 @@ export default function Trippage() {
           },
         })}
       >
+        {/* Close Alt Modal */}
         <CloseButton
           pos={"absolute"}
           top={21}
@@ -666,6 +690,8 @@ export default function Trippage() {
             addTripDesc={addTripDesc}
             addUpdateDesc={addUpdateDesc}
             donating={donating}
+            images={images}
+            // setImages={setImages}
           />
         </Stack>
       </Modal>
@@ -686,6 +712,7 @@ export default function Trippage() {
           },
         })}
       >
+        {/* Close Edit Content Modal */}
         <CloseButton
           pos={"absolute"}
           top={21}
@@ -801,6 +828,7 @@ export default function Trippage() {
                     alt=""
                   />
                 </Group>
+                {/* Complete Donation Button  */}
                 <Button
                   variant="filled"
                   size="xl"
@@ -845,6 +873,8 @@ export default function Trippage() {
               addTripDesc={addTripDesc}
               addUpdateDesc={addUpdateDesc}
               donating={donating}
+              images={images}
+              // setImages={setImages}
             />
           )}
         </Stack>

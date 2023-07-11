@@ -36,6 +36,7 @@ export default function Update({
   setEditUpdate,
   setAddUpdateDesc,
   setDonating,
+  images,
 }) {
   const [showall, toggle] = useToggle(["hide", "show"]);
 
@@ -181,6 +182,7 @@ export default function Update({
         sx={{ overflow: "hidden" }}
       >
         {hovered && (
+          // Previous Image Button
           <Button
             h={"80%"}
             mb={7}
@@ -219,6 +221,7 @@ export default function Update({
           ))}
         </Slider>
         {hovered && (
+          // Next Image Button
           <Button
             h={"80%"}
             mb={7}
@@ -242,7 +245,7 @@ export default function Update({
     );
   }
 
-  function UpdateContent({ content }) {
+  const UpdateContent = ({ content }) => {
     const [readmore, toggle] = useToggle(["closed", "open"]);
 
     return (
@@ -255,6 +258,7 @@ export default function Update({
           w={"100%"}
           mt={20}
           label={
+            // Read More Toggle
             <Button
               compact
               size="xs"
@@ -262,7 +266,7 @@ export default function Update({
               px={15}
               variant="subtle"
               color="gray.6"
-              onClick={() => toggle()}
+              onClick={toggle}
             >
               {readmore === "closed" ? "Read More" : "Show Less"}
             </Button>
@@ -270,7 +274,14 @@ export default function Update({
         />
       </>
     );
-  }
+  };
+
+  const updateTrip = () => {
+    setEditUpdate(true);
+    setAddUpdateDesc(true);
+    setDonating(false);
+    setEditContentModal(true);
+  };
 
   const updates = updateData.map((update, index) => (
     <Flex
@@ -290,17 +301,13 @@ export default function Update({
         boxShadow: "0 2px 5px 0 rgba(0,0,0,0.3)",
       }}
     >
+      {/* Show Update Modal Button  */}
       <ActionIcon
         pos={"absolute"}
         top={17}
         right={10}
         color="gray.7"
-        onClick={() => {
-          setEditUpdate(true);
-          setEditContentModal(true);
-          setAddUpdateDesc(true);
-          setDonating(false);
-        }}
+        onClick={updateTrip}
       >
         <IconPencil />
       </ActionIcon>
@@ -395,6 +402,7 @@ export default function Update({
         w={"80%"}
         mt={20}
         label={
+          // Show all updates toggle
           <Button
             compact
             size="xs"
@@ -402,7 +410,7 @@ export default function Update({
             px={15}
             variant="subtle"
             color="gray.6"
-            onClick={() => toggle()}
+            onClick={toggle}
           >
             Show {showall === "hide" ? "All Updates" : "Last Update Only"}
           </Button>

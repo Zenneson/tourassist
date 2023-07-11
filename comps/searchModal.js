@@ -5,6 +5,7 @@ import { IconSearch } from "@tabler/icons-react";
 export default function SearchModal({ searchOpened, setSearchOpened }) {
   return (
     <Modal
+      zIndex={9999}
       opened={searchOpened}
       onClose={() => setSearchOpened(false)}
       withCloseButton={false}

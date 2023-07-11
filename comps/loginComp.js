@@ -222,6 +222,7 @@ export default function LoginComp({ auth }) {
           />
         )}
         <Group grow spacing={20}>
+          {/* Signout Button */}
           <Button
             onClick={() =>
               signInWith(
@@ -239,6 +240,7 @@ export default function LoginComp({ auth }) {
           >
             Google
           </Button>
+          {/* Twitter Signin Button  */}
           <Button
             onClick={() =>
               signInWith(
@@ -383,9 +385,7 @@ export default function LoginComp({ auth }) {
                 type="button"
                 color="dimmed"
                 size="xs"
-                onClick={function () {
-                  toggle();
-                }}
+                onClick={toggle}
               >
                 {type === "sign-up"
                   ? "Already have an account?"

@@ -13,6 +13,9 @@ export default function PlaceListItem({
 }) {
   const handleRemove = () => {
     setPlaces(places.filter((location) => location.place !== place));
+    if (places.length === 1) {
+      setListOpened(false);
+    }
   };
 
   const firstLetters = (str) => {
@@ -96,14 +99,12 @@ export default function PlaceListItem({
             </Text>
           </Grid.Col>
           <Grid.Col span="content">
+            {/* Delete Place Button */}
             <Avatar
               radius="xl"
               variant="outline"
               onClick={() => {
                 handleRemove();
-                if (places.length === 1) {
-                  setListOpened(false);
-                }
               }}
               styles={({ theme }) => ({
                 root: {

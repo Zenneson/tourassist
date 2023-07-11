@@ -59,6 +59,11 @@ export default function Money({ setTripSelected }) {
     ],
   };
 
+  const goToTripPage = () => {
+    setTripSelected(true);
+    router.push("/trippage");
+  };
+
   return (
     <Box pr={20}>
       <Box
@@ -138,6 +143,7 @@ export default function Money({ setTripSelected }) {
               </Text>
             </Box>
           </Center>
+          {/* Sends User to Trip Page */}
           <Center
             py={19}
             bg={"rgba(255,255,255,0.05)"}
@@ -148,10 +154,7 @@ export default function Money({ setTripSelected }) {
                 backgroundColor: "rgba(255,255,255,0.1)",
               },
             }}
-            onClick={() => {
-              setTripSelected(true);
-              router.push("/trippage");
-            }}
+            onClick={goToTripPage}
           >
             VIEW <IconPlayerPlay size={17} />
           </Center>

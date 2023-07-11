@@ -2,8 +2,8 @@ import Mymap from "../comps/mymap";
 import Intro from "../comps/intro";
 
 export default function Home(props) {
-  let setProfileShow = props.setProfileShow;
-  let setProfileOpened = props.setProfileOpened;
+  let setPanelShow = props.setPanelShow;
+  let setMainMenuOpened = props.setMainMenuOpened;
   let listOpened = props.listOpened;
   let setListOpened = props.setListOpened;
   let searchOpened = props.searchOpened;
@@ -16,8 +16,8 @@ export default function Home(props) {
     <>
       <Intro auth={auth} />
       <Mymap
-        setProfileShow={setProfileShow}
-        setProfileOpened={setProfileOpened}
+        setPanelShow={setPanelShow}
+        setMainMenuOpened={setMainMenuOpened}
         listOpened={listOpened}
         setListOpened={setListOpened}
         searchOpened={searchOpened}

@@ -60,7 +60,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function Legal({ setProfileOpened }) {
+export default function Legal({ setMainMenuOpened }) {
   const [linkState, setLinkState] = useState("terms");
   const [active, setActive] = useState(-99);
   const [highlighted, setHighlighted] = useState(-1);
@@ -142,16 +142,12 @@ export default function Legal({ setProfileOpened }) {
   const links = linkState === "terms" ? terms : privacy;
 
   const items = links.map((term, index) => (
+    // Menu Items
     <Box
       component="a"
       href={term.link}
       onClick={(event) => {
-        event.preventDefault();
-        setActive(index);
-        setHighlighted(index);
-        termsectionsRefs[index].current.scrollIntoView({
-          behavior: "smooth",
-        });
+        menuItems(event, index);
       }}
       key={index}
       className={cx(classes.link, { [classes.linkActive]: active === index })}
@@ -470,19 +466,31 @@ export default function Legal({ setProfileOpened }) {
     </Box>
   ));
 
+  const scrollToSection = () => {
+    setActive(-99);
+    setHighlighted(-1);
+    scrollTo({ y: 0 });
+  };
+
+  const menuItems = (event, index) => {
+    event.preventDefault();
+    setActive(index);
+    setHighlighted(index);
+    termsectionsRefs[index].current.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <Center mt={120} mb={50}>
         <Flex w={"80%"} maw={1200}>
           <Flex direction={"column"} miw={"300px"} pos={"fixed"} top={205}>
+            {/* Toggle between Terms of Use and Privacy Policy */}
             <SegmentedControl
               value={linkState}
               onChange={setLinkState}
-              onClick={() => {
-                setActive(-99);
-                setHighlighted(-1);
-                scrollTo({ y: 0 });
-              }}
+              onClick={scrollToSection}
               ml={-60}
               sx={{
                 transform: "scale(.75)",
@@ -539,6 +547,7 @@ export default function Legal({ setProfileOpened }) {
                 <Box w={"calc(20% - 30px)"}>
                   {" "}
                   <Button.Group orientation="vertical">
+                    {/* Go to Help Page */}
                     <Button
                       variant="light"
                       compact
@@ -549,6 +558,7 @@ export default function Legal({ setProfileOpened }) {
                     >
                       About Tourassist
                     </Button>
+                    {/* Go to Contact Page */}
                     <Button
                       variant="light"
                       compact

@@ -13,6 +13,21 @@ export default function TourList({
 }) {
   const router = useRouter();
 
+  const submitTourList = () => {
+    setTripSelected(true);
+    const newPlaceData = places.map((location) => {
+      const { place, region } = location;
+      return {
+        place: place === "東京都" ? "Tokyo" : place,
+        region: region && region.replace("ecture東京都", "., Japan"),
+        fullName: place + "," + region,
+        costs: ["FLIGHT", "HOTEL"],
+      };
+    });
+    setPlaces(newPlaceData);
+    router.push("/tripplanner");
+  };
+
   return (
     <>
       <DragDropContext
@@ -70,21 +85,7 @@ export default function TourList({
               fw={700}
               mt={30}
               fullWidth
-              onClick={() => {
-                setTripSelected(true);
-                const newPlaceData = places.map((location) => {
-                  const { place, region } = location;
-                  return {
-                    place: place === "東京都" ? "Tokyo" : place,
-                    region:
-                      region && region.replace("ecture東京都", "., Japan"),
-                    fullName: place + "," + region,
-                    costs: ["FLIGHT", "HOTEL"],
-                  };
-                });
-                setPlaces(newPlaceData);
-                router.push("/tripplanner");
-              }}
+              onClick={submitTourList}
               sx={(theme) => ({
                 transition: "all 200ms ease-in-out",
                 opacity: 0.7,

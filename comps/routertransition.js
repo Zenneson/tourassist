@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 
 export function RouterTransition({
-  setProfileShow,
-  setProfileOpened,
+  setPanelShow,
+  setMainMenuOpened,
   setDropDownOpened,
 }) {
   const router = useRouter();
@@ -12,8 +12,8 @@ export function RouterTransition({
   useEffect(() => {
     const handleStart = (url) => {
       url !== router.asPath && nprogress.start();
-      setProfileShow(false);
-      setProfileOpened(false);
+      setPanelShow(false);
+      setMainMenuOpened(false);
       setDropDownOpened(false);
     };
     const handleComplete = () => nprogress.complete();
@@ -30,8 +30,8 @@ export function RouterTransition({
   }, [
     router.asPath,
     router.events,
-    setProfileShow,
-    setProfileOpened,
+    setPanelShow,
+    setMainMenuOpened,
     setDropDownOpened,
   ]);
 

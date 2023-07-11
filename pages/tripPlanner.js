@@ -80,10 +80,6 @@ export default function TripPlannerPage(props) {
   dayjs.extend(localizedFormat);
 
   const [active, setActive] = useState(0);
-  const nextStep = () =>
-    setActive((current) => (current < 3 ? current + 1 : current));
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
 
   const animation = {
     initial: { y: -50, duration: 500 },
@@ -98,64 +94,6 @@ export default function TripPlannerPage(props) {
 
   const [costList, setCostList] = useState({});
   const [costsSum, setCostsSum] = useState(0);
-
-  let delayTimer = null;
-  const handleInputChange = (value, costid) => {
-    if (delayTimer) {
-      clearTimeout(delayTimer);
-    }
-
-    delayTimer = setTimeout(() => {
-      let updatedCosts = { ...costList, [costid]: parseFloat(value) };
-      let sum = Object.values(updatedCosts).reduce(
-        (acc, current) => acc + current,
-        0
-      );
-      setCostList(updatedCosts);
-      setCostsSum(sum);
-    }, 300);
-  };
-
-  const handleCostRemoval = (
-    costId,
-    placeIndex,
-    costIndex,
-    originalArray,
-    setOriginalArray
-  ) => {
-    let copyData = JSON.parse(JSON.stringify(originalArray));
-    let newCostList = { ...costList };
-
-    // remove the cost from the original array
-    if (Array.isArray(copyData[placeIndex])) {
-      copyData[placeIndex] = copyData[placeIndex].filter(
-        (_, i) => i !== costIndex
-      ); // If it's an array, remove the cost
-    } else if (
-      typeof copyData[placeIndex] === "object" &&
-      copyData[placeIndex] !== null &&
-      Array.isArray(copyData[placeIndex].costs)
-    ) {
-      copyData[placeIndex].costs = copyData[placeIndex].costs.filter(
-        (_, i) => i !== costIndex
-      ); // If it's an object, remove the cost from the `costs` array
-    }
-
-    // remove the cost from costList
-    if (newCostList[costId] !== undefined) {
-      delete newCostList[costId];
-    }
-
-    setOriginalArray(copyData);
-    setCostList(newCostList);
-
-    // recalculate the total cost
-    let sum = Object.values(newCostList).reduce(
-      (acc, current) => acc + current,
-      0
-    );
-    setCostsSum(sum);
-  };
 
   const Costs = ({ cost, costid }) => (
     <div key={index}>
@@ -276,6 +214,7 @@ export default function TripPlannerPage(props) {
                 (cost, index) =>
                   (cost === "FLIGHT" || cost === "HOTEL") && (
                     <Box key={index} pos="relative" pr={10}>
+                      {/* Remove Cost Button */}
                       <ActionIcon
                         pos="absolute"
                         variant="default"
@@ -305,6 +244,7 @@ export default function TripPlannerPage(props) {
             {newCost[index] &&
               newCost[index].map((cost, index) => (
                 <Box key={index} pos="relative" pr={10}>
+                  {/* Remove Cost Button */}
                   <ActionIcon
                     pos="absolute"
                     variant="default"
@@ -373,6 +313,7 @@ export default function TripPlannerPage(props) {
                     },
                   }}
                   rightSection={
+                    // Add New Cost Button
                     <ActionIcon
                       onClick={(event) => {
                         AddCost(event);
@@ -388,6 +329,88 @@ export default function TripPlannerPage(props) {
         </Box>
       );
     });
+
+  const index = startLocale?.indexOf(",");
+  const startCity = startLocale.substring(0, index);
+  const startRegion = startLocale?.substring(index + 1);
+
+  const today = new Date();
+  const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+  let delayTimer = null;
+  const handleInputChange = (value, costid) => {
+    if (delayTimer) {
+      clearTimeout(delayTimer);
+    }
+
+    delayTimer = setTimeout(() => {
+      let updatedCosts = { ...costList, [costid]: parseFloat(value) };
+      let sum = Object.values(updatedCosts).reduce(
+        (acc, current) => acc + current,
+        0
+      );
+      setCostList(updatedCosts);
+      setCostsSum(sum);
+    }, 300);
+  };
+
+  const handleCostRemoval = (
+    costId,
+    placeIndex,
+    costIndex,
+    originalArray,
+    setOriginalArray
+  ) => {
+    let copyData = JSON.parse(JSON.stringify(originalArray));
+    let newCostList = { ...costList };
+
+    // remove the cost from the original array
+    if (Array.isArray(copyData[placeIndex])) {
+      copyData[placeIndex] = copyData[placeIndex].filter(
+        (_, i) => i !== costIndex
+      ); // If it's an array, remove the cost
+    } else if (
+      typeof copyData[placeIndex] === "object" &&
+      copyData[placeIndex] !== null &&
+      Array.isArray(copyData[placeIndex].costs)
+    ) {
+      copyData[placeIndex].costs = copyData[placeIndex].costs.filter(
+        (_, i) => i !== costIndex
+      ); // If it's an object, remove the cost from the `costs` array
+    }
+
+    // remove the cost from costList
+    if (newCostList[costId] !== undefined) {
+      delete newCostList[costId];
+    }
+
+    setOriginalArray(copyData);
+    setCostList(newCostList);
+
+    // recalculate the total cost
+    let sum = Object.values(newCostList).reduce(
+      (acc, current) => acc + current,
+      0
+    );
+    setCostsSum(sum);
+  };
+
+  const prevStep = () =>
+    setActive((current) => (current > 0 ? current - 1 : current));
+
+  const nextStep = () =>
+    setActive((current) => (current < 3 ? current + 1 : current));
+
+  const changeNextStep = () => {
+    if (active !== 3) {
+      nextStep();
+    }
+    if (active === 3) {
+      // sessionStorage.removeItem("placeDataState");
+      setImages([]);
+      router.push("/trippage");
+    }
+  };
 
   const handleChange = async (e) => {
     const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
@@ -434,13 +457,6 @@ export default function TripPlannerPage(props) {
       }
     });
   };
-
-  const index = startLocale?.indexOf(",");
-  const startCity = startLocale.substring(0, index);
-  const startRegion = startLocale?.substring(index + 1);
-
-  const today = new Date();
-  const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
   return (
     <>
@@ -687,10 +703,6 @@ export default function TripPlannerPage(props) {
                           ref={startLocaleRef}
                           data={startLocaleData}
                           filter={(value, item) => item}
-                          onClick={function (event) {
-                            event.preventDefault();
-                            startLocaleRef.current.select();
-                          }}
                           onSelect={() => placeCheck()}
                           onChange={function (e) {
                             setStartLocaleSearch(e);
@@ -730,6 +742,7 @@ export default function TripPlannerPage(props) {
                             }
                           />
                           <Group spacing={5} w={"40%"} grow>
+                            {/* Decrease Traveler Count  */}
                             <Button
                               variant="filled"
                               color="dark.5"
@@ -757,6 +770,7 @@ export default function TripPlannerPage(props) {
                                 },
                               }}
                             />
+                            {/* Increase Traveler Count  */}
                             <Button
                               variant="filled"
                               color="dark.5"
@@ -1035,35 +1049,26 @@ export default function TripPlannerPage(props) {
               <Divider w={"100%"} my={15} opacity={0.5} />
             )}
             {active !== 0 && (
+              // Move Up Sections Button
               <Button
                 fullWidth
                 variant={"light"}
                 bg={"dark.5"}
                 c={"white"}
                 mb={10}
-                onClick={() => {
-                  prevStep();
-                }}
+                onClick={prevStep}
               >
                 <IconChevronUp />
               </Button>
             )}
             {startLocale && travelDates && (
+              // Move Down Sections Button
               <Button
                 fullWidth
                 variant={"light"}
                 bg={active === 3 ? "blue" : "dark.5"}
                 c={"white"}
-                onClick={() => {
-                  if (active !== 3) {
-                    nextStep();
-                  }
-                  if (active === 3) {
-                    // sessionStorage.removeItem("placeDataState");
-                    setImages([]);
-                    router.push("/trippage");
-                  }
-                }}
+                onClick={changeNextStep}
               >
                 {active === 3 ? "DONE" : <IconChevronDown />}
               </Button>

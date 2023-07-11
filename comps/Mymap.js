@@ -34,8 +34,8 @@ import { getNewCenter } from "../public/data/getNewCenter";
 import TourList from "./tourList";
 
 export default function Mymap({
-  setProfileShow,
-  setProfileOpened,
+  setPanelShow,
+  setMainMenuOpened,
   listOpened,
   setListOpened,
   searchOpened,
@@ -45,8 +45,6 @@ export default function Mymap({
 }) {
   const mapRef = useRef();
   const center = useRef();
-  const cityAutoRef = useRef(null);
-  const countryAutoRef = useRef(null);
   const router = useRouter();
   const [regionName, setRegionName] = useState("");
   const [citySubTitle, setCitySubTitle] = useState("");
@@ -444,6 +442,7 @@ export default function Mymap({
   };
 
   const topCitiesList = topCities.map((city, index) => (
+    // Menu item for Top Cities
     <NavLink
       py={5}
       key={index}
@@ -524,6 +523,44 @@ export default function Mymap({
     setCityListSet(false);
   };
 
+  const showTourList = () => {
+    setListOpened(true);
+    setMainMenuOpened(false);
+    setPanelShow(false);
+  };
+
+  const travelTo = () => {
+    setTripSelected(true);
+    setPlaces([
+      {
+        place: regionName === "東京都" ? "Tokyo" : regionName,
+        region:
+          citySubTitle && citySubTitle.replace("ecture東京都", "., Japan"),
+        fullName: regionName + "," + citySubTitle,
+        costs: ["FLIGHT", "HOTEL"],
+      },
+    ]);
+    router.push("/tripplanner");
+  };
+
+  const addToTourList = () => {
+    showTourList();
+    if (checkPlace(placeLocation) === false) {
+      addPlaces(placeLocation);
+      onClose();
+    } else {
+      notifications.show({
+        color: "red",
+        style: { backgroundColor: "#2e2e2e" },
+        title: "Loaction already added",
+        icon: <IconAlertTriangle size={17} />,
+        message: `${
+          regionName === "東京都" ? "Tokyo" : regionName
+        } was already added to your tour`,
+      });
+    }
+  };
+
   return (
     <>
       <LoadingOverlay
@@ -536,12 +573,9 @@ export default function Mymap({
         style={{ pointerEvents: "none" }}
       />
       {places.length >= 1 && !listOpened && (
+        // Tour List Button
         <Button
-          onClick={() => {
-            setListOpened(true);
-            setProfileOpened(false);
-            setProfileShow(false);
-          }}
+          onClick={showTourList}
           sx={{
             backgroundColor: "#020202",
             opacity: 0.7,
@@ -616,6 +650,7 @@ export default function Mymap({
       >
         {isCity && !isCountry && !isState && (
           <>
+            {/* Travel to Button  */}
             <Popover
               opened={tourListDropDown}
               offset={-85}
@@ -630,22 +665,10 @@ export default function Mymap({
               }}
               onClick={() => {
                 if (places.length > 0) {
-                  setListOpened(true);
-                  setProfileOpened(false);
+                  showTourList();
                   setTourListDropDown(!tourListDropDown);
                 } else {
-                  setTripSelected(true);
-                  setPlaces([
-                    {
-                      place: regionName === "東京都" ? "Tokyo" : regionName,
-                      region:
-                        citySubTitle &&
-                        citySubTitle.replace("ecture東京都", "., Japan"),
-                      fullName: regionName + "," + citySubTitle,
-                      costs: ["FLIGHT", "HOTEL"],
-                    },
-                  ]);
-                  router.push("/tripplanner");
+                  travelTo();
                 }
               }}
             >
@@ -710,6 +733,7 @@ export default function Mymap({
                   </Text>
                 </Flex>
                 <Group spacing={10} mt={10} grow>
+                  {/* No to Clear Tour List or Travel to */}
                   <Button
                     variant="filled"
                     opacity={0.7}
@@ -720,24 +744,8 @@ export default function Mymap({
                   >
                     <IconX size={20} stroke={5} />
                   </Button>
-                  <Button
-                    variant="filled"
-                    opacity={0.7}
-                    onClick={() => {
-                      setTripSelected(true);
-                      setPlaces([
-                        {
-                          place: regionName === "東京都" ? "Tokyo" : regionName,
-                          region:
-                            citySubTitle &&
-                            citySubTitle.replace("ecture東京都", "., Japan"),
-                          fullName: regionName + "," + citySubTitle,
-                          costs: ["FLIGHT", "HOTEL"],
-                        },
-                      ]);
-                      router.push("/tripplanner");
-                    }}
-                  >
+                  {/* Yes to Clear Tour List and Travel to */}
+                  <Button variant="filled" opacity={0.7} onClick={travelTo}>
                     <IconCheck size={20} stroke={5} />
                   </Button>
                 </Group>
@@ -751,6 +759,7 @@ export default function Mymap({
               zIndex={3}
               loader={<div></div>}
             />
+            {/* Add to Tour List Button  */}
             <NavLink
               mb={10}
               icon={
@@ -783,25 +792,7 @@ export default function Mymap({
                   </Text>
                 </>
               }
-              onClick={() => {
-                setListOpened(true);
-                setProfileOpened(false);
-                setProfileShow(false);
-                if (checkPlace(placeLocation) === false) {
-                  addPlaces(placeLocation);
-                  onClose();
-                } else {
-                  notifications.show({
-                    color: "red",
-                    style: { backgroundColor: "#2e2e2e" },
-                    title: "Loaction already added",
-                    icon: <IconAlertTriangle size={17} />,
-                    message: `${
-                      regionName === "東京都" ? "Tokyo" : regionName
-                    } was already added to your tour`,
-                  });
-                }
-              }}
+              onClick={addToTourList}
             />
           </>
         )}
@@ -834,6 +825,7 @@ export default function Mymap({
             <Box display={topCities.length === 0 ? "none" : "block"}>
               {topCitiesList}
             </Box>
+            {/* Search Cities in Selected Region */}
             <Autocomplete
               mt={15}
               variant={"filled"}
@@ -853,11 +845,6 @@ export default function Mymap({
               onItemSubmit={function (e) {
                 handleSelect(e);
                 setCitySearch("");
-              }}
-              ref={cityAutoRef}
-              onClick={function (event) {
-                event.preventDefault();
-                cityAutoRef.current.select();
               }}
               data={cityData}
               filter={(value, item) => item}
@@ -880,6 +867,7 @@ export default function Mymap({
           bottom={"100px"}
           w={"100%"}
         >
+          {/* Main Place Search */}
           <Autocomplete
             icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
             dropdownPosition="top"
@@ -890,16 +878,11 @@ export default function Mymap({
             value={countrySearch}
             placeholder="Where would you like to go?"
             onItemSubmit={(e) => handleSelect(e)}
-            ref={countryAutoRef}
             data={countryData}
             filter={(value, item) => item}
             style={{
               width: "350px",
               zIndex: 98,
-            }}
-            onClick={function (event) {
-              event.preventDefault();
-              countryAutoRef.current.select();
             }}
             onChange={function (e) {
               setCountrySearch(e);
@@ -908,7 +891,6 @@ export default function Mymap({
           />
         </Flex>
       )}
-      {/* TODO    */}
       {geoLat && geoLng && (
         <Map
           initialViewState={initialViewState}

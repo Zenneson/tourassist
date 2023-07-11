@@ -4,7 +4,6 @@ import { signOut } from "firebase/auth";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import {
-  Box,
   Header,
   Button,
   Image,
@@ -27,10 +26,10 @@ import ProfileDrawer from "./profileDrawer";
 export default function MainMenu({
   active,
   setActive,
-  profileShow,
-  setProfileShow,
-  profileOpened,
-  setProfileOpened,
+  panelShow,
+  setPanelShow,
+  mainMenuOpened,
+  setMainMenuOpened,
   setListOpened,
   searchOpened,
   setSearchOpened,
@@ -50,6 +49,7 @@ export default function MainMenu({
     key: "user",
     defaultValue: null,
   });
+  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -57,19 +57,54 @@ export default function MainMenu({
     }
   }, [user, setVisible]);
 
-  const router = useRouter();
+  const openMenu = () => {
+    setMainMenuOpened((o) => !o);
+    setListOpened(false);
+    setPanelShow(false);
+    setActive(-1);
+  };
+
+  const openSearch = () => {
+    setSearchOpened(true);
+    setMainMenuOpened(false);
+    setPanelShow(false);
+  };
+
+  const openDropDown = () => {
+    setDropDownOpened((o) => !o);
+    setMainMenuOpened(false);
+    setPanelShow(false);
+  };
+
+  const signOutFunc = () => {
+    signOut(auth)
+      .then(() => {
+        sessionStorage.removeItem("images");
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("visible");
+        sessionStorage.removeItem("mapSpin");
+        sessionStorage.removeItem("placeDataState");
+        if (router.pathname !== "/") router.push("/");
+        else {
+          router.reload();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
       <ProfileDrawer
         active={active}
         setActive={setActive}
-        profileShow={profileShow}
-        setProfileShow={setProfileShow}
-        profileOpened={profileOpened}
-        setProfileOpened={setProfileOpened}
+        panelShow={panelShow}
+        setPanelShow={setPanelShow}
+        mainMenuOpened={mainMenuOpened}
         setTripSelected={setTripSelected}
-        auth={auth}
+        openMenu={openMenu}
+        signOutFunc={signOutFunc}
       />
       <Header
         zIndex={998}
@@ -86,6 +121,7 @@ export default function MainMenu({
           pointerEvents: !visible && "none",
         }}
       >
+        {/* Main Menu Button  */}
         <Flex
           direction={"row"}
           align="center"
@@ -95,12 +131,7 @@ export default function MainMenu({
           sx={{
             cursor: "pointer",
           }}
-          onClick={() => {
-            setProfileOpened((o) => !o);
-            setListOpened(false);
-            setProfileShow(false);
-            setActive(-1);
-          }}
+          onClick={openMenu}
         >
           <Image
             ml={5}
@@ -119,18 +150,14 @@ export default function MainMenu({
         </Flex>
         <Flex align={"center"} gap={10} px={0} py={10} m={0} mt={5} mr={5}>
           {user && (
+            //  Main Menu Button
             <Button
               variant="subtle"
               radius="xl"
               px={15}
               size="sm"
               bg="rgba(0, 0, 0, 0.4)"
-              onClick={() => {
-                setListOpened(false);
-                setProfileOpened((o) => !o);
-                setProfileShow(false);
-                setActive(-1);
-              }}
+              onClick={openMenu}
             >
               <Text fz={12} c="#a5d8ff">
                 {user?.providerData[0].email}
@@ -151,17 +178,8 @@ export default function MainMenu({
               openDelay={800}
               withArrow
             >
-              <Button
-                onClick={() => {
-                  setSearchOpened(!searchOpened);
-                  setProfileOpened(false);
-                  setProfileShow(false);
-                  setDropDownOpened(false);
-                }}
-                variant="subtle"
-                radius="xl"
-                p={10}
-              >
+              {/* Search button */}
+              <Button onClick={openSearch} variant="subtle" radius="xl" p={10}>
                 <IconSearch size={17} />
               </Button>
             </Tooltip>
@@ -183,6 +201,7 @@ export default function MainMenu({
                   withArrow
                 >
                   <Popover.Target>
+                    {/* Logout Dropdown */}
                     <Button
                       onClick={() => {
                         setLogoutOpeened((o) => !o);
@@ -200,6 +219,7 @@ export default function MainMenu({
                   </Popover.Target>
                 </Tooltip>
                 <Popover.Dropdown p={0}>
+                  {/* Logout Button  */}
                   <Button
                     size="xs"
                     fw={700}
@@ -213,23 +233,7 @@ export default function MainMenu({
                         color: "rgba(255, 40, 40, 0.5)",
                       },
                     }}
-                    onClick={function () {
-                      signOut(auth)
-                        .then(() => {
-                          sessionStorage.removeItem("images");
-                          sessionStorage.removeItem("user");
-                          sessionStorage.removeItem("visible");
-                          sessionStorage.removeItem("mapSpin");
-                          sessionStorage.removeItem("placeDataState");
-                          if (router.pathname !== "/") router.push("/");
-                          else {
-                            router.reload();
-                          }
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    }}
+                    onClick={signOutFunc}
                   >
                     LOGOUT
                   </Button>
@@ -246,6 +250,7 @@ export default function MainMenu({
             }}
             transition={{ duration: 7, repeat: Infinity }}
           >
+            {/* DropDown Button */}
             <IconInfoCircleFilled
               stroke={1}
               size={30}
@@ -255,9 +260,7 @@ export default function MainMenu({
                 cursor: "pointer",
                 transform: "scale(1.25)",
               }}
-              onClick={() => {
-                setDropDownOpened((o) => !o);
-              }}
+              onClick={openDropDown}
             />
           </motion.div>
         </Flex>

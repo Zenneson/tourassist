@@ -176,6 +176,22 @@ export default function TripContent({
     setTimeout(() => addCroppedImage(), 0);
   };
 
+  const dontAddImage = () => {
+    setImageUpload(null);
+    setScale(1);
+  };
+
+  const focusEditor = () => {
+    setShowToolbar(true);
+    editor?.chain().focus().run();
+  };
+
+  const blurEditor = () => {
+    setShowToolbar(false);
+    setEditorFocused(false);
+    setTripDesc(editor.getHTML());
+  };
+
   return (
     <>
       {!donating && (
@@ -205,17 +221,17 @@ export default function TripContent({
                 grow
               >
                 {images.length > 1 && (
+                  // Previous Slide
                   <Button
                     variant="subtle"
                     color="gray"
                     h={"100%"}
-                    onClick={() => {
-                      previous();
-                    }}
+                    onClick={previous}
                   >
                     <IconChevronLeft size={20} />
                   </Button>
                 )}
+                {/* Remove Image */}
                 <Button
                   h={"100%"}
                   variant="light"
@@ -232,13 +248,12 @@ export default function TripContent({
                   <IconTrash size={21} />
                 </Button>
                 {images.length > 1 && (
+                  // Next Slide
                   <Button
                     variant="subtle"
                     color="gray"
                     h={"100%"}
-                    onClick={() => {
-                      next();
-                    }}
+                    onClick={next}
                   >
                     <IconChevronRight size={20} />
                   </Button>
@@ -326,21 +341,16 @@ export default function TripContent({
           </Box>
         </Group>
       )}
+      {/* Text Editor */}
       <RichTextEditor
         editor={editor}
         position="relative"
         bg={editorFocused ? "#373A40" : "dark.5"}
-        onClick={() => {
-          setShowToolbar(true);
-          editor?.chain().focus().run();
-        }}
+        onClick={focusEditor}
         onFocus={() => {
           setEditorFocused(true);
         }}
-        onBlur={() => {
-          setTripDesc(editor.getHTML());
-          setEditorFocused(false);
-        }}
+        onBlur={blurEditor}
         sx={{
           transition: "border-top 0.2s ease",
           border: "none",
@@ -444,17 +454,16 @@ export default function TripContent({
               }}
             />
             <Group w={"100%"} mt={30} grow>
+              {/* Selects NO Cropped Image to Image Slider  */}
               <Button
                 size="xl"
                 variant="default"
                 opacity={0.3}
-                onClick={() => {
-                  setImageUpload(null);
-                  setScale(1);
-                }}
+                onClick={dontAddImage}
               >
                 <IconX stroke={5} size={35} />
               </Button>
+              {/* Selects YES Cropped Image to Image Slider  */}
               <Button
                 size="xl"
                 variant="default"

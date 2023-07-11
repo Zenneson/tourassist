@@ -79,6 +79,12 @@ export default function Intro({ auth }) {
     "img/intro/plane.jpg",
   ];
 
+  const planTrip = () => {
+    setMapSpin(false);
+    setOpened(false);
+    setVisible(true);
+  };
+
   return (
     <>
       <Transition
@@ -246,6 +252,7 @@ export default function Intro({ auth }) {
                     an assist to make it all possible.
                   </Text>
                   <Group w="100%" position="center" mt={10}>
+                    {/* Learn More button  */}
                     <Button
                       fw={900}
                       size={!firstDown ? "md" : "xs"}
@@ -262,17 +269,14 @@ export default function Intro({ auth }) {
                     >
                       Learn More
                     </Button>
+                    {/* Plan Trip Button  */}
                     <Button
                       fw={900}
                       size={!firstDown ? "md" : "xs"}
                       uppercase={true}
                       variant="gradient"
                       gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
-                      onClick={() => {
-                        setMapSpin(false);
-                        setOpened(false);
-                        setVisible(true);
-                      }}
+                      onClick={planTrip}
                       leftIcon={
                         <IconWorld size={20} style={{ color: "#60E4FF" }} />
                       }
