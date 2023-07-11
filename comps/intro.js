@@ -127,6 +127,7 @@ export default function Intro({ auth }) {
                   ASSIST
                 </Title>
                 <Box
+                  pt={20}
                   sx={{
                     width: "80%",
                     maxWidth: "380px",

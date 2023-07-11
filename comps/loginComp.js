@@ -197,7 +197,7 @@ export default function LoginComp({ auth }) {
 
   return (
     <>
-      <Box w="100%" mt="xl">
+      <Box w="100%">
         {type === "sign-up" && (
           <Divider
             label={

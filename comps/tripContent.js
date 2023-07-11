@@ -195,7 +195,7 @@ export default function TripContent({
   return (
     <>
       {!donating && (
-        <Group maw={800} spacing={20} w="100%" grow>
+        <Group spacing={20} w="100%" grow>
           {images.length > 0 && (
             <Box
               sx={{
@@ -357,7 +357,6 @@ export default function TripContent({
           overflow: "auto",
           width: "100%",
           minWidth: "500px",
-          maxWidth: "800px",
           minHeight: donating ? "100px" : "200px",
           maxHeight: donating ? "100px" : "300px",
           borderTop: "2px solid rgba(255,255,255,0.2)",
