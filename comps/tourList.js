@@ -5,7 +5,6 @@ import { IconX } from "@tabler/icons-react";
 import PlaceListItem from "./placeListItem";
 
 export default function TourList({
-  setTripSelected,
   listOpened,
   setListOpened,
   places,
@@ -14,7 +13,6 @@ export default function TourList({
   const router = useRouter();
 
   const submitTourList = () => {
-    setTripSelected(true);
     const newPlaceData = places.map((location) => {
       const { place, region } = location;
       return {

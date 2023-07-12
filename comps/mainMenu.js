@@ -33,23 +33,23 @@ export default function MainMenu({
   setListOpened,
   searchOpened,
   setSearchOpened,
-  setTripSelected,
   setDropDownOpened,
   auth,
 }) {
+  const router = useRouter();
+
   const [logoutOpeened, setLogoutOpeened] = useState(false);
   const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
   });
   const [visible, setVisible] = useSessionStorage({
     key: "visible",
-    defaultValue: false,
+    defaultValue: router.pathname !== "/" ? false : true,
   });
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
   });
-  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -102,7 +102,6 @@ export default function MainMenu({
         panelShow={panelShow}
         setPanelShow={setPanelShow}
         mainMenuOpened={mainMenuOpened}
-        setTripSelected={setTripSelected}
         openMenu={openMenu}
         signOutFunc={signOutFunc}
       />
@@ -112,7 +111,7 @@ export default function MainMenu({
         pb={0}
         withBorder={false}
         height={1} // that that the header does not block the middele of the top
-        opacity={!visible || searchOpened || mapSpin ? 0 : 1}
+        opacity={!visible || searchOpened ? 0 : 1}
         sx={{
           display: "flex",
           padding: "15px 25px",

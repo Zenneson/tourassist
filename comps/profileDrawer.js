@@ -35,7 +35,6 @@ export default function ProfileDrawer({
   panelShow,
   setPanelShow,
   mainMenuOpened,
-  setTripSelected,
   openMenu,
   signOutFunc,
 }) {
@@ -202,7 +201,7 @@ export default function ProfileDrawer({
               icon={<IconWorld size={30} opacity={0.1} />}
               variant="subtle"
               onClick={() => {
-                sessionStorage.setItem("noLogin", "true");
+                !user && sessionStorage.setItem("noLogin", "true");
                 router.push("/");
               }}
               sx={{
@@ -390,7 +389,7 @@ export default function ProfileDrawer({
               placeholder="Help me raise money to go on a Music Tour"
               data={["Help me raise money to go on a Music Tour"]}
             />
-            <Money setTripSelected={setTripSelected} />
+            <Money />
           </motion.div>
         )}
       </Drawer>

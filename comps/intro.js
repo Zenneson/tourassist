@@ -32,7 +32,6 @@ export default function Intro({ auth }) {
   });
   const [visible, setVisible] = useSessionStorage({
     key: "visible",
-    defaultValue: false,
   });
   const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",

@@ -22,7 +22,7 @@ import {
   Tooltip,
 } from "chart.js";
 
-export default function Money({ setTripSelected }) {
+export default function Money() {
   const router = useRouter();
 
   ChartJS.register(
@@ -57,11 +57,6 @@ export default function Money({ setTripSelected }) {
         borderColor: "lime",
       },
     ],
-  };
-
-  const goToTripPage = () => {
-    setTripSelected(true);
-    router.push("/trippage");
   };
 
   return (
@@ -154,7 +149,9 @@ export default function Money({ setTripSelected }) {
                 backgroundColor: "rgba(255,255,255,0.1)",
               },
             }}
-            onClick={goToTripPage}
+            onClick={() => {
+              router.push("/trippage");
+            }}
           >
             VIEW <IconPlayerPlay size={17} />
           </Center>

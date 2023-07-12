@@ -7,8 +7,6 @@ export default function Home(props) {
   let listOpened = props.listOpened;
   let setListOpened = props.setListOpened;
   let searchOpened = props.searchOpened;
-  let tripSelected = props.tripSelected;
-  let setTripSelected = props.setTripSelected;
   let dropDownOpened = props.dropDownOpened;
   let auth = props.auth;
 
@@ -21,8 +19,6 @@ export default function Home(props) {
         listOpened={listOpened}
         setListOpened={setListOpened}
         searchOpened={searchOpened}
-        tripSelected={tripSelected}
-        setTripSelected={setTripSelected}
         dropDownOpened={dropDownOpened}
       />
     </>

@@ -41,8 +41,6 @@ export default function Mymap({
   listOpened,
   setListOpened,
   searchOpened,
-  tripSelected,
-  setTripSelected,
   dropDownOpened,
 }) {
   const mapRef = useRef();
@@ -91,6 +89,9 @@ export default function Mymap({
   const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
     defaultValue: true,
+  });
+  const [pageLoaded, setPageLoaded] = useSessionStorage({
+    key: "pageLoaded",
   });
 
   const initialViewState = {
@@ -532,7 +533,6 @@ export default function Mymap({
   };
 
   const travelTo = () => {
-    setTripSelected(true);
     setPlaces([
       {
         place: regionName === "東京都" ? "Tokyo" : regionName,
@@ -580,7 +580,7 @@ export default function Mymap({
   return (
     <>
       <LoadingOverlay
-        visible={!mapLoaded || tripSelected}
+        visible={!mapLoaded}
         overlayColor="#0b0c0d"
         overlayOpacity={1}
         zIndex={1000}
@@ -914,7 +914,6 @@ export default function Mymap({
           onZoomEnd={onZoomEnd}
           onLoad={() => {
             setMapLoaded(true);
-            setTripSelected(false);
             sessionStorage.removeItem("noLogin");
           }}
           keyboard={false}
@@ -935,7 +934,6 @@ export default function Mymap({
         >
           {visible && !searchOpened && (
             <TourList
-              setTripSelected={setTripSelected}
               listOpened={listOpened}
               setListOpened={setListOpened}
               places={places}

@@ -2,6 +2,7 @@ import Head from "next/head";
 import { getAuth } from "firebase/auth";
 import { app } from "../libs/firebase";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { MantineProvider, AppShell } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { RouterTransition } from "../comps/routertransition";
@@ -19,8 +20,8 @@ export default function Money(props) {
   const [mainMenuOpened, setMainMenuOpened] = useState(false);
   const [listOpened, setListOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
-  const [tripSelected, setTripSelected] = useState(false);
   const [dropDownOpened, setDropDownOpened] = useState(false);
+
   const auth = getAuth(app);
 
   return (
@@ -106,7 +107,6 @@ export default function Money(props) {
               setListOpened={setListOpened}
               searchOpened={searchOpened}
               setSearchOpened={setSearchOpened}
-              setTripSelected={setTripSelected}
               setDropDownOpened={setDropDownOpened}
               auth={auth}
             />
@@ -124,8 +124,6 @@ export default function Money(props) {
             listOpened={listOpened}
             setListOpened={setListOpened}
             searchOpened={searchOpened}
-            tripSelected={tripSelected}
-            setTripSelected={setTripSelected}
             dropDownOpened={dropDownOpened}
             setDropDownOpened={setDropDownOpened}
             auth={auth}
