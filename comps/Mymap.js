@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import Map, { Marker, Source, Layer } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
 import bbox from "@turf/bbox";
-import { motion } from "framer-motion";
 import {
   Autocomplete,
   Box,
@@ -34,6 +33,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../public/data/getNewCenter";
 import TourList from "./tourList";
+import Loader from "./loader";
 
 export default function Mymap({
   setPanelShow,
@@ -563,31 +563,9 @@ export default function Mymap({
     }
   };
 
-  const Loader = () => (
-    <Box>
-      <motion.div
-        animate={{
-          opacity: [1, 0.1, 1],
-          transform: ["scale(1)", "scale(0.9)", "scale(1)"],
-        }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
-        <Image src={"img/blue_loader.png"} alt="TourAssist Loader" />
-      </motion.div>
-    </Box>
-  );
-
   return (
     <>
-      <LoadingOverlay
-        visible={!mapLoaded}
-        overlayColor="#0b0c0d"
-        overlayOpacity={1}
-        zIndex={1000}
-        transitionDuration={250}
-        loader={<Loader />}
-        style={{ pointerEvents: "none" }}
-      />
+      <Loader pageLoaded={mapLoaded} />
       {places.length >= 1 && !listOpened && (
         // Tour List Button
         <Button

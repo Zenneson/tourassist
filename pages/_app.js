@@ -2,7 +2,6 @@ import Head from "next/head";
 import { getAuth } from "firebase/auth";
 import { app } from "../libs/firebase";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { MantineProvider, AppShell } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { RouterTransition } from "../comps/routertransition";

@@ -52,10 +52,10 @@ export default function MainMenu({
   });
 
   useEffect(() => {
-    if (user) {
-      setVisible(true);
+    if (mapSpin) {
+      setVisible(false);
     }
-  }, [user, setVisible]);
+  }, [mapSpin, setVisible]);
 
   const openMenu = () => {
     setMainMenuOpened((o) => !o);
