@@ -41,7 +41,6 @@ import {
   IconBrandPaypal,
   IconAt,
   IconUser,
-  IconChevronsRight,
 } from "@tabler/icons-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -212,33 +211,7 @@ export default function Trippage(props) {
 
   return (
     <>
-      <Center>
-        <Divider
-          w={"100%"}
-          maw={1200}
-          mt={90}
-          ml={30}
-          mb={15}
-          color="dark.4"
-          size={"xs"}
-          label={
-            <>
-              <IconChevronsRight size={40} stroke={0.5} />
-              <Title
-                order={3}
-                px={5}
-                maw={"800px"}
-                color="dark.0"
-                fw={400}
-                italic
-              >
-                Help me raise money to go on a Music Tour
-              </Title>
-            </>
-          }
-        />
-      </Center>
-      <Center>
+      <Center mt={120}>
         <Flex
           gap={30}
           w={"80%"}
@@ -296,6 +269,8 @@ export default function Trippage(props) {
                       ref={sliderRef}
                       {...slideSettings}
                       style={{
+                        borderRadius: "3px",
+                        borderTop: "3px solid rgba(255,255,255,0.2)",
                         width: "650px",
                       }}
                     >
@@ -334,6 +309,17 @@ export default function Trippage(props) {
                 )}
               </Center>
             </Group>
+            <Divider
+              w={"80%"}
+              color="dark.4"
+              size={"md"}
+              mt={40}
+              label={
+                <Title order={3} px={5} maw={"800px"} color="gray.6" fw={700}>
+                  Help me raise money to go on a Music Tour
+                </Title>
+              }
+            />
             <Center mt={20}>
               <Button.Group>
                 <Button variant="default" px={44}>
@@ -531,7 +517,7 @@ export default function Trippage(props) {
             h={"100%"}
             direction={"column"}
             pos={"sticky"}
-            top={30}
+            top={120}
             maw={360}
           >
             <Box
@@ -625,7 +611,7 @@ export default function Trippage(props) {
               </Button>
             </Box>
             <Box>
-              <Donations dHeight={"calc(100vh - 330px)"} />
+              <Donations dHeight={"calc(100vh - 420px)"} />
             </Box>
           </Flex>
         </Flex>
