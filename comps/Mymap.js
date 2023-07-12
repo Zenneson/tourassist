@@ -590,268 +590,270 @@ export default function Mymap({
           <IconList size={15} />
         </Button>
       )}
-      <Modal
-        centered
-        zIndex={100}
-        opened={showModal}
-        onClose={onClose}
-        padding={"15px 30px 20px 30px"}
-        size={"470px"}
-        overlayProps={{
-          opacity: 0.5,
-          blur: 5,
-        }}
-        title={
-          <Box mb={isCountry || isState ? -15 : 0}>
-            <Title
-              order={1}
-              fw={900}
-              variant="gradient"
-              gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
-              sx={{
-                textTransform: "uppercase",
-                textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
-              }}
-            >
-              {regionName === "東京都" ? "Tokyo" : regionName}
-            </Title>
-            <Text fw={600} size="xs" color="#c0c0c0">
-              {!isCountry &&
-                citySubTitle &&
-                citySubTitle.replace("ecture東京都", "., Japan")}
-            </Text>
-          </Box>
-        }
-        styles={(theme) => ({
-          header: {
-            backgroundColor: "rgba(11, 12, 13, 0)",
-            zIndex: 1,
-          },
-          content: {
-            backgroundColor: "rgba(11, 12, 13, 0.8)",
-            overflow: "hidden",
-          },
-          overlay: {
-            zIndex: 0,
-          },
-          close: {
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-          },
-        })}
-      >
-        {isCity && !isCountry && !isState && (
-          <>
-            {/* Travel to Button  */}
-            <Popover
-              opened={tourListDropDown}
-              offset={-85}
-              width={"target"}
-              styles={{
-                dropdown: {
-                  backgroundColor: "rgba(7, 7, 7, 1)",
-                  border: "none",
-                  borderRadius: "0 0 3px 3px",
-                  borderTop: "2px solid rgba(255, 255, 255, 0.3)",
-                },
-              }}
-              onClick={() => {
-                if (places.length > 0) {
-                  showTourList();
-                  setTourListDropDown(!tourListDropDown);
-                } else {
-                  travelTo();
-                }
-              }}
-            >
-              <Popover.Target>
-                <NavLink
-                  icon={
-                    <IconPlaneTilt
-                      size={25}
-                      color="#9ff5fd"
-                      opacity={0.7}
-                      style={{
-                        margin: "3px 2px 0 3px",
-                      }}
-                    />
+      {!searchOpened && (
+        <Modal
+          centered
+          zIndex={100}
+          opened={showModal}
+          onClose={onClose}
+          padding={"15px 30px 20px 30px"}
+          size={"470px"}
+          overlayProps={{
+            opacity: 0.5,
+            blur: 5,
+          }}
+          title={
+            <Box mb={isCountry || isState ? -15 : 0}>
+              <Title
+                order={1}
+                fw={900}
+                variant="gradient"
+                gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
+                sx={{
+                  textTransform: "uppercase",
+                  textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
+                }}
+              >
+                {regionName === "東京都" ? "Tokyo" : regionName}
+              </Title>
+              <Text fw={600} size="xs" color="#c0c0c0">
+                {!isCountry &&
+                  citySubTitle &&
+                  citySubTitle.replace("ecture東京都", "., Japan")}
+              </Text>
+            </Box>
+          }
+          styles={(theme) => ({
+            header: {
+              backgroundColor: "rgba(11, 12, 13, 0)",
+              zIndex: 1,
+            },
+            content: {
+              backgroundColor: "rgba(11, 12, 13, 0.8)",
+              overflow: "hidden",
+            },
+            overlay: {
+              zIndex: 0,
+            },
+            close: {
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+            },
+          })}
+        >
+          {isCity && !isCountry && !isState && (
+            <>
+              {/* Travel to Button  */}
+              <Popover
+                opened={tourListDropDown}
+                offset={-85}
+                width={"target"}
+                styles={{
+                  dropdown: {
+                    backgroundColor: "rgba(7, 7, 7, 1)",
+                    border: "none",
+                    borderRadius: "0 0 3px 3px",
+                    borderTop: "2px solid rgba(255, 255, 255, 0.3)",
+                  },
+                }}
+                onClick={() => {
+                  if (places.length > 0) {
+                    showTourList();
+                    setTourListDropDown(!tourListDropDown);
+                  } else {
+                    travelTo();
                   }
-                  variant="filled"
-                  description={`Start planning a trip to ${
-                    regionName === "東京都" ? "Tokyo" : regionName
-                  }`}
-                  sx={{
-                    borderLeft: "3px solid rgba(0, 0, 0, 0)",
-                    "&:hover": {
-                      borderLeft: "3px solid  rgba(159, 245, 253, 0.4)",
-                      transition: "all 0.2s ease-in-out",
-                    },
-                  }}
-                  label={
-                    <>
-                      <Text inherit span color="dimmed">
-                        Travel to{" "}
-                      </Text>
-                      <Text
-                        inherit
-                        span
-                        color="white"
-                        size="md"
-                        fw={700}
-                        transform="uppercase"
-                      >
-                        {regionName === "東京都" ? "Tokyo" : regionName}
-                      </Text>
-                    </>
-                  }
-                />
-              </Popover.Target>
-              <Popover.Dropdown>
-                <Flex
-                  align={"center"}
-                  gap={3}
-                  fz={12}
-                  fw={100}
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Clear Tour List and Travel to
-                  <Text>
-                    <Text span color="#81eaf4" fw={700} mx={2}>
-                      {regionName === "東京都" ? "Tokyo" : regionName}
-                    </Text>
-                    ?
-                  </Text>
-                </Flex>
-                <Group spacing={10} mt={10} grow>
-                  {/* No to Clear Tour List or Travel to */}
-                  <Button
+                }}
+              >
+                <Popover.Target>
+                  <NavLink
+                    icon={
+                      <IconPlaneTilt
+                        size={25}
+                        color="#9ff5fd"
+                        opacity={0.7}
+                        style={{
+                          margin: "3px 2px 0 3px",
+                        }}
+                      />
+                    }
                     variant="filled"
-                    opacity={0.7}
-                    color="red"
-                    onClick={() => {
-                      setTourListDropDown(false);
+                    description={`Start planning a trip to ${
+                      regionName === "東京都" ? "Tokyo" : regionName
+                    }`}
+                    sx={{
+                      borderLeft: "3px solid rgba(0, 0, 0, 0)",
+                      "&:hover": {
+                        borderLeft: "3px solid  rgba(159, 245, 253, 0.4)",
+                        transition: "all 0.2s ease-in-out",
+                      },
+                    }}
+                    label={
+                      <>
+                        <Text inherit span color="dimmed">
+                          Travel to{" "}
+                        </Text>
+                        <Text
+                          inherit
+                          span
+                          color="white"
+                          size="md"
+                          fw={700}
+                          transform="uppercase"
+                        >
+                          {regionName === "東京都" ? "Tokyo" : regionName}
+                        </Text>
+                      </>
+                    }
+                  />
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <Flex
+                    align={"center"}
+                    gap={3}
+                    fz={12}
+                    fw={100}
+                    sx={{
+                      textTransform: "uppercase",
                     }}
                   >
-                    <IconX size={20} stroke={5} />
-                  </Button>
-                  {/* Yes to Clear Tour List and Travel to */}
-                  <Button variant="filled" opacity={0.7} onClick={travelTo}>
-                    <IconCheck size={20} stroke={5} />
-                  </Button>
-                </Group>
-              </Popover.Dropdown>
-            </Popover>
-            <LoadingOverlay
-              visible={tourListDropDown}
-              overlayBlur={5}
-              overlayColor="#0b0c0d"
-              overlayOpacity={0.15}
-              zIndex={3}
-              loader={<div></div>}
-            />
-            {/* Add to Tour List Button  */}
-            <NavLink
-              mb={10}
-              icon={
-                <IconPlaylistAdd
-                  size={25}
-                  color="#9ff5fd"
-                  opacity={0.7}
-                  style={{
-                    margin: "3px 2px 0 3px",
-                  }}
-                />
-              }
-              description={`Add ${
-                regionName === "東京都" ? "Tokyo" : regionName
-              } to the Tour List`}
-              sx={{
-                borderLeft: "3px solid rgba(0, 0, 0, 0)",
-                "&:hover": {
-                  borderLeft: "3px solid  rgba(159, 245, 253, 0.4)",
-                  transition: "all 0.2s ease-in-out",
-                },
-              }}
-              label={
-                <>
-                  <Text color="dimmed">
-                    Add to{" "}
-                    <Text span color="white" fw={700} transform="uppercase">
-                      TOUR LIST
-                    </Text>{" "}
-                  </Text>
-                </>
-              }
-              onClick={addToTourList}
-            />
-          </>
-        )}
-        {!isCity && (isCountry || isState) && (
-          <Box>
-            <LoadingOverlay
-              overlayOpacity={0.7}
-              overlayBlur={3}
-              visible={cityListSet === false}
-            />
-            <Divider
-              label={
-                topCities.length > 0 ? (
-                  <Text fz={12} fs={"italic"}>
-                    Top {topCities.length === 1 ? "City" : "Cities"} in{" "}
-                    {regionName === "東京都" ? "Tokyo" : regionName} by
-                    population
-                  </Text>
-                ) : (
-                  <IconMapSearch size={20} />
-                )
-              }
-              labelPosition={topCities.length === 0 ? "center" : "left"}
-              size="xs"
-              my="xs"
-              style={{
-                opacity: 0.7,
-              }}
-            />
-            <Box display={topCities.length === 0 ? "none" : "block"}>
-              {topCitiesList}
-            </Box>
-            {/* Search Cities in Selected Region */}
-            <Autocomplete
-              mt={15}
-              variant={"filled"}
-              icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-              placeholder={`Search for a city in ${
-                regionName === "東京都" ? "Tokyo" : regionName
-              }?`}
-              defaultValue=""
-              value={citySearch}
-              size="sm"
-              mb={10}
-              withinPortal
-              onChange={function (e) {
-                setCitySearch(e);
-                handleChange("city", e);
-              }}
-              onItemSubmit={function (e) {
-                handleSelect(e);
-                setCitySearch("");
-              }}
-              data={cityData}
-              filter={(value, item) => item}
-              styles={(theme) => ({
-                input: {
-                  "::placeholder": {
-                    color: "rgba(255,255,255,0.5)",
+                    Clear Tour List and Travel to
+                    <Text>
+                      <Text span color="#81eaf4" fw={700} mx={2}>
+                        {regionName === "東京都" ? "Tokyo" : regionName}
+                      </Text>
+                      ?
+                    </Text>
+                  </Flex>
+                  <Group spacing={10} mt={10} grow>
+                    {/* No to Clear Tour List or Travel to */}
+                    <Button
+                      variant="filled"
+                      opacity={0.7}
+                      color="red"
+                      onClick={() => {
+                        setTourListDropDown(false);
+                      }}
+                    >
+                      <IconX size={20} stroke={5} />
+                    </Button>
+                    {/* Yes to Clear Tour List and Travel to */}
+                    <Button variant="filled" opacity={0.7} onClick={travelTo}>
+                      <IconCheck size={20} stroke={5} />
+                    </Button>
+                  </Group>
+                </Popover.Dropdown>
+              </Popover>
+              <LoadingOverlay
+                visible={tourListDropDown}
+                overlayBlur={5}
+                overlayColor="#0b0c0d"
+                overlayOpacity={0.15}
+                zIndex={3}
+                loader={<div></div>}
+              />
+              {/* Add to Tour List Button  */}
+              <NavLink
+                mb={10}
+                icon={
+                  <IconPlaylistAdd
+                    size={25}
+                    color="#9ff5fd"
+                    opacity={0.7}
+                    style={{
+                      margin: "3px 2px 0 3px",
+                    }}
+                  />
+                }
+                description={`Add ${
+                  regionName === "東京都" ? "Tokyo" : regionName
+                } to the Tour List`}
+                sx={{
+                  borderLeft: "3px solid rgba(0, 0, 0, 0)",
+                  "&:hover": {
+                    borderLeft: "3px solid  rgba(159, 245, 253, 0.4)",
+                    transition: "all 0.2s ease-in-out",
                   },
-                },
-              })}
-            />
-          </Box>
-        )}
-      </Modal>
+                }}
+                label={
+                  <>
+                    <Text color="dimmed">
+                      Add to{" "}
+                      <Text span color="white" fw={700} transform="uppercase">
+                        TOUR LIST
+                      </Text>{" "}
+                    </Text>
+                  </>
+                }
+                onClick={addToTourList}
+              />
+            </>
+          )}
+          {!isCity && (isCountry || isState) && (
+            <Box>
+              <LoadingOverlay
+                overlayOpacity={0.7}
+                overlayBlur={3}
+                visible={cityListSet === false}
+              />
+              <Divider
+                label={
+                  topCities.length > 0 ? (
+                    <Text fz={12} fs={"italic"}>
+                      Top {topCities.length === 1 ? "City" : "Cities"} in{" "}
+                      {regionName === "東京都" ? "Tokyo" : regionName} by
+                      population
+                    </Text>
+                  ) : (
+                    <IconMapSearch size={20} />
+                  )
+                }
+                labelPosition={topCities.length === 0 ? "center" : "left"}
+                size="xs"
+                my="xs"
+                style={{
+                  opacity: 0.7,
+                }}
+              />
+              <Box display={topCities.length === 0 ? "none" : "block"}>
+                {topCitiesList}
+              </Box>
+              {/* Search Cities in Selected Region */}
+              <Autocomplete
+                mt={15}
+                variant={"filled"}
+                icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
+                placeholder={`Search for a city in ${
+                  regionName === "東京都" ? "Tokyo" : regionName
+                }?`}
+                defaultValue=""
+                value={citySearch}
+                size="sm"
+                mb={10}
+                withinPortal
+                onChange={function (e) {
+                  setCitySearch(e);
+                  handleChange("city", e);
+                }}
+                onItemSubmit={function (e) {
+                  handleSelect(e);
+                  setCitySearch("");
+                }}
+                data={cityData}
+                filter={(value, item) => item}
+                styles={(theme) => ({
+                  input: {
+                    "::placeholder": {
+                      color: "rgba(255,255,255,0.5)",
+                    },
+                  },
+                })}
+              />
+            </Box>
+          )}
+        </Modal>
+      )}
       {!searchOpened && visible && !mapSpin && !dropDownOpened && (
         <Flex
           justify="center"

@@ -968,59 +968,61 @@ export default function TripPlannerPage(props) {
             )}
             {active === 3 && (
               <motion.div {...animation}>
-                <Stack
-                  pt={10}
-                  pb={30}
-                  px={30}
-                  maw={950}
-                  w={"100%"}
-                  bg={"rgba(0,0,0,0.3)"}
-                  sx={{
-                    borderTop: "2px solid rgba(255,255,255,0.2)",
-                  }}
-                >
-                  <Box hidden={user} w={"100%"} mb={5}>
-                    <Box>
-                      <LoginComp auth={auth} />
+                <Center>
+                  <Stack
+                    pt={10}
+                    pb={30}
+                    px={30}
+                    maw={700}
+                    w={"100%"}
+                    bg={"rgba(0,0,0,0.3)"}
+                    sx={{
+                      borderTop: "2px solid rgba(255,255,255,0.2)",
+                    }}
+                  >
+                    <Box hidden={user} w={"100%"} mb={5}>
+                      <Box>
+                        <LoginComp auth={auth} />
+                      </Box>
                     </Box>
-                  </Box>
-                  <Center mt={user ? 20 : 0}>
-                    <Button
-                      leftIcon={<IconBuildingBank size={34} />}
-                      variant="light"
-                      color="#0D3F82"
-                      size="xl"
-                      h={90}
-                      w={"100%"}
-                      sx={{
-                        textShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                      }}
-                    >
-                      <Title order={2}>ADD BANKING INFORMATION</Title>
-                    </Button>
-                  </Center>
-                  <Divider w={"100%"} my={5} opacity={0.3} />
-                  <Group spacing={0}>
-                    <Text fz={12} w={"80%"} pr={5}>
-                      We use Stripe, a trusted payment processor, to securely
-                      handle transactions and disburse funds, ensuring the
-                      protection of your sensitive banking information.
-                    </Text>
-                    <Image
-                      src="img/stripe.png"
-                      fit="contain"
-                      display={"block"}
-                      opacity={0.3}
-                      px={20}
-                      style={{
-                        width: "20%",
-                        borderRadius: "3px",
-                        backgroundColor: "rgba(255,255,255,0.08)",
-                      }}
-                      alt=""
-                    />
-                  </Group>
-                </Stack>
+                    <Center mt={user ? 20 : 0}>
+                      <Button
+                        leftIcon={<IconBuildingBank size={34} />}
+                        variant="light"
+                        color="#0D3F82"
+                        size="xl"
+                        h={90}
+                        w={"100%"}
+                        sx={{
+                          textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        <Title order={2}>ADD BANKING INFORMATION</Title>
+                      </Button>
+                    </Center>
+                    <Divider w={"100%"} my={5} opacity={0.3} />
+                    <Group spacing={0}>
+                      <Text fz={12} w={"80%"} pr={5}>
+                        We use Stripe, a trusted payment processor, to securely
+                        handle transactions and disburse funds, ensuring the
+                        protection of your sensitive banking information.
+                      </Text>
+                      <Image
+                        src="img/stripe.png"
+                        fit="contain"
+                        display={"block"}
+                        opacity={0.3}
+                        px={20}
+                        style={{
+                          width: "20%",
+                          borderRadius: "3px",
+                          backgroundColor: "rgba(255,255,255,0.08)",
+                        }}
+                        alt=""
+                      />
+                    </Group>
+                  </Stack>
+                </Center>
               </motion.div>
             )}
           </Box>

@@ -93,7 +93,7 @@ export default function Donations({ dHeight }) {
     <Box
       w="100%"
       sx={{
-        radius: 3,
+        borderRadius: 3,
         boxShadow:
           "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
       }}
