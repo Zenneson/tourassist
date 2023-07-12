@@ -9,9 +9,7 @@ import {
   Switch,
 } from "@mantine/core";
 import {
-  IconUserCircle,
   IconKey,
-  IconPencil,
   IconX,
   IconCheck,
   IconBrandFacebook,

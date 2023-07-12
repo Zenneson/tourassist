@@ -16,7 +16,6 @@ import {
   NavLink,
   Popover,
   Button,
-  Image,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import {
@@ -566,7 +565,7 @@ export default function Mymap({
   return (
     <>
       <Loader pageLoaded={mapLoaded} />
-      {places.length >= 1 && !listOpened && (
+      {places.length >= 1 && !listOpened && !mapSpin && (
         // Tour List Button
         <Button
           onClick={showTourList}

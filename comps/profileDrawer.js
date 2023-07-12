@@ -1,4 +1,3 @@
-import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";

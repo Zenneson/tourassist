@@ -170,7 +170,7 @@ export default function LoginComp({ auth }) {
     );
   };
 
-  async function signInWith(signin, provider, icon) {
+  async function signInWith(provider) {
     const userCred = await signInWithPopup(auth, new provider())
       .then((result) => {
         const credential = provider.credentialFromResult(result);
@@ -224,13 +224,7 @@ export default function LoginComp({ auth }) {
         <Group grow spacing={20}>
           {/* Signout Button */}
           <Button
-            onClick={() =>
-              signInWith(
-                "Google",
-                GoogleAuthProvider,
-                <IconBrandGoogle size={15} />
-              )
-            }
+            onClick={() => signInWith(GoogleAuthProvider)}
             variant="light"
             bg="dark.5"
             color="gray.5"
@@ -242,13 +236,7 @@ export default function LoginComp({ auth }) {
           </Button>
           {/* Twitter Signin Button  */}
           <Button
-            onClick={() =>
-              signInWith(
-                "Twitter",
-                TwitterAuthProvider,
-                <IconBrandTwitter size={15} />
-              )
-            }
+            onClick={() => signInWith(TwitterAuthProvider)}
             variant="light"
             bg="dark.5"
             color="gray.5"
@@ -364,12 +352,11 @@ export default function LoginComp({ auth }) {
               </Popover.Dropdown>
             </Popover>
             {type === "sign-up" && (
-              <Group
-                position={router.pathname !== "/tripplanner" ? "left" : "right"}
-              >
+              <Group position={"left"}>
                 <Checkbox
                   label="I accept terms and conditions"
                   checked={form.values.terms}
+                  mt={10}
                   required
                   onChange={(event) =>
                     form.setFieldValue("terms", event.currentTarget.checked)
@@ -378,8 +365,11 @@ export default function LoginComp({ auth }) {
               </Group>
             )}
           </Stack>
-          {router.pathname !== "/tripplanner" && (
-            <Group position={"apart"} mt="xl">
+          <Group
+            position={router.pathname !== "/tripplanner" ? "apart" : "right"}
+            mt={router.pathname !== "/tripplanner" ? "25px" : "-20px"}
+          >
+            {router.pathname !== "/tripplanner" && (
               <Anchor
                 component="button"
                 type="button"
@@ -391,21 +381,21 @@ export default function LoginComp({ auth }) {
                   ? "Already have an account?"
                   : "Don't have an account?"}
               </Anchor>
-              <Button
-                size={"sm"}
-                mt={0}
-                fw={700}
-                uppercase={true}
-                variant="light"
-                bg="dark.5"
-                c="gray.5"
-                sx={{ color: "rgba(255,255,255,0.3)" }}
-                type="submit"
-              >
-                {type === "sign-up" ? "Sign up" : "Login"}
-              </Button>
-            </Group>
-          )}
+            )}
+            <Button
+              size={"sm"}
+              mt={0}
+              fw={700}
+              uppercase={true}
+              variant="light"
+              bg="dark.5"
+              c="gray.5"
+              sx={{ color: "rgba(255,255,255,0.3)" }}
+              type="submit"
+            >
+              {type === "sign-up" ? "Sign up" : "Login"}
+            </Button>
+          </Group>
         </form>
       </Box>
     </>
