@@ -91,7 +91,7 @@ export default function LatestTrips() {
             sx={{
               zIndex: 1,
               background:
-                "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,0,0,1) 100%)",
+                "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(11,12,12,1) 100%)",
             }}
           />
           <Badge

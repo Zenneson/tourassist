@@ -33,7 +33,7 @@ const useStyles = createStyles((theme) => ({
     transition: "transform 150ms ease",
     position: "absolute",
     top: "10px",
-    left: `-15px`,
+    left: `-20px`,
   },
 
   activeBox: {
