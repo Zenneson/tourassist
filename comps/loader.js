@@ -28,7 +28,7 @@ export default function Loader({ pageLoaded }) {
         overlayColor="#0b0c0d"
         overlayOpacity={1}
         zIndex={1000}
-        transitionDuration={250}
+        transitionDuration={1000}
         loader={<Globe />}
         style={{ pointerEvents: "none" }}
       />

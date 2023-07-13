@@ -41,6 +41,8 @@ export default function Mymap({
   setListOpened,
   searchOpened,
   dropDownOpened,
+  mapLoaded,
+  setMapLoaded,
 }) {
   const mapRef = useRef();
   const center = useRef();
@@ -61,7 +63,6 @@ export default function Mymap({
   const [isCountry, setIsCountry] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
   const [tourListDropDown, setTourListDropDown] = useState(false);
-  const [mapLoaded, setMapLoaded] = useState(false);
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
@@ -121,11 +122,11 @@ export default function Mymap({
       rotationIntervalId = setInterval(() => {
         mapRef.current?.easeTo({
           center: [
-            mapRef.current?.getCenter().lng + 0.4,
+            mapRef.current?.getCenter().lng + 0.5,
             mapRef.current?.getCenter().lat,
           ],
-          zoom: 4.2,
-          pitch: 35,
+          zoom: 3.5,
+          pitch: 10,
           duration: 25,
         });
       }, 25);

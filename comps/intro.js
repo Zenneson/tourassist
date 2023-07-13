@@ -12,6 +12,7 @@ import {
   Image,
   Divider,
   BackgroundImage,
+  LoadingOverlay,
 } from "@mantine/core";
 import { IconWorld, IconInfoSquareRounded } from "@tabler/icons-react";
 import {
@@ -24,7 +25,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Intro({ auth }) {
+export default function Intro({ auth, mapLoaded }) {
   const [opened, setOpened] = useState(false);
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -99,16 +100,16 @@ export default function Intro({ auth }) {
                 left: 0,
                 width: "100%",
                 height: "100vh",
-                zIndex: "105",
+                zIndex: "1200",
               }}
             >
               <Center
                 opacity={firstDown ? 0 : 1}
                 w={firstDown ? 0 : 700}
                 h={"100vh"}
-                bg={"#020202"}
+                bg={"rgba(2, 2, 2, 0.94)"}
                 sx={{
-                  boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
+                  boxShadow: "10px 0 5px 0 rgba(0,0,0,0.3)",
                   flexDirection: "column",
                 }}
               >
@@ -127,20 +128,33 @@ export default function Intro({ auth }) {
                 </Title>
                 <Box
                   pt={20}
+                  pos={"relative"}
                   sx={{
                     width: "80%",
                     maxWidth: "380px",
                   }}
                 >
+                  <LoadingOverlay
+                    visible={!mapLoaded}
+                    overlayColor="#000"
+                    overlayOpacity={1}
+                  />
                   <LoginComp auth={auth} />
                 </Box>
               </Center>
-              <Center w={"100%"}>
+              <Center
+                bg={"rgba(0,0,0,0.8)"}
+                w={"100%"}
+                sx={{
+                  backdropFilter: "blur(50px)",
+                }}
+              >
                 <Flex
                   direction={"column"}
                   align={"center"}
                   ta={"center"}
                   w={"100%"}
+                  py={50}
                 >
                   <Image
                     hidden={!firstDown}
@@ -223,9 +237,6 @@ export default function Intro({ auth }) {
                     fw={300}
                     fz={!firstDown ? "1.5vw" : "2.4vw"}
                     color="#fff"
-                    sx={{
-                      textShadow: "0 2px 5px #000",
-                    }}
                   >
                     Make your travel plans a reality with the power of your
                     community!
@@ -239,16 +250,18 @@ export default function Intro({ auth }) {
                     opacity={0.6}
                     color="#fff"
                     hidden={firstDown}
-                    sx={{
-                      textShadow: "0 2px 5px #000",
-                    }}
                   >
                     Whether you&rsquo;re seeking adventure, exploring new
                     cultures, reuniting with loved ones, pursuing your passions,
                     or making lifelong memories on your honeymoon, here&rsquo;s
                     an assist to make it all possible.
                   </Text>
-                  <Group w="100%" position="center" mt={10}>
+                  <Group
+                    w="100%"
+                    position="center"
+                    mt={10}
+                    opacity={mapLoaded ? 1 : 0}
+                  >
                     {/* Learn More button  */}
                     <Button
                       fw={900}
@@ -284,45 +297,7 @@ export default function Intro({ auth }) {
                 </Flex>
               </Center>
             </Flex>
-            <Box
-              pos="absolute"
-              opacity={0.15}
-              w={width}
-              h={height}
-              sx={{
-                zIndex: "104",
-                overflow: "hidden",
-              }}
-            >
-              <Slider {...slideSettings}>
-                {images.map((image, index) => (
-                  <BackgroundImage
-                    key={index}
-                    src={image}
-                    h={height}
-                    alt="intro"
-                  />
-                ))}
-              </Slider>
-            </Box>
           </>
-        )}
-      </Transition>
-      <Transition
-        mounted={mapSpin}
-        transition="fade"
-        duration={100}
-        exitDuration={200}
-        timingFunction="linear"
-      >
-        {(styles) => (
-          <Overlay
-            style={styles}
-            gradient="linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.97) 30%, rgba(0,0,0,1) 100%)"
-            opacity={1}
-            blur={5}
-            zIndex={102}
-          />
         )}
       </Transition>
     </>
