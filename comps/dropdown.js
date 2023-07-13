@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { IconArrowBadgeRight } from "@tabler/icons-react";
-import { Box, Drawer, Center, Flex, Space, createStyles } from "@mantine/core";
+import { Box, Drawer, Center, Flex, createStyles } from "@mantine/core";
 import LatestTrips from "./latesttrips";
 
 const useStyles = createStyles((theme) => ({
@@ -40,7 +40,6 @@ const useStyles = createStyles((theme) => ({
     background: "rgba(11, 12, 13, 0.5)",
     borderTop: "2px solid rgba(255,255,255,0.2)",
     borderRadius: "0 0 3px 3px",
-    backdropFilter: "blur(20px)",
     height: "600px",
     padding: "20px",
     boxShadow:
@@ -107,6 +106,7 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
         withOverlay={false}
         styles={{
           content: {
+            backdropFilter: "blur(10px)",
             overflow: "hidden",
             background: "rgba(11, 12, 13, 0.9)",
           },
@@ -115,8 +115,8 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
           },
         }}
       >
-        <Center mt={120} mb={50}>
-          <Flex w={"80%"} maw={1200} pos={"relative"}>
+        <Center h={"100vh"} mb={50}>
+          <Flex w={"80%"} maw={1200} h={705} pos={"relative"}>
             <Flex direction={"column"} w={"20%"} pos={"relative"}>
               <Box maw={180}>
                 <IconArrowBadgeRight

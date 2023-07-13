@@ -74,11 +74,12 @@ export default function LatestTrips() {
           transition: "all 0.2s ease",
           background: "rgba(11, 12, 13, 0)",
           backdropFilter: "blur(20px)",
-          border: "1px solid rgba(0, 0, 0, 0.2)",
+          border: "1px solid rgba(0, 0, 0, 0.1)",
           boxShadow:
             "0 2px 5px  rgba(0,0,0, 0.2), inset 0 -3px 10px 1px rgba(0,0,0, 0.1)",
           "&:hover": {
             background: "rgba(5, 5, 5, 1)",
+            boxShadow: "none",
           },
         }}
       >
@@ -109,7 +110,7 @@ export default function LatestTrips() {
             pos={"absolute"}
             top={7}
             right={7}
-            size={50}
+            size={40}
             thickness={3}
             roundCaps
             sections={[{ value: trip.percent, color: "blue" }]}
@@ -118,7 +119,10 @@ export default function LatestTrips() {
             }}
             label={
               <Text color="blue" weight={700} align="center" size={12}>
-                {trip.percent}%
+                {trip.percent}
+                <Text fz={7} pos={"relative"} top={-3} span>
+                  %
+                </Text>
               </Text>
             }
           />

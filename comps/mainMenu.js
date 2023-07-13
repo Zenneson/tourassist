@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
+import { RemoveScroll } from "@mantine/core";
 import {
   Header,
+  Box,
   Button,
   Image,
   Group,
@@ -106,11 +108,12 @@ export default function MainMenu({
         signOutFunc={signOutFunc}
       />
       <Header
+        className={RemoveScroll.classNames.zeroRight}
         zIndex={998}
         bg="none"
         pb={0}
         withBorder={false}
-        height={1} // that that the header does not block the middele of the top
+        height={1} // so that the header does not block the middele of the top
         opacity={!visible || searchOpened ? 0 : 1}
         sx={{
           display: "flex",

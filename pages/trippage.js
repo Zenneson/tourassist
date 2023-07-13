@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
 import {
   Avatar,
@@ -52,7 +52,6 @@ import { DateInput } from "@mantine/dates";
 
 export default function Trippage(props) {
   // let images = props.images || [];
-  const { hovered, ref } = useHover();
   const [altModal, setAltModal] = useState(false);
   const [editContentModal, setEditContentModal] = useState(false);
   const [editUpdate, setEditUpdate] = useState("");
@@ -80,7 +79,14 @@ export default function Trippage(props) {
   ];
 
   const slides = images.map((image, index) => (
-    <BackgroundImage key={index} src={image} h={500} maw={650} alt="intro" />
+    <BackgroundImage
+      key={index}
+      src={image}
+      h={500}
+      maw={650}
+      alt="intro"
+      radius={"0 0 3px 3px"}
+    />
   ));
 
   const slideSettings = {
@@ -96,16 +102,6 @@ export default function Trippage(props) {
     slidesToScroll: 1,
     arrows: false,
     pauseOnHover: true,
-  };
-
-  const sliderRef = useRef();
-
-  const next = () => {
-    sliderRef.current.slickNext();
-  };
-
-  const previous = () => {
-    sliderRef.current.slickPrev();
   };
 
   const commentData = [
@@ -209,6 +205,360 @@ export default function Trippage(props) {
     setAddUpdateDesc(false);
   };
 
+  const MainCarousel = () => {
+    const sliderRef = useRef();
+    const { hovered, ref } = useHover();
+
+    const next = () => {
+      sliderRef.current.slickNext();
+    };
+
+    const previous = () => {
+      sliderRef.current.slickPrev();
+    };
+
+    if (images.length === 1) {
+      return (
+        <Box
+          style={{
+            borderTop: "3px solid rgba(255,255,255,0.2)",
+            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
+            borderRadius: "0 0 3px 3px",
+            overflow: "hidden",
+          }}
+        >
+          <BackgroundImage src={images} h={500} w={650} alt="intro" />
+        </Box>
+      );
+    }
+
+    return (
+      <Group
+        ref={ref}
+        spacing={0}
+        w={images.length > 1 ? "auto" : "650px"}
+        h={500}
+      >
+        <Center>
+          {hovered && images.length > 1 && (
+            // Previous Slider Button
+            <Button
+              h={490}
+              mb={7}
+              radius={"3px 0 0 3px"}
+              onClick={previous}
+              variant="outline"
+              color={"dark.4"}
+              p={0}
+              w={"5%"}
+              sx={{
+                border: "none",
+                "&:hover": {
+                  color: "#fff",
+                },
+              }}
+            >
+              <IconChevronLeft size={50} />
+            </Button>
+          )}
+          <Slider
+            ref={sliderRef}
+            {...slideSettings}
+            style={{
+              borderTop: "3px solid rgba(255,255,255,0.2)",
+              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
+              width: "650px",
+              height: "500px",
+            }}
+          >
+            {slides}
+          </Slider>
+          {hovered && images.length > 1 && (
+            // Next Slider Button
+            <Button
+              h={490}
+              mb={7}
+              radius={"3px 0 0 3px"}
+              onClick={next}
+              variant="outline"
+              color={"dark.4"}
+              p={0}
+              w={"5%"}
+              sx={{
+                border: "none",
+                "&:hover": {
+                  color: "#fff",
+                },
+              }}
+            >
+              <IconChevronRight size={50} />
+            </Button>
+          )}
+        </Center>
+      </Group>
+    );
+  };
+
+  const ModalsFunc = () => {
+    return (
+      <>
+        <Modal
+          withCloseButton={false}
+          size={850}
+          padding={"xl"}
+          opened={altModal}
+          centered
+          onClose={closeAltModal}
+          styles={(theme) => ({
+            header: {
+              backgroundColor: "rgba(0,0,0,0.3)",
+            },
+            content: {
+              backgroundColor: "rgba(0,0,0,0.9)",
+            },
+          })}
+        >
+          {/* Close Alt Modal */}
+          <CloseButton
+            pos={"absolute"}
+            top={21}
+            right={21}
+            size={25}
+            onClick={closeAltModal}
+          />
+          <Stack align="center">
+            <Title order={4} w={"100%"} ta={"left"} fs={"italic"}>
+              EDIT TRIP DETAILS:
+            </Title>
+            <Box
+              w={"100%"}
+              pl={15}
+              pt={5}
+              pb={10}
+              ml={-3}
+              sx={{
+                borderLeft: "3px solid rgba(255,255,255,0.05)",
+              }}
+            >
+              <Text
+                color="blue.2"
+                fw={400}
+                mb={7}
+                fs={"italic"}
+                w={"100%"}
+                ta={"left"}
+              >
+                Help me raise money to go on a Music Tour
+              </Text>
+              <Flex w={"100%"} justify={"flex-start"} align={"center"} gap={10}>
+                <Text w={185} fz={12} fs={"italic"} fw={700}>
+                  Change Travel Date:
+                </Text>
+                <DateInput
+                  variant="filled"
+                  defaultValue={new Date()}
+                  size="sm"
+                />
+                <Divider w={"100%"} size={"sm"} />
+              </Flex>
+            </Box>
+            <TripContent
+              addTripDesc={addTripDesc}
+              addUpdateDesc={addUpdateDesc}
+              donating={donating}
+              images={images}
+              // setImages={setImages}
+            />
+          </Stack>
+        </Modal>
+        <Modal
+          pos={"relative"}
+          withCloseButton={false}
+          size={850}
+          padding={"xl"}
+          centered
+          opened={editContentModal}
+          onClose={closeEditContentModal}
+          styles={(theme) => ({
+            header: {
+              backgroundColor: "rgba(0,0,0,0.3)",
+            },
+            content: {
+              backgroundColor: "rgba(0,0,0,0.9)",
+            },
+          })}
+        >
+          {/* Close Edit Content Modal */}
+          <CloseButton
+            pos={"absolute"}
+            top={21}
+            right={21}
+            size={25}
+            onClick={closeEditContentModal}
+          />
+          {donating && (
+            <>
+              <Title mb={5} color="#00E8FC">
+                <Flex align={"center"} gap={5}>
+                  DONATE
+                  <IconHeartHandshake size={35} />
+                </Flex>
+              </Title>
+              <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
+              <Group mb={15} grow>
+                <Stack>
+                  <Button.Group>
+                    <Button variant="default" size="xl" w={"25%"}>
+                      <IconCreditCard size={30} />
+                    </Button>
+                    <Button variant="default" size="xl" w={"25%"}>
+                      <IconBrandApple size={30} />
+                    </Button>
+                    <Button variant="default" size="xl" w={"25%"}>
+                      <IconBrandGoogle size={30} />
+                    </Button>
+                    <Button variant="default" size="xl" w={"25%"}>
+                      <IconBrandPaypal size={30} />
+                    </Button>
+                  </Button.Group>
+                  <Divider />
+                  <TextInput
+                    placeholder="E-mail Address"
+                    icon={<IconAt size={20} opacity={0.4} />}
+                  />
+                  <TextInput
+                    placeholder="Name on Card"
+                    icon={<IconUser size={20} opacity={0.4} />}
+                  />
+                  <Flex gap={10}>
+                    <Input
+                      placeholder="Card Number"
+                      w={"60%"}
+                      icon={<IconCreditCard size={20} opacity={0.4} />}
+                    />
+                    <Input placeholder="MM/YY" w={"20%"} />
+                    <Input placeholder="CVV" w={"20%"} />
+                  </Flex>
+                  <Flex gap={10}>
+                    <Select placeholder="Country" data={[]} w={"60%"} />
+                    <Input placeholder="Postal Code" w={"calc(40% + 10px)"} />
+                  </Flex>
+                </Stack>
+                <Stack spacing={5}>
+                  <NumberInput
+                    icon={<IconCurrencyDollar size={35} />}
+                    type="number"
+                    size="xl"
+                    mb={10}
+                    hideControls
+                    precision={2}
+                    placeholder="Enter Amount..."
+                    sx={{
+                      ".mantine-NumberInput-input": {
+                        textAlign: "right",
+                        fontWeight: 700,
+                      },
+                    }}
+                  />
+                  <Box
+                    pl={20}
+                    py={5}
+                    sx={{
+                      borderLeft: "3px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    <Flex align={"center"} gap={10}>
+                      <Divider label="Processing fee" w={"100%"} />{" "}
+                      <Text fz={12}>$0.00</Text>
+                    </Flex>
+                    <Flex align={"center"} gap={10}>
+                      <Divider
+                        label={
+                          <Text fz={15} fw={700}>
+                            Total
+                          </Text>
+                        }
+                        w={"100%"}
+                      />
+                      <Text fz={14} fw={700}>
+                        $0.00
+                      </Text>
+                    </Flex>
+                  </Box>
+                  <Group spacing={0} my={8}>
+                    <Text fz={11} w={"70%"} pr={10}>
+                      We use Stripe, a trusted payment processor, to securely
+                      handle transactions and disburse funds, ensuring the
+                      protection of your sensitive banking information.
+                    </Text>
+                    <Image
+                      src="img/stripe.png"
+                      fit="contain"
+                      display={"block"}
+                      opacity={0.3}
+                      pl={10}
+                      style={{
+                        width: "30%",
+                        borderLeft: "2px solid rgba(255,255,255,0.3)",
+                      }}
+                      alt=""
+                    />
+                  </Group>
+                  {/* Complete Donation Button  */}
+                  <Button
+                    variant="filled"
+                    size="xl"
+                    w={"100%"}
+                    onClick={() => router.push("/thankyou")}
+                  >
+                    DONATE NOW
+                  </Button>
+                </Stack>
+              </Group>
+            </>
+          )}
+          <Title order={4} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
+            {editUpdate ? "EDIT UPDATE:" : !donating ? "POST UPDATE:" : ""}
+          </Title>
+          <Stack align="center">
+            {!donating && (
+              <Input
+                size={"xl"}
+                variant="filled"
+                value={editUpdate && "Update number 3 of the trip"}
+                w="100%"
+                placeholder="Update Title..."
+                maw={800}
+                bg={"rgba(0,0,0,0)"}
+                onChange={(e) => e.preventDefault()}
+                sx={{
+                  ".mantine-Input-input": {
+                    borderTop: "2px solid rgba(255,255,255,0.2)",
+                    background: "#0b0c0d",
+                    "&::placeholder": {
+                      fontWeight: 700,
+                      fontStyle: "italic",
+                      color: "rgba(255,255,255,0.0.08)",
+                    },
+                  },
+                }}
+              />
+            )}
+            {!donating && (
+              <TripContent
+                addTripDesc={addTripDesc}
+                addUpdateDesc={addUpdateDesc}
+                donating={donating}
+                images={images}
+                // setImages={setImages}
+              />
+            )}
+          </Stack>
+        </Modal>
+      </>
+    );
+  };
+
   return (
     <>
       <Center mt={120}>
@@ -229,91 +579,12 @@ export default function Trippage(props) {
             align={"center"}
             pos={"relative"}
           >
-            <Group
-              ref={ref}
-              spacing={0}
-              w={images.length > 1 ? "auto" : "650px"}
-              h={500}
-              sx={{
-                overflow: "hidden",
-                borderRadius: "3px",
-                boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
-              }}
-            >
-              <Center>
-                {images.length > 1 ? (
-                  <>
-                    {hovered && (
-                      // Previous Slider Button
-                      <Button
-                        h={498}
-                        mb={7}
-                        radius={"3px 0 0 3px"}
-                        onClick={previous}
-                        variant="outline"
-                        color={"dark.4"}
-                        p={0}
-                        w={"5%"}
-                        sx={{
-                          border: "none",
-                          "&:hover": {
-                            color: "#fff",
-                            backgroundColor: "rgba(0,0,0,0.2)",
-                          },
-                        }}
-                      >
-                        <IconChevronLeft size={50} />
-                      </Button>
-                    )}
-                    <Slider
-                      ref={sliderRef}
-                      {...slideSettings}
-                      style={{
-                        borderRadius: "3px",
-                        borderTop: "3px solid rgba(255,255,255,0.2)",
-                        width: "650px",
-                      }}
-                    >
-                      {slides}
-                    </Slider>
-                    {hovered && (
-                      // Next Slider Button
-                      <Button
-                        h={498}
-                        mb={7}
-                        radius={"3px 0 0 3px"}
-                        onClick={next}
-                        variant="outline"
-                        color={"dark.4"}
-                        p={0}
-                        w={"5%"}
-                        sx={{
-                          border: "none",
-                          "&:hover": {
-                            color: "#fff",
-                            backgroundColor: "rgba(0,0,0,0.2)",
-                          },
-                        }}
-                      >
-                        <IconChevronRight size={50} />
-                      </Button>
-                    )}
-                  </>
-                ) : (
-                  <BackgroundImage
-                    src={images}
-                    h={500}
-                    w={"650px"}
-                    alt="intro"
-                  />
-                )}
-              </Center>
-            </Group>
+            <MainCarousel />
             <Divider
               w={"80%"}
               color="dark.4"
               size={"md"}
-              mt={40}
+              mt={50}
               label={
                 <Title order={3} px={5} maw={"800px"} color="gray.6" fw={700}>
                   Help me raise money to go on a Music Tour
@@ -343,10 +614,10 @@ export default function Trippage(props) {
               </Button.Group>
             </Center>
             <Box
-              radius={3}
               bg={"rgba(0,0,0,0.05)"}
               w={"85%"}
               mt={20}
+              mb={30}
               py={20}
               px={30}
               fz={14}
@@ -433,37 +704,35 @@ export default function Trippage(props) {
                   making this dream come true!
                 </p>
               </Text>
+              <Divider
+                labelPosition="right"
+                w={"100%"}
+                mt={20}
+                label={
+                  // Read More Toggle
+                  <Button
+                    compact
+                    size="xs"
+                    radius={25}
+                    px={15}
+                    variant="subtle"
+                    color="gray.6"
+                    onClick={toggle}
+                  >
+                    {readmore === "closed" ? "Read More" : "Show Less"}
+                  </Button>
+                }
+              />
             </Box>
-            <Divider
-              labelPosition="right"
-              w={"78%"}
-              mt={20}
-              label={
-                // Read More Toggle
-                <Button
-                  compact
-                  size="xs"
-                  radius={25}
-                  px={15}
-                  variant="subtle"
-                  color="gray.6"
-                  onClick={toggle}
-                >
-                  {readmore === "closed" ? "Read More" : "Show Less"}
-                </Button>
-              }
-              mb={20}
-            />
             <Update
               setEditContentModal={setEditContentModal}
               setEditUpdate={setEditUpdate}
               setAddUpdateDesc={setAddUpdateDesc}
               setDonating={setDonating}
-              images={images}
+              // images={images}
               // setImages={setImages}
             />
             <Box
-              radius={5}
               bg={"rgba(0,0,0,0.05)"}
               w={"90%"}
               mt={25}
@@ -511,7 +780,6 @@ export default function Trippage(props) {
               </Box>
             </Box>
           </Flex>
-          {/* NOTE   */}
           <Flex
             w={"30%"}
             h={"100%"}
@@ -521,7 +789,6 @@ export default function Trippage(props) {
             maw={360}
           >
             <Box
-              radius={3}
               bg={"rgba(0,0,0,0.05)"}
               w={"100%"}
               pt={15}
@@ -611,260 +878,12 @@ export default function Trippage(props) {
               </Button>
             </Box>
             <Box>
-              <Donations dHeight={"calc(100vh - 420px)"} />
+              <Donations dHeight={"calc(100vh - 410px)"} />
             </Box>
           </Flex>
         </Flex>
       </Center>
-      <Modal
-        withCloseButton={false}
-        size={850}
-        padding={"xl"}
-        opened={altModal}
-        centered
-        onClose={closeAltModal}
-        styles={(theme) => ({
-          header: {
-            backgroundColor: "rgba(0,0,0,0.3)",
-          },
-          content: {
-            backgroundColor: "rgba(0,0,0,0.9)",
-          },
-        })}
-      >
-        {/* Close Alt Modal */}
-        <CloseButton
-          pos={"absolute"}
-          top={21}
-          right={21}
-          size={25}
-          onClick={closeAltModal}
-        />
-        <Stack align="center">
-          <Title order={4} w={"100%"} ta={"left"} fs={"italic"}>
-            EDIT TRIP DETAILS:
-          </Title>
-          <Box
-            w={"100%"}
-            pl={15}
-            pt={5}
-            pb={10}
-            ml={-3}
-            sx={{
-              borderLeft: "3px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <Text
-              color="blue.2"
-              fw={400}
-              mb={7}
-              fs={"italic"}
-              w={"100%"}
-              ta={"left"}
-            >
-              Help me raise money to go on a Music Tour
-            </Text>
-            <Flex w={"100%"} justify={"flex-start"} align={"center"} gap={10}>
-              <Text w={185} fz={12} fs={"italic"} fw={700}>
-                Change Travel Date:
-              </Text>
-              <DateInput variant="filled" defaultValue={new Date()} size="sm" />
-              <Divider w={"100%"} size={"sm"} />
-            </Flex>
-          </Box>
-          <TripContent
-            addTripDesc={addTripDesc}
-            addUpdateDesc={addUpdateDesc}
-            donating={donating}
-            images={images}
-            // setImages={setImages}
-          />
-        </Stack>
-      </Modal>
-      <Modal
-        pos={"relative"}
-        withCloseButton={false}
-        size={850}
-        padding={"xl"}
-        centered
-        opened={editContentModal}
-        onClose={closeEditContentModal}
-        styles={(theme) => ({
-          header: {
-            backgroundColor: "rgba(0,0,0,0.3)",
-          },
-          content: {
-            backgroundColor: "rgba(0,0,0,0.9)",
-          },
-        })}
-      >
-        {/* Close Edit Content Modal */}
-        <CloseButton
-          pos={"absolute"}
-          top={21}
-          right={21}
-          size={25}
-          onClick={closeEditContentModal}
-        />
-        {donating && (
-          <>
-            <Title mb={5} color="#00E8FC">
-              <Flex align={"center"} gap={5}>
-                DONATE
-                <IconHeartHandshake size={35} />
-              </Flex>
-            </Title>
-            <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
-            <Group mb={15} grow>
-              <Stack>
-                <Button.Group>
-                  <Button variant="default" size="xl" w={"25%"}>
-                    <IconCreditCard size={30} />
-                  </Button>
-                  <Button variant="default" size="xl" w={"25%"}>
-                    <IconBrandApple size={30} />
-                  </Button>
-                  <Button variant="default" size="xl" w={"25%"}>
-                    <IconBrandGoogle size={30} />
-                  </Button>
-                  <Button variant="default" size="xl" w={"25%"}>
-                    <IconBrandPaypal size={30} />
-                  </Button>
-                </Button.Group>
-                <Divider />
-                <TextInput
-                  placeholder="E-mail Address"
-                  icon={<IconAt size={20} opacity={0.4} />}
-                />
-                <TextInput
-                  placeholder="Name on Card"
-                  icon={<IconUser size={20} opacity={0.4} />}
-                />
-                <Flex gap={10}>
-                  <Input
-                    placeholder="Card Number"
-                    w={"60%"}
-                    icon={<IconCreditCard size={20} opacity={0.4} />}
-                  />
-                  <Input placeholder="MM/YY" w={"20%"} />
-                  <Input placeholder="CVV" w={"20%"} />
-                </Flex>
-                <Flex gap={10}>
-                  <Select placeholder="Country" data={[]} w={"60%"} />
-                  <Input placeholder="Postal Code" w={"calc(40% + 10px)"} />
-                </Flex>
-              </Stack>
-              <Stack spacing={5}>
-                <NumberInput
-                  icon={<IconCurrencyDollar size={35} />}
-                  type="number"
-                  size="xl"
-                  mb={10}
-                  hideControls
-                  precision={2}
-                  placeholder="Enter Amount..."
-                  sx={{
-                    ".mantine-NumberInput-input": {
-                      textAlign: "right",
-                      fontWeight: 700,
-                    },
-                  }}
-                />
-                <Box
-                  pl={20}
-                  py={5}
-                  sx={{
-                    borderLeft: "3px solid rgba(255,255,255,0.1)",
-                  }}
-                >
-                  <Flex align={"center"} gap={10}>
-                    <Divider label="Processing fee" w={"100%"} />{" "}
-                    <Text fz={12}>$0.00</Text>
-                  </Flex>
-                  <Flex align={"center"} gap={10}>
-                    <Divider
-                      label={
-                        <Text fz={15} fw={700}>
-                          Total
-                        </Text>
-                      }
-                      w={"100%"}
-                    />
-                    <Text fz={14} fw={700}>
-                      $0.00
-                    </Text>
-                  </Flex>
-                </Box>
-                <Group spacing={0} my={8}>
-                  <Text fz={11} w={"70%"} pr={10}>
-                    We use Stripe, a trusted payment processor, to securely
-                    handle transactions and disburse funds, ensuring the
-                    protection of your sensitive banking information.
-                  </Text>
-                  <Image
-                    src="img/stripe.png"
-                    fit="contain"
-                    display={"block"}
-                    opacity={0.3}
-                    pl={10}
-                    style={{
-                      width: "30%",
-                      borderLeft: "2px solid rgba(255,255,255,0.3)",
-                    }}
-                    alt=""
-                  />
-                </Group>
-                {/* Complete Donation Button  */}
-                <Button
-                  variant="filled"
-                  size="xl"
-                  w={"100%"}
-                  onClick={() => router.push("/thankyou")}
-                >
-                  DONATE NOW
-                </Button>
-              </Stack>
-            </Group>
-          </>
-        )}
-        <Title order={4} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
-          {editUpdate ? "EDIT UPDATE:" : !donating ? "POST UPDATE:" : ""}
-        </Title>
-        <Stack align="center">
-          {!donating && (
-            <Input
-              size={"xl"}
-              variant="filled"
-              value={editUpdate && "Update number 3 of the trip"}
-              w="100%"
-              placeholder="Update Title..."
-              maw={800}
-              bg={"rgba(0,0,0,0)"}
-              onChange={(e) => e.preventDefault()}
-              sx={{
-                ".mantine-Input-input": {
-                  borderTop: "2px solid rgba(255,255,255,0.2)",
-                  background: "#0b0c0d",
-                  "&::placeholder": {
-                    fontWeight: 700,
-                    fontStyle: "italic",
-                    color: "rgba(255,255,255,0.0.08)",
-                  },
-                },
-              }}
-            />
-          )}
-          {!donating && (
-            <TripContent
-              addTripDesc={addTripDesc}
-              addUpdateDesc={addUpdateDesc}
-              donating={donating}
-              images={images}
-              // setImages={setImages}
-            />
-          )}
-        </Stack>
-      </Modal>
+      <ModalsFunc />
     </>
   );
 }

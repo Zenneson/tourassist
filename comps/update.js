@@ -36,7 +36,7 @@ export default function Update({
   setEditUpdate,
   setAddUpdateDesc,
   setDonating,
-  images,
+  // images,
 }) {
   const [showall, toggle] = useToggle(["hide", "show"]);
 
@@ -147,7 +147,7 @@ export default function Update({
     },
   ];
 
-  function Carousel({ images }) {
+  const Carousel = ({ images }) => {
     const sliderRef = useRef();
     const { hovered, ref } = useHover();
 
@@ -243,7 +243,7 @@ export default function Update({
         )}
       </Group>
     );
-  }
+  };
 
   const UpdateContent = ({ content }) => {
     const [readmore, toggle] = useToggle(["closed", "open"]);
@@ -338,14 +338,14 @@ export default function Update({
           <Title ta={"center"} bg={"dark.5"} pt={5}>
             {update.day}
           </Title>
-          <Text w={"100%"} bg={"dark.5"} ta={"center"} pb={5}>
+          <Text w={"100%"} bg={"dark.5"} ta={"center"} pb={7}>
             {update.year}
           </Text>
         </Stack>
         <Menu>
           <Menu.Target>
             <Center mt={15}>
-              <ActionIcon size={"xl"}>
+              <ActionIcon variant="transparent" size={"xl"}>
                 <IconShare size={"100%"} />
               </ActionIcon>
             </Center>
@@ -400,7 +400,7 @@ export default function Update({
       <Divider
         labelPosition="left"
         w={"80%"}
-        mt={20}
+        mt={10}
         label={
           // Show all updates toggle
           <Button
