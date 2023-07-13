@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Autocomplete,
@@ -70,6 +70,11 @@ export default function TripPlannerPage(props) {
   const startLocaleRef = useRef(null);
   const [newCost, setNewCost] = useState([]);
   const newCostRef = useRef(null);
+  const [tripTitle, setTripTitle] = useState("");
+  const [tripImages, setTripImages] = useState([]);
+  const [tripDesc, setTripDesc] = useState("");
+  const [costList, setCostList] = useState({});
+  const [costsSum, setCostsSum] = useState(0);
   const router = useRouter();
   const [placeData, setPlaceData] = useSessionStorage({
     key: "placeDataState",
@@ -81,19 +86,16 @@ export default function TripPlannerPage(props) {
 
   const [active, setActive] = useState(0);
 
+  useEffect(() => {
+    router.prefetch("/trippage");
+  }, [router]);
+
   const animation = {
     initial: { y: -50, duration: 500 },
     animate: { y: 0, duration: 500 },
     exit: { y: 50, duration: 500 },
     transition: { type: "ease-in-out" },
   };
-
-  const [tripTitle, setTripTitle] = useState("");
-  const [tripImages, setTripImages] = useState([]);
-  const [tripDesc, setTripDesc] = useState("");
-
-  const [costList, setCostList] = useState({});
-  const [costsSum, setCostsSum] = useState(0);
 
   const Costs = ({ cost, costid }) => (
     <div key={index}>

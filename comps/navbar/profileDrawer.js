@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
@@ -39,6 +40,12 @@ export default function ProfileDrawer({
 }) {
   const [user, setUser] = useSessionStorage({ key: "user" });
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/help");
+    router.prefetch("/legal");
+  }, [router]);
 
   const links = [
     {

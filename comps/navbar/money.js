@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { IconPlayerPlay } from "@tabler/icons-react";
 import {
@@ -24,6 +25,10 @@ import {
 
 export default function Money() {
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/trippage");
+  }, [router]);
 
   ChartJS.register(
     CategoryScale,

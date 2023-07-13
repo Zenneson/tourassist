@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   createStyles,
@@ -12,7 +12,7 @@ import {
   SegmentedControl,
   Space,
 } from "@mantine/core";
-import { IconArrowBadgeRight } from "@tabler/icons-react";
+import { IconChevronsRight } from "@tabler/icons-react";
 import { useScrollIntoView, useWindowScroll } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
@@ -62,6 +62,11 @@ export default function Legal({ setMainMenuOpened }) {
   const { scrollIntoView, targetRef } = useScrollIntoView({});
 
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/help");
+    router.prefetch("/contact");
+  }, [router]);
 
   const terms = [
     {
@@ -493,7 +498,7 @@ export default function Legal({ setMainMenuOpened }) {
             ]}
           />
           <Box className={classes.links}>
-            <IconArrowBadgeRight
+            <IconChevronsRight
               className={classes.indicator}
               size={17}
               style={{

@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { IconArrowBadgeRight } from "@tabler/icons-react";
-import { Box, Drawer, Center, Flex, createStyles } from "@mantine/core";
-import LatestTrips from "./dropdown/latesttrips";
+import { IconChevronsRight, IconChevronsUp } from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Box,
+  Drawer,
+  Center,
+  Flex,
+  createStyles,
+} from "@mantine/core";
+import LatestTrips from "./latesttrips";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -117,9 +124,24 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
       >
         <Center h={"100vh"} mb={50}>
           <Flex w={"80%"} maw={1200} h={705} pos={"relative"}>
+            <ActionIcon
+              pos={"absolute"}
+              variant="tranparent"
+              opacity={0.3}
+              right={-70}
+              size={"xl"}
+              onClick={() => setDropDownOpened(false)}
+              sx={{
+                "&:hover": {
+                  opacity: 1,
+                },
+              }}
+            >
+              <IconChevronsUp size={50} />
+            </ActionIcon>
             <Flex direction={"column"} w={"20%"} pos={"relative"}>
               <Box maw={180}>
-                <IconArrowBadgeRight
+                <IconChevronsRight
                   className={classes.indicator}
                   size={17}
                   style={{

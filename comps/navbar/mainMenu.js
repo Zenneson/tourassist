@@ -40,6 +40,10 @@ export default function MainMenu({
 }) {
   const router = useRouter();
 
+  useEffect(() => {
+    router.prefetch("/");
+  }, [router]);
+
   const [logoutOpeened, setLogoutOpeened] = useState(false);
   const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",

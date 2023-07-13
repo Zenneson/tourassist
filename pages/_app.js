@@ -7,7 +7,7 @@ import { Notifications } from "@mantine/notifications";
 import { RouterTransition } from "../comps/routertransition";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
-import DropDown from "../comps/dropdown";
+import DropDown from "../comps/dropdown/dropdown";
 require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
@@ -38,8 +38,8 @@ export default function Money(props) {
         withNormalizeCSS
         theme={{
           // colorScheme: "light",
-          defaultRadius: 3,
           colorScheme: "dark",
+          defaultRadius: 3,
           loader: "dots",
           focusRing: "auto",
           focusRingStyles: {

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Drawer, Button, Divider, Center, Stack } from "@mantine/core";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -11,6 +12,10 @@ export default function TourList({
   setPlaces,
 }) {
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/tripplanner");
+  }, [router]);
 
   const submitTourList = () => {
     const newPlaceData = places.map((location) => {

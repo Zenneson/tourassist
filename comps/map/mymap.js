@@ -163,6 +163,10 @@ export default function Mymap({
     setGeoLng,
   ]);
 
+  useEffect(() => {
+    router.prefetch("/tripplanner");
+  }, [router]);
+
   function goToCountry(feature) {
     if (feature == null) return;
     setIsState(feature?.properties?.STATE);
@@ -892,10 +896,13 @@ export default function Mymap({
           initialViewState={initialViewState}
           maxPitch={80}
           onZoomEnd={onZoomEnd}
+          maxZoom={14}
+          minZoom={2}
           onLoad={() => {
             setMapLoaded(true);
             sessionStorage.removeItem("noLogin");
           }}
+          touchPitch={false}
           keyboard={false}
           ref={mapRef}
           onClick={(e) => {

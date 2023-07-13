@@ -1,4 +1,4 @@
-import {} from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   Badge,
@@ -13,6 +13,10 @@ import {
 
 export default function LatestTrips() {
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/trippage");
+  }, [router]);
 
   const latestTripData = [
     {

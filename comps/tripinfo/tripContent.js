@@ -126,6 +126,10 @@ export default function TripContent({
   };
 
   function removeImage(activeSlide) {
+    if (images.length === 1) {
+      setImages([]);
+      return;
+    }
     setImages(images.filter((_, imgIndex) => imgIndex !== activeSlide));
   }
 
@@ -333,7 +337,7 @@ export default function TripContent({
               py={12}
               fz={12}
               ta={"center"}
-              bg={"#131314"}
+              bg={"rgba(19, 19, 20, 0.3)"}
               sx={{
                 borderRadius: "3px",
               }}

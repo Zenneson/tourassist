@@ -65,16 +65,16 @@ export default function Intro({ auth, mapLoaded }) {
     arrows: false,
   };
 
-  const images = [
-    "img/intro/coast.jpg",
-    "img/intro/bluehair.jpg",
-    "img/intro/street.jpg",
-    "img/intro/concert.jpg",
-    "img/intro/planewindow.jpg",
-    "img/intro/happyguy.jpg",
-    "img/intro/boat.jpg",
-    "img/intro/plane.jpg",
-  ];
+  // const images = [
+  //   "img/intro/coast.jpg",
+  //   "img/intro/bluehair.jpg",
+  //   "img/intro/street.jpg",
+  //   "img/intro/concert.jpg",
+  //   "img/intro/planewindow.jpg",
+  //   "img/intro/happyguy.jpg",
+  //   "img/intro/boat.jpg",
+  //   "img/intro/plane.jpg",
+  // ];
 
   const planTrip = () => {
     setMapSpin(false);
@@ -107,9 +107,9 @@ export default function Intro({ auth, mapLoaded }) {
                 opacity={firstDown ? 0 : 1}
                 w={firstDown ? 0 : 700}
                 h={"100vh"}
-                bg={"rgba(2, 2, 2, 0.94)"}
+                bg={"rgba(2, 2, 2, 0.5)"}
                 sx={{
-                  boxShadow: "10px 0 5px 0 rgba(0,0,0,0.3)",
+                  backdropFilter: "blur(50px)",
                   flexDirection: "column",
                 }}
               >
@@ -143,11 +143,13 @@ export default function Intro({ auth, mapLoaded }) {
                 </Box>
               </Center>
               <Center
-                bg={"rgba(0,0,0,0.8)"}
+                bg={"rgba(0,0,0,0.95)"}
                 w={"100%"}
-                sx={{
-                  backdropFilter: "blur(50px)",
-                }}
+                sx={
+                  {
+                    // backdropFilter: "blur(20px)",
+                  }
+                }
               >
                 <Flex
                   direction={"column"}

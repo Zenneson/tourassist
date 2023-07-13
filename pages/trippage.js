@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   Avatar,
@@ -54,6 +54,11 @@ export default function Trippage(props) {
   const [addUpdateDesc, setAddUpdateDesc] = useState(false);
   const [donating, setDonating] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/thankyou");
+    router.prefetch("/purchase");
+  }, [router]);
 
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -630,52 +635,51 @@ export default function Trippage(props) {
               <Progress
                 value={50}
                 color="green.7"
-                striped
-                animate
                 bg={"gray.6"}
                 size={"xl"}
                 radius={"xl"}
                 mt={5}
               />
-              <Button.Group mt={10} w={"100%"}>
-                {/* Go to Purchase Page  */}
+              {user && (
+                <Button.Group mt={10} w={"100%"}>
+                  <Button
+                    w={"100%"}
+                    variant="filled"
+                    color="green.9"
+                    onClick={() => {
+                      router.push("/purchase");
+                    }}
+                  >
+                    <Text>USE FUNDS</Text>
+                  </Button>
+                  <Button
+                    variant="filled"
+                    color="blue"
+                    fullWidth
+                    onClick={showUpdateModal}
+                  >
+                    POST UPDATE
+                  </Button>
+                </Button.Group>
+              )}
+              {!user && (
                 <Button
-                  w={"100%"}
-                  variant="filled"
-                  color="green.9"
-                  onClick={() => {
-                    router.push("/purchase");
-                  }}
-                >
-                  <Text>USE FUNDS</Text>
-                </Button>
-                {/* // Show Update Modal */}
-                <Button
-                  variant="filled"
-                  color="blue"
+                  mt={10}
                   fullWidth
-                  onClick={showUpdateModal}
+                  variant="gradient"
+                  gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
+                  onClick={showDonateModal}
                 >
-                  POST UPDATE
+                  <Text fz={20}>
+                    <Flex align={"center"} gap={5}>
+                      DONATE <IconHeartHandshake size={23} />
+                    </Flex>
+                  </Text>
                 </Button>
-              </Button.Group>
-              {/* Show Donate Modal Button The Goal Section */}
-              <Button
-                mt={10}
-                fullWidth
-                variant="gradient"
-                gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
-                onClick={showDonateModal}
-              >
-                <Text fz={20}>
-                  <Flex align={"center"} gap={5}>
-                    DONATE <IconHeartHandshake size={23} />
-                  </Flex>
-                </Text>
-              </Button>
+              )}
             </Box>
             <Box>
-              <Donations dHeight={"calc(100vh - 410px)"} />
+              <Donations dHeight={"calc(100vh - 365px)"} />
             </Box>
           </Flex>
         </Flex>
