@@ -41,7 +41,7 @@ export default function TripContent({
   addUpdateDesc,
   donating,
   setTripDesc,
-  // images,
+  images,
   setImages,
 }) {
   const [showToolbar, setShowToolbar] = useState(false);
@@ -84,17 +84,6 @@ export default function TripContent({
     arrows: false,
     pauseOnHover: true,
   };
-
-  const images = [
-    "img/intro/coast.jpg",
-    "img/intro/bluehair.jpg",
-    "img/intro/street.jpg",
-    "img/intro/concert.jpg",
-    "img/intro/planewindow.jpg",
-    "img/intro/happyguy.jpg",
-    "img/intro/boat.jpg",
-    "img/intro/plane.jpg",
-  ];
 
   const slides = images.map((image, index) => (
     <BackgroundImage
@@ -166,7 +155,9 @@ export default function TripContent({
 
         // use setTimeout to ensure that the state has been updated before calling slickGoTo
         setTimeout(() => {
-          sliderRef.current.slickGoTo(images.length); // go to the last slide
+          if (sliderRef.current) {
+            sliderRef.current.slickGoTo(images.length); // go to the last slide
+          }
         }, 0);
 
         setProcessingImage(false);

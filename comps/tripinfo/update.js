@@ -1,22 +1,17 @@
-import React, { useRef } from "react";
 import {
   ActionIcon,
-  BackgroundImage,
   Box,
   Button,
   Center,
   Divider,
   Flex,
-  Group,
-  Stack,
   Text,
   Title,
   Menu,
+  Stack,
 } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
 import {
-  IconChevronLeft,
-  IconChevronRight,
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandTiktok,
@@ -26,34 +21,16 @@ import {
   IconShare,
   IconPencil,
 } from "@tabler/icons-react";
-import { useHover } from "@mantine/hooks";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import UpdateCarousel from "./updatecarousel";
+import UpdateContent from "./updatecontent";
 
-function Update({
+export default function Update({
   setEditContentModal,
   setEditUpdate,
   setAddUpdateDesc,
   setDonating,
-  // images,
 }) {
   const [showall, toggle] = useToggle(["hide", "show"]);
-
-  const slideSettings = {
-    dots: false,
-    fade: true,
-    infinite: true,
-    autoplay: true,
-    swipeToSlide: true,
-    speed: 250,
-    autoplaySpeed: 5000,
-    cssEase: "linear",
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    pauseOnHover: true,
-  };
 
   const imagesone = [
     "img/women.jpg",
@@ -146,135 +123,6 @@ function Update({
         "Hello from Uluwatu! Day 7 has been nothing short of spectacular. Our journey took us to the awe-inspiring Uluwatu Temple, perched atop dramatic cliffs with breathtaking views of the Indian Ocean. The temple's unique location and stunning architecture left us all in awe. As the sun began to set, we were treated to a captivating Kecak fire dance performance, an unforgettable display of culture and tradition. The rhythmic chanting and mesmerizing movements had us all enthralled. To conclude our day, we enjoyed a sumptuous beachside seafood feast, savoring the delectable flavors of the island's fresh catch. This unforgettable day has truly been the cherry on top of our extraordinary journey.",
     },
   ];
-
-  const Carousel = ({ images }) => {
-    const sliderRef = useRef();
-    const { hovered, ref } = useHover();
-
-    const next = () => {
-      sliderRef.current.slickNext();
-    };
-
-    const previous = () => {
-      sliderRef.current.slickPrev();
-    };
-
-    if (images.length === 1) {
-      return (
-        <BackgroundImage
-          radius={3}
-          src={images[0]}
-          h={300}
-          mx={"5%"}
-          mb={30}
-          alt="intro"
-        />
-      );
-    }
-
-    return (
-      <Group
-        ref={ref}
-        spacing={0}
-        w={"100%"}
-        h={300}
-        mb={30}
-        sx={{ overflow: "hidden" }}
-      >
-        {hovered && (
-          // Previous Image Button
-          <Button
-            h={"80%"}
-            mb={7}
-            radius={"3px 0 0 3px"}
-            onClick={previous}
-            variant="outline"
-            color={"dark.4"}
-            p={0}
-            w={"5%"}
-            sx={{
-              border: "none",
-              "&:hover": {
-                color: "#fff",
-              },
-            }}
-          >
-            <IconChevronLeft size={50} />
-          </Button>
-        )}
-        <Slider
-          ref={sliderRef}
-          {...slideSettings}
-          style={{
-            marginLeft: hovered ? 0 : "5%",
-            width: "calc(100% - 10%)",
-          }}
-        >
-          {images.map((image, index) => (
-            <BackgroundImage
-              radius={3}
-              key={index}
-              src={image}
-              h={300}
-              alt="intro"
-            />
-          ))}
-        </Slider>
-        {hovered && (
-          // Next Image Button
-          <Button
-            h={"80%"}
-            mb={7}
-            radius={"3px 0 0 3px"}
-            onClick={next}
-            variant="outline"
-            color={"dark.4"}
-            p={0}
-            w={"5%"}
-            sx={{
-              border: "none",
-              "&:hover": {
-                color: "#fff",
-              },
-            }}
-          >
-            <IconChevronRight size={50} />
-          </Button>
-        )}
-      </Group>
-    );
-  };
-
-  const UpdateContent = ({ content }) => {
-    const [readmore, toggle] = useToggle(["closed", "open"]);
-
-    return (
-      <>
-        <Text mt={10} lineClamp={readmore === "closed" && 5}>
-          {content}
-        </Text>
-        <Divider
-          labelPosition="right"
-          w={"100%"}
-          mt={20}
-          label={
-            // Read More Toggle
-            <Button
-              compact
-              size="xs"
-              radius={25}
-              px={15}
-              variant="subtle"
-              color="gray.6"
-              onClick={toggle}
-            >
-              {readmore === "closed" ? "Read More" : "Show Less"}
-            </Button>
-          }
-        />
-      </>
-    );
-  };
 
   const updateTrip = () => {
     setEditUpdate(true);
@@ -376,7 +224,9 @@ function Update({
 
       <Flex direction={"column"} w={"85%"}>
         <Center>
-          {update.updateImages && <Carousel images={update.updateImages} />}
+          {update.updateImages && (
+            <UpdateCarousel images={update.updateImages} />
+          )}
         </Center>
         <Box
           mx={"5%"}
@@ -420,5 +270,3 @@ function Update({
     </>
   );
 }
-
-export default React.memo(Update);

@@ -47,7 +47,6 @@ import MainCarousel from "../comps/tripinfo/maincarousel";
 import TripDescription from "../comps/tripinfo/tripdescription";
 
 export default function Trippage(props) {
-  // let images = props.images || [];
   const [altModal, setAltModal] = useState(false);
   const [editContentModal, setEditContentModal] = useState(false);
   const [editUpdate, setEditUpdate] = useState("");
@@ -60,6 +59,8 @@ export default function Trippage(props) {
     key: "user",
     defaultValue: null,
   });
+
+  const [images, setImages] = useState([]);
 
   const commentData = [
     {
@@ -229,8 +230,8 @@ export default function Trippage(props) {
               addTripDesc={addTripDesc}
               addUpdateDesc={addUpdateDesc}
               donating={donating}
-              // images={images}
-              // setImages={setImages}
+              images={images}
+              setImages={setImages}
             />
           </Stack>
         </Modal>
@@ -412,8 +413,8 @@ export default function Trippage(props) {
                 addTripDesc={addTripDesc}
                 addUpdateDesc={addUpdateDesc}
                 donating={donating}
-                // images={images}
-                // setImages={setImages}
+                images={images}
+                setImages={setImages}
               />
             )}
           </Stack>
@@ -525,8 +526,8 @@ export default function Trippage(props) {
               setEditUpdate={setEditUpdate}
               setAddUpdateDesc={setAddUpdateDesc}
               setDonating={setDonating}
-              // images={images}
-              // setImages={setImages}
+              images={images}
+              setImages={setImages}
             />
             <Box
               bg={"rgba(0,0,0,0.05)"}

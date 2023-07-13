@@ -70,15 +70,12 @@ export default function LatestTrips() {
       <Card
         onClick={() => router.push("/trippage")}
         sx={{
-          borderTop: "3px solid rgba(255, 255, 255, 0.2)",
           cursor: "pointer",
           transition: "all 0.2s ease",
           background: "rgba(11, 12, 13, 0.5)",
           backdropFilter: "blur(20px)",
           boxShadow: "0 2px 5px  rgba(0,0,0, 0.2)",
-          borderRadius: "0 0 3px 3px",
           "&:hover": {
-            borderTop: "3px solid rgba(255, 255, 255, 0.8)",
             background: "rgba(5, 5, 5, 1)",
             transform: "scale(1.02)",
           },
