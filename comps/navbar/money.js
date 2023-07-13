@@ -12,7 +12,7 @@ import {
   Progress,
 } from "@mantine/core";
 import { Line } from "react-chartjs-2";
-import Donations from "./donations";
+import Donations from "../tripinfo/donations";
 import {
   Chart as ChartJS,
   CategoryScale,

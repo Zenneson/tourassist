@@ -1,4 +1,4 @@
-import Mymap from "../comps/mymap";
+import Mymap from "../comps/map/mymap";
 import Intro from "../comps/intro";
 
 export default function Home(props) {

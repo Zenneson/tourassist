@@ -1,10 +1,9 @@
-import { useState, useRef, useMemo } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import {
   Avatar,
   Button,
   Box,
-  BackgroundImage,
   Input,
   Center,
   Divider,
@@ -21,10 +20,8 @@ import {
   TextInput,
   Select,
 } from "@mantine/core";
-import { useHover, useToggle, useSessionStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import {
-  IconChevronLeft,
-  IconChevronRight,
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandTiktok,
@@ -42,13 +39,12 @@ import {
   IconAt,
   IconUser,
 } from "@tabler/icons-react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Donations from "../comps/donations";
-import Update from "../comps/update";
-import TripContent from "../comps/tripContent";
 import { DateInput } from "@mantine/dates";
+import Donations from "../comps/tripinfo/donations";
+import Update from "../comps/tripinfo/update";
+import TripContent from "../comps/tripinfo/tripContent";
+import MainCarousel from "../comps/tripinfo/maincarousel";
+import TripDescription from "../comps/tripinfo/tripdescription";
 
 export default function Trippage(props) {
   // let images = props.images || [];
@@ -58,51 +54,12 @@ export default function Trippage(props) {
   const [addTripDesc, setAddTripDesc] = useState(false);
   const [addUpdateDesc, setAddUpdateDesc] = useState(false);
   const [donating, setDonating] = useState(false);
-  const [readmore, toggle] = useToggle(["closed", "open"]);
   const router = useRouter();
 
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
   });
-
-  const images = [
-    "img/women.jpg",
-    "img/intro/coast.jpg",
-    "img/intro/bluehair.jpg",
-    "img/intro/street.jpg",
-    "img/intro/concert.jpg",
-    "img/intro/planewindow.jpg",
-    "img/intro/happyguy.jpg",
-    "img/intro/boat.jpg",
-    "img/intro/plane.jpg",
-  ];
-
-  const slides = images.map((image, index) => (
-    <BackgroundImage
-      key={index}
-      src={image}
-      h={500}
-      maw={650}
-      alt="intro"
-      radius={"0 0 3px 3px"}
-    />
-  ));
-
-  const slideSettings = {
-    dots: false,
-    fade: true,
-    infinite: true,
-    autoplay: true,
-    swipeToSlide: true,
-    speed: 250,
-    autoplaySpeed: 5000,
-    cssEase: "linear",
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    pauseOnHover: true,
-  };
 
   const commentData = [
     {
@@ -205,100 +162,6 @@ export default function Trippage(props) {
     setAddUpdateDesc(false);
   };
 
-  const MainCarousel = () => {
-    const sliderRef = useRef();
-    const { hovered, ref } = useHover();
-
-    const next = () => {
-      sliderRef.current.slickNext();
-    };
-
-    const previous = () => {
-      sliderRef.current.slickPrev();
-    };
-
-    if (images.length === 1) {
-      return (
-        <Box
-          style={{
-            borderTop: "3px solid rgba(255,255,255,0.2)",
-            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
-            borderRadius: "0 0 3px 3px",
-            overflow: "hidden",
-          }}
-        >
-          <BackgroundImage src={images} h={500} w={650} alt="intro" />
-        </Box>
-      );
-    }
-
-    return (
-      <Group
-        ref={ref}
-        spacing={0}
-        w={images.length > 1 ? "auto" : "650px"}
-        h={500}
-      >
-        <Center>
-          {hovered && images.length > 1 && (
-            // Previous Slider Button
-            <Button
-              h={490}
-              mb={7}
-              radius={"3px 0 0 3px"}
-              onClick={previous}
-              variant="outline"
-              color={"dark.4"}
-              p={0}
-              w={"5%"}
-              sx={{
-                border: "none",
-                "&:hover": {
-                  color: "#fff",
-                },
-              }}
-            >
-              <IconChevronLeft size={50} />
-            </Button>
-          )}
-          <Slider
-            ref={sliderRef}
-            {...slideSettings}
-            style={{
-              borderTop: "3px solid rgba(255,255,255,0.2)",
-              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
-              width: "650px",
-              height: "500px",
-            }}
-          >
-            {slides}
-          </Slider>
-          {hovered && images.length > 1 && (
-            // Next Slider Button
-            <Button
-              h={490}
-              mb={7}
-              radius={"3px 0 0 3px"}
-              onClick={next}
-              variant="outline"
-              color={"dark.4"}
-              p={0}
-              w={"5%"}
-              sx={{
-                border: "none",
-                "&:hover": {
-                  color: "#fff",
-                },
-              }}
-            >
-              <IconChevronRight size={50} />
-            </Button>
-          )}
-        </Center>
-      </Group>
-    );
-  };
-
   const ModalsFunc = () => {
     return (
       <>
@@ -366,7 +229,7 @@ export default function Trippage(props) {
               addTripDesc={addTripDesc}
               addUpdateDesc={addUpdateDesc}
               donating={donating}
-              images={images}
+              // images={images}
               // setImages={setImages}
             />
           </Stack>
@@ -549,7 +412,7 @@ export default function Trippage(props) {
                 addTripDesc={addTripDesc}
                 addUpdateDesc={addUpdateDesc}
                 donating={donating}
-                images={images}
+                // images={images}
                 // setImages={setImages}
               />
             )}
@@ -655,74 +518,7 @@ export default function Trippage(props) {
                   </Button>
                 }
               />
-              <Text lineClamp={readmore === "closed" && 5}>
-                <p>
-                  Are you ready to join me on an adventure of a lifetime?
-                  Together, we can make my long-held dream of visiting New York
-                  City a reality! I have always been captivated by the magic of
-                  the Big Apple, and I am excited to explore its vibrant
-                  neighborhoods, iconic landmarks, and diverse cultural
-                  experiences.
-                </p>
-
-                <p>
-                  With your generous support, I will be able to travel to New
-                  York City and fully immerse myself in its unique atmosphere. I
-                  cannot wait to see the towering skyscrapers of Manhattan,
-                  stroll through Central Park, marvel at the Statue of Liberty,
-                  and explore the trendy neighborhoods of Brooklyn. From
-                  Broadway shows to food tours, I plan on experiencing all that
-                  this incredible city has to offer.
-                </p>
-
-                <p>
-                  I will document every moment of my journey, from the sights
-                  and sounds to the people I meet along the way. Your
-                  contributions will allow me to capture precious memories and
-                  share them with my amazing supporters, so you can feel like
-                  you are right there with me, experiencing the adventure in
-                  real-time.
-                </p>
-
-                <p>
-                  But this trip is not just about fulfilling a dream or checking
-                  an item off my bucket list. It&apos;s about creating a
-                  life-changing experience that will stay with me forever. I
-                  believe that travel opens our minds, broadens our horizons,
-                  and connects us with people and cultures from around the
-                  world. By supporting me on this journey, you are not only
-                  helping me achieve my dream but also contributing to a greater
-                  cause.
-                </p>
-
-                <p>
-                  So, please consider joining me on this unforgettable
-                  adventure. Your kind contributions will not only enable me to
-                  travel to New York City but also create a unique,
-                  transformative experience that will inspire me and those
-                  around me. Thank you for believing in my journey and for
-                  making this dream come true!
-                </p>
-              </Text>
-              <Divider
-                labelPosition="right"
-                w={"100%"}
-                mt={20}
-                label={
-                  // Read More Toggle
-                  <Button
-                    compact
-                    size="xs"
-                    radius={25}
-                    px={15}
-                    variant="subtle"
-                    color="gray.6"
-                    onClick={toggle}
-                  >
-                    {readmore === "closed" ? "Read More" : "Show Less"}
-                  </Button>
-                }
-              />
+              <TripDescription />
             </Box>
             <Update
               setEditContentModal={setEditContentModal}

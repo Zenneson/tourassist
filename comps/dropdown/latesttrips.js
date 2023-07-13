@@ -72,24 +72,29 @@ export default function LatestTrips() {
         sx={{
           cursor: "pointer",
           transition: "all 0.2s ease",
-          background: "rgba(11, 12, 13, 0)",
+          background: "rgba(11, 12, 13, 0.5)",
           backdropFilter: "blur(20px)",
-          border: "1px solid rgba(0, 0, 0, 0.1)",
-          boxShadow:
-            "0 2px 5px  rgba(0,0,0, 0.2), inset 0 -3px 10px 1px rgba(0,0,0, 0.1)",
+          boxShadow: "0 2px 5px  rgba(0,0,0, 0.2)",
           "&:hover": {
             background: "rgba(5, 5, 5, 1)",
-            boxShadow: "none",
+            transform: "scale(1.02)",
           },
         }}
       >
-        <Card.Section pos={"relative"} mih={170}>
+        <Card.Section
+          pos={"relative"}
+          mih={170}
+          sx={{
+            overflow: "hidden",
+          }}
+        >
           <Box
             pos={"absolute"}
             w={"100%"}
             h={"100%"}
             sx={{
               zIndex: 1,
+              transform: "scale(1.02)",
               background:
                 "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(11,12,12,1) 100%)",
             }}
@@ -110,7 +115,7 @@ export default function LatestTrips() {
             pos={"absolute"}
             top={7}
             right={7}
-            size={40}
+            size={50}
             thickness={3}
             roundCaps
             sections={[{ value: trip.percent, color: "blue" }]}
@@ -118,9 +123,9 @@ export default function LatestTrips() {
               zIndex: 2,
             }}
             label={
-              <Text color="blue" weight={700} align="center" size={12}>
+              <Text color="blue" weight={700} align="center" size={14}>
                 {trip.percent}
-                <Text fz={7} pos={"relative"} top={-3} span>
+                <Text fz={7} pos={"relative"} top={-5} span>
                   %
                 </Text>
               </Text>

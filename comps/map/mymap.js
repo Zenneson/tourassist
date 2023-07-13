@@ -30,9 +30,9 @@ import {
   IconCheck,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
-import { getNewCenter } from "../public/data/getNewCenter";
+import { getNewCenter } from "../../public/data/getNewCenter";
 import TourList from "./tourList";
-import Loader from "./loader";
+import Loader from "../loader";
 
 export default function Mymap({
   setPanelShow,

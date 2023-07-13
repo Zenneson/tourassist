@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { IconArrowBadgeRight } from "@tabler/icons-react";
 import { Box, Drawer, Center, Flex, createStyles } from "@mantine/core";
-import LatestTrips from "./latesttrips";
+import LatestTrips from "./dropdown/latesttrips";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -108,7 +108,7 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
           content: {
             backdropFilter: "blur(10px)",
             overflow: "hidden",
-            background: "rgba(11, 12, 13, 0.9)",
+            background: "rgba(11, 12, 13, 0.5)",
           },
           header: {
             background: "transparent",

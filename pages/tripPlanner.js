@@ -47,7 +47,7 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
-import TripContent from "../comps/tripContent";
+import TripContent from "../comps/tripinfo/tripContent";
 
 export default function TripPlannerPage(props) {
   let auth = props.auth;
