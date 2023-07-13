@@ -361,6 +361,11 @@ export default function LoginComp({ auth }) {
                   onChange={(event) =>
                     form.setFieldValue("terms", event.currentTarget.checked)
                   }
+                  sx={{
+                    ".mantine-Checkbox-label, .mantine-Checkbox-input": {
+                      cursor: "pointer",
+                    },
+                  }}
                 />
               </Group>
             )}

@@ -196,6 +196,12 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="General Newsletter"
+              sx={{
+                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
+                  {
+                    cursor: "pointer",
+                  },
+              }}
             />
             <Switch
               p={0}
@@ -206,6 +212,12 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="Campaign Creation"
+              sx={{
+                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
+                  {
+                    cursor: "pointer",
+                  },
+              }}
             />
             <Switch
               p={0}
@@ -216,6 +228,12 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="New Campaign Comment"
+              sx={{
+                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
+                  {
+                    cursor: "pointer",
+                  },
+              }}
             />
           </Flex>
           <Flex direction="column" gap={8} align="flex-start">
@@ -228,6 +246,12 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="Campaign Milestones"
+              sx={{
+                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
+                  {
+                    cursor: "pointer",
+                  },
+              }}
             />
             <Switch
               p={0}
@@ -238,6 +262,12 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="Campaign Ending Soon"
+              sx={{
+                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
+                  {
+                    cursor: "pointer",
+                  },
+              }}
             />
             <Switch
               p={0}
@@ -248,6 +278,12 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="Campaign Ended"
+              sx={{
+                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
+                  {
+                    cursor: "pointer",
+                  },
+              }}
             />
           </Flex>
         </Group>

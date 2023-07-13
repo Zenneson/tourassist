@@ -67,10 +67,10 @@ export default function Money() {
   return (
     <Box pr={20}>
       <Box
-        my={20}
+        my={15}
         w="100%"
         px={10}
-        py={15}
+        h={"250px"}
         sx={{
           borderLeft: "3px solid rgba(204, 204, 204, 0.15)",
           borderBottom: "3px solid rgba(204, 204, 204, 0.15)",
@@ -170,7 +170,7 @@ export default function Money() {
             overflow: "hidden",
           }}
         >
-          <Donations dHeight={"calc(100vh - 558px)"} />
+          <Donations dHeight={"calc(100vh - 615px)"} />
         </Box>
       </Flex>
     </Box>

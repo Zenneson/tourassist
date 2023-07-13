@@ -40,7 +40,6 @@ export default function TripContent({
   addTripDesc,
   addUpdateDesc,
   donating,
-  setTripDesc,
   images,
   setImages,
 }) {
@@ -52,6 +51,7 @@ export default function TripContent({
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
   const [editorFocused, setEditorFocused] = useState(false);
+  const [tripDesc, setTripDesc] = useState("");
 
   const router = useRouter();
 
@@ -333,7 +333,7 @@ export default function TripContent({
               </Button>
             </Dropzone>
             <Title
-              mt={25}
+              mt={15}
               py={12}
               fz={12}
               ta={"center"}
@@ -365,7 +365,6 @@ export default function TripContent({
           minWidth: "500px",
           minHeight: donating ? "100px" : "200px",
           maxHeight: donating ? "100px" : "300px",
-          borderTop: "2px solid rgba(255,255,255,0.2)",
           ".mantine-RichTextEditor-content": {
             background: "rgba(0, 0, 0, 0)",
             color: editorFocused && "#fff",

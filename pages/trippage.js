@@ -19,6 +19,7 @@ import {
   NumberInput,
   TextInput,
   Select,
+  Textarea,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import {
@@ -53,6 +54,7 @@ export default function Trippage(props) {
   const [addTripDesc, setAddTripDesc] = useState(false);
   const [addUpdateDesc, setAddUpdateDesc] = useState(false);
   const [donating, setDonating] = useState(false);
+  const [paid, setPaid] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -160,6 +162,7 @@ export default function Trippage(props) {
     setEditContentModal(false);
     setAddTripDesc(false);
     setEditUpdate("");
+    setPaid(false);
   };
 
   const closeAltModal = () => {
@@ -178,6 +181,10 @@ export default function Trippage(props) {
           opened={altModal}
           centered
           onClose={closeAltModal}
+          overlayProps={{
+            opacity: 0.7,
+            blur: 9,
+          }}
           styles={(theme) => ({
             header: {
               backgroundColor: "rgba(0,0,0,0.3)",
@@ -238,6 +245,16 @@ export default function Trippage(props) {
               images={images}
               setImages={setImages}
             />
+            <Group position="right" mt={5} w={"100%"}>
+              <Button
+                variant="filled"
+                size="md"
+                w={"40%"}
+                onClick={closeEditContentModal}
+              >
+                UPDATE DETAILS
+              </Button>
+            </Group>
           </Stack>
         </Modal>
         <Modal
@@ -248,6 +265,10 @@ export default function Trippage(props) {
           centered
           opened={editContentModal}
           onClose={closeEditContentModal}
+          overlayProps={{
+            opacity: 0.7,
+            blur: 9,
+          }}
           styles={(theme) => ({
             header: {
               backgroundColor: "rgba(0,0,0,0.3)",
@@ -266,125 +287,185 @@ export default function Trippage(props) {
             onClick={closeEditContentModal}
           />
           {donating && (
-            <>
+            <Box h={345} w={802}>
               <Title mb={5} color="#00E8FC">
                 <Flex align={"center"} gap={5}>
-                  DONATE
+                  {!paid ? "DONATE" : "THANK YOU"}
                   <IconHeartHandshake size={35} />
                 </Flex>
               </Title>
               <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
-              <Group mb={15} grow>
-                <Stack>
-                  <Button.Group>
-                    <Button variant="default" size="xl" w={"25%"}>
-                      <IconCreditCard size={30} />
-                    </Button>
-                    <Button variant="default" size="xl" w={"25%"}>
-                      <IconBrandApple size={30} />
-                    </Button>
-                    <Button variant="default" size="xl" w={"25%"}>
-                      <IconBrandGoogle size={30} />
-                    </Button>
-                    <Button variant="default" size="xl" w={"25%"}>
-                      <IconBrandPaypal size={30} />
-                    </Button>
-                  </Button.Group>
-                  <Divider />
-                  <TextInput
-                    placeholder="E-mail Address"
-                    icon={<IconAt size={20} opacity={0.4} />}
-                  />
-                  <TextInput
-                    placeholder="Name on Card"
-                    icon={<IconUser size={20} opacity={0.4} />}
-                  />
-                  <Flex gap={10}>
-                    <Input
-                      placeholder="Card Number"
-                      w={"60%"}
-                      icon={<IconCreditCard size={20} opacity={0.4} />}
+              {!paid && (
+                <Group mb={15} grow>
+                  <Stack>
+                    <Button.Group>
+                      <Button
+                        variant="filled"
+                        bg={"dark.5"}
+                        size="xl"
+                        w={"25%"}
+                      >
+                        <IconCreditCard size={30} />
+                      </Button>
+                      <Button
+                        variant="filled"
+                        bg={"dark.5"}
+                        size="xl"
+                        w={"25%"}
+                      >
+                        <IconBrandApple size={30} />
+                      </Button>
+                      <Button
+                        variant="filled"
+                        bg={"dark.5"}
+                        size="xl"
+                        w={"25%"}
+                      >
+                        <IconBrandGoogle size={30} />
+                      </Button>
+                      <Button
+                        variant="filled"
+                        bg={"dark.5"}
+                        size="xl"
+                        w={"25%"}
+                      >
+                        <IconBrandPaypal size={30} />
+                      </Button>
+                    </Button.Group>
+                    <Divider />
+                    <TextInput
+                      variant="filled"
+                      placeholder="E-mail Address"
+                      icon={<IconAt size={20} opacity={0.4} />}
                     />
-                    <Input placeholder="MM/YY" w={"20%"} />
-                    <Input placeholder="CVV" w={"20%"} />
-                  </Flex>
-                  <Flex gap={10}>
-                    <Select placeholder="Country" data={[]} w={"60%"} />
-                    <Input placeholder="Postal Code" w={"calc(40% + 10px)"} />
-                  </Flex>
-                </Stack>
-                <Stack spacing={5}>
-                  <NumberInput
-                    icon={<IconCurrencyDollar size={35} />}
-                    type="number"
-                    size="xl"
-                    mb={10}
-                    hideControls
-                    precision={2}
-                    placeholder="Enter Amount..."
-                    sx={{
-                      ".mantine-NumberInput-input": {
-                        textAlign: "right",
-                        fontWeight: 700,
-                      },
-                    }}
-                  />
-                  <Box
-                    pl={20}
-                    py={5}
-                    sx={{
-                      borderLeft: "3px solid rgba(255,255,255,0.1)",
-                    }}
-                  >
-                    <Flex align={"center"} gap={10}>
-                      <Divider label="Processing fee" w={"100%"} />{" "}
-                      <Text fz={12}>$0.00</Text>
-                    </Flex>
-                    <Flex align={"center"} gap={10}>
-                      <Divider
-                        label={
-                          <Text fz={15} fw={700}>
-                            Total
-                          </Text>
-                        }
-                        w={"100%"}
+                    <TextInput
+                      variant="filled"
+                      placeholder="Name on Card"
+                      icon={<IconUser size={20} opacity={0.4} />}
+                    />
+                    <Flex gap={10}>
+                      <Input
+                        variant="filled"
+                        placeholder="Card Number"
+                        w={"60%"}
+                        icon={<IconCreditCard size={20} opacity={0.4} />}
                       />
-                      <Text fz={14} fw={700}>
-                        $0.00
-                      </Text>
+                      <Input variant="filled" placeholder="MM/YY" w={"20%"} />
+                      <Input variant="filled" placeholder="CVV" w={"20%"} />
                     </Flex>
-                  </Box>
-                  <Group spacing={0} my={8}>
-                    <Text fz={11} w={"70%"} pr={10}>
-                      We use Stripe, a trusted payment processor, to securely
-                      handle transactions and disburse funds, ensuring the
-                      protection of your sensitive banking information.
-                    </Text>
-                    <Image
-                      src="img/stripe.png"
-                      fit="contain"
-                      display={"block"}
-                      opacity={0.3}
-                      pl={10}
-                      style={{
-                        width: "30%",
-                        borderLeft: "2px solid rgba(255,255,255,0.3)",
+                    <Flex gap={10}>
+                      <Select
+                        placeholder="Country"
+                        variant="filled"
+                        data={[]}
+                        w={"60%"}
+                      />
+                      <Input
+                        placeholder="Postal Code"
+                        variant="filled"
+                        w={"calc(40% + 10px)"}
+                      />
+                    </Flex>
+                  </Stack>
+                  <Stack spacing={5}>
+                    <NumberInput
+                      icon={<IconCurrencyDollar size={35} />}
+                      type="number"
+                      size="xl"
+                      mb={10}
+                      hideControls
+                      precision={2}
+                      variant="filled"
+                      placeholder="Enter Amount..."
+                      sx={{
+                        ".mantine-NumberInput-input": {
+                          textAlign: "right",
+                          fontWeight: 700,
+                        },
                       }}
-                      alt=""
                     />
-                  </Group>
-                  {/* Complete Donation Button  */}
-                  <Button
+                    <Box
+                      pl={20}
+                      py={5}
+                      sx={{
+                        borderLeft: "3px solid rgba(255,255,255,0.1)",
+                      }}
+                    >
+                      <Flex align={"center"} gap={10}>
+                        <Divider label="Processing fee" w={"100%"} />{" "}
+                        <Text fz={12}>$0.00</Text>
+                      </Flex>
+                      <Flex align={"center"} gap={10}>
+                        <Divider
+                          label={
+                            <Text fz={15} fw={700}>
+                              Total
+                            </Text>
+                          }
+                          w={"100%"}
+                        />
+                        <Text fz={14} fw={700}>
+                          $0.00
+                        </Text>
+                      </Flex>
+                    </Box>
+                    <Group spacing={0} my={8}>
+                      <Text fz={11} w={"70%"} pr={10}>
+                        We use Stripe, a trusted payment processor, to securely
+                        handle transactions and disburse funds, ensuring the
+                        protection of your sensitive banking information.
+                      </Text>
+                      <Image
+                        src="img/stripe.png"
+                        fit="contain"
+                        display={"block"}
+                        opacity={0.3}
+                        pl={10}
+                        style={{
+                          width: "30%",
+                          borderLeft: "2px solid rgba(255,255,255,0.3)",
+                        }}
+                        alt=""
+                      />
+                    </Group>
+                    {/* Complete Donation Button  */}
+                    <Button
+                      variant="filled"
+                      size="xl"
+                      w={"100%"}
+                      onClick={() => setPaid(true)}
+                    >
+                      DONATE NOW
+                    </Button>
+                  </Stack>
+                </Group>
+              )}
+              {paid && (
+                <>
+                  <Text w={"100%"} ta={"center"} c={"#777"}>
+                    Thank you for your donation, please leave a message of
+                    suppport{" "}
+                  </Text>
+                  <Textarea
+                    placeholder="Bon voyage!"
                     variant="filled"
-                    size="xl"
-                    w={"100%"}
-                    onClick={() => router.push("/thankyou")}
-                  >
-                    DONATE NOW
-                  </Button>
-                </Stack>
-              </Group>
-            </>
+                    mt={10}
+                    minRows={8}
+                  />
+                  <Group position="right" mt={5} w={"100%"}>
+                    <Button
+                      variant="filled"
+                      size="md"
+                      mt={10}
+                      w={"40%"}
+                      onClick={closeEditContentModal}
+                    >
+                      POST MESSAGE
+                    </Button>
+                  </Group>
+                </>
+              )}
+            </Box>
           )}
           <Title order={4} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
             {editUpdate ? "EDIT UPDATE:" : !donating ? "POST UPDATE:" : ""}
@@ -398,12 +479,15 @@ export default function Trippage(props) {
                 w="100%"
                 placeholder="Update Title..."
                 maw={800}
-                bg={"rgba(0,0,0,0)"}
+                bg="dark.5"
                 onChange={(e) => e.preventDefault()}
+                wrapperProps={{
+                  style: {
+                    borderRadius: 3,
+                  },
+                }}
                 sx={{
                   ".mantine-Input-input": {
-                    borderTop: "2px solid rgba(255,255,255,0.2)",
-                    background: "#0b0c0d",
                     "&::placeholder": {
                       fontWeight: 700,
                       fontStyle: "italic",
@@ -414,13 +498,25 @@ export default function Trippage(props) {
               />
             )}
             {!donating && (
-              <TripContent
-                addTripDesc={addTripDesc}
-                addUpdateDesc={addUpdateDesc}
-                donating={donating}
-                images={images}
-                setImages={setImages}
-              />
+              <>
+                <TripContent
+                  addTripDesc={addTripDesc}
+                  addUpdateDesc={addUpdateDesc}
+                  donating={donating}
+                  images={images}
+                  setImages={setImages}
+                />
+                <Group position="right" mt={5} w={"100%"}>
+                  <Button
+                    variant="filled"
+                    size="md"
+                    w={"40%"}
+                    onClick={closeEditContentModal}
+                  >
+                    {editUpdate ? "EDIT" : "POST"} UPDATE
+                  </Button>
+                </Group>
+              </>
             )}
           </Stack>
         </Modal>
@@ -461,23 +557,28 @@ export default function Trippage(props) {
               }
             />
             <Center mt={20}>
-              <Button.Group>
-                <Button variant="default" px={44}>
+              <Button.Group
+                sx={{
+                  borderRadius: 50,
+                  overflow: "hidden",
+                }}
+              >
+                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
                   <IconBrandFacebook size={20} />
                 </Button>
-                <Button variant="default" px={44}>
+                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
                   <IconBrandInstagram size={20} />
                 </Button>
-                <Button variant="default" px={44}>
+                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
                   <IconBrandTiktok size={20} />
                 </Button>
-                <Button variant="default" px={44}>
+                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
                   <IconBrandTwitter size={20} />
                 </Button>
-                <Button variant="default" px={44}>
+                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
                   <IconBrandWhatsapp size={20} />
                 </Button>
-                <Button variant="default" px={44}>
+                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
                   <IconSourceCode size={20} />
                 </Button>
               </Button.Group>
@@ -552,7 +653,7 @@ export default function Trippage(props) {
                 label={
                   <Flex align={"center"}>
                     <IconQuote size={40} opacity={0.2} />
-                    <Title order={4}>WORDS OF SUPPORT</Title>
+                    <Title order={4}>DONOR MESSAGES</Title>
                   </Flex>
                 }
               />

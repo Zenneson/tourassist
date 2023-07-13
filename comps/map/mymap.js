@@ -664,8 +664,12 @@ export default function Mymap({
                 }}
                 onClick={() => {
                   if (places.length > 0) {
-                    showTourList();
-                    setTourListDropDown(!tourListDropDown);
+                    if (checkPlace(placeLocation)) {
+                      travelTo();
+                    } else {
+                      showTourList();
+                      setTourListDropDown(!tourListDropDown);
+                    }
                   } else {
                     travelTo();
                   }

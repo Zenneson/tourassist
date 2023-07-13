@@ -7,23 +7,14 @@ import {
   Text,
   Button,
   Group,
-  Overlay,
   Transition,
   Image,
   Divider,
-  BackgroundImage,
   LoadingOverlay,
 } from "@mantine/core";
 import { IconWorld, IconInfoSquareRounded } from "@tabler/icons-react";
-import {
-  useSessionStorage,
-  useMediaQuery,
-  useViewportSize,
-} from "@mantine/hooks";
+import { useSessionStorage, useMediaQuery } from "@mantine/hooks";
 import LoginComp from "./loginComp";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 export default function Intro({ auth, mapLoaded }) {
   const [opened, setOpened] = useState(false);
@@ -39,7 +30,6 @@ export default function Intro({ auth, mapLoaded }) {
     defaultValue: false,
   });
 
-  const { height, width } = useViewportSize();
   const firstDown = useMediaQuery("(max-width: 950px)");
 
   useEffect(() => {
@@ -134,12 +124,10 @@ export default function Intro({ auth, mapLoaded }) {
                     maxWidth: "380px",
                   }}
                 >
-                  <LoadingOverlay
-                    visible={!mapLoaded}
-                    overlayColor="#000"
-                    overlayOpacity={1}
-                  />
-                  <LoginComp auth={auth} />
+                  <LoadingOverlay visible={!mapLoaded} overlayOpacity={0} />
+                  <Box opacity={mapLoaded ? 1 : 0}>
+                    <LoginComp auth={auth} />
+                  </Box>
                 </Box>
               </Center>
               <Center

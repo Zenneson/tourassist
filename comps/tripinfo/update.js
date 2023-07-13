@@ -248,9 +248,10 @@ export default function Update({
       {showall === "hide" ? updates[updates.length - 1] : updates}
 
       <Divider
-        labelPosition="left"
+        labelPosition="right"
         w={"80%"}
         mt={10}
+        color={"rgba(255,255,255,0.04)"}
         label={
           // Show all updates toggle
           <Button

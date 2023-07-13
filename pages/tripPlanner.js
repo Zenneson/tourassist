@@ -72,7 +72,6 @@ export default function TripPlannerPage(props) {
   const newCostRef = useRef(null);
   const [tripTitle, setTripTitle] = useState("");
   const [tripImages, setTripImages] = useState([]);
-  const [tripDesc, setTripDesc] = useState("");
   const [costList, setCostList] = useState({});
   const [costsSum, setCostsSum] = useState(0);
   const router = useRouter();
@@ -951,7 +950,6 @@ export default function TripPlannerPage(props) {
                     onChange={(e) => setTripTitle(e.target.value)}
                     sx={{
                       ".mantine-Input-input": {
-                        borderTop: "2px solid rgba(255,255,255,0.2)",
                         background: "dark.6",
                         "&::placeholder": {
                           fontWeight: 700,
@@ -960,11 +958,7 @@ export default function TripPlannerPage(props) {
                       },
                     }}
                   />
-                  <TripContent
-                    images={images}
-                    setImages={setImages}
-                    setTripDesc={setTripDesc}
-                  />
+                  <TripContent images={images} setImages={setImages} />
                 </Stack>
               </motion.div>
             )}
