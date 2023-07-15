@@ -5,8 +5,8 @@ import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { RemoveScroll } from "@mantine/core";
 import {
+  useMantineTheme,
   Header,
-  Box,
   Button,
   Image,
   Group,
@@ -22,10 +22,13 @@ import {
   IconDoorExit,
   IconCircleX,
   IconInfoCircleFilled,
+  IconBrightnessUp,
+  IconMoon,
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
 
 export default function MainMenu({
+  auth,
   active,
   setActive,
   panelShow,
@@ -36,9 +39,11 @@ export default function MainMenu({
   searchOpened,
   setSearchOpened,
   setDropDownOpened,
-  auth,
+  toggle,
 }) {
   const router = useRouter();
+
+  const theme = useMantineTheme();
 
   useEffect(() => {
     router.prefetch("/");
@@ -143,40 +148,64 @@ export default function MainMenu({
             ml={5}
             width={"auto"}
             height={"60px"}
-            src={"img/TA_GlobeLogo.png"}
+            src={
+              theme.colorScheme === "dark"
+                ? "img/TA_GlobeLogo.png"
+                : "img/TA_GlobeRed.png"
+            }
             alt="TouraSSist_logo"
             withPlaceholder
           />
-          <Title fw={900} color="#fff" fz={30}>
-            <Text fw={500} color="#adadad" inherit span>
+          <Title
+            fw={900}
+            color={theme.colorScheme === "dark" ? "gray.0" : "dark.0"}
+            fz={30}
+          >
+            <Text
+              fw={500}
+              color={theme.colorScheme === "dark" ? "gray.5" : "dark.3"}
+              inherit
+              span
+            >
               TOUR
             </Text>
             ASSIST
           </Title>
         </Flex>
         <Flex align={"center"} gap={10} px={0} py={10} m={0} mt={5} mr={5}>
+          {/* TODO */}
           {user && (
             //  Main Menu Button
             <Button
               variant="subtle"
-              radius="xl"
               px={15}
               size="sm"
-              bg="rgba(0, 0, 0, 0.4)"
               onClick={openMenu}
+              radius={"xl"}
+              c={
+                theme.colorScheme === "dark"
+                  ? theme.colors.blue[2]
+                  : theme.colors.dark[9]
+              }
             >
-              <Text fz={12} c="#a5d8ff">
-                {user?.providerData[0].email}
-              </Text>
+              <Text fz={12}>{user?.providerData[0].email}</Text>
             </Button>
           )}
-          <Group
-            spacing={0}
-            sx={{
-              backgroundColor: "rgba(0,0,0,0.4)",
-              borderRadius: "50px",
-            }}
+          {/* TODO   */}
+          <Button
+            variant="subtle"
+            onClick={toggle}
+            radius={"xl"}
+            color={theme.colorScheme === "dark" ? "blue" : "dark"}
+            p={10}
           >
+            {theme.colorScheme === "dark" ? (
+              <IconBrightnessUp size={17} />
+            ) : (
+              <IconMoon size={17} />
+            )}
+          </Button>
+          <Group spacing={0}>
             <Tooltip
               color="dark"
               label="Search Trips"
@@ -186,66 +215,90 @@ export default function MainMenu({
             >
               {/* Search button */}
               <Button onClick={openSearch} variant="subtle" radius="xl" p={10}>
-                <IconSearch size={17} />
+                <IconSearch
+                  size={17}
+                  color={
+                    theme.colorScheme === "dark"
+                      ? theme.colors.blue[2]
+                      : theme.colors.dark[9]
+                  }
+                />
               </Button>
             </Tooltip>
-            {user && (
-              <Popover
+            <Popover
+              withArrow
+              arrowOffset={15}
+              width="auto"
+              position="bottom-end"
+              shadow="md"
+              opened={logoutOpeened}
+              onChange={setLogoutOpeened}
+            >
+              <Tooltip
+                color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
+                c={
+                  theme.colorScheme === "dark"
+                    ? theme.colors.blue[2]
+                    : theme.colors.dark[9]
+                }
+                label={user ? "Logout" : "Login"}
+                position="bottom"
+                openDelay={800}
                 withArrow
-                arrowOffset={15}
-                width="auto"
-                position="bottom-end"
-                shadow="md"
-                opened={logoutOpeened}
-                onChange={setLogoutOpeened}
               >
-                <Tooltip
-                  color="dark"
-                  label={user ? "Logout" : "Login"}
-                  position="bottom"
-                  openDelay={800}
-                  withArrow
-                >
-                  <Popover.Target>
-                    {/* Logout Dropdown */}
-                    <Button
-                      onClick={() => {
-                        setLogoutOpeened((o) => !o);
-                      }}
-                      variant="subtle"
-                      radius="xl"
-                      p={10}
-                    >
-                      {user ? (
-                        <IconDoorExit size={17} />
-                      ) : (
-                        <IconLogin size={17} />
-                      )}
-                    </Button>
-                  </Popover.Target>
-                </Tooltip>
-                <Popover.Dropdown p={0}>
-                  {/* Logout Button  */}
+                <Popover.Target>
+                  {/* Logout Dropdown */}
                   <Button
-                    size="xs"
-                    fw={700}
-                    px={15}
-                    variant="default"
-                    leftIcon={<IconCircleX size={15} />}
-                    sx={{
-                      opacity: 0.35,
-                      "&:hover": {
-                        opacity: 1,
-                        color: "rgba(255, 40, 40, 0.5)",
-                      },
+                    onClick={() => {
+                      setLogoutOpeened((o) => !o);
                     }}
-                    onClick={signOutFunc}
+                    variant="subtle"
+                    radius="xl"
+                    p={10}
                   >
-                    LOGOUT
+                    {user ? (
+                      <IconDoorExit
+                        size={17}
+                        color={
+                          theme.colorScheme === "dark"
+                            ? theme.colors.blue[2]
+                            : theme.colors.dark[9]
+                        }
+                      />
+                    ) : (
+                      <IconLogin
+                        size={17}
+                        color={
+                          theme.colorScheme === "dark"
+                            ? theme.colors.blue[2]
+                            : theme.colors.dark[9]
+                        }
+                      />
+                    )}
                   </Button>
-                </Popover.Dropdown>
-              </Popover>
-            )}
+                </Popover.Target>
+              </Tooltip>
+              <Popover.Dropdown p={0}>
+                {/* Logout Button  */}
+                <Button
+                  size="xs"
+                  fw={700}
+                  px={15}
+                  variant="default"
+                  leftIcon={<IconCircleX size={15} />}
+                  sx={{
+                    opacity: 0.35,
+                    "&:hover": {
+                      opacity: 1,
+                      color: "rgba(255, 40, 40, 0.5)",
+                    },
+                  }}
+                  onClick={signOutFunc}
+                >
+                  LOGOUT
+                </Button>
+              </Popover.Dropdown>
+            </Popover>
           </Group>
           <motion.div
             animate={{
@@ -261,10 +314,13 @@ export default function MainMenu({
               stroke={1}
               size={30}
               style={{
-                color: "#a5d8ff",
+                color:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.blue[2]
+                    : theme.colors.red[7],
                 paddingTop: "3px",
                 cursor: "pointer",
-                transform: "scale(1.25)",
+                transform: "scale(1.5)",
               }}
               onClick={openDropDown}
             />

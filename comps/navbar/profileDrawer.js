@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
 import Money from "./money";
 import {
+  createStyles,
   Avatar,
   Drawer,
   Space,
@@ -16,7 +17,6 @@ import {
   Box,
   NavLink,
   Divider,
-  Select,
 } from "@mantine/core";
 import {
   IconUser,
@@ -29,6 +29,50 @@ import {
   IconInfoCircle,
 } from "@tabler/icons-react";
 
+const useStyles = createStyles((theme) => ({
+  icon: {
+    opacity: 0.1,
+  },
+  activeIcon: {
+    opacity: 0.7,
+  },
+  description: {
+    opacity: 0.4,
+  },
+  root: {
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[0]
+        : theme.colors.gray[9],
+    "&:hover": { transform: "scale(1.02)", transition: "all 200ms ease" },
+    "&:active": {
+      transform: "scale(1)",
+    },
+  },
+  closeButton: {
+    background:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[5]
+        : theme.colors.gray[1],
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.gray[0]
+        : theme.colors.dark[9],
+    borderRadius: "5px 0 0 5px",
+    position: "absolute",
+    padding: "5px 10px",
+    top: 77,
+    right: 0,
+    transition: "all 250ms ease-in-out",
+    "&:hover": {
+      background:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[8]
+          : theme.colors.gray[4],
+    },
+  },
+}));
+
 export default function ProfileDrawer({
   active,
   setActive,
@@ -38,6 +82,7 @@ export default function ProfileDrawer({
   openMenu,
   signOutFunc,
 }) {
+  const { classes, cx } = useStyles();
   const [user, setUser] = useSessionStorage({ key: "user" });
   const router = useRouter();
 
@@ -90,17 +135,11 @@ export default function ProfileDrawer({
       icon={item.icon}
       variant="subtle"
       onClick={() => menuLinkFunc(index)}
-      sx={{
-        ".mantine-NavLink-description": {
-          opacity: 0.4,
-        },
-        ".mantine-NavLink-icon": {
-          opacity: index === active ? 0.7 : 0.1,
-        },
-        "&:hover": { transform: "scale(1.02)", transition: "all 200ms ease" },
-        "&:active": {
-          transform: "scale(1)",
-        },
+      classNames={{
+        icon: cx(classes.icon, { [classes.activeIcon]: active === index }),
+        description: classes.description,
+        label: classes.label,
+        root: classes.root,
       }}
     />
   ));
@@ -128,29 +167,19 @@ export default function ProfileDrawer({
         lockScroll={false}
         withOverlay={false}
         withCloseButton={false}
-        styles={{
+        styles={(theme) => ({
           content: {
             overflow: "hidden",
-            background: "rgba(11, 12, 13, 0.95)",
+            background:
+              theme.colorScheme === "dark"
+                ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                : theme.fn.rgba(theme.colors.gray[0], 0.95),
           },
-        }}
+        })}
       >
         {/* Close Main Menu Button */}
-        <Button
-          pos={"absolute"}
-          top={77}
-          right={0}
-          bg={"dark.5"}
-          radius={"5px 0 0 5px"}
-          p={"5px 10px"}
-          sx={{
-            transition: "all 250ms ease-in-out",
-            "&:hover": {
-              background: "rgba(8, 7, 11, 1)",
-            },
-          }}
-          onClick={openMenu}
-        >
+        {/* TODO   */}
+        <Button onClick={openMenu} className={classes.closeButton}>
           <IconX size={15} />
         </Button>
         <Space h={95} />
@@ -204,23 +233,16 @@ export default function ProfileDrawer({
               description="View the Map"
               px={25}
               py={8}
-              icon={<IconWorld size={30} opacity={0.1} />}
+              icon={<IconWorld size={30} />}
               variant="subtle"
               onClick={() => {
                 !user && sessionStorage.setItem("noLogin", "true");
                 router.push("/");
               }}
-              sx={{
-                ".mantine-NavLink-description": {
-                  opacity: 0.4,
-                },
-                "&:hover": {
-                  transform: "scale(1.02)",
-                  transition: "all 200ms ease",
-                },
-                "&:active": {
-                  transform: "scale(1)",
-                },
+              classNames={{
+                description: classes.description,
+                icon: classes.icon,
+                root: classes.root,
               }}
             />
           )}
@@ -244,22 +266,15 @@ export default function ProfileDrawer({
               description="About TourAssit | FAQs"
               px={25}
               py={8}
-              icon={<IconInfoCircle size={30} opacity={0.1} />}
+              icon={<IconInfoCircle size={30} />}
               variant="subtle"
               onClick={() => {
                 router.push("/help");
               }}
-              sx={{
-                ".mantine-NavLink-description": {
-                  opacity: 0.4,
-                },
-                "&:hover": {
-                  transform: "scale(1.02)",
-                  transition: "all 200ms ease",
-                },
-                "&:active": {
-                  transform: "scale(1)",
-                },
+              classNames={{
+                description: classes.description,
+                icon: classes.icon,
+                root: classes.root,
               }}
             />
           )}
@@ -277,12 +292,15 @@ export default function ProfileDrawer({
           onClick={() => {
             router.push("/legal");
           }}
-          sx={{
+          sx={(theme) => ({
             "&:hover": {
-              color: "#fff",
+              color:
+                theme.colorScheme === "dark"
+                  ? theme.colors.gray[0]
+                  : theme.colors.dark[9],
               backgroundColor: "rgba(0, 0, 0, 0)",
             },
-          }}
+          })}
         >
           Legal Documents
         </Button>
@@ -290,13 +308,17 @@ export default function ProfileDrawer({
           <Box
             pt={10}
             mb={30}
-            sx={{
-              borderTop: "1px solid rgba(255, 255, 255, 0.03)",
+            sx={(theme) => ({
+              borderTop: `1px solid ${
+                theme.colorScheme === "dark"
+                  ? theme.fn.rgba(theme.colors.gray[0], 0.1)
+                  : theme.fn.rgba(theme.colors.dark[9], 0.1)
+              }`,
               position: "absolute",
               left: "15%",
               bottom: 0,
               width: "70%",
-            }}
+            })}
           >
             {/* SignOut Button */}
             <Button
@@ -305,15 +327,27 @@ export default function ProfileDrawer({
               ml="20%"
               mt={10}
               leftIcon={<IconLogout size={18} />}
-              sx={{
-                color: "rgba(255, 255, 255, 0.1)",
-                backgroundColor: "rgba(255, 255, 255, 0.012)",
+              sx={(theme) => ({
+                color:
+                  theme.colorScheme === "dark"
+                    ? theme.fn.rgba(theme.colors.gray[0], 0.1)
+                    : theme.fn.rgba(theme.colors.dark[9], 0.1),
+                backgroundColor:
+                  theme.colorScheme === "dark"
+                    ? theme.fn.rgba(theme.colors.gray[0], 0.012)
+                    : theme.fn.rgba(theme.colors.dark[9], 0.05),
                 transition: "all 200ms ease",
                 "&:hover": {
-                  color: "#fff",
-                  backgroundColor: "rgba(0, 0, 0, 0.2)",
+                  color:
+                    theme.colorScheme === "dark"
+                      ? theme.colors.gray[0]
+                      : theme.colors.dark[9],
+                  backgroundColor:
+                    theme.colorScheme === "dark"
+                      ? theme.fn.rgba(theme.colors.dark[9], 0.2)
+                      : theme.fn.rgba(theme.colors.gray[0], 0.2),
                 },
-              }}
+              })}
               onClick={signOutFunc}
             >
               Logout
@@ -329,30 +363,26 @@ export default function ProfileDrawer({
         withCloseButton={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         overlayProps={{
-          opacity: 0.7,
           blur: 9,
         }}
-        sx={{
-          ".mantine-Drawer-content": { background: "rgba(11, 12, 13, 0.95)" },
-        }}
+        sx={(theme) => ({
+          ".mantine-Drawer-content": {
+            background:
+              theme.colorScheme === "dark"
+                ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                : theme.fn.rgba(theme.colors.gray[0], 0.95),
+          },
+          ".mantine-Drawer-overlay": {
+            background:
+              theme.colorScheme === "dark"
+                ? theme.fn.rgba(theme.colors.dark[9], 0.7)
+                : theme.fn.rgba(theme.colors.gray[0], 0.7),
+          },
+        })}
         onClose={closePanel}
       >
         {/* Close Panel Button */}
-        <Button
-          pos={"absolute"}
-          top={77}
-          right={0}
-          bg={"dark.5"}
-          radius={"5px 0 0 5px"}
-          p={"5px 10px"}
-          sx={{
-            transition: "all 250ms ease-in-out",
-            "&:hover": {
-              background: "rgba(8, 7, 11, 1)",
-            },
-          }}
-          onClick={closePanel}
-        >
+        <Button className={classes.closeButton} onClick={closePanel}>
           <IconX size={15} />
         </Button>
         {active === 0 && (
@@ -388,13 +418,6 @@ export default function ProfileDrawer({
                 Money <IconWallet size={40} />
               </Flex>
             </Title>
-            <Select
-              w={"95%"}
-              mt={7}
-              variant="filled"
-              placeholder="Help me raise money to go on a Music Tour"
-              data={["Help me raise money to go on a Music Tour"]}
-            />
             <Money />
           </motion.div>
         )}

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Box, Image, LoadingOverlay } from "@mantine/core";
+import { useMantineTheme, Box, Image, LoadingOverlay } from "@mantine/core";
 
 export default function Loader({ pageLoaded }) {
+  const theme = useMantineTheme();
   const Globe = () => (
     <Box>
       <motion.div
@@ -12,7 +13,14 @@ export default function Loader({ pageLoaded }) {
         }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <Image src={"img/blue_loader.png"} alt="TourAssist Loader" />
+        <Image
+          src={
+            theme.colorScheme === "dark"
+              ? "img/blue_loader.png"
+              : "img/red_loader.png"
+          }
+          alt="TourAssist Loader"
+        />
       </motion.div>
     </Box>
   );
@@ -25,7 +33,11 @@ export default function Loader({ pageLoaded }) {
     <>
       <LoadingOverlay
         visible={!pageLoaded}
-        overlayColor="#0b0c0d"
+        overlayColor={
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[7]
+            : theme.colors.gray[0]
+        }
         overlayOpacity={1}
         zIndex={1000}
         transitionDuration={1000}

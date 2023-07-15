@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  useMantineTheme,
   Center,
   Box,
   Flex,
@@ -17,6 +18,7 @@ import { useSessionStorage, useMediaQuery } from "@mantine/hooks";
 import LoginComp from "./loginComp";
 
 export default function Intro({ auth, mapLoaded }) {
+  const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -106,7 +108,11 @@ export default function Intro({ auth, mapLoaded }) {
                 <Image
                   mb={25}
                   sx={{ width: "100%", maxWidth: "250px" }}
-                  src={"img/TA_GlobeLogo.png"}
+                  src={
+                    theme.colorScheme === "dark"
+                      ? "img/TA_GlobeLogo.png"
+                      : "img/TA_GlobeRed.png"
+                  }
                   alt="TouraSSist_logo"
                   withPlaceholder
                 />
@@ -150,7 +156,11 @@ export default function Intro({ auth, mapLoaded }) {
                     hidden={!firstDown}
                     mb={25}
                     sx={{ maxWidth: "45vw" }}
-                    src={"img/TA_GlobeLogo.png"}
+                    src={
+                      theme.colorScheme === "dark"
+                        ? "img/TA_GlobeLogo.png"
+                        : "img/TA_GlobeRed.png"
+                    }
                     alt="TouraSSist_logo"
                     withPlaceholder
                   />

@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { Drawer, Button, Divider, Center, Stack } from "@mantine/core";
+import {
+  useMantineTheme,
+  Drawer,
+  Button,
+  Divider,
+  Center,
+  Stack,
+} from "@mantine/core";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons-react";
 import PlaceListItem from "./placeListItem";
@@ -11,6 +18,7 @@ export default function TourList({
   places,
   setPlaces,
 }) {
+  const theme = useMantineTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -60,7 +68,7 @@ export default function TourList({
             label="Tour Locations"
             sx={{
               opacity: 0.4,
-              margin: "80px 0 10px 0",
+              margin: "63px 0 10px 0",
             }}
           />
           <Droppable droppableId="places">
@@ -105,20 +113,32 @@ export default function TourList({
           </Center>
           <Button
             pos={"absolute"}
-            top={94}
+            top={77}
             right={0}
-            bg={"dark.5"}
+            onClick={() => setListOpened(false)}
+            bg={
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[5]
+                : theme.colors.gray[1]
+            }
             sx={{
               borderRadius: "3px 0 0 3px",
               padding: "0 8px",
               transition: "all 100ms ease-in-out",
               "&:hover": {
-                background: "rgba(16, 17, 19, 1)",
+                background:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[8]
+                    : theme.colors.gray[4],
               },
             }}
-            onClick={() => setListOpened(false)}
           >
-            <IconX size={15} />
+            <IconX
+              size={15}
+              style={{
+                color: theme.colorScheme === "dark" ? "#fff" : "#000",
+              }}
+            />
           </Button>
         </Drawer>
       </DragDropContext>

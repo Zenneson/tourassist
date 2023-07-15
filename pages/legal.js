@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
+  useMantineTheme,
   createStyles,
   Box,
   Button,
@@ -13,7 +14,7 @@ import {
   Space,
 } from "@mantine/core";
 import { IconChevronsRight } from "@tabler/icons-react";
-import { useScrollIntoView, useWindowScroll } from "@mantine/hooks";
+import { useWindowScroll } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -46,20 +47,22 @@ const useStyles = createStyles((theme) => ({
   },
 
   indicator: {
+    color:
+      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 7],
     transition: "transform 150ms ease",
     position: "absolute",
-    top: "10px",
+    top: "11px",
     left: "-20px",
   },
 }));
 
 export default function Legal({ setMainMenuOpened }) {
+  const theme = useMantineTheme();
   const [linkState, setLinkState] = useState("terms");
   const [active, setActive] = useState(0);
   const [highlighted, setHighlighted] = useState(0);
   const [scroll, scrollTo] = useWindowScroll();
   const { classes, cx } = useStyles();
-  const { scrollIntoView, targetRef } = useScrollIntoView({});
 
   const router = useRouter();
 
@@ -454,8 +457,25 @@ export default function Legal({ setMainMenuOpened }) {
   const sections = linkState === "terms" ? termsections : privsections;
 
   const content = sections.map((section, index) => (
-    <Box pt={20} mb={10} key={index} ref={termsectionsRefs[index]}>
-      <Title order={4} color={highlighted === index ? "blue.4" : "inherit"}>
+    <Box
+      pt={20}
+      mb={10}
+      key={index}
+      ref={termsectionsRefs[index]}
+      sx={{
+        scrollMarginTop: "188px",
+      }}
+    >
+      <Title
+        order={4}
+        color={
+          highlighted === index
+            ? theme.colorScheme === "dark"
+              ? "blue.3"
+              : "red.3"
+            : "inherit"
+        }
+      >
         {section.title}
       </Title>
       <Text fz={14} mt={10}>
@@ -476,6 +496,7 @@ export default function Legal({ setMainMenuOpened }) {
     setHighlighted(index);
     termsectionsRefs[index].current.scrollIntoView({
       behavior: "smooth",
+      offset: -60,
     });
   };
 
@@ -502,7 +523,6 @@ export default function Legal({ setMainMenuOpened }) {
               className={classes.indicator}
               size={17}
               style={{
-                color: "#4dabf7",
                 transform: `translateY(calc(${active} * 2.4rem))`,
               }}
             />
@@ -519,14 +539,24 @@ export default function Legal({ setMainMenuOpened }) {
           </Text>
           <Box
             radius={3}
-            bg={"rgba(0,0,0,0.05)"}
+            bg={
+              theme.colorScheme === "dark"
+                ? theme.fn.rgba(theme.colors.dark[9], 0.05)
+                : theme.fn.rgba(theme.colors.gray[0], 0.05)
+            }
             w={"100%"}
             mt={10}
-            py={10}
-            px={20}
+            p={20}
             sx={{
-              border: "1px solid rgba(0,0,0,0.15)",
-              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
+              border: `1px solid ${
+                theme.colorScheme === "dark"
+                  ? theme.fn.rgba(theme.colors.dark[9], 0.8)
+                  : theme.fn.rgba(theme.colors.gray[0], 0.8)
+              }`,
+              boxShadow: `0 7px 10px 0 ${theme.fn.rgba(
+                theme.colors.dark[9],
+                0.05
+              )}`,
             }}
           >
             <Group spacing={30}>

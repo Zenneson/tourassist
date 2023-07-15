@@ -37,6 +37,8 @@ const useStyles = createStyles((theme) => ({
   },
 
   indicator: {
+    color:
+      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 7],
     transition: "transform 150ms ease",
     position: "absolute",
     top: "10px",
@@ -111,16 +113,19 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
         withCloseButton={false}
         onClose={() => setDropDownOpened(false)}
         withOverlay={false}
-        styles={{
+        styles={(theme) => ({
           content: {
             backdropFilter: "blur(10px)",
             overflow: "hidden",
-            background: "rgba(11, 12, 13, 0.5)",
+            background:
+              theme.colorScheme === "dark"
+                ? theme.fn.rgba(theme.colors.dark[7], 0.8)
+                : theme.fn.rgba(theme.colors.gray[0], 0.8),
           },
           header: {
             background: "transparent",
           },
-        }}
+        })}
       >
         <Center h={"100vh"} mb={50}>
           <Flex w={"80%"} maw={1200} h={705} pos={"relative"}>
@@ -145,7 +150,6 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
                   className={classes.indicator}
                   size={17}
                   style={{
-                    color: "#4dabf7",
                     transform: `translateY(calc(${active} * 2.4rem))`,
                   }}
                 />

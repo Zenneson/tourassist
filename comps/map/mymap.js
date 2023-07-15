@@ -4,18 +4,19 @@ import Map, { Marker, Source, Layer } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
 import bbox from "@turf/bbox";
 import {
+  useMantineTheme,
   Autocomplete,
   Box,
+  Button,
   Modal,
   Title,
   Flex,
   Text,
   Group,
-  LoadingOverlay,
   Divider,
   NavLink,
   Popover,
-  Button,
+  LoadingOverlay,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import {
@@ -44,6 +45,7 @@ export default function Mymap({
   mapLoaded,
   setMapLoaded,
 }) {
+  const theme = useMantineTheme();
   const mapRef = useRef();
   const center = useRef();
   const router = useRouter();
@@ -90,9 +92,6 @@ export default function Mymap({
     key: "mapSpin",
     defaultValue: true,
   });
-  const [pageLoaded, setPageLoaded] = useSessionStorage({
-    key: "pageLoaded",
-  });
 
   const initialViewState = {
     latitude: geoLat,
@@ -102,6 +101,10 @@ export default function Mymap({
   };
 
   const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
+
+  useEffect(() => {
+    router.prefetch("/tripplanner");
+  }, [router]);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -163,9 +166,11 @@ export default function Mymap({
     setGeoLng,
   ]);
 
+  const [key, setKey] = useState(0);
+
   useEffect(() => {
-    router.prefetch("/tripplanner");
-  }, [router]);
+    setKey((prevKey) => prevKey + 1);
+  }, [theme.colorScheme]);
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -252,24 +257,16 @@ export default function Mymap({
       }
     }
 
+    console;
     if (
       feature.layer?.source === "states-boundaries" ||
+      isState ||
       location === "United States"
     ) {
       setCitySubTitle("United States");
       fetchUSCities(location);
-    } else if (feature.layer?.source === "country-boundaries") {
-      if (
-        location === "Angola" ||
-        location === "Nigeria" ||
-        location === "Russia" ||
-        location === "United Arab Emirates" ||
-        location === "United Kingdom"
-      ) {
-        fetchAltCities(location);
-      } else {
-        fetchWorldCities(location);
-      }
+    } else {
+      fetchWorldCities(location);
     }
     setRegionName(location);
     setIsoName(isoName);
@@ -354,45 +351,7 @@ export default function Mymap({
 
   const fetchWorldCities = async (regionName) => {
     try {
-      const res = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/population/cities/filter",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            country: `${regionName}`,
-          }),
-        }
-      );
-      const data = await res.json();
-      setCityListSet(true);
-
-      if (!data) {
-        return {
-          notFound: true,
-        };
-      }
-      let dataArray = Object.keys(data.data).map((key) => {
-        return data.data[key];
-      });
-      dataArray.sort(
-        (a, b) => b.populationCounts[0].value - a.populationCounts[0].value
-      );
-      let topFive = dataArray.slice(0, 5);
-      setTopCities(topFive);
-    } catch (error) {
-      console.error("Error:", error);
-      return {
-        notFound: true,
-      };
-    }
-  };
-
-  const fetchAltCities = async (regionName) => {
-    try {
-      const res = await fetch("/data/alt_cities.json");
+      const res = await fetch("/data/world_cities_july2023.json");
       const data = await res.json();
       setCityListSet(true);
 
@@ -453,7 +412,12 @@ export default function Mymap({
     <NavLink
       py={5}
       key={index}
-      icon={<IconMapPin size={15} color="#9ff5fd" />}
+      icon={
+        <IconMapPin
+          size={15}
+          color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
+        />
+      }
       label={
         <Flex align={"center"} fs={"italic"} fz={13} fw={600}>
           <Text
@@ -475,7 +439,6 @@ export default function Mymap({
           transition: "all 150ms ease",
           backgroundColor: "rgba(0,0,0,0)",
           opacity: 1,
-          color: "#fff",
         },
         "&:active": {
           transform: "scale(1)",
@@ -575,7 +538,8 @@ export default function Mymap({
         <Button
           onClick={showTourList}
           sx={{
-            backgroundColor: "#020202",
+            backgroundColor:
+              theme.colorScheme === "dark" ? "#2e2e2e" : "#bfbfbf",
             opacity: 0.7,
             borderRadius: "0 3px 3px 0",
             position: "absolute",
@@ -592,7 +556,12 @@ export default function Mymap({
             },
           }}
         >
-          <IconList size={15} />
+          <IconList
+            size={15}
+            style={{
+              color: theme.colorScheme === "dark" ? "#fff" : "#000",
+            }}
+          />
         </Button>
       )}
       {!searchOpened && (
@@ -607,13 +576,27 @@ export default function Mymap({
             opacity: 0.5,
             blur: 5,
           }}
+          sx={{
+            ".mantine-Modal-overlay": {
+              background:
+                theme.colorScheme === "dark"
+                  ? theme.fn.rgba(theme.colors.dark[9], 0.5)
+                  : theme.fn.rgba(theme.colors.gray[0], 0.5),
+            },
+          }}
           title={
             <Box mb={isCountry || isState ? -15 : 0}>
               <Title
                 order={1}
                 fw={900}
                 variant="gradient"
-                gradient={{ from: "#00E8FC", to: "#FFF", deg: 45 }}
+                gradient={{
+                  from: `${
+                    theme.colorScheme === "dark" ? "#00E8FC" : "#fa7500"
+                  }`,
+                  to: `${theme.colorScheme === "dark" ? "#FFF" : "#000"}`,
+                  deg: 45,
+                }}
                 sx={{
                   textTransform: "uppercase",
                   textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
@@ -630,11 +613,15 @@ export default function Mymap({
           }
           styles={(theme) => ({
             header: {
-              backgroundColor: "rgba(11, 12, 13, 0)",
+              backgroundColor: "transparent",
               zIndex: 1,
             },
             content: {
-              backgroundColor: "rgba(11, 12, 13, 0.8)",
+              backgroundColor: `${
+                theme.colorScheme === "dark"
+                  ? theme.fn.rgba(theme.colors.dark[7], 0.8)
+                  : theme.fn.rgba(theme.colors.gray[0], 0.8)
+              }`,
               overflow: "hidden",
             },
             overlay: {
@@ -654,14 +641,19 @@ export default function Mymap({
                 opened={tourListDropDown}
                 offset={-85}
                 width={"target"}
-                styles={{
+                styles={(theme) => ({
                   dropdown: {
-                    backgroundColor: "rgba(7, 7, 7, 1)",
+                    backgroundColor:
+                      theme.colorScheme === "dark" ? "dark.9" : "gray.0",
                     border: "none",
                     borderRadius: "0 0 3px 3px",
-                    borderTop: "2px solid rgba(255, 255, 255, 0.3)",
+                    borderTop: `2px solid ${
+                      theme.colorScheme === "dark"
+                        ? theme.fn.rgba(theme.colors.gray[0], 0.1)
+                        : theme.fn.rgba(theme.colors.dark[9], 0.1)
+                    }`,
                   },
-                }}
+                })}
                 onClick={() => {
                   if (places.length > 0) {
                     if (checkPlace(placeLocation)) {
@@ -680,7 +672,9 @@ export default function Mymap({
                     icon={
                       <IconPlaneTilt
                         size={25}
-                        color="#9ff5fd"
+                        color={
+                          theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"
+                        }
                         opacity={0.7}
                         style={{
                           margin: "3px 2px 0 3px",
@@ -694,7 +688,11 @@ export default function Mymap({
                     sx={{
                       borderLeft: "3px solid rgba(0, 0, 0, 0)",
                       "&:hover": {
-                        borderLeft: "3px solid  rgba(159, 245, 253, 0.4)",
+                        borderLeft: `3px solid  ${
+                          theme.colorScheme === "dark"
+                            ? "rgba(159, 245, 253, 0.4)"
+                            : "rgba(250, 117, 0, 0.4)"
+                        }`,
                         transition: "all 0.2s ease-in-out",
                       },
                     }}
@@ -706,7 +704,9 @@ export default function Mymap({
                         <Text
                           inherit
                           span
-                          color="white"
+                          color={
+                            theme.colorScheme === "dark" ? "white" : "black"
+                          }
                           size="md"
                           fw={700}
                           transform="uppercase"
@@ -768,7 +768,7 @@ export default function Mymap({
                 icon={
                   <IconPlaylistAdd
                     size={25}
-                    color="#9ff5fd"
+                    color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
                     opacity={0.7}
                     style={{
                       margin: "3px 2px 0 3px",
@@ -781,7 +781,11 @@ export default function Mymap({
                 sx={{
                   borderLeft: "3px solid rgba(0, 0, 0, 0)",
                   "&:hover": {
-                    borderLeft: "3px solid  rgba(159, 245, 253, 0.4)",
+                    borderLeft: `3px solid  ${
+                      theme.colorScheme === "dark"
+                        ? "rgba(159, 245, 253, 0.4)"
+                        : "rgba(250, 117, 0, 0.4)"
+                    }`,
                     transition: "all 0.2s ease-in-out",
                   },
                 }}
@@ -789,7 +793,12 @@ export default function Mymap({
                   <>
                     <Text color="dimmed">
                       Add to{" "}
-                      <Text span color="white" fw={700} transform="uppercase">
+                      <Text
+                        span
+                        color={theme.colorScheme === "dark" ? "white" : "black"}
+                        fw={700}
+                        transform="uppercase"
+                      >
                         TOUR LIST
                       </Text>{" "}
                     </Text>
@@ -807,9 +816,16 @@ export default function Mymap({
                 visible={cityListSet === false}
               />
               <Divider
+                size="xs"
+                my="xs"
+                labelPosition={topCities.length === 0 ? "center" : "left"}
                 label={
                   topCities.length > 0 ? (
-                    <Text fz={12} fs={"italic"}>
+                    <Text
+                      fz={12}
+                      fs={"italic"}
+                      color={theme.colorScheme === "dark" ? "white" : "dark"}
+                    >
                       Top {topCities.length === 1 ? "City" : "Cities"} in{" "}
                       {regionName === "東京都" ? "Tokyo" : regionName} by
                       population
@@ -818,12 +834,6 @@ export default function Mymap({
                     <IconMapSearch size={20} />
                   )
                 }
-                labelPosition={topCities.length === 0 ? "center" : "left"}
-                size="xs"
-                my="xs"
-                style={{
-                  opacity: 0.7,
-                }}
               />
               <Box display={topCities.length === 0 ? "none" : "block"}>
                 {topCitiesList}
@@ -831,7 +841,6 @@ export default function Mymap({
               {/* Search Cities in Selected Region */}
               <Autocomplete
                 mt={15}
-                variant={"filled"}
                 icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
                 placeholder={`Search for a city in ${
                   regionName === "東京都" ? "Tokyo" : regionName
@@ -851,13 +860,6 @@ export default function Mymap({
                 }}
                 data={cityData}
                 filter={(value, item) => item}
-                styles={(theme) => ({
-                  input: {
-                    "::placeholder": {
-                      color: "rgba(255,255,255,0.5)",
-                    },
-                  },
-                })}
               />
             </Box>
           )}
@@ -875,7 +877,6 @@ export default function Mymap({
           <Autocomplete
             icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
             dropdownPosition="top"
-            variant={"filled"}
             size="md"
             radius="xl"
             defaultValue=""
@@ -886,7 +887,7 @@ export default function Mymap({
             filter={(value, item) => item}
             style={{
               width: "350px",
-              zIndex: 98,
+              zIndex: 200,
             }}
             onChange={function (e) {
               setCountrySearch(e);
@@ -902,6 +903,7 @@ export default function Mymap({
           onZoomEnd={onZoomEnd}
           maxZoom={14}
           minZoom={2}
+          reuseMaps={true}
           onLoad={() => {
             setMapLoaded(true);
             sessionStorage.removeItem("noLogin");
@@ -919,7 +921,12 @@ export default function Mymap({
             "country-boundaries",
             "clicked-state",
           ]}
-          mapStyle="mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
+          styleDiffing={true}
+          mapStyle={
+            theme.colorScheme === "dark"
+              ? "mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
+              : "mapbox://styles/zenneson/clk2aa9s401ed01padxsqanrd"
+          }
           style={{ width: "100%", height: "100%" }}
           mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
         >
@@ -933,12 +940,18 @@ export default function Mymap({
           )}
           {isCity && (
             <Marker
+              color={
+                theme.colorScheme === "dark"
+                  ? " rgba(0, 232, 250, 0.8)"
+                  : "rgba(250, 117, 0, 0.8)"
+              }
               longitude={placeLngLat[0]}
               latitude={placeLngLat[1]}
               offsetLeft={-20}
               offsetTop={-10}
-              scale={4.5}
-            ></Marker>
+              scale={5}
+              key={key}
+            />
           )}
           <Source
             id="country-boundaries"
@@ -961,7 +974,11 @@ export default function Mymap({
               type="fill"
               filter={!showStates ? filter : ["in", "name", "United States"]}
               paint={{
-                "fill-color": "rgba( 0,232,250, .8 )",
+                "fill-color": `${
+                  theme.colorScheme === "dark"
+                    ? " rgba(0, 232, 250, 0.8)"
+                    : "rgba(250, 117, 0, 0.8)"
+                }`,
               }}
             />
             <Layer
@@ -1006,7 +1023,11 @@ export default function Mymap({
               id="clicked-state"
               type="fill"
               paint={{
-                "fill-color": "rgba( 0,232,250, .8 )",
+                "fill-color": `${
+                  theme.colorScheme === "dark"
+                    ? " rgba(0, 232, 250, 0.8)"
+                    : "rgba(250, 117, 0, 0.8)"
+                }`,
               }}
               filter={isCity ? false : ["==", "NAME", regionName]}
             />

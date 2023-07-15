@@ -543,7 +543,6 @@ export default function TripPlannerPage(props) {
                       <Autocomplete
                         size="sm"
                         w={"100%"}
-                        variant="filled"
                         defaultValue=""
                         value={startLocaleSearch}
                         placeholder="Departure Location..."
@@ -945,7 +944,6 @@ export default function TripPlannerPage(props) {
                   <Input
                     size={"xl"}
                     placeholder="Title..."
-                    variant="filled"
                     w="100%"
                     onChange={(e) => setTripTitle(e.target.value)}
                     sx={{

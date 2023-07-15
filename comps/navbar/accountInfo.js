@@ -1,4 +1,5 @@
 import {
+  useMantineTheme,
   ActionIcon,
   Box,
   Button,
@@ -26,6 +27,7 @@ import {
 import { useSessionStorage } from "@mantine/hooks";
 
 export default function AccountInfo() {
+  const theme = useMantineTheme();
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
@@ -36,7 +38,6 @@ export default function AccountInfo() {
       <Flex direction="column" gap="xs" w={"100%"}>
         <Title
           order={6}
-          opacity={0.4}
           pb={5}
           sx={{
             textTransform: "uppercase",
@@ -51,14 +52,17 @@ export default function AccountInfo() {
           pt={10}
           pb={12}
           sx={{
-            borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
+            borderLeft: `3px solid ${
+              theme.colorScheme === "dark"
+                ? theme.colors.gray[8]
+                : theme.colors.gray[4]
+            }`,
           }}
         >
           <Group grow spacing={10}>
             <Input
               icon={<IconDeviceSim1 size={20} />}
               placeholder="First Name"
-              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -68,7 +72,6 @@ export default function AccountInfo() {
             <Input
               icon={<IconDeviceSim2 size={20} />}
               placeholder="Last Name"
-              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -80,14 +83,13 @@ export default function AccountInfo() {
             <Input
               icon={<IconPhone size={20} />}
               placeholder="Phone #"
-              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
                 </ActionIcon>
               }
             />
-            <Button variant="light" bg="#0D3F82" fz={12}>
+            <Button variant="light" color="green" fz={12}>
               <IconBuildingBank
                 size={15}
                 stroke={3}
@@ -103,7 +105,6 @@ export default function AccountInfo() {
         </Flex>
         <Title
           order={6}
-          opacity={0.4}
           pb={5}
           sx={{
             textTransform: "uppercase",
@@ -118,14 +119,17 @@ export default function AccountInfo() {
           pt={10}
           pb={12}
           sx={{
-            borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
+            borderLeft: `3px solid ${
+              theme.colorScheme === "dark"
+                ? theme.colors.gray[8]
+                : theme.colors.gray[4]
+            }`,
           }}
         >
           <Group grow spacing={10}>
             <Input
               icon={<IconBrandFacebook size={20} />}
               placeholder="/Facebook"
-              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -135,7 +139,6 @@ export default function AccountInfo() {
             <Input
               icon={<IconBrandInstagram size={20} />}
               placeholder="@Instagram"
-              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -147,7 +150,6 @@ export default function AccountInfo() {
             <Input
               icon={<IconBrandTiktok size={20} />}
               placeholder="@TikTok"
-              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -157,7 +159,6 @@ export default function AccountInfo() {
             <Input
               icon={<IconBrandTwitter size={20} />}
               placeholder="@Twitter"
-              variant="filled"
               rightSection={
                 <ActionIcon opacity={0.5} variant="subtle">
                   <IconCirclePlus size={16} />
@@ -168,7 +169,6 @@ export default function AccountInfo() {
         </Flex>
         <Title
           order={6}
-          opacity={0.4}
           pb={5}
           sx={{
             textTransform: "uppercase",
@@ -183,7 +183,11 @@ export default function AccountInfo() {
           pt={10}
           pb={12}
           sx={{
-            borderLeft: "3px solid rgba(204, 204, 204, 0.2)",
+            borderLeft: `3px solid ${
+              theme.colorScheme === "dark"
+                ? theme.colors.gray[8]
+                : theme.colors.gray[4]
+            }`,
           }}
         >
           <Flex direction="column" gap={8} align="flex-start" pl={20}>
@@ -196,12 +200,6 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="General Newsletter"
-              sx={{
-                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
-                  {
-                    cursor: "pointer",
-                  },
-              }}
             />
             <Switch
               p={0}
@@ -212,12 +210,6 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="Campaign Creation"
-              sx={{
-                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
-                  {
-                    cursor: "pointer",
-                  },
-              }}
             />
             <Switch
               p={0}
@@ -228,12 +220,6 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="New Campaign Comment"
-              sx={{
-                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
-                  {
-                    cursor: "pointer",
-                  },
-              }}
             />
           </Flex>
           <Flex direction="column" gap={8} align="flex-start">
@@ -246,12 +232,6 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="Campaign Milestones"
-              sx={{
-                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
-                  {
-                    cursor: "pointer",
-                  },
-              }}
             />
             <Switch
               p={0}
@@ -262,12 +242,6 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="Campaign Ending Soon"
-              sx={{
-                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
-                  {
-                    cursor: "pointer",
-                  },
-              }}
             />
             <Switch
               p={0}
@@ -278,12 +252,6 @@ export default function AccountInfo() {
               radius="xs"
               labelPosition="right"
               label="Campaign Ended"
-              sx={{
-                "	.mantine-Switch-label, .mantine-Switch-thumb, .mantine-Switch-track":
-                  {
-                    cursor: "pointer",
-                  },
-              }}
             />
           </Flex>
         </Group>
@@ -300,11 +268,11 @@ export default function AccountInfo() {
       >
         <Button.Group>
           <Button
-            variant="default"
+            variant="subtle"
             size="xs"
             leftIcon={<IconKey size={18} stroke={2} />}
             sx={{
-              opacity: 0.2,
+              opacity: 0.5,
               "&:hover": {
                 opacity: 1,
               },
@@ -313,11 +281,11 @@ export default function AccountInfo() {
             CHANGE PASSWORD
           </Button>
           <Button
-            variant="default"
+            variant="subtle"
             size="xs"
             leftIcon={<IconUserX size={18} stroke={2} />}
             sx={{
-              opacity: 0.2,
+              opacity: 0.5,
               "&:hover": {
                 opacity: 1,
               },

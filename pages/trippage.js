@@ -345,13 +345,12 @@ export default function Trippage(props) {
                     />
                     <Flex gap={10}>
                       <Input
-                        variant="filled"
                         placeholder="Card Number"
                         w={"60%"}
                         icon={<IconCreditCard size={20} opacity={0.4} />}
                       />
-                      <Input variant="filled" placeholder="MM/YY" w={"20%"} />
-                      <Input variant="filled" placeholder="CVV" w={"20%"} />
+                      <Input placeholder="MM/YY" w={"20%"} />
+                      <Input placeholder="CVV" w={"20%"} />
                     </Flex>
                     <Flex gap={10}>
                       <Select
@@ -360,11 +359,7 @@ export default function Trippage(props) {
                         data={[]}
                         w={"60%"}
                       />
-                      <Input
-                        placeholder="Postal Code"
-                        variant="filled"
-                        w={"calc(40% + 10px)"}
-                      />
+                      <Input placeholder="Postal Code" w={"calc(40% + 10px)"} />
                     </Flex>
                   </Stack>
                   <Stack spacing={5}>
@@ -474,7 +469,6 @@ export default function Trippage(props) {
             {!donating && (
               <Input
                 size={"xl"}
-                variant="filled"
                 value={editUpdate && "Update number 3 of the trip"}
                 w="100%"
                 placeholder="Update Title..."

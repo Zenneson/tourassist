@@ -2,7 +2,8 @@ import Head from "next/head";
 import { getAuth } from "firebase/auth";
 import { app } from "../libs/firebase";
 import { useState } from "react";
-import { MantineProvider, AppShell } from "@mantine/core";
+import { useToggle } from "@mantine/hooks";
+import { AppShell, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { RouterTransition } from "../comps/routertransition";
 import SearchModal from "../comps/navbar/searchModal";
@@ -20,8 +21,99 @@ export default function Money(props) {
   const [listOpened, setListOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
   const [dropDownOpened, setDropDownOpened] = useState(false);
+  const [colorMode, toggle] = useToggle(["dark", "light"]);
 
   const auth = getAuth(app);
+
+  const tourTheme = {
+    colorScheme: colorMode,
+    colors: {
+      dark: [
+        "#C1C2C5",
+        "#A6A7AB",
+        "#909296",
+        "#5C5F66",
+        "#373A40",
+        "#131314",
+        "#101113",
+        "#0b0c0d",
+        "#050506",
+        "#020202",
+      ],
+    },
+    primaryColor: colorMode === "dark" ? "blue" : "red",
+    primaryShade: { light: 5, dark: 9 },
+    components: {
+      Autocomplete: {
+        defaultProps: {
+          variant: "filled",
+        },
+      },
+      Input: {
+        defaultProps: {
+          variant: "filled",
+        },
+      },
+      Switch: {
+        styles: {
+          thumb: {
+            cursor: "pointer",
+          },
+          track: {
+            cursor: "pointer",
+          },
+          label: {
+            cursor: "pointer",
+          },
+        },
+      },
+      Button: {
+        styles: {
+          root: {
+            transition: "all 0.2s ease",
+          },
+        },
+      },
+    },
+    defaultRadius: 3,
+    loader: "dots",
+    focusRing: "auto",
+    focusRingStyles: {
+      resetStyles: () => ({ outline: "none" }),
+      styles: (theme) => ({ outline: "none" }),
+      inputStyles: (theme) => ({
+        outline: "none",
+        transition: "background 0.2s ease",
+        background:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[4]
+            : theme.colors.gray[4],
+        color:
+          theme.colorScheme === "dark"
+            ? theme.colors.gray[0]
+            : theme.colors.dark[9],
+        "&::placeholder": {
+          color:
+            theme.colorScheme === "dark"
+              ? theme.colors.gray[0]
+              : theme.colors.dark[9],
+        },
+      }),
+    },
+    headings: {
+      fontFamily: "Montserrat, sans-serif",
+    },
+    fontFamily: "Open Sans, sans-serif",
+    TypographyStylesProvider: {
+      fontFamily: "Homemade Apple",
+    },
+    // globalStyles: (theme) => ({
+    //   body: {
+    //     backgroundColor:
+    //       theme.colorScheme === "dark" ? theme.dark : theme.white,
+    //   },
+    // }),
+  };
 
   return (
     <>
@@ -33,57 +125,7 @@ export default function Money(props) {
         />
       </Head>
 
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          // colorScheme: "light",
-          colorScheme: "dark",
-          defaultRadius: 3,
-          loader: "dots",
-          focusRing: "auto",
-          focusRingStyles: {
-            resetStyles: () => ({ outline: "none" }),
-            styles: (theme) => ({ outline: "none" }),
-            inputStyles: (theme) => ({
-              outline: "none",
-              background: "#373A40",
-              transition: "background 0.2s ease",
-              color: "#fff",
-              "&::placeholder": {
-                color: "#fff",
-              },
-            }),
-          },
-          headings: {
-            fontFamily: "Montserrat, sans-serif",
-          },
-          fontFamily: "Open Sans, sans-serif",
-          colors: {
-            dark: [
-              "#C1C2C5",
-              "#A6A7AB",
-              "#909296",
-              "#5C5F66",
-              "#373A40",
-              "#131314",
-              "#101113",
-              "#0b0c0d",
-              "#050506",
-              "#020202",
-            ],
-          },
-          TypographyStylesProvider: {
-            fontFamily: "Homemade Apple",
-          },
-          globalStyles: (theme) => ({
-            body: {
-              backgroundColor:
-                theme.colorScheme === "dark" ? "#0c0c0c" : theme.white,
-            },
-          }),
-        }}
-      >
+      <MantineProvider withGlobalStyles withNormalizeCSS theme={tourTheme}>
         <Notifications position="top-center" />
         <SearchModal
           searchOpened={searchOpened}
@@ -97,6 +139,7 @@ export default function Money(props) {
           padding="none"
           header={
             <MainMenu
+              auth={auth}
               active={active}
               setActive={setActive}
               panelShow={panelShow}
@@ -107,7 +150,7 @@ export default function Money(props) {
               searchOpened={searchOpened}
               setSearchOpened={setSearchOpened}
               setDropDownOpened={setDropDownOpened}
-              auth={auth}
+              toggle={toggle}
             />
           }
         >

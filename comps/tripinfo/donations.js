@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import {
+  useMantineTheme,
   Avatar,
   Box,
   Button,
@@ -16,6 +17,7 @@ import { useIntersection } from "@mantine/hooks";
 import { IconReload } from "@tabler/icons-react";
 
 export default function Donations({ dHeight }) {
+  const theme = useMantineTheme();
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
   const { ref, entry } = useIntersection({
@@ -92,13 +94,20 @@ export default function Donations({ dHeight }) {
   return (
     <Box
       w="100%"
-      sx={{
+      sx={(theme) => ({
         borderRadius: 3,
-        boxShadow:
-          "0 2px 5px  rgba(0,0,0, 0.15), inset 0 -3px 10px 1px rgba(255,255,255, 0.005)",
-      }}
+        boxShadow: `0 2px 5px  ${
+          theme.colorScheme === "dark"
+            ? theme.fn.rgba(theme.colors.dark[7], 0.15)
+            : theme.fn.rgba(theme.colors.gray[0], 0.05)
+        }, inset 0 -3px 10px 1px ${
+          theme.colorScheme === "dark"
+            ? theme.fn.rgba(theme.colors.gray[0], 0.01)
+            : theme.fn.rgba(theme.colors.dark[7], 0.05)
+        }`,
+      })}
     >
-      <Flex gap={0}>
+      <Flex gap={0} pt={10} px={10}>
         <Divider
           w="100%"
           label={
@@ -108,7 +117,6 @@ export default function Donations({ dHeight }) {
           }
         />
         <SegmentedControl
-          color="dark"
           value={sorted}
           onChange={setSorted}
           data={[
@@ -117,10 +125,9 @@ export default function Donations({ dHeight }) {
           ]}
           size="xs"
           top={-4}
-          right={-14}
+          right={-16}
           w="45%"
           sx={{
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
             transform: "scale(0.8)",
           }}
         />

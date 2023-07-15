@@ -34,6 +34,37 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 
+const useStyles = createStyles((theme, { floating }) => ({
+  root: {
+    position: "relative",
+  },
+
+  label: {
+    position: "absolute",
+    zIndex: 2,
+    top: 7,
+    left: theme.spacing.sm,
+    pointerEvents: "none",
+    color: "#fff",
+    transition: "transform 150ms ease, color 150ms ease, font-size 150ms ease",
+    transform: floating ? `translate(0, -28px)` : "none",
+    fontSize: floating ? theme.fontSizes.xs : theme.fontSizes.sm,
+    fontWeight: floating ? 500 : 400,
+  },
+
+  required: {
+    transition: "opacity 150ms ease",
+    opacity: floating ? 1 : 0,
+  },
+
+  input: {
+    "&::placeholder": {
+      transition: "color 150ms ease",
+      color: !floating ? "transparent" : undefined,
+    },
+  },
+}));
+
 export default function LoginComp({ auth }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -101,42 +132,10 @@ export default function LoginComp({ auth }) {
   const strength = getStrength(passValue);
   const color = strength === 100 ? "#00E8FC" : strength > 50 ? "yellow" : "red";
 
-  const useStyles = createStyles((theme, { floating }) => ({
-    root: {
-      position: "relative",
-    },
-
-    label: {
-      position: "absolute",
-      zIndex: 2,
-      top: 7,
-      left: theme.spacing.sm,
-      pointerEvents: "none",
-      color: "#fff",
-      transition:
-        "transform 150ms ease, color 150ms ease, font-size 150ms ease",
-      transform: floating ? `translate(0, -28px)` : "none",
-      fontSize: floating ? theme.fontSizes.xs : theme.fontSizes.sm,
-      fontWeight: floating ? 500 : 400,
-    },
-
-    required: {
-      transition: "opacity 150ms ease",
-      opacity: floating ? 1 : 0,
-    },
-
-    input: {
-      "&::placeholder": {
-        transition: "color 150ms ease",
-        color: !floating ? "transparent" : undefined,
-      },
-    },
-  }));
-
-  const { classes: classes3 } = useStyles({
+  const { classes: emailClass } = useStyles({
     floating: emailValue.trim().length !== 0 || emailFocus,
   });
-  const { classes: classes4 } = useStyles({
+  const { classes: passClass } = useStyles({
     floating: passValue.trim().length !== 0 || passwordFocus,
   });
 
@@ -291,7 +290,7 @@ export default function LoginComp({ auth }) {
               label="Email"
               variant="filled"
               placeholder="johndoe@gmail.com"
-              classNames={classes3}
+              classNames={emailClass}
               value={form.values.email}
               onChange={(event) => {
                 setEmailValue(event.currentTarget.value);
@@ -319,7 +318,7 @@ export default function LoginComp({ auth }) {
                     required
                     label="Password"
                     variant="filled"
-                    classNames={classes4}
+                    classNames={passClass}
                     value={form.values.password}
                     onChange={(event) => {
                       setPassValue(event.currentTarget.value);

@@ -1,4 +1,4 @@
-import { Avatar, Grid, Text } from "@mantine/core";
+import { useMantineTheme, Avatar, Grid, Text } from "@mantine/core";
 import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { Draggable } from "react-beautiful-dnd";
 
@@ -11,6 +11,8 @@ export default function PlaceListItem({
   places,
   setPlaces,
 }) {
+  const theme = useMantineTheme();
+
   const handleRemove = () => {
     setPlaces(places.filter((location) => location.place !== place));
     if (places.length === 1) {
@@ -83,7 +85,11 @@ export default function PlaceListItem({
           >
             <Avatar
               variant="gradient"
-              gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
+              gradient={
+                theme.colorScheme === "dark"
+                  ? { from: "#004585", to: "#00376b", deg: 180 }
+                  : { from: "#a30326", to: "#85001d", deg: 180 }
+              }
               radius="xl"
               color="#00E8FC"
             >
