@@ -66,6 +66,34 @@ export default function Donations({ dHeight }) {
       name: "Anonymus",
       amount: 200,
     },
+    {
+      name: "Henry Silkeater",
+      amount: 20,
+    },
+    {
+      name: "Bill Horsefighter",
+      amount: 150,
+    },
+    {
+      name: "Anonymus",
+      amount: 200,
+    },
+    {
+      name: "Anonymus",
+      amount: 100,
+    },
+    {
+      name: "Jill Jailbreaker",
+      amount: 50,
+    },
+    {
+      name: "Henry Silkeater",
+      amount: 20,
+    },
+    {
+      name: "Bill Horsefighter",
+      amount: 150,
+    },
   ];
 
   const donateOrder =
@@ -92,21 +120,7 @@ export default function Donations({ dHeight }) {
   ));
 
   return (
-    <Box
-      w="100%"
-      sx={(theme) => ({
-        borderRadius: 3,
-        boxShadow: `0 2px 5px  ${
-          theme.colorScheme === "dark"
-            ? theme.fn.rgba(theme.colors.dark[7], 0.15)
-            : theme.fn.rgba(theme.colors.gray[0], 0.05)
-        }, inset 0 -3px 10px 1px ${
-          theme.colorScheme === "dark"
-            ? theme.fn.rgba(theme.colors.gray[0], 0.01)
-            : theme.fn.rgba(theme.colors.dark[7], 0.05)
-        }`,
-      })}
-    >
+    <Box w="100%" pos={"relative"}>
       <Flex gap={0} pt={10} px={10}>
         <Divider
           w="100%"
@@ -133,27 +147,34 @@ export default function Donations({ dHeight }) {
         />
       </Flex>
       <Box
-        p={10}
-        m={0}
-        mah={dHeight}
-        mih={390}
-        ref={donationsRef}
-        type="auto"
+        pos={"absolute"}
+        top={0}
+        left={0}
+        w={"100%"}
+        h={"100%"}
         sx={{
-          "&::-webkit-scrollbar": {
-            width: "0",
-          },
-          overflow: "auto",
+          pointerEvents: "none",
+          zIndex: 100,
           borderRadius: 3,
-          backgroundColor: "rgba(255, 255, 255, 0.005)",
           boxShadow: `${
             entry?.isIntersecting
               ? "none"
-              : "rgba(0, 0, 0, 0.37) 0px -10px 10px -5px inset"
+              : theme.colorScheme === "dark"
+              ? "rgba(0, 0, 0, 1) 0px -15px 7px -5px inset"
+              : "rgba(0, 0, 0, 0.25) 0px -10px 7px -5px inset"
           }`,
-          borderBottom: `${
-            entry?.isIntersecting ? "none" : "1px solid rgba(0, 0, 0, .4)"
-          }`,
+        }}
+      />
+      <Box
+        p={10}
+        m={0}
+        mah={dHeight}
+        mih={350}
+        ref={donationsRef}
+        type="auto"
+        sx={{
+          overflow: "auto",
+          borderRadius: 3,
         }}
       >
         <Table verticalSpacing="xs" highlightOnHover striped withColumnBorders>

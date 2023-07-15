@@ -52,7 +52,7 @@ export default function MainCarousel() {
       h={500}
       maw={650}
       alt="intro"
-      radius={"0 0 3px 3px"}
+      radius={3}
     />
   ));
 
@@ -93,7 +93,8 @@ export default function MainCarousel() {
             sx={{
               border: "none",
               "&:hover": {
-                color: "#fff",
+                backgroundColor: "transparent",
+                transform: "scale(1.2)",
               },
             }}
           >
@@ -104,7 +105,6 @@ export default function MainCarousel() {
           ref={sliderRef}
           {...slideSettings}
           style={{
-            borderTop: "3px solid rgba(255,255,255,0.2)",
             boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
             width: "650px",
             height: "500px",
@@ -126,7 +126,8 @@ export default function MainCarousel() {
             sx={{
               border: "none",
               "&:hover": {
-                color: "#fff",
+                backgroundColor: "transparent",
+                transform: "scale(1.2)",
               },
             }}
           >

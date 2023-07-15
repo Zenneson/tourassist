@@ -358,7 +358,7 @@ export default function ProfileDrawer({
       <Drawer
         zIndex={499}
         opened={panelShow}
-        padding="24px 25px 24px 330px"
+        padding="24px 25px 0 330px"
         size={900}
         withCloseButton={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"

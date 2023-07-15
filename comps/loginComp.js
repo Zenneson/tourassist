@@ -9,6 +9,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
+  useMantineTheme,
   Anchor,
   Box,
   Button,
@@ -45,7 +46,7 @@ const useStyles = createStyles((theme, { floating }) => ({
     top: 7,
     left: theme.spacing.sm,
     pointerEvents: "none",
-    color: "#fff",
+    color: theme.colorScheme === "dark" ? "#fff" : "rgba(0,0,0,0.4)",
     transition: "transform 150ms ease, color 150ms ease, font-size 150ms ease",
     transform: floating ? `translate(0, -28px)` : "none",
     fontSize: floating ? theme.fontSizes.xs : theme.fontSizes.sm,
@@ -66,6 +67,7 @@ const useStyles = createStyles((theme, { floating }) => ({
 }));
 
 export default function LoginComp({ auth }) {
+  const theme = useMantineTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordFocus, setPasswordFocus] = useState(false);
@@ -225,7 +227,7 @@ export default function LoginComp({ auth }) {
           <Button
             onClick={() => signInWith(GoogleAuthProvider)}
             variant="light"
-            bg="dark.5"
+            bg={theme.colorScheme === "dark" ? "dark.5" : "gray.2"}
             color="gray.5"
             size="sm"
             py={5}
@@ -237,7 +239,7 @@ export default function LoginComp({ auth }) {
           <Button
             onClick={() => signInWith(TwitterAuthProvider)}
             variant="light"
-            bg="dark.5"
+            bg={theme.colorScheme === "dark" ? "dark.5" : "gray.2"}
             color="gray.5"
             size="sm"
             py={5}
@@ -392,7 +394,7 @@ export default function LoginComp({ auth }) {
               fw={700}
               uppercase={true}
               variant="light"
-              bg="dark.5"
+              bg={theme.colorScheme === "dark" ? "dark.5" : "gray.2"}
               c="gray.5"
               sx={{ color: "rgba(255,255,255,0.3)" }}
               type="submit"

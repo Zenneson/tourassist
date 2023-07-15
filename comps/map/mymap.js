@@ -170,7 +170,7 @@ export default function Mymap({
 
   useEffect(() => {
     setKey((prevKey) => prevKey + 1);
-  }, [theme.colorScheme]);
+  }, [theme.colorScheme, setMapLoaded]);
 
   function goToCountry(feature) {
     if (feature == null) return;
@@ -537,15 +537,14 @@ export default function Mymap({
         // Tour List Button
         <Button
           onClick={showTourList}
+          bg={theme.colorScheme === "dark" ? "dark.9" : "gray.0"}
+          opacity={0.7}
+          radius={"0 3px 3px 0"}
+          pos={"absolute"}
+          top={134}
+          left={0}
+          p={"0 8px"}
           sx={{
-            backgroundColor:
-              theme.colorScheme === "dark" ? "#2e2e2e" : "#bfbfbf",
-            opacity: 0.7,
-            borderRadius: "0 3px 3px 0",
-            position: "absolute",
-            top: "134px",
-            left: "0",
-            padding: "0 8px",
             transition: "all 100ms ease-in-out",
             zIndex: 120,
             boxShadow: "0 0 10px rgba(255, 255, 255, 0.02)",
@@ -840,13 +839,13 @@ export default function Mymap({
               </Box>
               {/* Search Cities in Selected Region */}
               <Autocomplete
-                mt={15}
                 icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
                 placeholder={`Search for a city in ${
                   regionName === "東京都" ? "Tokyo" : regionName
                 }?`}
                 defaultValue=""
                 value={citySearch}
+                mt={15}
                 size="sm"
                 mb={10}
                 withinPortal

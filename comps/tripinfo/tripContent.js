@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import {
+  useMantineTheme,
   BackgroundImage,
   Box,
   Button,
@@ -43,6 +44,7 @@ export default function TripContent({
   images,
   setImages,
 }) {
+  const theme = useMantineTheme();
   const [showToolbar, setShowToolbar] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -282,7 +284,10 @@ export default function TripContent({
               disabled={images.length === 6}
               style={{
                 border: "2px dashed rgba(255,255,255,0.05)",
-                backgroundColor: "#0c0c0c",
+                backgroundColor:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[7]
+                    : theme.colors.gray[4],
                 cursor: images.length === 6 ? "not-allowed" : "pointer",
               }}
             >
@@ -316,7 +321,11 @@ export default function TripContent({
                   labelPosition="center"
                   my={5}
                   w={"60%"}
-                  opacity={0.7}
+                  color={
+                    theme.colorScheme === "dark"
+                      ? theme.colors.dark[4]
+                      : theme.colors.gray[6]
+                  }
                 />
               </Center>
               <Button
@@ -333,11 +342,15 @@ export default function TripContent({
               </Button>
             </Dropzone>
             <Title
-              mt={15}
+              mt={20}
               py={12}
               fz={12}
               ta={"center"}
-              bg={"rgba(19, 19, 20, 0.3)"}
+              bg={
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[5]
+                  : theme.colors.gray[1]
+              }
               sx={{
                 borderRadius: "3px",
               }}
@@ -351,7 +364,15 @@ export default function TripContent({
       <RichTextEditor
         editor={editor}
         position="relative"
-        bg={editorFocused ? "#373A40" : "dark.5"}
+        bg={
+          theme.colorScheme === "dark"
+            ? editorFocused
+              ? "dark.4"
+              : "dark.5"
+            : editorFocused
+            ? "gray.4"
+            : "gray.2"
+        }
         onClick={focusEditor}
         onFocus={() => {
           setEditorFocused(true);

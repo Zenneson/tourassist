@@ -42,7 +42,7 @@ export default function Money(props) {
       ],
     },
     primaryColor: colorMode === "dark" ? "blue" : "red",
-    primaryShade: { light: 5, dark: 9 },
+    primaryShade: { light: 7, dark: 9 },
     components: {
       Autocomplete: {
         defaultProps: {
@@ -87,7 +87,7 @@ export default function Money(props) {
         background:
           theme.colorScheme === "dark"
             ? theme.colors.dark[4]
-            : theme.colors.gray[4],
+            : theme.colors.gray[3],
         color:
           theme.colorScheme === "dark"
             ? theme.colors.gray[0]
@@ -107,12 +107,28 @@ export default function Money(props) {
     TypographyStylesProvider: {
       fontFamily: "Homemade Apple",
     },
-    // globalStyles: (theme) => ({
-    //   body: {
-    //     backgroundColor:
-    //       theme.colorScheme === "dark" ? theme.dark : theme.white,
-    //   },
-    // }),
+    globalStyles: (theme) => ({
+      body: {
+        backgroundColor:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[7]
+            : theme.colors.gray[0],
+      },
+
+      ".pagePanel": {
+        borderTop: `2px solid ${
+          theme.colorScheme === "dark"
+            ? "rgba(255,255,255,0.1)"
+            : "rgba(0,0,0,0.1)"
+        }`,
+        background:
+          theme.colorScheme === "dark"
+            ? "rgba(0,0,0,0.3)"
+            : "rgba(255,255,255,0.3)",
+        boxShadow: "0 3px 5px 0 rgba(0,0,0,0.08)",
+        borderRadius: "0 0 3px 3px",
+      },
+    }),
   };
 
   return (

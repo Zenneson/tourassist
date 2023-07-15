@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
+  useMantineTheme,
   Avatar,
   Button,
   Box,
@@ -48,6 +49,7 @@ import MainCarousel from "../comps/tripinfo/maincarousel";
 import TripDescription from "../comps/tripinfo/tripdescription";
 
 export default function Trippage(props) {
+  const theme = useMantineTheme();
   const [altModal, setAltModal] = useState(false);
   const [editContentModal, setEditContentModal] = useState(false);
   const [editUpdate, setEditUpdate] = useState("");
@@ -557,39 +559,100 @@ export default function Trippage(props) {
                   overflow: "hidden",
                 }}
               >
-                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
+                <Button
+                  variant="filled"
+                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
+                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  sx={{
+                    "&:hover": {
+                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                    },
+                  }}
+                  px={44}
+                  size={"lg"}
+                >
                   <IconBrandFacebook size={20} />
                 </Button>
-                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
+                <Button
+                  variant="filled"
+                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
+                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  sx={{
+                    "&:hover": {
+                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                    },
+                  }}
+                  px={44}
+                  size={"lg"}
+                >
                   <IconBrandInstagram size={20} />
                 </Button>
-                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
+                <Button
+                  variant="filled"
+                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
+                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  sx={{
+                    "&:hover": {
+                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                    },
+                  }}
+                  px={44}
+                  size={"lg"}
+                >
                   <IconBrandTiktok size={20} />
                 </Button>
-                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
+                <Button
+                  variant="filled"
+                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
+                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  sx={{
+                    "&:hover": {
+                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                    },
+                  }}
+                  px={44}
+                  size={"lg"}
+                >
                   <IconBrandTwitter size={20} />
                 </Button>
-                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
+                <Button
+                  variant="filled"
+                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
+                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  sx={{
+                    "&:hover": {
+                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                    },
+                  }}
+                  px={44}
+                  size={"lg"}
+                >
                   <IconBrandWhatsapp size={20} />
                 </Button>
-                <Button variant="filled" bg={"dark.5"} px={44} size={"lg"}>
+                <Button
+                  variant="filled"
+                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
+                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  sx={{
+                    "&:hover": {
+                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                    },
+                  }}
+                  px={44}
+                  size={"lg"}
+                >
                   <IconSourceCode size={20} />
                 </Button>
               </Button.Group>
             </Center>
             <Box
-              bg={"rgba(0,0,0,0.05)"}
+              className="pagePanel"
               w={"85%"}
               mt={20}
               mb={30}
               py={20}
               px={30}
               fz={14}
-              sx={{
-                border: "1px solid rgba(0,0,0,0.15)",
-                borderTop: "3px solid rgba(255,255,255,0.1)",
-                boxShadow: "0 2px 5px 0 rgba(0,0,0,0.3)",
-              }}
             >
               <Divider
                 labelPosition="right"
@@ -630,16 +693,11 @@ export default function Trippage(props) {
               setImages={setImages}
             />
             <Box
-              bg={"rgba(0,0,0,0.05)"}
-              w={"90%"}
+              className="pagePanel"
+              w={"85%"}
               mt={25}
               mb={50}
               p={"20px 30px"}
-              sx={{
-                border: "1px solid rgba(0,0,0,0.15)",
-                borderTop: "3px solid rgba(255,255,255,0.1)",
-                boxShadow: "0 2px 5px 0 rgba(0,0,0,0.3)",
-              }}
             >
               <Divider
                 size={"xl"}
@@ -686,17 +744,12 @@ export default function Trippage(props) {
             maw={360}
           >
             <Box
-              bg={"rgba(0,0,0,0.05)"}
+              className="pagePanel"
               w={"100%"}
               pt={15}
               pb={25}
               px={20}
               mb={20}
-              sx={{
-                border: "1px solid rgba(0,0,0,0.15)",
-                borderTop: "3px solid rgba(255,255,255,0.1)",
-                boxShadow: "0 2px 5px 0 rgba(0,0,0,0.3)",
-              }}
             >
               <Group spacing={0} w={"100%"}>
                 <Box w={"70%"} pl={20}>
@@ -773,7 +826,7 @@ export default function Trippage(props) {
                 </Button>
               )}
             </Box>
-            <Box>
+            <Box className="pagePanel">
               <Donations dHeight={"calc(100vh - 365px)"} />
             </Box>
           </Flex>

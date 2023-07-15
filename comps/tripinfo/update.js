@@ -1,4 +1,5 @@
 import {
+  useMantineTheme,
   ActionIcon,
   Box,
   Button,
@@ -30,6 +31,7 @@ export default function Update({
   setAddUpdateDesc,
   setDonating,
 }) {
+  const theme = useMantineTheme();
   const [showall, toggle] = useToggle(["hide", "show"]);
 
   const imagesone = [
@@ -133,30 +135,19 @@ export default function Update({
 
   const updates = updateData.map((update, index) => (
     <Flex
+      className="pagePanel"
       key={index}
       pos={"relative"}
       radius={3}
-      bg={"rgba(0,0,0,0.05)"}
       w={"85%"}
       mt={20}
       py={20}
       px={30}
       fz={14}
       gap={10}
-      sx={{
-        border: "1px solid rgba(0,0,0,0.15)",
-        borderTop: "3px solid rgba(255,255,255,0.1)",
-        boxShadow: "0 2px 5px 0 rgba(0,0,0,0.3)",
-      }}
     >
       {/* Show Update Modal Button  */}
-      <ActionIcon
-        pos={"absolute"}
-        top={17}
-        right={10}
-        color="gray.7"
-        onClick={updateTrip}
-      >
+      <ActionIcon pos={"absolute"} top={17} right={10} onClick={updateTrip}>
         <IconPencil />
       </ActionIcon>
       <Flex direction={"column"} w={"15%"}>
@@ -165,12 +156,12 @@ export default function Update({
           sx={{
             borderRadius: "3px",
             overflow: "hidden",
-            boxShadow: "0 2px 10px 0 rgba(0,0,0,0.1)",
+            boxShadow: `0 2px 5px 0 rgba(0,0,0,0.1)`,
           }}
         >
           <Text
             w={"100%"}
-            bg={"blue.9"}
+            bg={theme.colorScheme === "dark" ? "blue.9" : "red.8"}
             ta={"center"}
             py={5}
             fw={700}
@@ -183,10 +174,19 @@ export default function Update({
           >
             {update.month}
           </Text>
-          <Title ta={"center"} bg={"dark.5"} pt={5}>
+          <Title
+            ta={"center"}
+            bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+            pt={5}
+          >
             {update.day}
           </Title>
-          <Text w={"100%"} bg={"dark.5"} ta={"center"} pb={7}>
+          <Text
+            w={"100%"}
+            bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+            ta={"center"}
+            pb={7}
+          >
             {update.year}
           </Text>
         </Stack>
@@ -251,7 +251,7 @@ export default function Update({
         labelPosition="right"
         w={"80%"}
         mt={10}
-        color={"rgba(255,255,255,0.04)"}
+        // color={"rgba(255,255,255,0.04)"}
         label={
           // Show all updates toggle
           <Button

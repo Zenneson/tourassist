@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
+  useMantineTheme,
   Autocomplete,
   ActionIcon,
   Space,
@@ -50,6 +51,7 @@ import { DatePicker } from "@mantine/dates";
 import TripContent from "../comps/tripinfo/tripContent";
 
 export default function TripPlannerPage(props) {
+  const theme = useMantineTheme();
   let auth = props.auth;
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -71,7 +73,6 @@ export default function TripPlannerPage(props) {
   const [newCost, setNewCost] = useState([]);
   const newCostRef = useRef(null);
   const [tripTitle, setTripTitle] = useState("");
-  const [tripImages, setTripImages] = useState([]);
   const [costList, setCostList] = useState({});
   const [costsSum, setCostsSum] = useState(0);
   const router = useRouter();
@@ -106,7 +107,11 @@ export default function TripPlannerPage(props) {
           style={{
             marginTop: -25,
             width: "50%",
-            border: "1px dotted rgba(0,0,0,0.4)",
+            border: `1px dotted ${
+              theme.colorScheme === "dark"
+                ? "rgba(255, 255, 255, 0.05)"
+                : "rgba(0, 0, 0, 0.234)"
+            }`,
           }}
         ></div>
         <NumberInput
@@ -166,12 +171,7 @@ export default function TripPlannerPage(props) {
           p={20}
           mb={20}
           radius={3}
-          bg={"rgba(0,0,0,0.3)"}
-          sx={{
-            borderRadius: "3px",
-            boxShadow: "0px 4px 10px rgba(0,0,0,0.3)",
-            borderTop: "2px solid rgba(255,255,255,0.1)",
-          }}
+          className="pagePanel"
         >
           <Group position="apart">
             <Stack
@@ -272,7 +272,12 @@ export default function TripPlannerPage(props) {
                 </Box>
               ))}
           </Box>
-          <Divider opacity={0.2} color="#000" />
+          <Divider
+            opacity={0.2}
+            color={
+              theme.colorScheme === "dark" ? "rgba(255, 255, 255, 0.4)" : "#000"
+            }
+          />
           <Group position="right">
             <Popover
               width={250}
@@ -493,18 +498,14 @@ export default function TripPlannerPage(props) {
           gap={10}
         >
           <Box w="100%" miw={500}>
+            {/* TODO   */}
             {active === 0 && (
               <motion.div {...animation}>
                 <Flex
                   p={30}
                   maw={950}
                   direction={"column"}
-                  bg={"rgba(0,0,0,0.3)"}
-                  sx={{
-                    borderRadius: "3px",
-                    borderTop: "2px solid rgba(255,255,255,0.1)",
-                    boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
-                  }}
+                  className="pagePanel"
                 >
                   <Title order={5} fw={400} h={20} mb={20}>
                     {startLocale && travelDates ? (
@@ -513,7 +514,7 @@ export default function TripPlannerPage(props) {
                       <Text opacity={0.7}>
                         Provide the{" "}
                         <Text inherit span hidden={startLocale}>
-                          Depataure Location{" "}
+                          Departure Location{" "}
                         </Text>
                         <Text inherit span hidden={startLocale || travelDates}>
                           and
@@ -527,18 +528,13 @@ export default function TripPlannerPage(props) {
                   </Title>
                   <Group w={"100%"} spacing={0}>
                     <Flex
+                      className="pagePanel"
                       direction={"column"}
                       justify={"center"}
-                      bg={"rgba(255,255,255,0.01)"}
                       w={"58%"}
                       h={380}
                       p={20}
                       gap={10}
-                      sx={{
-                        borderTop: "2px solid rgba(255,255,255,0.1)",
-                        boxShadow: "0 4px 7px 0 rgba(0,0,0,0.05)",
-                        borderRadius: "3px",
-                      }}
                     >
                       <Autocomplete
                         size="sm"
@@ -572,17 +568,17 @@ export default function TripPlannerPage(props) {
                           pr={10}
                           labelPosition="right"
                           variant="dashed"
-                          color={"rgba(255,255,255,0.1)"}
                           label={
                             <Flex align={"center"}>
-                              <IconFriends size={16} color="#fff" />
-                              <Text
-                                ta={"right"}
-                                color="gray.0"
-                                ml={5}
-                                fz={13}
-                                opacity={0.4}
-                              >
+                              <IconFriends
+                                size={16}
+                                color={
+                                  theme.colorScheme === "dark"
+                                    ? "rgb(255,255,255)"
+                                    : "rgb(0,0,0)"
+                                }
+                              />
+                              <Text ta={"right"} ml={5} fz={13} opacity={0.4}>
                                 Travelers:
                               </Text>
                             </Flex>
@@ -592,8 +588,13 @@ export default function TripPlannerPage(props) {
                           {/* Decrease Traveler Count  */}
                           <Button
                             variant="filled"
-                            color="dark.5"
                             fz={15}
+                            color={
+                              theme.colorScheme === "dark" ? "dark.5" : "gray.1"
+                            }
+                            c={
+                              theme.colorScheme === "dark" ? "gray.0" : "dark.9"
+                            }
                             onClick={() =>
                               travelersHandlerRef.current.decrement()
                             }
@@ -620,8 +621,13 @@ export default function TripPlannerPage(props) {
                           {/* Increase Traveler Count  */}
                           <Button
                             variant="filled"
-                            color="dark.5"
                             fz={15}
+                            color={
+                              theme.colorScheme === "dark" ? "dark.5" : "gray.1"
+                            }
+                            c={
+                              theme.colorScheme === "dark" ? "gray.0" : "dark.9"
+                            }
                             onClick={() =>
                               travelersHandlerRef.current.increment()
                             }
@@ -636,15 +642,20 @@ export default function TripPlannerPage(props) {
                           my={15}
                           labelPosition="right"
                           variant="dashed"
-                          color={"rgba(255,255,255,0.1)"}
                           label={
                             <Switch
                               label={
                                 <Flex align={"center"}>
-                                  <IconRotate360 size={16} color="#fff" />
+                                  <IconRotate360
+                                    size={16}
+                                    color={
+                                      theme.colorScheme === "dark"
+                                        ? "rgb(255,255,255)"
+                                        : "rgb(0,0,0)"
+                                    }
+                                  />
                                   <Text
                                     ta={"right"}
-                                    color="gray.0"
                                     ml={5}
                                     fz={12}
                                     opacity={0.4}
@@ -674,7 +685,9 @@ export default function TripPlannerPage(props) {
                             spacing={0}
                             p={20}
                             h={150}
-                            bg={"rgba(255, 255, 255, 0.02)"}
+                            bg={
+                              theme.colorScheme === "dark" ? "dark.5" : "gray.1"
+                            }
                             sx={{
                               overflowX: "auto",
                               borderRadius: "3px",
@@ -682,7 +695,11 @@ export default function TripPlannerPage(props) {
                           >
                             <Box>
                               <Group spacing={7} mb={15}>
-                                <IconMapPin size={20} opacity={0.4} />
+                                <IconMapPin
+                                  size={20}
+                                  color="gray"
+                                  opacity={0.4}
+                                />
                                 {startLocale && (
                                   <>
                                     <Badge
@@ -742,11 +759,17 @@ export default function TripPlannerPage(props) {
                                   orientation="vertical"
                                   ml={10}
                                   mr={7}
-                                  // size={"sm"}
                                   opacity={0.7}
                                 />
                                 <Group spacing={5} fz={12}>
-                                  <Title color="red" order={3}>
+                                  <Title
+                                    color={
+                                      theme.colorScheme === "dark"
+                                        ? "red"
+                                        : "blue"
+                                    }
+                                    order={3}
+                                  >
                                     •
                                   </Title>
                                   {dayjs(travelDates)
@@ -792,18 +815,9 @@ export default function TripPlannerPage(props) {
                         </Box>
                       </Box>
                     </Flex>
-                    <Center
-                      bg={"rgba(255,255,255,0.01)"}
-                      w={"calc(42% - 30px)"}
-                      ml={30}
-                      h={380}
-                      sx={{
-                        borderTop: "2px solid rgba(255,255,255,0.1)",
-                        borderRadius: "3px",
-                        boxShadow: "0 4px 7px 0 rgba(0,0,0,0.05)",
-                      }}
-                    >
+                    <Center w={"calc(42% - 30px)"} ml={30} h={380}>
                       <DatePicker
+                        className="pagePanel"
                         allowDeselect
                         firstDayOfWeek={0}
                         defaultDate={today}
@@ -839,7 +853,9 @@ export default function TripPlannerPage(props) {
                           return (
                             <Indicator
                               size={5}
-                              color="red"
+                              color={
+                                theme.colorScheme === "dark" ? "red" : "blue"
+                              }
                               offset={-3}
                               disabled={!isSpecificDay}
                             >
@@ -848,22 +864,45 @@ export default function TripPlannerPage(props) {
                           );
                         }}
                         sx={{
-                          boxShadow: "0 4px 7px 0 rgba(0,0,0,0.3)",
                           ".mantine-DatePicker-day[data-disabled]": {
-                            color: "#1c1c1c",
+                            color:
+                              theme.colorScheme === "dark"
+                                ? theme.colors.dark[6]
+                                : theme.colors.gray[2],
                           },
                           ".mantine-DatePicker-day[data-weekend]": {
-                            color: "#91d4ee",
+                            color:
+                              theme.colorScheme === "dark"
+                                ? theme.colors.blue[2]
+                                : theme.colors.red[3],
+                          },
+                          ".mantine-DatePicker-day[data-outside]": {
+                            color:
+                              theme.colorScheme === "dark"
+                                ? theme.colors.dark[3]
+                                : theme.colors.gray[5],
                           },
                           ".mantine-DatePicker-day[data-selected]": {
-                            backgroundColor: "#c4c4c4",
-                            borderTop: "5px solid #4096b8",
+                            border: `1px solid ${
+                              theme.colorScheme === "dark"
+                                ? theme.colors.blue[1]
+                                : theme.colors.red[2]
+                            }`,
+                            backgroundColor:
+                              theme.colorScheme === "dark"
+                                ? theme.colors.gray[5]
+                                : theme.colors.red[0],
+                            borderTop: `4px solid ${
+                              theme.colorScheme === "dark"
+                                ? theme.colors.blue[7]
+                                : theme.colors.red[9]
+                            }`,
                             color: "#404040",
                             transition: "all 0.15s ease-in-out",
                             borderRadius: "0 0 3px 3px",
-                            fontSize: "1.8rem",
+                            fontSize: "1.7rem",
                             "&:hover": {
-                              backgroundColor: "#e2e2e2",
+                              backgroundColor: "#fff",
                             },
                           },
                         }}
@@ -877,18 +916,7 @@ export default function TripPlannerPage(props) {
               <motion.div {...animation}>
                 <Places />
                 {checked && placeData.length > 1 && (
-                  <Box
-                    p={20}
-                    mb={20}
-                    radius={3}
-                    bg={"rgba(0,0,0,0.3)"}
-                    sx={{
-                      borderRadius: "3px",
-                      boxShadow: "0 7px 10px 0 rgba(0,0,0,0.1)",
-
-                      borderTop: "2px solid rgba(255,255,255,0.1)",
-                    }}
-                  >
+                  <Box className="pagePanel" p={20} mb={20}>
                     <Group position="apart">
                       <Stack
                         spacing={0}
@@ -930,16 +958,12 @@ export default function TripPlannerPage(props) {
             {active === 2 && (
               <motion.div {...animation}>
                 <Stack
+                  className="pagePanel"
                   pos={"relative"}
                   maw={950}
                   p={30}
                   align="center"
-                  bg={"rgba(0,0,0,0.3)"}
                   spacing={25}
-                  sx={{
-                    boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
-                    borderTop: "2px solid rgba(255,255,255,0.1)",
-                  }}
                 >
                   <Input
                     size={"xl"}
@@ -964,15 +988,12 @@ export default function TripPlannerPage(props) {
               <motion.div {...animation}>
                 <Center>
                   <Stack
+                    className="pagePanel"
                     pt={10}
                     pb={30}
                     px={30}
                     maw={700}
                     w={"100%"}
-                    bg={"rgba(0,0,0,0.3)"}
-                    sx={{
-                      borderTop: "2px solid rgba(255,255,255,0.2)",
-                    }}
                   >
                     <Box hidden={user} w={"100%"} mb={5}>
                       <Box>
@@ -983,12 +1004,12 @@ export default function TripPlannerPage(props) {
                       <Button
                         leftIcon={<IconBuildingBank size={34} />}
                         variant="light"
-                        color="#0D3F82"
+                        color="green"
                         size="xl"
                         h={90}
                         w={"100%"}
                         sx={{
-                          textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                          textShadow: "0 2px 4px rgba(0,0,0,0.1)",
                         }}
                       >
                         <Title order={2}>ADD BANKING INFORMATION</Title>
@@ -1100,8 +1121,8 @@ export default function TripPlannerPage(props) {
               // Move Up Sections Button
               <Button
                 fullWidth
-                variant={"light"}
-                bg={"dark.5"}
+                variant={"filled"}
+                bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
                 c={"white"}
                 mb={10}
                 onClick={prevStep}
@@ -1113,8 +1134,14 @@ export default function TripPlannerPage(props) {
               // Move Down Sections Button
               <Button
                 fullWidth
-                variant={"light"}
-                bg={active === 3 ? "blue" : "dark.5"}
+                variant={"filled"}
+                bg={
+                  active === 3
+                    ? "primary"
+                    : theme.colorScheme === "dark"
+                    ? "dark.9"
+                    : "gray.3"
+                }
                 c={"white"}
                 onClick={changeNextStep}
               >

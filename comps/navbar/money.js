@@ -83,15 +83,10 @@ export default function Money() {
           pb={10}
           h={"250px"}
           sx={(theme) => ({
-            borderLeft: `3px solid ${
+            borderLeft: `2px solid ${
               theme.colorScheme === "dark"
-                ? theme.colors.gray[8]
-                : theme.colors.gray[4]
-            }`,
-            borderBottom: `3px solid ${
-              theme.colorScheme === "dark"
-                ? theme.colors.gray[8]
-                : theme.colors.gray[4]
+                ? "rgba(255,255,255,0.1)"
+                : "rgba(0,0,0,0.1)"
             }`,
           })}
         >
@@ -104,12 +99,9 @@ export default function Money() {
           />
         </Box>
         <Box
+          className="pagePanel"
+          mb={20}
           sx={(theme) => ({
-            border: `2px solid ${
-              theme.colorScheme === "dark"
-                ? theme.colors.gray[8]
-                : theme.colors.gray[4]
-            }`,
             borderRadius: 3,
           })}
         >
@@ -127,8 +119,8 @@ export default function Money() {
               sx={(theme) => ({
                 borderLeft: `2px solid ${
                   theme.colorScheme === "dark"
-                    ? theme.colors.gray[8]
-                    : theme.colors.gray[4]
+                    ? "rgba(255,255,255,0.1)"
+                    : "rgba(0,0,0,0.1)"
                 }`,
               })}
             >
@@ -150,12 +142,12 @@ export default function Money() {
             </Center>
           </Group>
           <Divider
-            size={"md"}
-            color={
+            size={"xs"}
+            c={`2px solid ${
               theme.colorScheme === "dark"
-                ? theme.colors.gray[8]
-                : theme.colors.gray[4]
-            }
+                ? "rgba(255,255,255,0.1)"
+                : "rgba(0,0,0,0.1)"
+            }`}
           />
           <Group w={"100%"} grow spacing={0}>
             <Center>
@@ -173,8 +165,8 @@ export default function Money() {
               sx={(theme) => ({
                 borderLeft: `2px solid ${
                   theme.colorScheme === "dark"
-                    ? theme.colors.gray[8]
-                    : theme.colors.gray[4]
+                    ? "rgba(255,255,255,0.1)"
+                    : "rgba(0,0,0,0.1)"
                 }`,
               })}
             >
@@ -193,17 +185,14 @@ export default function Money() {
               fw={600}
               bg={
                 theme.colorScheme === "dark"
-                  ? theme.colors.gray[8]
+                  ? "rgba(255,255,255,0.1)"
                   : theme.colors.gray[4]
               }
               sx={(theme) => ({
                 transition: "all 0.2s ease",
                 "&:hover": {
                   cursor: "pointer",
-                  color:
-                    theme.colorScheme === "dark"
-                      ? theme.colors.gray[9]
-                      : theme.colors.gray[0],
+                  color: theme.colorScheme === "dark" ? "#000" : "#fff",
                 },
               })}
               onClick={() => {
@@ -216,13 +205,14 @@ export default function Money() {
         </Box>
         <Flex my={10} pos={"relative"}>
           <Box
+            className="pagePanel"
             w={"100%"}
             position="relative"
             sx={{
               overflow: "hidden",
             }}
           >
-            <Donations dHeight={"calc(100vh - 625px)"} />
+            <Donations dHeight={"calc(100vh - 635px)"} />
           </Box>
         </Flex>
       </Box>
