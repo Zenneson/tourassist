@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
-import Map, { Marker, Source, Layer } from "react-map-gl";
+import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
 import bbox from "@turf/bbox";
 import {
+  createStyles,
   useMantineTheme,
   ActionIcon,
   Autocomplete,
@@ -26,12 +27,13 @@ import {
   IconLocation,
   IconPlaneTilt,
   IconAlertTriangle,
-  IconMapPin,
+  IconWorld,
   IconMapSearch,
   IconList,
   IconX,
   IconCheck,
   IconArrowBarToRight,
+  IconMapPinFilled,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
@@ -57,7 +59,8 @@ export default function Mymap({
   const [locationDrawer, setLocationDrawer] = useState(false);
   const [lngLat, setLngLat] = useState([0, 0]);
   const [showStates, setShowStates] = useState(false);
-  const [showMarker, setShowMarker] = useState(false);
+  const [popupInfo, setPopupInfo] = useState(null);
+  const [showMainMarker, setShowMainMarker] = useState(false);
   const [citySubTitle, setCitySubTitle] = useState("");
   const [isoName, setIsoName] = useState("");
   const [countrySearch, setCountrySearch] = useState("");
@@ -103,6 +106,34 @@ export default function Mymap({
     zoom: 2.5,
     pitch: 0,
   };
+
+  const useStyles = createStyles((theme) => ({
+    popup: {
+      "& .mapboxgl-popup-content": {
+        fontWeight: 700,
+        cursor: "pointer",
+        paddingTop: "0rem !important",
+        paddingBottom: "0rem !important",
+        paddingLeft: "0rem !important",
+        paddingRight: "0rem !important",
+        backgroundColor:
+          theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+        color: theme.colorScheme === "dark" ? theme.white : theme.black,
+        borderRadius: theme.radius.sm,
+        boxShadow: theme.shadows.sm,
+        padding: theme.spacing.xs,
+        "& .mapboxgl-popup-close-button": {
+          display: "none",
+        },
+      },
+      "& .mapboxgl-popup-tip": {
+        borderTopColor:
+          theme.colorScheme === "dark" ? `#000 !important` : `#fff !important`,
+      },
+    },
+  }));
+
+  const { classes } = useStyles();
 
   const filter = useMemo(
     () => ["in", "name_en", area.label.toString()],
@@ -170,12 +201,6 @@ export default function Mymap({
     setGeoLng,
   ]);
 
-  const [key, setKey] = useState(0);
-
-  useEffect(() => {
-    setKey((prevKey) => prevKey + 1);
-  }, [theme.colorScheme, setMapLoaded]);
-
   function getCords(feature) {
     const center = centerOfMass(feature);
     return center.geometry.coordinates;
@@ -188,7 +213,7 @@ export default function Mymap({
     let fontSizeEm = fontSizePx / 16;
 
     fontSizeEm = Math.max(fontSizeEm, 1.7);
-    fontSizeEm = Math.min(fontSizeEm, 6.5);
+    fontSizeEm = Math.min(fontSizeEm, 6);
 
     return fontSizeEm;
   }
@@ -230,7 +255,7 @@ export default function Mymap({
     setCountryData([]);
     setCityData([]);
     setLocationDrawer(true);
-    setShowMarker(
+    setShowMainMarker(
       locationObj.type !== "country" &&
         locationObj.type === "city" &&
         locationObj.country === "United States"
@@ -469,6 +494,32 @@ export default function Mymap({
     }
   };
 
+  const pins = useMemo(
+    () =>
+      topCities.map((city, index) => (
+        <Marker
+          key={`marker-${index}`}
+          longitude={city[1][0]}
+          latitude={city[1][1]}
+          anchor="bottom"
+          onClick={(e) => {
+            e.originalEvent.stopPropagation();
+            setPopupInfo(city);
+          }}
+        >
+          <IconMapPinFilled
+            style={{
+              cursor: "pointer",
+              opacity: 0.7,
+              transform: "scale(1.5)",
+              color: theme.colorScheme === "dark" ? " #121d47" : "#9c161c",
+            }}
+          />
+        </Marker>
+      )),
+    [topCities, theme.colorScheme]
+  );
+
   const fetchCities = async (location) => {
     try {
       const path =
@@ -506,6 +557,13 @@ export default function Mymap({
     }
   };
 
+  const selectTopCity = (city) => {
+    setPopupInfo(null);
+    setShowMainMarker(true);
+    setLngLat(city[1]);
+    goToLocation("city", city[1], 12, area.country);
+  };
+
   const topCitiesList = topCities.map((city, index) => (
     <Group key={index} position="right">
       {/* Menu item for Top Cities */}
@@ -526,17 +584,20 @@ export default function Mymap({
             transform: "scale(1)",
           },
         }}
-        onClick={() => {
-          setShowMarker(true);
-          setLngLat(city[1]);
-          goToLocation("city", city[1], 12, area.country);
-        }}
+        onClick={() => selectTopCity(city)}
       >
-        <IconMapPin
+        {/* <IconWorld
           size={12}
           color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
-        />
-        <Text lineClamp={1} truncate={true} w={180} fw={100} fz={14}>
+        /> */}
+        <Text
+          lineClamp={1}
+          truncate={true}
+          w={180}
+          fw={700}
+          fs={"italic"}
+          fz={14}
+        >
           {city[0]}
         </Text>
       </Group>
@@ -550,7 +611,7 @@ export default function Mymap({
       pitch: 0,
     });
     setLngLat([0, 0]);
-    setShowMarker(false);
+    setShowMainMarker(false);
     setArea({ label: "" });
     setShowStates(false);
     setLocationDrawer(false);
@@ -600,7 +661,7 @@ export default function Mymap({
       <Loader pageLoaded={mapLoaded} />
       {/* TODO - Drawer */}
       <Drawer
-        size={700}
+        size={"50%"}
         position="right"
         opened={locationDrawer}
         withOverlay={false}
@@ -614,7 +675,7 @@ export default function Mymap({
             overflow: "visible",
             background:
               theme.colorScheme === "dark"
-                ? "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(11,12,12,1) 100%)"
+                ? "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0, 0, 0, 1) 100%)"
                 : "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(255, 255, 255, 1) 100%)",
           },
         })}
@@ -626,14 +687,14 @@ export default function Mymap({
               mr={10}
               variant="transparent"
               onClick={reset}
-              opacity={0.3}
+              opacity={0.7}
               sx={{
                 pointerEvents: "all",
                 transform: "scale(1.5)",
                 transition: "all 150ms ease-in-out",
                 "&:hover": {
                   opacity: 1,
-                  transform: "scale(1.55)",
+                  transform: "scale(1.7)",
                 },
               }}
             >
@@ -674,8 +735,8 @@ export default function Mymap({
             <Divider
               size="xs"
               my="xs"
-              ml={"65%"}
-              w={"35&"}
+              ml={"70%"}
+              w={"30%"}
               color={theme.colorScheme === "dark" ? "white" : "dark"}
               labelPosition={"left"}
               label={
@@ -978,9 +1039,7 @@ export default function Mymap({
                   </Text>
                 }
               />
-              <Box display={topCities.length === 0 ? "none" : "block"}>
-                {topCitiesList}
-              </Box>
+              <Box>{topCitiesList}</Box>
               {/* Search Cities in Selected Region */}
               {/* TODO - City Auto */}
               <Autocomplete
@@ -1051,6 +1110,8 @@ export default function Mymap({
       {geoLat && geoLng && (
         <Map
           initialViewState={initialViewState}
+          renderWorldCopies={true}
+          styleDiffing={false}
           maxPitch={80}
           onZoomEnd={onZoomEnd}
           maxZoom={14}
@@ -1073,7 +1134,6 @@ export default function Mymap({
             "country-boundaries",
             "clicked-state",
           ]}
-          styleDiffing={true}
           mapStyle={
             theme.colorScheme === "dark"
               ? "mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
@@ -1090,20 +1150,35 @@ export default function Mymap({
               setPlaces={setPlaces}
             />
           )}
-          {showMarker && (
+          {topCities && !showMainMarker && pins}
+          {popupInfo && (
+            <Popup
+              className={classes.popup}
+              anchor="bottom"
+              offset={[0, -30]}
+              longitude={popupInfo[1][0]}
+              latitude={popupInfo[1][1]}
+            >
+              <Box py={10} px={20} onClick={() => selectTopCity(popupInfo)}>
+                {popupInfo[0]}
+              </Box>
+            </Popup>
+          )}
+          {showMainMarker && (
             <Marker
-              color={
-                theme.colorScheme === "dark"
-                  ? " rgba(0, 232, 250, 0.8)"
-                  : "rgba(250, 117, 0, 0.8)"
-              }
               longitude={lngLat[0]}
               latitude={lngLat[1]}
               offsetLeft={-20}
               offsetTop={-10}
-              scale={5}
-              key={key}
-            />
+            >
+              <IconMapPinFilled
+                style={{
+                  cursor: "pointer",
+                  transform: "scale(5)",
+                  color: theme.colorScheme === "dark" ? " #121d47" : "#9c161c",
+                }}
+              />
+            </Marker>
           )}
           <Source
             id="country-boundaries"
