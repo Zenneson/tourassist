@@ -1,281 +1,176 @@
 [
   {
-    "state": "AK",
+    "state": "Alaska",
     "cities": [
       {
         "name": "Anchorage",
-        "center": [
-          61.21806,
-          -149.90028
-        ]
+        "center": [-149.90028, 61.21806]
       },
       {
         "name": "Juneau",
-        "center": [
-          58.30194,
-          -134.41972
-        ]
+        "center": [-134.41972, 58.30194]
       },
       {
         "name": "Fairbanks",
-        "center": [
-          64.83778,
-          -147.71639
-        ]
+        "center": [-147.71639, 64.83778]
       },
       {
         "name": "Eagle River",
-        "center": [
-          61.32139,
-          -149.56778
-        ]
+        "center": [-149.56778, 61.32139]
       },
       {
         "name": "Badger",
-        "center": [
-          64.8,
-          -147.53333
-        ]
+        "center": [-147.53333, 64.8]
       }
     ]
   },
   {
-    "state": "AL",
+    "state": "Alabama",
     "cities": [
       {
         "name": "Huntsville",
-        "center": [
-          34.7304,
-          -86.58594
-        ]
+        "center": [-86.58594, 34.7304]
       },
       {
         "name": "Birmingham",
-        "center": [
-          33.52066,
-          -86.80249
-        ]
+        "center": [-86.80249, 33.52066]
       },
       {
         "name": "Montgomery",
-        "center": [
-          32.36681,
-          -86.29997
-        ]
+        "center": [-86.29997, 32.36681]
       },
       {
         "name": "Mobile",
-        "center": [
-          30.69436,
-          -88.04305
-        ]
+        "center": [-88.04305, 30.69436]
       },
       {
         "name": "Tuscaloosa",
-        "center": [
-          33.20984,
-          -87.56917
-        ]
+        "center": [-87.56917, 33.20984]
       }
     ]
   },
   {
-    "state": "AR",
+    "state": "Arkansas",
     "cities": [
       {
         "name": "Little Rock",
-        "center": [
-          34.74648,
-          -92.28959
-        ]
+        "center": [-92.28959, 34.74648]
       },
       {
         "name": "Fort Smith",
-        "center": [
-          35.38592,
-          -94.39855
-        ]
+        "center": [-94.39855, 35.38592]
       },
       {
         "name": "Fayetteville",
-        "center": [
-          36.06258,
-          -94.15743
-        ]
+        "center": [-94.15743, 36.06258]
       },
       {
         "name": "Springdale",
-        "center": [
-          36.18674,
-          -94.12881
-        ]
+        "center": [-94.12881, 36.18674]
       },
       {
         "name": "Jonesboro",
-        "center": [
-          35.8423,
-          -90.70428
-        ]
+        "center": [-90.70428, 35.8423]
       }
     ]
   },
   {
-    "state": "AZ",
+    "state": "Arizona",
     "cities": [
       {
         "name": "Phoenix",
-        "center": [
-          33.44838,
-          -112.07404
-        ]
+        "center": [-112.07404, 33.44838]
       },
       {
         "name": "Tucson",
-        "center": [
-          32.22174,
-          -110.92648
-        ]
+        "center": [-110.92648, 32.22174]
       },
       {
         "name": "Mesa",
-        "center": [
-          33.42227,
-          -111.82264
-        ]
+        "center": [-111.82264, 33.42227]
       },
       {
         "name": "Chandler",
-        "center": [
-          33.30616,
-          -111.84125
-        ]
+        "center": [-111.84125, 33.30616]
       },
       {
         "name": "Gilbert",
-        "center": [
-          33.35283,
-          -111.78903
-        ]
+        "center": [-111.78903, 33.35283]
       }
     ]
   },
   {
-    "state": "CA",
+    "state": "California",
     "cities": [
       {
         "name": "Los Angeles",
-        "center": [
-          34.05223,
-          -118.24368
-        ]
+        "center": [-118.24368, 34.05223]
       },
       {
         "name": "San Diego",
-        "center": [
-          32.71571,
-          -117.16472
-        ]
+        "center": [-117.16472, 32.71571]
       },
       {
         "name": "San Jose",
-        "center": [
-          37.33939,
-          -121.89496
-        ]
+        "center": [-121.89496, 37.33939]
       },
       {
         "name": "San Francisco",
-        "center": [
-          37.77493,
-          -122.41942
-        ]
+        "center": [-122.41942, 37.77493]
       },
       {
         "name": "Fresno",
-        "center": [
-          36.74773,
-          -119.77237
-        ]
+        "center": [-119.77237, 36.74773]
       }
     ]
   },
   {
-    "state": "CO",
+    "state": "Colorado",
     "cities": [
       {
         "name": "Denver",
-        "center": [
-          39.73915,
-          -104.9847
-        ]
+        "center": [-104.9847, 39.73915]
       },
       {
         "name": "Colorado Springs",
-        "center": [
-          38.83388,
-          -104.82136
-        ]
+        "center": [-104.82136, 38.83388]
       },
       {
         "name": "Aurora",
-        "center": [
-          39.72943,
-          -104.83192
-        ]
+        "center": [-104.83192, 39.72943]
       },
       {
         "name": "Fort Collins",
-        "center": [
-          40.58526,
-          -105.08442
-        ]
+        "center": [-105.08442, 40.58526]
       },
       {
         "name": "Lakewood",
-        "center": [
-          39.70471,
-          -105.08137
-        ]
+        "center": [-105.08137, 39.70471]
       }
     ]
   },
   {
-    "state": "CT",
+    "state": "Connecticut",
     "cities": [
       {
         "name": "Bridgeport",
-        "center": [
-          41.17923,
-          -73.18945
-        ]
+        "center": [-73.18945, 41.17923]
       },
       {
         "name": "New Haven",
-        "center": [
-          41.30815,
-          -72.92816
-        ]
+        "center": [-72.92816, 41.30815]
       },
       {
         "name": "Stamford",
-        "center": [
-          41.05343,
-          -73.53873
-        ]
+        "center": [-73.53873, 41.05343]
       },
       {
         "name": "North Stamford",
-        "center": [
-          41.13815,
-          -73.54346
-        ]
+        "center": [-73.54346, 41.13815]
       },
       {
         "name": "Hartford",
-        "center": [
-          41.76371,
-          -72.68509
-        ]
+        "center": [-72.68509, 41.76371]
       }
     ]
   },
@@ -284,1758 +179,1098 @@
     "cities": [
       {
         "name": "Washington",
-        "center": [
-          38.89511,
-          -77.03637
-        ]
+        "center": [-77.03637, 38.89511]
       },
       {
         "name": "Shaw",
-        "center": [
-          38.91206,
-          -77.02137
-        ]
+        "center": [-77.02137, 38.91206]
       },
       {
         "name": "Adams Morgan",
-        "center": [
-          38.9215,
-          -77.0422
-        ]
+        "center": [-77.0422, 38.9215]
       },
       {
         "name": "Chevy Chase",
-        "center": [
-          38.964,
-          -77.06776
-        ]
+        "center": [-77.06776, 38.964]
       },
       {
         "name": "Bloomingdale",
-        "center": [
-          38.91678,
-          -77.01137
-        ]
+        "center": [-77.01137, 38.91678]
       }
     ]
   },
   {
-    "state": "DE",
+    "state": "Delaware",
     "cities": [
       {
         "name": "Wilmington",
-        "center": [
-          39.74595,
-          -75.54659
-        ]
+        "center": [-75.54659, 39.74595]
       },
       {
         "name": "Dover",
-        "center": [
-          39.15817,
-          -75.52437
-        ]
+        "center": [-75.52437, 39.15817]
       },
       {
         "name": "Newark",
-        "center": [
-          39.68372,
-          -75.74966
-        ]
+        "center": [-75.74966, 39.68372]
       },
       {
         "name": "Middletown",
-        "center": [
-          39.44956,
-          -75.71632
-        ]
+        "center": [-75.71632, 39.44956]
       },
       {
         "name": "Bear",
-        "center": [
-          39.62928,
-          -75.65826
-        ]
+        "center": [-75.65826, 39.62928]
       }
     ]
   },
   {
-    "state": "FL",
+    "state": "Florida",
     "cities": [
       {
         "name": "Jacksonville",
-        "center": [
-          30.33218,
-          -81.65565
-        ]
+        "center": [-81.65565, 30.33218]
       },
       {
         "name": "Miami",
-        "center": [
-          25.77427,
-          -80.19366
-        ]
+        "center": [-80.19366, 25.77427]
       },
       {
         "name": "Tampa",
-        "center": [
-          27.94752,
-          -82.45843
-        ]
+        "center": [-82.45843, 27.94752]
       },
       {
         "name": "Orlando",
-        "center": [
-          28.53834,
-          -81.37924
-        ]
+        "center": [-81.37924, 28.53834]
       },
       {
         "name": "St. Petersburg",
-        "center": [
-          27.77086,
-          -82.67927
-        ]
+        "center": [-82.67927, 27.77086]
       }
     ]
   },
   {
-    "state": "GA",
+    "state": "Georgia",
     "cities": [
       {
         "name": "Atlanta",
-        "center": [
-          33.749,
-          -84.38798
-        ]
+        "center": [-84.38798, 33.749]
       },
       {
         "name": "Columbus",
-        "center": [
-          32.46098,
-          -84.98771
-        ]
+        "center": [-84.98771, 32.46098]
       },
       {
         "name": "Savannah",
-        "center": [
-          32.08354,
-          -81.09983
-        ]
+        "center": [-81.09983, 32.08354]
       },
       {
         "name": "Athens",
-        "center": [
-          33.96095,
-          -83.37794
-        ]
+        "center": [-83.37794, 33.96095]
       },
       {
         "name": "South Fulton",
-        "center": [
-          33.59259,
-          -84.67294
-        ]
+        "center": [-84.67294, 33.59259]
       }
     ]
   },
   {
-    "state": "HI",
+    "state": "Hawaii",
     "cities": [
       {
         "name": "Honolulu",
-        "center": [
-          21.30694,
-          -157.85833
-        ]
+        "center": [-157.85833, 21.30694]
       },
       {
         "name": "East Honolulu",
-        "center": [
-          21.28906,
-          -157.71734
-        ]
+        "center": [-157.71734, 21.28906]
       },
       {
         "name": "Pearl City",
-        "center": [
-          21.39734,
-          -157.97516
-        ]
+        "center": [-157.97516, 21.39734]
       },
       {
         "name": "Hilo",
-        "center": [
-          19.72991,
-          -155.09073
-        ]
+        "center": [-155.09073, 19.72991]
       },
       {
         "name": "Kailua",
-        "center": [
-          21.40241,
-          -157.74054
-        ]
+        "center": [-157.74054, 21.40241]
       }
     ]
   },
   {
-    "state": "IA",
+    "state": "Iowa",
     "cities": [
       {
         "name": "Des Moines",
-        "center": [
-          41.60054,
-          -93.60911
-        ]
+        "center": [-93.60911, 41.60054]
       },
       {
         "name": "Cedar Rapids",
-        "center": [
-          42.00833,
-          -91.64407
-        ]
+        "center": [-91.64407, 42.00833]
       },
       {
         "name": "Davenport",
-        "center": [
-          41.52364,
-          -90.57764
-        ]
+        "center": [-90.57764, 41.52364]
       },
       {
         "name": "Sioux City",
-        "center": [
-          42.49999,
-          -96.40031
-        ]
+        "center": [-96.40031, 42.49999]
       },
       {
         "name": "Iowa City",
-        "center": [
-          41.66113,
-          -91.53017
-        ]
+        "center": [-91.53017, 41.66113]
       }
     ]
   },
   {
-    "state": "ID",
+    "state": "Idaho",
     "cities": [
       {
         "name": "Boise",
-        "center": [
-          43.6135,
-          -116.20345
-        ]
+        "center": [-116.20345, 43.6135]
       },
       {
         "name": "Meridian",
-        "center": [
-          43.61211,
-          -116.39151
-        ]
+        "center": [-116.39151, 43.61211]
       },
       {
         "name": "Nampa",
-        "center": [
-          43.54072,
-          -116.56346
-        ]
+        "center": [-116.56346, 43.54072]
       },
       {
         "name": "Idaho Falls",
-        "center": [
-          43.46658,
-          -112.03414
-        ]
+        "center": [-112.03414, 43.46658]
       },
       {
         "name": "Pocatello",
-        "center": [
-          42.8713,
-          -112.44553
-        ]
+        "center": [-112.44553, 42.8713]
       }
     ]
   },
   {
-    "state": "IL",
+    "state": "Illinois",
     "cities": [
       {
         "name": "Chicago",
-        "center": [
-          41.85003,
-          -87.65005
-        ]
+        "center": [-87.65005, 41.85003]
       },
       {
         "name": "Aurora",
-        "center": [
-          41.76058,
-          -88.32007
-        ]
+        "center": [-88.32007, 41.76058]
       },
       {
         "name": "Rockford",
-        "center": [
-          42.27113,
-          -89.094
-        ]
+        "center": [-89.094, 42.27113]
       },
       {
         "name": "Joliet",
-        "center": [
-          41.52519,
-          -88.0834
-        ]
+        "center": [-88.0834, 41.52519]
       },
       {
         "name": "Naperville",
-        "center": [
-          41.78586,
-          -88.14729
-        ]
+        "center": [-88.14729, 41.78586]
       }
     ]
   },
   {
-    "state": "IN",
+    "state": "Indiana",
     "cities": [
       {
         "name": "Indianapolis",
-        "center": [
-          39.76838,
-          -86.15804
-        ]
+        "center": [-86.15804, 39.76838]
       },
       {
         "name": "Fort Wayne",
-        "center": [
-          41.1306,
-          -85.12886
-        ]
+        "center": [-85.12886, 41.1306]
       },
       {
         "name": "Evansville",
-        "center": [
-          37.97476,
-          -87.55585
-        ]
+        "center": [-87.55585, 37.97476]
       },
       {
         "name": "South Bend",
-        "center": [
-          41.68338,
-          -86.25001
-        ]
+        "center": [-86.25001, 41.68338]
       },
       {
         "name": "Carmel",
-        "center": [
-          39.97837,
-          -86.11804
-        ]
+        "center": [-86.11804, 39.97837]
       }
     ]
   },
   {
-    "state": "KS",
+    "state": "Kansas",
     "cities": [
       {
         "name": "Wichita",
-        "center": [
-          37.69224,
-          -97.33754
-        ]
+        "center": [-97.33754, 37.69224]
       },
       {
         "name": "Overland Park",
-        "center": [
-          38.98223,
-          -94.67079
-        ]
+        "center": [-94.67079, 38.98223]
       },
       {
         "name": "Kansas City",
-        "center": [
-          39.11417,
-          -94.62746
-        ]
+        "center": [-94.62746, 39.11417]
       },
       {
         "name": "Olathe",
-        "center": [
-          38.8814,
-          -94.81913
-        ]
+        "center": [-94.81913, 38.8814]
       },
       {
         "name": "Topeka",
-        "center": [
-          39.04833,
-          -95.67804
-        ]
+        "center": [-95.67804, 39.04833]
       }
     ]
   },
   {
-    "state": "KY",
+    "state": "Kentucky",
     "cities": [
       {
         "name": "Lexington-Fayette",
-        "center": [
-          38.0498,
-          -84.45855
-        ]
+        "center": [-84.45855, 38.0498]
       },
       {
         "name": "Meads",
-        "center": [
-          38.41258,
-          -82.70905
-        ]
+        "center": [-82.70905, 38.41258]
       },
       {
         "name": "Ironville",
-        "center": [
-          38.45647,
-          -82.69238
-        ]
+        "center": [-82.69238, 38.45647]
       },
       {
         "name": "Louisville",
-        "center": [
-          38.25424,
-          -85.75941
-        ]
+        "center": [-85.75941, 38.25424]
       },
       {
         "name": "Lexington",
-        "center": [
-          37.98869,
-          -84.47772
-        ]
+        "center": [-84.47772, 37.98869]
       }
     ]
   },
   {
-    "state": "LA",
+    "state": "Louisiana",
     "cities": [
       {
         "name": "New Orleans",
-        "center": [
-          29.95465,
-          -90.07507
-        ]
+        "center": [-90.07507, 29.95465]
       },
       {
         "name": "Baton Rouge",
-        "center": [
-          30.44332,
-          -91.18747
-        ]
+        "center": [-91.18747, 30.44332]
       },
       {
         "name": "Shreveport",
-        "center": [
-          32.52515,
-          -93.75018
-        ]
+        "center": [-93.75018, 32.52515]
       },
       {
         "name": "Metairie Terrace",
-        "center": [
-          29.97854,
-          -90.16396
-        ]
+        "center": [-90.16396, 29.97854]
       },
       {
         "name": "Metairie",
-        "center": [
-          29.98409,
-          -90.15285
-        ]
+        "center": [-90.15285, 29.98409]
       }
     ]
   },
   {
-    "state": "MA",
+    "state": "Massachusetts",
     "cities": [
       {
         "name": "Boston",
-        "center": [
-          42.35843,
-          -71.05977
-        ]
+        "center": [-71.05977, 42.35843]
       },
       {
         "name": "South Boston",
-        "center": [
-          42.33343,
-          -71.04949
-        ]
+        "center": [-71.04949, 42.33343]
       },
       {
         "name": "Worcester",
-        "center": [
-          42.26259,
-          -71.80229
-        ]
+        "center": [-71.80229, 42.26259]
       },
       {
         "name": "Springfield",
-        "center": [
-          42.10148,
-          -72.58981
-        ]
+        "center": [-72.58981, 42.10148]
       },
       {
         "name": "Lowell",
-        "center": [
-          42.63342,
-          -71.31617
-        ]
+        "center": [-71.31617, 42.63342]
       }
     ]
   },
   {
-    "state": "MD",
+    "state": "Maryland",
     "cities": [
       {
         "name": "Baltimore",
-        "center": [
-          39.29038,
-          -76.61219
-        ]
+        "center": [-76.61219, 39.29038]
       },
       {
         "name": "Columbia",
-        "center": [
-          39.24038,
-          -76.83942
-        ]
+        "center": [-76.83942, 39.24038]
       },
       {
         "name": "Germantown",
-        "center": [
-          39.17316,
-          -77.27165
-        ]
+        "center": [-77.27165, 39.17316]
       },
       {
         "name": "Silver Spring",
-        "center": [
-          38.99067,
-          -77.02609
-        ]
+        "center": [-77.02609, 38.99067]
       },
       {
         "name": "Frederick",
-        "center": [
-          39.41427,
-          -77.41054
-        ]
+        "center": [-77.41054, 39.41427]
       }
     ]
   },
   {
-    "state": "ME",
+    "state": "Maine",
     "cities": [
       {
         "name": "Portland",
-        "center": [
-          43.65737,
-          -70.2589
-        ]
+        "center": [-70.2589, 43.65737]
       },
       {
         "name": "Lewiston",
-        "center": [
-          44.10035,
-          -70.21478
-        ]
+        "center": [-70.21478, 44.10035]
       },
       {
         "name": "Bangor",
-        "center": [
-          44.79884,
-          -68.77265
-        ]
+        "center": [-68.77265, 44.79884]
       },
       {
         "name": "West Scarborough",
-        "center": [
-          43.57036,
-          -70.38783
-        ]
+        "center": [-70.38783, 43.57036]
       },
       {
         "name": "South Portland",
-        "center": [
-          43.64147,
-          -70.24088
-        ]
+        "center": [-70.24088, 43.64147]
       }
     ]
   },
   {
-    "state": "MI",
+    "state": "Michigan",
     "cities": [
       {
         "name": "Detroit",
-        "center": [
-          42.33143,
-          -83.04575
-        ]
+        "center": [-83.04575, 42.33143]
       },
       {
         "name": "Grand Rapids",
-        "center": [
-          42.96336,
-          -85.66809
-        ]
+        "center": [-85.66809, 42.96336]
       },
       {
         "name": "Warren",
-        "center": [
-          42.49044,
-          -83.01304
-        ]
+        "center": [-83.01304, 42.49044]
       },
       {
         "name": "Sterling Heights",
-        "center": [
-          42.58031,
-          -83.0302
-        ]
+        "center": [-83.0302, 42.58031]
       },
       {
         "name": "Ann Arbor",
-        "center": [
-          42.27756,
-          -83.74088
-        ]
+        "center": [-83.74088, 42.27756]
       }
     ]
   },
   {
-    "state": "MN",
+    "state": "Minnesota",
     "cities": [
       {
         "name": "Minneapolis",
-        "center": [
-          44.97997,
-          -93.26384
-        ]
+        "center": [-93.26384, 44.97997]
       },
       {
         "name": "Saint Paul",
-        "center": [
-          44.94441,
-          -93.09327
-        ]
+        "center": [-93.09327, 44.94441]
       },
       {
         "name": "Rochester",
-        "center": [
-          44.02163,
-          -92.4699
-        ]
+        "center": [-92.4699, 44.02163]
       },
       {
         "name": "Bloomington",
-        "center": [
-          44.8408,
-          -93.29828
-        ]
+        "center": [-93.29828, 44.8408]
       },
       {
         "name": "Duluth",
-        "center": [
-          46.78327,
-          -92.10658
-        ]
+        "center": [-92.10658, 46.78327]
       }
     ]
   },
   {
-    "state": "MO",
+    "state": "Missouri",
     "cities": [
       {
         "name": "Kansas City",
-        "center": [
-          39.09973,
-          -94.57857
-        ]
+        "center": [-94.57857, 39.09973]
       },
       {
         "name": "St. Louis",
-        "center": [
-          38.62727,
-          -90.19789
-        ]
+        "center": [-90.19789, 38.62727]
       },
       {
         "name": "Springfield",
-        "center": [
-          37.21533,
-          -93.29824
-        ]
+        "center": [-93.29824, 37.21533]
       },
       {
         "name": "Columbia",
-        "center": [
-          38.95171,
-          -92.33407
-        ]
+        "center": [-92.33407, 38.95171]
       },
       {
         "name": "Independence",
-        "center": [
-          39.09112,
-          -94.41551
-        ]
+        "center": [-94.41551, 39.09112]
       }
     ]
   },
   {
-    "state": "MS",
+    "state": "Mississippi",
     "cities": [
       {
         "name": "Jackson",
-        "center": [
-          32.29876,
-          -90.18481
-        ]
+        "center": [-90.18481, 32.29876]
       },
       {
         "name": "Gulfport",
-        "center": [
-          30.36742,
-          -89.09282
-        ]
+        "center": [-89.09282, 30.36742]
       },
       {
         "name": "West Gulfport",
-        "center": [
-          30.40409,
-          -89.0942
-        ]
+        "center": [-89.0942, 30.40409]
       },
       {
         "name": "Southaven",
-        "center": [
-          34.98898,
-          -90.01259
-        ]
+        "center": [-90.01259, 34.98898]
       },
       {
         "name": "Hattiesburg",
-        "center": [
-          31.32712,
-          -89.29034
-        ]
+        "center": [-89.29034, 31.32712]
       }
     ]
   },
   {
-    "state": "MT",
+    "state": "Montana",
     "cities": [
       {
         "name": "Billings",
-        "center": [
-          45.78329,
-          -108.50069
-        ]
+        "center": [-108.50069, 45.78329]
       },
       {
         "name": "Missoula",
-        "center": [
-          46.87215,
-          -113.994
-        ]
+        "center": [-113.994, 46.87215]
       },
       {
         "name": "Great Falls",
-        "center": [
-          47.50024,
-          -111.30081
-        ]
+        "center": [-111.30081, 47.50024]
       },
       {
         "name": "Bozeman",
-        "center": [
-          45.67965,
-          -111.03856
-        ]
+        "center": [-111.03856, 45.67965]
       },
       {
         "name": "Butte",
-        "center": [
-          46.00382,
-          -112.53474
-        ]
+        "center": [-112.53474, 46.00382]
       }
     ]
   },
   {
-    "state": "NC",
+    "state": "North Carolina",
     "cities": [
       {
         "name": "Charlotte",
-        "center": [
-          35.22709,
-          -80.84313
-        ]
+        "center": [-80.84313, 35.22709]
       },
       {
         "name": "Raleigh",
-        "center": [
-          35.7721,
-          -78.63861
-        ]
+        "center": [-78.63861, 35.7721]
       },
       {
         "name": "West Raleigh",
-        "center": [
-          35.78682,
-          -78.66389
-        ]
+        "center": [-78.66389, 35.78682]
       },
       {
         "name": "Greensboro",
-        "center": [
-          36.07264,
-          -79.79198
-        ]
+        "center": [-79.79198, 36.07264]
       },
       {
         "name": "Durham",
-        "center": [
-          35.99403,
-          -78.89862
-        ]
+        "center": [-78.89862, 35.99403]
       }
     ]
   },
   {
-    "state": "ND",
+    "state": "North Dakota",
     "cities": [
       {
         "name": "Fargo",
-        "center": [
-          46.87719,
-          -96.7898
-        ]
+        "center": [-96.7898, 46.87719]
       },
       {
         "name": "Bismarck",
-        "center": [
-          46.80833,
-          -100.78374
-        ]
+        "center": [-100.78374, 46.80833]
       },
       {
         "name": "Grand Forks",
-        "center": [
-          47.92526,
-          -97.03285
-        ]
+        "center": [-97.03285, 47.92526]
       },
       {
         "name": "Minot",
-        "center": [
-          48.23251,
-          -101.29627
-        ]
+        "center": [-101.29627, 48.23251]
       },
       {
         "name": "West Fargo",
-        "center": [
-          46.87497,
-          -96.90036
-        ]
+        "center": [-96.90036, 46.87497]
       }
     ]
   },
   {
-    "state": "NE",
+    "state": "Nebraska",
     "cities": [
       {
         "name": "Omaha",
-        "center": [
-          41.25626,
-          -95.94043
-        ]
+        "center": [-95.94043, 41.25626]
       },
       {
         "name": "Lincoln",
-        "center": [
-          40.8,
-          -96.66696
-        ]
+        "center": [-96.66696, 40.8]
       },
       {
         "name": "Bellevue",
-        "center": [
-          41.13667,
-          -95.89084
-        ]
+        "center": [-95.89084, 41.13667]
       },
       {
         "name": "Grand Island",
-        "center": [
-          40.92501,
-          -98.34201
-        ]
+        "center": [-98.34201, 40.92501]
       },
       {
         "name": "Kearney",
-        "center": [
-          40.69946,
-          -99.08148
-        ]
+        "center": [-99.08148, 40.69946]
       }
     ]
   },
   {
-    "state": "NH",
+    "state": "New Hampshire",
     "cities": [
       {
         "name": "Manchester",
-        "center": [
-          42.99564,
-          -71.45479
-        ]
+        "center": [-71.45479, 42.99564]
       },
       {
         "name": "Nashua",
-        "center": [
-          42.76537,
-          -71.46757
-        ]
+        "center": [-71.46757, 42.76537]
       },
       {
         "name": "Concord",
-        "center": [
-          43.20814,
-          -71.53757
-        ]
+        "center": [-71.53757, 43.20814]
       },
       {
         "name": "East Concord",
-        "center": [
-          43.24202,
-          -71.53813
-        ]
+        "center": [-71.53813, 43.24202]
       },
       {
         "name": "Derry Village",
-        "center": [
-          42.89175,
-          -71.31201
-        ]
+        "center": [-71.31201, 42.89175]
       }
     ]
   },
   {
-    "state": "NJ",
+    "state": "New Jersey",
     "cities": [
       {
         "name": "Newark",
-        "center": [
-          40.73566,
-          -74.17237
-        ]
+        "center": [-74.17237, 40.73566]
       },
       {
         "name": "Jersey City",
-        "center": [
-          40.72816,
-          -74.07764
-        ]
+        "center": [-74.07764, 40.72816]
       },
       {
         "name": "Paterson",
-        "center": [
-          40.91677,
-          -74.17181
-        ]
+        "center": [-74.17181, 40.91677]
       },
       {
         "name": "Elizabeth",
-        "center": [
-          40.66399,
-          -74.2107
-        ]
+        "center": [-74.2107, 40.66399]
       },
       {
         "name": "Edison",
-        "center": [
-          40.51872,
-          -74.4121
-        ]
+        "center": [-74.4121, 40.51872]
       }
     ]
   },
   {
-    "state": "NM",
+    "state": "New Mexico",
     "cities": [
       {
         "name": "Albuquerque",
-        "center": [
-          35.08449,
-          -106.65114
-        ]
+        "center": [-106.65114, 35.08449]
       },
       {
         "name": "Las Cruces",
-        "center": [
-          32.31232,
-          -106.77834
-        ]
+        "center": [-106.77834, 32.31232]
       },
       {
         "name": "Enchanted Hills",
-        "center": [
-          35.33676,
-          -106.59296
-        ]
+        "center": [-106.59296, 35.33676]
       },
       {
         "name": "Rio Rancho",
-        "center": [
-          35.23338,
-          -106.66447
-        ]
+        "center": [-106.66447, 35.23338]
       },
       {
         "name": "Santa Fe",
-        "center": [
-          35.68698,
-          -105.9378
-        ]
+        "center": [-105.9378, 35.68698]
       }
     ]
   },
   {
-    "state": "NV",
+    "state": "Nevada",
     "cities": [
       {
         "name": "Las Vegas",
-        "center": [
-          36.17497,
-          -115.13722
-        ]
+        "center": [-115.13722, 36.17497]
       },
       {
         "name": "Henderson",
-        "center": [
-          36.0397,
-          -114.98194
-        ]
+        "center": [-114.98194, 36.0397]
       },
       {
         "name": "Reno",
-        "center": [
-          39.52963,
-          -119.8138
-        ]
+        "center": [-119.8138, 39.52963]
       },
       {
         "name": "North Las Vegas",
-        "center": [
-          36.19886,
-          -115.1175
-        ]
+        "center": [-115.1175, 36.19886]
       },
       {
         "name": "Paradise",
-        "center": [
-          36.09719,
-          -115.14666
-        ]
+        "center": [-115.14666, 36.09719]
       }
     ]
   },
   {
-    "state": "NY",
+    "state": "New York",
     "cities": [
       {
         "name": "New York City",
-        "center": [
-          40.71427,
-          -74.00597
-        ]
+        "center": [-74.00597, 40.71427]
       },
       {
         "name": "Brooklyn",
-        "center": [
-          40.6501,
-          -73.94958
-        ]
+        "center": [-73.94958, 40.6501]
       },
       {
         "name": "Queens",
-        "center": [
-          40.68149,
-          -73.83652
-        ]
+        "center": [-73.83652, 40.68149]
       },
       {
         "name": "Manhattan",
-        "center": [
-          40.78343,
-          -73.96625
-        ]
+        "center": [-73.96625, 40.78343]
       },
       {
         "name": "The Bronx",
-        "center": [
-          40.84985,
-          -73.86641
-        ]
+        "center": [-73.86641, 40.84985]
       }
     ]
   },
   {
-    "state": "OH",
+    "state": "Ohio",
     "cities": [
       {
         "name": "Columbus",
-        "center": [
-          39.96118,
-          -82.99879
-        ]
+        "center": [-82.99879, 39.96118]
       },
       {
         "name": "Cleveland",
-        "center": [
-          41.4995,
-          -81.69541
-        ]
+        "center": [-81.69541, 41.4995]
       },
       {
         "name": "Cincinnati",
-        "center": [
-          39.12711,
-          -84.51439
-        ]
+        "center": [-84.51439, 39.12711]
       },
       {
         "name": "Toledo",
-        "center": [
-          41.66394,
-          -83.55521
-        ]
+        "center": [-83.55521, 41.66394]
       },
       {
         "name": "Akron",
-        "center": [
-          41.08144,
-          -81.51901
-        ]
+        "center": [-81.51901, 41.08144]
       }
     ]
   },
   {
-    "state": "OK",
+    "state": "Oklahoma",
     "cities": [
       {
         "name": "Oklahoma City",
-        "center": [
-          35.46756,
-          -97.51643
-        ]
+        "center": [-97.51643, 35.46756]
       },
       {
         "name": "Tulsa",
-        "center": [
-          36.15398,
-          -95.99277
-        ]
+        "center": [-95.99277, 36.15398]
       },
       {
         "name": "Norman",
-        "center": [
-          35.22257,
-          -97.43948
-        ]
+        "center": [-97.43948, 35.22257]
       },
       {
         "name": "Broken Arrow",
-        "center": [
-          36.0526,
-          -95.79082
-        ]
+        "center": [-95.79082, 36.0526]
       },
       {
         "name": "Lawton",
-        "center": [
-          34.60869,
-          -98.39033
-        ]
+        "center": [-98.39033, 34.60869]
       }
     ]
   },
   {
-    "state": "OR",
+    "state": "Oregon",
     "cities": [
       {
         "name": "Portland",
-        "center": [
-          45.52345,
-          -122.67621
-        ]
+        "center": [-122.67621, 45.52345]
       },
       {
         "name": "Salem",
-        "center": [
-          44.9429,
-          -123.0351
-        ]
+        "center": [-123.0351, 44.9429]
       },
       {
         "name": "Eugene",
-        "center": [
-          44.05207,
-          -123.08675
-        ]
+        "center": [-123.08675, 44.05207]
       },
       {
         "name": "Gresham",
-        "center": [
-          45.49818,
-          -122.43148
-        ]
+        "center": [-122.43148, 45.49818]
       },
       {
         "name": "Hillsboro",
-        "center": [
-          45.52289,
-          -122.98983
-        ]
+        "center": [-122.98983, 45.52289]
       }
     ]
   },
   {
-    "state": "PA",
+    "state": "Pennsylvania",
     "cities": [
       {
         "name": "Philadelphia",
-        "center": [
-          39.95238,
-          -75.16362
-        ]
+        "center": [-75.16362, 39.95238]
       },
       {
         "name": "Pittsburgh",
-        "center": [
-          40.44062,
-          -79.99589
-        ]
+        "center": [-79.99589, 40.44062]
       },
       {
         "name": "Allentown",
-        "center": [
-          40.60843,
-          -75.49018
-        ]
+        "center": [-75.49018, 40.60843]
       },
       {
         "name": "Erie",
-        "center": [
-          42.12922,
-          -80.08506
-        ]
+        "center": [-80.08506, 42.12922]
       },
       {
         "name": "Reading",
-        "center": [
-          40.33565,
-          -75.92687
-        ]
+        "center": [-75.92687, 40.33565]
       }
     ]
   },
   {
-    "state": "RI",
+    "state": "Rhode Island",
     "cities": [
       {
         "name": "Providence",
-        "center": [
-          41.82399,
-          -71.41283
-        ]
+        "center": [-71.41283, 41.82399]
       },
       {
         "name": "Warwick",
-        "center": [
-          41.7001,
-          -71.41617
-        ]
+        "center": [-71.41617, 41.7001]
       },
       {
         "name": "Cranston",
-        "center": [
-          41.77982,
-          -71.43728
-        ]
+        "center": [-71.43728, 41.77982]
       },
       {
         "name": "Pawtucket",
-        "center": [
-          41.87871,
-          -71.38256
-        ]
+        "center": [-71.38256, 41.87871]
       },
       {
         "name": "East Providence",
-        "center": [
-          41.81371,
-          -71.37005
-        ]
+        "center": [-71.37005, 41.81371]
       }
     ]
   },
   {
-    "state": "SC",
+    "state": "South Carolina",
     "cities": [
       {
         "name": "Columbia",
-        "center": [
-          34.00071,
-          -81.03481
-        ]
+        "center": [-81.03481, 34.00071]
       },
       {
         "name": "Charleston",
-        "center": [
-          32.77657,
-          -79.93092
-        ]
+        "center": [-79.93092, 32.77657]
       },
       {
         "name": "North Charleston",
-        "center": [
-          32.85462,
-          -79.97481
-        ]
+        "center": [-79.97481, 32.85462]
       },
       {
         "name": "Mount Pleasant",
-        "center": [
-          32.79407,
-          -79.86259
-        ]
+        "center": [-79.86259, 32.79407]
       },
       {
         "name": "Rock Hill",
-        "center": [
-          34.92487,
-          -81.02508
-        ]
+        "center": [-81.02508, 34.92487]
       }
     ]
   },
   {
-    "state": "SD",
+    "state": "South Dakota",
     "cities": [
       {
         "name": "Sioux Falls",
-        "center": [
-          43.54997,
-          -96.70033
-        ]
+        "center": [-96.70033, 43.54997]
       },
       {
         "name": "Rapid City",
-        "center": [
-          44.08054,
-          -103.23101
-        ]
+        "center": [-103.23101, 44.08054]
       },
       {
         "name": "Aberdeen",
-        "center": [
-          45.4647,
-          -98.48648
-        ]
+        "center": [-98.48648, 45.4647]
       },
       {
         "name": "Brookings",
-        "center": [
-          44.31136,
-          -96.79839
-        ]
+        "center": [-96.79839, 44.31136]
       },
       {
         "name": "Watertown",
-        "center": [
-          44.89941,
-          -97.11507
-        ]
+        "center": [-97.11507, 44.89941]
       }
     ]
   },
   {
-    "state": "TN",
+    "state": "Tennessee",
     "cities": [
       {
         "name": "Nashville",
-        "center": [
-          36.16589,
-          -86.78444
-        ]
+        "center": [-86.78444, 36.16589]
       },
       {
         "name": "New South Memphis",
-        "center": [
-          35.08676,
-          -90.05676
-        ]
+        "center": [-90.05676, 35.08676]
       },
       {
         "name": "Memphis",
-        "center": [
-          35.14953,
-          -90.04898
-        ]
+        "center": [-90.04898, 35.14953]
       },
       {
         "name": "Knoxville",
-        "center": [
-          35.96064,
-          -83.92074
-        ]
+        "center": [-83.92074, 35.96064]
       },
       {
         "name": "Chattanooga",
-        "center": [
-          35.04563,
-          -85.30968
-        ]
+        "center": [-85.30968, 35.04563]
       }
     ]
   },
   {
-    "state": "TX",
+    "state": "Texas",
     "cities": [
       {
         "name": "Houston",
-        "center": [
-          29.76328,
-          -95.36327
-        ]
+        "center": [-95.36327, 29.76328]
       },
       {
         "name": "San Antonio",
-        "center": [
-          29.42412,
-          -98.49363
-        ]
+        "center": [-98.49363, 29.42412]
       },
       {
         "name": "Dallas",
-        "center": [
-          32.78306,
-          -96.80667
-        ]
+        "center": [-96.80667, 32.78306]
       },
       {
         "name": "Austin",
-        "center": [
-          30.26715,
-          -97.74306
-        ]
+        "center": [-97.74306, 30.26715]
       },
       {
         "name": "Fort Worth",
-        "center": [
-          32.72541,
-          -97.32085
-        ]
+        "center": [-97.32085, 32.72541]
       }
     ]
   },
   {
-    "state": "UT",
+    "state": "Utah",
     "cities": [
       {
         "name": "Salt Lake City",
-        "center": [
-          40.76078,
-          -111.89105
-        ]
+        "center": [-111.89105, 40.76078]
       },
       {
         "name": "West Valley City",
-        "center": [
-          40.69161,
-          -112.00105
-        ]
+        "center": [-112.00105, 40.69161]
       },
       {
         "name": "Provo",
-        "center": [
-          40.23384,
-          -111.65853
-        ]
+        "center": [-111.65853, 40.23384]
       },
       {
         "name": "West Jordan",
-        "center": [
-          40.60967,
-          -111.9391
-        ]
+        "center": [-111.9391, 40.60967]
       },
       {
         "name": "Orem",
-        "center": [
-          40.2969,
-          -111.69465
-        ]
+        "center": [-111.69465, 40.2969]
       }
     ]
   },
   {
-    "state": "VA",
+    "state": "Virginia",
     "cities": [
       {
         "name": "Virginia Beach",
-        "center": [
-          36.85293,
-          -75.97799
-        ]
+        "center": [-75.97799, 36.85293]
       },
       {
         "name": "Norfolk",
-        "center": [
-          36.84681,
-          -76.28522
-        ]
+        "center": [-76.28522, 36.84681]
       },
       {
         "name": "Chesapeake",
-        "center": [
-          36.81904,
-          -76.27494
-        ]
+        "center": [-76.27494, 36.81904]
       },
       {
         "name": "Richmond",
-        "center": [
-          37.55376,
-          -77.46026
-        ]
+        "center": [-77.46026, 37.55376]
       },
       {
         "name": "Arlington",
-        "center": [
-          38.88101,
-          -77.10428
-        ]
+        "center": [-77.10428, 38.88101]
       }
     ]
   },
   {
-    "state": "VT",
+    "state": "Vermont",
     "cities": [
       {
         "name": "Burlington",
-        "center": [
-          44.47588,
-          -73.21207
-        ]
+        "center": [-73.21207, 44.47588]
       },
       {
         "name": "South Burlington",
-        "center": [
-          44.46699,
-          -73.17096
-        ]
+        "center": [-73.17096, 44.46699]
       },
       {
         "name": "Colchester",
-        "center": [
-          44.54394,
-          -73.14791
-        ]
+        "center": [-73.14791, 44.54394]
       },
       {
         "name": "Rutland",
-        "center": [
-          43.61062,
-          -72.97261
-        ]
+        "center": [-72.97261, 43.61062]
       },
       {
         "name": "Essex Junction",
-        "center": [
-          44.49061,
-          -73.11096
-        ]
+        "center": [-73.11096, 44.49061]
       }
     ]
   },
   {
-    "state": "WA",
+    "state": "Washington",
     "cities": [
       {
         "name": "Seattle",
-        "center": [
-          47.60621,
-          -122.33207
-        ]
+        "center": [-122.33207, 47.60621]
       },
       {
         "name": "Tri-Cities",
-        "center": [
-          46.2454,
-          -119.19617
-        ]
+        "center": [-119.19617, 46.2454]
       },
       {
         "name": "Spokane",
-        "center": [
-          47.65966,
-          -117.42908
-        ]
+        "center": [-117.42908, 47.65966]
       },
       {
         "name": "Tacoma",
-        "center": [
-          47.25288,
-          -122.44429
-        ]
+        "center": [-122.44429, 47.25288]
       },
       {
         "name": "Vancouver",
-        "center": [
-          45.63873,
-          -122.66149
-        ]
+        "center": [-122.66149, 45.63873]
       }
     ]
   },
   {
-    "state": "WI",
+    "state": "Wisconsin",
     "cities": [
       {
         "name": "Milwaukee",
-        "center": [
-          43.0389,
-          -87.90647
-        ]
+        "center": [-87.90647, 43.0389]
       },
       {
         "name": "Madison",
-        "center": [
-          43.07305,
-          -89.40123
-        ]
+        "center": [-89.40123, 43.07305]
       },
       {
         "name": "Green Bay",
-        "center": [
-          44.51916,
-          -88.01983
-        ]
+        "center": [-88.01983, 44.51916]
       },
       {
         "name": "Kenosha",
-        "center": [
-          42.58474,
-          -87.82119
-        ]
+        "center": [-87.82119, 42.58474]
       },
       {
         "name": "Racine",
-        "center": [
-          42.72613,
-          -87.78285
-        ]
+        "center": [-87.78285, 42.72613]
       }
     ]
   },
   {
-    "state": "WV",
+    "state": "West Virginia",
     "cities": [
       {
         "name": "Charleston",
-        "center": [
-          38.34982,
-          -81.63262
-        ]
+        "center": [-81.63262, 38.34982]
       },
       {
         "name": "Huntington",
-        "center": [
-          38.41925,
-          -82.44515
-        ]
+        "center": [-82.44515, 38.41925]
       },
       {
         "name": "Parkersburg",
-        "center": [
-          39.26674,
-          -81.56151
-        ]
+        "center": [-81.56151, 39.26674]
       },
       {
         "name": "Morgantown",
-        "center": [
-          39.62953,
-          -79.9559
-        ]
+        "center": [-79.9559, 39.62953]
       },
       {
         "name": "Wheeling",
-        "center": [
-          40.06396,
-          -80.72091
-        ]
+        "center": [-80.72091, 40.06396]
       }
     ]
   },
   {
-    "state": "WY",
+    "state": "Wyoming",
     "cities": [
       {
         "name": "Cheyenne",
-        "center": [
-          41.13998,
-          -104.82025
-        ]
+        "center": [-104.82025, 41.13998]
       },
       {
         "name": "Casper",
-        "center": [
-          42.86663,
-          -106.31308
-        ]
+        "center": [-106.31308, 42.86663]
       },
       {
         "name": "Gillette",
-        "center": [
-          44.29109,
-          -105.50222
-        ]
+        "center": [-105.50222, 44.29109]
       },
       {
         "name": "Laramie",
-        "center": [
-          41.31137,
-          -105.5911
-        ]
+        "center": [-105.5911, 41.31137]
       },
       {
         "name": "Rock Springs",
-        "center": [
-          41.58746,
-          -109.2029
-        ]
+        "center": [-109.2029, 41.58746]
       }
     ]
   }

@@ -193,3 +193,56 @@ function getNewCenter(place) {
   return { newCenter, maxZoom };
 }
 export { getNewCenter };
+
+[
+  {
+    state: "AZ",
+    cities: [
+      {
+        name: "Phoenix",
+        center: [33.44838, -112.07404],
+      },
+      {
+        name: "Tucson",
+        center: [32.22174, -110.92648],
+      },
+      {
+        name: "Mesa",
+        center: [33.42227, -111.82264],
+      },
+      {
+        name: "Chandler",
+        center: [33.30616, -111.84125],
+      },
+      {
+        name: "Gilbert",
+        center: [33.35283, -111.78903],
+      },
+    ],
+  },
+  {
+    state: "GA",
+    cities: [
+      {
+        name: "Atlanta",
+        center: [33.749, -84.38798],
+      },
+      {
+        name: "Columbus",
+        center: [32.46098, -84.98771],
+      },
+      {
+        name: "Savannah",
+        center: [32.08354, -81.09983],
+      },
+      {
+        name: "Athens",
+        center: [33.96095, -83.37794],
+      },
+      {
+        name: "South Fulton",
+        center: [33.59259, -84.67294],
+      },
+    ],
+  },
+];

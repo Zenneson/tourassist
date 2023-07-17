@@ -5,6 +5,7 @@ import centerOfMass from "@turf/center-of-mass";
 import bbox from "@turf/bbox";
 import {
   useMantineTheme,
+  ActionIcon,
   Autocomplete,
   Box,
   Button,
@@ -17,6 +18,7 @@ import {
   NavLink,
   Popover,
   LoadingOverlay,
+  Drawer,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import {
@@ -29,6 +31,7 @@ import {
   IconList,
   IconX,
   IconCheck,
+  IconArrowBarToRight,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
@@ -50,6 +53,11 @@ export default function Mymap({
   const center = useRef();
   const router = useRouter();
   const [area, setArea] = useState({ label: "" });
+  const [headerEm, setHeaderEm] = useState(0);
+  const [locationDrawer, setLocationDrawer] = useState(false);
+  const [lngLat, setLngLat] = useState([0, 0]);
+  const [showStates, setShowStates] = useState(false);
+  const [showMarker, setShowMarker] = useState(false);
   const [citySubTitle, setCitySubTitle] = useState("");
   const [isoName, setIsoName] = useState("");
   const [countrySearch, setCountrySearch] = useState("");
@@ -57,7 +65,6 @@ export default function Mymap({
   const [cityData, setCityData] = useState([]);
   const [countryData, setCountryData] = useState([]);
   const [borderBox, setBorderbox] = useState([]);
-  const [showStates, setShowStates] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isCity, setIsCity] = useState(false);
   const [isCountry, setIsCountry] = useState(false);
@@ -174,14 +181,26 @@ export default function Mymap({
     return center.geometry.coordinates;
   }
 
-  // TODO - goToCountry
-  function goToCountry(feature) {
+  function calculateFontSize(text) {
+    const containerWidthPx = 700;
+    const stringLength = text.length;
+    let fontSizePx = containerWidthPx / stringLength;
+    let fontSizeEm = fontSizePx / 16;
+
+    fontSizeEm = Math.max(fontSizeEm, 1.7);
+    fontSizeEm = Math.min(fontSizeEm, 6.5);
+
+    return fontSizeEm;
+  }
+
+  // TODO - locationHandler
+  function locationHandler(feature) {
     if (feature == null) return;
     let locationObj = {};
     locationObj.type =
       feature.group ||
       (feature.source === "country-boundaries" ? "country" : "region") ||
-      "";
+      "city";
     locationObj.type = locationObj.type.toLowerCase();
     locationObj.label =
       feature.label ||
@@ -198,31 +217,41 @@ export default function Mymap({
     locationObj.state = feature.region || feature.properties?.NAME || "";
     locationObj.center = feature.center || getCords(feature) || [];
     locationObj.border = feature.border || [];
+    locationObj.isState =
+      locationObj.type === "region" && locationObj.country === "United States"
+        ? true
+        : false;
 
+    setLngLat(locationObj.center);
     setArea(locationObj);
+    setHeaderEm(calculateFontSize(locationObj.label));
+    setCountrySearch("");
+    setCitySearch("");
+    setCountryData([]);
+    setCityData([]);
+    setLocationDrawer(true);
+    setShowMarker(
+      locationObj.type !== "country" &&
+        locationObj.type === "city" &&
+        locationObj.country === "United States"
+    );
     setShowStates(
       locationObj.country === "United States" && locationObj.type === "country"
     );
 
-    const coordinates = getNewCenter(locationObj).newCenter;
-    const maxZoom = getNewCenter(locationObj).maxZoom;
-    mapRef.current.flyTo({
-      center: coordinates,
-      zoom: 3,
-      duration: 800,
-      pitch: 0,
-    });
+    if (
+      (locationObj.country === "United States" &&
+        locationObj.type === "region") ||
+      locationObj.type !== "city"
+    )
+      fetchCities(locationObj);
 
-    setTimeout(() => {
-      mapRef.current.flyTo({
-        center: coordinates,
-        duration: 1500,
-        zoom: locationObj.type === "city" ? 12 : maxZoom,
-        maxZoom: maxZoom,
-        pitch: locationObj.type === "city" ? 75 : 40,
-        linear: false,
-      });
-    }, 400);
+    const coordinates =
+      locationObj.type === "country"
+        ? getNewCenter(locationObj).newCenter
+        : locationObj.center;
+    const maxZoom = getNewCenter(locationObj).maxZoom;
+    goToLocation(locationObj.type, coordinates, maxZoom, area.country);
 
     // let isSelection = true ? feature?.text : false;
     // let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
@@ -308,6 +337,29 @@ export default function Mymap({
     // setCountryData([]);
   }
 
+  const goToLocation = (type, center, maxZoom, location) => {
+    mapRef.current.flyTo({
+      center: center,
+      zoom: 3,
+      duration: 800,
+      pitch: 0,
+    });
+
+    setTimeout(() => {
+      mapRef.current.flyTo({
+        center: center,
+        duration: 1500,
+        zoom: type !== "country" && location !== "United States" ? 12 : maxZoom,
+        maxZoom: maxZoom,
+        pitch:
+          (location !== "United States" && type === "region") || type === "city"
+            ? 75
+            : 40,
+        linear: false,
+      });
+    }, 400);
+  };
+
   const addPlaces = (place) => {
     let newPlace = JSON.parse(JSON.stringify(place));
     newPlace.id = place.id;
@@ -347,7 +399,7 @@ export default function Mymap({
       <Box ref={ref}>
         <Box
           p={5}
-          onClick={() => goToCountry(data)}
+          onClick={() => locationHandler(data)}
           sx={{
             cursor: "pointer",
             transitions: "all 0.2s ease-in-out",
@@ -368,7 +420,6 @@ export default function Mymap({
     );
   });
 
-  // TODO - Handle Change
   const handleChange = async (field) => {
     let endpoint;
     switch (field) {
@@ -418,11 +469,12 @@ export default function Mymap({
     }
   };
 
-  const fetchCities = async (location, isUS = false) => {
+  const fetchCities = async (location) => {
     try {
-      const path = isUS
-        ? "/data/usacitiesdata.json"
-        : "/data/worldcitiesdata.json";
+      const path =
+        location.country === "United States"
+          ? "/data/uscitiesdata.json"
+          : "/data/worldcitiesdata.json";
       const res = await fetch(path);
       const data = await res.json();
 
@@ -432,13 +484,18 @@ export default function Mymap({
         };
       }
 
-      const filterKey = isUS ? "state" : "country";
-      const dataArray = data.filter((region) => region[filterKey] === location);
+      const filterKey =
+        location.country === "United States" && location.type === "region"
+          ? "state"
+          : "country";
+      const dataArray = data.filter(
+        (region) => region[filterKey] === location.label
+      );
       const regionCities = dataArray[0]?.cities;
       let topFive = [];
       regionCities &&
         regionCities.map((city) => {
-          topFive.push(city.name);
+          topFive.push([city.name, city.center]);
         });
       setTopCities(topFive);
     } catch (error) {
@@ -450,89 +507,58 @@ export default function Mymap({
   };
 
   const topCitiesList = topCities.map((city, index) => (
-    // Menu item for Top Cities
-    <NavLink
-      py={5}
-      key={index}
-      icon={
+    <Group key={index} position="right">
+      {/* Menu item for Top Cities */}
+      <Group
+        pb={1}
+        opacity={0.8}
+        spacing={10}
+        sx={{
+          pointerEvents: "all",
+          cursor: "pointer",
+          transition: "all 150ms ease",
+          "&:hover": {
+            transform: "scale(1.05)",
+            backgroundColor: "rgba(0,0,0,0)",
+            opacity: 1,
+          },
+          "&:active": {
+            transform: "scale(1)",
+          },
+        }}
+        onClick={() => {
+          setShowMarker(true);
+          setLngLat(city[1]);
+          goToLocation("city", city[1], 12, area.country);
+        }}
+      >
         <IconMapPin
-          size={15}
+          size={12}
           color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
         />
-      }
-      label={
-        <Flex align={"center"} fs={"italic"} fz={13} fw={600}>
-          <Text
-            span
-            w={350}
-            truncate
-            sx={{
-              textTransform: "capitalize",
-            }}
-          >
-            {city.city ? city.city.toLowerCase() : city}
-          </Text>
-        </Flex>
-      }
-      sx={{
-        opacity: 0.7,
-        "&:hover": {
-          transform: "scale(1.1) translateX(17px)",
-          transition: "all 150ms ease",
-          backgroundColor: "rgba(0,0,0,0)",
-          opacity: 1,
-        },
-        "&:active": {
-          transform: "scale(1)",
-        },
-      }}
-      onClick={() => {
-        getTopCitiesSpot(city.city ? city.city.toLowerCase() : city);
-      }}
-    />
+        <Text lineClamp={1} truncate={true} w={180} fw={100} fz={14}>
+          {city[0]}
+        </Text>
+      </Group>
+    </Group>
   ));
 
-  // TODO - goToTopCitiesSpot
-  const getTopCitiesSpot = async (field) => {
-    try {
-      const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${field}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&limit=1&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`
-      );
-      const results = await response.json();
-      const data = results.features.map((feature) => ({
-        label: feature.label,
-        place_name: feature.place_name,
-        place_type: feature.place_type,
-        center: feature.center,
-        geometry: feature.geometry,
-        text: feature.text,
-        bbox: feature.bbox,
-        shortcode: feature.properties.short_code,
-      }));
-      if (field === "city") setCityData(data);
-      if (field === "country") setCountryData(data);
-      goToCountry(data[0]);
-    } catch (error) {
-      console.log("Error fetching data for Country Autocomplete: ", error);
-    }
-  };
-
-  const onClose = () => {
+  const reset = () => {
     mapRef.current.flyTo({
       zoom: 2.5,
       duration: 1000,
       pitch: 0,
     });
-    setCitySubTitle("");
-    setShowModal(false);
-    setIsCity(false);
-    setIsCountry(false);
-    setTourListDropDown(false);
+    setLngLat([0, 0]);
+    setShowMarker(false);
+    setArea({ label: "" });
+    setShowStates(false);
+    setLocationDrawer(false);
+    setTopCities([]);
     setCityData([]);
     setCountryData([]);
     setCitySearch("");
     setCountrySearch("");
-    setTopCities([]);
   };
 
   const showTourList = () => {
@@ -557,7 +583,7 @@ export default function Mymap({
     showTourList();
     if (checkPlace(placeLocation) === false) {
       addPlaces(placeLocation);
-      onClose();
+      reset();
     } else {
       notifications.show({
         color: "red",
@@ -572,6 +598,100 @@ export default function Mymap({
   return (
     <>
       <Loader pageLoaded={mapLoaded} />
+      {/* TODO - Drawer */}
+      <Drawer
+        size={700}
+        position="right"
+        opened={locationDrawer}
+        withOverlay={false}
+        withCloseButton={false}
+        onClose={reset}
+        styles={(theme) => ({
+          content: {
+            pointerEvents: "none",
+            boxShadow: "none",
+            paddingTop: 100,
+            overflow: "visible",
+            background:
+              theme.colorScheme === "dark"
+                ? "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(11,12,12,1) 100%)"
+                : "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(255, 255, 255, 1) 100%)",
+          },
+        })}
+      >
+        <Box>
+          <Flex w={"100"} gap={5} justify={"flex-end"} align={"center"}>
+            <ActionIcon
+              size={"xl"}
+              mr={10}
+              variant="transparent"
+              onClick={reset}
+              opacity={0.3}
+              sx={{
+                pointerEvents: "all",
+                transform: "scale(1.5)",
+                transition: "all 150ms ease-in-out",
+                "&:hover": {
+                  opacity: 1,
+                  transform: "scale(1.55)",
+                },
+              }}
+            >
+              <IconArrowBarToRight
+                color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
+                stroke={3}
+                size={70}
+              />
+            </ActionIcon>
+            <Title
+              lineClamp={1}
+              truncate={true}
+              fw={900}
+              fz={headerEm + "em"}
+              variant="gradient"
+              gradient={{
+                from: theme.colorScheme === "dark" ? "#00E8FC" : "#fa7500",
+                to: theme.colorScheme === "dark" ? "#FFF" : "#000",
+                deg: 45,
+              }}
+              sx={{
+                textTransform: "uppercase",
+                textShadow: `0 3px 5px ${
+                  theme.colorScheme === "dark"
+                    ? "rgba(255, 255, 255, 0.25)"
+                    : "rgba(0, 0, 0, 0.15)"
+                }`,
+              }}
+            >
+              {area.label}
+            </Title>
+          </Flex>
+          <Box
+            top={-15}
+            pos={"relative"}
+            hidden={area.country === "United States" && area.type === "country"}
+          >
+            <Divider
+              size="xs"
+              my="xs"
+              ml={"65%"}
+              w={"35&"}
+              color={theme.colorScheme === "dark" ? "white" : "dark"}
+              labelPosition={"left"}
+              label={
+                <Text
+                  fz={12}
+                  fs={"italic"}
+                  color={theme.colorScheme === "dark" ? "white" : "dark"}
+                >
+                  Top Cities
+                </Text>
+              }
+            />
+            <Box>{topCitiesList}</Box>
+          </Box>
+        </Box>
+      </Drawer>
       {places.length >= 1 && !listOpened && !mapSpin && (
         // Tour List Button
         <Button
@@ -607,7 +727,7 @@ export default function Mymap({
           centered
           zIndex={100}
           opened={showModal}
-          onClose={onClose}
+          onClose={reset}
           padding={"15px 30px 20px 30px"}
           size={"470px"}
           overlayProps={{
@@ -849,18 +969,13 @@ export default function Mymap({
                 my="xs"
                 labelPosition={topCities.length === 0 ? "center" : "left"}
                 label={
-                  topCities.length > 0 ? (
-                    <Text
-                      fz={12}
-                      fs={"italic"}
-                      color={theme.colorScheme === "dark" ? "white" : "dark"}
-                    >
-                      Top {topCities.length === 1 ? "City" : "Cities"} in{" "}
-                      {area.label} by population
-                    </Text>
-                  ) : (
-                    <IconMapSearch size={20} />
-                  )
+                  <Text
+                    fz={12}
+                    fs={"italic"}
+                    color={theme.colorScheme === "dark" ? "white" : "dark"}
+                  >
+                    Top Cities in {area.label} by population
+                  </Text>
                 }
               />
               <Box display={topCities.length === 0 ? "none" : "block"}>
@@ -878,7 +993,7 @@ export default function Mymap({
                 mb={10}
                 withinPortal
                 itemComponent={AutoCompItem}
-                onChange={function (e) {
+                onChange={(e) => {
                   setCitySearch(e);
                   handleChange("city");
                 }}
@@ -911,14 +1026,14 @@ export default function Mymap({
             itemComponent={AutoCompItem}
             value={countrySearch}
             placeholder="Where would you like to go?"
-            onItemSubmit={(e) => goToCountry(e)}
+            onItemSubmit={(e) => locationHandler(e)}
             data={countryData}
             filter={(id, item) => item}
             style={{
               width: "400px",
               zIndex: 200,
             }}
-            onChange={function (e) {
+            onChange={(e) => {
               setCountrySearch(e);
               handleChange("country");
             }}
@@ -949,7 +1064,7 @@ export default function Mymap({
           keyboard={false}
           ref={mapRef}
           onClick={(e) => {
-            goToCountry(e.features[0]);
+            locationHandler(e.features[0]);
           }}
           projection="globe"
           doubleClickZoom={false}
@@ -975,15 +1090,15 @@ export default function Mymap({
               setPlaces={setPlaces}
             />
           )}
-          {isCity && (
+          {showMarker && (
             <Marker
               color={
                 theme.colorScheme === "dark"
                   ? " rgba(0, 232, 250, 0.8)"
                   : "rgba(250, 117, 0, 0.8)"
               }
-              longitude={area.center[0]}
-              latitude={area.center[1]}
+              longitude={lngLat[0]}
+              latitude={lngLat[1]}
               offsetLeft={-20}
               offsetTop={-10}
               scale={5}
