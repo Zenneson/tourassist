@@ -1,8 +1,8 @@
-function getNewCenter(orgCenter, place) {
-  let newCenter = orgCenter;
+function getNewCenter(place) {
+  let newCenter = place.center;
   let maxZoom = 5.5;
 
-  switch (place) {
+  switch (place.label) {
     case "United States":
       newCenter = [-98.5795, 43];
       maxZoom = 4;

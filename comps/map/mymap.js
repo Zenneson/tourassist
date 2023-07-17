@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
 import Map, { Marker, Source, Layer } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
@@ -49,18 +49,16 @@ export default function Mymap({
   const mapRef = useRef();
   const center = useRef();
   const router = useRouter();
-  const [regionName, setRegionName] = useState("");
+  const [area, setArea] = useState({ label: "" });
   const [citySubTitle, setCitySubTitle] = useState("");
   const [isoName, setIsoName] = useState("");
   const [countrySearch, setCountrySearch] = useState("");
   const [citySearch, setCitySearch] = useState("");
   const [cityData, setCityData] = useState([]);
   const [countryData, setCountryData] = useState([]);
-  const [placeLngLat, setPlaceLngLat] = useState([]);
   const [borderBox, setBorderbox] = useState([]);
   const [showStates, setShowStates] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [isState, setIsState] = useState(false);
   const [isCity, setIsCity] = useState(false);
   const [isCountry, setIsCountry] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
@@ -70,7 +68,6 @@ export default function Mymap({
     defaultValue: null,
   });
   const [topCities, setTopCities] = useState([]);
-  const [cityListSet, setCityListSet] = useState(false);
   const [geoLat, setGeoLat] = useSessionStorage({
     key: "geoLatState",
     defaultValue: null,
@@ -100,7 +97,10 @@ export default function Mymap({
     pitch: 0,
   };
 
-  const filter = useMemo(() => ["in", "name_en", regionName], [regionName]);
+  const filter = useMemo(
+    () => ["in", "name_en", area.label.toString()],
+    [area.label]
+  );
 
   useEffect(() => {
     router.prefetch("/tripplanner");
@@ -150,9 +150,6 @@ export default function Mymap({
     }
     return () => clearInterval(rotationIntervalId);
   }, [
-    regionName,
-    isoName,
-    placeLngLat,
     visible,
     user,
     mapRef,
@@ -172,106 +169,143 @@ export default function Mymap({
     setKey((prevKey) => prevKey + 1);
   }, [theme.colorScheme, setMapLoaded]);
 
+  function getCords(feature) {
+    const center = centerOfMass(feature);
+    return center.geometry.coordinates;
+  }
+
+  // TODO - goToCountry
   function goToCountry(feature) {
     if (feature == null) return;
-    setIsState(feature?.properties?.STATE);
-    setPlaceLngLat(feature?.center);
-    let isSelection = true ? feature?.text : false;
-    let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
-
-    let dashIndex = feature?.layer?.id.indexOf("-");
-    let placeType = feature?.layer?.id.substring(0, dashIndex);
-    placeType = isSelection ? feature?.place_type[0] : placeType;
-    setIsCountry(placeType === "country" || placeType === "country-boundries");
-
-    let border = feature?.text ? feature.bbox : bbox(feature);
-    setBorderbox(border);
-
-    let location =
-      feature?.properties?.name_en ||
-      feature?.properties?.NAME ||
-      feature?.text ||
+    let locationObj = {};
+    locationObj.type =
+      feature.group ||
+      (feature.source === "country-boundaries" ? "country" : "region") ||
       "";
+    locationObj.type = locationObj.type.toLowerCase();
+    locationObj.label =
+      feature.label ||
+      feature.properties.name_en ||
+      feature.properties.name ||
+      feature.properties.NAME ||
+      "";
+    locationObj.country =
+      feature.country ||
+      (feature.properties.NAME && "United States") ||
+      feature.properties.name ||
+      feature.properties.name_en ||
+      "";
+    locationObj.state = feature.region || feature.properties?.NAME || "";
+    locationObj.center = feature.center || getCords(feature) || [];
+    locationObj.border = feature.border || [];
 
-    if (location) {
-      center.current = isSelection
-        ? feature.geometry.coordinates
-        : centerOfMass(feature);
-      setShowStates(location === "United States");
+    setArea(locationObj);
+    setShowStates(
+      locationObj.country === "United States" && locationObj.type === "country"
+    );
 
-      const { newCenter, maxZoom } =
-        getNewCenter(center.current.geometry?.coordinates, location) || {};
-      const index = feature.place_name?.indexOf(",");
-      let result = feature.place_name?.substring(index + 1);
-      {
-        feature.layer?.source === "states-boundaries"
-          ? (result = "United States")
-          : result;
-      }
-      setCitySubTitle(result);
-      setIsCity(
-        isSelection &&
-          (feature?.place_type.includes("place") ||
-            (feature?.place_type[0] === "region" &&
-              location === "United States"))
-      );
+    const coordinates = getNewCenter(locationObj).newCenter;
+    const maxZoom = getNewCenter(locationObj).maxZoom;
+    mapRef.current.flyTo({
+      center: coordinates,
+      zoom: 3,
+      duration: 800,
+      pitch: 0,
+    });
 
-      setPlaceLocation({
-        place: location,
-        region: result,
-      });
-
+    setTimeout(() => {
       mapRef.current.flyTo({
-        center: isSelection ? feature.geometry.coordinates : newCenter,
-        zoom:
-          location === "United States" && (isState || isSelection) ? 5.5 : 3.5,
-        duration: 800,
-        pitch: 0,
+        center: coordinates,
+        duration: 1500,
+        zoom: locationObj.type === "city" ? 12 : maxZoom,
+        maxZoom: maxZoom,
+        pitch: locationObj.type === "city" ? 75 : 40,
+        linear: false,
       });
+    }, 400);
 
-      setTimeout(() => {
-        mapRef.current.flyTo({
-          center: isSelection ? feature.geometry.coordinates : newCenter,
-          duration: 1500,
-          zoom:
-            isSelection &&
-            (feature?.place_type.includes("place") ||
-              (feature?.place_type[0] === "region" &&
-                location === "United States"))
-              ? 12
-              : maxZoom,
-          maxZoom: maxZoom,
-          pitch:
-            isSelection &&
-            (feature?.place_type.includes("place") ||
-              (feature?.place_type[0] === "region" &&
-                location === "United States"))
-              ? 75
-              : 40,
-          linear: false,
-        });
-      }, 400);
+    // let isSelection = true ? feature?.text : false;
+    // let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
+    // setIsCountry(placeType === "country" || placeType === "country-boundries");
+    // setBorderbox(border);
 
-      if (location !== "United States") {
-        setShowModal(true);
-      }
-    }
+    /////////////////////////////////////////////////////////////////////////////////////////
 
-    console;
-    if (
-      feature.layer?.source === "states-boundaries" ||
-      isState ||
-      location === "United States"
-    ) {
-      setCitySubTitle("United States");
-      fetchUSCities(location);
-    } else {
-      fetchWorldCities(location);
-    }
-    setRegionName(location);
-    setIsoName(isoName);
-    setCityData([]);
-    setCountryData([]);
+    // if (location) {
+    //   center.current = isSelection
+    //     ? feature.geometry.coordinates
+    //     : centerOfMass(feature);
+    //   setShowStates(location === "United States");
+
+    //   const index = feature.place_name?.indexOf(",");
+    //   let result = feature.place_name?.substring(index + 1);
+    //   {
+    //     feature.layer?.source === "states-boundaries"
+    //       ? (result = "United States")
+    //       : result;
+    //   }
+    //   setCitySubTitle(result);
+    //   setIsCity(
+    //     isSelection &&
+    //       (feature?.place_type.includes("place") ||
+    //         (feature?.place_type[0] === "region" &&
+    //           location === "United States"))
+    //   );
+
+    //   setPlaceLocation({
+    //     place: location,
+    //     region: result,
+    //   });
+
+    //   mapRef.current.flyTo({
+    //     center: isSelection ? feature.geometry.coordinates : newCenter,
+    //     zoom:
+    //       location === "United States" && (area.state || isSelection) ? 5.5 : 3.5,
+    //     duration: 800,
+    //     pitch: 0,
+    //   });
+
+    //   setTimeout(() => {
+    //     mapRef.current.flyTo({
+    //       center: isSelection ? feature.geometry.coordinates : newCenter,
+    //       duration: 1500,
+    //       zoom:
+    //         isSelection &&
+    //         (feature?.place_type.includes("place") ||
+    //           (feature?.place_type[0] === "region" &&
+    //             location === "United States"))
+    //           ? 12
+    //           : maxZoom,
+    //       maxZoom: maxZoom,
+    //       pitch:
+    //         isSelection &&
+    //         (feature?.place_type.includes("place") ||
+    //           (feature?.place_type[0] === "region" &&
+    //             location === "United States"))
+    //           ? 75
+    //           : 40,
+    //       linear: false,
+    //     });
+    //   }, 400);
+
+    //   if (location !== "United States") {
+    //     setShowModal(true);
+    //   }
+    // }
+
+    // if (
+    //   feature.layer?.source === "states-boundaries" ||
+    //   area.state ||
+    //   location === "United States"
+    // ) {
+    //   setCitySubTitle("United States");
+    //   fetchCities(location, true);
+    // } else {
+    //   fetchCities(location);
+    // }
+    // setIsoName(isoName);
+    // setCityData([]);
+    // setCountryData([]);
   }
 
   const addPlaces = (place) => {
@@ -292,20 +326,54 @@ export default function Mymap({
     return placeExists;
   };
 
-  const onEvent = (event) => {
-    const feature = event.features[0];
-    goToCountry(feature);
-  };
+  function placeType(place) {
+    if (place === "country") return "Country";
+    if (place === "region") return "Region";
+    if (place === "place") return "City";
+  }
 
-  const handleSelect = (e) => {
-    goToCountry(e);
-  };
+  const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
+    const { label, region, country, group, center, border, fullname } = props;
+    const data = {
+      label,
+      region,
+      country,
+      group,
+      center,
+      border,
+      fullname,
+    };
+    return (
+      <Box ref={ref}>
+        <Box
+          p={5}
+          onClick={() => goToCountry(data)}
+          sx={{
+            cursor: "pointer",
+            transitions: "all 0.2s ease-in-out",
+            "&:hover": {
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[7]
+                  : theme.colors.gray[0],
+            },
+          }}
+        >
+          <Title order={6}>{label}</Title>
+          <Text fz={12}>
+            {group === "City" ? `${region}, ${country}` : country}
+          </Text>
+        </Box>
+      </Box>
+    );
+  });
 
-  const handleChange = async (field, e) => {
+  // TODO - Handle Change
+  const handleChange = async (field) => {
     let endpoint;
     switch (field) {
       case "country":
-        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place%2Ccountry&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&fuzzyMatch=true&limit=5&types=country%2Cregion%2Cplace&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
         break;
       case "city":
         const [minLng, minLat, maxLng, maxLat] = borderBox;
@@ -322,16 +390,17 @@ export default function Mymap({
         const response = await fetch(endpoint);
         const results = await response.json();
         const data = results.features.map((feature) => ({
-          label: feature.label,
-          value: feature.place_name,
-          place_name: feature.place_name,
-          place_type: feature.place_type,
+          label: feature.text,
+          value: feature.id,
+          type: feature.place_type[0],
+          group: placeType(feature.place_type[0]),
+          country: feature.place_name.split(", ").pop(),
+          region: feature.place_name.split(", ", 2)[1],
           center: feature.center,
-          geometry: feature.geometry,
-          text: feature.text,
-          bbox: feature.bbox,
-          shortcode: feature.properties.short_code,
+          border: feature.bbox,
+          fullname: feature.place_name,
         }));
+
         if (field === "city") setCityData(data);
         if (field === "country") setCountryData(data);
       } catch (error) {
@@ -349,11 +418,13 @@ export default function Mymap({
     }
   };
 
-  const fetchWorldCities = async (regionName) => {
+  const fetchCities = async (location, isUS = false) => {
     try {
-      const res = await fetch("/data/world_cities_july2023.json");
+      const path = isUS
+        ? "/data/usacitiesdata.json"
+        : "/data/worldcitiesdata.json";
+      const res = await fetch(path);
       const data = await res.json();
-      setCityListSet(true);
 
       if (!data) {
         return {
@@ -361,41 +432,12 @@ export default function Mymap({
         };
       }
 
-      const dataArray = data.filter(
-        (country) => country.country === regionName
-      );
-      const countryCities = dataArray[0]?.cities;
+      const filterKey = isUS ? "state" : "country";
+      const dataArray = data.filter((region) => region[filterKey] === location);
+      const regionCities = dataArray[0]?.cities;
       let topFive = [];
-      countryCities &&
-        countryCities.map((city) => {
-          topFive.push(city.name);
-        });
-      setTopCities(topFive);
-    } catch (error) {
-      console.error("Error:", error);
-      return {
-        notFound: true,
-      };
-    }
-  };
-
-  const fetchUSCities = async (regionName) => {
-    try {
-      const res = await fetch("/data/usa_cities_june2023.json");
-      const data = await res.json();
-      setCityListSet(true);
-
-      if (!data) {
-        return {
-          notFound: true,
-        };
-      }
-
-      const dataArray = data.filter((state) => state.state === regionName);
-      const stateCities = dataArray[0]?.cities;
-      let topFive = [];
-      stateCities &&
-        stateCities.map((city) => {
+      regionCities &&
+        regionCities.map((city) => {
           topFive.push(city.name);
         });
       setTopCities(topFive);
@@ -450,15 +492,15 @@ export default function Mymap({
     />
   ));
 
-  const getTopCitiesSpot = async (field, e) => {
+  // TODO - goToTopCitiesSpot
+  const getTopCitiesSpot = async (field) => {
     try {
       const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${field}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&types=place&limit=1&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${field}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&limit=1&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`
       );
       const results = await response.json();
       const data = results.features.map((feature) => ({
         label: feature.label,
-        value: feature.place_name,
         place_name: feature.place_name,
         place_type: feature.place_type,
         center: feature.center,
@@ -481,16 +523,16 @@ export default function Mymap({
       duration: 1000,
       pitch: 0,
     });
-    setRegionName("");
+    setCitySubTitle("");
     setShowModal(false);
     setIsCity(false);
+    setIsCountry(false);
     setTourListDropDown(false);
     setCityData([]);
     setCountryData([]);
     setCitySearch("");
     setCountrySearch("");
     setTopCities([]);
-    setCityListSet(false);
   };
 
   const showTourList = () => {
@@ -502,10 +544,9 @@ export default function Mymap({
   const travelTo = () => {
     setPlaces([
       {
-        place: regionName === "東京都" ? "Tokyo" : regionName,
-        region:
-          citySubTitle && citySubTitle.replace("ecture東京都", "., Japan"),
-        fullName: regionName + "," + citySubTitle,
+        place: area.label,
+        region: citySubTitle,
+        fullName: area.label + "," + citySubTitle,
         costs: ["FLIGHT", "HOTEL"],
       },
     ]);
@@ -523,9 +564,7 @@ export default function Mymap({
         style: { backgroundColor: "#2e2e2e" },
         title: "Loaction already added",
         icon: <IconAlertTriangle size={17} />,
-        message: `${
-          regionName === "東京都" ? "Tokyo" : regionName
-        } was already added to your tour`,
+        message: `${area.label} was already added to your tour`,
       });
     }
   };
@@ -584,7 +623,7 @@ export default function Mymap({
             },
           }}
           title={
-            <Box mb={isCountry || isState ? -15 : 0}>
+            <Box>
               <Title
                 order={1}
                 fw={900}
@@ -601,7 +640,7 @@ export default function Mymap({
                   textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
                 }}
               >
-                {regionName === "東京都" ? "Tokyo" : regionName}
+                {area.label}
               </Title>
               <Text fw={600} size="xs" color="#c0c0c0">
                 {!isCountry &&
@@ -633,7 +672,7 @@ export default function Mymap({
             },
           })}
         >
-          {isCity && !isCountry && !isState && (
+          {isCity && !isCountry && !area.state && (
             <>
               {/* Travel to Button  */}
               <Popover
@@ -681,9 +720,7 @@ export default function Mymap({
                       />
                     }
                     variant="filled"
-                    description={`Start planning a trip to ${
-                      regionName === "東京都" ? "Tokyo" : regionName
-                    }`}
+                    description={`Start planning a trip to ${area.label}`}
                     sx={{
                       borderLeft: "3px solid rgba(0, 0, 0, 0)",
                       "&:hover": {
@@ -710,7 +747,7 @@ export default function Mymap({
                           fw={700}
                           transform="uppercase"
                         >
-                          {regionName === "東京都" ? "Tokyo" : regionName}
+                          {area.label}
                         </Text>
                       </>
                     }
@@ -729,7 +766,7 @@ export default function Mymap({
                     Clear Tour List and Travel to
                     <Text>
                       <Text span color="#81eaf4" fw={700} mx={2}>
-                        {regionName === "東京都" ? "Tokyo" : regionName}
+                        {area.label}
                       </Text>
                       ?
                     </Text>
@@ -774,9 +811,7 @@ export default function Mymap({
                     }}
                   />
                 }
-                description={`Add ${
-                  regionName === "東京都" ? "Tokyo" : regionName
-                } to the Tour List`}
+                description={`Add ${area.label} to the Tour List`}
                 sx={{
                   borderLeft: "3px solid rgba(0, 0, 0, 0)",
                   "&:hover": {
@@ -807,13 +842,8 @@ export default function Mymap({
               />
             </>
           )}
-          {!isCity && (isCountry || isState) && (
+          {!isCity && (isCountry || area.state) && (
             <Box>
-              <LoadingOverlay
-                overlayOpacity={0.7}
-                overlayBlur={3}
-                visible={cityListSet === false}
-              />
               <Divider
                 size="xs"
                 my="xs"
@@ -826,8 +856,7 @@ export default function Mymap({
                       color={theme.colorScheme === "dark" ? "white" : "dark"}
                     >
                       Top {topCities.length === 1 ? "City" : "Cities"} in{" "}
-                      {regionName === "東京都" ? "Tokyo" : regionName} by
-                      population
+                      {area.label} by population
                     </Text>
                   ) : (
                     <IconMapSearch size={20} />
@@ -838,20 +867,20 @@ export default function Mymap({
                 {topCitiesList}
               </Box>
               {/* Search Cities in Selected Region */}
+              {/* TODO - City Auto */}
               <Autocomplete
                 icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-                placeholder={`Search for a city in ${
-                  regionName === "東京都" ? "Tokyo" : regionName
-                }?`}
+                placeholder={`Search for a city in ${area.label}?`}
                 defaultValue=""
                 value={citySearch}
                 mt={15}
                 size="sm"
                 mb={10}
                 withinPortal
+                itemComponent={AutoCompItem}
                 onChange={function (e) {
                   setCitySearch(e);
-                  handleChange("city", e);
+                  handleChange("city");
                 }}
                 onItemSubmit={function (e) {
                   handleSelect(e);
@@ -873,25 +902,34 @@ export default function Mymap({
           w={"100%"}
         >
           {/* Main Place Search */}
+          {/* TODO - Country Auto */}
           <Autocomplete
             icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
             dropdownPosition="top"
             size="md"
-            radius="xl"
             defaultValue=""
+            itemComponent={AutoCompItem}
             value={countrySearch}
             placeholder="Where would you like to go?"
-            onItemSubmit={(e) => handleSelect(e)}
+            onItemSubmit={(e) => goToCountry(e)}
             data={countryData}
-            filter={(value, item) => item}
+            filter={(id, item) => item}
             style={{
-              width: "350px",
+              width: "400px",
               zIndex: 200,
             }}
             onChange={function (e) {
               setCountrySearch(e);
-              handleChange("country", e);
+              handleChange("country");
             }}
+            styles={(theme) => ({
+              dropdown: {
+                backgroundColor:
+                  theme.colorScheme === "dark"
+                    ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                    : theme.fn.rgba(theme.colors.gray[0], 0.95),
+              },
+            })}
           />
         </Flex>
       )}
@@ -911,7 +949,7 @@ export default function Mymap({
           keyboard={false}
           ref={mapRef}
           onClick={(e) => {
-            onEvent(e);
+            goToCountry(e.features[0]);
           }}
           projection="globe"
           doubleClickZoom={false}
@@ -944,8 +982,8 @@ export default function Mymap({
                   ? " rgba(0, 232, 250, 0.8)"
                   : "rgba(250, 117, 0, 0.8)"
               }
-              longitude={placeLngLat[0]}
-              latitude={placeLngLat[1]}
+              longitude={area.center[0]}
+              latitude={area.center[1]}
               offsetLeft={-20}
               offsetTop={-10}
               scale={5}
@@ -1028,7 +1066,16 @@ export default function Mymap({
                     : "rgba(250, 117, 0, 0.8)"
                 }`,
               }}
-              filter={isCity ? false : ["==", "NAME", regionName]}
+              filter={["==", "NAME", area.label]}
+            />
+            <Layer
+              id="state-borders"
+              type="line"
+              paint={{
+                "line-color": "rgba(255, 255, 255, 1)",
+                "line-width": 4,
+              }}
+              filter={["==", "NAME", area.label]}
             />
           </Source>
         </Map>

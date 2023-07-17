@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useMantineTheme } from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import Loader from "./loader";
 
@@ -8,6 +9,7 @@ export function RouterTransition({
   setMainMenuOpened,
   setDropDownOpened,
 }) {
+  const theme = useMantineTheme();
   const router = useRouter();
 
   const [pageLoaded, setPageLoaded] = useState(true);
@@ -56,7 +58,7 @@ export function RouterTransition({
         zIndex={9999}
         autoReset={true}
         size={"sm"}
-        color="#219cee"
+        color={theme.colorScheme === "dark" ? "#219cee" : "#9b1616"}
       />
       <Loader pageLoaded={pageLoaded} />
     </>

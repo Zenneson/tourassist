@@ -56,7 +56,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function Legal({ setMainMenuOpened }) {
+export default function Legal() {
   const theme = useMantineTheme();
   const [linkState, setLinkState] = useState("terms");
   const [active, setActive] = useState(0);
@@ -537,28 +537,7 @@ export default function Legal({ setMainMenuOpened }) {
           <Text fz={10} w={"100%"} ta={"right"}>
             Last Updated: April 30, 2023
           </Text>
-          <Box
-            radius={3}
-            bg={
-              theme.colorScheme === "dark"
-                ? theme.fn.rgba(theme.colors.dark[9], 0.05)
-                : theme.fn.rgba(theme.colors.gray[0], 0.05)
-            }
-            w={"100%"}
-            mt={10}
-            p={20}
-            sx={{
-              border: `1px solid ${
-                theme.colorScheme === "dark"
-                  ? theme.fn.rgba(theme.colors.dark[9], 0.8)
-                  : theme.fn.rgba(theme.colors.gray[0], 0.8)
-              }`,
-              boxShadow: `0 7px 10px 0 ${theme.fn.rgba(
-                theme.colors.dark[9],
-                0.05
-              )}`,
-            }}
-          >
+          <Box className="pagePanel" w={"100%"} mt={10} p={20}>
             <Group spacing={30}>
               <Text w={"80%"} fz={12}>
                 {linkState === "terms"

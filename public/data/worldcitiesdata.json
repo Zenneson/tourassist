@@ -1,0 +1,5996 @@
+[
+  {
+    "country": "Afghanistan",
+    "shortcode": "AF",
+    "cities": [
+      {
+        "name": "Kabul",
+        "center": [34.52813, 69.17233]
+      },
+      {
+        "name": "Herāt",
+        "center": [34.34817, 62.19967]
+      },
+      {
+        "name": "Mazār-e Sharīf",
+        "center": [36.70904, 67.11087]
+      },
+      {
+        "name": "Kandahār",
+        "center": [31.61332, 65.71013]
+      },
+      {
+        "name": "Jalālābād",
+        "center": [34.42647, 70.45153]
+      }
+    ]
+  },
+  {
+    "country": "Albania",
+    "shortcode": "AL",
+    "cities": [
+      {
+        "name": "Tirana",
+        "center": [41.3275, 19.81889]
+      },
+      {
+        "name": "Durrës",
+        "center": [41.32355, 19.45469]
+      },
+      {
+        "name": "Elbasan",
+        "center": [41.1125, 20.08222]
+      },
+      {
+        "name": "Vlorë",
+        "center": [40.4686, 19.48318]
+      },
+      {
+        "name": "Shkodër",
+        "center": [42.06828, 19.51258]
+      }
+    ]
+  },
+  {
+    "country": "Algeria",
+    "shortcode": "DZ",
+    "cities": [
+      {
+        "name": "Algiers",
+        "center": [36.73225, 3.08746]
+      },
+      {
+        "name": "Boumerdas",
+        "center": [36.76639, 3.47717]
+      },
+      {
+        "name": "Oran",
+        "center": [35.69906, -0.63588]
+      },
+      {
+        "name": "Tébessa",
+        "center": [35.40417, 8.12417]
+      },
+      {
+        "name": "Constantine",
+        "center": [36.365, 6.61472]
+      }
+    ]
+  },
+  {
+    "country": "American Samoa",
+    "shortcode": "AS",
+    "cities": [
+      {
+        "name": "Pago Pago",
+        "center": [-14.27806, -170.7025]
+      },
+      {
+        "name": "Tāfuna",
+        "center": [-14.33583, -170.72]
+      },
+      {
+        "name": "Leone",
+        "center": [-14.34389, -170.785]
+      },
+      {
+        "name": "Faleniu",
+        "center": [-14.3325, -170.74444]
+      },
+      {
+        "name": "Aūa",
+        "center": [-14.27611, -170.66389]
+      }
+    ]
+  },
+  {
+    "country": "Andorra",
+    "shortcode": "AD",
+    "cities": [
+      {
+        "name": "Andorra la Vella",
+        "center": [42.50779, 1.52109]
+      },
+      {
+        "name": "les Escaldes",
+        "center": [42.50729, 1.53414]
+      },
+      {
+        "name": "Encamp",
+        "center": [42.53474, 1.58014]
+      },
+      {
+        "name": "Sant Julià de Lòria",
+        "center": [42.46372, 1.49129]
+      },
+      {
+        "name": "la Massana",
+        "center": [42.54499, 1.51483]
+      }
+    ]
+  },
+  {
+    "country": "Angola",
+    "shortcode": "AO",
+    "cities": [
+      {
+        "name": "Luanda",
+        "center": [-8.83682, 13.23432]
+      },
+      {
+        "name": "N’dalatando",
+        "center": [-9.29782, 14.91162]
+      },
+      {
+        "name": "Huambo",
+        "center": [-12.77611, 15.73917]
+      },
+      {
+        "name": "Lobito",
+        "center": [-12.3644, 13.53601]
+      },
+      {
+        "name": "Benguela",
+        "center": [-12.57626, 13.40547]
+      }
+    ]
+  },
+  {
+    "country": "Anguilla",
+    "shortcode": "AI",
+    "cities": [
+      {
+        "name": "The Valley",
+        "center": [18.21704, -63.05783]
+      },
+      {
+        "name": "Blowing Point Village",
+        "center": [18.17648, -63.09375]
+      },
+      {
+        "name": "Sandy Ground Village",
+        "center": [18.20118, -63.08998]
+      },
+      {
+        "name": "Sandy Hill",
+        "center": [18.22104, -63.01329]
+      },
+      {
+        "name": "South Hill Village",
+        "center": [18.19201, -63.08779]
+      }
+    ]
+  },
+  {
+    "country": "Antarctica",
+    "shortcode": "AQ",
+    "cities": [
+      {
+        "name": "McMurdo Station",
+        "center": [-77.84632, 166.66824]
+      }
+    ]
+  },
+  {
+    "country": "Antigua and Barbuda",
+    "shortcode": "AG",
+    "cities": [
+      {
+        "name": "Saint John’s",
+        "center": [17.12096, -61.84329]
+      },
+      {
+        "name": "All Saints",
+        "center": [17.06671, -61.79303]
+      },
+      {
+        "name": "Piggotts",
+        "center": [17.11667, -61.8]
+      },
+      {
+        "name": "Liberta",
+        "center": [17.04141, -61.79052]
+      },
+      {
+        "name": "Bolands",
+        "center": [17.06565, -61.87466]
+      }
+    ]
+  },
+  {
+    "country": "Argentina",
+    "shortcode": "AR",
+    "cities": [
+      {
+        "name": "Buenos Aires",
+        "center": [-34.61315, -58.37723]
+      },
+      {
+        "name": "Córdoba",
+        "center": [-31.4135, -64.18105]
+      },
+      {
+        "name": "Rosario",
+        "center": [-32.94682, -60.63932]
+      },
+      {
+        "name": "Mar del Plata",
+        "center": [-38.00042, -57.5562]
+      },
+      {
+        "name": "San Miguel de Tucumán",
+        "center": [-26.82414, -65.2226]
+      }
+    ]
+  },
+  {
+    "country": "Armenia",
+    "shortcode": "AM",
+    "cities": [
+      {
+        "name": "Yerevan",
+        "center": [40.18111, 44.51361]
+      },
+      {
+        "name": "Gyumri",
+        "center": [40.7942, 43.84528]
+      },
+      {
+        "name": "Vanadzor",
+        "center": [40.80456, 44.4939]
+      },
+      {
+        "name": "Vagharshapat",
+        "center": [40.16557, 44.29462]
+      },
+      {
+        "name": "Hrazdan",
+        "center": [40.49748, 44.7662]
+      }
+    ]
+  },
+  {
+    "country": "Aruba",
+    "shortcode": "AW",
+    "cities": [
+      {
+        "name": "Oranjestad",
+        "center": [12.52398, -70.02703]
+      },
+      {
+        "name": "Tanki Leendert",
+        "center": [12.53914, -70.02004]
+      },
+      {
+        "name": "San Nicolas",
+        "center": [12.43624, -69.90713]
+      },
+      {
+        "name": "Santa Cruz",
+        "center": [12.50953, -69.98094]
+      },
+      {
+        "name": "Paradera",
+        "center": [12.5351, -70.00688]
+      }
+    ]
+  },
+  {
+    "country": "Australia",
+    "shortcode": "AU",
+    "cities": [
+      {
+        "name": "Sydney",
+        "center": [-33.86785, 151.20732]
+      },
+      {
+        "name": "Melbourne",
+        "center": [-37.814, 144.96332]
+      },
+      {
+        "name": "Brisbane",
+        "center": [-27.46794, 153.02809]
+      },
+      {
+        "name": "Perth",
+        "center": [-31.95224, 115.8614]
+      },
+      {
+        "name": "Adelaide",
+        "center": [-34.92866, 138.59863]
+      }
+    ]
+  },
+  {
+    "country": "Austria",
+    "shortcode": "AT",
+    "cities": [
+      {
+        "name": "Vienna",
+        "center": [48.20849, 16.37208]
+      },
+      {
+        "name": "Graz",
+        "center": [47.06667, 15.45]
+      },
+      {
+        "name": "Linz",
+        "center": [48.30639, 14.28611]
+      },
+      {
+        "name": "Favoriten",
+        "center": [48.16116, 16.38233]
+      },
+      {
+        "name": "Donaustadt",
+        "center": [48.2333, 16.46002]
+      }
+    ]
+  },
+  {
+    "country": "Azerbaijan",
+    "shortcode": "AZ",
+    "cities": [
+      {
+        "name": "Baku",
+        "center": [40.37767, 49.89201]
+      },
+      {
+        "name": "Sumqayıt",
+        "center": [40.58972, 49.66861]
+      },
+      {
+        "name": "Ganja",
+        "center": [40.68278, 46.36056]
+      },
+      {
+        "name": "Lankaran",
+        "center": [38.75428, 48.85062]
+      },
+      {
+        "name": "Tovuz",
+        "center": [40.99249, 45.62838]
+      }
+    ]
+  },
+  {
+    "country": "Bahamas",
+    "shortcode": "BS",
+    "cities": [
+      {
+        "name": "Nassau",
+        "center": [25.05823, -77.34306]
+      },
+      {
+        "name": "Lucaya",
+        "center": [26.53333, -78.66667]
+      },
+      {
+        "name": "Freeport",
+        "center": [26.53333, -78.7]
+      },
+      {
+        "name": "West End",
+        "center": [26.68711, -78.97702]
+      },
+      {
+        "name": "Cooper’s Town",
+        "center": [26.87137, -77.51131]
+      }
+    ]
+  },
+  {
+    "country": "Bahrain",
+    "shortcode": "BH",
+    "cities": [
+      {
+        "name": "Ar Rifā‘",
+        "center": [26.13, 50.555]
+      },
+      {
+        "name": "Manama",
+        "center": [26.22787, 50.58565]
+      },
+      {
+        "name": "Al Muharraq",
+        "center": [26.25722, 50.61194]
+      },
+      {
+        "name": "Dār Kulayb",
+        "center": [26.06861, 50.50389]
+      },
+      {
+        "name": "Madīnat Ḩamad",
+        "center": [26.11528, 50.50694]
+      }
+    ]
+  },
+  {
+    "country": "Bangladesh",
+    "shortcode": "BD",
+    "cities": [
+      {
+        "name": "Dhaka",
+        "center": [23.7104, 90.40744]
+      },
+      {
+        "name": "Chattogram",
+        "center": [22.3384, 91.83168]
+      },
+      {
+        "name": "Khulna",
+        "center": [22.80979, 89.56439]
+      },
+      {
+        "name": "Rangpur",
+        "center": [25.74664, 89.25166]
+      },
+      {
+        "name": "Comilla",
+        "center": [23.46186, 91.18503]
+      }
+    ]
+  },
+  {
+    "country": "Barbados",
+    "shortcode": "BB",
+    "cities": [
+      {
+        "name": "Bridgetown",
+        "center": [13.10732, -59.62021]
+      },
+      {
+        "name": "Speightstown",
+        "center": [13.25072, -59.64396]
+      },
+      {
+        "name": "Oistins",
+        "center": [13.07067, -59.54637]
+      },
+      {
+        "name": "Bathsheba",
+        "center": [13.21133, -59.52596]
+      },
+      {
+        "name": "Holetown",
+        "center": [13.18672, -59.63808]
+      }
+    ]
+  },
+  {
+    "country": "Belarus",
+    "shortcode": "BY",
+    "cities": [
+      {
+        "name": "Minsk",
+        "center": [53.9, 27.56667]
+      },
+      {
+        "name": "Homyel'",
+        "center": [52.4345, 30.9754]
+      },
+      {
+        "name": "Hrodna",
+        "center": [53.6884, 23.8258]
+      },
+      {
+        "name": "Mahilyow",
+        "center": [53.9168, 30.3449]
+      },
+      {
+        "name": "Brest",
+        "center": [52.09755, 23.68775]
+      }
+    ]
+  },
+  {
+    "country": "Belgium",
+    "shortcode": "BE",
+    "cities": [
+      {
+        "name": "Brussels",
+        "center": [50.85045, 4.34878]
+      },
+      {
+        "name": "Antwerpen",
+        "center": [51.22047, 4.40026]
+      },
+      {
+        "name": "Gent",
+        "center": [51.05, 3.71667]
+      },
+      {
+        "name": "Charleroi",
+        "center": [50.41136, 4.44448]
+      },
+      {
+        "name": "Liège",
+        "center": [50.63373, 5.56749]
+      }
+    ]
+  },
+  {
+    "country": "Belize",
+    "shortcode": "BZ",
+    "cities": [
+      {
+        "name": "Belize City",
+        "center": [17.49952, -88.19756]
+      },
+      {
+        "name": "San Ignacio",
+        "center": [17.1588, -89.0696]
+      },
+      {
+        "name": "San Pedro",
+        "center": [17.91598, -87.9659]
+      },
+      {
+        "name": "Orange Walk",
+        "center": [18.08124, -88.56328]
+      },
+      {
+        "name": "Corozal",
+        "center": [18.39375, -88.38849]
+      }
+    ]
+  },
+  {
+    "country": "Benin",
+    "shortcode": "BJ",
+    "cities": [
+      {
+        "name": "Cotonou",
+        "center": [6.36536, 2.41833]
+      },
+      {
+        "name": "Abomey-Calavi",
+        "center": [6.44852, 2.35566]
+      },
+      {
+        "name": "Djougou",
+        "center": [9.70853, 1.66598]
+      },
+      {
+        "name": "Porto-Novo",
+        "center": [6.49646, 2.60359]
+      },
+      {
+        "name": "Parakou",
+        "center": [9.33716, 2.63031]
+      }
+    ]
+  },
+  {
+    "country": "Bermuda",
+    "shortcode": "BM",
+    "cities": [
+      {
+        "name": "Saint George",
+        "center": [32.38167, -64.67806]
+      },
+      {
+        "name": "Hamilton",
+        "center": [32.2949, -64.78303]
+      }
+    ]
+  },
+  {
+    "country": "Bhutan",
+    "shortcode": "BT",
+    "cities": [
+      {
+        "name": "Thimphu",
+        "center": [27.46609, 89.64191]
+      },
+      {
+        "name": "Phuntsholing",
+        "center": [26.85164, 89.38837]
+      },
+      {
+        "name": "Tsirang",
+        "center": [27.0219, 90.12291]
+      },
+      {
+        "name": "Punākha",
+        "center": [27.59137, 89.87743]
+      },
+      {
+        "name": "Pemagatshel",
+        "center": [27.03795, 91.40305]
+      }
+    ]
+  },
+  {
+    "country": "Bolivia",
+    "shortcode": "BO",
+    "cities": [
+      {
+        "name": "La Paz",
+        "center": [-16.5, -68.15]
+      },
+      {
+        "name": "Santa Cruz de la Sierra",
+        "center": [-17.78629, -63.18117]
+      },
+      {
+        "name": "Cochabamba",
+        "center": [-17.3895, -66.1568]
+      },
+      {
+        "name": "Sucre",
+        "center": [-19.03332, -65.26274]
+      },
+      {
+        "name": "Oruro",
+        "center": [-17.98333, -67.15]
+      }
+    ]
+  },
+  {
+    "country": "Bosnia and Herzegovina",
+    "shortcode": "BA",
+    "cities": [
+      {
+        "name": "Sarajevo",
+        "center": [43.84864, 18.35644]
+      },
+      {
+        "name": "Banja Luka",
+        "center": [44.77842, 17.19386]
+      },
+      {
+        "name": "Zenica",
+        "center": [44.20169, 17.90397]
+      },
+      {
+        "name": "Tuzla",
+        "center": [44.53842, 18.66709]
+      },
+      {
+        "name": "Mostar",
+        "center": [43.34333, 17.80806]
+      }
+    ]
+  },
+  {
+    "country": "Botswana",
+    "shortcode": "BW",
+    "cities": [
+      {
+        "name": "Gaborone",
+        "center": [-24.65451, 25.90859]
+      },
+      {
+        "name": "Francistown",
+        "center": [-21.17, 27.50778]
+      },
+      {
+        "name": "Molepolole",
+        "center": [-24.40659, 25.49508]
+      },
+      {
+        "name": "Maun",
+        "center": [-19.98333, 23.41667]
+      },
+      {
+        "name": "Serowe",
+        "center": [-22.38754, 26.71077]
+      }
+    ]
+  },
+  {
+    "country": "Brazil",
+    "shortcode": "BR",
+    "cities": [
+      {
+        "name": "São Paulo",
+        "center": [-23.5475, -46.63611]
+      },
+      {
+        "name": "Rio de Janeiro",
+        "center": [-22.90642, -43.18223]
+      },
+      {
+        "name": "Belo Horizonte",
+        "center": [-19.92083, -43.93778]
+      },
+      {
+        "name": "Salvador",
+        "center": [-12.97563, -38.49096]
+      },
+      {
+        "name": "Fortaleza",
+        "center": [-3.71722, -38.54306]
+      }
+    ]
+  },
+  {
+    "country": "British Virgin Islands",
+    "shortcode": "VG",
+    "cities": [
+      {
+        "name": "Road Town",
+        "center": [18.42693, -64.62079]
+      }
+    ]
+  },
+  {
+    "country": "Brunei Darussalam",
+    "shortcode": "BN",
+    "cities": [
+      {
+        "name": "Bandar Seri Begawan",
+        "center": [4.89035, 114.94006]
+      },
+      {
+        "name": "Kuala Belait",
+        "center": [4.58361, 114.2312]
+      },
+      {
+        "name": "Seria",
+        "center": [4.60637, 114.32476]
+      },
+      {
+        "name": "Tutong",
+        "center": [4.80278, 114.64917]
+      },
+      {
+        "name": "Kapok",
+        "center": [5.02447, 115.04664]
+      }
+    ]
+  },
+  {
+    "country": "Bulgaria",
+    "shortcode": "BG",
+    "cities": [
+      {
+        "name": "Sofia",
+        "center": [42.69751, 23.32415]
+      },
+      {
+        "name": "Plovdiv",
+        "center": [42.15, 24.75]
+      },
+      {
+        "name": "Varna",
+        "center": [43.21667, 27.91667]
+      },
+      {
+        "name": "Burgas",
+        "center": [42.50606, 27.46781]
+      },
+      {
+        "name": "Stara Zagora",
+        "center": [42.43278, 25.64194]
+      }
+    ]
+  },
+  {
+    "country": "Burkina Faso",
+    "shortcode": "BF",
+    "cities": [
+      {
+        "name": "Ouagadougou",
+        "center": [12.36566, -1.53388]
+      },
+      {
+        "name": "Bobo-Dioulasso",
+        "center": [11.17715, -4.2979]
+      },
+      {
+        "name": "Koudougou",
+        "center": [12.25263, -2.36272]
+      },
+      {
+        "name": "Ouahigouya",
+        "center": [13.58278, -2.42158]
+      },
+      {
+        "name": "Kaya",
+        "center": [13.09167, -1.08444]
+      }
+    ]
+  },
+  {
+    "country": "Burundi",
+    "shortcode": "BI",
+    "cities": [
+      {
+        "name": "Bujumbura",
+        "center": [-3.38193, 29.36142]
+      },
+      {
+        "name": "Muyinga",
+        "center": [-2.8451, 30.3414]
+      },
+      {
+        "name": "Gitega",
+        "center": [-3.42708, 29.92463]
+      },
+      {
+        "name": "Ruyigi",
+        "center": [-3.47639, 30.24861]
+      },
+      {
+        "name": "Ngozi",
+        "center": [-2.9075, 29.8306]
+      }
+    ]
+  },
+  {
+    "country": "Cambodia",
+    "shortcode": "KH",
+    "cities": [
+      {
+        "name": "Phnom Penh",
+        "center": [11.56245, 104.91601]
+      },
+      {
+        "name": "Takeo",
+        "center": [10.99081, 104.78498]
+      },
+      {
+        "name": "Siem Reap",
+        "center": [13.36179, 103.86056]
+      },
+      {
+        "name": "Battambang",
+        "center": [13.10271, 103.19822]
+      },
+      {
+        "name": "Paoy Paet",
+        "center": [13.65805, 102.56365]
+      }
+    ]
+  },
+  {
+    "country": "Cameroon",
+    "shortcode": "CM",
+    "cities": [
+      {
+        "name": "Douala",
+        "center": [4.04827, 9.70428]
+      },
+      {
+        "name": "Yaoundé",
+        "center": [3.86667, 11.51667]
+      },
+      {
+        "name": "Garoua",
+        "center": [9.30143, 13.39771]
+      },
+      {
+        "name": "Kousséri",
+        "center": [12.07689, 15.03063]
+      },
+      {
+        "name": "Bamenda",
+        "center": [5.9597, 10.14597]
+      }
+    ]
+  },
+  {
+    "country": "Canada",
+    "shortcode": "CA",
+    "cities": [
+      {
+        "name": "Toronto",
+        "center": [43.70011, -79.4163]
+      },
+      {
+        "name": "Montréal",
+        "center": [45.50884, -73.58781]
+      },
+      {
+        "name": "Calgary",
+        "center": [51.05011, -114.08529]
+      },
+      {
+        "name": "Edmonton",
+        "center": [53.55014, -113.46871]
+      },
+      {
+        "name": "Ottawa",
+        "center": [45.41117, -75.69812]
+      }
+    ]
+  },
+  {
+    "country": "Cape Verde",
+    "shortcode": "CV",
+    "cities": [
+      {
+        "name": "Praia",
+        "center": [14.93152, -23.51254]
+      },
+      {
+        "name": "Mindelo",
+        "center": [16.89014, -24.98042]
+      },
+      {
+        "name": "Santa Maria",
+        "center": [16.59796, -22.90509]
+      },
+      {
+        "name": "Cova Figueira",
+        "center": [14.89054, -24.29343]
+      },
+      {
+        "name": "Santa Cruz",
+        "center": [15.13333, -23.56667]
+      }
+    ]
+  },
+  {
+    "country": "Caribbean Netherlands",
+    "shortcode": "BQ",
+    "cities": [
+      {
+        "name": "Kralendijk",
+        "center": [12.15, -68.26667]
+      },
+      {
+        "name": "Dorp Antriol",
+        "center": [12.16631, -68.27042]
+      },
+      {
+        "name": "Upper Hell's Gate",
+        "center": [17.643, -63.22649]
+      },
+      {
+        "name": "Dorp Rincon",
+        "center": [12.23762, -68.33059]
+      },
+      {
+        "name": "Dorp Tera Kora",
+        "center": [12.13728, -68.26039]
+      }
+    ]
+  },
+  {
+    "country": "Cayman Islands",
+    "shortcode": "KY",
+    "cities": [
+      {
+        "name": "George Town",
+        "center": [19.2866, -81.37436]
+      },
+      {
+        "name": "West Bay",
+        "center": [19.38197, -81.39281]
+      },
+      {
+        "name": "Bodden Town",
+        "center": [19.27647, -81.2542]
+      },
+      {
+        "name": "North Side",
+        "center": [19.35, -81.2]
+      },
+      {
+        "name": "East End",
+        "center": [19.3, -81.11667]
+      }
+    ]
+  },
+  {
+    "country": "Central African Republic",
+    "shortcode": "CF",
+    "cities": [
+      {
+        "name": "Bangui",
+        "center": [4.36122, 18.55496]
+      },
+      {
+        "name": "Bimbo",
+        "center": [4.25671, 18.41583]
+      },
+      {
+        "name": "Mbaïki",
+        "center": [3.86781, 17.98923]
+      },
+      {
+        "name": "Berbérati",
+        "center": [4.26116, 15.79216]
+      },
+      {
+        "name": "Kaga Bandoro",
+        "center": [6.98961, 19.18744]
+      }
+    ]
+  },
+  {
+    "country": "Chad",
+    "shortcode": "TD",
+    "cities": [
+      {
+        "name": "N'Djamena",
+        "center": [12.10672, 15.0444]
+      },
+      {
+        "name": "Moundou",
+        "center": [8.57437, 16.07722]
+      },
+      {
+        "name": "Sarh",
+        "center": [9.14555, 18.38331]
+      },
+      {
+        "name": "Abéché",
+        "center": [13.82916, 20.8324]
+      },
+      {
+        "name": "Kelo",
+        "center": [9.30859, 15.80658]
+      }
+    ]
+  },
+  {
+    "country": "Chile",
+    "shortcode": "CL",
+    "cities": [
+      {
+        "name": "Santiago",
+        "center": [-33.45694, -70.64827]
+      },
+      {
+        "name": "Puente Alto",
+        "center": [-33.61169, -70.57577]
+      },
+      {
+        "name": "Antofagasta",
+        "center": [-23.65236, -70.3954]
+      },
+      {
+        "name": "Viña del Mar",
+        "center": [-33.02457, -71.55183]
+      },
+      {
+        "name": "Valparaíso",
+        "center": [-33.036, -71.62963]
+      }
+    ]
+  },
+  {
+    "country": "China",
+    "shortcode": "CN",
+    "cities": [
+      {
+        "name": "Shanghai",
+        "center": [31.22222, 121.45806]
+      },
+      {
+        "name": "Beijing",
+        "center": [39.9075, 116.39723]
+      },
+      {
+        "name": "Shenzhen",
+        "center": [22.54554, 114.0683]
+      },
+      {
+        "name": "Guangzhou",
+        "center": [23.11667, 113.25]
+      },
+      {
+        "name": "Chengdu",
+        "center": [30.66667, 104.06667]
+      }
+    ]
+  },
+  {
+    "country": "Christmas Island",
+    "shortcode": "CX",
+    "cities": [
+      {
+        "name": "Flying Fish Cove",
+        "center": [-10.42172, 105.67912]
+      }
+    ]
+  },
+  {
+    "country": "Cocos Islands",
+    "shortcode": "CC",
+    "cities": [
+      {
+        "name": "West Island",
+        "center": [-12.15681, 96.82251]
+      }
+    ]
+  },
+  {
+    "country": "Colombia",
+    "shortcode": "CO",
+    "cities": [
+      {
+        "name": "Bogotá",
+        "center": [4.60971, -74.08175]
+      },
+      {
+        "name": "Cali",
+        "center": [3.43722, -76.5225]
+      },
+      {
+        "name": "Medellín",
+        "center": [6.25184, -75.56359]
+      },
+      {
+        "name": "Barranquilla",
+        "center": [10.96854, -74.78132]
+      },
+      {
+        "name": "Cartagena",
+        "center": [10.39972, -75.51444]
+      }
+    ]
+  },
+  {
+    "country": "Comoros",
+    "shortcode": "KM",
+    "cities": [
+      {
+        "name": "Moroni",
+        "center": [-11.70216, 43.25506]
+      },
+      {
+        "name": "Moutsamoudou",
+        "center": [-12.16672, 44.39944]
+      },
+      {
+        "name": "Fomboni",
+        "center": [-12.28759, 43.74344]
+      },
+      {
+        "name": "Domoni",
+        "center": [-12.26067, 44.52947]
+      },
+      {
+        "name": "Tsimbeo",
+        "center": [-12.20583, 44.46472]
+      }
+    ]
+  },
+  {
+    "country": "Congo",
+    "shortcode": "CG",
+    "cities": [
+      {
+        "name": "Brazzaville",
+        "center": [-4.26613, 15.28318]
+      },
+      {
+        "name": "Pointe-Noire",
+        "center": [-4.77609, 11.86352]
+      },
+      {
+        "name": "Dolisie",
+        "center": [-4.19834, 12.66664]
+      },
+      {
+        "name": "Kayes",
+        "center": [-4.20493, 13.28608]
+      },
+      {
+        "name": "Owando",
+        "center": [-0.48193, 15.89988]
+      }
+    ]
+  },
+  {
+    "country": "Democratic Republic of the Congo",
+    "shortcode": "CD",
+    "cities": [
+      {
+        "name": "Kinshasa",
+        "center": [-4.32758, 15.31357]
+      },
+      {
+        "name": "Lubumbashi",
+        "center": [-11.66089, 27.47938]
+      },
+      {
+        "name": "Mbuji-Mayi",
+        "center": [-6.13603, 23.58979]
+      },
+      {
+        "name": "Kisangani",
+        "center": [0.51528, 25.19099]
+      },
+      {
+        "name": "Masina",
+        "center": [-4.38361, 15.39139]
+      }
+    ]
+  },
+  {
+    "country": "Cook Islands",
+    "shortcode": "CK",
+    "cities": [
+      {
+        "name": "Avarua",
+        "center": [-21.2075, -159.77545]
+      }
+    ]
+  },
+  {
+    "country": "Costa Rica",
+    "shortcode": "CR",
+    "cities": [
+      {
+        "name": "San José",
+        "center": [9.93333, -84.08333]
+      },
+      {
+        "name": "Limón",
+        "center": [9.99074, -83.03596]
+      },
+      {
+        "name": "San Francisco",
+        "center": [9.9938, -84.12742]
+      },
+      {
+        "name": "Alajuela",
+        "center": [10.01625, -84.21163]
+      },
+      {
+        "name": "Liberia",
+        "center": [10.63504, -85.43772]
+      }
+    ]
+  },
+  {
+    "country": "Croatia",
+    "shortcode": "HR",
+    "cities": [
+      {
+        "name": "Zagreb",
+        "center": [45.81444, 15.97798]
+      },
+      {
+        "name": "Split",
+        "center": [43.50891, 16.43915]
+      },
+      {
+        "name": "Rijeka",
+        "center": [45.32673, 14.44241]
+      },
+      {
+        "name": "Osijek",
+        "center": [45.55111, 18.69389]
+      },
+      {
+        "name": "Zadar",
+        "center": [44.11578, 15.22514]
+      }
+    ]
+  },
+  {
+    "country": "Cuba",
+    "shortcode": "CU",
+    "cities": [
+      {
+        "name": "Havana",
+        "center": [23.13302, -82.38304]
+      },
+      {
+        "name": "Santiago de Cuba",
+        "center": [20.02083, -75.82667]
+      },
+      {
+        "name": "Camagüey",
+        "center": [21.38083, -77.91694]
+      },
+      {
+        "name": "Holguín",
+        "center": [20.88722, -76.26306]
+      },
+      {
+        "name": "Guantánamo",
+        "center": [20.14444, -75.20917]
+      }
+    ]
+  },
+  {
+    "country": "Curacao",
+    "shortcode": "CW",
+    "cities": [
+      {
+        "name": "Willemstad",
+        "center": [12.12246, -68.88641]
+      },
+      {
+        "name": "Sint Michiel Liber",
+        "center": [12.15, -68.98333]
+      },
+      {
+        "name": "Barber",
+        "center": [12.29014, -69.07389]
+      },
+      {
+        "name": "Dorp Soto",
+        "center": [12.27749, -69.1125]
+      }
+    ]
+  },
+  {
+    "country": "Cyprus",
+    "shortcode": "CY",
+    "cities": [
+      {
+        "name": "Nicosia",
+        "center": [35.17531, 33.3642]
+      },
+      {
+        "name": "Limassol",
+        "center": [34.68406, 33.03794]
+      },
+      {
+        "name": "Larnaca",
+        "center": [34.92291, 33.6233]
+      },
+      {
+        "name": "Stróvolos",
+        "center": [35.14867, 33.33384]
+      },
+      {
+        "name": "Famagusta",
+        "center": [35.12489, 33.94135]
+      }
+    ]
+  },
+  {
+    "country": "Czech Republic",
+    "shortcode": "CZ",
+    "cities": [
+      {
+        "name": "Prague",
+        "center": [50.08804, 14.42076]
+      },
+      {
+        "name": "Brno",
+        "center": [49.19522, 16.60796]
+      },
+      {
+        "name": "Ostrava",
+        "center": [49.83465, 18.28204]
+      },
+      {
+        "name": "Pilsen",
+        "center": [49.74747, 13.37759]
+      },
+      {
+        "name": "Liberec",
+        "center": [50.76711, 15.05619]
+      }
+    ]
+  },
+  {
+    "country": "Côte d'Ivoire",
+    "shortcode": "CI",
+    "cities": [
+      {
+        "name": "Abidjan",
+        "center": [5.35444, -4.00167]
+      },
+      {
+        "name": "Abobo",
+        "center": [5.41613, -4.0159]
+      },
+      {
+        "name": "Bouaké",
+        "center": [7.69385, -5.03031]
+      },
+      {
+        "name": "Korhogo",
+        "center": [9.45803, -5.62961]
+      },
+      {
+        "name": "Daloa",
+        "center": [6.87735, -6.45022]
+      }
+    ]
+  },
+  {
+    "country": "Denmark",
+    "shortcode": "DK",
+    "cities": [
+      {
+        "name": "Copenhagen",
+        "center": [55.67594, 12.56553]
+      },
+      {
+        "name": "Århus",
+        "center": [56.15674, 10.21076]
+      },
+      {
+        "name": "Odense",
+        "center": [55.39594, 10.38831]
+      },
+      {
+        "name": "Aalborg",
+        "center": [57.048, 9.9187]
+      },
+      {
+        "name": "Frederiksberg",
+        "center": [55.67938, 12.53463]
+      }
+    ]
+  },
+  {
+    "country": "Djibouti",
+    "shortcode": "DJ",
+    "cities": [
+      {
+        "name": "Djibouti",
+        "center": [11.58901, 43.14503]
+      },
+      {
+        "name": "'Ali Sabieh",
+        "center": [11.15583, 42.7125]
+      },
+      {
+        "name": "Tadjourah",
+        "center": [11.78778, 42.88222]
+      },
+      {
+        "name": "Obock",
+        "center": [11.96693, 43.28835]
+      },
+      {
+        "name": "Dikhil",
+        "center": [11.10454, 42.36971]
+      }
+    ]
+  },
+  {
+    "country": "Dominica",
+    "shortcode": "DM",
+    "cities": [
+      {
+        "name": "Roseau",
+        "center": [15.30174, -61.38808]
+      },
+      {
+        "name": "Portsmouth",
+        "center": [15.58288, -61.45592]
+      },
+      {
+        "name": "Marigot",
+        "center": [15.53743, -61.282]
+      },
+      {
+        "name": "Berekua",
+        "center": [15.23333, -61.31667]
+      },
+      {
+        "name": "Mahaut",
+        "center": [15.36357, -61.39701]
+      }
+    ]
+  },
+  {
+    "country": "Dominican Republic",
+    "shortcode": "DO",
+    "cities": [
+      {
+        "name": "Santo Domingo",
+        "center": [18.47186, -69.89232]
+      },
+      {
+        "name": "Santiago de los Caballeros",
+        "center": [19.4517, -70.69703]
+      },
+      {
+        "name": "Santo Domingo Oeste",
+        "center": [18.5, -70]
+      },
+      {
+        "name": "Santo Domingo Este",
+        "center": [18.48847, -69.85707]
+      },
+      {
+        "name": "San Pedro de Macorís",
+        "center": [18.4539, -69.30864]
+      }
+    ]
+  },
+  {
+    "country": "Ecuador",
+    "shortcode": "EC",
+    "cities": [
+      {
+        "name": "Quito",
+        "center": [-0.22985, -78.52495]
+      },
+      {
+        "name": "Guayaquil",
+        "center": [-2.19616, -79.88621]
+      },
+      {
+        "name": "Cuenca",
+        "center": [-2.90055, -79.00453]
+      },
+      {
+        "name": "Santo Domingo de los Colorados",
+        "center": [-0.25305, -79.17536]
+      },
+      {
+        "name": "Ambato",
+        "center": [-1.24908, -78.61675]
+      }
+    ]
+  },
+  {
+    "country": "Egypt",
+    "shortcode": "EG",
+    "cities": [
+      {
+        "name": "Cairo",
+        "center": [30.06263, 31.24967]
+      },
+      {
+        "name": "Alexandria",
+        "center": [31.20176, 29.91582]
+      },
+      {
+        "name": "Giza",
+        "center": [30.00944, 31.20861]
+      },
+      {
+        "name": "Shubrā al Khaymah",
+        "center": [30.12511, 31.25053]
+      },
+      {
+        "name": "Port Said",
+        "center": [31.26531, 32.3019]
+      }
+    ]
+  },
+  {
+    "country": "El Salvador",
+    "shortcode": "SV",
+    "cities": [
+      {
+        "name": "San Salvador",
+        "center": [13.68935, -89.18718]
+      },
+      {
+        "name": "Soyapango",
+        "center": [13.71024, -89.13989]
+      },
+      {
+        "name": "San Miguel",
+        "center": [13.48333, -88.18333]
+      },
+      {
+        "name": "Santa Ana",
+        "center": [13.99417, -89.55972]
+      },
+      {
+        "name": "Mejicanos",
+        "center": [13.72397, -89.188]
+      }
+    ]
+  },
+  {
+    "country": "Equatorial Guinea",
+    "shortcode": "GQ",
+    "cities": [
+      {
+        "name": "Bata",
+        "center": [1.86391, 9.76582]
+      },
+      {
+        "name": "Malabo",
+        "center": [3.75578, 8.78166]
+      },
+      {
+        "name": "Ebebiyin",
+        "center": [2.15218, 11.33013]
+      },
+      {
+        "name": "Aconibe",
+        "center": [1.29683, 10.93691]
+      },
+      {
+        "name": "Añisoc",
+        "center": [1.8658, 10.76892]
+      }
+    ]
+  },
+  {
+    "country": "Eritrea",
+    "shortcode": "ER",
+    "cities": [
+      {
+        "name": "Asmara",
+        "center": [15.33805, 38.93184]
+      },
+      {
+        "name": "Keren",
+        "center": [15.77792, 38.45107]
+      },
+      {
+        "name": "Massawa",
+        "center": [15.60811, 39.47455]
+      },
+      {
+        "name": "Assab",
+        "center": [13.00917, 42.73944]
+      },
+      {
+        "name": "Mendefera",
+        "center": [14.88722, 38.81528]
+      }
+    ]
+  },
+  {
+    "country": "Estonia",
+    "shortcode": "EE",
+    "cities": [
+      {
+        "name": "Tallinn",
+        "center": [59.43696, 24.75353]
+      },
+      {
+        "name": "Tartu",
+        "center": [58.38062, 26.72509]
+      },
+      {
+        "name": "Narva",
+        "center": [59.37722, 28.19028]
+      },
+      {
+        "name": "Pärnu",
+        "center": [58.38588, 24.49711]
+      },
+      {
+        "name": "Nõmme",
+        "center": [59.37757, 24.68587]
+      }
+    ]
+  },
+  {
+    "country": "Ethiopia",
+    "shortcode": "ET",
+    "cities": [
+      {
+        "name": "Addis Ababa",
+        "center": [9.02497, 38.74689]
+      },
+      {
+        "name": "Jijiga",
+        "center": [9.35, 42.8]
+      },
+      {
+        "name": "Gondar",
+        "center": [12.6, 37.46667]
+      },
+      {
+        "name": "Mek'ele",
+        "center": [13.49667, 39.47528]
+      },
+      {
+        "name": "Nazrēt",
+        "center": [8.55, 39.26667]
+      }
+    ]
+  },
+  {
+    "country": "Faeroe Islands",
+    "shortcode": "FO",
+    "cities": [
+      {
+        "name": "Tórshavn",
+        "center": [62.00973, -6.77164]
+      },
+      {
+        "name": "Klaksvík",
+        "center": [62.22655, -6.58901]
+      },
+      {
+        "name": "Hoyvík",
+        "center": [62.03407, -6.78127]
+      },
+      {
+        "name": "Argir",
+        "center": [61.99595, -6.77154]
+      },
+      {
+        "name": "Fuglafjørður",
+        "center": [62.24398, -6.81395]
+      }
+    ]
+  },
+  {
+    "country": "Falkland Islands (Malvinas)",
+    "shortcode": "FK",
+    "cities": [
+      {
+        "name": "Stanley",
+        "center": [-51.69382, -57.85701]
+      }
+    ]
+  },
+  {
+    "country": "Fiji",
+    "shortcode": "FJ",
+    "cities": [
+      {
+        "name": "Nasinu",
+        "center": [-18.07051, 178.51313]
+      },
+      {
+        "name": "Suva",
+        "center": [-18.13683, 178.42531]
+      },
+      {
+        "name": "Lautoka",
+        "center": [-17.61686, 177.45049]
+      },
+      {
+        "name": "Nadi",
+        "center": [-17.80309, 177.41617]
+      },
+      {
+        "name": "Labasa",
+        "center": [-16.4332, 179.36451]
+      }
+    ]
+  },
+  {
+    "country": "Finland",
+    "shortcode": "FI",
+    "cities": [
+      {
+        "name": "Helsinki",
+        "center": [60.16952, 24.93545]
+      },
+      {
+        "name": "Espoo",
+        "center": [60.2052, 24.6522]
+      },
+      {
+        "name": "Tampere",
+        "center": [61.49911, 23.78712]
+      },
+      {
+        "name": "Oulu",
+        "center": [65.01236, 25.46816]
+      },
+      {
+        "name": "Turku",
+        "center": [60.45148, 22.26869]
+      }
+    ]
+  },
+  {
+    "country": "France",
+    "shortcode": "FR",
+    "cities": [
+      {
+        "name": "Paris",
+        "center": [48.85341, 2.3488]
+      },
+      {
+        "name": "Marseille",
+        "center": [43.29695, 5.38107]
+      },
+      {
+        "name": "Lyon",
+        "center": [45.74846, 4.84671]
+      },
+      {
+        "name": "Toulouse",
+        "center": [43.60426, 1.44367]
+      },
+      {
+        "name": "Nice",
+        "center": [43.70313, 7.26608]
+      }
+    ]
+  },
+  {
+    "country": "French Guiana",
+    "shortcode": "GF",
+    "cities": [
+      {
+        "name": "Cayenne",
+        "center": [4.93333, -52.33333]
+      },
+      {
+        "name": "Matoury",
+        "center": [4.84921, -52.32355]
+      },
+      {
+        "name": "Saint-Laurent-du-Maroni",
+        "center": [5.50153, -54.02916]
+      },
+      {
+        "name": "Kourou",
+        "center": [5.16281, -52.64265]
+      },
+      {
+        "name": "Rémire-Montjoly",
+        "center": [4.91667, -52.26667]
+      }
+    ]
+  },
+  {
+    "country": "French Polynesia",
+    "shortcode": "PF",
+    "cities": [
+      {
+        "name": "Faaa",
+        "center": [-17.55933, -149.60352]
+      },
+      {
+        "name": "Papeete",
+        "center": [-17.5347, -149.56843]
+      },
+      {
+        "name": "Punaauia",
+        "center": [-17.63333, -149.6]
+      },
+      {
+        "name": "Pirae",
+        "center": [-17.52985, -149.55119]
+      },
+      {
+        "name": "Mahina",
+        "center": [-17.50648, -149.48899]
+      }
+    ]
+  },
+  {
+    "country": "French Southern Territories",
+    "shortcode": "TF",
+    "cities": [
+      {
+        "name": "Port-aux-Français",
+        "center": [-49.34916, 70.21937]
+      }
+    ]
+  },
+  {
+    "country": "Gabon",
+    "shortcode": "GA",
+    "cities": [
+      {
+        "name": "Libreville",
+        "center": [0.39241, 9.45356]
+      },
+      {
+        "name": "Port-Gentil",
+        "center": [-0.71933, 8.78151]
+      },
+      {
+        "name": "Franceville",
+        "center": [-1.63333, 13.58357]
+      },
+      {
+        "name": "Oyem",
+        "center": [1.5995, 11.57933]
+      },
+      {
+        "name": "Moanda",
+        "center": [-1.56652, 13.1987]
+      }
+    ]
+  },
+  {
+    "country": "Gambia",
+    "shortcode": "GM",
+    "cities": [
+      {
+        "name": "Serekunda",
+        "center": [13.43833, -16.67806]
+      },
+      {
+        "name": "Brikama",
+        "center": [13.27136, -16.64944]
+      },
+      {
+        "name": "Bakau",
+        "center": [13.47806, -16.68194]
+      },
+      {
+        "name": "Banjul",
+        "center": [13.45274, -16.57803]
+      },
+      {
+        "name": "Farafenni",
+        "center": [13.56667, -15.6]
+      }
+    ]
+  },
+  {
+    "country": "Georgia",
+    "shortcode": "GE",
+    "cities": [
+      {
+        "name": "Tbilisi",
+        "center": [41.69411, 44.83368]
+      },
+      {
+        "name": "Batumi",
+        "center": [41.64228, 41.63392]
+      },
+      {
+        "name": "Kutaisi",
+        "center": [42.26791, 42.69459]
+      },
+      {
+        "name": "Rustavi",
+        "center": [41.56271, 44.9787]
+      },
+      {
+        "name": "Sokhumi",
+        "center": [43.00697, 40.9893]
+      }
+    ]
+  },
+  {
+    "country": "Germany",
+    "shortcode": "DE",
+    "cities": [
+      {
+        "name": "Berlin",
+        "center": [52.52437, 13.41053]
+      },
+      {
+        "name": "Hamburg",
+        "center": [53.55073, 9.99302]
+      },
+      {
+        "name": "Munich",
+        "center": [48.13743, 11.57549]
+      },
+      {
+        "name": "Köln",
+        "center": [50.93333, 6.95]
+      },
+      {
+        "name": "Frankfurt am Main",
+        "center": [50.11552, 8.68417]
+      }
+    ]
+  },
+  {
+    "country": "Ghana",
+    "shortcode": "GH",
+    "cities": [
+      {
+        "name": "Accra",
+        "center": [5.55602, -0.1969]
+      },
+      {
+        "name": "Kumasi",
+        "center": [6.68848, -1.62443]
+      },
+      {
+        "name": "Tamale",
+        "center": [9.40079, -0.8393]
+      },
+      {
+        "name": "Takoradi",
+        "center": [4.89816, -1.76029]
+      },
+      {
+        "name": "Atsiaman",
+        "center": [5.69775, -0.32824]
+      }
+    ]
+  },
+  {
+    "country": "Gibraltar",
+    "shortcode": "GI",
+    "cities": [
+      {
+        "name": "Gibraltar",
+        "center": [36.14474, -5.35257]
+      }
+    ]
+  },
+  {
+    "country": "Greece",
+    "shortcode": "GR",
+    "cities": [
+      {
+        "name": "Athens",
+        "center": [37.98376, 23.72784]
+      },
+      {
+        "name": "Thessaloníki",
+        "center": [40.64361, 22.93086]
+      },
+      {
+        "name": "Pátra",
+        "center": [38.24444, 21.73444]
+      },
+      {
+        "name": "Piraeus",
+        "center": [37.94203, 23.64619]
+      },
+      {
+        "name": "Lárisa",
+        "center": [39.63689, 22.41761]
+      }
+    ]
+  },
+  {
+    "country": "Greenland",
+    "shortcode": "GL",
+    "cities": [
+      {
+        "name": "Nuuk",
+        "center": [64.18347, -51.72157]
+      },
+      {
+        "name": "Sisimiut",
+        "center": [66.93946, -53.6735]
+      },
+      {
+        "name": "Ilulissat",
+        "center": [69.21981, -51.09861]
+      },
+      {
+        "name": "Qaqortoq",
+        "center": [60.71839, -46.03561]
+      },
+      {
+        "name": "Aasiaat",
+        "center": [68.70869, -52.86366]
+      }
+    ]
+  },
+  {
+    "country": "Grenada",
+    "shortcode": "GD",
+    "cities": [
+      {
+        "name": "Saint George's",
+        "center": [12.05288, -61.75226]
+      },
+      {
+        "name": "Gouyave",
+        "center": [12.16462, -61.72965]
+      },
+      {
+        "name": "Grenville",
+        "center": [12.12278, -61.62498]
+      },
+      {
+        "name": "Victoria",
+        "center": [12.19021, -61.70677]
+      },
+      {
+        "name": "Saint David’s",
+        "center": [12.04903, -61.66875]
+      }
+    ]
+  },
+  {
+    "country": "Guadeloupe",
+    "shortcode": "GP",
+    "cities": [
+      {
+        "name": "Les Abymes",
+        "center": [16.273, -61.50507]
+      },
+      {
+        "name": "Baie-Mahault",
+        "center": [16.26738, -61.58543]
+      },
+      {
+        "name": "Le Gosier",
+        "center": [16.20618, -61.49306]
+      },
+      {
+        "name": "Petit-Bourg",
+        "center": [16.19163, -61.5914]
+      },
+      {
+        "name": "Sainte-Anne",
+        "center": [16.22564, -61.38098]
+      }
+    ]
+  },
+  {
+    "country": "Guam",
+    "shortcode": "GU",
+    "cities": [
+      {
+        "name": "Dededo Village",
+        "center": [13.51777, 144.8391]
+      },
+      {
+        "name": "Yigo Village",
+        "center": [13.53605, 144.88855]
+      },
+      {
+        "name": "Tamuning",
+        "center": [13.48754, 144.78143]
+      },
+      {
+        "name": "Tamuning-Tumon-Harmon Village",
+        "center": [13.48773, 144.78138]
+      },
+      {
+        "name": "Mangilao Village",
+        "center": [13.44761, 144.80109]
+      }
+    ]
+  },
+  {
+    "country": "Guatemala",
+    "shortcode": "GT",
+    "cities": [
+      {
+        "name": "Guatemala City",
+        "center": [14.64072, -90.51327]
+      },
+      {
+        "name": "Villa Nueva",
+        "center": [14.52512, -90.58544]
+      },
+      {
+        "name": "Mixco",
+        "center": [14.63077, -90.60711]
+      },
+      {
+        "name": "Cobán",
+        "center": [15.47083, -90.37083]
+      },
+      {
+        "name": "Quetzaltenango",
+        "center": [14.83472, -91.51806]
+      }
+    ]
+  },
+  {
+    "country": "Guernsey",
+    "shortcode": "GG",
+    "cities": [
+      {
+        "name": "Saint Peter Port",
+        "center": [49.45981, -2.53527]
+      },
+      {
+        "name": "Saint Sampson",
+        "center": [49.48389, -2.52333]
+      },
+      {
+        "name": "St Martin",
+        "center": [49.43713, -2.55479]
+      },
+      {
+        "name": "Torteval",
+        "center": [49.43333, -2.65]
+      },
+      {
+        "name": "St Anne",
+        "center": [49.71549, -2.20757]
+      }
+    ]
+  },
+  {
+    "country": "Guinea",
+    "shortcode": "GN",
+    "cities": [
+      {
+        "name": "Camayenne",
+        "center": [9.535, -13.68778]
+      },
+      {
+        "name": "Conakry",
+        "center": [9.53795, -13.67729]
+      },
+      {
+        "name": "Nzérékoré",
+        "center": [7.75624, -8.8179]
+      },
+      {
+        "name": "Kindia",
+        "center": [10.05692, -12.86576]
+      },
+      {
+        "name": "Kankan",
+        "center": [10.38542, -9.30568]
+      }
+    ]
+  },
+  {
+    "country": "Guinea-Bissau",
+    "shortcode": "GW",
+    "cities": [
+      {
+        "name": "Bissau",
+        "center": [11.86357, -15.59767]
+      },
+      {
+        "name": "Bafatá",
+        "center": [12.16583, -14.66167]
+      },
+      {
+        "name": "Gabú",
+        "center": [12.28, -14.22222]
+      },
+      {
+        "name": "Bissorã",
+        "center": [12.22306, -15.4475]
+      },
+      {
+        "name": "Bolama",
+        "center": [11.57694, -15.47611]
+      }
+    ]
+  },
+  {
+    "country": "Guyana",
+    "shortcode": "GY",
+    "cities": [
+      {
+        "name": "Georgetown",
+        "center": [6.80448, -58.15527]
+      },
+      {
+        "name": "Linden",
+        "center": [6.00809, -58.30714]
+      },
+      {
+        "name": "New Amsterdam",
+        "center": [6.24793, -57.5171]
+      },
+      {
+        "name": "Anna Regina",
+        "center": [7.26439, -58.50769]
+      },
+      {
+        "name": "Bartica",
+        "center": [6.40799, -58.62192]
+      }
+    ]
+  },
+  {
+    "country": "Haiti",
+    "shortcode": "HT",
+    "cities": [
+      {
+        "name": "Port-au-Prince",
+        "center": [18.54349, -72.33881]
+      },
+      {
+        "name": "Carrefour",
+        "center": [18.54114, -72.39922]
+      },
+      {
+        "name": "Delmas 73",
+        "center": [18.54472, -72.30278]
+      },
+      {
+        "name": "Port-de-Paix",
+        "center": [19.93984, -72.83037]
+      },
+      {
+        "name": "Pétionville",
+        "center": [18.5125, -72.28528]
+      }
+    ]
+  },
+  {
+    "country": "Honduras",
+    "shortcode": "HN",
+    "cities": [
+      {
+        "name": "Tegucigalpa",
+        "center": [14.0818, -87.20681]
+      },
+      {
+        "name": "San Pedro Sula",
+        "center": [15.50417, -88.025]
+      },
+      {
+        "name": "La Ceiba",
+        "center": [15.75971, -86.78221]
+      },
+      {
+        "name": "Choloma",
+        "center": [15.61444, -87.95302]
+      },
+      {
+        "name": "El Progreso",
+        "center": [15.4, -87.8]
+      }
+    ]
+  },
+  {
+    "country": "Hong Kong, China",
+    "shortcode": "HK",
+    "cities": [
+      {
+        "name": "Hong Kong",
+        "center": [22.27832, 114.17469]
+      },
+      {
+        "name": "Kowloon",
+        "center": [22.31667, 114.18333]
+      },
+      {
+        "name": "Victoria",
+        "center": [22.2875, 114.14417]
+      },
+      {
+        "name": "Tuen Mun",
+        "center": [22.39175, 113.97157]
+      },
+      {
+        "name": "Sha Tin",
+        "center": [22.38333, 114.18333]
+      }
+    ]
+  },
+  {
+    "country": "Hungary",
+    "shortcode": "HU",
+    "cities": [
+      {
+        "name": "Budapest",
+        "center": [47.49835, 19.04045]
+      },
+      {
+        "name": "Debrecen",
+        "center": [47.53167, 21.62444]
+      },
+      {
+        "name": "Szeged",
+        "center": [46.253, 20.14824]
+      },
+      {
+        "name": "Miskolc",
+        "center": [48.10306, 20.77806]
+      },
+      {
+        "name": "Pécs",
+        "center": [46.0725, 18.23083]
+      }
+    ]
+  },
+  {
+    "country": "Iceland",
+    "shortcode": "IS",
+    "cities": [
+      {
+        "name": "Reykjavík",
+        "center": [64.13548, -21.89541]
+      },
+      {
+        "name": "Kópavogur",
+        "center": [64.11234, -21.91298]
+      },
+      {
+        "name": "Hafnarfjörður",
+        "center": [64.0671, -21.93774]
+      },
+      {
+        "name": "Reykjanesbær",
+        "center": [63.99813, -22.56111]
+      },
+      {
+        "name": "Akureyri",
+        "center": [65.68353, -18.0878]
+      }
+    ]
+  },
+  {
+    "country": "India",
+    "shortcode": "IN",
+    "cities": [
+      {
+        "name": "Mumbai",
+        "center": [19.07283, 72.88261]
+      },
+      {
+        "name": "Delhi",
+        "center": [28.65195, 77.23149]
+      },
+      {
+        "name": "Bengaluru",
+        "center": [12.97194, 77.59369]
+      },
+      {
+        "name": "Hyderābād",
+        "center": [17.38405, 78.45636]
+      },
+      {
+        "name": "Ahmedabad",
+        "center": [23.02579, 72.58727]
+      }
+    ]
+  },
+  {
+    "country": "Indonesia",
+    "shortcode": "ID",
+    "cities": [
+      {
+        "name": "Jakarta",
+        "center": [-6.21462, 106.84513]
+      },
+      {
+        "name": "Surabaya",
+        "center": [-7.24917, 112.75083]
+      },
+      {
+        "name": "Bekasi",
+        "center": [-6.2349, 106.9896]
+      },
+      {
+        "name": "Bandung",
+        "center": [-6.92222, 107.60694]
+      },
+      {
+        "name": "Medan",
+        "center": [3.58333, 98.66667]
+      }
+    ]
+  },
+  {
+    "country": "Iran",
+    "shortcode": "IR",
+    "cities": [
+      {
+        "name": "Tehran",
+        "center": [35.69439, 51.42151]
+      },
+      {
+        "name": "Mashhad",
+        "center": [36.29807, 59.60567]
+      },
+      {
+        "name": "Isfahan",
+        "center": [32.65246, 51.67462]
+      },
+      {
+        "name": "Karaj",
+        "center": [35.83266, 50.99155]
+      },
+      {
+        "name": "Tabriz",
+        "center": [38.08, 46.2919]
+      }
+    ]
+  },
+  {
+    "country": "Iraq",
+    "shortcode": "IQ",
+    "cities": [
+      {
+        "name": "Baghdad",
+        "center": [33.34058, 44.40088]
+      },
+      {
+        "name": "Al Mawşil al Jadīdah",
+        "center": [36.33271, 43.10555]
+      },
+      {
+        "name": "Al Başrah al Qadīmah",
+        "center": [30.50316, 47.81507]
+      },
+      {
+        "name": "Mosul",
+        "center": [36.335, 43.11889]
+      },
+      {
+        "name": "Erbil",
+        "center": [36.18333, 44.01193]
+      }
+    ]
+  },
+  {
+    "country": "Ireland",
+    "shortcode": "IE",
+    "cities": [
+      {
+        "name": "Dublin",
+        "center": [53.33306, -6.24889]
+      },
+      {
+        "name": "South Dublin",
+        "center": [53.29026, -6.34151]
+      },
+      {
+        "name": "Cork",
+        "center": [51.89797, -8.47061]
+      },
+      {
+        "name": "Limerick",
+        "center": [52.66472, -8.62306]
+      },
+      {
+        "name": "Galway",
+        "center": [53.27245, -9.05095]
+      }
+    ]
+  },
+  {
+    "country": "Isle of Man",
+    "shortcode": "IM",
+    "cities": [
+      {
+        "name": "Douglas",
+        "center": [54.15, -4.48333]
+      },
+      {
+        "name": "Ramsey",
+        "center": [54.32273, -4.38526]
+      },
+      {
+        "name": "Peel",
+        "center": [54.22209, -4.69099]
+      },
+      {
+        "name": "Port Erin",
+        "center": [54.08487, -4.75099]
+      },
+      {
+        "name": "Castletown",
+        "center": [54.07445, -4.65365]
+      }
+    ]
+  },
+  {
+    "country": "Israel",
+    "shortcode": "IL",
+    "cities": [
+      {
+        "name": "Jerusalem",
+        "center": [31.76904, 35.21633]
+      },
+      {
+        "name": "Tel Aviv",
+        "center": [32.08088, 34.78057]
+      },
+      {
+        "name": "West Jerusalem",
+        "center": [31.78199, 35.21961]
+      },
+      {
+        "name": "Haifa",
+        "center": [32.81841, 34.9885]
+      },
+      {
+        "name": "Rishon LeTsiyyon",
+        "center": [31.97102, 34.78939]
+      }
+    ]
+  },
+  {
+    "country": "Italy",
+    "shortcode": "IT",
+    "cities": [
+      {
+        "name": "Rome",
+        "center": [41.89193, 12.51133]
+      },
+      {
+        "name": "Milan",
+        "center": [45.46427, 9.18951]
+      },
+      {
+        "name": "Naples",
+        "center": [40.85216, 14.26811]
+      },
+      {
+        "name": "Turin",
+        "center": [45.07049, 7.68682]
+      },
+      {
+        "name": "Palermo",
+        "center": [38.1166, 13.3636]
+      }
+    ]
+  },
+  {
+    "country": "Jamaica",
+    "shortcode": "JM",
+    "cities": [
+      {
+        "name": "Kingston",
+        "center": [17.99702, -76.79358]
+      },
+      {
+        "name": "New Kingston",
+        "center": [18.00747, -76.78319]
+      },
+      {
+        "name": "Spanish Town",
+        "center": [17.99107, -76.95742]
+      },
+      {
+        "name": "Portmore",
+        "center": [17.95032, -76.88215]
+      },
+      {
+        "name": "Montego Bay",
+        "center": [18.47116, -77.91883]
+      }
+    ]
+  },
+  {
+    "country": "Japan",
+    "shortcode": "JP",
+    "cities": [
+      {
+        "name": "Tokyo",
+        "center": [35.6895, 139.69171]
+      },
+      {
+        "name": "Yokohama",
+        "center": [35.43333, 139.65]
+      },
+      {
+        "name": "Osaka",
+        "center": [34.69374, 135.50218]
+      },
+      {
+        "name": "Nagoya",
+        "center": [35.18147, 136.90641]
+      },
+      {
+        "name": "Sapporo",
+        "center": [43.06667, 141.35]
+      }
+    ]
+  },
+  {
+    "country": "Jersey",
+    "shortcode": "JE",
+    "cities": [
+      {
+        "name": "Saint Helier",
+        "center": [49.18804, -2.10491]
+      },
+      {
+        "name": "Saint John",
+        "center": [49.24556, -2.13861]
+      },
+      {
+        "name": "Le Hocq",
+        "center": [49.16823, -2.06178]
+      }
+    ]
+  },
+  {
+    "country": "Jordan",
+    "shortcode": "JO",
+    "cities": [
+      {
+        "name": "Amman",
+        "center": [31.95522, 35.94503]
+      },
+      {
+        "name": "Zarqa",
+        "center": [32.07275, 36.08796]
+      },
+      {
+        "name": "Irbid",
+        "center": [32.55556, 35.85]
+      },
+      {
+        "name": "Russeifa",
+        "center": [32.01778, 36.04639]
+      },
+      {
+        "name": "Wādī as Sīr",
+        "center": [31.9545, 35.81831]
+      }
+    ]
+  },
+  {
+    "country": "Kazakhstan",
+    "shortcode": "KZ",
+    "cities": [
+      {
+        "name": "Almaty",
+        "center": [43.25, 76.91667]
+      },
+      {
+        "name": "Shymkent",
+        "center": [42.3, 69.6]
+      },
+      {
+        "name": "Aktobe",
+        "center": [50.27969, 57.20718]
+      },
+      {
+        "name": "Karagandy",
+        "center": [49.80187, 73.10211]
+      },
+      {
+        "name": "Taraz",
+        "center": [42.9, 71.36667]
+      }
+    ]
+  },
+  {
+    "country": "Kenya",
+    "shortcode": "KE",
+    "cities": [
+      {
+        "name": "Nairobi",
+        "center": [-1.28333, 36.81667]
+      },
+      {
+        "name": "Kakamega",
+        "center": [0.28422, 34.75229]
+      },
+      {
+        "name": "Mombasa",
+        "center": [-4.05466, 39.66359]
+      },
+      {
+        "name": "Ruiru",
+        "center": [-1.14665, 36.96087]
+      },
+      {
+        "name": "Eldoret",
+        "center": [0.52036, 35.26993]
+      }
+    ]
+  },
+  {
+    "country": "Kiribati",
+    "shortcode": "KI",
+    "cities": [
+      {
+        "name": "Tarawa",
+        "center": [1.3278, 172.97696]
+      },
+      {
+        "name": "Betio Village",
+        "center": [1.35797, 172.92105]
+      },
+      {
+        "name": "Bikenibeu Village",
+        "center": [1.3673, 173.12415]
+      },
+      {
+        "name": "Teaoraereke Village",
+        "center": [1.33309, 173.01162]
+      },
+      {
+        "name": "Bairiki Village",
+        "center": [1.32924, 172.97522]
+      }
+    ]
+  },
+  {
+    "country": "North Korea",
+    "shortcode": "KP",
+    "cities": [
+      {
+        "name": "Pyongyang",
+        "center": [39.03385, 125.75432]
+      },
+      {
+        "name": "Hamhŭng",
+        "center": [39.91833, 127.53639]
+      },
+      {
+        "name": "Namp’o",
+        "center": [38.7375, 125.40778]
+      },
+      {
+        "name": "Sunch’ŏn",
+        "center": [39.43167, 125.93278]
+      },
+      {
+        "name": "Hŭngnam",
+        "center": [39.84198, 127.63206]
+      }
+    ]
+  },
+  {
+    "country": "South Korea",
+    "shortcode": "KR",
+    "cities": [
+      {
+        "name": "Seoul",
+        "center": [37.566, 126.9784]
+      },
+      {
+        "name": "Busan",
+        "center": [35.10168, 129.03004]
+      },
+      {
+        "name": "Incheon",
+        "center": [37.45646, 126.70515]
+      },
+      {
+        "name": "Daegu",
+        "center": [35.87028, 128.59111]
+      },
+      {
+        "name": "Gwangju",
+        "center": [35.15472, 126.91556]
+      }
+    ]
+  },
+  {
+    "country": "Kosovo",
+    "shortcode": "XK",
+    "cities": [
+      {
+        "name": "Pristina",
+        "center": [42.67272, 21.16688]
+      },
+      {
+        "name": "Prizren",
+        "center": [42.21389, 20.73972]
+      },
+      {
+        "name": "Mitrovicë",
+        "center": [42.88333, 20.86667]
+      },
+      {
+        "name": "Gjakovë",
+        "center": [42.38028, 20.43083]
+      },
+      {
+        "name": "Suva Reka",
+        "center": [42.35861, 20.825]
+      }
+    ]
+  },
+  {
+    "country": "Kuwait",
+    "shortcode": "KW",
+    "cities": [
+      {
+        "name": "Al Aḩmadī",
+        "center": [29.07694, 48.08389]
+      },
+      {
+        "name": "Ḩawallī",
+        "center": [29.33278, 48.02861]
+      },
+      {
+        "name": "As Sālimīyah",
+        "center": [29.33389, 48.07611]
+      },
+      {
+        "name": "Şabāḩ as Sālim",
+        "center": [29.25722, 48.05722]
+      },
+      {
+        "name": "Al Farwānīyah",
+        "center": [29.2775, 47.95861]
+      }
+    ]
+  },
+  {
+    "country": "Kyrgyzstan",
+    "shortcode": "KG",
+    "cities": [
+      {
+        "name": "Bishkek",
+        "center": [42.87, 74.59]
+      },
+      {
+        "name": "Osh",
+        "center": [40.52828, 72.7985]
+      },
+      {
+        "name": "Jalal-Abad",
+        "center": [40.93333, 73]
+      },
+      {
+        "name": "Karakol",
+        "center": [42.49068, 78.39362]
+      },
+      {
+        "name": "Tokmok",
+        "center": [42.84194, 75.30149]
+      }
+    ]
+  },
+  {
+    "country": "LaoS",
+    "shortcode": "LA",
+    "cities": [
+      {
+        "name": "Vientiane",
+        "center": [17.96667, 102.6]
+      },
+      {
+        "name": "Savannakhet",
+        "center": [16.5703, 104.7622]
+      },
+      {
+        "name": "Pakse",
+        "center": [15.12022, 105.79898]
+      },
+      {
+        "name": "Thakhèk",
+        "center": [17.41027, 104.83068]
+      },
+      {
+        "name": "Luang Prabang",
+        "center": [19.8933, 102.1525]
+      }
+    ]
+  },
+  {
+    "country": "Latvia",
+    "shortcode": "LV",
+    "cities": [
+      {
+        "name": "Riga",
+        "center": [56.946, 24.10589]
+      },
+      {
+        "name": "Daugavpils",
+        "center": [55.88333, 26.53333]
+      },
+      {
+        "name": "Liepāja",
+        "center": [56.50474, 21.01085]
+      },
+      {
+        "name": "Jelgava",
+        "center": [56.65, 23.71278]
+      },
+      {
+        "name": "Jūrmala",
+        "center": [56.968, 23.77038]
+      }
+    ]
+  },
+  {
+    "country": "Lebanon",
+    "shortcode": "LB",
+    "cities": [
+      {
+        "name": "Beirut",
+        "center": [33.89332, 35.50157]
+      },
+      {
+        "name": "Ra’s Bayrūt",
+        "center": [33.9, 35.48333]
+      },
+      {
+        "name": "Tripoli",
+        "center": [34.43352, 35.84415]
+      },
+      {
+        "name": "Sidon",
+        "center": [33.55751, 35.37148]
+      },
+      {
+        "name": "Tyre",
+        "center": [33.27333, 35.19389]
+      }
+    ]
+  },
+  {
+    "country": "Lesotho",
+    "shortcode": "LS",
+    "cities": [
+      {
+        "name": "Maseru",
+        "center": [-29.31667, 27.48333]
+      },
+      {
+        "name": "Mohale’s Hoek",
+        "center": [-30.15137, 27.47691]
+      },
+      {
+        "name": "Mafeteng",
+        "center": [-29.82299, 27.23744]
+      },
+      {
+        "name": "Leribe",
+        "center": [-28.87185, 28.04501]
+      },
+      {
+        "name": "Butha-Buthe",
+        "center": [-28.76659, 28.24937]
+      }
+    ]
+  },
+  {
+    "country": "Liberia",
+    "shortcode": "LR",
+    "cities": [
+      {
+        "name": "Monrovia",
+        "center": [6.30054, -10.7969]
+      },
+      {
+        "name": "Gbarnga",
+        "center": [6.99543, -9.47122]
+      },
+      {
+        "name": "Kakata",
+        "center": [6.53104, -10.35368]
+      },
+      {
+        "name": "Bensonville",
+        "center": [6.44716, -10.61283]
+      },
+      {
+        "name": "Harper",
+        "center": [4.3782, -7.71081]
+      }
+    ]
+  },
+  {
+    "country": "Libyan Arab Jamahiriya",
+    "shortcode": "LY",
+    "cities": [
+      {
+        "name": "Tripoli",
+        "center": [32.88743, 13.18733]
+      },
+      {
+        "name": "Benghazi",
+        "center": [32.11486, 20.06859]
+      },
+      {
+        "name": "Ajdabiya",
+        "center": [30.75545, 20.22625]
+      },
+      {
+        "name": "Mişrātah",
+        "center": [32.37535, 15.09254]
+      },
+      {
+        "name": "Tarhuna",
+        "center": [32.43501, 13.6332]
+      }
+    ]
+  },
+  {
+    "country": "Liechtenstein",
+    "shortcode": "LI",
+    "cities": [
+      {
+        "name": "Schaan",
+        "center": [47.16498, 9.50867]
+      },
+      {
+        "name": "Vaduz",
+        "center": [47.14151, 9.52154]
+      },
+      {
+        "name": "Triesen",
+        "center": [47.10752, 9.52815]
+      },
+      {
+        "name": "Balzers",
+        "center": [47.06665, 9.50251]
+      },
+      {
+        "name": "Eschen",
+        "center": [47.21071, 9.52223]
+      }
+    ]
+  },
+  {
+    "country": "Lithuania",
+    "shortcode": "LT",
+    "cities": [
+      {
+        "name": "Vilnius",
+        "center": [54.68916, 25.2798]
+      },
+      {
+        "name": "Kaunas",
+        "center": [54.90272, 23.90961]
+      },
+      {
+        "name": "Klaipėda",
+        "center": [55.7068, 21.13912]
+      },
+      {
+        "name": "Šiauliai",
+        "center": [55.93333, 23.31667]
+      },
+      {
+        "name": "Panevėžys",
+        "center": [55.73186, 24.35983]
+      }
+    ]
+  },
+  {
+    "country": "Luxembourg",
+    "shortcode": "LU",
+    "cities": [
+      {
+        "name": "Luxembourg",
+        "center": [49.61167, 6.13]
+      },
+      {
+        "name": "Esch-sur-Alzette",
+        "center": [49.49583, 5.98056]
+      },
+      {
+        "name": "Dudelange",
+        "center": [49.48056, 6.0875]
+      },
+      {
+        "name": "Schifflange",
+        "center": [49.50639, 6.01278]
+      },
+      {
+        "name": "Bettembourg",
+        "center": [49.51861, 6.10278]
+      }
+    ]
+  },
+  {
+    "country": "Macau, China",
+    "shortcode": "MO",
+    "cities": [
+      {
+        "name": "Macau",
+        "center": [22.20056, 113.54611]
+      }
+    ]
+  },
+  {
+    "country": "Macedonia",
+    "shortcode": "MK",
+    "cities": [
+      {
+        "name": "Skopje",
+        "center": [41.99646, 21.43141]
+      },
+      {
+        "name": "Kumanovo",
+        "center": [42.13222, 21.71444]
+      },
+      {
+        "name": "Prilep",
+        "center": [41.34514, 21.55504]
+      },
+      {
+        "name": "Bitola",
+        "center": [41.03143, 21.33474]
+      },
+      {
+        "name": "Čair",
+        "center": [42.01528, 21.44111]
+      }
+    ]
+  },
+  {
+    "country": "Madagascar",
+    "shortcode": "MG",
+    "cities": [
+      {
+        "name": "Antananarivo",
+        "center": [-18.91368, 47.53613]
+      },
+      {
+        "name": "Toamasina",
+        "center": [-18.1492, 49.40234]
+      },
+      {
+        "name": "Antsirabe",
+        "center": [-19.86586, 47.03333]
+      },
+      {
+        "name": "Mahajanga",
+        "center": [-15.71667, 46.31667]
+      },
+      {
+        "name": "Fianarantsoa",
+        "center": [-21.45267, 47.08569]
+      }
+    ]
+  },
+  {
+    "country": "Malawi",
+    "shortcode": "MW",
+    "cities": [
+      {
+        "name": "Lilongwe",
+        "center": [-13.96692, 33.78725]
+      },
+      {
+        "name": "Blantyre",
+        "center": [-15.78499, 35.00854]
+      },
+      {
+        "name": "Mzuzu",
+        "center": [-11.46556, 34.02071]
+      },
+      {
+        "name": "Zomba",
+        "center": [-15.38596, 35.3188]
+      },
+      {
+        "name": "Kasungu",
+        "center": [-13.03333, 33.48333]
+      }
+    ]
+  },
+  {
+    "country": "Malaysia",
+    "shortcode": "MY",
+    "cities": [
+      {
+        "name": "Kuala Lumpur",
+        "center": [3.1412, 101.68653]
+      },
+      {
+        "name": "Petaling Jaya",
+        "center": [3.10726, 101.60671]
+      },
+      {
+        "name": "Klang",
+        "center": [3.03667, 101.44333]
+      },
+      {
+        "name": "Johor Bahru",
+        "center": [1.4655, 103.7578]
+      },
+      {
+        "name": "Ipoh",
+        "center": [4.5841, 101.0829]
+      }
+    ]
+  },
+  {
+    "country": "Maldives",
+    "shortcode": "MV",
+    "cities": [
+      {
+        "name": "Male",
+        "center": [4.17521, 73.50916]
+      },
+      {
+        "name": "Fuvahmulah",
+        "center": [-0.29878, 73.42403]
+      },
+      {
+        "name": "Hithadhoo",
+        "center": [-0.6, 73.08333]
+      },
+      {
+        "name": "Kulhudhuffushi",
+        "center": [6.62207, 73.06998]
+      },
+      {
+        "name": "Thinadhoo",
+        "center": [0.5306, 72.99969]
+      }
+    ]
+  },
+  {
+    "country": "Mali",
+    "shortcode": "ML",
+    "cities": [
+      {
+        "name": "Bamako",
+        "center": [12.65, -8]
+      },
+      {
+        "name": "Ségou",
+        "center": [13.44032, -6.25947]
+      },
+      {
+        "name": "Sikasso",
+        "center": [11.31755, -5.66654]
+      },
+      {
+        "name": "Mopti",
+        "center": [14.4843, -4.18296]
+      },
+      {
+        "name": "Koutiala",
+        "center": [12.39173, -5.46421]
+      }
+    ]
+  },
+  {
+    "country": "Malta",
+    "shortcode": "MT",
+    "cities": [
+      {
+        "name": "San Pawl il-Baħar",
+        "center": [35.95064, 14.41561]
+      },
+      {
+        "name": "Birkirkara",
+        "center": [35.89722, 14.46111]
+      },
+      {
+        "name": "Mosta",
+        "center": [35.90917, 14.42556]
+      },
+      {
+        "name": "Sliema",
+        "center": [35.9125, 14.50194]
+      },
+      {
+        "name": "Qormi",
+        "center": [35.87601, 14.472]
+      }
+    ]
+  },
+  {
+    "country": "Marshall Islands",
+    "shortcode": "MH",
+    "cities": [
+      {
+        "name": "Majuro",
+        "center": [7.08971, 171.38027]
+      },
+      {
+        "name": "Ebaye",
+        "center": [8.77479, 167.73919]
+      },
+      {
+        "name": "Arno",
+        "center": [7.06691, 171.55413]
+      },
+      {
+        "name": "Jabor",
+        "center": [5.92098, 169.64335]
+      },
+      {
+        "name": "Wotje",
+        "center": [9.45429, 170.23674]
+      }
+    ]
+  },
+  {
+    "country": "Martinique",
+    "shortcode": "MQ",
+    "cities": [
+      {
+        "name": "Fort-de-France",
+        "center": [14.60365, -61.07418]
+      },
+      {
+        "name": "Le Lamentin",
+        "center": [14.61341, -60.99964]
+      },
+      {
+        "name": "Le Robert",
+        "center": [14.67751, -60.94228]
+      },
+      {
+        "name": "Sainte-Marie",
+        "center": [14.78352, -60.99227]
+      },
+      {
+        "name": "Le François",
+        "center": [14.61513, -60.90311]
+      }
+    ]
+  },
+  {
+    "country": "Mauritania",
+    "shortcode": "MR",
+    "cities": [
+      {
+        "name": "Nouakchott",
+        "center": [18.08581, -15.9785]
+      },
+      {
+        "name": "Nouadhibou",
+        "center": [20.94188, -17.03842]
+      },
+      {
+        "name": "Dar Naim",
+        "center": [18.10808, -15.92666]
+      },
+      {
+        "name": "Néma",
+        "center": [16.61702, -7.25649]
+      },
+      {
+        "name": "Kaédi",
+        "center": [16.15027, -13.5037]
+      }
+    ]
+  },
+  {
+    "country": "Mauritius",
+    "shortcode": "MU",
+    "cities": [
+      {
+        "name": "Port Louis",
+        "center": [-20.16194, 57.49889]
+      },
+      {
+        "name": "Vacoas",
+        "center": [-20.29806, 57.47833]
+      },
+      {
+        "name": "Beau Bassin-Rose Hill",
+        "center": [-20.23325, 57.46609]
+      },
+      {
+        "name": "Curepipe",
+        "center": [-20.31628, 57.52594]
+      },
+      {
+        "name": "Quatre Bornes",
+        "center": [-20.26381, 57.4791]
+      }
+    ]
+  },
+  {
+    "country": "Mayotte",
+    "shortcode": "YT",
+    "cities": [
+      {
+        "name": "Mamoudzou",
+        "center": [-12.78234, 45.22878]
+      },
+      {
+        "name": "Koungou",
+        "center": [-12.73361, 45.20417]
+      },
+      {
+        "name": "Dzaoudzi",
+        "center": [-12.78339, 45.25693]
+      },
+      {
+        "name": "Dembeni",
+        "center": [-12.8436, 45.18436]
+      },
+      {
+        "name": "Sada",
+        "center": [-12.85055, 45.10205]
+      }
+    ]
+  },
+  {
+    "country": "Mexico",
+    "shortcode": "MX",
+    "cities": [
+      {
+        "name": "Mexico City",
+        "center": [19.42847, -99.12766]
+      },
+      {
+        "name": "Tijuana",
+        "center": [32.5027, -117.00371]
+      },
+      {
+        "name": "Iztapalapa",
+        "center": [19.35529, -99.06224]
+      },
+      {
+        "name": "León de los Aldama",
+        "center": [21.12908, -101.67374]
+      },
+      {
+        "name": "Puebla",
+        "center": [19.03793, -98.20346]
+      }
+    ]
+  },
+  {
+    "country": "Micronesia",
+    "shortcode": "FM",
+    "cities": [
+      {
+        "name": "Weno",
+        "center": [7.44648, 151.84135]
+      },
+      {
+        "name": "Tofol",
+        "center": [5.32479, 163.00781]
+      },
+      {
+        "name": "Colonia",
+        "center": [9.51638, 138.12167]
+      },
+      {
+        "name": "Kolonia",
+        "center": [6.964, 158.2062]
+      },
+      {
+        "name": "Kolonia Town",
+        "center": [6.964, 158.206]
+      }
+    ]
+  },
+  {
+    "country": "Moldova",
+    "shortcode": "MD",
+    "cities": [
+      {
+        "name": "Chisinau",
+        "center": [47.00556, 28.8575]
+      },
+      {
+        "name": "Tiraspol",
+        "center": [46.84274, 29.62909]
+      },
+      {
+        "name": "Bălţi",
+        "center": [47.76314, 27.92932]
+      },
+      {
+        "name": "Bender",
+        "center": [46.83156, 29.47769]
+      },
+      {
+        "name": "Rîbniţa",
+        "center": [47.76817, 29.01]
+      }
+    ]
+  },
+  {
+    "country": "Monaco",
+    "shortcode": "MC",
+    "cities": [
+      {
+        "name": "Monaco",
+        "center": [43.73718, 7.42145]
+      },
+      {
+        "name": "Monte-Carlo",
+        "center": [43.73976, 7.42732]
+      },
+      {
+        "name": "La Condamine",
+        "center": [43.73439, 7.42024]
+      },
+      {
+        "name": "Fontvieille",
+        "center": [43.72687, 7.41766]
+      },
+      {
+        "name": "Saint-Roman",
+        "center": [43.7489, 7.43423]
+      }
+    ]
+  },
+  {
+    "country": "Mongolia",
+    "shortcode": "MN",
+    "cities": [
+      {
+        "name": "Ulan Bator",
+        "center": [47.90771, 106.88324]
+      },
+      {
+        "name": "Erdenet",
+        "center": [49.03333, 104.08333]
+      },
+      {
+        "name": "Darhan",
+        "center": [49.48667, 105.92278]
+      },
+      {
+        "name": "Mörön",
+        "center": [49.63417, 100.1625]
+      },
+      {
+        "name": "Bayanhongor",
+        "center": [46.19444, 100.71806]
+      }
+    ]
+  },
+  {
+    "country": "Montenegro",
+    "shortcode": "ME",
+    "cities": [
+      {
+        "name": "Podgorica",
+        "center": [42.44111, 19.26361]
+      },
+      {
+        "name": "Nikšić",
+        "center": [42.7731, 18.94446]
+      },
+      {
+        "name": "Herceg Novi",
+        "center": [42.45306, 18.5375]
+      },
+      {
+        "name": "Pljevlja",
+        "center": [43.3567, 19.35843]
+      },
+      {
+        "name": "Budva",
+        "center": [42.28639, 18.84]
+      }
+    ]
+  },
+  {
+    "country": "Montserrat",
+    "shortcode": "MS",
+    "cities": [
+      {
+        "name": "Brades",
+        "center": [16.79183, -62.21058]
+      },
+      {
+        "name": "Plymouth",
+        "center": [16.70555, -62.21292]
+      },
+      {
+        "name": "Saint Peters",
+        "center": [16.7727, -62.21729]
+      }
+    ]
+  },
+  {
+    "country": "Morocco",
+    "shortcode": "MA",
+    "cities": [
+      {
+        "name": "Casablanca",
+        "center": [33.58831, -7.61138]
+      },
+      {
+        "name": "Rabat",
+        "center": [34.01325, -6.83255]
+      },
+      {
+        "name": "Fès",
+        "center": [34.03313, -5.00028]
+      },
+      {
+        "name": "Sale",
+        "center": [34.0531, -6.79846]
+      },
+      {
+        "name": "Marrakesh",
+        "center": [31.63416, -7.99994]
+      }
+    ]
+  },
+  {
+    "country": "Mozambique",
+    "shortcode": "MZ",
+    "cities": [
+      {
+        "name": "Maputo",
+        "center": [-25.96553, 32.58322]
+      },
+      {
+        "name": "Matola",
+        "center": [-25.96222, 32.45889]
+      },
+      {
+        "name": "Nampula",
+        "center": [-15.11646, 39.2666]
+      },
+      {
+        "name": "Beira",
+        "center": [-19.84361, 34.83889]
+      },
+      {
+        "name": "Chimoio",
+        "center": [-19.11639, 33.48333]
+      }
+    ]
+  },
+  {
+    "country": "Myanmar",
+    "shortcode": "MM",
+    "cities": [
+      {
+        "name": "Yangon",
+        "center": [16.80528, 96.15611]
+      },
+      {
+        "name": "Mandalay",
+        "center": [21.97473, 96.08359]
+      },
+      {
+        "name": "Nay Pyi Taw",
+        "center": [19.745, 96.12972]
+      },
+      {
+        "name": "Mawlamyine",
+        "center": [16.49051, 97.62825]
+      },
+      {
+        "name": "Kyain Seikgyi Township",
+        "center": [15.82288, 98.25257]
+      }
+    ]
+  },
+  {
+    "country": "Namibia",
+    "shortcode": "NA",
+    "cities": [
+      {
+        "name": "Windhoek",
+        "center": [-22.55941, 17.08323]
+      },
+      {
+        "name": "Rundu",
+        "center": [-17.91796, 19.77314]
+      },
+      {
+        "name": "Walvis Bay",
+        "center": [-22.9575, 14.50528]
+      },
+      {
+        "name": "Oshakati",
+        "center": [-17.78833, 15.70436]
+      },
+      {
+        "name": "Swakopmund",
+        "center": [-22.67842, 14.52663]
+      }
+    ]
+  },
+  {
+    "country": "Nauru",
+    "shortcode": "NR",
+    "cities": [
+      {
+        "name": "Arijejen",
+        "center": [-0.52545, 166.91247]
+      },
+      {
+        "name": "Denigomodu",
+        "center": [-0.52574, 166.91259]
+      },
+      {
+        "name": "Menen",
+        "center": [-0.54539, 166.94871]
+      },
+      {
+        "name": "Yaren",
+        "center": [-0.55085, 166.9252]
+      },
+      {
+        "name": "Baiti",
+        "center": [-0.50803, 166.92945]
+      }
+    ]
+  },
+  {
+    "country": "Nepal",
+    "shortcode": "NP",
+    "cities": [
+      {
+        "name": "Kathmandu",
+        "center": [27.70169, 85.3206]
+      },
+      {
+        "name": "Bharatpur",
+        "center": [27.6768, 84.43589]
+      },
+      {
+        "name": "Pātan",
+        "center": [27.67658, 85.31417]
+      },
+      {
+        "name": "Birgañj",
+        "center": [27.01709, 84.8808]
+      },
+      {
+        "name": "Biratnagar",
+        "center": [26.45505, 87.27007]
+      }
+    ]
+  },
+  {
+    "country": "Netherlands",
+    "shortcode": "NL",
+    "cities": [
+      {
+        "name": "Amsterdam",
+        "center": [52.37403, 4.88969]
+      },
+      {
+        "name": "Rotterdam",
+        "center": [51.9225, 4.47917]
+      },
+      {
+        "name": "The Hague",
+        "center": [52.07667, 4.29861]
+      },
+      {
+        "name": "Utrecht",
+        "center": [52.09083, 5.12222]
+      },
+      {
+        "name": "Groningen",
+        "center": [53.21917, 6.56667]
+      }
+    ]
+  },
+  {
+    "country": "New Caledonia",
+    "shortcode": "NC",
+    "cities": [
+      {
+        "name": "Nouméa",
+        "center": [-22.27407, 166.44884]
+      },
+      {
+        "name": "Mont-Dore",
+        "center": [-22.26257, 166.56621]
+      },
+      {
+        "name": "Dumbéa",
+        "center": [-22.15757, 166.4572]
+      },
+      {
+        "name": "Païta",
+        "center": [-22.13105, 166.35717]
+      },
+      {
+        "name": "Wé",
+        "center": [-20.91687, 167.26461]
+      }
+    ]
+  },
+  {
+    "country": "New Zealand",
+    "shortcode": "NZ",
+    "cities": [
+      {
+        "name": "Auckland",
+        "center": [-36.84853, 174.76349]
+      },
+      {
+        "name": "Wellington",
+        "center": [-41.28664, 174.77557]
+      },
+      {
+        "name": "Christchurch",
+        "center": [-43.53333, 172.63333]
+      },
+      {
+        "name": "Manukau City",
+        "center": [-36.99282, 174.87986]
+      },
+      {
+        "name": "North Shore",
+        "center": [-36.8, 174.75]
+      }
+    ]
+  },
+  {
+    "country": "Nicaragua",
+    "shortcode": "NI",
+    "cities": [
+      {
+        "name": "Managua",
+        "center": [12.13282, -86.2504]
+      },
+      {
+        "name": "León",
+        "center": [12.43787, -86.87804]
+      },
+      {
+        "name": "Masaya",
+        "center": [11.97444, -86.09417]
+      },
+      {
+        "name": "Chinandega",
+        "center": [12.62937, -87.13105]
+      },
+      {
+        "name": "Matagalpa",
+        "center": [12.92559, -85.91747]
+      }
+    ]
+  },
+  {
+    "country": "Niger",
+    "shortcode": "NE",
+    "cities": [
+      {
+        "name": "Niamey",
+        "center": [13.51366, 2.1098]
+      },
+      {
+        "name": "Zinder",
+        "center": [13.80716, 8.9881]
+      },
+      {
+        "name": "Maradi",
+        "center": [13.5, 7.10174]
+      },
+      {
+        "name": "Agadez",
+        "center": [16.97333, 7.99111]
+      },
+      {
+        "name": "Alaghsas",
+        "center": [17.0187, 8.0168]
+      }
+    ]
+  },
+  {
+    "country": "Nigeria",
+    "shortcode": "NG",
+    "cities": [
+      {
+        "name": "Lagos",
+        "center": [6.45407, 3.39467]
+      },
+      {
+        "name": "Kano",
+        "center": [12.00012, 8.51672]
+      },
+      {
+        "name": "Ibadan",
+        "center": [7.37756, 3.90591]
+      },
+      {
+        "name": "Port Harcourt",
+        "center": [4.77742, 7.0134]
+      },
+      {
+        "name": "Benin City",
+        "center": [6.33815, 5.62575]
+      }
+    ]
+  },
+  {
+    "country": "Niue",
+    "shortcode": "NU",
+    "cities": [
+      {
+        "name": "Alofi",
+        "center": [-19.05294, -169.91957]
+      }
+    ]
+  },
+  {
+    "country": "Norfolk Island",
+    "shortcode": "NF",
+    "cities": [
+      {
+        "name": "Kingston",
+        "center": [-29.05459, 167.96628]
+      }
+    ]
+  },
+  {
+    "country": "Northern Mariana Islands",
+    "shortcode": "MP",
+    "cities": [
+      {
+        "name": "Saipan",
+        "center": [15.21233, 145.7545]
+      },
+      {
+        "name": "San Jose Village",
+        "center": [14.96823, 145.61998]
+      }
+    ]
+  },
+  {
+    "country": "Norway",
+    "shortcode": "NO",
+    "cities": [
+      {
+        "name": "Oslo",
+        "center": [59.91273, 10.74609]
+      },
+      {
+        "name": "Bergen",
+        "center": [60.39299, 5.32415]
+      },
+      {
+        "name": "Trondheim",
+        "center": [63.43049, 10.39506]
+      },
+      {
+        "name": "Stavanger",
+        "center": [58.97005, 5.73332]
+      },
+      {
+        "name": "Drammen",
+        "center": [59.74389, 10.20449]
+      }
+    ]
+  },
+  {
+    "country": "Oman",
+    "shortcode": "OM",
+    "cities": [
+      {
+        "name": "Muscat",
+        "center": [23.58413, 58.40778]
+      },
+      {
+        "name": "Seeb",
+        "center": [23.67027, 58.18911]
+      },
+      {
+        "name": "Bawshar",
+        "center": [23.57769, 58.39982]
+      },
+      {
+        "name": "‘Ibrī",
+        "center": [23.22573, 56.51572]
+      },
+      {
+        "name": "Şalālah",
+        "center": [17.01505, 54.09237]
+      }
+    ]
+  },
+  {
+    "country": "Pakistan",
+    "shortcode": "PK",
+    "cities": [
+      {
+        "name": "Karachi",
+        "center": [24.8608, 67.0104]
+      },
+      {
+        "name": "Lahore",
+        "center": [31.558, 74.35071]
+      },
+      {
+        "name": "Faisalabad",
+        "center": [31.41554, 73.08969]
+      },
+      {
+        "name": "Rawalpindi",
+        "center": [33.59733, 73.0479]
+      },
+      {
+        "name": "Multan",
+        "center": [30.19679, 71.47824]
+      }
+    ]
+  },
+  {
+    "country": "Palau",
+    "shortcode": "PW",
+    "cities": [
+      {
+        "name": "Koror",
+        "center": [7.33978, 134.47326]
+      },
+      {
+        "name": "Koror Town",
+        "center": [7.34257, 134.47888]
+      },
+      {
+        "name": "Kloulklubed",
+        "center": [7.04192, 134.25561]
+      },
+      {
+        "name": "Ulimang",
+        "center": [7.62416, 134.64208]
+      },
+      {
+        "name": "Mengellang",
+        "center": [7.6957, 134.63054]
+      }
+    ]
+  },
+  {
+    "country": "Panama",
+    "shortcode": "PA",
+    "cities": [
+      {
+        "name": "Panamá",
+        "center": [8.9936, -79.51973]
+      },
+      {
+        "name": "San Miguelito",
+        "center": [9.05032, -79.47068]
+      },
+      {
+        "name": "Juan Díaz",
+        "center": [9.04059, -79.44083]
+      },
+      {
+        "name": "David",
+        "center": [8.42729, -82.43085]
+      },
+      {
+        "name": "Arraiján",
+        "center": [8.9398, -79.64038]
+      }
+    ]
+  },
+  {
+    "country": "Papua New Guinea",
+    "shortcode": "PG",
+    "cities": [
+      {
+        "name": "Port Moresby",
+        "center": [-9.47723, 147.15089]
+      },
+      {
+        "name": "Lae",
+        "center": [-6.72333, 146.99611]
+      },
+      {
+        "name": "Arawa",
+        "center": [-6.22977, 155.56598]
+      },
+      {
+        "name": "Mount Hagen",
+        "center": [-5.85746, 144.23058]
+      },
+      {
+        "name": "Popondetta",
+        "center": [-8.76536, 148.23252]
+      }
+    ]
+  },
+  {
+    "country": "Paraguay",
+    "shortcode": "PY",
+    "cities": [
+      {
+        "name": "Asunción",
+        "center": [-25.28646, -57.647]
+      },
+      {
+        "name": "Ciudad del Este",
+        "center": [-25.50972, -54.61111]
+      },
+      {
+        "name": "San Lorenzo",
+        "center": [-25.33968, -57.50879]
+      },
+      {
+        "name": "Capiatá",
+        "center": [-25.3552, -57.44545]
+      },
+      {
+        "name": "Lambaré",
+        "center": [-25.34682, -57.60647]
+      }
+    ]
+  },
+  {
+    "country": "Peru",
+    "shortcode": "PE",
+    "cities": [
+      {
+        "name": "Lima",
+        "center": [-12.04318, -77.02824]
+      },
+      {
+        "name": "Callao",
+        "center": [-12.05659, -77.11814]
+      },
+      {
+        "name": "Arequipa",
+        "center": [-16.39889, -71.535]
+      },
+      {
+        "name": "Trujillo",
+        "center": [-8.11599, -79.02998]
+      },
+      {
+        "name": "Chiclayo",
+        "center": [-6.77137, -79.84088]
+      }
+    ]
+  },
+  {
+    "country": "Philippines",
+    "shortcode": "PH",
+    "cities": [
+      {
+        "name": "Quezon City",
+        "center": [14.6488, 121.0509]
+      },
+      {
+        "name": "Davao",
+        "center": [7.07306, 125.61278]
+      },
+      {
+        "name": "Manila",
+        "center": [14.6042, 120.9822]
+      },
+      {
+        "name": "Caloocan City",
+        "center": [14.64953, 120.96788]
+      },
+      {
+        "name": "Budta",
+        "center": [7.20417, 124.43972]
+      }
+    ]
+  },
+  {
+    "country": "Pitcairn",
+    "shortcode": "PN",
+    "cities": [
+      {
+        "name": "Adamstown",
+        "center": [-25.06597, -130.10147]
+      }
+    ]
+  },
+  {
+    "country": "Poland",
+    "shortcode": "PL",
+    "cities": [
+      {
+        "name": "Warsaw",
+        "center": [52.22977, 21.01178]
+      },
+      {
+        "name": "Łódź",
+        "center": [51.77058, 19.47395]
+      },
+      {
+        "name": "Kraków",
+        "center": [50.06143, 19.93658]
+      },
+      {
+        "name": "Wrocław",
+        "center": [51.1, 17.03333]
+      },
+      {
+        "name": "Poznań",
+        "center": [52.40692, 16.92993]
+      }
+    ]
+  },
+  {
+    "country": "Portugal",
+    "shortcode": "PT",
+    "cities": [
+      {
+        "name": "Lisbon",
+        "center": [38.71667, -9.13333]
+      },
+      {
+        "name": "Porto",
+        "center": [41.14961, -8.61099]
+      },
+      {
+        "name": "Amadora",
+        "center": [38.75382, -9.23083]
+      },
+      {
+        "name": "Braga",
+        "center": [41.55032, -8.42005]
+      },
+      {
+        "name": "Setúbal",
+        "center": [38.5244, -8.8882]
+      }
+    ]
+  },
+  {
+    "country": "Puerto Rico",
+    "shortcode": "PR",
+    "cities": [
+      {
+        "name": "San Juan",
+        "center": [18.46633, -66.10572]
+      },
+      {
+        "name": "Bayamón",
+        "center": [18.39856, -66.15572]
+      },
+      {
+        "name": "Carolina",
+        "center": [18.38078, -65.95739]
+      },
+      {
+        "name": "Ponce",
+        "center": [18.01031, -66.62398]
+      },
+      {
+        "name": "Arecibo",
+        "center": [18.47245, -66.71573]
+      }
+    ]
+  },
+  {
+    "country": "Qatar",
+    "shortcode": "QA",
+    "cities": [
+      {
+        "name": "Doha",
+        "center": [25.28545, 51.53096]
+      },
+      {
+        "name": "Ar Rayyān",
+        "center": [25.29194, 51.42444]
+      },
+      {
+        "name": "Umm Şalāl Muḩammad",
+        "center": [25.41524, 51.40647]
+      },
+      {
+        "name": "Al Wakrah",
+        "center": [25.17151, 51.60337]
+      },
+      {
+        "name": "Al Khawr",
+        "center": [25.68389, 51.50583]
+      }
+    ]
+  },
+  {
+    "country": "Romania",
+    "shortcode": "RO",
+    "cities": [
+      {
+        "name": "Bucharest",
+        "center": [44.43225, 26.10626]
+      },
+      {
+        "name": "Sector 3",
+        "center": [44.4234, 26.16874]
+      },
+      {
+        "name": "Iaşi",
+        "center": [47.16667, 27.6]
+      },
+      {
+        "name": "Sector 6",
+        "center": [44.43579, 26.01649]
+      },
+      {
+        "name": "Sector 2",
+        "center": [44.4528, 26.13321]
+      }
+    ]
+  },
+  {
+    "country": "Russian Federation",
+    "shortcode": "RU",
+    "cities": [
+      {
+        "name": "Moscow",
+        "center": [55.75222, 37.61556]
+      },
+      {
+        "name": "Saint Petersburg",
+        "center": [59.93863, 30.31413]
+      },
+      {
+        "name": "Novosibirsk",
+        "center": [55.0415, 82.9346]
+      },
+      {
+        "name": "Yekaterinburg",
+        "center": [56.8519, 60.6122]
+      },
+      {
+        "name": "Nizhniy Novgorod",
+        "center": [56.32867, 44.00205]
+      }
+    ]
+  },
+  {
+    "country": "Rwanda",
+    "shortcode": "RW",
+    "cities": [
+      {
+        "name": "Kigali",
+        "center": [-1.94995, 30.05885]
+      },
+      {
+        "name": "Gisenyi",
+        "center": [-1.70278, 29.25639]
+      },
+      {
+        "name": "Butare",
+        "center": [-2.59667, 29.73944]
+      },
+      {
+        "name": "Gitarama",
+        "center": [-2.07444, 29.75667]
+      },
+      {
+        "name": "Musanze",
+        "center": [-1.49984, 29.63497]
+      }
+    ]
+  },
+  {
+    "country": "Réunion",
+    "shortcode": "RE",
+    "cities": [
+      {
+        "name": "Saint-Denis",
+        "center": [-20.88231, 55.4504]
+      },
+      {
+        "name": "Saint-Paul",
+        "center": [-21.00961, 55.27134]
+      },
+      {
+        "name": "Le Tampon",
+        "center": [-21.2766, 55.51766]
+      },
+      {
+        "name": "Saint-Pierre",
+        "center": [-21.3393, 55.47811]
+      },
+      {
+        "name": "Saint-André",
+        "center": [-20.96333, 55.65031]
+      }
+    ]
+  },
+  {
+    "country": "Saint Barthélemy",
+    "shortcode": "BL",
+    "cities": [
+      {
+        "name": "Gustavia",
+        "center": [17.89618, -62.84978]
+      }
+    ]
+  },
+  {
+    "country": "Saint Barthélemy",
+    "shortcode": "VA",
+    "cities": [
+      {
+        "name": "Vatican City",
+        "center": [41.90268, 12.45414]
+      }
+    ]
+  },
+  {
+    "country": "Saint Helena",
+    "shortcode": "SH",
+    "cities": [
+      {
+        "name": "Jamestown",
+        "center": [-15.93872, -5.71675]
+      },
+      {
+        "name": "Georgetown",
+        "center": [-7.92861, -14.41194]
+      },
+      {
+        "name": "Edinburgh of the Seven Seas",
+        "center": [-37.06757, -12.31155]
+      }
+    ]
+  },
+  {
+    "country": "Saint Kitts and Nevis",
+    "shortcode": "KN",
+    "cities": [
+      {
+        "name": "Basseterre",
+        "center": [17.2955, -62.72499]
+      },
+      {
+        "name": "Fig Tree",
+        "center": [17.12623, -62.60265]
+      },
+      {
+        "name": "Market Shop",
+        "center": [17.13218, -62.57267]
+      },
+      {
+        "name": "Saint Paul’s",
+        "center": [17.40605, -62.83562]
+      },
+      {
+        "name": "Middle Island",
+        "center": [17.3259, -62.81055]
+      }
+    ]
+  },
+  {
+    "country": "Saint Lucia",
+    "shortcode": "LC",
+    "cities": [
+      {
+        "name": "Castries",
+        "center": [13.9957, -61.00614]
+      },
+      {
+        "name": "Bisee",
+        "center": [14.02429, -60.97445]
+      },
+      {
+        "name": "Vieux Fort",
+        "center": [13.71667, -60.95]
+      },
+      {
+        "name": "Micoud",
+        "center": [13.81667, -60.9]
+      },
+      {
+        "name": "Soufrière",
+        "center": [13.85616, -61.0566]
+      }
+    ]
+  },
+  {
+    "country": "Saint Martin",
+    "shortcode": "MF",
+    "cities": [
+      {
+        "name": "Marigot",
+        "center": [18.06819, -63.08302]
+      }
+    ]
+  },
+  {
+    "country": "Saint Pierre and Miquelon",
+    "shortcode": "PM",
+    "cities": [
+      {
+        "name": "Saint-Pierre",
+        "center": [46.77914, -56.1773]
+      },
+      {
+        "name": "Miquelon",
+        "center": [47.0975, -56.38139]
+      }
+    ]
+  },
+  {
+    "country": "Saint Vincent and the Grenadines",
+    "shortcode": "VC",
+    "cities": [
+      {
+        "name": "Kingstown",
+        "center": [13.15527, -61.22742]
+      },
+      {
+        "name": "Kingstown Park",
+        "center": [13.15924, -61.23161]
+      },
+      {
+        "name": "Georgetown",
+        "center": [13.28054, -61.1185]
+      },
+      {
+        "name": "Byera Village",
+        "center": [13.25636, -61.11954]
+      },
+      {
+        "name": "Biabou",
+        "center": [13.1943, -61.13904]
+      }
+    ]
+  },
+  {
+    "country": "Samoa",
+    "shortcode": "WS",
+    "cities": [
+      {
+        "name": "Apia",
+        "center": [-13.83333, -171.76666]
+      },
+      {
+        "name": "Asau",
+        "center": [-13.51963, -172.63784]
+      },
+      {
+        "name": "Mulifanua",
+        "center": [-13.83183, -172.03602]
+      },
+      {
+        "name": "Faleula",
+        "center": [-13.79457, -171.83126]
+      },
+      {
+        "name": "Siusega",
+        "center": [-13.84432, -171.81397]
+      }
+    ]
+  },
+  {
+    "country": "San Marino",
+    "shortcode": "SM",
+    "cities": [
+      {
+        "name": "Serravalle",
+        "center": [43.96897, 12.48167]
+      },
+      {
+        "name": "Borgo Maggiore",
+        "center": [43.94193, 12.44738]
+      },
+      {
+        "name": "San Marino",
+        "center": [43.93667, 12.44639]
+      },
+      {
+        "name": "Domagnano",
+        "center": [43.94961, 12.46828]
+      },
+      {
+        "name": "Fiorentino",
+        "center": [43.91001, 12.45738]
+      }
+    ]
+  },
+  {
+    "country": "Sao Tome and Principe",
+    "shortcode": "ST",
+    "cities": [
+      {
+        "name": "São Tomé",
+        "center": [0.33654, 6.72732]
+      },
+      {
+        "name": "Santo António",
+        "center": [1.63943, 7.41951]
+      },
+      {
+        "name": "Trindade",
+        "center": [0.29667, 6.68139]
+      },
+      {
+        "name": "São João dos Angolares",
+        "center": [0.13417, 6.64944]
+      },
+      {
+        "name": "Guadalupe",
+        "center": [0.37917, 6.6375]
+      }
+    ]
+  },
+  {
+    "country": "Saudi Arabia",
+    "shortcode": "SA",
+    "cities": [
+      {
+        "name": "Jeddah",
+        "center": [21.49012, 39.18624]
+      },
+      {
+        "name": "Riyadh",
+        "center": [24.68773, 46.72185]
+      },
+      {
+        "name": "Mecca",
+        "center": [21.42664, 39.82563]
+      },
+      {
+        "name": "Medina",
+        "center": [24.46861, 39.61417]
+      },
+      {
+        "name": "Dammam",
+        "center": [26.43442, 50.10326]
+      }
+    ]
+  },
+  {
+    "country": "Senegal",
+    "shortcode": "SN",
+    "cities": [
+      {
+        "name": "Dakar",
+        "center": [14.6937, -17.44406]
+      },
+      {
+        "name": "Pikine",
+        "center": [14.76457, -17.39071]
+      },
+      {
+        "name": "Touba",
+        "center": [14.85, -15.88333]
+      },
+      {
+        "name": "Thiès",
+        "center": [14.78944, -16.92602]
+      },
+      {
+        "name": "Saint-Louis",
+        "center": [16.01793, -16.48962]
+      }
+    ]
+  },
+  {
+    "country": "Serbia",
+    "shortcode": "RS",
+    "cities": [
+      {
+        "name": "Belgrade",
+        "center": [44.80401, 20.46513]
+      },
+      {
+        "name": "Niš",
+        "center": [43.32472, 21.90333]
+      },
+      {
+        "name": "Novi Sad",
+        "center": [45.25167, 19.83694]
+      },
+      {
+        "name": "Zemun",
+        "center": [44.8458, 20.40116]
+      },
+      {
+        "name": "Kragujevac",
+        "center": [44.01667, 20.91667]
+      }
+    ]
+  },
+  {
+    "country": "Seychelles",
+    "shortcode": "SC",
+    "cities": [
+      {
+        "name": "Victoria",
+        "center": [-4.62001, 55.45501]
+      },
+      {
+        "name": "Anse Boileau",
+        "center": [-4.71667, 55.48333]
+      },
+      {
+        "name": "Bel Ombre",
+        "center": [-4.61667, 55.41667]
+      },
+      {
+        "name": "Beau Vallon",
+        "center": [-4.62091, 55.43015]
+      },
+      {
+        "name": "Cascade",
+        "center": [-4.66915, 55.49952]
+      }
+    ]
+  },
+  {
+    "country": "Sierra Leone",
+    "shortcode": "SL",
+    "cities": [
+      {
+        "name": "Freetown",
+        "center": [8.48714, -13.2356]
+      },
+      {
+        "name": "Bo",
+        "center": [7.96472, -11.73833]
+      },
+      {
+        "name": "Kenema",
+        "center": [7.87687, -11.19025]
+      },
+      {
+        "name": "Koidu",
+        "center": [8.64387, -10.9714]
+      },
+      {
+        "name": "Makeni",
+        "center": [8.88605, -12.04417]
+      }
+    ]
+  },
+  {
+    "country": "Singapore",
+    "shortcode": "SG",
+    "cities": [
+      {
+        "name": "Singapore",
+        "center": [1.28967, 103.85007]
+      },
+      {
+        "name": "Woodlands",
+        "center": [1.43801, 103.78877]
+      },
+      {
+        "name": "Geylang",
+        "center": [1.31953, 103.88689]
+      },
+      {
+        "name": "Queenstown Estate",
+        "center": [1.29417, 103.8025]
+      },
+      {
+        "name": "Marine Parade",
+        "center": [1.30306, 103.90778]
+      }
+    ]
+  },
+  {
+    "country": "Sint Maarten",
+    "shortcode": "SX",
+    "cities": [
+      {
+        "name": "Cul de Sac",
+        "center": [18.04852, -63.06513]
+      },
+      {
+        "name": "Lower Prince’s Quarter",
+        "center": [18.04987, -63.03789]
+      },
+      {
+        "name": "Koolbaai",
+        "center": [18.04048, -63.08397]
+      },
+      {
+        "name": "Philipsburg",
+        "center": [18.026, -63.04582]
+      }
+    ]
+  },
+  {
+    "country": "Slovakia",
+    "shortcode": "SK",
+    "cities": [
+      {
+        "name": "Bratislava",
+        "center": [48.14816, 17.10674]
+      },
+      {
+        "name": "Košice",
+        "center": [48.71395, 21.25808]
+      },
+      {
+        "name": "Nitra",
+        "center": [48.30763, 18.08453]
+      },
+      {
+        "name": "Prešov",
+        "center": [48.99839, 21.23393]
+      },
+      {
+        "name": "Žilina",
+        "center": [49.22315, 18.73941]
+      }
+    ]
+  },
+  {
+    "country": "Slovenia",
+    "shortcode": "SI",
+    "cities": [
+      {
+        "name": "Ljubljana",
+        "center": [46.05108, 14.50513]
+      },
+      {
+        "name": "Maribor",
+        "center": [46.55472, 15.64667]
+      },
+      {
+        "name": "Kranj",
+        "center": [46.23887, 14.35561]
+      },
+      {
+        "name": "Celje",
+        "center": [46.23092, 15.26044]
+      },
+      {
+        "name": "Koper",
+        "center": [45.54694, 13.72944]
+      }
+    ]
+  },
+  {
+    "country": "Solomon Islands",
+    "shortcode": "SB",
+    "cities": [
+      {
+        "name": "Honiara",
+        "center": [-9.43333, 159.95]
+      },
+      {
+        "name": "Malango",
+        "center": [-9.69523, 159.71734]
+      },
+      {
+        "name": "Auki",
+        "center": [-8.76778, 160.69778]
+      },
+      {
+        "name": "Gizo",
+        "center": [-8.10303, 156.84186]
+      },
+      {
+        "name": "Kirakira",
+        "center": [-10.45442, 161.92045]
+      }
+    ]
+  },
+  {
+    "country": "Somalia",
+    "shortcode": "SO",
+    "cities": [
+      {
+        "name": "Mogadishu",
+        "center": [2.03711, 45.34375]
+      },
+      {
+        "name": "Hargeysa",
+        "center": [9.56, 44.065]
+      },
+      {
+        "name": "Berbera",
+        "center": [10.43959, 45.01432]
+      },
+      {
+        "name": "Kismayo",
+        "center": [-0.35817, 42.54536]
+      },
+      {
+        "name": "Marka",
+        "center": [1.71594, 44.77166]
+      }
+    ]
+  },
+  {
+    "country": "South Africa",
+    "shortcode": "ZA",
+    "cities": [
+      {
+        "name": "Johannesburg",
+        "center": [-26.20227, 28.04363]
+      },
+      {
+        "name": "Cape Town",
+        "center": [-33.92584, 18.42322]
+      },
+      {
+        "name": "Durban",
+        "center": [-29.8579, 31.0292]
+      },
+      {
+        "name": "Soweto",
+        "center": [-26.26781, 27.85849]
+      },
+      {
+        "name": "Pretoria",
+        "center": [-25.74486, 28.18783]
+      }
+    ]
+  },
+  {
+    "country": "South Georgia",
+    "shortcode": "GS",
+    "cities": [
+      {
+        "name": "Grytviken",
+        "center": [-54.28111, -36.5092]
+      }
+    ]
+  },
+  {
+    "country": "South Sudan",
+    "shortcode": "SS",
+    "cities": [
+      {
+        "name": "Juba",
+        "center": [4.85165, 31.58247]
+      },
+      {
+        "name": "Winejok",
+        "center": [9.01222, 27.57081]
+      },
+      {
+        "name": "Yei",
+        "center": [4.09444, 30.67639]
+      },
+      {
+        "name": "Malakal",
+        "center": [9.53342, 31.66049]
+      },
+      {
+        "name": "Wau",
+        "center": [7.70111, 27.98972]
+      }
+    ]
+  },
+  {
+    "country": "Spain",
+    "shortcode": "ES",
+    "cities": [
+      {
+        "name": "Madrid",
+        "center": [40.4165, -3.70256]
+      },
+      {
+        "name": "Barcelona",
+        "center": [41.38879, 2.15899]
+      },
+      {
+        "name": "Valencia",
+        "center": [39.47391, -0.37966]
+      },
+      {
+        "name": "Sevilla",
+        "center": [37.38283, -5.97317]
+      },
+      {
+        "name": "Zaragoza",
+        "center": [41.65606, -0.87734]
+      }
+    ]
+  },
+  {
+    "country": "Sri Lanka",
+    "shortcode": "LK",
+    "cities": [
+      {
+        "name": "Colombo",
+        "center": [6.93548, 79.84868]
+      },
+      {
+        "name": "Dehiwala-Mount Lavinia",
+        "center": [6.84019, 79.87116]
+      },
+      {
+        "name": "Maharagama",
+        "center": [6.848, 79.9265]
+      },
+      {
+        "name": "Jaffna",
+        "center": [9.66845, 80.00742]
+      },
+      {
+        "name": "Moratuwa",
+        "center": [6.773, 79.8816]
+      }
+    ]
+  },
+  {
+    "country": "Sudan",
+    "shortcode": "SD",
+    "cities": [
+      {
+        "name": "Khartoum",
+        "center": [15.55177, 32.53241]
+      },
+      {
+        "name": "Omdurman",
+        "center": [15.64453, 32.47773]
+      },
+      {
+        "name": "Nyala",
+        "center": [12.04888, 24.88069]
+      },
+      {
+        "name": "Port Sudan",
+        "center": [19.61745, 37.21644]
+      },
+      {
+        "name": "Kassala",
+        "center": [15.45099, 36.39998]
+      }
+    ]
+  },
+  {
+    "country": "Suriname",
+    "shortcode": "SR",
+    "cities": [
+      {
+        "name": "Paramaribo",
+        "center": [5.86638, -55.16682]
+      },
+      {
+        "name": "Lelydorp",
+        "center": [5.7, -55.23333]
+      },
+      {
+        "name": "Brokopondo",
+        "center": [5.05594, -54.98043]
+      },
+      {
+        "name": "Nieuw Nickerie",
+        "center": [5.92606, -56.97297]
+      },
+      {
+        "name": "Meerzorg",
+        "center": [5.80789, -55.1408]
+      }
+    ]
+  },
+  {
+    "country": "Svalbard and Jan Mayen",
+    "shortcode": "SJ",
+    "cities": [
+      {
+        "name": "Longyearbyen",
+        "center": [78.22334, 15.64689]
+      },
+      {
+        "name": "Olonkinbyen",
+        "center": [70.9221, -8.7187]
+      }
+    ]
+  },
+  {
+    "country": "Swaziland",
+    "shortcode": "SZ",
+    "cities": [
+      {
+        "name": "Manzini",
+        "center": [-26.49884, 31.38004]
+      },
+      {
+        "name": "Mbabane",
+        "center": [-26.31667, 31.13333]
+      },
+      {
+        "name": "Big Bend",
+        "center": [-26.81667, 31.93333]
+      },
+      {
+        "name": "Malkerns",
+        "center": [-26.56667, 31.18333]
+      },
+      {
+        "name": "Nhlangano",
+        "center": [-27.11222, 31.19833]
+      }
+    ]
+  },
+  {
+    "country": "Sweden",
+    "shortcode": "SE",
+    "cities": [
+      {
+        "name": "Stockholm",
+        "center": [59.32938, 18.06871]
+      },
+      {
+        "name": "Göteborg",
+        "center": [57.70716, 11.96679]
+      },
+      {
+        "name": "Malmö",
+        "center": [55.60587, 13.00073]
+      },
+      {
+        "name": "Uppsala",
+        "center": [59.85882, 17.63889]
+      },
+      {
+        "name": "Linköping",
+        "center": [58.41086, 15.62157]
+      }
+    ]
+  },
+  {
+    "country": "Switzerland",
+    "shortcode": "CH",
+    "cities": [
+      {
+        "name": "Zürich",
+        "center": [47.36667, 8.55]
+      },
+      {
+        "name": "Genève",
+        "center": [46.20222, 6.14569]
+      },
+      {
+        "name": "Basel",
+        "center": [47.55839, 7.57327]
+      },
+      {
+        "name": "Lausanne",
+        "center": [46.516, 6.63282]
+      },
+      {
+        "name": "Bern",
+        "center": [46.94809, 7.44744]
+      }
+    ]
+  },
+  {
+    "country": "Syrian",
+    "shortcode": "SY",
+    "cities": [
+      {
+        "name": "Aleppo",
+        "center": [36.20124, 37.16117]
+      },
+      {
+        "name": "Damascus",
+        "center": [33.5102, 36.29128]
+      },
+      {
+        "name": "Homs",
+        "center": [34.72682, 36.72339]
+      },
+      {
+        "name": "Latakia",
+        "center": [35.53168, 35.79011]
+      },
+      {
+        "name": "Ar Raqqah",
+        "center": [35.95283, 39.00788]
+      }
+    ]
+  },
+  {
+    "country": "Taiwan, China",
+    "shortcode": "TW",
+    "cities": [
+      {
+        "name": "Taipei",
+        "center": [25.04776, 121.53185]
+      },
+      {
+        "name": "Kaohsiung",
+        "center": [22.61626, 120.31333]
+      },
+      {
+        "name": "Taichung",
+        "center": [24.1469, 120.6839]
+      },
+      {
+        "name": "Tainan",
+        "center": [22.99083, 120.21333]
+      },
+      {
+        "name": "Banqiao",
+        "center": [25.01427, 121.46719]
+      }
+    ]
+  },
+  {
+    "country": "Tajikistan",
+    "shortcode": "TJ",
+    "cities": [
+      {
+        "name": "Dushanbe",
+        "center": [38.53575, 68.77905]
+      },
+      {
+        "name": "Isfara",
+        "center": [40.12649, 70.62526]
+      },
+      {
+        "name": "Istaravshan",
+        "center": [39.9142, 69.00328]
+      },
+      {
+        "name": "Kŭlob",
+        "center": [37.91459, 69.78454]
+      },
+      {
+        "name": "Konibodom",
+        "center": [40.29414, 70.43122]
+      }
+    ]
+  },
+  {
+    "country": "Tanzania",
+    "shortcode": "TZ",
+    "cities": [
+      {
+        "name": "Dar es Salaam",
+        "center": [-6.82349, 39.26951]
+      },
+      {
+        "name": "Mwanza",
+        "center": [-2.51667, 32.9]
+      },
+      {
+        "name": "Zanzibar",
+        "center": [-6.16394, 39.19793]
+      },
+      {
+        "name": "Arusha",
+        "center": [-3.36667, 36.68333]
+      },
+      {
+        "name": "Mbeya",
+        "center": [-8.9, 33.45]
+      }
+    ]
+  },
+  {
+    "country": "Thailand",
+    "shortcode": "TH",
+    "cities": [
+      {
+        "name": "Bangkok",
+        "center": [13.75398, 100.50144]
+      },
+      {
+        "name": "Samut Prakan",
+        "center": [13.59934, 100.59675]
+      },
+      {
+        "name": "Mueang Nonthaburi",
+        "center": [13.86075, 100.51477]
+      },
+      {
+        "name": "Chon Buri",
+        "center": [13.3622, 100.98345]
+      },
+      {
+        "name": "Hat Yai",
+        "center": [7.00836, 100.47668]
+      }
+    ]
+  },
+  {
+    "country": "Timor-Leste",
+    "shortcode": "TL",
+    "cities": [
+      {
+        "name": "Dili",
+        "center": [-8.55861, 125.57361]
+      },
+      {
+        "name": "Maliana",
+        "center": [-8.99167, 125.21972]
+      },
+      {
+        "name": "Suai",
+        "center": [-9.31286, 125.25648]
+      },
+      {
+        "name": "Likisá",
+        "center": [-8.5875, 125.34194]
+      },
+      {
+        "name": "Aileu",
+        "center": [-8.72806, 125.56639]
+      }
+    ]
+  },
+  {
+    "country": "Togo",
+    "shortcode": "TG",
+    "cities": [
+      {
+        "name": "Lomé",
+        "center": [6.12874, 1.22154]
+      },
+      {
+        "name": "Sokodé",
+        "center": [8.98333, 1.13333]
+      },
+      {
+        "name": "Kara",
+        "center": [9.55111, 1.18611]
+      },
+      {
+        "name": "Atakpamé",
+        "center": [7.53333, 1.13333]
+      },
+      {
+        "name": "Kpalimé",
+        "center": [6.9, 0.63333]
+      }
+    ]
+  },
+  {
+    "country": "Tokelau",
+    "shortcode": "TK",
+    "cities": [
+      {
+        "name": "Atafu Village",
+        "center": [-8.54212, -172.51591]
+      },
+      {
+        "name": "Nukunonu",
+        "center": [-9.20045, -171.84804]
+      },
+      {
+        "name": "Fale old settlement",
+        "center": [-9.38516, -171.24675]
+      }
+    ]
+  },
+  {
+    "country": "Tonga",
+    "shortcode": "TO",
+    "cities": [
+      {
+        "name": "Nuku‘alofa",
+        "center": [-21.13683, -175.20114]
+      },
+      {
+        "name": "Lapaha",
+        "center": [-21.17735, -175.1172]
+      },
+      {
+        "name": "Neiafu",
+        "center": [-18.65144, -173.98354]
+      },
+      {
+        "name": "Haveluloto",
+        "center": [-21.15216, -175.21333]
+      },
+      {
+        "name": "Tatakamotonga",
+        "center": [-21.18627, -175.12453]
+      }
+    ]
+  },
+  {
+    "country": "Trinidad and Tobago",
+    "shortcode": "TT",
+    "cities": [
+      {
+        "name": "Chaguanas",
+        "center": [10.51667, -61.41667]
+      },
+      {
+        "name": "Mon Repos",
+        "center": [10.27979, -61.4459]
+      },
+      {
+        "name": "San Fernando",
+        "center": [10.27969, -61.46835]
+      },
+      {
+        "name": "Port of Spain",
+        "center": [10.66668, -61.51889]
+      },
+      {
+        "name": "Rio Claro",
+        "center": [10.30594, -61.17556]
+      }
+    ]
+  },
+  {
+    "country": "Tunisia",
+    "shortcode": "TN",
+    "cities": [
+      {
+        "name": "Tunis",
+        "center": [36.81897, 10.16579]
+      },
+      {
+        "name": "Sfax",
+        "center": [34.74056, 10.76028]
+      },
+      {
+        "name": "Sousse",
+        "center": [35.82539, 10.63699]
+      },
+      {
+        "name": "Kairouan",
+        "center": [35.6781, 10.09633]
+      },
+      {
+        "name": "Bizerte",
+        "center": [37.27442, 9.87391]
+      }
+    ]
+  },
+  {
+    "country": "Turkey",
+    "shortcode": "TR",
+    "cities": [
+      {
+        "name": "Istanbul",
+        "center": [41.01384, 28.94966]
+      },
+      {
+        "name": "Ankara",
+        "center": [39.91987, 32.85427]
+      },
+      {
+        "name": "Bursa",
+        "center": [40.19559, 29.06013]
+      },
+      {
+        "name": "İzmir",
+        "center": [38.41273, 27.13838]
+      },
+      {
+        "name": "Gaziantep",
+        "center": [37.05944, 37.3825]
+      }
+    ]
+  },
+  {
+    "country": "Turkmenistan",
+    "shortcode": "TM",
+    "cities": [
+      {
+        "name": "Ashgabat",
+        "center": [37.95, 58.38333]
+      },
+      {
+        "name": "Türkmenabat",
+        "center": [39.07328, 63.57861]
+      },
+      {
+        "name": "Daşoguz",
+        "center": [41.83625, 59.96661]
+      },
+      {
+        "name": "Mary",
+        "center": [37.59378, 61.83031]
+      },
+      {
+        "name": "Balkanabat",
+        "center": [39.51075, 54.36713]
+      }
+    ]
+  },
+  {
+    "country": "Turks and Caicos Islands",
+    "shortcode": "TC",
+    "cities": [
+      {
+        "name": "Cockburn Town",
+        "center": [21.46122, -71.14188]
+      }
+    ]
+  },
+  {
+    "country": "Tuvalu",
+    "shortcode": "TV",
+    "cities": [
+      {
+        "name": "Funafuti",
+        "center": [-8.52425, 179.19417]
+      },
+      {
+        "name": "Alapi Village",
+        "center": [-8.52074, 179.1968]
+      },
+      {
+        "name": "Fakaifou Village",
+        "center": [-8.51758, 179.20094]
+      },
+      {
+        "name": "Savave Village",
+        "center": [-8.02731, 178.31351]
+      },
+      {
+        "name": "Tanrake Village",
+        "center": [-7.24562, 177.14511]
+      }
+    ]
+  },
+  {
+    "country": "Uganda",
+    "shortcode": "UG",
+    "cities": [
+      {
+        "name": "Kampala",
+        "center": [0.31628, 32.58219]
+      },
+      {
+        "name": "Gulu",
+        "center": [2.77457, 32.29899]
+      },
+      {
+        "name": "Lira",
+        "center": [2.2499, 32.89985]
+      },
+      {
+        "name": "Mbarara",
+        "center": [-0.60467, 30.64851]
+      },
+      {
+        "name": "Jinja",
+        "center": [0.43902, 33.20317]
+      }
+    ]
+  },
+  {
+    "country": "Ukraine",
+    "shortcode": "UA",
+    "cities": [
+      {
+        "name": "Kyiv",
+        "center": [50.45466, 30.5238]
+      },
+      {
+        "name": "Kharkiv",
+        "center": [49.98081, 36.25272]
+      },
+      {
+        "name": "Odesa",
+        "center": [46.48572, 30.74383]
+      },
+      {
+        "name": "Dnipro",
+        "center": [48.46664, 35.04066]
+      },
+      {
+        "name": "Donetsk",
+        "center": [48.023, 37.80224]
+      }
+    ]
+  },
+  {
+    "country": "United Arab Emirates",
+    "shortcode": "AE",
+    "cities": [
+      {
+        "name": "Dubai",
+        "center": [25.07725, 55.30927]
+      },
+      {
+        "name": "Abu Dhabi",
+        "center": [24.45118, 54.39696]
+      },
+      {
+        "name": "Sharjah",
+        "center": [25.33737, 55.41206]
+      },
+      {
+        "name": "Al Ain City",
+        "center": [24.19167, 55.76056]
+      },
+      {
+        "name": "Ajman City",
+        "center": [25.40177, 55.47878]
+      }
+    ]
+  },
+  {
+    "country": "United Kingdom",
+    "shortcode": "GB",
+    "cities": [
+      {
+        "name": "London",
+        "center": [51.50853, -0.12574]
+      },
+      {
+        "name": "Birmingham",
+        "center": [52.48142, -1.89983]
+      },
+      {
+        "name": "Liverpool",
+        "center": [53.41058, -2.97794]
+      },
+      {
+        "name": "Glasgow",
+        "center": [55.86515, -4.25763]
+      },
+      {
+        "name": "Sheffield",
+        "center": [53.38297, -1.4659]
+      }
+    ]
+  },
+  {
+    "country": "Uruguay",
+    "shortcode": "UY",
+    "cities": [
+      {
+        "name": "Montevideo",
+        "center": [-34.90328, -56.18816]
+      },
+      {
+        "name": "Salto",
+        "center": [-31.38333, -57.96667]
+      },
+      {
+        "name": "Paysandú",
+        "center": [-32.3171, -58.08072]
+      },
+      {
+        "name": "Las Piedras",
+        "center": [-34.7302, -56.21915]
+      },
+      {
+        "name": "Rivera",
+        "center": [-30.90534, -55.55076]
+      }
+    ]
+  },
+  {
+    "country": "Uzbekistan",
+    "shortcode": "UZ",
+    "cities": [
+      {
+        "name": "Tashkent",
+        "center": [41.26465, 69.21627]
+      },
+      {
+        "name": "Namangan",
+        "center": [40.9983, 71.67257]
+      },
+      {
+        "name": "Samarkand",
+        "center": [39.65417, 66.95972]
+      },
+      {
+        "name": "Andijon",
+        "center": [40.78206, 72.34424]
+      },
+      {
+        "name": "Nukus",
+        "center": [42.45306, 59.61028]
+      }
+    ]
+  },
+  {
+    "country": "Vanuatu",
+    "shortcode": "VU",
+    "cities": [
+      {
+        "name": "Port-Vila",
+        "center": [-17.73648, 168.31366]
+      },
+      {
+        "name": "Luganville",
+        "center": [-15.51989, 167.16235]
+      },
+      {
+        "name": "Norsup",
+        "center": [-16.06536, 167.39714]
+      },
+      {
+        "name": "Port-Olry",
+        "center": [-15.04175, 167.07265]
+      },
+      {
+        "name": "Isangel",
+        "center": [-19.54167, 169.28167]
+      }
+    ]
+  },
+  {
+    "country": "Venezuela",
+    "shortcode": "VE",
+    "cities": [
+      {
+        "name": "Caracas",
+        "center": [10.48801, -66.87919]
+      },
+      {
+        "name": "Maracaibo",
+        "center": [10.66663, -71.61245]
+      },
+      {
+        "name": "Maracay",
+        "center": [10.23535, -67.59113]
+      },
+      {
+        "name": "Valencia",
+        "center": [10.16202, -68.00765]
+      },
+      {
+        "name": "Barquisimeto",
+        "center": [10.0647, -69.35703]
+      }
+    ]
+  },
+  {
+    "country": "Viet Nam",
+    "shortcode": "VN",
+    "cities": [
+      {
+        "name": "Ho Chi Minh City",
+        "center": [10.82302, 106.62965]
+      },
+      {
+        "name": "Hanoi",
+        "center": [21.0245, 105.84117]
+      },
+      {
+        "name": "Da Nang",
+        "center": [16.06778, 108.22083]
+      },
+      {
+        "name": "Haiphong",
+        "center": [20.86481, 106.68345]
+      },
+      {
+        "name": "Biên Hòa",
+        "center": [10.94469, 106.82432]
+      }
+    ]
+  },
+  {
+    "country": "Virgin Islands (US)",
+    "shortcode": "VI",
+    "cities": [
+      {
+        "name": "Saint Croix",
+        "center": [17.72751, -64.74698]
+      },
+      {
+        "name": "Charlotte Amalie",
+        "center": [18.3419, -64.9307]
+      },
+      {
+        "name": "Cruz Bay",
+        "center": [18.33134, -64.79375]
+      },
+      {
+        "name": "Christiansted",
+        "center": [17.74681, -64.70557]
+      }
+    ]
+  },
+  {
+    "country": "Wallis and Futuna Islands",
+    "shortcode": "WF",
+    "cities": [
+      {
+        "name": "Mata-Utu",
+        "center": [-13.28163, -176.17453]
+      },
+      {
+        "name": "Leava",
+        "center": [-14.29333, -178.15833]
+      },
+      {
+        "name": "Alo",
+        "center": [-14.31096, -178.11094]
+      }
+    ]
+  },
+  {
+    "country": "West Bank and Gaza Strip",
+    "shortcode": "PS",
+    "cities": [
+      {
+        "name": "East Jerusalem",
+        "center": [31.78336, 35.23388]
+      },
+      {
+        "name": "Gaza",
+        "center": [31.50161, 34.46672]
+      },
+      {
+        "name": "Khān Yūnis",
+        "center": [31.34018, 34.30627]
+      },
+      {
+        "name": "Jabālyā",
+        "center": [31.5272, 34.48347]
+      },
+      {
+        "name": "Hebron",
+        "center": [31.52935, 35.0938]
+      }
+    ]
+  },
+  {
+    "country": "Western Sahara",
+    "shortcode": "EH",
+    "cities": [
+      {
+        "name": "Laayoune",
+        "center": [27.1418, -13.18797]
+      },
+      {
+        "name": "Dakhla",
+        "center": [23.68477, -15.95798]
+      },
+      {
+        "name": "Boujdour",
+        "center": [26.13073, -14.48513]
+      },
+      {
+        "name": "Laayoune Plage",
+        "center": [27.09611, -13.41583]
+      }
+    ]
+  },
+  {
+    "country": "Yemen",
+    "shortcode": "YE",
+    "cities": [
+      {
+        "name": "Sanaa",
+        "center": [15.35472, 44.20667]
+      },
+      {
+        "name": "Aden",
+        "center": [12.77944, 45.03667]
+      },
+      {
+        "name": "Al Ḩudaydah",
+        "center": [14.79781, 42.95452]
+      },
+      {
+        "name": "Taiz",
+        "center": [13.57952, 44.02091]
+      },
+      {
+        "name": "Mukalla",
+        "center": [14.54248, 49.12424]
+      }
+    ]
+  },
+  {
+    "country": "Zambia",
+    "shortcode": "ZM",
+    "cities": [
+      {
+        "name": "Lusaka",
+        "center": [-15.40669, 28.28713]
+      },
+      {
+        "name": "Ndola",
+        "center": [-12.95867, 28.63659]
+      },
+      {
+        "name": "Kitwe",
+        "center": [-12.80243, 28.21323]
+      },
+      {
+        "name": "Chipata",
+        "center": [-13.63333, 32.65]
+      },
+      {
+        "name": "Kabwe",
+        "center": [-14.4469, 28.44644]
+      }
+    ]
+  },
+  {
+    "country": "Zimbabwe",
+    "shortcode": "ZW",
+    "cities": [
+      {
+        "name": "Harare",
+        "center": [-17.82772, 31.05337]
+      },
+      {
+        "name": "Bulawayo",
+        "center": [-20.15, 28.58333]
+      },
+      {
+        "name": "Chitungwiza",
+        "center": [-18.01274, 31.07555]
+      },
+      {
+        "name": "Mutare",
+        "center": [-18.9707, 32.67086]
+      },
+      {
+        "name": "Gweru",
+        "center": [-19.45, 29.81667]
+      }
+    ]
+  },
+  {
+    "country": "Åland",
+    "shortcode": "AX",
+    "cities": [
+      {
+        "name": "Mariehamn",
+        "center": [60.09726, 19.93481]
+      },
+      {
+        "name": "Jomala",
+        "center": [60.14902, 19.951]
+      },
+      {
+        "name": "Finström",
+        "center": [60.26667, 19.93333]
+      },
+      {
+        "name": "Lemland",
+        "center": [60.07178, 20.08472]
+      },
+      {
+        "name": "Saltvik",
+        "center": [60.28333, 20.05]
+      }
+    ]
+  }
+]
