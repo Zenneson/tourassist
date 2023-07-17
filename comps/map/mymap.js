@@ -20,6 +20,7 @@ import {
   Popover,
   LoadingOverlay,
   Drawer,
+  Transition,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import {
@@ -497,27 +498,37 @@ export default function Mymap({
   const pins = useMemo(
     () =>
       topCities.map((city, index) => (
-        <Marker
+        <Transition
           key={`marker-${index}`}
-          longitude={city[1][0]}
-          latitude={city[1][1]}
-          anchor="bottom"
-          onClick={(e) => {
-            e.originalEvent.stopPropagation();
-            setPopupInfo(city);
-          }}
+          mounted={!showMainMarker && topCities}
+          transition="fade"
+          duration={300}
+          timingFunction="ease"
         >
-          <IconMapPinFilled
-            style={{
-              cursor: "pointer",
-              opacity: 0.7,
-              transform: "scale(1.5)",
-              color: theme.colorScheme === "dark" ? " #121d47" : "#9c161c",
-            }}
-          />
-        </Marker>
+          {(styles) => (
+            <Marker
+              style={styles}
+              longitude={city[1][0]}
+              latitude={city[1][1]}
+              anchor="bottom"
+              onClick={(e) => {
+                e.originalEvent.stopPropagation();
+                setPopupInfo(city);
+              }}
+            >
+              <IconMapPinFilled
+                style={{
+                  cursor: "pointer",
+                  opacity: 0.7,
+                  transform: "scale(1.5)",
+                  color: theme.colorScheme === "dark" ? " #121d47" : "#9c161c",
+                }}
+              />
+            </Marker>
+          )}
+        </Transition>
       )),
-    [topCities, theme.colorScheme]
+    [topCities, theme.colorScheme, showMainMarker]
   );
 
   const fetchCities = async (location) => {
@@ -1150,7 +1161,7 @@ export default function Mymap({
               setPlaces={setPlaces}
             />
           )}
-          {topCities && !showMainMarker && pins}
+          {pins}
           {popupInfo && (
             <Popup
               className={classes.popup}
@@ -1164,22 +1175,35 @@ export default function Mymap({
               </Box>
             </Popup>
           )}
-          {showMainMarker && (
-            <Marker
-              longitude={lngLat[0]}
-              latitude={lngLat[1]}
-              offsetLeft={-20}
-              offsetTop={-10}
-            >
-              <IconMapPinFilled
-                style={{
-                  cursor: "pointer",
-                  transform: "scale(5)",
-                  color: theme.colorScheme === "dark" ? " #121d47" : "#9c161c",
+          <Transition
+            mounted={showMainMarker}
+            transition="fade"
+            duration={300}
+            timingFunction="ease"
+          >
+            {(styles) => (
+              <Marker
+                style={styles}
+                longitude={lngLat[0]}
+                latitude={lngLat[1]}
+                offsetLeft={-20}
+                offsetTop={-10}
+                onClick={(e) => {
+                  e.originalEvent.stopPropagation();
+                  reset();
                 }}
-              />
-            </Marker>
-          )}
+              >
+                <IconMapPinFilled
+                  style={{
+                    cursor: "pointer",
+                    transform: "scale(5)",
+                    color:
+                      theme.colorScheme === "dark" ? " #121d47" : "#9c161c",
+                  }}
+                />
+              </Marker>
+            )}
+          </Transition>
           <Source
             id="country-boundaries"
             type="vector"
