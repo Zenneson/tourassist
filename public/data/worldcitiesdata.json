@@ -2916,7 +2916,7 @@
     ]
   },
   {
-    "country": "LaoS",
+    "country": "Laos",
     "shortcode": "LA",
     "cities": [
       {
@@ -3698,7 +3698,7 @@
     ]
   },
   {
-    "country": "Myanmar",
+    "country": "Myanmar (Burma)",
     "shortcode": "MM",
     "cities": [
       {
@@ -5776,7 +5776,7 @@
     ]
   },
   {
-    "country": "Viet Nam",
+    "country": "Vietnam",
     "shortcode": "VN",
     "cities": [
       {

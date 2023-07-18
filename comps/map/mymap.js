@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
-import bbox from "@turf/bbox";
 import {
   createStyles,
   useMantineTheme,
@@ -21,8 +20,9 @@ import {
   LoadingOverlay,
   Drawer,
   Transition,
+  Image,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
+import { useSessionStorage, usePrevious } from "@mantine/hooks";
 import {
   IconPlaylistAdd,
   IconLocation,
@@ -40,6 +40,7 @@ import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
 import TourList from "./tourList";
 import Loader from "../loader";
+import { type } from "os";
 
 export default function Mymap({
   setPanelShow,
@@ -56,9 +57,10 @@ export default function Mymap({
   const center = useRef();
   const router = useRouter();
   const [area, setArea] = useState({ label: "" });
+  const returnRegion = usePrevious(area);
   const [headerEm, setHeaderEm] = useState(0);
   const [locationDrawer, setLocationDrawer] = useState(false);
-  const [lngLat, setLngLat] = useState([0, 0]);
+  const [lngLat, setLngLat] = useState([]);
   const [showStates, setShowStates] = useState(false);
   const [popupInfo, setPopupInfo] = useState(null);
   const [showMainMarker, setShowMainMarker] = useState(false);
@@ -111,7 +113,10 @@ export default function Mymap({
   const useStyles = createStyles((theme) => ({
     popup: {
       "& .mapboxgl-popup-content": {
+        fontSize: "1rem",
+        maxWidth: "20rem",
         fontWeight: 700,
+        fontFamily: "Montserrat",
         cursor: "pointer",
         paddingTop: "0rem !important",
         paddingBottom: "0rem !important",
@@ -203,8 +208,10 @@ export default function Mymap({
   ]);
 
   function getCords(feature) {
-    const center = centerOfMass(feature);
-    return center.geometry.coordinates;
+    if (feature) {
+      const center = centerOfMass(feature);
+      return center.geometry.coordinates;
+    }
   }
 
   function calculateFontSize(text) {
@@ -230,23 +237,18 @@ export default function Mymap({
     locationObj.type = locationObj.type.toLowerCase();
     locationObj.label =
       feature.label ||
-      feature.properties.name_en ||
-      feature.properties.name ||
-      feature.properties.NAME ||
+      feature.properties?.name_en ||
+      feature.properties?.name ||
+      feature.properties?.NAME ||
       "";
     locationObj.country =
       feature.country ||
-      (feature.properties.NAME && "United States") ||
-      feature.properties.name ||
-      feature.properties.name_en ||
+      (feature.properties?.NAME && "United States") ||
+      feature.properties?.name ||
+      feature.properties?.name_en ||
       "";
     locationObj.state = feature.region || feature.properties?.NAME || "";
-    locationObj.center = feature.center || getCords(feature) || [];
-    locationObj.border = feature.border || [];
-    locationObj.isState =
-      locationObj.type === "region" && locationObj.country === "United States"
-        ? true
-        : false;
+    locationObj.center = feature.center || getCords(feature);
 
     setLngLat(locationObj.center);
     setArea(locationObj);
@@ -257,9 +259,9 @@ export default function Mymap({
     setCityData([]);
     setLocationDrawer(true);
     setShowMainMarker(
-      locationObj.type !== "country" &&
-        locationObj.type === "city" &&
-        locationObj.country === "United States"
+      locationObj.type === "city" ||
+        (locationObj.type === "region" &&
+          locationObj.country !== "United States")
     );
     setShowStates(
       locationObj.country === "United States" && locationObj.type === "country"
@@ -277,7 +279,13 @@ export default function Mymap({
         ? getNewCenter(locationObj).newCenter
         : locationObj.center;
     const maxZoom = getNewCenter(locationObj).maxZoom;
-    goToLocation(locationObj.type, coordinates, maxZoom, area.country);
+    goToLocation(
+      locationObj.type,
+      coordinates,
+      maxZoom,
+      locationObj.country,
+      locationObj.label
+    );
 
     // let isSelection = true ? feature?.text : false;
     // let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
@@ -363,7 +371,20 @@ export default function Mymap({
     // setCountryData([]);
   }
 
-  const goToLocation = (type, center, maxZoom, location) => {
+  const goToLocation = (type, center, maxZoom, location, name) => {
+    let zoom = maxZoom;
+    let pitch = 40;
+    if (
+      type === "city" ||
+      (location !== "United States" && type === "region")
+    ) {
+      zoom = 12;
+      pitch = 75;
+    }
+    if (name === "District of Columbia") {
+      zoom = 10;
+    }
+
     mapRef.current.flyTo({
       center: center,
       zoom: 3,
@@ -375,12 +396,8 @@ export default function Mymap({
       mapRef.current.flyTo({
         center: center,
         duration: 1500,
-        zoom: type !== "country" && location !== "United States" ? 12 : maxZoom,
-        maxZoom: maxZoom,
-        pitch:
-          (location !== "United States" && type === "region") || type === "city"
-            ? 75
-            : 40,
+        zoom: zoom,
+        pitch: pitch,
         linear: false,
       });
     }, 400);
@@ -474,7 +491,6 @@ export default function Mymap({
           country: feature.place_name.split(", ").pop(),
           region: feature.place_name.split(", ", 2)[1],
           center: feature.center,
-          border: feature.bbox,
           fullname: feature.place_name,
         }));
 
@@ -569,10 +585,12 @@ export default function Mymap({
   };
 
   const selectTopCity = (city) => {
+    setHeaderEm(calculateFontSize(city[0]));
+    setArea({ label: city[0], type: "city", country: area.country });
     setPopupInfo(null);
     setShowMainMarker(true);
     setLngLat(city[1]);
-    goToLocation("city", city[1], 12, area.country);
+    goToLocation("city", city[1], 12, area.country, city[0]);
   };
 
   const topCitiesList = topCities.map((city, index) => (
@@ -667,6 +685,35 @@ export default function Mymap({
     }
   };
 
+  const returnToRegion = () => {
+    setLngLat(returnRegion.center);
+    if (area.type === "city") {
+      const ww = {
+        label: returnRegion.label,
+        group: returnRegion.country === "United States" ? "region" : "country",
+        center: returnRegion.center,
+        country: returnRegion.country,
+        state: "",
+      };
+      setArea(ww);
+      locationHandler(ww);
+    } else if (area.type === "region" && area.country === "United States") {
+      const us = {
+        label: "United States",
+        group: "country",
+        type: "country",
+        center: [-100.58542673380947, 34.91248268838714],
+        country: "United States",
+        state: "",
+      };
+      setShowStates(true);
+      setArea(us);
+      locationHandler(us);
+    } else {
+      reset();
+    }
+  };
+
   return (
     <>
       <Loader pageLoaded={mapLoaded} />
@@ -677,7 +724,6 @@ export default function Mymap({
         opened={locationDrawer}
         withOverlay={false}
         withCloseButton={false}
-        onClose={reset}
         styles={(theme) => ({
           content: {
             pointerEvents: "none",
@@ -697,7 +743,7 @@ export default function Mymap({
               size={"xl"}
               mr={10}
               variant="transparent"
-              onClick={reset}
+              onClick={returnToRegion}
               opacity={0.7}
               sx={{
                 pointerEvents: "all",
@@ -741,7 +787,10 @@ export default function Mymap({
           <Box
             top={-15}
             pos={"relative"}
-            hidden={area.country === "United States" && area.type === "country"}
+            hidden={
+              (area.country === "United States" && area.type === "country") ||
+              area.type === "city"
+            }
           >
             <Divider
               size="xs"
@@ -1193,14 +1242,14 @@ export default function Mymap({
                   reset();
                 }}
               >
-                <IconMapPinFilled
+                {/* <IconMapPinFilled
                   style={{
                     cursor: "pointer",
                     transform: "scale(5)",
-                    color:
-                      theme.colorScheme === "dark" ? " #121d47" : "#9c161c",
+                    color: "#fff",
                   }}
-                />
+                /> */}
+                <Image width={80} src={"img/pin.png"} alt="Map Pin" />
               </Marker>
             )}
           </Transition>
