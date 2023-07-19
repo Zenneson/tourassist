@@ -128,9 +128,6 @@ export default function Mymap({
         borderRadius: theme.radius.sm,
         boxShadow: theme.shadows.sm,
         padding: theme.spacing.xs,
-        "& .mapboxgl-popup-close-button": {
-          display: "none",
-        },
       },
       "& .mapboxgl-popup-tip": {
         borderTopColor:
@@ -207,11 +204,13 @@ export default function Mymap({
     setGeoLng,
   ]);
 
+  useEffect(() => {
+    area.label === "United States" && setShowStates(true);
+  }, [area.label]);
+
   function getCords(feature) {
-    if (feature) {
-      const center = centerOfMass(feature);
-      return center.geometry.coordinates;
-    }
+    const center = centerOfMass(feature);
+    return center.geometry.coordinates;
   }
 
   function calculateFontSize(text) {
@@ -503,7 +502,7 @@ export default function Mymap({
   };
 
   const onZoomEnd = (e) => {
-    if (e.target.getZoom() < 3) {
+    if (e.target.getZoom() < 3.5) {
       mapRef.current.flyTo({
         duration: 2000,
         pitch: 0,
@@ -686,7 +685,12 @@ export default function Mymap({
   };
 
   const returnToRegion = () => {
+    if (returnRegion.center === undefined) {
+      reset();
+      return;
+    }
     setLngLat(returnRegion.center);
+    setPopupInfo(null);
     if (area.type === "city") {
       const ww = {
         label: returnRegion.label,
@@ -1138,9 +1142,20 @@ export default function Mymap({
           {/* Main Place Search */}
           {/* TODO - Country Auto */}
           <Autocomplete
-            icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
+            icon={
+              <IconLocation
+                size={30}
+                style={{
+                  opacity: 0.4,
+                  color:
+                    theme.colorScheme === "dark"
+                      ? " rgba(0, 232, 250)"
+                      : "rgba(250, 117, 0)",
+                }}
+              />
+            }
             dropdownPosition="top"
-            size="md"
+            size="xl"
             defaultValue=""
             itemComponent={AutoCompItem}
             value={countrySearch}
@@ -1216,6 +1231,9 @@ export default function Mymap({
               className={classes.popup}
               anchor="bottom"
               offset={[0, -30]}
+              closeOnMove={false}
+              closeButton={false}
+              closeOnClick={false}
               longitude={popupInfo[1][0]}
               latitude={popupInfo[1][1]}
             >

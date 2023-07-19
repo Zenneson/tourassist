@@ -168,7 +168,7 @@ function getNewCenter(place) {
       maxZoom = 9;
       break;
     case "Trinidad and Tobago":
-      newCenter = [-61.1, 11];
+      newCenter = [-61.1, 10.5];
       maxZoom = 9;
       break;
     case "Turks and Caicos Islands":

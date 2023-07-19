@@ -178,24 +178,8 @@
     "state": "District of Columbia",
     "cities": [
       {
-        "name": "Washington",
+        "name": "Washington, D.C.",
         "center": [-77.03637, 38.89511]
-      },
-      {
-        "name": "Shaw",
-        "center": [-77.02137, 38.91206]
-      },
-      {
-        "name": "Adams Morgan",
-        "center": [-77.0422, 38.9215]
-      },
-      {
-        "name": "Chevy Chase",
-        "center": [-77.06776, 38.964]
-      },
-      {
-        "name": "Bloomingdale",
-        "center": [-77.01137, 38.91678]
       }
     ]
   },

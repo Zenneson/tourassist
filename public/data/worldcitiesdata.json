@@ -1360,7 +1360,7 @@
     ]
   },
   {
-    "country": "Czech Republic",
+    "country": "Czechia",
     "shortcode": "CZ",
     "cities": [
       {
@@ -1386,7 +1386,7 @@
     ]
   },
   {
-    "country": "Côte d'Ivoire",
+    "country": "Ivory Coast",
     "shortcode": "CI",
     "cities": [
       {
@@ -1724,7 +1724,7 @@
     ]
   },
   {
-    "country": "Falkland Islands (Malvinas)",
+    "country": "Falkland Islands (Islas Malvinas)",
     "shortcode": "FK",
     "cities": [
       {
@@ -3160,7 +3160,7 @@
     ]
   },
   {
-    "country": "Macedonia",
+    "country": "North Macedonia",
     "shortcode": "MK",
     "cities": [
       {
@@ -5202,7 +5202,7 @@
     ]
   },
   {
-    "country": "Syrian",
+    "country": "Syria",
     "shortcode": "SY",
     "cities": [
       {
@@ -5228,7 +5228,7 @@
     ]
   },
   {
-    "country": "Taiwan, China",
+    "country": "Taiwan",
     "shortcode": "TW",
     "cities": [
       {
@@ -5802,7 +5802,7 @@
     ]
   },
   {
-    "country": "Virgin Islands (US)",
+    "country": "U.S. Virgin Islands",
     "shortcode": "VI",
     "cities": [
       {
@@ -5842,7 +5842,7 @@
     ]
   },
   {
-    "country": "West Bank and Gaza Strip",
+    "country": "Palestinian Territories",
     "shortcode": "PS",
     "cities": [
       {
