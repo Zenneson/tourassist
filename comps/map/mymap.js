@@ -161,8 +161,6 @@ export default function Mymap({
     },
   }));
 
-  console.log("places", places);
-
   const { classes } = useStyles();
 
   const filter = useMemo(
@@ -280,6 +278,7 @@ export default function Mymap({
     locationObj.label =
       feature.label ||
       feature.properties?.name_en ||
+      feature.properties?.name ||
       feature.properties?.NAME ||
       "";
     locationObj.country =
@@ -447,7 +446,6 @@ export default function Mymap({
     );
   });
 
-  // TODO - Travel Item
   const TravelItem = React.forwardRef(function TravelItem(props, ref) {
     const { label, icon, ...rest } = props;
     return (
@@ -681,9 +679,15 @@ export default function Mymap({
     }
   };
 
+  // TODO
   const selectTopCity = (city) => {
     setHeaderEm(calculateFontSize(city[0]));
-    setArea({ label: city[0], type: "city", country: area.country });
+    setArea({
+      label: city[0],
+      type: "city",
+      country: area.country,
+      region: area.state,
+    });
     setPopupInfo(null);
     setShowMainMarker(true);
     setLngLat(city[1]);
@@ -853,15 +857,18 @@ export default function Mymap({
                 />
               }
               onChange={(e) => {
+                console.log(area);
                 const place = {
                   place: area.label,
-                  region: `${
-                    area.region !== undefined ? area.region + "," : ""
-                  } ${area.label === area.country ? "" : area.country}`,
-                  fullName: `${area.label}, ${
-                    area.region !== undefined ? area.region + "," : ""
-                  }, ${area.label === area.country ? "" : area.country}`,
-                  costs: ["FLIGHT", "HOTEL"],
+                  region:
+                    area.type === "city"
+                      ? `${area.state || area.region}, ${area.country}`
+                      : "",
+                  // region: `${area.state || area.region}, ${area.country}`,
+                  fullName:
+                    area.type === "city"
+                      ? `${area.state || area.region}, ${area.country}`
+                      : "",
                 };
                 setPlaceLocation([place]);
                 if (e === "tour") setListOpened(true);
@@ -942,7 +949,6 @@ export default function Mymap({
               opacity={0.1}
               color={theme.colorScheme === "dark" ? "white" : "dark"}
             />
-            {/* TODO - Place Autocomplete Search */}
             {area.type !== "city" &&
               !(area.type === "region" && area.country !== "United States") && (
                 <Autocomplete
