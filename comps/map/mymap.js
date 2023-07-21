@@ -735,8 +735,14 @@ export default function Mymap({
         }}
       >
         <Text fz={14} ta={"center"} mb={10} px={20}>
-          {places.length > 0 && !placeChoosen ? "Clear Tour List and s" : "S"}
-          elect {area.label} as your destination?
+          {places.length > 0 && !placeChoosen
+            ? "Clear the Tour List and s"
+            : "S"}
+          elect{" "}
+          <Text fw={700} span>
+            {area.label}
+          </Text>{" "}
+          as your destination?
         </Text>
         <Group grow spacing={15}>
           <Button
@@ -857,18 +863,17 @@ export default function Mymap({
                 />
               }
               onChange={(e) => {
-                console.log(area);
                 const place = {
                   place: area.label,
                   region:
-                    area.type === "city"
+                    area.type === "city" && area.country === "United States"
                       ? `${area.state || area.region}, ${area.country}`
-                      : "",
-                  // region: `${area.state || area.region}, ${area.country}`,
+                      : area.country,
                   fullName:
-                    area.type === "city"
+                    area.type === "city" && area.country === "United States"
                       ? `${area.state || area.region}, ${area.country}`
-                      : "",
+                      : area.country,
+                  costs: ["FLIGHT", "HOTEL"],
                 };
                 setPlaceLocation([place]);
                 if (e === "tour") setListOpened(true);
