@@ -24,7 +24,7 @@ import {
   Image,
   Select,
 } from "@mantine/core";
-import { useSessionStorage, usePrevious } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   IconPlaylistAdd,
   IconLocation,
@@ -38,6 +38,7 @@ import {
   IconMapPin,
   IconChevronsLeft,
   IconMapPinFilled,
+  IconLocationFilled,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
@@ -60,7 +61,6 @@ export default function Mymap({
   const center = useRef();
   const router = useRouter();
   const [area, setArea] = useState({ label: "" });
-  const returnRegion = usePrevious(area);
   const [headerEm, setHeaderEm] = useState(0);
   const [locationDrawer, setLocationDrawer] = useState(false);
   const [lngLat, setLngLat] = useState([]);
@@ -105,6 +105,13 @@ export default function Mymap({
   const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
     defaultValue: true,
+  });
+
+  const [viewState, setViewState] = useState({
+    latitude: 37,
+    longitude: -95,
+    zoom: 2.5,
+    pitch: 0,
   });
 
   const initialViewState = {
@@ -229,7 +236,23 @@ export default function Mymap({
     return fontSizeEm;
   }
 
-  // TODO - locationHandler
+  const prefaceThe = [
+    "Bahamas",
+    "Cayman Islands",
+    "Falkland Islands",
+    "Netherlands",
+    "Philippines",
+    "United Arab Emirates",
+    "United Kingdom",
+    "United States",
+    "US Virgin Islands",
+    "Maldives",
+    "Democratic Republic of the Congo",
+    "Republic of the Congo",
+    "Dominican Republic",
+    "Central African Republic",
+  ];
+
   function locationHandler(feature) {
     if (feature == null) return;
     let locationObj = {};
@@ -369,8 +392,10 @@ export default function Mymap({
     return (
       <Box ref={ref} {...rest} p={"5px 10px"}>
         <Box p={5} onClick={() => locationHandler(data)}>
-          <Title order={6}>{label}</Title>
-          <Text fz={12}>
+          <Title order={6} lineClamp={1} truncate>
+            {label}
+          </Title>
+          <Text fz={12} lineClamp={1} truncate>
             {group === "City" ? `${region}, ${country}` : country}
           </Text>
         </Box>
@@ -390,7 +415,14 @@ export default function Mymap({
   const SelectItem = React.forwardRef(function SelectItem(props, ref) {
     const { label, region, country, group, center, fullname, ...rest } = props;
     return (
-      <Box ref={ref} {...rest} p={"5px 10px"}>
+      <Box
+        ref={ref}
+        {...rest}
+        p={"5px 10px"}
+        sx={{
+          borderRadius: "25px 0 0 25px",
+        }}
+      >
         <Flex gap={5} variant="subtle" align="center">
           <IconMapPinFilled opacity={0.1} size={15} /> {label}
         </Flex>
@@ -516,18 +548,15 @@ export default function Mymap({
   const topCitiesList = topCities.map((city, index) => (
     <Group
       key={index}
-      position="right"
-      pos={"relative"}
-      left={15}
       sx={{
-        transition: "all 150ms ease-in-out",
+        transition: "all 200ms ease-in-out",
         "&:hover": {
-          left: 13,
+          transform: "scale(1.05)",
         },
       }}
     >
       <NavLink
-        mb={5}
+        mb={index === topCities.length - 1 ? 0 : 5}
         fw={700}
         label={city[0]}
         c={theme.colorScheme === "dark" ? "white" : "dark"}
@@ -620,44 +649,17 @@ export default function Mymap({
     setCountrySearch("");
   };
 
-  const returnToRegion = () => {
-    if (returnRegion.center === undefined) {
-      reset();
-      return;
-    }
-    setLngLat(returnRegion.center);
-    setPopupInfo(null);
-    if (area.type === "city") {
-      const ww = {
-        label: returnRegion.label,
-        group: returnRegion.country === "United States" ? "region" : "country",
-        center: returnRegion.center,
-        country: returnRegion.country,
-        state: "",
-      };
-      setArea(ww);
-      locationHandler(ww);
-    } else if (area.type === "region" && area.country === "United States") {
-      const us = {
-        label: "United States",
-        group: "country",
-        type: "country",
-        center: [-100.58542673380947, 34.91248268838714],
-        country: "United States",
-        state: "",
-      };
-      setShowStates(true);
-      setArea(us);
-      locationHandler(us);
+  const addEllipsis = (string) => {
+    if (string.length > 32) {
+      return string.substring(0, 32) + "...";
     } else {
-      reset();
+      return string;
     }
   };
 
   return (
     <>
       <Loader pageLoaded={mapLoaded} />
-      {/* TODO - Drawer */}
       <Drawer
         size={"50%"}
         position="right"
@@ -669,7 +671,7 @@ export default function Mymap({
             pointerEvents: "none",
             boxShadow: "none",
             paddingTop: 100,
-            overflow: "visible",
+            overflow: "hidden",
             backgroundColor: "transparent",
           },
         })}
@@ -680,7 +682,7 @@ export default function Mymap({
               size={"xl"}
               mr={5}
               variant="transparent"
-              onClick={returnToRegion}
+              onClick={reset}
               opacity={0.7}
               sx={{
                 pointerEvents: "all",
@@ -724,29 +726,24 @@ export default function Mymap({
           <Box
             pos={"relative"}
             left={15}
-            ml={"70%"}
-            w={"30%"}
+            ml={"65%"}
+            w={"35%"}
             hidden={area.type === "city"}
             sx={{
               pointerEvents: "all",
             }}
           >
-            <Divider
-              size="xs"
-              my="xs"
-              opacity={0.3}
-              color={theme.colorScheme === "dark" ? "white" : "dark"}
-            />
             {area.country === "United States" && area.type === "country" ? (
               <Select
                 size="md"
-                radius={"3px 0 0 3px"}
+                radius={"25px 0 0 25px"}
                 placeholder="Select a US State"
                 itemComponent={SelectItem}
                 nothingFound="Nobody here"
                 data={listStates}
                 searchable={true}
                 hoverOnSearchChange={true}
+                icon={<IconMapPinFilled opacity={0.3} size={15} />}
                 filter={(value, item) =>
                   item.label.toLowerCase().includes(value.toLowerCase().trim())
                 }
@@ -761,16 +758,97 @@ export default function Mymap({
                   setArea(location);
                   locationHandler(location);
                 }}
-                sx={{
-                  boxShadow:
-                    theme.colorScheme === "dark"
-                      ? "0 2px 5px rgba(255, 255, 255, 0.05)"
-                      : "0 2px 5px rgba(0, 0, 0, 0.05)",
-                }}
+                styles={(theme) => ({
+                  input: {
+                    border: "none",
+                    borderTop: `2px solid ${
+                      theme.colorScheme === "dark"
+                        ? "rgba(255,255,255,0.1)"
+                        : "rgba(0,0,0,0.1)"
+                    }`,
+                    background:
+                      theme.colorScheme === "dark"
+                        ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+                        : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+                  },
+                  dropdown: {
+                    borderRadius: "25px 0 0 25px",
+                    border: "none",
+                  },
+                  root: {
+                    borderRadius: "25px 0 0 25px",
+                    boxShadow:
+                      theme.colorScheme === "dark"
+                        ? "0 2px 5px rgba(255, 255, 255, 0.02)"
+                        : "0 2px 5px rgba(0, 0, 0, 0.05)",
+                  },
+                })}
               />
             ) : (
               <Box>{topCitiesList}</Box>
             )}
+            <Divider
+              size="xs"
+              my="xs"
+              opacity={0.3}
+              color={theme.colorScheme === "dark" ? "white" : "dark"}
+            />
+            {/* TODO - Place Autocomplete Search */}
+            <Autocomplete
+              icon={
+                <IconLocationFilled
+                  size={20}
+                  style={{
+                    paddingLeft: 5,
+                    color:
+                      theme.colorScheme === "dark"
+                        ? " rgba(0, 232, 250)"
+                        : "rgba(250, 117, 0)",
+                  }}
+                />
+              }
+              size="sm"
+              defaultValue=""
+              itemComponent={AutoCompItem}
+              value={countrySearch}
+              placeholder={addEllipsis(
+                `Where in${prefaceThe.includes(area.label) ? " The" : ""} ${
+                  area.country === "United States" ? area.country : area.label
+                }?`
+              )}
+              onItemSubmit={(e) => locationHandler(e)}
+              data={countryData}
+              filter={(id, item) => item}
+              switchDirectionOnFlip={true}
+              onChange={(e) => {
+                setCountrySearch(e);
+                handleChange();
+              }}
+              styles={(theme) => ({
+                input: {
+                  "&::placeholder": {
+                    color: theme.colorScheme === "dark" ? "#fff" : "#000",
+                  },
+                  borderRadius: "25px 0 0 25px",
+                  border: "none",
+                  borderTop: `2px solid ${
+                    theme.colorScheme === "dark"
+                      ? "rgba(255,255,255,0.1)"
+                      : "rgba(0,0,0,0.1)"
+                  }`,
+                  background:
+                    theme.colorScheme === "dark"
+                      ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+                      : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+                },
+                dropdown: {
+                  backgroundColor:
+                    theme.colorScheme === "dark"
+                      ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                      : theme.fn.rgba(theme.colors.gray[0], 0.95),
+                },
+              })}
+            />
           </Box>
         </Box>
       </Drawer>
@@ -807,7 +885,6 @@ export default function Mymap({
       {!searchOpened && visible && !mapSpin && !dropDownOpened && (
         <Center pos={"absolute"} bottom={"100px"} w={"100%"}>
           {/* Main Place Search */}
-          {/* TODO - Country Auto */}
           <Box
             w={400}
             pos={"relative"}
@@ -837,10 +914,6 @@ export default function Mymap({
               data={countryData}
               filter={(id, item) => item}
               switchDirectionOnFlip={true}
-              style={{
-                width: "400px",
-                zIndex: 200,
-              }}
               onChange={(e) => {
                 setCountrySearch(e);
                 handleChange();
@@ -859,6 +932,8 @@ export default function Mymap({
       )}
       {geoLat && geoLng && (
         <Map
+          {...viewState}
+          onMove={(e) => setViewState(e.viewState)}
           initialViewState={initialViewState}
           renderWorldCopies={true}
           styleDiffing={false}
@@ -870,6 +945,7 @@ export default function Mymap({
           onLoad={() => {
             setMapLoaded(true);
             sessionStorage.removeItem("noLogin");
+            setViewState(initialViewState);
           }}
           touchPitch={false}
           // keyboard={false}
@@ -900,7 +976,7 @@ export default function Mymap({
               setPlaces={setPlaces}
             />
           )}
-          {pins}
+          {theme.colorScheme ? pins : {}}
           {popupInfo && (
             <Popup
               className={classes.popup}
