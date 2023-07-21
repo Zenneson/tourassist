@@ -1900,7 +1900,7 @@
     ]
   },
   {
-    "country": "Gambia",
+    "country": "The Gambia",
     "shortcode": "GM",
     "cities": [
       {
@@ -2286,7 +2286,7 @@
         "center": [-72.39922, 18.54114]
       },
       {
-        "name": "Delmas 73",
+        "name": "Delmas",
         "center": [-72.30278, 18.54472]
       },
       {
@@ -4636,7 +4636,7 @@
     ]
   },
   {
-    "country": "Sao Tome and Principe",
+    "country": "São Tomé and Príncipe",
     "shortcode": "ST",
     "cities": [
       {

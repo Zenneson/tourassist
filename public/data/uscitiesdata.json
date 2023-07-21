@@ -1,6 +1,7 @@
 [
   {
     "state": "Alaska",
+    "center": [-149.90028, 61.21806],
     "cities": [
       {
         "name": "Anchorage",
@@ -26,6 +27,7 @@
   },
   {
     "state": "Alabama",
+    "center": [-86.9023, 32.31823],
     "cities": [
       {
         "name": "Huntsville",
@@ -51,6 +53,7 @@
   },
   {
     "state": "Arkansas",
+    "center": [-92.28959, 34.74648],
     "cities": [
       {
         "name": "Little Rock",
@@ -76,6 +79,7 @@
   },
   {
     "state": "Arizona",
+    "center": [-111.926051, 34.048928],
     "cities": [
       {
         "name": "Phoenix",
@@ -101,6 +105,7 @@
   },
   {
     "state": "California",
+    "center": [-119.417932, 36.778261],
     "cities": [
       {
         "name": "Los Angeles",
@@ -126,6 +131,7 @@
   },
   {
     "state": "Colorado",
+    "center": [-105.550567, 38.997934],
     "cities": [
       {
         "name": "Denver",
@@ -151,6 +157,7 @@
   },
   {
     "state": "Connecticut",
+    "center": [-72.757385, 41.517654],
     "cities": [
       {
         "name": "Bridgeport",
@@ -176,15 +183,17 @@
   },
   {
     "state": "District of Columbia",
+    "center": [-77.03637, 38.89511],
     "cities": [
       {
-        "name": "Washington, D.C.",
+        "name": "Washington D.C.",
         "center": [-77.03637, 38.89511]
       }
     ]
   },
   {
     "state": "Delaware",
+    "center": [-75.499901, 39.145251],
     "cities": [
       {
         "name": "Wilmington",
@@ -210,6 +219,7 @@
   },
   {
     "state": "Florida",
+    "center": [-82.438704, 27.766279],
     "cities": [
       {
         "name": "Jacksonville",
@@ -235,6 +245,7 @@
   },
   {
     "state": "Georgia",
+    "center": [-83.442606, 32.678125],
     "cities": [
       {
         "name": "Atlanta",
@@ -260,6 +271,7 @@
   },
   {
     "state": "Hawaii",
+    "center": [-157.505, 20.46],
     "cities": [
       {
         "name": "Honolulu",
@@ -285,6 +297,7 @@
   },
   {
     "state": "Iowa",
+    "center": [-93.389883, 42.042974],
     "cities": [
       {
         "name": "Des Moines",
@@ -310,6 +323,7 @@
   },
   {
     "state": "Idaho",
+    "center": [-114.742041, 44.068202],
     "cities": [
       {
         "name": "Boise",
@@ -335,6 +349,7 @@
   },
   {
     "state": "Illinois",
+    "center": [-89.199581, 40.079891],
     "cities": [
       {
         "name": "Chicago",
@@ -360,6 +375,7 @@
   },
   {
     "state": "Indiana",
+    "center": [-86.281601, 40.273502],
     "cities": [
       {
         "name": "Indianapolis",
@@ -385,6 +401,7 @@
   },
   {
     "state": "Kansas",
+    "center": [-98.484246, 38.484726],
     "cities": [
       {
         "name": "Wichita",
@@ -410,6 +427,7 @@
   },
   {
     "state": "Kentucky",
+    "center": [-85.572601, 37.839333],
     "cities": [
       {
         "name": "Lexington-Fayette",
@@ -435,6 +453,7 @@
   },
   {
     "state": "Louisiana",
+    "center": [-91.962333, 30.984298],
     "cities": [
       {
         "name": "New Orleans",
@@ -460,6 +479,7 @@
   },
   {
     "state": "Massachusetts",
+    "center": [-71.382437, 42.407211],
     "cities": [
       {
         "name": "Boston",
@@ -485,6 +505,7 @@
   },
   {
     "state": "Maryland",
+    "center": [-76.641273, 39.045753],
     "cities": [
       {
         "name": "Baltimore",
@@ -510,6 +531,7 @@
   },
   {
     "state": "Maine",
+    "center": [-69.445473, 45.253783],
     "cities": [
       {
         "name": "Portland",
@@ -535,6 +557,7 @@
   },
   {
     "state": "Michigan",
+    "center": [-84.56031, 43.94435],
     "cities": [
       {
         "name": "Detroit",
@@ -560,6 +583,7 @@
   },
   {
     "state": "Minnesota",
+    "center": [-94.30529, 46.31514],
     "cities": [
       {
         "name": "Minneapolis",
@@ -585,6 +609,7 @@
   },
   {
     "state": "Missouri",
+    "center": [-92.45803, 38.3678],
     "cities": [
       {
         "name": "Kansas City",
@@ -610,6 +635,7 @@
   },
   {
     "state": "Mississippi",
+    "center": [-89.66639, 32.73643],
     "cities": [
       {
         "name": "Jackson",
@@ -635,6 +661,7 @@
   },
   {
     "state": "Montana",
+    "center": [-109.53305, 46.96526],
     "cities": [
       {
         "name": "Billings",
@@ -660,6 +687,7 @@
   },
   {
     "state": "North Carolina",
+    "center": [-79.829, 35.55569],
     "cities": [
       {
         "name": "Charlotte",
@@ -685,6 +713,7 @@
   },
   {
     "state": "North Dakota",
+    "center": [-99.793, 47.52888],
     "cities": [
       {
         "name": "Fargo",
@@ -710,6 +739,7 @@
   },
   {
     "state": "Nebraska",
+    "center": [-99.68894, 41.50078],
     "cities": [
       {
         "name": "Omaha",
@@ -735,6 +765,7 @@
   },
   {
     "state": "New Hampshire",
+    "center": [-71.58049, 43.68581],
     "cities": [
       {
         "name": "Manchester",
@@ -760,6 +791,7 @@
   },
   {
     "state": "New Jersey",
+    "center": [-74.52429, 40.05832],
     "cities": [
       {
         "name": "Newark",
@@ -785,6 +817,7 @@
   },
   {
     "state": "New Mexico",
+    "center": [-106.10865, 34.42132],
     "cities": [
       {
         "name": "Albuquerque",
@@ -810,6 +843,7 @@
   },
   {
     "state": "Nevada",
+    "center": [-117.02274, 38.502032],
     "cities": [
       {
         "name": "Las Vegas",
@@ -835,6 +869,7 @@
   },
   {
     "state": "New York",
+    "center": [-75.165222, 42.827001],
     "cities": [
       {
         "name": "New York City",
@@ -860,6 +895,7 @@
   },
   {
     "state": "Ohio",
+    "center": [-82.793731, 40.373661],
     "cities": [
       {
         "name": "Columbus",
@@ -885,6 +921,7 @@
   },
   {
     "state": "Oklahoma",
+    "center": [-97.508469, 35.583061],
     "cities": [
       {
         "name": "Oklahoma City",
@@ -910,6 +947,7 @@
   },
   {
     "state": "Oregon",
+    "center": [-120.554201, 43.804133],
     "cities": [
       {
         "name": "Portland",
@@ -935,6 +973,7 @@
   },
   {
     "state": "Pennsylvania",
+    "center": [-77.194527, 40.577422],
     "cities": [
       {
         "name": "Philadelphia",
@@ -960,6 +999,7 @@
   },
   {
     "state": "Rhode Island",
+    "center": [-71.477432, 41.57913],
     "cities": [
       {
         "name": "Providence",
@@ -985,6 +1025,7 @@
   },
   {
     "state": "South Carolina",
+    "center": [-80.647621, 33.819099],
     "cities": [
       {
         "name": "Columbia",
@@ -1010,6 +1051,7 @@
   },
   {
     "state": "South Dakota",
+    "center": [-100.226924, 44.430199],
     "cities": [
       {
         "name": "Sioux Falls",
@@ -1035,6 +1077,7 @@
   },
   {
     "state": "Tennessee",
+    "center": [-86.341599, 35.858002],
     "cities": [
       {
         "name": "Nashville",
@@ -1060,6 +1103,7 @@
   },
   {
     "state": "Texas",
+    "center": [-98.760437, 31.131302],
     "cities": [
       {
         "name": "Houston",
@@ -1085,6 +1129,7 @@
   },
   {
     "state": "Utah",
+    "center": [-111.544876, 39.323776],
     "cities": [
       {
         "name": "Salt Lake City",
@@ -1110,6 +1155,7 @@
   },
   {
     "state": "Virginia",
+    "center": [-78.243097, 37.521534],
     "cities": [
       {
         "name": "Virginia Beach",
@@ -1135,6 +1181,7 @@
   },
   {
     "state": "Vermont",
+    "center": [-72.577841, 44.040731],
     "cities": [
       {
         "name": "Burlington",
@@ -1160,6 +1207,7 @@
   },
   {
     "state": "Washington",
+    "center": [-120.447151, 47.3826],
     "cities": [
       {
         "name": "Seattle",
@@ -1185,6 +1233,7 @@
   },
   {
     "state": "Wisconsin",
+    "center": [-89.638493, 44.624854],
     "cities": [
       {
         "name": "Milwaukee",
@@ -1210,6 +1259,7 @@
   },
   {
     "state": "West Virginia",
+    "center": [-80.712639, 38.642178],
     "cities": [
       {
         "name": "Charleston",
@@ -1235,6 +1285,7 @@
   },
   {
     "state": "Wyoming",
+    "center": [-107.554275, 42.999627],
     "cities": [
       {
         "name": "Cheyenne",

@@ -188,7 +188,7 @@ export default function Donations({ dHeight }) {
             )}
           </tbody>
         </Table>
-        <Box ref={ref}></Box>
+        <Box ref={ref} />
         <Center>
           <Button
             variant="default"

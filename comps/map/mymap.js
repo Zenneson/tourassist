@@ -5,6 +5,7 @@ import centerOfMass from "@turf/center-of-mass";
 import {
   createStyles,
   useMantineTheme,
+  Center,
   ActionIcon,
   Autocomplete,
   Box,
@@ -21,6 +22,7 @@ import {
   Drawer,
   Transition,
   Image,
+  Select,
 } from "@mantine/core";
 import { useSessionStorage, usePrevious } from "@mantine/hooks";
 import {
@@ -33,14 +35,15 @@ import {
   IconList,
   IconX,
   IconCheck,
-  IconArrowBarToRight,
+  IconMapPin,
+  IconChevronsLeft,
   IconMapPinFilled,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
 import TourList from "./tourList";
 import Loader from "../loader";
-import { type } from "os";
+import { list } from "firebase/storage";
 
 export default function Mymap({
   setPanelShow,
@@ -81,6 +84,7 @@ export default function Mymap({
     defaultValue: null,
   });
   const [topCities, setTopCities] = useState([]);
+  const [listStates, setListStates] = useState([]);
   const [geoLat, setGeoLat] = useSessionStorage({
     key: "geoLatState",
     defaultValue: null,
@@ -270,8 +274,15 @@ export default function Mymap({
       (locationObj.country === "United States" &&
         locationObj.type === "region") ||
       locationObj.type !== "city"
-    )
+    ) {
       fetchCities(locationObj);
+    }
+    if (
+      locationObj.country === "United States" &&
+      locationObj.type === "country"
+    ) {
+      usStates(locationObj);
+    }
 
     const coordinates =
       locationObj.type === "country"
@@ -285,89 +296,6 @@ export default function Mymap({
       locationObj.country,
       locationObj.label
     );
-
-    // let isSelection = true ? feature?.text : false;
-    // let isoName = feature?.properties?.iso_3166_1 || feature?.shortcode || "";
-    // setIsCountry(placeType === "country" || placeType === "country-boundries");
-    // setBorderbox(border);
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-
-    // if (location) {
-    //   center.current = isSelection
-    //     ? feature.geometry.coordinates
-    //     : centerOfMass(feature);
-    //   setShowStates(location === "United States");
-
-    //   const index = feature.place_name?.indexOf(",");
-    //   let result = feature.place_name?.substring(index + 1);
-    //   {
-    //     feature.layer?.source === "states-boundaries"
-    //       ? (result = "United States")
-    //       : result;
-    //   }
-    //   setCitySubTitle(result);
-    //   setIsCity(
-    //     isSelection &&
-    //       (feature?.place_type.includes("place") ||
-    //         (feature?.place_type[0] === "region" &&
-    //           location === "United States"))
-    //   );
-
-    //   setPlaceLocation({
-    //     place: location,
-    //     region: result,
-    //   });
-
-    //   mapRef.current.flyTo({
-    //     center: isSelection ? feature.geometry.coordinates : newCenter,
-    //     zoom:
-    //       location === "United States" && (area.state || isSelection) ? 5.5 : 3.5,
-    //     duration: 800,
-    //     pitch: 0,
-    //   });
-
-    //   setTimeout(() => {
-    //     mapRef.current.flyTo({
-    //       center: isSelection ? feature.geometry.coordinates : newCenter,
-    //       duration: 1500,
-    //       zoom:
-    //         isSelection &&
-    //         (feature?.place_type.includes("place") ||
-    //           (feature?.place_type[0] === "region" &&
-    //             location === "United States"))
-    //           ? 12
-    //           : maxZoom,
-    //       maxZoom: maxZoom,
-    //       pitch:
-    //         isSelection &&
-    //         (feature?.place_type.includes("place") ||
-    //           (feature?.place_type[0] === "region" &&
-    //             location === "United States"))
-    //           ? 75
-    //           : 40,
-    //       linear: false,
-    //     });
-    //   }, 400);
-
-    //   if (location !== "United States") {
-    //     setShowModal(true);
-    //   }
-    // }
-
-    // if (
-    //   feature.layer?.source === "states-boundaries" ||
-    //   area.state ||
-    //   location === "United States"
-    // ) {
-    //   setCitySubTitle("United States");
-    //   fetchCities(location, true);
-    // } else {
-    //   fetchCities(location);
-    // }
-    // setIsoName(isoName);
-    // setCityData([]);
-    // setCountryData([]);
   }
 
   const goToLocation = (type, center, maxZoom, location, name) => {
@@ -427,7 +355,8 @@ export default function Mymap({
   }
 
   const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
-    const { label, region, country, group, center, border, fullname } = props;
+    const { label, region, country, group, center, border, fullname, ...rest } =
+      props;
     const data = {
       label,
       region,
@@ -438,21 +367,8 @@ export default function Mymap({
       fullname,
     };
     return (
-      <Box ref={ref}>
-        <Box
-          p={5}
-          onClick={() => locationHandler(data)}
-          sx={{
-            cursor: "pointer",
-            transitions: "all 0.2s ease-in-out",
-            "&:hover": {
-              backgroundColor:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[7]
-                  : theme.colors.gray[0],
-            },
-          }}
-        >
+      <Box ref={ref} {...rest} p={"5px 10px"}>
+        <Box p={5} onClick={() => locationHandler(data)}>
           <Title order={6}>{label}</Title>
           <Text fz={12}>
             {group === "City" ? `${region}, ${country}` : country}
@@ -462,42 +378,56 @@ export default function Mymap({
     );
   });
 
-  const handleChange = async (field) => {
-    let endpoint;
-    switch (field) {
-      case "country":
-        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&fuzzyMatch=true&limit=5&types=country%2Cregion%2Cplace&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
-        break;
-      case "city":
-        const [minLng, minLat, maxLng, maxLat] = borderBox;
-        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
-        if (isCountry)
-          endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${citySearch}.json?country=${isoName}&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
-        break;
-      default:
-        break;
-    }
-
-    if (countrySearch.length > 1 || citySearch.length > 1) {
-      try {
-        const response = await fetch(endpoint);
-        const results = await response.json();
-        const data = results.features.map((feature) => ({
-          label: feature.text,
-          value: feature.id,
-          type: feature.place_type[0],
-          group: placeType(feature.place_type[0]),
-          country: feature.place_name.split(", ").pop(),
-          region: feature.place_name.split(", ", 2)[1],
-          center: feature.center,
-          fullname: feature.place_name,
-        }));
-
-        if (field === "city") setCityData(data);
-        if (field === "country") setCountryData(data);
-      } catch (error) {
-        console.log("Error fetching data for Country Autocomplete: ", error);
+  const searchForState = (e) => {
+    for (let item of listStates) {
+      if (item.value === e) {
+        return item.center;
       }
+    }
+    return null;
+  };
+
+  const SelectItem = React.forwardRef(function SelectItem(props, ref) {
+    const { label, region, country, group, center, fullname, ...rest } = props;
+    return (
+      <Box ref={ref} {...rest} p={"5px 10px"}>
+        <Flex gap={5} variant="subtle" align="center">
+          <IconMapPinFilled opacity={0.1} size={15} /> {label}
+        </Flex>
+      </Box>
+    );
+  });
+
+  const handleChange = async () => {
+    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&fuzzyMatch=true&limit=5&types=country%2Cregion%2Cplace&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+
+    try {
+      const response = await fetch(endpoint);
+      const results = await response.json();
+      const data = results.features.map((feature) => ({
+        label: feature.text,
+        value: feature.id,
+        type: feature.place_type[0],
+        group: placeType(feature.place_type[0]),
+        country: feature.place_name.split(", ").pop(),
+        region: feature.place_name.split(", ", 2)[1],
+        center: feature.center,
+        fullname: feature.place_name,
+      }));
+
+      const searchData = data.map((item) => {
+        if (item.value === "place.345549036") {
+          return {
+            ...item,
+            label: "Washington D.C.",
+          };
+        }
+        return item;
+      });
+
+      setCountryData(searchData);
+    } catch (error) {
+      console.log("Error fetching data for Country Autocomplete: ", error);
     }
   };
 
@@ -583,6 +513,86 @@ export default function Mymap({
     }
   };
 
+  const topCitiesList = topCities.map((city, index) => (
+    <Group
+      key={index}
+      position="right"
+      pos={"relative"}
+      left={15}
+      sx={{
+        transition: "all 150ms ease-in-out",
+        "&:hover": {
+          left: 13,
+        },
+      }}
+    >
+      <NavLink
+        mb={5}
+        fw={700}
+        label={city[0]}
+        c={theme.colorScheme === "dark" ? "white" : "dark"}
+        icon={
+          <IconMapPinFilled
+            size={15}
+            style={{
+              position: "relative",
+              top: 1,
+              marginLeft: 3,
+            }}
+          />
+        }
+        onClick={() => selectTopCity(city)}
+        bg={
+          theme.colorScheme === "dark"
+            ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+            : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)"
+        }
+        sx={{
+          borderRadius: "25px 0 0 25px",
+          borderTop: `2px solid ${
+            theme.colorScheme === "dark"
+              ? "rgba(255,255,255,0.1)"
+              : "rgba(0,0,0,0.1)"
+          }`,
+          boxShadow: `${
+            theme.colorScheme === "dark"
+              ? "rgba(0, 0, 0, 0.2) 0px 10px 7px -5px"
+              : "rgba(0, 0, 0, 0.1) 0px 5px 7px -5px"
+          }`,
+        }}
+      />
+    </Group>
+  ));
+
+  const usStates = async () => {
+    try {
+      const res = await fetch("/data/uscitiesdata.json");
+      const data = await res.json();
+
+      if (!data) {
+        return {
+          notFound: true,
+        };
+      }
+
+      let states = [];
+      data.map((state) => {
+        states.push({
+          value: state.state,
+          label: state.state,
+          center: state.center,
+          country: "United States",
+        });
+      });
+      setListStates(states);
+    } catch (error) {
+      console.error("Error:", error);
+      return {
+        notFound: true,
+      };
+    }
+  };
+
   const selectTopCity = (city) => {
     setHeaderEm(calculateFontSize(city[0]));
     setArea({ label: city[0], type: "city", country: area.country });
@@ -591,46 +601,6 @@ export default function Mymap({
     setLngLat(city[1]);
     goToLocation("city", city[1], 12, area.country, city[0]);
   };
-
-  const topCitiesList = topCities.map((city, index) => (
-    <Group key={index} position="right">
-      {/* Menu item for Top Cities */}
-      <Group
-        pb={1}
-        opacity={0.8}
-        spacing={10}
-        sx={{
-          pointerEvents: "all",
-          cursor: "pointer",
-          transition: "all 150ms ease",
-          "&:hover": {
-            transform: "scale(1.05)",
-            backgroundColor: "rgba(0,0,0,0)",
-            opacity: 1,
-          },
-          "&:active": {
-            transform: "scale(1)",
-          },
-        }}
-        onClick={() => selectTopCity(city)}
-      >
-        {/* <IconWorld
-          size={12}
-          color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
-        /> */}
-        <Text
-          lineClamp={1}
-          truncate={true}
-          w={180}
-          fw={700}
-          fs={"italic"}
-          fz={14}
-        >
-          {city[0]}
-        </Text>
-      </Group>
-    </Group>
-  ));
 
   const reset = () => {
     mapRef.current.flyTo({
@@ -648,40 +618,6 @@ export default function Mymap({
     setCountryData([]);
     setCitySearch("");
     setCountrySearch("");
-  };
-
-  const showTourList = () => {
-    setListOpened(true);
-    setMainMenuOpened(false);
-    setPanelShow(false);
-  };
-
-  const travelTo = () => {
-    setPlaces([
-      {
-        place: area.label,
-        region: citySubTitle,
-        fullName: area.label + "," + citySubTitle,
-        costs: ["FLIGHT", "HOTEL"],
-      },
-    ]);
-    router.push("/tripplanner");
-  };
-
-  const addToTourList = () => {
-    showTourList();
-    if (checkPlace(placeLocation) === false) {
-      addPlaces(placeLocation);
-      reset();
-    } else {
-      notifications.show({
-        color: "red",
-        style: { backgroundColor: "#2e2e2e" },
-        title: "Loaction already added",
-        icon: <IconAlertTriangle size={17} />,
-        message: `${area.label} was already added to your tour`,
-      });
-    }
   };
 
   const returnToRegion = () => {
@@ -734,18 +670,15 @@ export default function Mymap({
             boxShadow: "none",
             paddingTop: 100,
             overflow: "visible",
-            background:
-              theme.colorScheme === "dark"
-                ? "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0, 0, 0, 1) 100%)"
-                : "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(255, 255, 255, 1) 100%)",
+            backgroundColor: "transparent",
           },
         })}
       >
         <Box>
-          <Flex w={"100"} gap={5} justify={"flex-end"} align={"center"}>
+          <Flex w={"100"} h={90} gap={0} justify={"flex-end"} align={"center"}>
             <ActionIcon
               size={"xl"}
-              mr={10}
+              mr={5}
               variant="transparent"
               onClick={returnToRegion}
               opacity={0.7}
@@ -759,10 +692,10 @@ export default function Mymap({
                 },
               }}
             >
-              <IconArrowBarToRight
+              <IconChevronsLeft
                 color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
-                stroke={3}
-                size={70}
+                stroke={2}
+                size={headerEm + "em"}
               />
             </ActionIcon>
             <Title
@@ -789,31 +722,55 @@ export default function Mymap({
             </Title>
           </Flex>
           <Box
-            top={-15}
             pos={"relative"}
-            hidden={
-              (area.country === "United States" && area.type === "country") ||
-              area.type === "city"
-            }
+            left={15}
+            ml={"70%"}
+            w={"30%"}
+            hidden={area.type === "city"}
+            sx={{
+              pointerEvents: "all",
+            }}
           >
             <Divider
               size="xs"
               my="xs"
-              ml={"70%"}
-              w={"30%"}
+              opacity={0.3}
               color={theme.colorScheme === "dark" ? "white" : "dark"}
-              labelPosition={"left"}
-              label={
-                <Text
-                  fz={12}
-                  fs={"italic"}
-                  color={theme.colorScheme === "dark" ? "white" : "dark"}
-                >
-                  Top Cities
-                </Text>
-              }
             />
-            <Box>{topCitiesList}</Box>
+            {area.country === "United States" && area.type === "country" ? (
+              <Select
+                size="md"
+                radius={"3px 0 0 3px"}
+                placeholder="Select a US State"
+                itemComponent={SelectItem}
+                nothingFound="Nobody here"
+                data={listStates}
+                searchable={true}
+                hoverOnSearchChange={true}
+                filter={(value, item) =>
+                  item.label.toLowerCase().includes(value.toLowerCase().trim())
+                }
+                onChange={(e) => {
+                  searchForState(e);
+                  let location = {
+                    label: e,
+                    group: "region",
+                    center: searchForState(e),
+                    country: "United States",
+                  };
+                  setArea(location);
+                  locationHandler(location);
+                }}
+                sx={{
+                  boxShadow:
+                    theme.colorScheme === "dark"
+                      ? "0 2px 5px rgba(255, 255, 255, 0.05)"
+                      : "0 2px 5px rgba(0, 0, 0, 0.05)",
+                }}
+              />
+            ) : (
+              <Box>{topCitiesList}</Box>
+            )}
           </Box>
         </Box>
       </Drawer>
@@ -847,340 +804,58 @@ export default function Mymap({
           />
         </Button>
       )}
-      {!searchOpened && (
-        <Modal
-          centered
-          zIndex={100}
-          opened={showModal}
-          onClose={reset}
-          padding={"15px 30px 20px 30px"}
-          size={"470px"}
-          overlayProps={{
-            opacity: 0.5,
-            blur: 5,
-          }}
-          sx={{
-            ".mantine-Modal-overlay": {
-              background:
-                theme.colorScheme === "dark"
-                  ? theme.fn.rgba(theme.colors.dark[9], 0.5)
-                  : theme.fn.rgba(theme.colors.gray[0], 0.5),
-            },
-          }}
-          title={
-            <Box>
-              <Title
-                order={1}
-                fw={900}
-                variant="gradient"
-                gradient={{
-                  from: `${
-                    theme.colorScheme === "dark" ? "#00E8FC" : "#fa7500"
-                  }`,
-                  to: `${theme.colorScheme === "dark" ? "#FFF" : "#000"}`,
-                  deg: 45,
-                }}
-                sx={{
-                  textTransform: "uppercase",
-                  textShadow: "0 3px 5px rgba(0, 0, 0, 0.15)",
-                }}
-              >
-                {area.label}
-              </Title>
-              <Text fw={600} size="xs" color="#c0c0c0">
-                {!isCountry &&
-                  citySubTitle &&
-                  citySubTitle.replace("ecture東京都", "., Japan")}
-              </Text>
-            </Box>
-          }
-          styles={(theme) => ({
-            header: {
-              backgroundColor: "transparent",
-              zIndex: 1,
-            },
-            content: {
-              backgroundColor: `${
-                theme.colorScheme === "dark"
-                  ? theme.fn.rgba(theme.colors.dark[7], 0.8)
-                  : theme.fn.rgba(theme.colors.gray[0], 0.8)
-              }`,
-              overflow: "hidden",
-            },
-            overlay: {
-              zIndex: 0,
-            },
-            close: {
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-            },
-          })}
-        >
-          {isCity && !isCountry && !area.state && (
-            <>
-              {/* Travel to Button  */}
-              <Popover
-                opened={tourListDropDown}
-                offset={-85}
-                width={"target"}
-                styles={(theme) => ({
-                  dropdown: {
-                    backgroundColor:
-                      theme.colorScheme === "dark" ? "dark.9" : "gray.0",
-                    border: "none",
-                    borderRadius: "0 0 3px 3px",
-                    borderTop: `2px solid ${
-                      theme.colorScheme === "dark"
-                        ? theme.fn.rgba(theme.colors.gray[0], 0.1)
-                        : theme.fn.rgba(theme.colors.dark[9], 0.1)
-                    }`,
-                  },
-                })}
-                onClick={() => {
-                  if (places.length > 0) {
-                    if (checkPlace(placeLocation)) {
-                      travelTo();
-                    } else {
-                      showTourList();
-                      setTourListDropDown(!tourListDropDown);
-                    }
-                  } else {
-                    travelTo();
-                  }
-                }}
-              >
-                <Popover.Target>
-                  <NavLink
-                    icon={
-                      <IconPlaneTilt
-                        size={25}
-                        color={
-                          theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"
-                        }
-                        opacity={0.7}
-                        style={{
-                          margin: "3px 2px 0 3px",
-                        }}
-                      />
-                    }
-                    variant="filled"
-                    description={`Start planning a trip to ${area.label}`}
-                    sx={{
-                      borderLeft: "3px solid rgba(0, 0, 0, 0)",
-                      "&:hover": {
-                        borderLeft: `3px solid  ${
-                          theme.colorScheme === "dark"
-                            ? "rgba(159, 245, 253, 0.4)"
-                            : "rgba(250, 117, 0, 0.4)"
-                        }`,
-                        transition: "all 0.2s ease-in-out",
-                      },
-                    }}
-                    label={
-                      <>
-                        <Text inherit span color="dimmed">
-                          Travel to{" "}
-                        </Text>
-                        <Text
-                          inherit
-                          span
-                          color={
-                            theme.colorScheme === "dark" ? "white" : "black"
-                          }
-                          size="md"
-                          fw={700}
-                          transform="uppercase"
-                        >
-                          {area.label}
-                        </Text>
-                      </>
-                    }
-                  />
-                </Popover.Target>
-                <Popover.Dropdown>
-                  <Flex
-                    align={"center"}
-                    gap={3}
-                    fz={12}
-                    fw={100}
-                    sx={{
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Clear Tour List and Travel to
-                    <Text>
-                      <Text span color="#81eaf4" fw={700} mx={2}>
-                        {area.label}
-                      </Text>
-                      ?
-                    </Text>
-                  </Flex>
-                  <Group spacing={10} mt={10} grow>
-                    {/* No to Clear Tour List or Travel to */}
-                    <Button
-                      variant="filled"
-                      opacity={0.7}
-                      color="red"
-                      onClick={() => {
-                        setTourListDropDown(false);
-                      }}
-                    >
-                      <IconX size={20} stroke={5} />
-                    </Button>
-                    {/* Yes to Clear Tour List and Travel to */}
-                    <Button variant="filled" opacity={0.7} onClick={travelTo}>
-                      <IconCheck size={20} stroke={5} />
-                    </Button>
-                  </Group>
-                </Popover.Dropdown>
-              </Popover>
-              <LoadingOverlay
-                visible={tourListDropDown}
-                overlayBlur={5}
-                overlayColor="#0b0c0d"
-                overlayOpacity={0.15}
-                zIndex={3}
-                loader={<div></div>}
-              />
-              {/* Add to Tour List Button  */}
-              <NavLink
-                mb={10}
-                icon={
-                  <IconPlaylistAdd
-                    size={25}
-                    color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
-                    opacity={0.7}
-                    style={{
-                      margin: "3px 2px 0 3px",
-                    }}
-                  />
-                }
-                description={`Add ${area.label} to the Tour List`}
-                sx={{
-                  borderLeft: "3px solid rgba(0, 0, 0, 0)",
-                  "&:hover": {
-                    borderLeft: `3px solid  ${
-                      theme.colorScheme === "dark"
-                        ? "rgba(159, 245, 253, 0.4)"
-                        : "rgba(250, 117, 0, 0.4)"
-                    }`,
-                    transition: "all 0.2s ease-in-out",
-                  },
-                }}
-                label={
-                  <>
-                    <Text color="dimmed">
-                      Add to{" "}
-                      <Text
-                        span
-                        color={theme.colorScheme === "dark" ? "white" : "black"}
-                        fw={700}
-                        transform="uppercase"
-                      >
-                        TOUR LIST
-                      </Text>{" "}
-                    </Text>
-                  </>
-                }
-                onClick={addToTourList}
-              />
-            </>
-          )}
-          {!isCity && (isCountry || area.state) && (
-            <Box>
-              <Divider
-                size="xs"
-                my="xs"
-                labelPosition={topCities.length === 0 ? "center" : "left"}
-                label={
-                  <Text
-                    fz={12}
-                    fs={"italic"}
-                    color={theme.colorScheme === "dark" ? "white" : "dark"}
-                  >
-                    Top Cities in {area.label} by population
-                  </Text>
-                }
-              />
-              <Box>{topCitiesList}</Box>
-              {/* Search Cities in Selected Region */}
-              {/* TODO - City Auto */}
-              <Autocomplete
-                icon={<IconLocation size={17} style={{ opacity: 0.2 }} />}
-                placeholder={`Search for a city in ${area.label}?`}
-                defaultValue=""
-                value={citySearch}
-                mt={15}
-                size="sm"
-                mb={10}
-                withinPortal
-                itemComponent={AutoCompItem}
-                onChange={(e) => {
-                  setCitySearch(e);
-                  handleChange("city");
-                }}
-                onItemSubmit={function (e) {
-                  handleSelect(e);
-                  setCitySearch("");
-                }}
-                data={cityData}
-                filter={(value, item) => item}
-              />
-            </Box>
-          )}
-        </Modal>
-      )}
       {!searchOpened && visible && !mapSpin && !dropDownOpened && (
-        <Flex
-          justify="center"
-          align="center"
-          pos={"absolute"}
-          bottom={"100px"}
-          w={"100%"}
-        >
+        <Center pos={"absolute"} bottom={"100px"} w={"100%"}>
           {/* Main Place Search */}
           {/* TODO - Country Auto */}
-          <Autocomplete
-            icon={
-              <IconLocation
-                size={30}
-                style={{
-                  opacity: 0.4,
-                  color:
-                    theme.colorScheme === "dark"
-                      ? " rgba(0, 232, 250)"
-                      : "rgba(250, 117, 0)",
-                }}
-              />
-            }
-            dropdownPosition="top"
-            size="xl"
-            defaultValue=""
-            itemComponent={AutoCompItem}
-            value={countrySearch}
-            placeholder="Where would you like to go?"
-            onItemSubmit={(e) => locationHandler(e)}
-            data={countryData}
-            filter={(id, item) => item}
+          <Box
+            w={400}
+            pos={"relative"}
             style={{
-              width: "400px",
               zIndex: 200,
             }}
-            onChange={(e) => {
-              setCountrySearch(e);
-              handleChange("country");
-            }}
-            styles={(theme) => ({
-              dropdown: {
-                backgroundColor:
-                  theme.colorScheme === "dark"
-                    ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-                    : theme.fn.rgba(theme.colors.gray[0], 0.95),
-              },
-            })}
-          />
-        </Flex>
+          >
+            <Autocomplete
+              icon={
+                <IconLocation
+                  size={20}
+                  style={{
+                    opacity: 0.4,
+                    color:
+                      theme.colorScheme === "dark"
+                        ? " rgba(0, 232, 250)"
+                        : "rgba(250, 117, 0)",
+                  }}
+                />
+              }
+              size="lg"
+              defaultValue=""
+              itemComponent={AutoCompItem}
+              value={countrySearch}
+              placeholder="Where would you like to go?"
+              onItemSubmit={(e) => locationHandler(e)}
+              data={countryData}
+              filter={(id, item) => item}
+              switchDirectionOnFlip={true}
+              style={{
+                width: "400px",
+                zIndex: 200,
+              }}
+              onChange={(e) => {
+                setCountrySearch(e);
+                handleChange();
+              }}
+              styles={(theme) => ({
+                dropdown: {
+                  backgroundColor:
+                    theme.colorScheme === "dark"
+                      ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                      : theme.fn.rgba(theme.colors.gray[0], 0.95),
+                },
+              })}
+            />
+          </Box>
+        </Center>
       )}
       {geoLat && geoLng && (
         <Map
@@ -1197,7 +872,7 @@ export default function Mymap({
             sessionStorage.removeItem("noLogin");
           }}
           touchPitch={false}
-          keyboard={false}
+          // keyboard={false}
           ref={mapRef}
           onClick={(e) => {
             locationHandler(e.features[0]);
@@ -1260,13 +935,6 @@ export default function Mymap({
                   reset();
                 }}
               >
-                {/* <IconMapPinFilled
-                  style={{
-                    cursor: "pointer",
-                    transform: "scale(5)",
-                    color: "#fff",
-                  }}
-                /> */}
                 <Image width={80} src={"img/pin.png"} alt="Map Pin" />
               </Marker>
             )}
