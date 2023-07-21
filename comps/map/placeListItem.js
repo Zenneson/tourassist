@@ -20,10 +20,14 @@ export default function PlaceListItem({
     }
   };
 
-  const firstLetters = (str) => {
+  const firstLastLetters = (str) => {
     let words = str.split(" ");
-    let firstLetters = words.map((word) => word[0]);
-    return firstLetters.join("");
+    if (words.length === 1) {
+      return words[0][0].toUpperCase();
+    }
+    let firstLetter = words[0][0].toUpperCase();
+    let lastLetter = words[words.length - 1][0].toUpperCase();
+    return firstLetter + lastLetter;
   };
 
   return (
@@ -93,15 +97,15 @@ export default function PlaceListItem({
               radius="xl"
               color="#00E8FC"
             >
-              {firstLetters(place)}
+              {firstLastLetters(place)}
             </Avatar>
           </Grid.Col>
           <Grid.Col span="auto">
             <Text size="md" fw={700}>
-              {place === "東京都" ? "Tokyo" : place}
+              {place}
             </Text>
             <Text size="xs" sx={{ color: "rgba(255,255,255,0.3)" }}>
-              {region && region.replace("ecture東京都", "., Japan")}
+              {region}
             </Text>
           </Grid.Col>
           <Grid.Col span="content">

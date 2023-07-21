@@ -184,7 +184,7 @@ export default function MainMenu({
               radius={"xl"}
               c={
                 theme.colorScheme === "dark"
-                  ? theme.colors.blue[2]
+                  ? theme.colors.gray[0]
                   : theme.colors.dark[9]
               }
             >
@@ -196,7 +196,7 @@ export default function MainMenu({
             variant="subtle"
             onClick={toggle}
             radius={"xl"}
-            color={theme.colorScheme === "dark" ? "blue" : "dark"}
+            color={theme.colorScheme === "dark" ? "gray" : "dark"}
             p={10}
           >
             {theme.colorScheme === "dark" ? (
@@ -219,7 +219,7 @@ export default function MainMenu({
                   size={17}
                   color={
                     theme.colorScheme === "dark"
-                      ? theme.colors.blue[2]
+                      ? theme.colors.gray[0]
                       : theme.colors.dark[9]
                   }
                 />
@@ -238,7 +238,7 @@ export default function MainMenu({
                 color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
                 c={
                   theme.colorScheme === "dark"
-                    ? theme.colors.blue[2]
+                    ? theme.colors.gray[0]
                     : theme.colors.dark[9]
                 }
                 label={user ? "Logout" : "Login"}
@@ -261,7 +261,7 @@ export default function MainMenu({
                         size={17}
                         color={
                           theme.colorScheme === "dark"
-                            ? theme.colors.blue[2]
+                            ? theme.colors.gray[0]
                             : theme.colors.dark[9]
                         }
                       />
@@ -270,7 +270,7 @@ export default function MainMenu({
                         size={17}
                         color={
                           theme.colorScheme === "dark"
-                            ? theme.colors.blue[2]
+                            ? theme.colors.gray[0]
                             : theme.colors.dark[9]
                         }
                       />

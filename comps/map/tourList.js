@@ -27,12 +27,12 @@ export default function TourList({
 
   const submitTourList = () => {
     const newPlaceData = places.map((location) => {
-      const { place, region } = location;
+      const { place, region, fullName, costs } = location;
       return {
-        place: place === "東京都" ? "Tokyo" : place,
-        region: region && region.replace("ecture東京都", "., Japan"),
-        fullName: place + "," + region,
-        costs: ["FLIGHT", "HOTEL"],
+        place: place,
+        region: region,
+        fullName: fullName,
+        costs: costs,
       };
     });
     setPlaces(newPlaceData);
@@ -52,7 +52,8 @@ export default function TourList({
       >
         <Drawer
           zIndex={999}
-          opened={listOpened}
+          opened={listOpened && places.length > 0}
+          onClose={() => setListOpened(false)}
           withOverlay={false}
           withCloseButton={false}
           padding="xl"

@@ -10,45 +10,35 @@ import {
   Autocomplete,
   Box,
   Button,
-  Modal,
   Title,
   Flex,
   Text,
   Group,
   Divider,
   NavLink,
-  Popover,
-  LoadingOverlay,
   Drawer,
   Transition,
   Image,
   Select,
+  Modal,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import {
-  IconPlaylistAdd,
-  IconLocation,
-  IconPlaneTilt,
-  IconAlertTriangle,
-  IconWorld,
-  IconMapSearch,
   IconList,
   IconX,
-  IconCheck,
-  IconMapPin,
-  IconChevronsLeft,
   IconMapPinFilled,
-  IconLocationFilled,
+  IconWorld,
+  IconGlobe,
+  IconPlane,
+  IconLuggage,
+  IconCheck,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
 import TourList from "./tourList";
 import Loader from "../loader";
-import { list } from "firebase/storage";
 
 export default function Mymap({
-  setPanelShow,
-  setMainMenuOpened,
   listOpened,
   setListOpened,
   searchOpened,
@@ -58,7 +48,6 @@ export default function Mymap({
 }) {
   const theme = useMantineTheme();
   const mapRef = useRef();
-  const center = useRef();
   const router = useRouter();
   const [area, setArea] = useState({ label: "" });
   const [headerEm, setHeaderEm] = useState(0);
@@ -67,18 +56,14 @@ export default function Mymap({
   const [showStates, setShowStates] = useState(false);
   const [popupInfo, setPopupInfo] = useState(null);
   const [showMainMarker, setShowMainMarker] = useState(false);
-  const [citySubTitle, setCitySubTitle] = useState("");
-  const [isoName, setIsoName] = useState("");
   const [countrySearch, setCountrySearch] = useState("");
-  const [citySearch, setCitySearch] = useState("");
-  const [cityData, setCityData] = useState([]);
+  const [placeSearch, setPlaceSearch] = useState("");
+  const [placeData, setPlaceData] = useState([]);
   const [countryData, setCountryData] = useState([]);
-  const [borderBox, setBorderbox] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [isCity, setIsCity] = useState(false);
-  const [isCountry, setIsCountry] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
   const [tourListDropDown, setTourListDropDown] = useState(false);
+  const [placeChoosen, setPlaceChoosen] = useState(false);
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
@@ -145,7 +130,38 @@ export default function Mymap({
           theme.colorScheme === "dark" ? `#000 !important` : `#fff !important`,
       },
     },
+
+    select: {
+      "& .mantine-Select-input": {
+        "&::placeholder": {
+          color: theme.colorScheme === "dark" ? "#fff" : "#000",
+        },
+        border: "none",
+        borderTop: `2px solid ${
+          theme.colorScheme === "dark"
+            ? "rgba(255,255,255,0.1)"
+            : "rgba(0,0,0,0.1)"
+        }`,
+        background:
+          theme.colorScheme === "dark"
+            ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+            : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+      },
+      "& .mantine-Select-dropdown": {
+        borderRadius: "25px 0 0 25px",
+        border: "none",
+      },
+      "& .mantine-Select-root	": {
+        borderRadius: "25px 0 0 25px",
+        boxShadow:
+          theme.colorScheme === "dark"
+            ? "0 2px 5px rgba(255, 255, 255, 0.02)"
+            : "0 2px 5px rgba(0, 0, 0, 0.05)",
+      },
+    },
   }));
+
+  console.log("places", places);
 
   const { classes } = useStyles();
 
@@ -264,25 +280,26 @@ export default function Mymap({
     locationObj.label =
       feature.label ||
       feature.properties?.name_en ||
-      feature.properties?.name ||
       feature.properties?.NAME ||
       "";
     locationObj.country =
       feature.country ||
       (feature.properties?.NAME && "United States") ||
-      feature.properties?.name ||
       feature.properties?.name_en ||
       "";
     locationObj.state = feature.region || feature.properties?.NAME || "";
     locationObj.center = feature.center || getCords(feature);
+    locationObj.shortcode =
+      feature.isoName || feature.properties?.iso_3166_1 || "";
+    locationObj.shortcode = locationObj.shortcode.toLowerCase();
 
     setLngLat(locationObj.center);
     setArea(locationObj);
     setHeaderEm(calculateFontSize(locationObj.label));
     setCountrySearch("");
-    setCitySearch("");
+    setPlaceSearch("");
     setCountryData([]);
-    setCityData([]);
+    setPlaceData([]);
     setLocationDrawer(true);
     setShowMainMarker(
       locationObj.type === "city" ||
@@ -423,15 +440,56 @@ export default function Mymap({
           borderRadius: "25px 0 0 25px",
         }}
       >
-        <Flex gap={5} variant="subtle" align="center">
+        <Flex gap={5} align="center">
           <IconMapPinFilled opacity={0.1} size={15} /> {label}
         </Flex>
       </Box>
     );
   });
 
-  const handleChange = async () => {
-    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&fuzzyMatch=true&limit=5&types=country%2Cregion%2Cplace&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+  // TODO - Travel Item
+  const TravelItem = React.forwardRef(function TravelItem(props, ref) {
+    const { label, icon, ...rest } = props;
+    return (
+      <Box
+        {...rest}
+        ref={ref}
+        p={"5px 10px"}
+        sx={{
+          borderRadius: "25px 0 0 25px",
+        }}
+      >
+        <Group spaceing={0} w={"100%"} position="left">
+          {icon}
+          <Text>{addEllipsis(label)}</Text>
+        </Group>
+      </Box>
+    );
+  });
+
+  const travelChoices = [
+    {
+      label: `Choose ${area.label}`,
+      value: "travel",
+      icon: <IconPlane size={15} style={{ width: "5%" }} />,
+    },
+    {
+      label: `Add to Tour List`,
+      value: "tour",
+      icon: <IconList size={15} style={{ width: "5%" }} />,
+    },
+  ];
+
+  const handleChange = async (field) => {
+    let shortCode = area.shortcode;
+    if (field === "place" && area.country === "United States") shortCode = "us";
+
+    let endpoint;
+    if (field === "country") {
+      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&fuzzyMatch=true&limit=5&types=country%2Cregion%2Cplace&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+    } else {
+      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearch}.json?country=${shortCode}&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+    }
 
     try {
       const response = await fetch(endpoint);
@@ -445,6 +503,7 @@ export default function Mymap({
         region: feature.place_name.split(", ", 2)[1],
         center: feature.center,
         fullname: feature.place_name,
+        shortcode: feature.properties?.short_code,
       }));
 
       const searchData = data.map((item) => {
@@ -457,7 +516,8 @@ export default function Mymap({
         return item;
       });
 
-      setCountryData(searchData);
+      if (field === "country") setCountryData(searchData);
+      if (field === "place") setPlaceData(searchData);
     } catch (error) {
       console.log("Error fetching data for Country Autocomplete: ", error);
     }
@@ -557,7 +617,6 @@ export default function Mymap({
     >
       <NavLink
         mb={index === topCities.length - 1 ? 0 : 5}
-        fw={700}
         label={city[0]}
         c={theme.colorScheme === "dark" ? "white" : "dark"}
         icon={
@@ -643,15 +702,15 @@ export default function Mymap({
     setShowStates(false);
     setLocationDrawer(false);
     setTopCities([]);
-    setCityData([]);
+    setPlaceData([]);
     setCountryData([]);
-    setCitySearch("");
+    setPlaceSearch("");
     setCountrySearch("");
   };
 
   const addEllipsis = (string) => {
-    if (string.length > 32) {
-      return string.substring(0, 32) + "...";
+    if (string.length > 26) {
+      return string.substring(0, 26) + "...";
     } else {
       return string;
     }
@@ -660,12 +719,51 @@ export default function Mymap({
   return (
     <>
       <Loader pageLoaded={mapLoaded} />
+      <Modal
+        size={"xs"}
+        zIndex={130}
+        opened={showModal}
+        onClose={setShowModal}
+        withCloseButton={false}
+        centered
+        overlayProps={{
+          blur: 7,
+        }}
+      >
+        <Text fz={14} ta={"center"} mb={10} px={20}>
+          {places.length > 0 && !placeChoosen ? "Clear Tour List and s" : "S"}
+          elect {area.label} as your destination?
+        </Text>
+        <Group grow spacing={15}>
+          <Button
+            variant="light"
+            size="xs"
+            color="green"
+            onClick={() => {
+              setPlaceChoosen(true);
+              setPlaces(placeLocation);
+              router.push("/tripplanner");
+            }}
+          >
+            <IconCheck />
+          </Button>
+          <Button
+            variant="light"
+            size="xs"
+            color="red"
+            onClick={() => setShowModal(false)}
+          >
+            <IconX />
+          </Button>
+        </Group>
+      </Modal>
       <Drawer
         size={"50%"}
         position="right"
         opened={locationDrawer}
         withOverlay={false}
         withCloseButton={false}
+        onClose={reset}
         styles={(theme) => ({
           content: {
             pointerEvents: "none",
@@ -686,17 +784,17 @@ export default function Mymap({
               opacity={0.7}
               sx={{
                 pointerEvents: "all",
-                transform: "scale(1.5)",
+                transform: "scale(1.2)",
                 transition: "all 150ms ease-in-out",
                 "&:hover": {
                   opacity: 1,
-                  transform: "scale(1.7)",
+                  transform: "scale(1.5)",
                 },
               }}
             >
-              <IconChevronsLeft
+              <IconX
                 color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
-                stroke={2}
+                stroke={3}
                 size={headerEm + "em"}
               />
             </ActionIcon>
@@ -725,16 +823,75 @@ export default function Mymap({
           </Flex>
           <Box
             pos={"relative"}
-            left={15}
+            left={16}
             ml={"65%"}
             w={"35%"}
-            hidden={area.type === "city"}
             sx={{
               pointerEvents: "all",
             }}
           >
+            <Select
+              mt={10}
+              className={classes.select}
+              size="md"
+              radius={"25px 0 0 25px"}
+              placeholder={`Select ${area.label}?`}
+              itemComponent={TravelItem}
+              nothingFound="Nobody here"
+              data={travelChoices}
+              icon={
+                <IconLuggage
+                  opacity={1}
+                  size={20}
+                  style={{
+                    paddingLeft: 5,
+                    color:
+                      theme.colorScheme === "dark"
+                        ? " rgba(0, 232, 250)"
+                        : "rgba(250, 117, 0)",
+                  }}
+                />
+              }
+              onChange={(e) => {
+                const place = {
+                  place: area.label,
+                  region: `${
+                    area.region !== undefined ? area.region + "," : ""
+                  } ${area.label === area.country ? "" : area.country}`,
+                  fullName: `${area.label}, ${
+                    area.region !== undefined ? area.region + "," : ""
+                  }, ${area.label === area.country ? "" : area.country}`,
+                  costs: ["FLIGHT", "HOTEL"],
+                };
+                setPlaceLocation([place]);
+                if (e === "tour") setListOpened(true);
+                if (e === "travel") setShowModal(true);
+                if (checkPlace(place) && e === "tour") {
+                  notifications.show({
+                    color: "red",
+                    style: { backgroundColor: "#2e2e2e" },
+                    title: "Loaction already added",
+                    message: `${area.label} was already added to your tour`,
+                  });
+                  return;
+                } else if (e === "tour") {
+                  addPlaces(place);
+                }
+              }}
+            />
+            <Divider
+              hidden={
+                area.type === "city" ||
+                (area.type === "region" && area.country !== "United States")
+              }
+              size="xs"
+              my="xs"
+              opacity={0.1}
+              color={theme.colorScheme === "dark" ? "white" : "dark"}
+            />
             {area.country === "United States" && area.type === "country" ? (
               <Select
+                className={classes.select}
                 size="md"
                 radius={"25px 0 0 25px"}
                 placeholder="Select a US State"
@@ -742,8 +899,19 @@ export default function Mymap({
                 nothingFound="Nobody here"
                 data={listStates}
                 searchable={true}
-                hoverOnSearchChange={true}
-                icon={<IconMapPinFilled opacity={0.3} size={15} />}
+                icon={
+                  <IconMapPinFilled
+                    opacity={1}
+                    size={20}
+                    style={{
+                      paddingLeft: 5,
+                      color:
+                        theme.colorScheme === "dark"
+                          ? " rgba(0, 232, 250)"
+                          : "rgba(250, 117, 0)",
+                    }}
+                  />
+                }
                 filter={(value, item) =>
                   item.label.toLowerCase().includes(value.toLowerCase().trim())
                 }
@@ -758,104 +926,96 @@ export default function Mymap({
                   setArea(location);
                   locationHandler(location);
                 }}
-                styles={(theme) => ({
-                  input: {
-                    border: "none",
-                    borderTop: `2px solid ${
-                      theme.colorScheme === "dark"
-                        ? "rgba(255,255,255,0.1)"
-                        : "rgba(0,0,0,0.1)"
-                    }`,
-                    background:
-                      theme.colorScheme === "dark"
-                        ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-                        : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
-                  },
-                  dropdown: {
-                    borderRadius: "25px 0 0 25px",
-                    border: "none",
-                  },
-                  root: {
-                    borderRadius: "25px 0 0 25px",
-                    boxShadow:
-                      theme.colorScheme === "dark"
-                        ? "0 2px 5px rgba(255, 255, 255, 0.02)"
-                        : "0 2px 5px rgba(0, 0, 0, 0.05)",
-                  },
-                })}
               />
             ) : (
-              <Box>{topCitiesList}</Box>
+              <Box mt={10} hidden={area.type === "city"}>
+                {topCitiesList}
+              </Box>
             )}
             <Divider
+              hidden={
+                area.type === "city" ||
+                (area.type === "region" && area.country !== "United States")
+              }
               size="xs"
               my="xs"
-              opacity={0.3}
+              opacity={0.1}
               color={theme.colorScheme === "dark" ? "white" : "dark"}
             />
             {/* TODO - Place Autocomplete Search */}
-            <Autocomplete
-              icon={
-                <IconLocationFilled
-                  size={20}
-                  style={{
-                    paddingLeft: 5,
-                    color:
-                      theme.colorScheme === "dark"
-                        ? " rgba(0, 232, 250)"
-                        : "rgba(250, 117, 0)",
+            {area.type !== "city" &&
+              !(area.type === "region" && area.country !== "United States") && (
+                <Autocomplete
+                  icon={
+                    <IconGlobe
+                      size={25}
+                      style={{
+                        paddingLeft: 5,
+                        color:
+                          theme.colorScheme === "dark"
+                            ? " rgba(0, 232, 250)"
+                            : "rgba(250, 117, 0)",
+                      }}
+                    />
+                  }
+                  size="md"
+                  defaultValue=""
+                  itemComponent={AutoCompItem}
+                  value={placeSearch}
+                  placeholder={addEllipsis(
+                    `Search in${
+                      prefaceThe.includes(area.label) ? " The" : ""
+                    } ${
+                      area.country === "United States"
+                        ? area.country
+                        : area.label
+                    }?`
+                  )}
+                  onItemSubmit={(e) => locationHandler(e)}
+                  data={placeData}
+                  filter={(id, item) => item}
+                  switchDirectionOnFlip={true}
+                  onChange={(e) => {
+                    setPlaceSearch(e);
+                    handleChange("place");
                   }}
+                  styles={(theme) => ({
+                    input: {
+                      "&::placeholder": {
+                        color: theme.colorScheme === "dark" ? "#fff" : "#000",
+                      },
+                      borderRadius: "25px 0 0 25px",
+                      border: "none",
+                      borderTop: `2px solid ${
+                        theme.colorScheme === "dark"
+                          ? "rgba(255,255,255,0.1)"
+                          : "rgba(0,0,0,0.1)"
+                      }`,
+                      background:
+                        theme.colorScheme === "dark"
+                          ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+                          : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+                    },
+                    item: {
+                      borderRadius: "18px 0 0 18px",
+                    },
+                    dropdown: {
+                      borderRadius: "25px 0 0 25px",
+                      backgroundColor:
+                        theme.colorScheme === "dark"
+                          ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                          : theme.fn.rgba(theme.colors.gray[0], 0.95),
+                    },
+                  })}
                 />
-              }
-              size="sm"
-              defaultValue=""
-              itemComponent={AutoCompItem}
-              value={countrySearch}
-              placeholder={addEllipsis(
-                `Where in${prefaceThe.includes(area.label) ? " The" : ""} ${
-                  area.country === "United States" ? area.country : area.label
-                }?`
               )}
-              onItemSubmit={(e) => locationHandler(e)}
-              data={countryData}
-              filter={(id, item) => item}
-              switchDirectionOnFlip={true}
-              onChange={(e) => {
-                setCountrySearch(e);
-                handleChange();
-              }}
-              styles={(theme) => ({
-                input: {
-                  "&::placeholder": {
-                    color: theme.colorScheme === "dark" ? "#fff" : "#000",
-                  },
-                  borderRadius: "25px 0 0 25px",
-                  border: "none",
-                  borderTop: `2px solid ${
-                    theme.colorScheme === "dark"
-                      ? "rgba(255,255,255,0.1)"
-                      : "rgba(0,0,0,0.1)"
-                  }`,
-                  background:
-                    theme.colorScheme === "dark"
-                      ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-                      : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
-                },
-                dropdown: {
-                  backgroundColor:
-                    theme.colorScheme === "dark"
-                      ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-                      : theme.fn.rgba(theme.colors.gray[0], 0.95),
-                },
-              })}
-            />
           </Box>
         </Box>
       </Drawer>
       {places.length >= 1 && !listOpened && !mapSpin && (
         // Tour List Button
         <Button
-          onClick={showTourList}
+          onClick={() => setListOpened(true)}
           bg={theme.colorScheme === "dark" ? "dark.9" : "gray.0"}
           opacity={0.7}
           radius={"0 3px 3px 0"}
@@ -882,54 +1042,67 @@ export default function Mymap({
           />
         </Button>
       )}
-      {!searchOpened && visible && !mapSpin && !dropDownOpened && (
-        <Center pos={"absolute"} bottom={"100px"} w={"100%"}>
-          {/* Main Place Search */}
-          <Box
-            w={400}
-            pos={"relative"}
-            style={{
-              zIndex: 200,
-            }}
-          >
-            <Autocomplete
-              icon={
-                <IconLocation
-                  size={20}
-                  style={{
-                    opacity: 0.4,
-                    color:
-                      theme.colorScheme === "dark"
-                        ? " rgba(0, 232, 250)"
-                        : "rgba(250, 117, 0)",
-                  }}
-                />
-              }
-              size="lg"
-              defaultValue=""
-              itemComponent={AutoCompItem}
-              value={countrySearch}
-              placeholder="Where would you like to go?"
-              onItemSubmit={(e) => locationHandler(e)}
-              data={countryData}
-              filter={(id, item) => item}
-              switchDirectionOnFlip={true}
-              onChange={(e) => {
-                setCountrySearch(e);
-                handleChange();
+      {!searchOpened &&
+        visible &&
+        !mapSpin &&
+        !dropDownOpened &&
+        !locationDrawer && (
+          <Center pos={"absolute"} top={"30px"} w={"100%"}>
+            {/* Main Place Search */}
+            <Box
+              w={400}
+              pos={"relative"}
+              style={{
+                zIndex: 200,
               }}
-              styles={(theme) => ({
-                dropdown: {
-                  backgroundColor:
-                    theme.colorScheme === "dark"
-                      ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-                      : theme.fn.rgba(theme.colors.gray[0], 0.95),
-                },
-              })}
-            />
-          </Box>
-        </Center>
-      )}
+            >
+              <Autocomplete
+                icon={
+                  <IconWorld
+                    size={30}
+                    style={{
+                      paddingLeft: 5,
+                      opacity: 0.4,
+                      color:
+                        theme.colorScheme === "dark"
+                          ? " rgba(0, 232, 250)"
+                          : "rgba(250, 117, 0)",
+                    }}
+                  />
+                }
+                size="lg"
+                defaultValue=""
+                itemComponent={AutoCompItem}
+                value={countrySearch}
+                placeholder="Where would you like to go?"
+                onItemSubmit={(e) => locationHandler(e)}
+                data={countryData}
+                filter={(id, item) => item}
+                radius={25}
+                onChange={(e) => {
+                  setCountrySearch(e);
+                  handleChange("country");
+                }}
+                styles={(theme) => ({
+                  root: {
+                    borderRadius: "25px",
+                    boxShadow:
+                      theme.colorScheme === "dark"
+                        ? "0 3px 5px rgba(255, 255, 255, 0.07)"
+                        : "0 3px 5px rgba(0, 0, 0, 0.2)",
+                  },
+                  dropdown: {
+                    borderRadius: "25px",
+                    backgroundColor:
+                      theme.colorScheme === "dark"
+                        ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                        : theme.fn.rgba(theme.colors.gray[0], 0.95),
+                  },
+                })}
+              />
+            </Box>
+          </Center>
+        )}
       {geoLat && geoLng && (
         <Map
           {...viewState}

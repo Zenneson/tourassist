@@ -163,6 +163,7 @@ export default function ProfileDrawer({
         pos={"relative"}
         padding={0}
         opened={mainMenuOpened}
+        onClose={openMenu}
         size={305}
         lockScroll={false}
         withOverlay={false}
@@ -360,6 +361,7 @@ export default function ProfileDrawer({
         opened={panelShow}
         padding="24px 25px 0 330px"
         size={900}
+        onClose={closePanel}
         withCloseButton={false}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         overlayProps={{
@@ -379,7 +381,6 @@ export default function ProfileDrawer({
                 : theme.fn.rgba(theme.colors.gray[0], 0.7),
           },
         })}
-        onClose={closePanel}
       >
         {/* Close Panel Button */}
         <Button className={classes.closeButton} onClick={closePanel}>
