@@ -184,7 +184,6 @@ export default function Trippage(props) {
           centered
           onClose={closeAltModal}
           overlayProps={{
-            opacity: 0.7,
             blur: 9,
           }}
           styles={(theme) => ({
@@ -196,6 +195,13 @@ export default function Trippage(props) {
                 theme.colorScheme === "dark"
                   ? "rgba(0,0,0,0.9)"
                   : "rgba(255,255,255,0.9)",
+            },
+            overlay: {
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? "rgba(0,0,0,0.5)"
+                  : "rgba(255,255,255,0.5)",
+              backdropFilter: "blur(9px)",
             },
           })}
         >
@@ -263,10 +269,6 @@ export default function Trippage(props) {
           centered
           opened={editContentModal}
           onClose={closeEditContentModal}
-          overlayProps={{
-            opacity: 0.7,
-            blur: 9,
-          }}
           styles={(theme) => ({
             header: {
               backgroundColor: "transparent",
@@ -276,6 +278,13 @@ export default function Trippage(props) {
                 theme.colorScheme === "dark"
                   ? "rgba(0,0,0,0.9)"
                   : "rgba(255,255,255,0.9)",
+            },
+            overlay: {
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? "rgba(0,0,0,0.5)"
+                  : "rgba(255,255,255,0.5)",
+              backdropFilter: "blur(9px)",
             },
           })}
         >

@@ -76,11 +76,9 @@ export default function LatestTrips() {
         sx={{
           cursor: "pointer",
           transition: "all 0.2s ease",
-          background: "rgba(11, 12, 13, 0.5)",
           backdropFilter: "blur(20px)",
           boxShadow: "0 2px 5px  rgba(0,0,0, 0.2)",
           "&:hover": {
-            background: "rgba(5, 5, 5, 1)",
             transform: "scale(1.02)",
           },
         }}
@@ -122,12 +120,12 @@ export default function LatestTrips() {
             size={50}
             thickness={3}
             roundCaps
-            sections={[{ value: trip.percent, color: "blue" }]}
+            sections={[{ value: trip.percent, color: "lime" }]}
             sx={{
               zIndex: 2,
             }}
             label={
-              <Text color="blue" weight={700} align="center" size={14}>
+              <Text color="lime" fw={100} align="center" size={14}>
                 {trip.percent}
                 <Text fz={7} pos={"relative"} top={-5} span>
                   %

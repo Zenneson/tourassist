@@ -46,8 +46,15 @@ const useStyles = createStyles((theme) => ({
   },
 
   activeBox: {
-    background: "rgba(11, 12, 13, 0.5)",
-    borderTop: "2px solid rgba(255,255,255,0.2)",
+    background:
+      theme.colorScheme === "dark"
+        ? "rgba(11, 12, 13, 0.5)"
+        : "rgba(248, 248, 248, 0.5)",
+    borderTop: `2px solid ${
+      theme.colorScheme === "dark"
+        ? theme.fn.rgba(theme.colors.gray[0], 0.1)
+        : theme.fn.rgba(theme.colors.dark[9], 0.1)
+    }`,
     borderRadius: "0 0 3px 3px",
     height: "600px",
     padding: "20px",
