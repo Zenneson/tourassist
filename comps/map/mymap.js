@@ -144,8 +144,8 @@ export default function Mymap({
         }`,
         background:
           theme.colorScheme === "dark"
-            ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-            : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+            ? "linear-gradient(-90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+            : "linear-gradient(-90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
       },
       "& .mantine-Select-dropdown": {
         borderRadius: "25px 0 0 25px",
@@ -268,6 +268,7 @@ export default function Mymap({
   ];
 
   function locationHandler(feature) {
+    console.log(feature);
     if (feature == null) return;
     let locationObj = {};
     locationObj.type =
@@ -289,7 +290,10 @@ export default function Mymap({
     locationObj.state = feature.region || feature.properties?.NAME || "";
     locationObj.center = feature.center || getCords(feature);
     locationObj.shortcode =
-      feature.isoName || feature.properties?.iso_3166_1 || "";
+      feature.shortcode ||
+      feature.isoName ||
+      feature.properties?.iso_3166_1 ||
+      "";
     locationObj.shortcode = locationObj.shortcode.toLowerCase();
 
     setLngLat(locationObj.center);
@@ -592,7 +596,7 @@ export default function Mymap({
       let topFive = [];
       regionCities &&
         regionCities.map((city) => {
-          topFive.push([city.name, city.center]);
+          topFive.push([city.name, city.center, location.label]);
         });
       setTopCities(topFive);
     } catch (error) {
@@ -630,8 +634,8 @@ export default function Mymap({
         onClick={() => selectTopCity(city)}
         bg={
           theme.colorScheme === "dark"
-            ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-            : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)"
+            ? "linear-gradient(-90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+            : "linear-gradient(-90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)"
         }
         sx={{
           borderRadius: "25px 0 0 25px",
@@ -679,14 +683,13 @@ export default function Mymap({
     }
   };
 
-  // TODO
   const selectTopCity = (city) => {
     setHeaderEm(calculateFontSize(city[0]));
     setArea({
       label: city[0],
       type: "city",
       country: area.country,
-      region: area.state,
+      region: city[2],
     });
     setPopupInfo(null);
     setShowMainMarker(true);
@@ -833,6 +836,7 @@ export default function Mymap({
           </Flex>
           <Box
             pos={"relative"}
+            top={10}
             left={16}
             ml={"65%"}
             w={"35%"}
@@ -840,120 +844,6 @@ export default function Mymap({
               pointerEvents: "all",
             }}
           >
-            <Select
-              mt={10}
-              className={classes.select}
-              size="md"
-              radius={"25px 0 0 25px"}
-              placeholder={`Select ${area.label}?`}
-              itemComponent={TravelItem}
-              nothingFound="Nobody here"
-              data={travelChoices}
-              icon={
-                <IconLuggage
-                  opacity={1}
-                  size={20}
-                  style={{
-                    paddingLeft: 5,
-                    color:
-                      theme.colorScheme === "dark"
-                        ? " rgba(0, 232, 250)"
-                        : "rgba(250, 117, 0)",
-                  }}
-                />
-              }
-              onChange={(e) => {
-                const place = {
-                  place: area.label,
-                  region:
-                    area.type === "city" && area.country === "United States"
-                      ? `${area.state || area.region}, ${area.country}`
-                      : area.country,
-                  fullName:
-                    area.type === "city" && area.country === "United States"
-                      ? `${area.state || area.region}, ${area.country}`
-                      : area.country,
-                  costs: ["FLIGHT", "HOTEL"],
-                };
-                setPlaceLocation([place]);
-                if (e === "tour") setListOpened(true);
-                if (e === "travel") setShowModal(true);
-                if (checkPlace(place) && e === "tour") {
-                  notifications.show({
-                    color: "red",
-                    style: { backgroundColor: "#2e2e2e" },
-                    title: "Loaction already added",
-                    message: `${area.label} was already added to your tour`,
-                  });
-                  return;
-                } else if (e === "tour") {
-                  addPlaces(place);
-                }
-              }}
-            />
-            <Divider
-              hidden={
-                area.type === "city" ||
-                (area.type === "region" && area.country !== "United States")
-              }
-              size="xs"
-              my="xs"
-              opacity={0.1}
-              color={theme.colorScheme === "dark" ? "white" : "dark"}
-            />
-            {area.country === "United States" && area.type === "country" ? (
-              <Select
-                className={classes.select}
-                size="md"
-                radius={"25px 0 0 25px"}
-                placeholder="Select a US State"
-                itemComponent={SelectItem}
-                nothingFound="Nobody here"
-                data={listStates}
-                searchable={true}
-                icon={
-                  <IconMapPinFilled
-                    opacity={1}
-                    size={20}
-                    style={{
-                      paddingLeft: 5,
-                      color:
-                        theme.colorScheme === "dark"
-                          ? " rgba(0, 232, 250)"
-                          : "rgba(250, 117, 0)",
-                    }}
-                  />
-                }
-                filter={(value, item) =>
-                  item.label.toLowerCase().includes(value.toLowerCase().trim())
-                }
-                onChange={(e) => {
-                  searchForState(e);
-                  let location = {
-                    label: e,
-                    group: "region",
-                    center: searchForState(e),
-                    country: "United States",
-                  };
-                  setArea(location);
-                  locationHandler(location);
-                }}
-              />
-            ) : (
-              <Box mt={10} hidden={area.type === "city"}>
-                {topCitiesList}
-              </Box>
-            )}
-            <Divider
-              hidden={
-                area.type === "city" ||
-                (area.type === "region" && area.country !== "United States")
-              }
-              size="xs"
-              my="xs"
-              opacity={0.1}
-              color={theme.colorScheme === "dark" ? "white" : "dark"}
-            />
             {area.type !== "city" &&
               !(area.type === "region" && area.country !== "United States") && (
                 <Autocomplete
@@ -963,9 +853,7 @@ export default function Mymap({
                       style={{
                         paddingLeft: 5,
                         color:
-                          theme.colorScheme === "dark"
-                            ? " rgba(0, 232, 250)"
-                            : "rgba(250, 117, 0)",
+                          theme.colorScheme === "dark" ? " #00e8fa" : "#fa7500",
                       }}
                     />
                   }
@@ -1004,8 +892,8 @@ export default function Mymap({
                       }`,
                       background:
                         theme.colorScheme === "dark"
-                          ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-                          : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+                          ? "linear-gradient(-90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+                          : "linear-gradient(-90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
                     },
                     item: {
                       borderRadius: "18px 0 0 18px",
@@ -1020,6 +908,124 @@ export default function Mymap({
                   })}
                 />
               )}
+            <Divider
+              hidden={
+                area.type === "city" ||
+                (area.type === "region" && area.country !== "United States")
+              }
+              size="xs"
+              my="xs"
+              opacity={0.2}
+              color={"dark"}
+            />
+            {area.country === "United States" && area.type === "country" ? (
+              <Select
+                className={classes.select}
+                size="md"
+                radius={"25px 0 0 25px"}
+                placeholder="Select a US State"
+                itemComponent={SelectItem}
+                nothingFound="Nobody here"
+                data={listStates}
+                searchable={true}
+                icon={
+                  <IconMapPinFilled
+                    opacity={1}
+                    size={20}
+                    style={{
+                      paddingLeft: 5,
+                      color:
+                        theme.colorScheme === "dark"
+                          ? " rgba(0, 232, 250)"
+                          : "rgba(250, 117, 0)",
+                    }}
+                  />
+                }
+                filter={(value, item) =>
+                  item.label.toLowerCase().includes(value.toLowerCase().trim())
+                }
+                onChange={(e) => {
+                  searchForState(e);
+                  let location = {
+                    label: e,
+                    group: "region",
+                    type: "region",
+                    state: e,
+                    region: e,
+                    center: searchForState(e),
+                    country: "United States",
+                  };
+                  setArea(location);
+                  locationHandler(location);
+                }}
+              />
+            ) : (
+              <Box mt={10} hidden={area.type === "city"}>
+                {topCitiesList}
+              </Box>
+            )}
+            <Divider
+              hidden={
+                area.type === "city" ||
+                (area.type === "region" && area.country !== "United States")
+              }
+              size="xs"
+              my="xs"
+              opacity={0.2}
+              color={"dark"}
+            />
+            <Select
+              className={classes.select}
+              size="md"
+              radius={"25px 0 0 25px"}
+              placeholder={`Select ${area.label}?`}
+              itemComponent={TravelItem}
+              nothingFound="Nobody here"
+              data={travelChoices}
+              icon={
+                <IconLuggage
+                  opacity={1}
+                  size={20}
+                  style={{
+                    paddingLeft: 5,
+                    color:
+                      theme.colorScheme === "dark"
+                        ? " rgba(0, 232, 250)"
+                        : "rgba(250, 117, 0)",
+                  }}
+                />
+              }
+              onChange={(e) => {
+                const place = {
+                  place: area.label,
+                  region:
+                    area.type === "city" && area.country === "United States"
+                      ? `${area.state || area.region}, ${area.country}`
+                      : area.country === area.label
+                      ? ""
+                      : area.country,
+                  fullName:
+                    area.type === "city" && area.country === "United States"
+                      ? `${area.state || area.region}, ${area.country}`
+                      : area.country,
+                  costs: ["FLIGHT", "HOTEL"],
+                };
+                setPlaceLocation([place]);
+                if (e === "tour") setListOpened(true);
+                if (e === "travel") setShowModal(true);
+                if (checkPlace(place) && e === "tour") {
+                  notifications.show({
+                    color: "red",
+                    style: { backgroundColor: "#2e2e2e" },
+                    title: "Loaction already added",
+                    message: `${area.label} was already added to your tour`,
+                  });
+                  return;
+                } else if (e === "tour") {
+                  addPlaces(place);
+                }
+              }}
+            />
           </Box>
         </Box>
       </Drawer>
@@ -1075,9 +1081,7 @@ export default function Mymap({
                       paddingLeft: 5,
                       opacity: 0.4,
                       color:
-                        theme.colorScheme === "dark"
-                          ? " rgba(0, 232, 250)"
-                          : "rgba(250, 117, 0)",
+                        theme.colorScheme === "dark" ? " #00e8fa" : "#fa7500",
                     }}
                   />
                 }
@@ -1102,6 +1106,7 @@ export default function Mymap({
                         ? "0 3px 5px rgba(255, 255, 255, 0.07)"
                         : "0 3px 5px rgba(0, 0, 0, 0.2)",
                   },
+                  item: { borderRadius: "17px" },
                   dropdown: {
                     borderRadius: "25px",
                     backgroundColor:
@@ -1195,7 +1200,13 @@ export default function Mymap({
                   reset();
                 }}
               >
-                <Image width={80} src={"img/pin.png"} alt="Map Pin" />
+                <IconMapPinFilled
+                  style={{
+                    cursor: "pointer",
+                    transform: "scale(5)",
+                    color: theme.colorScheme === "dark" ? "#00e8fa" : "#fa7500",
+                  }}
+                />
               </Marker>
             )}
           </Transition>
