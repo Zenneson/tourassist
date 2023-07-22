@@ -18,7 +18,6 @@ import {
   NavLink,
   Drawer,
   Transition,
-  Image,
   Select,
   Modal,
 } from "@mantine/core";
@@ -27,8 +26,9 @@ import {
   IconList,
   IconX,
   IconMapPinFilled,
-  IconWorld,
-  IconGlobe,
+  IconWorldSearch,
+  IconMapPinSearch,
+  IconListSearch,
   IconPlane,
   IconLuggage,
   IconCheck,
@@ -62,7 +62,6 @@ export default function Mymap({
   const [countryData, setCountryData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
-  const [tourListDropDown, setTourListDropDown] = useState(false);
   const [placeChoosen, setPlaceChoosen] = useState(false);
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -471,7 +470,7 @@ export default function Mymap({
 
   const travelChoices = [
     {
-      label: `Choose ${area.label}`,
+      label: `Choose as destination`,
       value: "travel",
       icon: <IconPlane size={15} style={{ width: "5%" }} />,
     },
@@ -848,7 +847,7 @@ export default function Mymap({
               !(area.type === "region" && area.country !== "United States") && (
                 <Autocomplete
                   icon={
-                    <IconGlobe
+                    <IconMapPinSearch
                       size={25}
                       style={{
                         paddingLeft: 5,
@@ -929,9 +928,9 @@ export default function Mymap({
                 data={listStates}
                 searchable={true}
                 icon={
-                  <IconMapPinFilled
+                  <IconListSearch
                     opacity={1}
-                    size={20}
+                    size={25}
                     style={{
                       paddingLeft: 5,
                       color:
@@ -985,7 +984,7 @@ export default function Mymap({
               icon={
                 <IconLuggage
                   opacity={1}
-                  size={20}
+                  size={25}
                   style={{
                     paddingLeft: 5,
                     color:
@@ -1075,11 +1074,10 @@ export default function Mymap({
             >
               <Autocomplete
                 icon={
-                  <IconWorld
+                  <IconWorldSearch
                     size={30}
                     style={{
                       paddingLeft: 5,
-                      opacity: 0.4,
                       color:
                         theme.colorScheme === "dark" ? " #00e8fa" : "#fa7500",
                     }}

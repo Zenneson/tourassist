@@ -104,7 +104,7 @@ export default function PlaceListItem({
             <Text size="md" fw={700}>
               {place}
             </Text>
-            <Text size="xs" sx={{ color: "rgba(255,255,255,0.3)" }}>
+            <Text size="xs" opacity={0.5}>
               {region}
             </Text>
           </Grid.Col>
