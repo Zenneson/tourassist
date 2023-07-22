@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
+  useMantineTheme,
   Badge,
   Box,
   Card,
@@ -12,6 +13,7 @@ import {
 } from "@mantine/core";
 
 export default function LatestTrips() {
+  const theme = useMantineTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -144,7 +146,11 @@ export default function LatestTrips() {
           pl={10}
           mb={10}
           sx={{
-            borderLeft: "1px solid rgba(255, 255, 255, 0.2)",
+            borderLeft: `1px solid ${
+              theme.colorScheme === "dark"
+                ? "rgba(255, 255, 255, 0.2)"
+                : "rgba(0, 0, 0, 0.2)"
+            }`,
             textAlign: "justify",
           }}
         >
