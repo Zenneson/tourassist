@@ -731,9 +731,16 @@ export default function Mymap({
         onClose={setShowModal}
         withCloseButton={false}
         centered
-        overlayProps={{
-          blur: 7,
-        }}
+        styles={(theme) => ({
+          zIndex: 130,
+          overlay: {
+            backgroundColor:
+              theme.colorScheme === "dark"
+                ? "rgba(0,0,0,0.5)"
+                : "rgba(255,255,255,0.5)",
+            backdropFilter: "blur(9px)",
+          },
+        })}
       >
         <Text fz={14} ta={"center"} mb={10} px={20}>
           {places.length > 0 && !placeChoosen
@@ -776,6 +783,10 @@ export default function Mymap({
         withCloseButton={false}
         onClose={reset}
         styles={(theme) => ({
+          root: {
+            zIndex: 125,
+            position: "relative",
+          },
           content: {
             pointerEvents: "none",
             boxShadow: "none",
