@@ -1108,6 +1108,11 @@ export default function Mymap({
                 }}
                 styles={(theme) => ({
                   root: {
+                    borderTop: `2px solid ${
+                      theme.colorScheme === "dark"
+                        ? "rgba(255,255,255,0.3)"
+                        : "rgba(0,0,0,0.1)"
+                    }`,
                     borderRadius: "25px",
                     boxShadow:
                       theme.colorScheme === "dark"
