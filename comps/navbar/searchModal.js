@@ -11,6 +11,15 @@ export default function SearchModal({ searchOpened, setSearchOpened }) {
       withCloseButton={false}
       padding={0}
       radius="xl"
+      styles={(theme) => ({
+        overlay: {
+          backgroundColor:
+            theme.colorScheme === "dark"
+              ? "rgba(0,0,0,0.5)"
+              : "rgba(255,255,255,0.5)",
+          backdropFilter: "blur(9px)",
+        },
+      })}
     >
       <TextInput
         radius="xl"
