@@ -69,7 +69,8 @@ export default function UpdateCarousel({ images }) {
           sx={{
             border: "none",
             "&:hover": {
-              color: "#fff",
+              backgroundColor: "transparent",
+              transform: "scale(1.2)",
             },
           }}
         >
@@ -108,7 +109,8 @@ export default function UpdateCarousel({ images }) {
           sx={{
             border: "none",
             "&:hover": {
-              color: "#fff",
+              backgroundColor: "transparent",
+              transform: "scale(1.2)",
             },
           }}
         >

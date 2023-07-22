@@ -189,10 +189,13 @@ export default function Trippage(props) {
           }}
           styles={(theme) => ({
             header: {
-              backgroundColor: "rgba(0,0,0,0.3)",
+              backgroundColor: "transparent",
             },
             content: {
-              backgroundColor: "rgba(0,0,0,0.9)",
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? "rgba(0,0,0,0.9)"
+                  : "rgba(255,255,255,0.9)",
             },
           })}
         >
@@ -218,14 +221,7 @@ export default function Trippage(props) {
                 borderLeft: "3px solid rgba(255,255,255,0.05)",
               }}
             >
-              <Text
-                color="blue.2"
-                fw={400}
-                mb={7}
-                fs={"italic"}
-                w={"100%"}
-                ta={"left"}
-              >
+              <Text fw={400} mb={7} fs={"italic"} w={"100%"} ta={"left"}>
                 Help me raise money to go on a Music Tour
               </Text>
               <Flex w={"100%"} justify={"flex-start"} align={"center"} gap={10}>
@@ -273,10 +269,13 @@ export default function Trippage(props) {
           }}
           styles={(theme) => ({
             header: {
-              backgroundColor: "rgba(0,0,0,0.3)",
+              backgroundColor: "transparent",
             },
             content: {
-              backgroundColor: "rgba(0,0,0,0.9)",
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? "rgba(0,0,0,0.9)"
+                  : "rgba(255,255,255,0.9)",
             },
           })}
         >
@@ -290,7 +289,10 @@ export default function Trippage(props) {
           />
           {donating && (
             <Box h={345} w={802}>
-              <Title mb={5} color="#00E8FC">
+              <Title
+                mb={5}
+                color={theme.colorScheme === "dark" ? "#00E8FC" : "#fa7500"}
+              >
                 <Flex align={"center"} gap={5}>
                   {!paid ? "DONATE" : "THANK YOU"}
                   <IconHeartHandshake size={35} />
@@ -303,7 +305,8 @@ export default function Trippage(props) {
                     <Button.Group>
                       <Button
                         variant="filled"
-                        bg={"dark.5"}
+                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.3"}
+                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                         size="xl"
                         w={"25%"}
                       >
@@ -311,7 +314,8 @@ export default function Trippage(props) {
                       </Button>
                       <Button
                         variant="filled"
-                        bg={"dark.5"}
+                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.3"}
+                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                         size="xl"
                         w={"25%"}
                       >
@@ -319,7 +323,8 @@ export default function Trippage(props) {
                       </Button>
                       <Button
                         variant="filled"
-                        bg={"dark.5"}
+                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.3"}
+                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                         size="xl"
                         w={"25%"}
                       >
@@ -327,7 +332,8 @@ export default function Trippage(props) {
                       </Button>
                       <Button
                         variant="filled"
-                        bg={"dark.5"}
+                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.3"}
+                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                         size="xl"
                         w={"25%"}
                       >

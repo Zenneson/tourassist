@@ -370,8 +370,8 @@ export default function TripContent({
               ? "dark.4"
               : "dark.5"
             : editorFocused
-            ? "gray.4"
-            : "gray.2"
+            ? "gray.0"
+            : "gray.4"
         }
         onClick={focusEditor}
         onFocus={() => {
@@ -388,7 +388,14 @@ export default function TripContent({
           maxHeight: donating ? "100px" : "300px",
           ".mantine-RichTextEditor-content": {
             background: "rgba(0, 0, 0, 0)",
-            color: editorFocused && "#fff",
+            color:
+              theme.colorScheme === "dark"
+                ? editorFocused
+                  ? "dark.4"
+                  : "dark.5"
+                : editorFocused
+                ? "gray.0"
+                : "gray.4",
           },
           ".mantine-RichTextEditor-toolbar": {
             background: "rgba(0, 0, 0, 0)",

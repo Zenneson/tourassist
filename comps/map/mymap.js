@@ -267,7 +267,6 @@ export default function Mymap({
   ];
 
   function locationHandler(feature) {
-    console.log(feature);
     if (feature == null) return;
     let locationObj = {};
     locationObj.type =
@@ -1195,12 +1194,10 @@ export default function Mymap({
                 offsetTop={-10}
                 onClick={(e) => {
                   e.originalEvent.stopPropagation();
-                  reset();
                 }}
               >
                 <IconMapPinFilled
                   style={{
-                    cursor: "pointer",
                     transform: "scale(5)",
                     color: theme.colorScheme === "dark" ? "#00e8fa" : "#fa7500",
                   }}
