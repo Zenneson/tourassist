@@ -972,7 +972,14 @@ export default function TripPlannerPage(props) {
                     onChange={(e) => setTripTitle(e.target.value)}
                     sx={{
                       ".mantine-Input-input": {
-                        background: "dark.6",
+                        background:
+                          theme.colorScheme === "dark" ? "#101113" : "#ced4da",
+                        "&:focus": {
+                          background:
+                            theme.colorScheme === "dark"
+                              ? "#383a3f"
+                              : "#f1f3f5",
+                        },
                         "&::placeholder": {
                           fontWeight: 700,
                           fontStyle: "italic",

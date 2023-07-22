@@ -453,14 +453,21 @@ export default function TripContent({
               width={585}
               height={450}
               border={50}
-              color={[0, 0, 0, 0.7]} // RGBA
+              color={
+                theme.colorScheme === "dark"
+                  ? [0, 0, 0, 0.7]
+                  : [255, 255, 255, 0.7]
+              } // RGBA
               image={imageUpload}
               borderRadius={3}
               scale={scale}
               onWheel={handleScroll}
               onLoadSuccess={() => setLoading(false)}
               style={{
-                borderTop: "2px solid rgba(255,255,255,0.1)",
+                borderTop:
+                  theme.colorScheme === "dark"
+                    ? "2px solid rgba(255,255,255,0.1)"
+                    : "2px solid rgba(0,0,0,0.1)",
               }}
             />
             <MantineSlider
@@ -506,8 +513,21 @@ export default function TripContent({
               </Button>
             </Group>
           </Box>
-          <Overlay opacity={0.3} blur={7} />
+          <Overlay
+            color={
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[7]
+                : theme.colors.gray[0]
+            }
+            opacity={0.3}
+            blur={7}
+          />
           <LoadingOverlay
+            overlayColor={
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[7]
+                : theme.colors.gray[0]
+            }
             visible={processingImage}
             overlayBlur={0}
             overlayOpacity={0}

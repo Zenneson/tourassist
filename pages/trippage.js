@@ -499,6 +499,12 @@ export default function Trippage(props) {
                 }}
                 sx={{
                   ".mantine-Input-input": {
+                    background:
+                      theme.colorScheme === "dark" ? "#101113" : "#ced4da",
+                    "&:focus": {
+                      background:
+                        theme.colorScheme === "dark" ? "#383a3f" : "#f1f3f5",
+                    },
                     "&::placeholder": {
                       fontWeight: 700,
                       fontStyle: "italic",
