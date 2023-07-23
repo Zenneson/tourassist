@@ -199,28 +199,47 @@ export default function MainMenu({
             </Button>
           )}
           {/* TODO   */}
-          <Button
-            variant="subtle"
-            onClick={toggle}
-            radius={"xl"}
-            p={10}
+          <Tooltip
+            color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
             c={
               theme.colorScheme === "dark"
                 ? theme.colors.gray[0]
                 : theme.colors.dark[9]
             }
+            label="Toggle Color Scheme"
+            position="bottom"
+            openDelay={500}
+            withArrow
           >
-            {theme.colorScheme === "dark" ? (
-              <IconBrightnessUp size={17} />
-            ) : (
-              <IconMoon size={17} />
-            )}
-          </Button>
+            <Button
+              variant="subtle"
+              onClick={toggle}
+              radius={"xl"}
+              p={10}
+              c={
+                theme.colorScheme === "dark"
+                  ? theme.colors.gray[0]
+                  : theme.colors.dark[9]
+              }
+            >
+              {theme.colorScheme === "dark" ? (
+                <IconBrightnessUp size={17} />
+              ) : (
+                <IconMoon size={17} />
+              )}
+            </Button>
+          </Tooltip>
           <Group spacing={0}>
             <Tooltip
+              color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
+              c={
+                theme.colorScheme === "dark"
+                  ? theme.colors.gray[0]
+                  : theme.colors.dark[9]
+              }
               label="Search Trips"
               position="bottom"
-              openDelay={800}
+              openDelay={500}
               withArrow
             >
               {/* Search button */}
@@ -256,7 +275,7 @@ export default function MainMenu({
                 }
                 label={user ? "Logout" : "Login"}
                 position="bottom"
-                openDelay={800}
+                openDelay={500}
                 withArrow
               >
                 <Popover.Target>
@@ -314,20 +333,33 @@ export default function MainMenu({
             transition={{ duration: 7, repeat: Infinity }}
           >
             {/* DropDown Button */}
-            <IconInfoCircleFilled
-              stroke={1}
-              size={30}
-              style={{
-                paddingTop: "3px",
-                cursor: "pointer",
-                transform: "scale(1.5)",
-                color:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.blue[2]
-                    : theme.colors.red[7],
-              }}
-              onClick={openDropDown}
-            />
+            <Tooltip
+              color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
+              c={
+                theme.colorScheme === "dark"
+                  ? theme.colors.gray[0]
+                  : theme.colors.dark[9]
+              }
+              label={"TourAssist?"}
+              position="bottom"
+              openDelay={500}
+              withArrow
+            >
+              <IconInfoCircleFilled
+                stroke={1}
+                size={30}
+                style={{
+                  paddingTop: "3px",
+                  cursor: "pointer",
+                  transform: "scale(1.5)",
+                  color:
+                    theme.colorScheme === "dark"
+                      ? theme.colors.blue[2]
+                      : theme.colors.red[7],
+                }}
+                onClick={openDropDown}
+              />
+            </Tooltip>
           </motion.div>
         </Flex>
       </Header>
