@@ -1083,7 +1083,7 @@ export default function Mymap({
         !mapSpin &&
         !dropDownOpened &&
         !locationDrawer && (
-          <Center pos={"absolute"} top={"25px"} w={"100%"}>
+          <Center pos={"absolute"} top={"27px"} w={"100%"}>
             {/* Main Place Search */}
             <Box
               w={400}
