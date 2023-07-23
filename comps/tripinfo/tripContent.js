@@ -231,7 +231,6 @@ export default function TripContent({
                 )}
                 {/* Remove Image */}
                 <Button
-                  h={"100%"}
                   variant="light"
                   color="red.9"
                   opacity={0.7}

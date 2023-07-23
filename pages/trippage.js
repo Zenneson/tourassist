@@ -313,38 +313,62 @@ export default function Trippage(props) {
                   <Stack>
                     <Button.Group>
                       <Button
-                        variant="filled"
-                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.3"}
-                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                         size="xl"
                         w={"25%"}
+                        variant="filled"
+                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                        sx={{
+                          "&:hover": {
+                            color: "#fff",
+                            backgroundColor: "#A6A7AB",
+                          },
+                        }}
                       >
                         <IconCreditCard size={30} />
                       </Button>
                       <Button
-                        variant="filled"
-                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.3"}
-                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                         size="xl"
                         w={"25%"}
+                        variant="filled"
+                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                        sx={{
+                          "&:hover": {
+                            color: "#fff",
+                            backgroundColor: "#A6A7AB",
+                          },
+                        }}
                       >
                         <IconBrandApple size={30} />
                       </Button>
                       <Button
-                        variant="filled"
-                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.3"}
-                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                         size="xl"
                         w={"25%"}
+                        variant="filled"
+                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                        sx={{
+                          "&:hover": {
+                            color: "#fff",
+                            backgroundColor: "#A6A7AB",
+                          },
+                        }}
                       >
                         <IconBrandGoogle size={30} />
                       </Button>
                       <Button
-                        variant="filled"
-                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.3"}
-                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                         size="xl"
                         w={"25%"}
+                        variant="filled"
+                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                        sx={{
+                          "&:hover": {
+                            color: "#fff",
+                            backgroundColor: "#A6A7AB",
+                          },
+                        }}
                       >
                         <IconBrandPaypal size={30} />
                       </Button>
@@ -581,86 +605,92 @@ export default function Trippage(props) {
                 }}
               >
                 <Button
+                  px={44}
+                  size={"lg"}
                   variant="filled"
                   bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
                   c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
-                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                      color: "#fff",
+                      backgroundColor: "#A6A7AB",
                     },
                   }}
-                  px={44}
-                  size={"lg"}
                 >
                   <IconBrandFacebook size={20} />
                 </Button>
                 <Button
+                  px={44}
+                  size={"lg"}
                   variant="filled"
                   bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
                   c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
-                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                      color: "#fff",
+                      backgroundColor: "#A6A7AB",
                     },
                   }}
-                  px={44}
-                  size={"lg"}
                 >
                   <IconBrandInstagram size={20} />
                 </Button>
                 <Button
+                  px={44}
+                  size={"lg"}
                   variant="filled"
                   bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
                   c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
-                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                      color: "#fff",
+                      backgroundColor: "#A6A7AB",
                     },
                   }}
-                  px={44}
-                  size={"lg"}
                 >
                   <IconBrandTiktok size={20} />
                 </Button>
                 <Button
+                  px={44}
+                  size={"lg"}
                   variant="filled"
                   bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
                   c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
-                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                      color: "#fff",
+                      backgroundColor: "#A6A7AB",
                     },
                   }}
-                  px={44}
-                  size={"lg"}
                 >
                   <IconBrandTwitter size={20} />
                 </Button>
                 <Button
+                  px={44}
+                  size={"lg"}
                   variant="filled"
                   bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
                   c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
-                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                      color: "#fff",
+                      backgroundColor: "#A6A7AB",
                     },
                   }}
-                  px={44}
-                  size={"lg"}
                 >
                   <IconBrandWhatsapp size={20} />
                 </Button>
                 <Button
+                  px={44}
+                  size={"lg"}
                   variant="filled"
                   bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
                   c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
-                      color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                      color: "#fff",
+                      backgroundColor: "#A6A7AB",
                     },
                   }}
-                  px={44}
-                  size={"lg"}
                 >
                   <IconSourceCode size={20} />
                 </Button>
