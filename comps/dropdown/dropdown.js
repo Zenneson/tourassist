@@ -121,6 +121,11 @@ export default function DropDown({ dropDownOpened, setDropDownOpened }) {
         onClose={() => setDropDownOpened(false)}
         withOverlay={false}
         styles={(theme) => ({
+          body: {
+            padding: 0,
+            width: "100vw",
+            height: "100vh",
+          },
           content: {
             backdropFilter: "blur(10px)",
             overflow: "hidden",

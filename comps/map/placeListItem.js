@@ -44,11 +44,15 @@ export default function PlaceListItem({
             transition: "all 200ms ease",
             cursor: "pointer",
             "&:hover": {
-              background: "rgba(0, 0, 0, 0.1)",
+              background:
+                theme.colorScheme === "dark"
+                  ? "rgba(255, 255, 255, 0.05)"
+                  : "rgba(0, 0, 0, 0.05)",
             },
             "&:active": {
               transform: "scale(1.02)",
-              backgroundColor: "#121212",
+              backgroundColor:
+                theme.colorScheme === "dark" ? "#121212" : "#fff",
               boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
             },
           }}

@@ -76,20 +76,7 @@ export default function Money() {
         data={["Help me raise money to go on a Music Tour"]}
       />
       <Box pr={20}>
-        <Box
-          my={15}
-          w="100%"
-          px={10}
-          pb={10}
-          h={"250px"}
-          sx={(theme) => ({
-            borderLeft: `2px solid ${
-              theme.colorScheme === "dark"
-                ? "rgba(255,255,255,0.1)"
-                : "rgba(0,0,0,0.1)"
-            }`,
-          })}
-        >
+        <Box my={20} w="100%" h={"250px"}>
           <Line
             options={{
               responsive: true,
@@ -99,10 +86,14 @@ export default function Money() {
           />
         </Box>
         <Box
-          className="pagePanel"
-          mb={20}
+          mb={10}
           sx={(theme) => ({
             borderRadius: 3,
+            border: `2px solid ${
+              theme.colorScheme === "dark"
+                ? "rgba(255,255,255,0.1)"
+                : "rgba(0,0,0,0.1)"
+            }`,
           })}
         >
           <Group w={"100%"} spacing={0} grow>
@@ -205,7 +196,7 @@ export default function Money() {
         </Box>
         <Flex my={10} pos={"relative"}>
           <Box
-            className="pagePanel"
+            // className="pagePanel"
             w={"100%"}
             position="relative"
             sx={{

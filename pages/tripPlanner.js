@@ -1015,9 +1015,6 @@ export default function TripPlannerPage(props) {
                         size="xl"
                         h={90}
                         w={"100%"}
-                        sx={{
-                          textShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                        }}
                       >
                         <Title order={2}>ADD BANKING INFORMATION</Title>
                       </Button>

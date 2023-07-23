@@ -63,6 +63,7 @@ export default function Mymap({
   const [showModal, setShowModal] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
   const [placeChoosen, setPlaceChoosen] = useState(false);
+  const [showChoice, setShowChoice] = useState(false);
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
@@ -695,6 +696,50 @@ export default function Mymap({
     goToLocation("city", city[1], 12, area.country, city[0]);
   };
 
+  const addEllipsis = (string) => {
+    if (string.length > 26) {
+      return string.substring(0, 26) + "...";
+    } else {
+      return string;
+    }
+  };
+
+  const choosePlace = (choice) => {
+    const place = {
+      place: area.label,
+      region:
+        area.type === "city" && area.country === "United States"
+          ? `${area.state || area.region}, ${area.country}`
+          : area.country === area.label
+          ? ""
+          : area.country,
+      fullName:
+        area.type === "city" && area.country === "United States"
+          ? `${area.state || area.region}, ${area.country}`
+          : area.country,
+      costs: ["FLIGHT", "HOTEL"],
+    };
+    setPlaceLocation([place]);
+    if (choice === "tour") {
+      setListOpened(true);
+      if (checkPlace(place)) {
+        notifications.show({
+          color: "red",
+          style: { backgroundColor: "#2e2e2e" },
+          title: "Loaction already added",
+          message: `${area.label} was already added to your tour`,
+        });
+        return;
+      }
+      addPlaces(place);
+      reset();
+    }
+    if (choice === "travel") {
+      setShowModal(true);
+    }
+    setShowChoice(false);
+  };
+
   const reset = () => {
     mapRef.current.flyTo({
       zoom: 2.5,
@@ -711,14 +756,8 @@ export default function Mymap({
     setCountryData([]);
     setPlaceSearch("");
     setCountrySearch("");
-  };
-
-  const addEllipsis = (string) => {
-    if (string.length > 26) {
-      return string.substring(0, 26) + "...";
-    } else {
-      return string;
-    }
+    setShowChoice(false);
+    setPopupInfo(null);
   };
 
   return (
@@ -1004,36 +1043,7 @@ export default function Mymap({
                   }}
                 />
               }
-              onChange={(e) => {
-                const place = {
-                  place: area.label,
-                  region:
-                    area.type === "city" && area.country === "United States"
-                      ? `${area.state || area.region}, ${area.country}`
-                      : area.country === area.label
-                      ? ""
-                      : area.country,
-                  fullName:
-                    area.type === "city" && area.country === "United States"
-                      ? `${area.state || area.region}, ${area.country}`
-                      : area.country,
-                  costs: ["FLIGHT", "HOTEL"],
-                };
-                setPlaceLocation([place]);
-                if (e === "tour") setListOpened(true);
-                if (e === "travel") setShowModal(true);
-                if (checkPlace(place) && e === "tour") {
-                  notifications.show({
-                    color: "red",
-                    style: { backgroundColor: "#2e2e2e" },
-                    title: "Loaction already added",
-                    message: `${area.label} was already added to your tour`,
-                  });
-                  return;
-                } else if (e === "tour") {
-                  addPlaces(place);
-                }
-              }}
+              onChange={(e) => choosePlace(e)}
             />
           </Box>
         </Box>
@@ -1055,7 +1065,6 @@ export default function Mymap({
             boxShadow: "0 0 10px rgba(255, 255, 255, 0.02)",
             "&:hover": {
               opacity: 1,
-              backgroundColor: "#020202",
               boxShadow: "0 0 20px rgba(255, 255, 255, 0.04)",
             },
           }}
@@ -1073,7 +1082,7 @@ export default function Mymap({
         !mapSpin &&
         !dropDownOpened &&
         !locationDrawer && (
-          <Center pos={"absolute"} top={"27px"} w={"100%"}>
+          <Center pos={"absolute"} top={"25px"} w={"100%"}>
             {/* Main Place Search */}
             <Box
               w={400}
@@ -1150,7 +1159,6 @@ export default function Mymap({
             setViewState(initialViewState);
           }}
           touchPitch={false}
-          // keyboard={false}
           ref={mapRef}
           onClick={(e) => {
             locationHandler(e.features[0]);
@@ -1195,6 +1203,47 @@ export default function Mymap({
               </Box>
             </Popup>
           )}
+          {showChoice && (
+            <Popup
+              className={classes.popup}
+              anchor="bottom"
+              offset={[0, -30]}
+              closeOnMove={false}
+              closeButton={false}
+              closeOnClick={false}
+              longitude={lngLat[0]}
+              latitude={lngLat[1]}
+            >
+              <Box py={10} px={20}>
+                {area.label}
+                <NavLink
+                  mt={5}
+                  icon={<IconPlane size={15} />}
+                  label={"Choose as destination"}
+                  onClick={() => choosePlace("travel")}
+                  sx={{
+                    borderLeft: `1px solid ${
+                      theme.colorScheme === "dark"
+                        ? "rgba(255, 255, 255, 0.2)"
+                        : "rgba(0, 0, 0, 0.2)"
+                    }`,
+                  }}
+                />
+                <NavLink
+                  icon={<IconList size={15} />}
+                  label={"Add to Tour List"}
+                  onClick={() => choosePlace("tour")}
+                  sx={{
+                    borderLeft: `1px solid ${
+                      theme.colorScheme === "dark"
+                        ? "rgba(255, 255, 255, 0.2)"
+                        : "rgba(0, 0, 0, 0.2)"
+                    }`,
+                  }}
+                />
+              </Box>
+            </Popup>
+          )}
           <Transition
             mounted={showMainMarker}
             transition="fade"
@@ -1206,10 +1255,9 @@ export default function Mymap({
                 style={styles}
                 longitude={lngLat[0]}
                 latitude={lngLat[1]}
-                offsetLeft={-20}
-                offsetTop={-10}
                 onClick={(e) => {
                   e.originalEvent.stopPropagation();
+                  setShowChoice(true);
                 }}
               >
                 <IconMapPinFilled

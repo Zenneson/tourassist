@@ -82,7 +82,7 @@ export default function MainMenu({
   };
 
   const openDropDown = () => {
-    setDropDownOpened((o) => !o);
+    if (panelShow === false) setDropDownOpened((o) => !o);
     setMainMenuOpened(false);
     setPanelShow(false);
   };
@@ -172,33 +172,22 @@ export default function MainMenu({
             ASSIST
           </Title>
         </Flex>
-        <Flex align={"center"} gap={10} px={0} py={10} m={0} mt={5} mr={5}>
+        <Flex align={"center"} gap={10} px={0} py={10} mt={10} mr={10}>
           {/* TODO */}
           {user && (
             //  Main Menu Button
             <Button
               variant="subtle"
-              px={15}
               size="sm"
               onClick={openMenu}
               radius={"xl"}
-              c={
-                theme.colorScheme === "dark"
-                  ? theme.colors.gray[0]
-                  : theme.colors.dark[9]
-              }
+              mr={-5}
             >
               <Text fz={12}>{user?.providerData[0].email}</Text>
             </Button>
           )}
           {/* TODO   */}
-          <Button
-            variant="subtle"
-            onClick={toggle}
-            radius={"xl"}
-            color={theme.colorScheme === "dark" ? "gray" : "dark"}
-            p={10}
-          >
+          <Button variant="subtle" onClick={toggle} radius={"xl"} p={10}>
             {theme.colorScheme === "dark" ? (
               <IconBrightnessUp size={17} />
             ) : (
@@ -207,7 +196,6 @@ export default function MainMenu({
           </Button>
           <Group spacing={0}>
             <Tooltip
-              color="dark"
               label="Search Trips"
               position="bottom"
               openDelay={800}
@@ -215,14 +203,7 @@ export default function MainMenu({
             >
               {/* Search button */}
               <Button onClick={openSearch} variant="subtle" radius="xl" p={10}>
-                <IconSearch
-                  size={17}
-                  color={
-                    theme.colorScheme === "dark"
-                      ? theme.colors.gray[0]
-                      : theme.colors.dark[9]
-                  }
-                />
+                <IconSearch size={17} />
               </Button>
             </Tooltip>
             <Popover
@@ -257,23 +238,9 @@ export default function MainMenu({
                     p={10}
                   >
                     {user ? (
-                      <IconDoorExit
-                        size={17}
-                        color={
-                          theme.colorScheme === "dark"
-                            ? theme.colors.gray[0]
-                            : theme.colors.dark[9]
-                        }
-                      />
+                      <IconDoorExit size={17} />
                     ) : (
-                      <IconLogin
-                        size={17}
-                        color={
-                          theme.colorScheme === "dark"
-                            ? theme.colors.gray[0]
-                            : theme.colors.dark[9]
-                        }
-                      />
+                      <IconLogin size={17} />
                     )}
                   </Button>
                 </Popover.Target>
@@ -314,13 +281,13 @@ export default function MainMenu({
               stroke={1}
               size={30}
               style={{
+                paddingTop: "3px",
+                cursor: "pointer",
+                transform: "scale(1.5)",
                 color:
                   theme.colorScheme === "dark"
                     ? theme.colors.blue[2]
                     : theme.colors.red[7],
-                paddingTop: "3px",
-                cursor: "pointer",
-                transform: "scale(1.5)",
               }}
               onClick={openDropDown}
             />

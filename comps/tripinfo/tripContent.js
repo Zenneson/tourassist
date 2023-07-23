@@ -216,26 +216,16 @@ export default function TripContent({
                 afterChange={setActiveSlide}
                 {...slideSettings}
                 style={{
-                  width: "390px",
-                  height: "300px",
+                  width: "100%",
+                  height: "100%",
                 }}
               >
                 {slides}
               </Slider>
-              <Group
-                mt={images.length === 1 ? 18 : 25}
-                spacing={15}
-                h={40}
-                grow
-              >
+              <Group mt={17} spacing={15} h={40} grow>
                 {images.length > 1 && (
                   // Previous Slide
-                  <Button
-                    variant="subtle"
-                    color="gray"
-                    h={"100%"}
-                    onClick={previous}
-                  >
+                  <Button variant="subtle" color="gray" onClick={previous}>
                     <IconChevronLeft size={20} />
                   </Button>
                 )}
@@ -257,12 +247,7 @@ export default function TripContent({
                 </Button>
                 {images.length > 1 && (
                   // Next Slide
-                  <Button
-                    variant="subtle"
-                    color="gray"
-                    h={"100%"}
-                    onClick={next}
-                  >
+                  <Button variant="subtle" color="gray" onClick={next}>
                     <IconChevronRight size={20} />
                   </Button>
                 )}
@@ -342,7 +327,7 @@ export default function TripContent({
               </Button>
             </Dropzone>
             <Title
-              mt={20}
+              mt={23}
               py={12}
               fz={12}
               ta={"center"}
