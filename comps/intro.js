@@ -256,42 +256,22 @@ export default function Intro({ auth, mapLoaded }) {
                     or making lifelong memories on your honeymoon, here&rsquo;s
                     an assist to make it all possible.
                   </Text>
-                  <Group
-                    w="100%"
-                    position="center"
-                    mt={10}
-                    opacity={mapLoaded ? 1 : 0}
-                  >
-                    {/* Learn More button  */}
-                    <Button
-                      fw={900}
-                      size={!firstDown ? "md" : "xs"}
-                      uppercase={true}
-                      variant="gradient"
-                      gradient={{ from: "#393939", to: "#282828", deg: 180 }}
-                      onClick={() => {}}
-                      leftIcon={
-                        <IconInfoSquareRounded
-                          size={22}
-                          color="rgba(255,255,255,0.25)"
-                        />
-                      }
-                    >
-                      Learn More
-                    </Button>
+                  <Group w="100%" position="center" mt={10}>
                     {/* Plan Trip Button  */}
                     <Button
                       fw={900}
-                      size={!firstDown ? "md" : "xs"}
+                      loading={!mapLoaded}
+                      size={!firstDown ? "xl" : "sm"}
                       uppercase={true}
                       variant="gradient"
+                      radius={"xl"}
                       gradient={{ from: "#004585", to: "#00376b", deg: 180 }}
                       onClick={planTrip}
                       leftIcon={
-                        <IconWorld size={20} style={{ color: "#60E4FF" }} />
+                        <IconWorld size={30} style={{ color: "#60E4FF" }} />
                       }
                     >
-                      Plan a trip
+                      Let&lsquo;s Go!
                     </Button>
                   </Group>
                 </Flex>

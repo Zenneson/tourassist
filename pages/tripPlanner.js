@@ -526,7 +526,12 @@ export default function TripPlannerPage(props) {
                       </Text>
                     )}
                   </Title>
-                  <Group w={"100%"} spacing={0}>
+                  <Flex
+                    w={"100%"}
+                    justify={"flex-start"}
+                    align={"flex-start"}
+                    gap={0}
+                  >
                     <Flex
                       className="pagePanel"
                       direction={"column"}
@@ -815,100 +820,100 @@ export default function TripPlannerPage(props) {
                         </Box>
                       </Box>
                     </Flex>
-                    <Center w={"calc(42% - 30px)"} ml={30} h={380}>
-                      <DatePicker
-                        className="pagePanel"
-                        allowDeselect
-                        firstDayOfWeek={0}
-                        defaultDate={today}
-                        minDate={weekAhead}
-                        value={travelDates}
-                        size={"md"}
-                        p={20}
-                        onChange={(e) => {
-                          setTravelDates(e);
-                        }}
-                        getDayProps={() => {
-                          return {
-                            style: {
-                              fontWeight: "bold",
-                            },
-                          };
-                        }}
-                        renderDay={(date) => {
-                          const day = date.getDate();
-                          const month = date.getMonth();
-                          const year = date.getFullYear();
+                    <DatePicker
+                      className="pagePanel"
+                      allowDeselect
+                      firstDayOfWeek={0}
+                      defaultDate={today}
+                      minDate={weekAhead}
+                      value={travelDates}
+                      size={"md"}
+                      mah={380}
+                      ml={30}
+                      p={20}
+                      onChange={(e) => {
+                        setTravelDates(e);
+                      }}
+                      getDayProps={() => {
+                        return {
+                          style: {
+                            fontWeight: "bold",
+                          },
+                        };
+                      }}
+                      renderDay={(date) => {
+                        const day = date.getDate();
+                        const month = date.getMonth();
+                        const year = date.getFullYear();
 
-                          let isSpecificDay;
-                          if (travelDates) {
-                            const travelDate = dayjs(travelDates);
-                            const prevDate = travelDate.subtract(1, "day");
+                        let isSpecificDay;
+                        if (travelDates) {
+                          const travelDate = dayjs(travelDates);
+                          const prevDate = travelDate.subtract(1, "day");
 
-                            isSpecificDay =
-                              day === prevDate.date() &&
-                              month === prevDate.month() &&
-                              year === prevDate.year();
-                          }
-                          return (
-                            <Indicator
-                              size={5}
-                              color={
-                                theme.colorScheme === "dark" ? "red" : "blue"
-                              }
-                              offset={-3}
-                              disabled={!isSpecificDay}
-                            >
-                              <div>{day}</div>
-                            </Indicator>
-                          );
-                        }}
-                        sx={{
-                          ".mantine-DatePicker-day[data-disabled]": {
-                            color:
-                              theme.colorScheme === "dark"
-                                ? theme.colors.dark[6]
-                                : theme.colors.gray[2],
+                          isSpecificDay =
+                            day === prevDate.date() &&
+                            month === prevDate.month() &&
+                            year === prevDate.year();
+                        }
+                        return (
+                          <Indicator
+                            size={5}
+                            color={
+                              theme.colorScheme === "dark" ? "red" : "blue"
+                            }
+                            offset={-3}
+                            disabled={!isSpecificDay}
+                          >
+                            <div>{day}</div>
+                          </Indicator>
+                        );
+                      }}
+                      sx={{
+                        ".mantine-DatePicker-day[data-disabled]": {
+                          color:
+                            theme.colorScheme === "dark"
+                              ? theme.colors.dark[6]
+                              : theme.colors.gray[2],
+                        },
+                        ".mantine-DatePicker-day[data-weekend]": {
+                          color:
+                            theme.colorScheme === "dark"
+                              ? theme.colors.blue[2]
+                              : theme.colors.red[3],
+                        },
+                        ".mantine-DatePicker-day[data-outside]": {
+                          color:
+                            theme.colorScheme === "dark"
+                              ? theme.colors.dark[3]
+                              : theme.colors.gray[5],
+                        },
+                        ".mantine-DatePicker-day[data-selected]": {
+                          border: `1px solid ${
+                            theme.colorScheme === "dark"
+                              ? theme.colors.blue[1]
+                              : theme.colors.red[2]
+                          }`,
+                          backgroundColor:
+                            theme.colorScheme === "dark"
+                              ? theme.colors.gray[5]
+                              : theme.colors.red[0],
+                          borderTop: `4px solid ${
+                            theme.colorScheme === "dark"
+                              ? theme.colors.blue[7]
+                              : theme.colors.red[9]
+                          }`,
+                          color: "#404040",
+                          transition: "all 0.15s ease-in-out",
+                          borderRadius: "0 0 3px 3px",
+                          fontSize: "1.7rem",
+                          "&:hover": {
+                            backgroundColor: "#fff",
                           },
-                          ".mantine-DatePicker-day[data-weekend]": {
-                            color:
-                              theme.colorScheme === "dark"
-                                ? theme.colors.blue[2]
-                                : theme.colors.red[3],
-                          },
-                          ".mantine-DatePicker-day[data-outside]": {
-                            color:
-                              theme.colorScheme === "dark"
-                                ? theme.colors.dark[3]
-                                : theme.colors.gray[5],
-                          },
-                          ".mantine-DatePicker-day[data-selected]": {
-                            border: `1px solid ${
-                              theme.colorScheme === "dark"
-                                ? theme.colors.blue[1]
-                                : theme.colors.red[2]
-                            }`,
-                            backgroundColor:
-                              theme.colorScheme === "dark"
-                                ? theme.colors.gray[5]
-                                : theme.colors.red[0],
-                            borderTop: `4px solid ${
-                              theme.colorScheme === "dark"
-                                ? theme.colors.blue[7]
-                                : theme.colors.red[9]
-                            }`,
-                            color: "#404040",
-                            transition: "all 0.15s ease-in-out",
-                            borderRadius: "0 0 3px 3px",
-                            fontSize: "1.7rem",
-                            "&:hover": {
-                              backgroundColor: "#fff",
-                            },
-                          },
-                        }}
-                      />
-                    </Center>
-                  </Group>
+                        },
+                      }}
+                    />
+                  </Flex>
                 </Flex>
               </motion.div>
             )}

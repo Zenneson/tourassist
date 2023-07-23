@@ -91,6 +91,13 @@ export default function MainMenu({
   };
 
   const signOutFunc = () => {
+    if (!user) {
+      if (router.pathname !== "/") router.push("/");
+      else {
+        router.reload();
+      }
+      return;
+    }
     signOut(auth)
       .then(() => {
         sessionStorage.removeItem("images");
@@ -261,7 +268,7 @@ export default function MainMenu({
               withArrow
               arrowOffset={15}
               width="auto"
-              position="bottom-end"
+              position="bottom"
               shadow="md"
               opened={logoutOpeened}
               onChange={setLogoutOpeened}
@@ -308,17 +315,16 @@ export default function MainMenu({
                   fw={700}
                   px={15}
                   variant="default"
+                  onClick={signOutFunc}
                   leftIcon={<IconCircleX size={15} />}
                   sx={{
                     opacity: 0.35,
                     "&:hover": {
                       opacity: 1,
-                      color: "rgba(255, 40, 40, 0.5)",
                     },
                   }}
-                  onClick={signOutFunc}
                 >
-                  LOGOUT
+                  {user ? "LOGOUT" : "LOGIN"}
                 </Button>
               </Popover.Dropdown>
             </Popover>
