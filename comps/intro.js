@@ -123,7 +123,7 @@ export default function Intro({ auth, mapLoaded }) {
                   ASSIST
                 </Title>
                 <Box
-                  pt={20}
+                  mt={10}
                   pos={"relative"}
                   sx={{
                     width: "80%",

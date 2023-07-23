@@ -726,7 +726,9 @@ export default function Mymap({
       if (checkPlace(place)) {
         notifications.show({
           color: "red",
-          style: { backgroundColor: "#2e2e2e" },
+          style: {
+            backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+          },
           title: "Loaction already added",
           message: `${area.label} was already added to your tour`,
         });

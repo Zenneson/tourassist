@@ -1,8 +1,5 @@
 import { useState } from "react";
 import {
-  GoogleAuthProvider,
-  TwitterAuthProvider,
-  signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -26,13 +23,8 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useToggle, useSessionStorage } from "@mantine/hooks";
-import {
-  IconBrandGoogle,
-  IconBrandTwitter,
-  IconX,
-  IconCheck,
-  IconUserCircle,
-} from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { IconX, IconCheck, IconUserCircle } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 
 const useStyles = createStyles((theme, { floating }) => ({
@@ -68,13 +60,15 @@ const useStyles = createStyles((theme, { floating }) => ({
 
 export default function LoginComp({ auth }) {
   const theme = useMantineTheme();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordFocus, setPasswordFocus] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
-  const [passPopOpened, setPassPopOpened] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
+  const [firstNameFocus, setFirstNameFocus] = useState(false);
+  const [lastNameFocus, setLastNameFocus] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
+  const [firstNameValue, setFirstNameValue] = useState("");
+  const [lastNameValue, setLastNameValue] = useState("");
+  const [passPopOpened, setPassPopOpened] = useState(false);
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const router = useRouter();
   const [user, setUser] = useSessionStorage({
@@ -141,11 +135,18 @@ export default function LoginComp({ auth }) {
     floating: passValue.trim().length !== 0 || passwordFocus,
   });
 
+  const { classes: firstNameClass } = useStyles({
+    floating: firstNameValue.trim().length !== 0 || firstNameFocus,
+  });
+  const { classes: lastNameClass } = useStyles({
+    floating: lastNameValue.trim().length !== 0 || lastNameFocus,
+  });
+
   const form = useForm({
     initialValues: {
       email: "",
       firstName: "",
-      lasrName: "",
+      lastName: "",
       password: "",
       terms: false,
     },
@@ -161,40 +162,17 @@ export default function LoginComp({ auth }) {
 
   // TODO - get Auth working correctly
   const addUser = async (user) => {
-    await setDoc(
-      doc(firestore, "users", user?.email || user?.providerData[0].email),
-      {
-        name: user.displayName || user?.providerData[0].displayName,
-        email: user.email || user?.providerData[0].email,
-        avi: user.photoURL || user?.providerData[0].photoURL,
-      }
-    );
-  };
+    console.log("User: ", user);
 
-  async function signInWith(provider) {
-    const userCred = await signInWithPopup(auth, new provider())
-      .then((result) => {
-        const credential = provider.credentialFromResult(result);
-        setVisible(true);
-        setUser(auth.currentUser);
-        addUser(auth.currentUser);
-      })
-      .catch((error) => {
-        if (error.code === "auth/account-exists-with-different-credential") {
-          const pendingCred = error.credential;
-          signInWithPopup(auth, new provider()).then((result) => {
-            result.user.linkWithCredential(pendingCred).then(() => {
-              setVisible(true);
-              setUser(auth.currentUser);
-              addUser(auth.currentUser);
-            });
-            console.log("Credential Linked");
-          });
-        }
-        const credential = provider.credentialFromError(error);
-        console.log("Google Login Error: ", error);
-      });
-  }
+    // await setDoc(
+    //   doc(firestore, "users", user?.email || user?.providerData[0].email),
+    //   {
+    //     name: user.displayName || user?.providerData[0].displayName,
+    //     email: user.email || user?.providerData[0].email,
+    //     avi: user.photoURL || user?.providerData[0].photoURL,
+    //   }
+    // );
+  };
 
   return (
     <>
@@ -211,43 +189,16 @@ export default function LoginComp({ auth }) {
                     textTransform: "uppercase",
                   }}
                 >
-                  Create Account
+                  Join TourAssist
                 </Text>
               </>
             }
             labelPosition="left"
             color="rgba(255,255,255,0.3)"
             mt={16}
-            mb={20}
             opacity={0.7}
           />
         )}
-        <Group grow spacing={20}>
-          {/* Signout Button */}
-          <Button
-            onClick={() => signInWith(GoogleAuthProvider)}
-            variant="light"
-            bg={theme.colorScheme === "dark" ? "dark.5" : "gray.2"}
-            color="gray.5"
-            size="sm"
-            py={5}
-            leftIcon={<IconBrandGoogle size={15} />}
-          >
-            Google
-          </Button>
-          {/* Twitter Signin Button  */}
-          <Button
-            onClick={() => signInWith(TwitterAuthProvider)}
-            variant="light"
-            bg={theme.colorScheme === "dark" ? "dark.5" : "gray.2"}
-            color="gray.5"
-            size="sm"
-            py={5}
-            leftIcon={<IconBrandTwitter size={15} />}
-          >
-            Twitter
-          </Button>
-        </Group>
         <form
           onSubmit={form.onSubmit((event) => {
             if (type === "sign-up") {
@@ -259,13 +210,24 @@ export default function LoginComp({ auth }) {
                 .then((userCredential) => {
                   const user = userCredential.user;
                   setVisible(true);
-                  // (false);
+                  setUser(user);
                 })
                 .catch((error) => {
                   const errorCode = error.code;
                   const errorMessage = error.message;
                   console.log("Error Code: ", errorCode);
                   console.log("Error Message: ", errorMessage);
+                  if (errorCode === "auth/email-already-in-use") {
+                    notifications.show({
+                      color: "red",
+                      style: {
+                        backgroundColor:
+                          theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+                      },
+                      title: "Email already in use",
+                      message: `	${form.values.email} is linked to another account.`,
+                    });
+                  }
                 });
             } else {
               signInWithEmailAndPassword(
@@ -276,6 +238,7 @@ export default function LoginComp({ auth }) {
                 .then((userCredential) => {
                   const user = userCredential.user;
                   setVisible(true);
+                  setUser(user);
                 })
                 .catch((error) => {
                   const errorCode = error.code;
@@ -287,10 +250,40 @@ export default function LoginComp({ auth }) {
           })}
         >
           <Stack>
+            {type === "sign-up" && (
+              <Group mt={20} grow>
+                <TextInput
+                  required
+                  label="First Name"
+                  placeholder="John"
+                  classNames={firstNameClass}
+                  value={form.values.firstName}
+                  onChange={(event) => {
+                    setFirstNameValue(event.currentTarget.value);
+                    form.setFieldValue("firstName", event.currentTarget.value);
+                  }}
+                  onFocus={() => setFirstNameFocus(true)}
+                  onBlur={() => setFirstNameFocus(false)}
+                />
+                <TextInput
+                  required
+                  label="Last Name"
+                  placeholder="Doe"
+                  classNames={lastNameClass}
+                  value={form.values.lastName}
+                  onChange={(event) => {
+                    setLastNameValue(event.currentTarget.value);
+                    form.setFieldValue("lastName", event.currentTarget.value);
+                  }}
+                  onFocus={() => setLastNameFocus(true)}
+                  onBlur={() => setLastNameFocus(false)}
+                />
+              </Group>
+            )}
             <TextInput
+              mt={10}
               required
               label="Email"
-              variant="filled"
               placeholder="johndoe@gmail.com"
               classNames={emailClass}
               value={form.values.email}
@@ -301,7 +294,6 @@ export default function LoginComp({ auth }) {
               onFocus={() => setEmailFocus(true)}
               onBlur={() => setEmailFocus(false)}
               error={form.errors.email && "Invalid email"}
-              mt={26}
             />
             <Popover
               opened={passPopOpened}
@@ -319,7 +311,6 @@ export default function LoginComp({ auth }) {
                   <PasswordInput
                     required
                     label="Password"
-                    variant="filled"
                     classNames={passClass}
                     value={form.values.password}
                     onChange={(event) => {

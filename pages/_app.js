@@ -76,7 +76,6 @@ export default function Money(props) {
       },
     },
     defaultRadius: 3,
-    loader: "dots",
     focusRing: "auto",
     focusRingStyles: {
       resetStyles: () => ({ outline: "none" }),
@@ -142,7 +141,7 @@ export default function Money(props) {
       </Head>
 
       <MantineProvider withGlobalStyles withNormalizeCSS theme={tourTheme}>
-        <Notifications position="top-center" />
+        <Notifications position="top-center" zIndex={9999} />
         <SearchModal
           searchOpened={searchOpened}
           setSearchOpened={setSearchOpened}
