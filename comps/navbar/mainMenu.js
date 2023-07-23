@@ -82,8 +82,11 @@ export default function MainMenu({
   };
 
   const openDropDown = () => {
-    if (panelShow === false) setDropDownOpened((o) => !o);
-    setMainMenuOpened(false);
+    if (panelShow === true) {
+      setDropDownOpened(true);
+    } else {
+      setDropDownOpened((o) => !o);
+    }
     setPanelShow(false);
   };
 
