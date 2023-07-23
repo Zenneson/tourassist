@@ -183,11 +183,30 @@ export default function MainMenu({
               radius={"xl"}
               mr={-5}
             >
-              <Text fz={12}>{user?.providerData[0].email}</Text>
+              <Text
+                fz={12}
+                color={
+                  theme.colorScheme === "dark"
+                    ? theme.colors.gray[0]
+                    : theme.colors.dark[9]
+                }
+              >
+                {user?.providerData[0].email}
+              </Text>
             </Button>
           )}
           {/* TODO   */}
-          <Button variant="subtle" onClick={toggle} radius={"xl"} p={10}>
+          <Button
+            variant="subtle"
+            onClick={toggle}
+            radius={"xl"}
+            p={10}
+            c={
+              theme.colorScheme === "dark"
+                ? theme.colors.gray[0]
+                : theme.colors.dark[9]
+            }
+          >
             {theme.colorScheme === "dark" ? (
               <IconBrightnessUp size={17} />
             ) : (
@@ -202,7 +221,17 @@ export default function MainMenu({
               withArrow
             >
               {/* Search button */}
-              <Button onClick={openSearch} variant="subtle" radius="xl" p={10}>
+              <Button
+                onClick={openSearch}
+                variant="subtle"
+                radius="xl"
+                p={10}
+                c={
+                  theme.colorScheme === "dark"
+                    ? theme.colors.gray[0]
+                    : theme.colors.dark[9]
+                }
+              >
                 <IconSearch size={17} />
               </Button>
             </Tooltip>
@@ -236,6 +265,11 @@ export default function MainMenu({
                     variant="subtle"
                     radius="xl"
                     p={10}
+                    c={
+                      theme.colorScheme === "dark"
+                        ? theme.colors.gray[0]
+                        : theme.colors.dark[9]
+                    }
                   >
                     {user ? (
                       <IconDoorExit size={17} />

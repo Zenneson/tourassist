@@ -268,6 +268,7 @@ export default function Mymap({
   ];
 
   function locationHandler(feature) {
+    setShowChoice(false);
     if (feature == null) return;
     let locationObj = {};
     locationObj.type =
@@ -1262,6 +1263,7 @@ export default function Mymap({
               >
                 <IconMapPinFilled
                   style={{
+                    cursor: "pointer",
                     transform: "scale(5)",
                     color: theme.colorScheme === "dark" ? "#00e8fa" : "#fa7500",
                   }}
