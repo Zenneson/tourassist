@@ -16,7 +16,7 @@ import {
 import { useIntersection } from "@mantine/hooks";
 import { IconReload } from "@tabler/icons-react";
 
-export default function Donations({ dHeight }) {
+export default function Donations({ dHeight, donations, tripUser, user }) {
   const theme = useMantineTheme();
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
@@ -25,83 +25,12 @@ export default function Donations({ dHeight }) {
     threshold: 1,
   });
 
-  let donateData = [
-    {
-      name: "Anonymus",
-      amount: 100,
-    },
-    {
-      name: "Jill Jailbreaker",
-      amount: 50,
-    },
-    {
-      name: "Henry Silkeater",
-      amount: 20,
-    },
-    {
-      name: "Bill Horsefighter",
-      amount: 150,
-    },
-    {
-      name: "Anonymus",
-      amount: 200,
-    },
-    {
-      name: "Anonymus",
-      amount: 100,
-    },
-    {
-      name: "Jill Jailbreaker",
-      amount: 50,
-    },
-    {
-      name: "Henry Silkeater",
-      amount: 20,
-    },
-    {
-      name: "Bill Horsefighter",
-      amount: 150,
-    },
-    {
-      name: "Anonymus",
-      amount: 200,
-    },
-    {
-      name: "Henry Silkeater",
-      amount: 20,
-    },
-    {
-      name: "Bill Horsefighter",
-      amount: 150,
-    },
-    {
-      name: "Anonymus",
-      amount: 200,
-    },
-    {
-      name: "Anonymus",
-      amount: 100,
-    },
-    {
-      name: "Jill Jailbreaker",
-      amount: 50,
-    },
-    {
-      name: "Henry Silkeater",
-      amount: 20,
-    },
-    {
-      name: "Bill Horsefighter",
-      amount: 150,
-    },
-  ];
-
   const donateOrder =
-    sorted === "time"
-      ? donateData
-      : donateData.sort((a, b) => (a.amount < b.amount ? 1 : -1));
+    sorted === "time" && donations.length !== 0
+      ? donations
+      : donations.sort((a, b) => (a.amount < b.amount ? 1 : -1));
 
-  const rows = donateOrder.map((item, index) => (
+  const rows = donateOrder?.map((item, index) => (
     <tr key={index}>
       <td>
         <Group>
@@ -167,9 +96,10 @@ export default function Donations({ dHeight }) {
       />
       <Box
         p={10}
+        pb={20}
         m={0}
         mah={dHeight}
-        mih={350}
+        // mih={350}
         ref={donationsRef}
         type="auto"
         sx={{
@@ -183,14 +113,16 @@ export default function Donations({ dHeight }) {
               rows
             ) : (
               <Text color="dimmed" ta="center" fz={12}>
-                Your trips will be listed here...
+                {user && user.email === tripUser
+                  ? "The donations will be listed here"
+                  : "Be the first to donate!"}
               </Text>
             )}
           </tbody>
         </Table>
         <Box ref={ref} />
         <Center>
-          <Button
+          {/* <Button
             variant="default"
             compact
             pr={10}
@@ -198,7 +130,7 @@ export default function Donations({ dHeight }) {
             leftIcon={<IconReload size={14} />}
           >
             Load More
-          </Button>
+          </Button> */}
         </Center>
       </Box>
     </Box>

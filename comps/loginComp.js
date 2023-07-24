@@ -3,7 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
   useMantineTheme,
@@ -204,7 +204,7 @@ export default function LoginComp({ auth }) {
   const addUser = async (user) => {
     setVisible(true);
     setUser(user);
-    await addDoc(doc(firestore, "users", user.email), {
+    await setDoc(doc(firestore, "users", user.email), {
       firstName: form.values.firstName,
       lastName: form.values.lastName,
       email: form.values.email,
@@ -278,7 +278,7 @@ export default function LoginComp({ auth }) {
               </>
             }
             labelPosition="left"
-            color="rgba(255,255,255,0.3)"
+            c={theme.colorScheme === "dark" ? "#fff" : "#000"}
             mt={16}
             opacity={0.7}
           />

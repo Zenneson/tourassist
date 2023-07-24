@@ -498,7 +498,7 @@ export default function TripPlannerPage(props) {
   };
 
   const generateTripId = () => {
-    const trip_title = tripTitle.replace(/ /g, "_").toLowerCase();
+    const trip_title = tripTitle.replace(/ /g, "").toLowerCase();
     let now = new Date();
     let date_time_string =
       now.toISOString().slice(5, 7) +
@@ -519,12 +519,13 @@ export default function TripPlannerPage(props) {
       tripDesc: tripDesc,
       startLocale: startLocale,
       travelers: travelers,
-      travelDates: travelDates,
+      travelDates: travelDates.toString(),
       roundTrip: roundTrip,
       costsObj: costsObj,
       costsSum: costsSum,
       destinations: destinations,
       tripId: tripId,
+      user: user.email,
     });
     setImages([]);
     setTripDesc("");

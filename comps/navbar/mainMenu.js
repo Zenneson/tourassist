@@ -100,27 +100,22 @@ export default function MainMenu({
   };
 
   const signOutFunc = async () => {
-    if (!user) {
-      if (router.pathname !== "/") router.push("/");
-      else {
-        router.reload();
+    if (user) {
+      await recordLogout(user);
+      try {
+        await signOut(auth);
+        sessionStorage.removeItem("images");
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("visible");
+        sessionStorage.removeItem("mapSpin");
+        sessionStorage.removeItem("placeDataState");
+      } catch (error) {
+        console.log(error);
       }
-      return;
     }
-    await recordLogout(user);
-    try {
-      await signOut(auth);
-      sessionStorage.removeItem("images");
-      sessionStorage.removeItem("user");
-      sessionStorage.removeItem("visible");
-      sessionStorage.removeItem("mapSpin");
-      sessionStorage.removeItem("placeDataState");
-      if (router.pathname !== "/") router.push("/");
-      else {
-        router.reload();
-      }
-    } catch (error) {
-      console.log(error);
+    if (router.pathname !== "/") router.push("/");
+    else {
+      router.reload();
     }
   };
 

@@ -6,19 +6,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function MainCarousel() {
-  const images = [
-    "img/women.jpg",
-    "img/intro/coast.jpg",
-    "img/intro/bluehair.jpg",
-    "img/intro/street.jpg",
-    "img/intro/concert.jpg",
-    "img/intro/planewindow.jpg",
-    "img/intro/happyguy.jpg",
-    "img/intro/boat.jpg",
-    "img/intro/plane.jpg",
-  ];
-
+export default function MainCarousel({ images }) {
   const sliderRef = useRef();
   const { hovered, ref } = useHover();
 
@@ -45,7 +33,7 @@ export default function MainCarousel() {
     sliderRef.current.slickPrev();
   };
 
-  const slides = images.map((image, index) => (
+  const slides = images?.map((image, index) => (
     <BackgroundImage
       key={index}
       src={image}
@@ -56,7 +44,7 @@ export default function MainCarousel() {
     />
   ));
 
-  if (images.length === 1) {
+  if (images?.length === 1) {
     return (
       <Box
         style={{
@@ -72,69 +60,71 @@ export default function MainCarousel() {
   }
 
   return (
-    <Group
-      ref={ref}
-      spacing={0}
-      w={images.length > 1 ? "auto" : "650px"}
-      h={500}
-    >
-      <Center>
-        {hovered && images.length > 1 && (
-          // Previous Slider Button
-          <Button
-            h={490}
-            mb={7}
-            radius={"3px 0 0 3px"}
-            onClick={previous}
-            variant="outline"
-            color={"dark.4"}
-            p={0}
-            w={"5%"}
-            sx={{
-              border: "none",
-              "&:hover": {
-                backgroundColor: "transparent",
-                transform: "scale(1.2)",
-              },
+    images?.length > 0 && (
+      <Group
+        ref={ref}
+        spacing={0}
+        w={images?.length > 1 ? "auto" : "650px"}
+        h={500}
+      >
+        <Center>
+          {hovered && images?.length > 1 && (
+            // Previous Slider Button
+            <Button
+              h={490}
+              mb={7}
+              radius={"3px 0 0 3px"}
+              onClick={previous}
+              variant="outline"
+              color={"dark.4"}
+              p={0}
+              w={"5%"}
+              sx={{
+                border: "none",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                  transform: "scale(1.2)",
+                },
+              }}
+            >
+              <IconChevronLeft size={50} />
+            </Button>
+          )}
+          <Slider
+            ref={sliderRef}
+            {...slideSettings}
+            style={{
+              boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
+              width: "650px",
+              height: "500px",
             }}
           >
-            <IconChevronLeft size={50} />
-          </Button>
-        )}
-        <Slider
-          ref={sliderRef}
-          {...slideSettings}
-          style={{
-            boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
-            width: "650px",
-            height: "500px",
-          }}
-        >
-          {slides}
-        </Slider>
-        {hovered && images.length > 1 && (
-          // Next Slider Button
-          <Button
-            h={490}
-            mb={7}
-            radius={"3px 0 0 3px"}
-            onClick={next}
-            variant="outline"
-            color={"dark.4"}
-            p={0}
-            w={"5%"}
-            sx={{
-              border: "none",
-              "&:hover": {
-                backgroundColor: "transparent",
-                transform: "scale(1.2)",
-              },
-            }}
-          >
-            <IconChevronRight size={50} />
-          </Button>
-        )}
-      </Center>
-    </Group>
+            {slides}
+          </Slider>
+          {hovered && images?.length > 1 && (
+            // Next Slider Button
+            <Button
+              h={490}
+              mb={7}
+              radius={"3px 0 0 3px"}
+              onClick={next}
+              variant="outline"
+              color={"dark.4"}
+              p={0}
+              w={"5%"}
+              sx={{
+                border: "none",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                  transform: "scale(1.2)",
+                },
+              }}
+            >
+              <IconChevronRight size={50} />
+            </Button>
+          )}
+        </Center>
+      </Group>
+    )
   );
 }

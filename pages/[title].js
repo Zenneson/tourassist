@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { query, where, collectionGroup, getDocs } from "firebase/firestore";
+import { firestore } from "../libs/firebase";
 import {
   useMantineTheme,
   Avatar,
@@ -47,6 +49,7 @@ import Update from "../comps/tripinfo/update";
 import TripContent from "../comps/tripinfo/tripContent";
 import MainCarousel from "../comps/tripinfo/maincarousel";
 import TripDescription from "../comps/tripinfo/tripdescription";
+import { formatNumber, daysBefore } from "../libs/custom";
 
 export default function Trippage(props) {
   const theme = useMantineTheme();
@@ -56,12 +59,19 @@ export default function Trippage(props) {
   const [addUpdateDesc, setAddUpdateDesc] = useState(false);
   const [donating, setDonating] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [updates, setUpdates] = useState([]);
+  const [commentData, setCommentData] = useState([]);
   const router = useRouter();
+  const tripData = props.trip;
 
-  useEffect(() => {
-    router.prefetch("/thankyou");
-    router.prefetch("/purchase");
-  }, [router]);
+  const [visible, setVisible] = useSessionStorage({
+    key: "visible",
+    defaultValue: true,
+  });
+
+  const [mapSpin, setMapSpin] = useSessionStorage({
+    key: "mapSpin",
+  });
 
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -78,58 +88,28 @@ export default function Trippage(props) {
     defaultValue: [],
   });
 
-  const commentData = [
-    {
-      name: "Anonymus",
-      time: "10 mintues ago",
-      text: "Just donated! Can't wait to see the team swimming with the Loch Ness Monster in Scotland! #LegendaryAdventure",
-    },
-    {
-      name: "Jill Jailbreaker",
-      time: "10 mintues ago",
-      text: "Proud to support this amazing journey! Meeting the aliens at Area 51 sounds like a once-in-a-lifetime experience!",
-    },
-    {
-      name: "Bill Horsefighter",
-      time: "10 mintues ago",
-      text: "Just backed this epic trip! Excited to watch you guys discover the lost city of Atlantis. Good luck!",
-    },
-    {
-      name: "Anonymus",
-      time: "10 mintues ago",
-      text: "Happy to contribute! Dinosaur-watching in Jurassic Park seems like a childhood dream come true! Have fun!",
-    },
-    {
-      name: "Henry Silkeater",
-      time: "10 mintues ago",
-      text: "Donated! Can't wait to see the vlogs from this epic time-traveling trip. Say hi to the cavemen for me!",
-    },
-    {
-      name: "Anonymus",
-      time: "10 mintues ago",
-      text: "Supported! Have a blast exploring the underwater city of Rapture. Beware of the Big Daddies though! 😉",
-    },
-    {
-      name: "Anonymus",
-      time: "10 mintues ago",
-      text: "Just gave my support! Enjoy your teleportation adventure to Mars. Can't wait for the Martian selfies!",
-    },
-    {
-      name: "Anonymus",
-      time: "10 mintues ago",
-      text: "Contributed to the cause! Have fun at the North Pole Santa's Workshop tour! Bring back some elf souvenirs!",
-    },
-    {
-      name: "Anonymus",
-      time: "10 mintues ago",
-      text: "Proud to back this project! Can't wait to see the team climbing Mount Everest in just one day! 🏔️",
-    },
-    {
-      name: "Anonymus",
-      time: "10 mintues ago",
-      text: "Donated! Good luck discovering the Fountain of Youth, you guys! Don't forget to share the secret! 😉",
-    },
-  ];
+  const [donations, setDonations] = useSessionStorage({
+    key: "donations",
+    defaultValue: [],
+  });
+
+  useEffect(() => {
+    router.prefetch("/thankyou");
+    router.prefetch("/purchase");
+  }, [router]);
+
+  useEffect(() => {
+    if (tripData) {
+      setVisible(true);
+      setMapSpin(false);
+    }
+  }, [tripData, setMapSpin, setVisible]);
+
+  // {
+  //   name: "Anonymus",
+  //   time: "10 mintues ago",
+  //   text: "Just donated! Can't wait to see the team swimming with the Loch Ness Monster in Scotland! #LegendaryAdventure",
+  // },
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -153,7 +133,6 @@ export default function Trippage(props) {
 
   const showEditContentModal = () => {
     setAltModal(true);
-    setAddTripDesc(true);
     setDonating(false);
   };
 
@@ -169,14 +148,12 @@ export default function Trippage(props) {
 
   const closeEditContentModal = () => {
     setEditContentModal(false);
-    setAddTripDesc(false);
     setEditUpdate("");
     setPaid(false);
   };
 
   const closeAltModal = () => {
     setAltModal(false);
-    setAddTripDesc(false);
     setAddUpdateDesc(false);
   };
 
@@ -592,15 +569,15 @@ export default function Trippage(props) {
             align={"center"}
             pos={"relative"}
           >
-            <MainCarousel />
+            <MainCarousel imaages={tripData.imaages} />
             <Divider
               w={"80%"}
               color="dark.4"
               size={"md"}
-              mt={50}
+              mt={tripData.images.length > 0 ? 50 : 0}
               label={
                 <Title order={3} px={5} maw={"800px"} color="gray.6" fw={700}>
-                  Help me raise money to go on a Music Tour
+                  {tripData.tripTitle}
                 </Title>
               }
             />
@@ -712,44 +689,48 @@ export default function Trippage(props) {
               px={30}
               fz={14}
             >
-              <Divider
-                labelPosition="right"
-                w={"100%"}
-                label={
-                  // Edit Trip Details
-                  <Button
-                    compact
-                    size="xs"
-                    radius={25}
-                    pl={10}
-                    pr={15}
-                    variant="subtle"
-                    color="gray.6"
-                    leftIcon={
-                      <IconPencil
-                        size={17}
-                        style={{
-                          marginRight: -5,
-                          marginTop: -3,
-                        }}
-                      />
-                    }
-                    onClick={showEditContentModal}
-                  >
-                    Edit Travel Details
-                  </Button>
-                }
-              />
-              <TripDescription />
+              {user && user.email === tripData.user && (
+                <Divider
+                  labelPosition="right"
+                  w={"100%"}
+                  label={
+                    // Edit Trip Details
+                    <Button
+                      compact
+                      size="xs"
+                      radius={25}
+                      pl={10}
+                      pr={15}
+                      variant="subtle"
+                      color="gray.6"
+                      leftIcon={
+                        <IconPencil
+                          size={17}
+                          style={{
+                            marginRight: -5,
+                            marginTop: -3,
+                          }}
+                        />
+                      }
+                      onClick={showEditContentModal}
+                    >
+                      Edit Travel Details
+                    </Button>
+                  }
+                />
+              )}
+              <TripDescription desc={tripData.tripDesc} />
             </Box>
-            <Update
-              setEditContentModal={setEditContentModal}
-              setEditUpdate={setEditUpdate}
-              setAddUpdateDesc={setAddUpdateDesc}
-              setDonating={setDonating}
-              images={images}
-              setImages={setImages}
-            />
+            {updates.length > 0 && (
+              <Update
+                setEditContentModal={setEditContentModal}
+                setEditUpdate={setEditUpdate}
+                setAddUpdateDesc={setAddUpdateDesc}
+                setDonating={setDonating}
+                images={images}
+                setImages={setImages}
+              />
+            )}
             <Box
               className="pagePanel"
               w={"85%"}
@@ -789,7 +770,13 @@ export default function Trippage(props) {
                     </Button>
                   }
                 />{" "}
-                {comments}
+                {commentData.length === 0 ? (
+                  <Text w={"100%"} fz={14} ta={"center"}>
+                    Support this trip to leave a comment!
+                  </Text>
+                ) : (
+                  comments
+                )}
               </Box>
             </Box>
           </Flex>
@@ -815,12 +802,12 @@ export default function Trippage(props) {
                     GOAL
                   </Text>
                   <Title order={2} ta={"left"} color="green.7">
-                    $500
+                    $0
                     <Text ml={7} span inherit color="gray.7">
                       <Text fw={400} span inherit>
                         /
                       </Text>{" "}
-                      $1,000
+                      ${formatNumber(tripData.costsSum)}
                     </Text>
                   </Title>
                 </Box>
@@ -834,7 +821,7 @@ export default function Trippage(props) {
                     DAYS LEFT
                   </Text>
                   <Title order={2} ta={"center"} color="gray.7">
-                    15
+                    {daysBefore(tripData.travelDates)}
                   </Title>
                 </Box>
               </Group>
@@ -846,7 +833,7 @@ export default function Trippage(props) {
                 radius={"xl"}
                 mt={5}
               />
-              {user && (
+              {user && user.email === tripData.user && (
                 <Button.Group mt={10} w={"100%"}>
                   <Button
                     w={"100%"}
@@ -885,7 +872,12 @@ export default function Trippage(props) {
               )}
             </Box>
             <Box className="pagePanel">
-              <Donations dHeight={"calc(100vh - 365px)"} />
+              <Donations
+                user={user}
+                donations={donations}
+                tripUser={tripData.user}
+                dHeight={"calc(100vh - 365px)"}
+              />
             </Box>
           </Flex>
         </Flex>
@@ -894,3 +886,59 @@ export default function Trippage(props) {
     </>
   );
 }
+
+export const getStaticPaths = async () => {
+  // Fetch all documents from the 'trips' collection group
+  const queryData = collectionGroup(firestore, "trips");
+  let paths = [];
+
+  try {
+    const querySnapshot = await getDocs(queryData);
+    paths = querySnapshot.docs.map((doc) => {
+      // The document ID is used as 'title' in the URL
+      const title = doc.id;
+      return { params: { title } };
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  return {
+    paths,
+    fallback: true,
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
+  const { title } = params;
+
+  // Query all 'trips' collection
+  const query = collectionGroup(firestore, "trips");
+  try {
+    const querySnapshot = await getDocs(query);
+
+    // Find the document with an ID matching the 'title'
+    const tripDoc = querySnapshot.docs.find((doc) => doc.id === title);
+
+    if (!tripDoc) {
+      // No document found with the matching 'title'
+      console.log("No document found with the matching 'title'");
+      return {
+        notFound: true,
+      };
+    }
+
+    const trip = tripDoc.data();
+    return {
+      props: {
+        trip,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    // In case of error, return an empty props object
+    return {
+      props: {},
+    };
+  }
+};

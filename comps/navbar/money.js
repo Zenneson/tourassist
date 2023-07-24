@@ -28,6 +28,11 @@ export default function Money() {
   const theme = useMantineTheme();
   const router = useRouter();
 
+  const [donations, setDonations] = useSessionStorage({
+    key: "donations",
+    defaultValue: [],
+  });
+
   useEffect(() => {
     router.prefetch("/trippage");
   }, [router]);
