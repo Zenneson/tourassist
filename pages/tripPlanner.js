@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { doc, setDoc } from "firebase/firestore";
+import { firestore } from "../libs/firebase";
 import { motion } from "framer-motion";
 import {
   useMantineTheme,
@@ -49,6 +51,7 @@ import {
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import TripContent from "../comps/tripinfo/tripContent";
+import { estTimeStamp } from "../libs/custom";
 
 export default function TripPlannerPage(props) {
   const theme = useMantineTheme();
@@ -61,13 +64,21 @@ export default function TripPlannerPage(props) {
     key: "images",
     defaultValue: [],
   });
+  const [tripDesc, setTripDesc] = useSessionStorage({
+    key: "tripDesc",
+    defaultValue: "",
+  });
+  const [placeData, setPlaceData] = useSessionStorage({
+    key: "placeDataState",
+    defaultValue: [],
+  });
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startLocale, setStartLocale] = useState("");
   const [travelers, setTravelers] = useState(1);
   const travelersHandlerRef = useRef(null);
   const [travelDates, setTravelDates] = useState(null);
-  const [checked, setChecked] = useState(false);
+  const [roundTrip, setRoundTrip] = useState(false);
   const forceUpdate = useForceUpdate();
   const startLocaleRef = useRef(null);
   const [newCost, setNewCost] = useState([]);
@@ -78,10 +89,6 @@ export default function TripPlannerPage(props) {
   const [destinations, setDestinations] = useState([]);
   const [costsSum, setCostsSum] = useState(0);
   const router = useRouter();
-  const [placeData, setPlaceData] = useSessionStorage({
-    key: "placeDataState",
-    defaultValue: [],
-  });
   const dayjs = require("dayjs");
   var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
@@ -127,8 +134,8 @@ export default function TripPlannerPage(props) {
               ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               : ""
           }
-          stepHoldDelay={500}
-          stepHoldInterval={100}
+          stepHoldDelay={700}
+          stepHoldInterval={300}
           precision={2}
           min={0}
           size="md"
@@ -203,7 +210,7 @@ export default function TripPlannerPage(props) {
               labelPosition="right"
               label={
                 placeData.length === 1 &&
-                checked && (
+                roundTrip && (
                   <Text color="dimmed" fz={10} fs={"italic"}>
                     ROUND TRIP
                   </Text>
@@ -430,23 +437,142 @@ export default function TripPlannerPage(props) {
     });
   };
 
+  const placeExists = {
+    title: "Already set as destination",
+    message: `${startLocale} is set as a destination. Please choose another location.`,
+    color: "orange",
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
+    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+  };
+
+  const noTitle = {
+    title: "Missing Trip Title",
+    message: "Please provide a title for your trip.",
+    color: "red",
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
+    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+  };
+
+  const titleIsShort = {
+    title: "Trip Title is Short",
+    message: "Please provide a longer Title for your trip.",
+    color: "orange",
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
+    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+  };
+
+  const noDesc = {
+    title: "Add details about your trip",
+    message: "Please provide a description of your trip below.",
+    color: "red",
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
+    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+  };
+
+  const descIsShort = {
+    title: "Description is Short",
+    message: "Please provide more information about your trip.",
+    color: "orange",
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
+    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+  };
+
+  const generateTripId = () => {
+    const trip_title = tripTitle.replace(/ /g, "_").toLowerCase();
+    let now = new Date();
+    let date_time_string =
+      now.toISOString().slice(5, 7) +
+      now.toISOString().slice(8, 10) +
+      now.toISOString().slice(11, 13) +
+      now.toISOString().slice(14, 16) +
+      now.toISOString().slice(17, 19);
+    let trip_id = `${trip_title}_${date_time_string}`;
+    return trip_id;
+  };
+
+  const saveToDB = async (user) => {
+    const tripId = generateTripId();
+    await setDoc(doc(firestore, "users", user.email, "trips", tripId), {
+      creationTime: estTimeStamp(new Date()),
+      tripTitle: tripTitle,
+      images: images,
+      tripDesc: tripDesc,
+      startLocale: startLocale,
+      travelers: travelers,
+      travelDates: travelDates,
+      roundTrip: roundTrip,
+      costsObj: costsObj,
+      costsSum: costsSum,
+      destinations: destinations,
+      tripId: tripId,
+    });
+    setImages([]);
+    setTripDesc("");
+    setPlaceData([]);
+  };
+
+  // TODO - Pass info to Trippage
   const changeNextStep = () => {
-    if (active !== 3) {
-      nextStep();
-    }
-    if (active === 1) {
+    if (active === 2) {
+      if (tripTitle === "") {
+        notifications.show(noTitle);
+        return;
+      }
+      if (tripTitle.length < 11) {
+        notifications.show(titleIsShort);
+        return;
+      }
+      if (tripDesc === "") {
+        notifications.show(noDesc);
+        return;
+      }
+      if (tripDesc.length < 11) {
+        notifications.show(descIsShort);
+        return;
+      }
       setCostsObj(formatCostBreakdown(costList));
       setDestinations(formatPlaces(placeData));
     }
+    if (active !== 3) {
+      nextStep();
+    }
     if (active === 3) {
       // sessionStorage.removeItem("placeDataState");
-      setImages([]);
+      saveToDB(user);
       router.push("/trippage");
     }
   };
 
-  console.log("costsObj", costsObj);
-  console.log("destinations", destinations);
+  const placeCheck = () => {
+    placeData.map((place) => {
+      if (`${place.place}, ${place.region}` === startLocale) {
+        notifications.show(placeExists);
+        setStartLocale("");
+        setStartLocaleSearch("");
+        setStartLocaleData([]);
+      }
+    });
+  };
 
   const handleChange = async (e) => {
     const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
@@ -472,26 +598,6 @@ export default function TripPlannerPage(props) {
         console.log("Error fetching data for Country Autocomplete: ", error);
       }
     }
-  };
-
-  const placeCheck = () => {
-    placeData.map((place) => {
-      if (`${place.place}, ${place.region}` === startLocale) {
-        const wrongPlace = startLocale;
-        notifications.show({
-          title: "Already set as destination",
-          message: `You already have ${wrongPlace} in your list.`,
-          color: "red",
-          style: { backgroundColor: "#2e2e2e" },
-          icon: <IconAlertTriangle size={17} />,
-          autoClose: 2500,
-          style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
-        });
-        setStartLocale("");
-        setStartLocaleSearch("");
-        setStartLocaleData([]);
-      }
-    });
   };
 
   return (
@@ -528,7 +634,6 @@ export default function TripPlannerPage(props) {
           gap={10}
         >
           <Box w="100%" miw={500}>
-            {/* TODO   */}
             {active === 0 && (
               <motion.div {...animation}>
                 <Flex
@@ -702,8 +807,8 @@ export default function TripPlannerPage(props) {
                               labelPosition="left"
                               onLabel="YES"
                               offLabel="NO"
-                              checked={checked}
-                              onChange={() => setChecked(!checked)}
+                              checked={roundTrip}
+                              onChange={() => setRoundTrip(!roundTrip)}
                             />
                           }
                         />
@@ -767,7 +872,7 @@ export default function TripPlannerPage(props) {
                                     )}
                                   </Group>
                                 ))}
-                                {checked && startLocale && (
+                                {roundTrip && startLocale && (
                                   <>
                                     <IconArrowRightTail
                                       size={18}
@@ -950,7 +1055,7 @@ export default function TripPlannerPage(props) {
             {active === 1 && (
               <motion.div {...animation}>
                 <Places />
-                {checked && placeData.length > 1 && (
+                {roundTrip && placeData.length > 1 && (
                   <Box className="pagePanel" p={20} mb={20}>
                     <Group position="apart">
                       <Stack
@@ -1022,7 +1127,11 @@ export default function TripPlannerPage(props) {
                       },
                     }}
                   />
-                  <TripContent images={images} setImages={setImages} />
+                  <TripContent
+                    images={images}
+                    setTripDesc={setTripDesc}
+                    setImages={setImages}
+                  />
                 </Stack>
               </motion.div>
             )}
@@ -1133,7 +1242,7 @@ export default function TripPlannerPage(props) {
                     }
                   }}
                   stepHoldDelay={500}
-                  stepHoldInterval={100}
+                  stepHoldInterval={300}
                   variant="filled"
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   formatter={(value) =>

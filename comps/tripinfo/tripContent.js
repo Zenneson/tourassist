@@ -38,11 +38,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent({
-  addTripDesc,
   addUpdateDesc,
   donating,
   images,
   setImages,
+  setTripDesc,
 }) {
   const theme = useMantineTheme();
   const [showToolbar, setShowToolbar] = useState(false);
@@ -53,11 +53,9 @@ export default function TripContent({
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
   const [editorFocused, setEditorFocused] = useState(false);
-  const [tripDesc, setTripDesc] = useState("");
 
   const router = useRouter();
 
-  const tripSummary = "Content for trip description";
   const updateDetails = "Update Content";
 
   const sliderRef = useRef();
@@ -112,13 +110,7 @@ export default function TripContent({
             : "Update us here...",
       }),
     ],
-    content: donating
-      ? ""
-      : addTripDesc
-      ? tripSummary
-      : addUpdateDesc
-      ? updateDetails
-      : "",
+    content: donating ? "" : addUpdateDesc ? updateDetails : "",
   });
 
   const handleScroll = (event) => {

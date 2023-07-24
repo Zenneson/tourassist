@@ -53,7 +53,6 @@ export default function Trippage(props) {
   const [altModal, setAltModal] = useState(false);
   const [editContentModal, setEditContentModal] = useState(false);
   const [editUpdate, setEditUpdate] = useState("");
-  const [addTripDesc, setAddTripDesc] = useState(false);
   const [addUpdateDesc, setAddUpdateDesc] = useState(false);
   const [donating, setDonating] = useState(false);
   const [paid, setPaid] = useState(false);
@@ -69,7 +68,15 @@ export default function Trippage(props) {
     defaultValue: null,
   });
 
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useSessionStorage({
+    key: "images",
+    defaultValue: [],
+  });
+
+  const [tripDesc, setTripDesc] = useSessionStorage({
+    key: "tripDesc",
+    defaultValue: [],
+  });
 
   const commentData = [
     {
@@ -243,7 +250,7 @@ export default function Trippage(props) {
               </Flex>
             </Box>
             <TripContent
-              addTripDesc={addTripDesc}
+              setTripDesc={setTripDesc}
               addUpdateDesc={addUpdateDesc}
               donating={donating}
               images={images}
@@ -541,7 +548,7 @@ export default function Trippage(props) {
             {!donating && (
               <>
                 <TripContent
-                  addTripDesc={addTripDesc}
+                  setTripDesc={setTripDesc}
                   addUpdateDesc={addUpdateDesc}
                   donating={donating}
                   images={images}

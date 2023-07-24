@@ -3,7 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, addDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
   useMantineTheme,
@@ -161,31 +161,14 @@ export default function LoginComp({ auth }) {
     },
   });
 
-  // TODO - get Auth working correctly
-  const addUser = async (user) => {
-    setVisible(true);
-    setUser(user);
-    await setDoc(doc(firestore, "users", user.email), {
-      firstName: form.values.firstName,
-      lastName: form.values.lastName,
-      email: form.values.email,
-      uid: user.uid,
-      creationTime: estTimeStamp(user.metadata.creationTime),
-    });
-    notifications.show({
-      color: "green",
-      icon: <IconCheck size={20} />,
-      style: {
-        backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
-      },
-      title: "Account Created",
-      message: `${form.values.firstName} ${form.values.lastName}'s account has been created.`,
-    });
-  };
-
-  const setLogin = async (user) => {
-    setVisible(true);
-    setUser(user);
+  const newAccount = {
+    color: "green",
+    icon: <IconCheck size={20} />,
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    title: "Account Created",
+    message: `${form.values.firstName} ${form.values.lastName}'s account has been created.`,
   };
 
   const alreadyExists = {
@@ -206,6 +189,34 @@ export default function LoginComp({ auth }) {
     },
     title: "User not found",
     message: `An account for ${form.values.email} does not exist.`,
+  };
+
+  const wrongPassword = {
+    color: "red",
+    icon: <IconX size={20} />,
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    title: "Wrong password",
+    message: `The password you entered is incorrect.`,
+  };
+
+  const addUser = async (user) => {
+    setVisible(true);
+    setUser(user);
+    await addDoc(doc(firestore, "users", user.email), {
+      firstName: form.values.firstName,
+      lastName: form.values.lastName,
+      email: form.values.email,
+      uid: user.uid,
+      creationTime: estTimeStamp(user.metadata.creationTime),
+    });
+    notifications.show(newAccount);
+  };
+
+  const setLogin = async (user) => {
+    setVisible(true);
+    setUser(user);
   };
 
   const handleLogin = () => {
@@ -239,6 +250,9 @@ export default function LoginComp({ auth }) {
           console.log("Error Message: ", errorMessage);
           if (errorCode === "auth/user-not-found") {
             notifications.show(userNotFound);
+          }
+          if (errorCode === "auth/wrong-password") {
+            notifications.show(wrongPassword);
           }
         });
     }
@@ -345,7 +359,7 @@ export default function LoginComp({ auth }) {
                     mt="xs"
                     error={
                       form.errors.password &&
-                      "Password doesn not meet requirements"
+                      "Password does not meet requirements"
                     }
                   />
                 </div>

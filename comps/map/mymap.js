@@ -31,6 +31,7 @@ import {
   IconListSearch,
   IconPlane,
   IconLuggage,
+  IconAlertTriangle,
   IconCheck,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
@@ -711,7 +712,8 @@ export default function Mymap({
       setListOpened(true);
       if (checkPlace(place)) {
         notifications.show({
-          color: "red",
+          color: "orange",
+          icon: <IconAlertTriangle size={20} />,
           style: {
             backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
           },
