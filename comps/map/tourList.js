@@ -27,11 +27,10 @@ export default function TourList({
 
   const submitTourList = () => {
     const newPlaceData = places.map((location) => {
-      const { place, region, fullName, costs } = location;
+      const { place, region, costs } = location;
       return {
         place: place,
         region: region,
-        fullName: fullName,
         costs: costs,
       };
     });

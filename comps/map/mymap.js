@@ -399,8 +399,7 @@ export default function Mymap({
   }
 
   const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
-    const { label, region, country, group, center, border, fullname, ...rest } =
-      props;
+    const { label, region, country, group, center, border, ...rest } = props;
     const data = {
       label,
       region,
@@ -408,7 +407,6 @@ export default function Mymap({
       group,
       center,
       border,
-      fullname,
     };
     return (
       <Box ref={ref} {...rest} p={"5px 10px"}>
@@ -434,7 +432,7 @@ export default function Mymap({
   };
 
   const SelectItem = React.forwardRef(function SelectItem(props, ref) {
-    const { label, region, country, group, center, fullname, ...rest } = props;
+    const { label, region, country, group, center, ...rest } = props;
     return (
       <Box
         ref={ref}
@@ -505,7 +503,6 @@ export default function Mymap({
         country: feature.place_name.split(", ").pop(),
         region: feature.place_name.split(", ", 2)[1],
         center: feature.center,
-        fullname: feature.place_name,
         shortcode: feature.properties?.short_code,
       }));
 
@@ -706,10 +703,6 @@ export default function Mymap({
           ? `${area.state || area.region}, ${area.country}`
           : area.country === area.label
           ? ""
-          : area.country,
-      fullName:
-        area.type === "city" && area.country === "United States"
-          ? `${area.state || area.region}, ${area.country}`
           : area.country,
       costs: ["FLIGHT", "HOTEL"],
     };

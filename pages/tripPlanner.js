@@ -74,6 +74,8 @@ export default function TripPlannerPage(props) {
   const newCostRef = useRef(null);
   const [tripTitle, setTripTitle] = useState("");
   const [costList, setCostList] = useState({});
+  const [costsObj, setCostsObj] = useState({});
+  const [destinations, setDestinations] = useState([]);
   const [costsSum, setCostsSum] = useState(0);
   const router = useRouter();
   const [placeData, setPlaceData] = useSessionStorage({
@@ -407,9 +409,34 @@ export default function TripPlannerPage(props) {
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
 
+  const formatCostBreakdown = (obj) => {
+    const result = {};
+    for (let key in obj) {
+      const [country, expense] = key.split("_");
+      if (!result[country]) {
+        result[country] = {};
+      }
+      result[country][expense] = obj[key];
+    }
+    return result;
+  };
+
+  const formatPlaces = (input) => {
+    return input.map((item) => {
+      return {
+        place: item.place,
+        region: item.region,
+      };
+    });
+  };
+
   const changeNextStep = () => {
     if (active !== 3) {
       nextStep();
+    }
+    if (active === 1) {
+      setCostsObj(formatCostBreakdown(costList));
+      setDestinations(formatPlaces(placeData));
     }
     if (active === 3) {
       // sessionStorage.removeItem("placeDataState");
@@ -417,6 +444,9 @@ export default function TripPlannerPage(props) {
       router.push("/trippage");
     }
   };
+
+  console.log("costsObj", costsObj);
+  console.log("destinations", destinations);
 
   const handleChange = async (e) => {
     const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
@@ -446,7 +476,7 @@ export default function TripPlannerPage(props) {
 
   const placeCheck = () => {
     placeData.map((place) => {
-      if (place.fullName === startLocale) {
+      if (`${place.place}, ${place.region}` === startLocale) {
         const wrongPlace = startLocale;
         notifications.show({
           title: "Already set as destination",
