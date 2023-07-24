@@ -58,6 +58,7 @@
     "firebase": "^9.16.0",
     "framer-motion": "^8.5.2",
     "mapbox-gl": "^2.15.0",
+    "moment-timezone": "^0.5.43",
     "next": "13.0.6",
     "nextjs": "^0.0.3",
     "react": "^18.2.0",

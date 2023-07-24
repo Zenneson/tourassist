@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
+import { firestore } from "../../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { RemoveScroll } from "@mantine/core";
@@ -26,6 +28,7 @@ import {
   IconMoon,
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
+import { estTimeStamp } from "../../libs/custom";
 
 export default function MainMenu({
   auth,
@@ -90,7 +93,13 @@ export default function MainMenu({
     setPanelShow(false);
   };
 
-  const signOutFunc = () => {
+  const recordLogout = async (user) => {
+    await updateDoc(doc(firestore, "users", user.email), {
+      lastLogout: estTimeStamp(new Date()),
+    });
+  };
+
+  const signOutFunc = async () => {
     if (!user) {
       if (router.pathname !== "/") router.push("/");
       else {
@@ -98,21 +107,21 @@ export default function MainMenu({
       }
       return;
     }
-    signOut(auth)
-      .then(() => {
-        sessionStorage.removeItem("images");
-        sessionStorage.removeItem("user");
-        sessionStorage.removeItem("visible");
-        sessionStorage.removeItem("mapSpin");
-        sessionStorage.removeItem("placeDataState");
-        if (router.pathname !== "/") router.push("/");
-        else {
-          router.reload();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await recordLogout(user);
+    try {
+      await signOut(auth);
+      sessionStorage.removeItem("images");
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("visible");
+      sessionStorage.removeItem("mapSpin");
+      sessionStorage.removeItem("placeDataState");
+      if (router.pathname !== "/") router.push("/");
+      else {
+        router.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -201,7 +210,7 @@ export default function MainMenu({
                     : theme.colors.dark[9]
                 }
               >
-                {user?.providerData[0].email}
+                {user.email}
               </Text>
             </Button>
           )}

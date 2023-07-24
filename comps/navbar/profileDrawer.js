@@ -6,7 +6,6 @@ import AccountInfo from "./accountInfo";
 import Money from "./money";
 import {
   createStyles,
-  Avatar,
   Drawer,
   Space,
   Group,
@@ -17,6 +16,8 @@ import {
   Box,
   NavLink,
   Divider,
+  Center,
+  Badge,
 } from "@mantine/core";
 import {
   IconUser,
@@ -28,6 +29,7 @@ import {
   IconGavel,
   IconInfoCircle,
 } from "@tabler/icons-react";
+import { addEllipsis } from "../../libs/custom";
 
 const useStyles = createStyles((theme) => ({
   icon: {
@@ -186,35 +188,19 @@ export default function ProfileDrawer({
         <Space h={95} />
         <Divider mt={0} mb={20} w={"253px"} ml={"15px"} opacity={0.4} />
         {user && (
-          <Flex
-            direction="column"
-            gap="xs"
-            mb={10}
-            sx={{
-              userSelect: "none",
-            }}
-          >
-            <Avatar
-              size={70}
-              src={user?.providerData[0].photoURL}
-              radius="xl"
-              mr={7}
-              mx="auto"
-            />
-            <Text
-              variant="outline"
-              ta="center"
-              w={"50%"}
-              ml={"25%"}
-              fz={9}
-              sx={{
-                textTransform: "uppercase",
-              }}
-            >
-              {user?.providerData[0].email}
-            </Text>
-            <Divider w={"90%"} mt={5} ml={"5%"} opacity={0.2} />
-          </Flex>
+          <>
+            <Center>
+              <Badge
+                variant="dot"
+                sx={{
+                  cursor: "pointer",
+                }}
+              >
+                {addEllipsis(user.email, 40)}
+              </Badge>
+            </Center>
+            <Divider w={"90%"} mt={20} ml={"5%"} opacity={0.2} />
+          </>
         )}
         <Group spacing={8} mt={10}>
           {router.pathname !== "/" && (

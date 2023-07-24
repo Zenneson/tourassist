@@ -37,6 +37,7 @@ import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
 import TourList from "./tourList";
 import Loader from "../loader";
+import { addEllipsis } from "../../libs/custom";
 
 export default function Mymap({
   listOpened,
@@ -463,7 +464,7 @@ export default function Mymap({
       >
         <Group spaceing={0} w={"100%"} position="left">
           {icon}
-          <Text>{addEllipsis(label)}</Text>
+          <Text>{addEllipsis(label, 26)}</Text>
         </Group>
       </Box>
     );
@@ -697,14 +698,6 @@ export default function Mymap({
     goToLocation("city", city[1], 12, area.country, city[0]);
   };
 
-  const addEllipsis = (string) => {
-    if (string.length > 26) {
-      return string.substring(0, 26) + "...";
-    } else {
-      return string;
-    }
-  };
-
   const choosePlace = (choice) => {
     const place = {
       place: area.label,
@@ -919,7 +912,8 @@ export default function Mymap({
                       area.country === "United States"
                         ? area.country
                         : area.label
-                    }?`
+                    }?`,
+                    28
                   )}
                   onItemSubmit={(e) => locationHandler(e)}
                   data={placeData}
@@ -1029,7 +1023,7 @@ export default function Mymap({
               className={classes.select}
               size="md"
               radius={"25px 0 0 25px"}
-              placeholder={`Select ${area.label}?`}
+              placeholder={`Select ${addEllipsis(area.label, 19)}?`}
               itemComponent={TravelItem}
               nothingFound="Nobody here"
               data={travelChoices}

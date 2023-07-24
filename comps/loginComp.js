@@ -3,7 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
   useMantineTheme,
@@ -26,6 +26,7 @@ import { useToggle, useSessionStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconX, IconCheck, IconUserCircle } from "@tabler/icons-react";
 import { useRouter } from "next/router";
+import { estTimeStamp } from "../libs/custom";
 
 const useStyles = createStyles((theme, { floating }) => ({
   root: {
@@ -162,16 +163,85 @@ export default function LoginComp({ auth }) {
 
   // TODO - get Auth working correctly
   const addUser = async (user) => {
-    console.log("User: ", user);
+    setVisible(true);
+    setUser(user);
+    await setDoc(doc(firestore, "users", user.email), {
+      firstName: form.values.firstName,
+      lastName: form.values.lastName,
+      email: form.values.email,
+      uid: user.uid,
+      creationTime: estTimeStamp(user.metadata.creationTime),
+    });
+    notifications.show({
+      color: "green",
+      icon: <IconCheck size={20} />,
+      style: {
+        backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      },
+      title: "Account Created",
+      message: `${form.values.firstName} ${form.values.lastName}'s account has been created.`,
+    });
+  };
 
-    // await setDoc(
-    //   doc(firestore, "users", user?.email || user?.providerData[0].email),
-    //   {
-    //     name: user.displayName || user?.providerData[0].displayName,
-    //     email: user.email || user?.providerData[0].email,
-    //     avi: user.photoURL || user?.providerData[0].photoURL,
-    //   }
-    // );
+  const setLogin = async (user) => {
+    setVisible(true);
+    setUser(user);
+  };
+
+  const alreadyExists = {
+    color: "red",
+    icon: <IconX size={20} />,
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    title: "Email already in use",
+    message: `${form.values.email} is linked to another account.`,
+  };
+
+  const userNotFound = {
+    color: "red",
+    icon: <IconX size={20} />,
+    style: {
+      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+    },
+    title: "User not found",
+    message: `An account for ${form.values.email} does not exist.`,
+  };
+
+  const handleLogin = () => {
+    if (type === "sign-up") {
+      createUserWithEmailAndPassword(
+        auth,
+        form.values.email,
+        form.values.password
+      )
+        .then((userCredential) => {
+          addUser(userCredential.user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("Error Code: ", errorCode);
+          console.log("Error Message: ", errorMessage);
+          if (errorCode === "auth/email-already-in-use") {
+            notifications.show(alreadyExists);
+          }
+        });
+    } else if (type === "login") {
+      signInWithEmailAndPassword(auth, form.values.email, form.values.password)
+        .then((userCredential) => {
+          setLogin(userCredential.user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("Error Code: ", errorCode);
+          console.log("Error Message: ", errorMessage);
+          if (errorCode === "auth/user-not-found") {
+            notifications.show(userNotFound);
+          }
+        });
+    }
   };
 
   return (
@@ -199,56 +269,7 @@ export default function LoginComp({ auth }) {
             opacity={0.7}
           />
         )}
-        <form
-          onSubmit={form.onSubmit((event) => {
-            if (type === "sign-up") {
-              createUserWithEmailAndPassword(
-                auth,
-                form.values.email,
-                form.values.password
-              )
-                .then((userCredential) => {
-                  const user = userCredential.user;
-                  setVisible(true);
-                  setUser(user);
-                })
-                .catch((error) => {
-                  const errorCode = error.code;
-                  const errorMessage = error.message;
-                  console.log("Error Code: ", errorCode);
-                  console.log("Error Message: ", errorMessage);
-                  if (errorCode === "auth/email-already-in-use") {
-                    notifications.show({
-                      color: "red",
-                      style: {
-                        backgroundColor:
-                          theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
-                      },
-                      title: "Email already in use",
-                      message: `	${form.values.email} is linked to another account.`,
-                    });
-                  }
-                });
-            } else {
-              signInWithEmailAndPassword(
-                auth,
-                form.values.email,
-                form.values.password
-              )
-                .then((userCredential) => {
-                  const user = userCredential.user;
-                  setVisible(true);
-                  setUser(user);
-                })
-                .catch((error) => {
-                  const errorCode = error.code;
-                  const errorMessage = error.message;
-                  console.log("Error Code: ", errorCode);
-                  console.log("Error Message: ", errorMessage);
-                });
-            }
-          })}
-        >
+        <form onSubmit={form.onSubmit(handleLogin)}>
           <Stack>
             {type === "sign-up" && (
               <Group mt={20} grow>
@@ -370,7 +391,7 @@ export default function LoginComp({ auth }) {
               <Anchor
                 component="button"
                 type="button"
-                color="dimmed"
+                color="#fff"
                 size="xs"
                 onClick={toggle}
               >
