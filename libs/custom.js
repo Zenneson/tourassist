@@ -18,17 +18,24 @@ export const addEllipsis = (string, num) => {
 };
 
 export const formatNumber = (num) => {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 export const daysBefore = (dateString) => {
-  const inputDate = moment.tz(
-    dateString,
-    "MMMM DD, YYYY [at] hh:mm:ss A [UTC]Z",
-    "UTC"
-  );
+  const format = "MMDDYYYY";
+  const inputDate = moment(dateString, format);
   inputDate.subtract(1, "days");
-  const today = moment.tz("UTC");
+  const today = moment();
   const days = inputDate.diff(today, "days");
   return days;
+};
+
+export const convertDateString = (dateString) => {
+  const date = moment.tz(dateString, "UTC");
+  if (!date.isValid()) {
+    console.error("Invalid date string");
+    return;
+  }
+  const formattedDate = date.format("MMDDYYYY");
+  return formattedDate;
 };

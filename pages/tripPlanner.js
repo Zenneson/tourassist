@@ -51,7 +51,7 @@ import {
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import TripContent from "../comps/tripinfo/tripContent";
-import { estTimeStamp } from "../libs/custom";
+import { estTimeStamp, convertDateString } from "../libs/custom";
 
 export default function TripPlannerPage(props) {
   const theme = useMantineTheme();
@@ -84,6 +84,7 @@ export default function TripPlannerPage(props) {
   const [newCost, setNewCost] = useState([]);
   const newCostRef = useRef(null);
   const [tripTitle, setTripTitle] = useState("");
+  const [tripId, setTripId] = useState("");
   const [costList, setCostList] = useState({});
   const [costsObj, setCostsObj] = useState({});
   const [destinations, setDestinations] = useState([]);
@@ -134,8 +135,8 @@ export default function TripPlannerPage(props) {
               ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               : ""
           }
-          stepHoldDelay={700}
-          stepHoldInterval={300}
+          stepHoldDelay={800}
+          stepHoldInterval={400}
           precision={2}
           min={0}
           size="md"
@@ -511,7 +512,7 @@ export default function TripPlannerPage(props) {
   };
 
   const saveToDB = async (user) => {
-    const tripId = generateTripId();
+    const travel_date = travelDates.toString();
     await setDoc(doc(firestore, "users", user.email, "trips", tripId), {
       creationTime: estTimeStamp(new Date()),
       tripTitle: tripTitle,
@@ -519,7 +520,7 @@ export default function TripPlannerPage(props) {
       tripDesc: tripDesc,
       startLocale: startLocale,
       travelers: travelers,
-      travelDates: travelDates.toString(),
+      travelDate: convertDateString(travel_date),
       roundTrip: roundTrip,
       costsObj: costsObj,
       costsSum: costsSum,
@@ -558,9 +559,9 @@ export default function TripPlannerPage(props) {
       nextStep();
     }
     if (active === 3) {
-      // sessionStorage.removeItem("placeDataState");
+      setTripId(generateTripId());
       saveToDB(user);
-      router.push("/trippage");
+      router.push("/" + tripId);
     }
   };
 
@@ -1242,8 +1243,8 @@ export default function TripPlannerPage(props) {
                       setCostsSum(numericValue);
                     }
                   }}
-                  stepHoldDelay={500}
-                  stepHoldInterval={300}
+                  stepHoldDelay={800}
+                  stepHoldInterval={400}
                   variant="filled"
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   formatter={(value) =>

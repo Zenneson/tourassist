@@ -13,10 +13,10 @@ import {
   Table,
   Title,
 } from "@mantine/core";
-import { useIntersection } from "@mantine/hooks";
+import { useIntersection, useSessionStorage } from "@mantine/hooks";
 import { IconReload } from "@tabler/icons-react";
 
-export default function Donations({ dHeight, donations, tripUser, user }) {
+export default function Donations({ dHeight }) {
   const theme = useMantineTheme();
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
@@ -25,8 +25,23 @@ export default function Donations({ dHeight, donations, tripUser, user }) {
     threshold: 1,
   });
 
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
+
+  const [donations, setDonations] = useSessionStorage({
+    key: "donations",
+    defaultValue: [],
+  });
+
+  const [tripData, setTripData] = useSessionStorage({
+    key: "tripData",
+    defaultValue: [],
+  });
+
   const donateOrder =
-    sorted === "time" && donations.length !== 0
+    sorted === "time" && donations?.length !== 0
       ? donations
       : donations.sort((a, b) => (a.amount < b.amount ? 1 : -1));
 
@@ -99,7 +114,6 @@ export default function Donations({ dHeight, donations, tripUser, user }) {
         pb={20}
         m={0}
         mah={dHeight}
-        // mih={350}
         ref={donationsRef}
         type="auto"
         sx={{
@@ -108,18 +122,15 @@ export default function Donations({ dHeight, donations, tripUser, user }) {
         }}
       >
         <Table verticalSpacing="xs" highlightOnHover striped withColumnBorders>
-          <tbody>
-            {rows.length !== 0 ? (
-              rows
-            ) : (
-              <Text color="dimmed" ta="center" fz={12}>
-                {user && user.email === tripUser
-                  ? "The donations will be listed here"
-                  : "Be the first to donate!"}
-              </Text>
-            )}
-          </tbody>
+          <tbody>{rows.length !== 0 && rows}</tbody>
         </Table>
+        {rows.length === 0 && (
+          <Text color="dimmed" ta="center" fz={12}>
+            {user && user.email === tripData?.user
+              ? "Donations will be listed here"
+              : "Be the first to donate!"}
+          </Text>
+        )}
         <Box ref={ref} />
         <Center>
           {/* <Button

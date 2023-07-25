@@ -9,11 +9,9 @@ export default function TripDescription({ desc }) {
   return (
     <>
       <Text lineClamp={readmore === "closed" && 5}>
-        <Box ref={ref}>
-          <div dangerouslySetInnerHTML={{ __html: desc }} />
-        </Box>
+        <Box ref={ref} dangerouslySetInnerHTML={{ __html: desc }} />
       </Text>
-      {height > 122 && (
+      {(height > 100 || readmore === "open") && (
         <Divider
           labelPosition="right"
           w={"100%"}

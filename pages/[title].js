@@ -61,8 +61,8 @@ export default function Trippage(props) {
   const [paid, setPaid] = useState(false);
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
+  const [tripImages, setTripImages] = useState([]);
   const router = useRouter();
-  const tripData = props.trip;
 
   const [visible, setVisible] = useSessionStorage({
     key: "visible",
@@ -93,17 +93,24 @@ export default function Trippage(props) {
     defaultValue: [],
   });
 
+  const [tripData, setTripData] = useSessionStorage({
+    key: "tripData",
+    defaultValue: [],
+  });
+
   useEffect(() => {
     router.prefetch("/thankyou");
     router.prefetch("/purchase");
   }, [router]);
 
   useEffect(() => {
-    if (tripData) {
+    if (props.trip) {
       setVisible(true);
       setMapSpin(false);
+      setTripData(props.trip);
+      setTripImages(props.trip.images);
     }
-  }, [tripData, setMapSpin, setVisible]);
+  }, [props.trip, setTripData, setMapSpin, setVisible]);
 
   // {
   //   name: "Anonymus",
@@ -569,12 +576,13 @@ export default function Trippage(props) {
             align={"center"}
             pos={"relative"}
           >
-            <MainCarousel imaages={tripData.imaages} />
+            {console.log(tripImages)}
+            <MainCarousel tripImages={tripImages} />
             <Divider
               w={"80%"}
               color="dark.4"
               size={"md"}
-              mt={tripData.images.length > 0 ? 50 : 0}
+              mt={tripData.images?.length > 0 ? 50 : 0}
               label={
                 <Title order={3} px={5} maw={"800px"} color="gray.6" fw={700}>
                   {tripData.tripTitle}
@@ -749,30 +757,34 @@ export default function Trippage(props) {
                 }
               />
               <Box pl={10}>
-                <Divider
-                  mb={20}
-                  w={"100%"}
-                  labelPosition="right"
-                  label={
-                    // Show Donate Modal Button Near Comments
-                    <Button
-                      size="xs"
-                      radius={25}
-                      px={15}
-                      variant="light"
-                      color="gray.6"
-                      onClick={showDonateModal}
-                    >
-                      <Flex align={"center"} gap={5}>
-                        DONATE
-                        <IconHeartHandshake size={20} />
-                      </Flex>
-                    </Button>
-                  }
-                />{" "}
+                {user && user.email !== tripData.user && (
+                  <Divider
+                    mb={20}
+                    w={"100%"}
+                    labelPosition="right"
+                    label={
+                      // Show Donate Modal Button Near Comments
+                      <Button
+                        size="xs"
+                        radius={25}
+                        px={15}
+                        variant="light"
+                        color="gray.6"
+                        onClick={showDonateModal}
+                      >
+                        <Flex align={"center"} gap={5}>
+                          DONATE
+                          <IconHeartHandshake size={20} />
+                        </Flex>
+                      </Button>
+                    }
+                  />
+                )}
                 {commentData.length === 0 ? (
-                  <Text w={"100%"} fz={14} ta={"center"}>
-                    Support this trip to leave a comment!
+                  <Text w={"100%"} fz={12} ta={"center"}>
+                    {user && user.email !== tripData.user
+                      ? "Donate to leave a comment!"
+                      : "Donor's comments will appear here"}
                   </Text>
                 ) : (
                   comments
@@ -821,7 +833,7 @@ export default function Trippage(props) {
                     DAYS LEFT
                   </Text>
                   <Title order={2} ta={"center"} color="gray.7">
-                    {daysBefore(tripData.travelDates)}
+                    {daysBefore(tripData?.travelDate).toString()}
                   </Title>
                 </Box>
               </Group>
@@ -855,7 +867,7 @@ export default function Trippage(props) {
                   </Button>
                 </Button.Group>
               )}
-              {!user && (
+              {user && user.email !== tripData.user && (
                 <Button
                   mt={10}
                   fullWidth
@@ -872,12 +884,7 @@ export default function Trippage(props) {
               )}
             </Box>
             <Box className="pagePanel">
-              <Donations
-                user={user}
-                donations={donations}
-                tripUser={tripData.user}
-                dHeight={"calc(100vh - 365px)"}
-              />
+              <Donations dHeight={"calc(100vh - 365px)"} />
             </Box>
           </Flex>
         </Flex>
