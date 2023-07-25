@@ -5,7 +5,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function MainCarousel({ tripImages }) {
+export default function MainCarousel(props) {
+  const { tripImages } = props;
   const sliderRef = useRef();
 
   const slideSettings = {

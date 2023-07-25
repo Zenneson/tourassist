@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useMantineTheme, Box, Image, LoadingOverlay } from "@mantine/core";
 
-export default function Loader({ pageLoaded }) {
+export default function Loader(props) {
+  const { pageLoaded } = props;
   const theme = useMantineTheme();
   const Globe = () => (
     <Box>

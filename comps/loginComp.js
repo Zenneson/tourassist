@@ -59,7 +59,8 @@ const useStyles = createStyles((theme, { floating }) => ({
   },
 }));
 
-export default function LoginComp({ auth, mapLoaded }) {
+export default function LoginComp(props) {
+  const { auth, mapLoaded } = props;
   const theme = useMantineTheme();
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);

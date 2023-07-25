@@ -4,11 +4,8 @@ import { useMantineTheme } from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import Loader from "./loader";
 
-export function RouterTransition({
-  setPanelShow,
-  setMainMenuOpened,
-  setDropDownOpened,
-}) {
+export function RouterTransition(props) {
+  const { setPanelShow, setMainMenuOpened, setDropDownOpened } = props;
   const theme = useMantineTheme();
   const router = useRouter();
 

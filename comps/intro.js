@@ -16,7 +16,8 @@ import { IconWorld } from "@tabler/icons-react";
 import { useSessionStorage, useMediaQuery } from "@mantine/hooks";
 import LoginComp from "./loginComp";
 
-export default function Intro({ auth, mapLoaded }) {
+export default function Intro(props) {
+  const { auth, mapLoaded } = props;
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [user, setUser] = useSessionStorage({

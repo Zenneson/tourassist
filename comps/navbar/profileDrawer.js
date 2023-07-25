@@ -75,16 +75,17 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function ProfileDrawer({
-  active,
-  setActive,
-  panelShow,
-  setPanelShow,
-  mainMenuOpened,
-  openMenu,
-  signOutFunc,
-}) {
+export default function ProfileDrawer(props) {
   const { classes, cx } = useStyles();
+  const {
+    active,
+    setActive,
+    panelShow,
+    setPanelShow,
+    mainMenuOpened,
+    openMenu,
+    signOutFunc,
+  } = props;
   const [user, setUser] = useSessionStorage({ key: "user" });
   const router = useRouter();
 

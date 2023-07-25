@@ -40,14 +40,15 @@ import TourList from "./tourList";
 import Loader from "../loader";
 import { addEllipsis } from "../../libs/custom";
 
-export default function Mymap({
-  listOpened,
-  setListOpened,
-  searchOpened,
-  dropDownOpened,
-  mapLoaded,
-  setMapLoaded,
-}) {
+export default function Mymap(props) {
+  const {
+    listOpened,
+    setListOpened,
+    searchOpened,
+    dropDownOpened,
+    mapLoaded,
+    setMapLoaded,
+  } = props;
   const theme = useMantineTheme();
   const mapRef = useRef();
   const router = useRouter();

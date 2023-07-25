@@ -125,7 +125,7 @@ const searchData = results.map((result, index) => (
   </>
 ));
 
-export default function Page() {
+export default function SearchPage() {
   return (
     <>
       <Center mt={120} mb={50}>

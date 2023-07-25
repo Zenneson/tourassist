@@ -16,7 +16,8 @@ import {
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
 import { IconReload } from "@tabler/icons-react";
 
-export default function Donations({ dHeight }) {
+export default function Donations(props) {
+  const { dHeight } = props;
   const theme = useMantineTheme();
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();

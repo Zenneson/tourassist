@@ -12,12 +12,8 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons-react";
 import PlaceListItem from "./placeListItem";
 
-export default function TourList({
-  listOpened,
-  setListOpened,
-  places,
-  setPlaces,
-}) {
+export default function TourList(props) {
+  const { listOpened, setListOpened, places, setPlaces } = props;
   const theme = useMantineTheme();
   const router = useRouter();
 

@@ -63,7 +63,8 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function DropDown({ dropDownOpened, setDropDownOpened }) {
+export default function DropDown(props) {
+  const { dropDownOpened, setDropDownOpened } = props;
   const { classes, cx } = useStyles();
   const [active, setActive] = useState(0);
   const [highlighted, setHighlighted] = useState(0);

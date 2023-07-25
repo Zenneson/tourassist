@@ -2,7 +2,8 @@ import {} from "react";
 import { useToggle, useElementSize } from "@mantine/hooks";
 import { Box, Button, Divider, Text } from "@mantine/core";
 
-export default function TripDescription({ desc }) {
+export default function TripDescription(props) {
+  const { desc } = props;
   const [readmore, toggle] = useToggle(["closed", "open"]);
   const { ref, width, height } = useElementSize();
 

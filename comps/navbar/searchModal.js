@@ -2,7 +2,8 @@ import {} from "react";
 import { Modal, TextInput } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 
-export default function SearchModal({ searchOpened, setSearchOpened }) {
+export default function SearchModal(props) {
+  const { searchOpened, setSearchOpened } = props;
   return (
     <Modal
       zIndex={9999}

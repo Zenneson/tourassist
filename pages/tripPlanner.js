@@ -55,7 +55,7 @@ import { estTimeStamp, convertDateString } from "../libs/custom";
 
 export default function TripPlannerPage(props) {
   const theme = useMantineTheme();
-  let auth = props.auth;
+  let { auth } = props;
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,

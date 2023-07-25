@@ -25,12 +25,9 @@ import {
 import UpdateCarousel from "./updatecarousel";
 import UpdateContent from "./updatecontent";
 
-export default function Update({
-  setEditContentModal,
-  setEditUpdate,
-  setAddUpdateDesc,
-  setDonating,
-}) {
+export default function Update(props) {
+  const { setEditContentModal, setEditUpdate, setAddUpdateDesc, setDonating } =
+    props;
   const theme = useMantineTheme();
   const [showall, toggle] = useToggle(["hide", "show"]);
 

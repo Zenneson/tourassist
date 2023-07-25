@@ -2,7 +2,8 @@ import {} from "react";
 import { useToggle } from "@mantine/hooks";
 import { Button, Divider, Text } from "@mantine/core";
 
-export default function UpdateContent({ content }) {
+export default function UpdateContent(props) {
+  const { content } = props;
   const [readmore, toggle] = useToggle(["closed", "open"]);
 
   return (

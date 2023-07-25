@@ -2,17 +2,17 @@ import { useMantineTheme, Avatar, Grid, Text } from "@mantine/core";
 import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { Draggable } from "react-beautiful-dnd";
 
-export default function PlaceListItem({
-  index,
-  place,
-  region,
-  draggableId,
-  setListOpened,
-  places,
-  setPlaces,
-}) {
+export default function PlaceListItem(props) {
+  const {
+    index,
+    place,
+    region,
+    draggableId,
+    setListOpened,
+    places,
+    setPlaces,
+  } = props;
   const theme = useMantineTheme();
-
   const handleRemove = () => {
     setPlaces(places.filter((location) => location.place !== place));
     if (places.length === 1) {

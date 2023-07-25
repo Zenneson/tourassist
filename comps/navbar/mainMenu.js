@@ -258,6 +258,7 @@ export default function MainMenu({
                 onClick={openSearch}
                 variant="subtle"
                 radius="xl"
+                mr={5}
                 p={10}
                 c={
                   theme.colorScheme === "dark"

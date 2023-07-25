@@ -37,13 +37,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function TripContent({
-  addUpdateDesc,
-  donating,
-  images,
-  setImages,
-  setTripDesc,
-}) {
+export default function TripContent(props) {
+  const { addUpdateDesc, donating, images, setImages, setTripDesc } = props;
   const theme = useMantineTheme();
   const [showToolbar, setShowToolbar] = useState(false);
   const [loading, setLoading] = useState(true);
