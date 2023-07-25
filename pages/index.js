@@ -1,14 +1,13 @@
 import { useState } from "react";
 import Mymap from "../comps/map/mymap";
 import Intro from "../comps/intro";
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth();
 
 export default function Home(props) {
   const [mapLoaded, setMapLoaded] = useState(false);
-  let listOpened = props.listOpened;
-  let setListOpened = props.setListOpened;
-  let searchOpened = props.searchOpened;
-  let dropDownOpened = props.dropDownOpened;
-  let auth = props.auth;
+  const { listOpened, setListOpened, searchOpened, dropDownOpened } = props;
 
   return (
     <>

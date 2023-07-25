@@ -387,7 +387,7 @@ export default function ProfileDrawer({
                 Account Info <IconUser size={40} />
               </Flex>
             </Title>
-            <AccountInfo />
+            <AccountInfo user={user} />
           </motion.div>
         )}
         {active === 1 && (

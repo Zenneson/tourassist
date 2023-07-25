@@ -17,10 +17,6 @@ export const addEllipsis = (string, num) => {
   }
 };
 
-export const formatNumber = (num) => {
-  return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
 export const daysBefore = (dateString) => {
   const format = "MMDDYYYY";
   const inputDate = moment(dateString, format);
@@ -38,4 +34,8 @@ export const convertDateString = (dateString) => {
   }
   const formattedDate = date.format("MMDDYYYY");
   return formattedDate;
+};
+
+export const formatNumber = (num) => {
+  return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

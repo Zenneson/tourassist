@@ -183,7 +183,6 @@ export default function Money(props) {
             searchOpened={searchOpened}
             dropDownOpened={dropDownOpened}
             setDropDownOpened={setDropDownOpened}
-            auth={auth}
           />
         </AppShell>
       </MantineProvider>

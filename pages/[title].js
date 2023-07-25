@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { query, where, collectionGroup, getDocs } from "firebase/firestore";
+import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
   useMantineTheme,
@@ -576,7 +576,6 @@ export default function Trippage(props) {
             align={"center"}
             pos={"relative"}
           >
-            {console.log(tripImages)}
             <MainCarousel tripImages={tripImages} />
             <Divider
               w={"80%"}
