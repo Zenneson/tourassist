@@ -139,15 +139,10 @@ export default function Mymap({
           color: theme.colorScheme === "dark" ? "#fff" : "#000",
         },
         border: "none",
-        borderTop: `2px solid ${
-          theme.colorScheme === "dark"
-            ? "rgba(255,255,255,0.1)"
-            : "rgba(0,0,0,0.1)"
-        }`,
         background:
           theme.colorScheme === "dark"
-            ? "linear-gradient(-90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-            : "linear-gradient(-90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+            ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+            : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
       },
       "& .mantine-Select-dropdown": {
         borderRadius: "25px 0 0 25px",
@@ -607,22 +602,15 @@ export default function Mymap({
   };
 
   const topCitiesList = topCities.map((city, index) => (
-    <Group
-      key={index}
-      sx={{
-        transition: "all 200ms ease-in-out",
-        "&:hover": {
-          transform: "scale(1.05)",
-        },
-      }}
-    >
+    <Group key={index}>
       <NavLink
-        mb={index === topCities.length - 1 ? 0 : 5}
+        // mb={index === topCities.length - 1 ? 0 : 5}
         label={city[0]}
         c={theme.colorScheme === "dark" ? "white" : "dark"}
         icon={
           <IconMapPinFilled
             size={15}
+            opacity={0.2}
             style={{
               position: "relative",
               top: 1,
@@ -633,16 +621,15 @@ export default function Mymap({
         onClick={() => selectTopCity(city)}
         bg={
           theme.colorScheme === "dark"
-            ? "linear-gradient(-90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-            : "linear-gradient(-90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)"
+            ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+            : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)"
         }
         sx={{
-          borderRadius: "25px 0 0 25px",
-          borderTop: `2px solid ${
-            theme.colorScheme === "dark"
-              ? "rgba(255,255,255,0.1)"
-              : "rgba(0,0,0,0.1)"
-          }`,
+          transition: "all 200ms ease-in-out",
+          "&:hover": {
+            transform: "scale(1.1)",
+            borderRadius: "25px 0 0 25px",
+          },
           boxShadow: `${
             theme.colorScheme === "dark"
               ? "rgba(0, 0, 0, 0.2) 0px 10px 7px -5px"
@@ -822,7 +809,10 @@ export default function Mymap({
             boxShadow: "none",
             paddingTop: 100,
             overflow: "hidden",
-            backgroundColor: "transparent",
+            background:
+              theme.colorScheme === "dark"
+                ? "linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1))"
+                : "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))",
           },
         })}
       >
@@ -846,7 +836,7 @@ export default function Mymap({
             >
               <IconX
                 color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
-                stroke={3}
+                stroke={5}
                 size={headerEm + "em"}
               />
             </ActionIcon>
@@ -886,20 +876,18 @@ export default function Mymap({
             {area.type !== "city" &&
               !(area.type === "region" && area.country !== "United States") && (
                 <Autocomplete
-                  icon={
-                    <IconMapPinSearch
-                      size={25}
-                      style={{
-                        paddingLeft: 5,
-                        color:
-                          theme.colorScheme === "dark" ? " #00e8fa" : "#fa7500",
-                      }}
-                    />
-                  }
                   size="md"
                   defaultValue=""
                   itemComponent={AutoCompItem}
                   value={placeSearch}
+                  onItemSubmit={(e) => locationHandler(e)}
+                  data={placeData}
+                  filter={(id, item) => item}
+                  switchDirectionOnFlip={true}
+                  onChange={(e) => {
+                    setPlaceSearch(e);
+                    handleChange("place");
+                  }}
                   placeholder={addEllipsis(
                     `Search in${
                       prefaceThe.includes(area.label) ? " The" : ""
@@ -910,20 +898,23 @@ export default function Mymap({
                     }?`,
                     28
                   )}
-                  onItemSubmit={(e) => locationHandler(e)}
-                  data={placeData}
-                  filter={(id, item) => item}
-                  switchDirectionOnFlip={true}
-                  onChange={(e) => {
-                    setPlaceSearch(e);
-                    handleChange("place");
-                  }}
+                  icon={
+                    <IconMapPinSearch
+                      opacity={0.5}
+                      size={25}
+                      style={{
+                        paddingLeft: 5,
+                        color:
+                          theme.colorScheme === "dark" ? " #00e8fa" : "#fa7500",
+                      }}
+                    />
+                  }
                   styles={(theme) => ({
                     input: {
                       "&::placeholder": {
                         color: theme.colorScheme === "dark" ? "#fff" : "#000",
                       },
-                      borderRadius: "25px 0 0 25px",
+                      borderRadius: "25px 0 0 0",
                       border: "none",
                       borderTop: `2px solid ${
                         theme.colorScheme === "dark"
@@ -932,8 +923,8 @@ export default function Mymap({
                       }`,
                       background:
                         theme.colorScheme === "dark"
-                          ? "linear-gradient(-90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-                          : "linear-gradient(-90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+                          ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+                          : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
                     },
                     item: {
                       borderRadius: "18px 0 0 18px",
@@ -948,21 +939,10 @@ export default function Mymap({
                   })}
                 />
               )}
-            <Divider
-              hidden={
-                area.type === "city" ||
-                (area.type === "region" && area.country !== "United States")
-              }
-              size="xs"
-              my="xs"
-              opacity={0.2}
-              color={"dark"}
-            />
             {area.country === "United States" && area.type === "country" ? (
               <Select
                 className={classes.select}
                 size="md"
-                radius={"25px 0 0 25px"}
                 placeholder="Select a US State"
                 itemComponent={SelectItem}
                 nothingFound="Nobody here"
@@ -970,7 +950,7 @@ export default function Mymap({
                 searchable={true}
                 icon={
                   <IconListSearch
-                    opacity={1}
+                    opacity={0.5}
                     size={25}
                     style={{
                       paddingLeft: 5,
@@ -1000,31 +980,24 @@ export default function Mymap({
                 }}
               />
             ) : (
-              <Box mt={10} hidden={area.type === "city"}>
-                {topCitiesList}
-              </Box>
+              <Box hidden={area.type === "city"}>{topCitiesList}</Box>
             )}
-            <Divider
-              hidden={
-                area.type === "city" ||
-                (area.type === "region" && area.country !== "United States")
-              }
-              size="xs"
-              my="xs"
-              opacity={0.2}
-              color={"dark"}
-            />
             <Select
               className={classes.select}
               size="md"
-              radius={"25px 0 0 25px"}
+              radius={
+                area.type === "city" ||
+                (area.type === "region" && area.country !== "United States")
+                  ? "25px 0 0 25px"
+                  : "0 0 0 25px"
+              }
               placeholder={`Select ${addEllipsis(area.label, 19)}?`}
               itemComponent={TravelItem}
               nothingFound="Nobody here"
               data={travelChoices}
               icon={
                 <IconLuggage
-                  opacity={1}
+                  opacity={0.5}
                   size={25}
                   style={{
                     paddingLeft: 5,

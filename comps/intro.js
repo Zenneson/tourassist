@@ -11,9 +11,8 @@ import {
   Transition,
   Image,
   Divider,
-  LoadingOverlay,
 } from "@mantine/core";
-import { IconWorld, IconInfoSquareRounded } from "@tabler/icons-react";
+import { IconWorld } from "@tabler/icons-react";
 import { useSessionStorage, useMediaQuery } from "@mantine/hooks";
 import LoginComp from "./loginComp";
 
@@ -43,30 +42,6 @@ export default function Intro({ auth, mapLoaded }) {
       if (!visible) setOpened(true);
     }
   }, [user, setVisible, setMapSpin, visible]);
-
-  const slideSettings = {
-    dots: false,
-    fade: true,
-    infinite: true,
-    autoplay: true,
-    speed: 5000,
-    autoplaySpeed: 10000,
-    cssEase: "linear",
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-  };
-
-  // const images = [
-  //   "img/intro/coast.jpg",
-  //   "img/intro/bluehair.jpg",
-  //   "img/intro/street.jpg",
-  //   "img/intro/concert.jpg",
-  //   "img/intro/planewindow.jpg",
-  //   "img/intro/happyguy.jpg",
-  //   "img/intro/boat.jpg",
-  //   "img/intro/plane.jpg",
-  // ];
 
   const planTrip = () => {
     setMapSpin(false);
@@ -130,10 +105,7 @@ export default function Intro({ auth, mapLoaded }) {
                     maxWidth: "380px",
                   }}
                 >
-                  <LoadingOverlay visible={!mapLoaded} overlayOpacity={0} />
-                  <Box opacity={mapLoaded ? 1 : 0}>
-                    <LoginComp auth={auth} />
-                  </Box>
+                  <LoginComp mapLoaded={mapLoaded} auth={auth} />
                 </Box>
               </Center>
               <Center

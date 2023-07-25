@@ -59,7 +59,7 @@ const useStyles = createStyles((theme, { floating }) => ({
   },
 }));
 
-export default function LoginComp({ auth }) {
+export default function LoginComp({ auth, mapLoaded }) {
   const theme = useMantineTheme();
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
@@ -415,6 +415,7 @@ export default function LoginComp({ auth }) {
               </Anchor>
             )}
             <Button
+              loading={!mapLoaded}
               size={"sm"}
               mt={0}
               fw={700}
