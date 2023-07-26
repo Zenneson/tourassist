@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
 import Money from "./money";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   createStyles,
   Drawer,
@@ -86,8 +86,11 @@ export default function ProfileDrawer(props) {
     openMenu,
     signOutFunc,
   } = props;
-  const [user, setUser] = useSessionStorage({ key: "user" });
   const router = useRouter();
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
 
   useEffect(() => {
     router.prefetch("/");

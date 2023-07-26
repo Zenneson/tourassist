@@ -73,16 +73,12 @@ export default function LoginComp(props) {
   const [passPopOpened, setPassPopOpened] = useState(false);
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const router = useRouter();
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
   const [visible, setVisible] = useSessionStorage({
     key: "visible",
     defaultValue: false,
   });
 
-  if (!user && type === "login" && router.pathname === "/tripplanner") {
+  if (type === "login" && router.pathname === "/tripplanner") {
     toggle();
   }
 
@@ -204,7 +200,6 @@ export default function LoginComp(props) {
 
   const addUser = async (user) => {
     setVisible(true);
-    setUser(user);
     await setDoc(doc(firestore, "users", user.email), {
       firstName: form.values.firstName,
       lastName: form.values.lastName,
@@ -217,7 +212,6 @@ export default function LoginComp(props) {
 
   const setLogin = async (user) => {
     setVisible(true);
-    setUser(user);
   };
 
   const handleLogin = () => {

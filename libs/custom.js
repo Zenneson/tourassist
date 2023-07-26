@@ -1,3 +1,6 @@
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, firestore } from "./firebase";
+import { doc, getDoc } from "firebase/firestore";
 const moment = require("moment-timezone");
 
 export const estTimeStamp = (timeStamp) => {
@@ -39,3 +42,24 @@ export const convertDateString = (dateString) => {
 export const formatNumber = (num) => {
   return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export async function useUserData() {
+  const [userAuth] = useAuthState(auth);
+
+  if (!userAuth?.email) {
+    console.log("User email not found");
+    return null;
+  }
+
+  const docRef = doc(firestore, "users", userAuth.email);
+  try {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log("No such document!");
+    }
+  } catch (error) {
+    console.log("Error getting document:", error);
+  }
+}

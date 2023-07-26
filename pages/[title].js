@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   useMantineTheme,
   Avatar,
@@ -24,7 +25,6 @@ import {
   Select,
   Textarea,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import {
   IconBrandFacebook,
   IconBrandInstagram,
@@ -64,6 +64,11 @@ export default function Trippage(props) {
   const [tripImages, setTripImages] = useState([]);
   const router = useRouter();
 
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
+
   const [visible, setVisible] = useSessionStorage({
     key: "visible",
     defaultValue: true,
@@ -71,11 +76,6 @@ export default function Trippage(props) {
 
   const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
-  });
-
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
   });
 
   const [images, setImages] = useSessionStorage({

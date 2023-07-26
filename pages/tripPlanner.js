@@ -50,28 +50,12 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
-import TripContent from "../comps/tripinfo/tripContent";
 import { estTimeStamp, convertDateString } from "../libs/custom";
+import TripContent from "../comps/tripinfo/tripContent";
 
 export default function TripPlannerPage(props) {
+  let { auth, mapLoaded } = props;
   const theme = useMantineTheme();
-  let { auth } = props;
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
-  const [images, setImages] = useSessionStorage({
-    key: "images",
-    defaultValue: [],
-  });
-  const [tripDesc, setTripDesc] = useSessionStorage({
-    key: "tripDesc",
-    defaultValue: "",
-  });
-  const [placeData, setPlaceData] = useSessionStorage({
-    key: "placeDataState",
-    defaultValue: [],
-  });
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startLocale, setStartLocale] = useState("");
@@ -91,10 +75,28 @@ export default function TripPlannerPage(props) {
   const [costsSum, setCostsSum] = useState(0);
   const router = useRouter();
   const dayjs = require("dayjs");
+  const [active, setActive] = useState(0);
+
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
+
+  const [images, setImages] = useSessionStorage({
+    key: "images",
+    defaultValue: [],
+  });
+  const [tripDesc, setTripDesc] = useSessionStorage({
+    key: "tripDesc",
+    defaultValue: "",
+  });
+  const [placeData, setPlaceData] = useSessionStorage({
+    key: "placeDataState",
+    defaultValue: [],
+  });
+
   var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
-
-  const [active, setActive] = useState(0);
 
   useEffect(() => {
     router.prefetch("/trippage");
@@ -1150,7 +1152,7 @@ export default function TripPlannerPage(props) {
                   >
                     <Box hidden={user} w={"100%"} mb={5}>
                       <Box>
-                        <LoginComp auth={auth} />
+                        <LoginComp mapLoaded={mapLoaded} auth={auth} />
                       </Box>
                     </Box>
                     <Center mt={user ? 20 : 0}>

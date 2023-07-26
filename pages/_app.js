@@ -1,11 +1,11 @@
 import Head from "next/head";
-import { getAuth } from "firebase/auth";
-import { app } from "../libs/firebase";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToggle } from "@mantine/hooks";
 import { AppShell, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { useSessionStorage } from "@mantine/hooks";
 import { RouterTransition } from "../comps/routertransition";
+import { useUserData } from "../libs/custom";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
 import DropDown from "../comps/dropdown/dropdown";
@@ -22,8 +22,17 @@ export default function Money(props) {
   const [searchOpened, setSearchOpened] = useState(false);
   const [dropDownOpened, setDropDownOpened] = useState(false);
   const [colorMode, toggle] = useToggle(["dark", "light"]);
+  const userData = useUserData();
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
 
-  const auth = getAuth(app);
+  useEffect(() => {
+    if (user === null) {
+      userData.then((res) => setUser(res));
+    }
+  }, [userData, user, setUser]);
 
   const tourTheme = {
     colorScheme: colorMode,
@@ -154,7 +163,6 @@ export default function Money(props) {
           padding="none"
           header={
             <MainMenu
-              auth={auth}
               active={active}
               setActive={setActive}
               panelShow={panelShow}
@@ -174,16 +182,7 @@ export default function Money(props) {
             setPanelShow={setPanelShow}
             setDropDownOpened={setDropDownOpened}
           />
-          <Component
-            {...pageProps}
-            setPanelShow={setPanelShow}
-            setMainMenuOpened={setMainMenuOpened}
-            listOpened={listOpened}
-            setListOpened={setListOpened}
-            searchOpened={searchOpened}
-            dropDownOpened={dropDownOpened}
-            setDropDownOpened={setDropDownOpened}
-          />
+          <Component {...pageProps} />
         </AppShell>
       </MantineProvider>
     </>

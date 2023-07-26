@@ -29,30 +29,29 @@ import {
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
 import { estTimeStamp } from "../../libs/custom";
+import { auth } from "../../libs/firebase";
 
-export default function MainMenu({
-  auth,
-  active,
-  setActive,
-  panelShow,
-  setPanelShow,
-  mainMenuOpened,
-  setMainMenuOpened,
-  setListOpened,
-  searchOpened,
-  setSearchOpened,
-  setDropDownOpened,
-  toggle,
-}) {
+export default function MainMenu(props) {
+  const {
+    active,
+    setActive,
+    panelShow,
+    setPanelShow,
+    mainMenuOpened,
+    setMainMenuOpened,
+    setListOpened,
+    searchOpened,
+    setSearchOpened,
+    setDropDownOpened,
+    toggle,
+  } = props;
   const router = useRouter();
-
   const theme = useMantineTheme();
-
-  useEffect(() => {
-    router.prefetch("/");
-  }, [router]);
-
   const [logoutOpeened, setLogoutOpeened] = useState(false);
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
   const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
   });
@@ -60,10 +59,10 @@ export default function MainMenu({
     key: "visible",
     defaultValue: router.pathname !== "/" ? false : true,
   });
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
+
+  useEffect(() => {
+    router.prefetch("/");
+  }, [router]);
 
   useEffect(() => {
     if (mapSpin) {

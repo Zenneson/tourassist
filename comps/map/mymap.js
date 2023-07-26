@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   createStyles,
   useMantineTheme,
@@ -21,7 +22,6 @@ import {
   Select,
   Modal,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import {
   IconList,
   IconX,
@@ -67,12 +67,9 @@ export default function Mymap(props) {
   const [placeLocation, setPlaceLocation] = useState({});
   const [placeChoosen, setPlaceChoosen] = useState(false);
   const [showChoice, setShowChoice] = useState(false);
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
+  const [mapReady, setMapReady] = useState(false);
   const [geoLat, setGeoLat] = useSessionStorage({
     key: "geoLatState",
     defaultValue: null,
@@ -81,7 +78,6 @@ export default function Mymap(props) {
     key: "geoLngState",
     defaultValue: null,
   });
-  const [mapReady, setMapReady] = useState(false);
   const [places, setPlaces] = useSessionStorage({
     key: "placeDataState",
     defaultValue: [],
@@ -93,6 +89,10 @@ export default function Mymap(props) {
   const [mapSpin, setMapSpin] = useSessionStorage({
     key: "mapSpin",
     defaultValue: true,
+  });
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
   });
 
   const [viewState, setViewState] = useState({

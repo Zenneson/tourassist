@@ -1,8 +1,6 @@
-import { useRouter } from "next/router";
-import { Accordion, Button, Stack, Title } from "@mantine/core";
+import { Accordion, Stack, Title } from "@mantine/core";
 
 export default function Help() {
-  const router = useRouter();
   const questions = [
     {
       question: "What is Tourassist?",
