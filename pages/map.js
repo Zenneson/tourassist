@@ -2,8 +2,14 @@ import { useState } from "react";
 import Mymap from "../comps/map/mymap";
 
 export default function Map(props) {
-  const [mapLoaded, setMapLoaded] = useState(false);
-  const { listOpened, setListOpened, searchOpened, dropDownOpened } = props;
+  const {
+    listOpened,
+    setListOpened,
+    searchOpened,
+    dropDownOpened,
+    mapLoaded,
+    setMapLoaded,
+  } = props;
 
   return (
     <>

@@ -1,12 +1,16 @@
 import { useEffect } from "react";
-import { Box } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
+import { BackgroundImage, Box } from "@mantine/core";
+import { useSessionStorage, useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
 import Intro from "../comps/intro";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const auth = getAuth();
 
 export default function Home() {
+  const { height, width } = useViewportSize();
   const [geoLat, setGeoLat] = useSessionStorage({
     key: "geoLatState",
     defaultValue: 37,
@@ -15,6 +19,32 @@ export default function Home() {
     key: "geoLngState",
     defaultValue: -95,
   });
+
+  const slideSettings = {
+    dots: false,
+    fade: true,
+    infinite: true,
+    autoplay: true,
+    speed: 1500,
+    autoplaySpeed: 5000,
+    cssEase: "linear",
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+  };
+
+  const images = [
+    "slides/slide1.png",
+    "slides/slide2.png",
+    "slides/slide3.png",
+    "slides/slide4.png",
+    "slides/slide5.png",
+    "slides/slide6.png",
+    "slides/slide7.png",
+    "slides/slide8.png",
+    "slides/slide10.png",
+    "slides/slide11.png",
+  ];
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -31,31 +61,21 @@ export default function Home() {
   return (
     <>
       <Intro auth={auth} />
-      <video
-        autoPlay
-        muted
-        loop
-        style={{
-          zIndex: -1,
-          position: "fixed",
-          top: 0,
-          bottom: 0,
-          width: "100vw",
-          height: "100vh",
-          transform: "scale(1.5)",
+      <Box
+        pos="absolute"
+        w={width}
+        h={height}
+        sx={{
+          zIndex: "1000",
+          overflow: "hidden",
         }}
       >
-        <source src="globe.mp4" type="video/mp4" />
-      </video>
-      <Box
-        pos={"fixed"}
-        w={"100%"}
-        h={"100%"}
-        bg={"#000"}
-        sx={{
-          zIndex: -2,
-        }}
-      />
+        <Slider {...slideSettings}>
+          {images.map((image, index) => (
+            <BackgroundImage key={index} src={image} h={height} alt="intro" />
+          ))}
+        </Slider>
+      </Box>
     </>
   );
 }

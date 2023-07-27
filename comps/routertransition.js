@@ -1,23 +1,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useMantineTheme } from "@mantine/core";
-import { useWindowEvent } from "@mantine/hooks";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import Loader from "./loader";
 
 export function RouterTransition(props) {
-  const { setPanelShow, setMainMenuOpened, setDropDownOpened } = props;
+  const { setPanelShow, setMainMenuOpened, setDropDownOpened, mapLoaded } =
+    props;
   const [loaded, setLoaded] = useState(false);
   const theme = useMantineTheme();
   const router = useRouter();
-
-  useWindowEvent("beforeunload", () => {
-    setLoaded(false);
-  });
-
-  useWindowEvent("load", () => {
-    setLoaded(true);
-  });
 
   useEffect(() => {
     const handleStart = (url) => {
@@ -57,7 +49,7 @@ export function RouterTransition(props) {
         size={"sm"}
         color={theme.colorScheme === "dark" ? "#219cee" : "#9b1616"}
       />
-      <Loader loaded={loaded} />
+      <Loader loaded={loaded} mapLoaded={mapLoaded} />
     </>
   );
 }

@@ -46,11 +46,11 @@ export default function Intro(props) {
     >
       <Center
         opacity={firstDown ? 0 : 1}
-        w={firstDown ? 0 : 700}
+        w={firstDown ? 0 : 600}
         h={"100vh"}
-        bg={dark ? "rgba(2, 2, 2, 0.5)" : "rgba(255, 255, 255, 0.85)"}
+        bg={dark ? "rgba(2, 2, 2, 0.9)" : "rgba(255, 255, 255, 0.5)"}
         sx={{
-          backdropFilter: "blur(5px)",
+          backdropFilter: "blur(10px)",
           flexDirection: "column",
         }}
       >
@@ -79,13 +79,8 @@ export default function Intro(props) {
         </Box>
       </Center>
       <Center
-        bg={dark ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.8)"}
+        bg={dark ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.8)"}
         w={"100%"}
-        sx={
-          {
-            // backdropFilter: "blur(20px)",
-          }
-        }
       >
         <Flex
           direction={"column"}
@@ -113,7 +108,7 @@ export default function Intro(props) {
             fw={400}
             transform="uppercase"
             fz={!firstDown ? "4.3vw" : "7vw"}
-            color="#8c8c8c"
+            color={dark ? "#fff" : "#000"}
             sx={{
               lineHeight: "1",
               textShadow: "0 2px 5px rgba(0,0,0,0.2)",
@@ -172,7 +167,12 @@ export default function Intro(props) {
             </Text>
           </Title>
           <Divider variant="solid" opacity={0.15} my={10} w="80%" />
-          <Title order={2} fw={300} fz={!firstDown ? "1.5vw" : "2.4vw"}>
+          <Title
+            order={2}
+            fw={300}
+            fz={!firstDown ? "1.5vw" : "2.4vw"}
+            color={dark ? "#fff" : "#000"}
+          >
             Make your travel plans a reality with the power of your community!
           </Title>
           <Text
@@ -183,6 +183,7 @@ export default function Intro(props) {
             w={"70%"}
             opacity={0.6}
             hidden={firstDown}
+            color={dark ? "#fff" : "#000"}
           >
             Whether you&rsquo;re seeking adventure, exploring new cultures,
             reuniting with loved ones, pursuing your passions, or making
@@ -190,7 +191,7 @@ export default function Intro(props) {
             it all possible.
           </Text>
           <Group w="100%" position="center" mt={10}>
-            {/* Plan Trip Button  */}
+            {/* Plan Trip Button */}
             <Button
               fw={900}
               size={!firstDown ? "xl" : "sm"}

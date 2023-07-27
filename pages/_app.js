@@ -23,6 +23,7 @@ export default function App(props) {
   const [searchOpened, setSearchOpened] = useState(false);
   const [dropDownOpened, setDropDownOpened] = useState(false);
   const [colorScheme, setColorScheme] = useState("dark");
+  const [mapLoaded, setMapLoaded] = useState(false);
   const userData = useUserData();
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -192,6 +193,7 @@ export default function App(props) {
             }
           >
             <RouterTransition
+              mapLoaded={mapLoaded}
               setMainMenuOpened={setMainMenuOpened}
               setPanelShow={setPanelShow}
               setDropDownOpened={setDropDownOpened}
@@ -205,6 +207,8 @@ export default function App(props) {
               searchOpened={searchOpened}
               dropDownOpened={dropDownOpened}
               setDropDownOpened={setDropDownOpened}
+              mapLoaded={mapLoaded}
+              setMapLoaded={setMapLoaded}
               auth={auth}
             />
           </AppShell>
