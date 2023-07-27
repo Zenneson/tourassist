@@ -46,7 +46,7 @@ export default function MainMenu(props) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
-  const [logoutOpeened, setLogoutOpeened] = useState(false);
+  const [logoutOpened, setLogoutOpened] = useState(false);
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
@@ -85,6 +85,7 @@ export default function MainMenu(props) {
   };
 
   const signOutFunc = async () => {
+    setLogoutOpened(false);
     sessionStorage.removeItem("tripData");
     sessionStorage.removeItem("guest");
     sessionStorage.removeItem("placeDataState");
@@ -219,8 +220,7 @@ export default function MainMenu(props) {
               width="auto"
               position="bottom"
               shadow="md"
-              opened={logoutOpeened}
-              onChange={setLogoutOpeened}
+              opened={logoutOpened}
             >
               <Tooltip
                 color={dark ? "dark" : "gray.0"}
@@ -233,7 +233,7 @@ export default function MainMenu(props) {
                   {/* Logout Dropdown */}
                   <Button
                     onClick={() => {
-                      setLogoutOpeened((o) => !o);
+                      setLogoutOpened((o) => !o);
                     }}
                     variant="subtle"
                     radius="xl"

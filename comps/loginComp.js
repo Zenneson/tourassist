@@ -277,7 +277,7 @@ export default function LoginComp(props) {
               </>
             }
             labelPosition="left"
-            color={dark ? "#fff" : "#000"}
+            color={"#fff"}
             c={dark ? "#fff" : "#000"}
             mt={16}
             opacity={0.7}
@@ -405,7 +405,7 @@ export default function LoginComp(props) {
               <Anchor
                 component="button"
                 type="button"
-                color="#fff"
+                color={dark ? "#fff" : "#4e4e4e"}
                 size="xs"
                 onClick={toggle}
               >

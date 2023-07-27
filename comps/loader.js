@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useSessionStorage } from "@mantine/hooks";
 import { useMantineTheme, Box, Image, LoadingOverlay } from "@mantine/core";
+import { useRouter } from "next/router";
 
 export default function Loader(props) {
   const [tripData, setTripData] = useSessionStorage({
@@ -9,6 +10,7 @@ export default function Loader(props) {
   });
   let { loaded, mapLoaded } = props;
   const theme = useMantineTheme();
+  const router = useRouter();
   const Globe = () => (
     <Box>
       <motion.div
@@ -29,6 +31,10 @@ export default function Loader(props) {
       </motion.div>
     </Box>
   );
+
+  if (router.pathname === "/") {
+    return;
+  }
 
   return (
     <>

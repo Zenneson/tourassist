@@ -62,11 +62,13 @@ export default function Home() {
     <>
       <Intro auth={auth} />
       <Box
+        opacity={1}
         pos="absolute"
         w={width}
         h={height}
         sx={{
           zIndex: "1000",
+          filter: "brightness(123%)",
           overflow: "hidden",
         }}
       >
