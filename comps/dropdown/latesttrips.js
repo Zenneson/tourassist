@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   Badge,
   Box,
   Card,
@@ -13,8 +13,9 @@ import {
 } from "@mantine/core";
 
 export default function LatestTrips() {
-  const theme = useMantineTheme();
   const router = useRouter();
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
 
   useEffect(() => {
     router.prefetch("/trippage");
@@ -147,9 +148,7 @@ export default function LatestTrips() {
           mb={10}
           sx={{
             borderLeft: `1px solid ${
-              theme.colorScheme === "dark"
-                ? "rgba(255, 255, 255, 0.2)"
-                : "rgba(0, 0, 0, 0.2)"
+              dark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)"
             }`,
             textAlign: "justify",
           }}

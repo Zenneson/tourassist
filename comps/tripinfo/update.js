@@ -1,5 +1,5 @@
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   ActionIcon,
   Box,
   Button,
@@ -28,7 +28,8 @@ import UpdateContent from "./updatecontent";
 export default function Update(props) {
   const { setEditContentModal, setEditUpdate, setAddUpdateDesc, setDonating } =
     props;
-  const theme = useMantineTheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const [showall, toggle] = useToggle(["hide", "show"]);
 
   const imagesone = [
@@ -158,7 +159,7 @@ export default function Update(props) {
         >
           <Text
             w={"100%"}
-            bg={theme.colorScheme === "dark" ? "blue.9" : "red.8"}
+            bg={dark ? "blue.9" : "red.8"}
             ta={"center"}
             py={5}
             fw={700}
@@ -171,19 +172,10 @@ export default function Update(props) {
           >
             {update.month}
           </Text>
-          <Title
-            ta={"center"}
-            bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-            pt={5}
-          >
+          <Title ta={"center"} bg={dark ? "dark.5" : "gray.1"} pt={5}>
             {update.day}
           </Title>
-          <Text
-            w={"100%"}
-            bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-            ta={"center"}
-            pb={7}
-          >
+          <Text w={"100%"} bg={dark ? "dark.5" : "gray.1"} ta={"center"} pb={7}>
             {update.year}
           </Text>
         </Stack>

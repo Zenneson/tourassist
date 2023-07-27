@@ -7,7 +7,7 @@ import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { RemoveScroll } from "@mantine/core";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   Header,
   Button,
   Image,
@@ -22,7 +22,6 @@ import {
   IconLogin,
   IconSearch,
   IconDoorExit,
-  IconCircleX,
   IconInfoCircleFilled,
   IconBrightnessUp,
   IconMoon,
@@ -43,32 +42,19 @@ export default function MainMenu(props) {
     searchOpened,
     setSearchOpened,
     setDropDownOpened,
-    toggle,
   } = props;
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const router = useRouter();
-  const theme = useMantineTheme();
   const [logoutOpeened, setLogoutOpeened] = useState(false);
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
   });
-  const [mapSpin, setMapSpin] = useSessionStorage({
-    key: "mapSpin",
-  });
-  const [visible, setVisible] = useSessionStorage({
-    key: "visible",
-    defaultValue: router.pathname !== "/" ? false : true,
-  });
 
   useEffect(() => {
     router.prefetch("/");
   }, [router]);
-
-  useEffect(() => {
-    if (mapSpin) {
-      setVisible(false);
-    }
-  }, [mapSpin, setVisible]);
 
   const openMenu = () => {
     setMainMenuOpened((o) => !o);
@@ -99,24 +85,27 @@ export default function MainMenu(props) {
   };
 
   const signOutFunc = async () => {
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("tripData");
+    sessionStorage.removeItem("guest");
+    sessionStorage.removeItem("placeDataState");
+    sessionStorage.removeItem("images");
+    sessionStorage.removeItem("tripDesc");
     if (user) {
       await recordLogout(user);
       try {
         await signOut(auth);
-        sessionStorage.removeItem("images");
-        sessionStorage.removeItem("user");
-        sessionStorage.removeItem("visible");
-        sessionStorage.removeItem("mapSpin");
-        sessionStorage.removeItem("placeDataState");
       } catch (error) {
         console.log(error);
       }
     }
-    if (router.pathname !== "/") router.push("/");
-    else {
-      router.reload();
-    }
+    sessionStorage.removeItem("user");
+    router.push("/");
   };
+
+  if (router.pathname === "/") {
+    return null;
+  }
 
   return (
     <>
@@ -136,13 +125,12 @@ export default function MainMenu(props) {
         pb={0}
         withBorder={false}
         height={1} // so that the header does not block the middele of the top
-        opacity={!visible || searchOpened ? 0 : 1}
+        opacity={searchOpened ? 0 : 1}
         sx={{
           display: "flex",
           padding: "15px 25px",
           alignItems: "flex-start",
           justifyContent: "space-between",
-          pointerEvents: !visible && "none",
         }}
       >
         {/* Main Menu Button  */}
@@ -161,25 +149,12 @@ export default function MainMenu(props) {
             ml={5}
             width={"auto"}
             height={"60px"}
-            src={
-              theme.colorScheme === "dark"
-                ? "img/TA_GlobeLogo.png"
-                : "img/TA_GlobeRed.png"
-            }
+            src={dark ? "img/TA_GlobeLogo.png" : "img/TA_GlobeRed.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
-          <Title
-            fw={900}
-            color={theme.colorScheme === "dark" ? "gray.0" : "dark.0"}
-            fz={30}
-          >
-            <Text
-              fw={500}
-              color={theme.colorScheme === "dark" ? "gray.5" : "dark.3"}
-              inherit
-              span
-            >
+          <Title fw={900} color={dark ? "gray.0" : "dark.0"} fz={30}>
+            <Text fw={500} color={dark ? "gray.5" : "dark.3"} inherit span>
               TOUR
             </Text>
             ASSIST
@@ -196,60 +171,35 @@ export default function MainMenu(props) {
               radius={"xl"}
               mr={-5}
             >
-              <Text
-                fz={12}
-                color={
-                  theme.colorScheme === "dark"
-                    ? theme.colors.gray[0]
-                    : theme.colors.dark[9]
-                }
-              >
+              <Text fz={12} color={dark ? "gray.0" : "dark.9"}>
                 {user.email}
               </Text>
             </Button>
           )}
           {/* TODO   */}
           <Tooltip
-            color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
-            c={
-              theme.colorScheme === "dark"
-                ? theme.colors.gray[0]
-                : theme.colors.dark[9]
-            }
+            color={dark ? "dark" : "gray.0"}
+            c={dark ? "gray.0" : "dark.9"}
             label="Toggle Color Scheme"
             position="bottom"
-            openDelay={500}
             withArrow
           >
             <Button
               variant="subtle"
-              onClick={toggle}
+              onClick={() => toggleColorScheme()}
               radius={"xl"}
               p={10}
-              c={
-                theme.colorScheme === "dark"
-                  ? theme.colors.gray[0]
-                  : theme.colors.dark[9]
-              }
+              c={dark ? "gray.0" : "dark.9"}
             >
-              {theme.colorScheme === "dark" ? (
-                <IconBrightnessUp size={17} />
-              ) : (
-                <IconMoon size={17} />
-              )}
+              {dark ? <IconBrightnessUp size={17} /> : <IconMoon size={17} />}
             </Button>
           </Tooltip>
           <Group spacing={0}>
             <Tooltip
-              color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
-              c={
-                theme.colorScheme === "dark"
-                  ? theme.colors.gray[0]
-                  : theme.colors.dark[9]
-              }
+              color={dark ? "dark" : "gray.0"}
+              c={dark ? "gray.0" : "dark.9"}
               label="Search Trips"
               position="bottom"
-              openDelay={500}
               withArrow
             >
               {/* Search button */}
@@ -259,11 +209,7 @@ export default function MainMenu(props) {
                 radius="xl"
                 mr={5}
                 p={10}
-                c={
-                  theme.colorScheme === "dark"
-                    ? theme.colors.gray[0]
-                    : theme.colors.dark[9]
-                }
+                c={dark ? "gray.0" : "dark.9"}
               >
                 <IconSearch size={17} />
               </Button>
@@ -278,15 +224,10 @@ export default function MainMenu(props) {
               onChange={setLogoutOpeened}
             >
               <Tooltip
-                color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
-                c={
-                  theme.colorScheme === "dark"
-                    ? theme.colors.gray[0]
-                    : theme.colors.dark[9]
-                }
+                color={dark ? "dark" : "gray.0"}
+                c={dark ? "gray.0" : "dark.9"}
                 label={user ? "Logout" : "Login"}
                 position="bottom"
-                openDelay={500}
                 withArrow
               >
                 <Popover.Target>
@@ -298,11 +239,7 @@ export default function MainMenu(props) {
                     variant="subtle"
                     radius="xl"
                     p={10}
-                    c={
-                      theme.colorScheme === "dark"
-                        ? theme.colors.gray[0]
-                        : theme.colors.dark[9]
-                    }
+                    c={dark ? "gray.0" : "dark.9"}
                   >
                     {user ? (
                       <IconDoorExit size={17} />
@@ -320,7 +257,6 @@ export default function MainMenu(props) {
                   px={15}
                   variant="default"
                   onClick={signOutFunc}
-                  leftIcon={<IconCircleX size={15} />}
                   sx={{
                     opacity: 0.35,
                     "&:hover": {
@@ -344,15 +280,10 @@ export default function MainMenu(props) {
           >
             {/* DropDown Button */}
             <Tooltip
-              color={theme.colorScheme === "dark" ? "dark" : "gray.0"}
-              c={
-                theme.colorScheme === "dark"
-                  ? theme.colors.gray[0]
-                  : theme.colors.dark[9]
-              }
+              color={dark ? "dark" : "gray.0"}
+              c={dark ? "gray.0" : "dark.9"}
               label={"TourAssist?"}
               position="bottom"
-              openDelay={500}
               withArrow
             >
               <IconInfoCircleFilled
@@ -362,10 +293,6 @@ export default function MainMenu(props) {
                   paddingTop: "3px",
                   cursor: "pointer",
                   transform: "scale(1.5)",
-                  color:
-                    theme.colorScheme === "dark"
-                      ? theme.colors.blue[2]
-                      : theme.colors.red[7],
                 }}
                 onClick={openDropDown}
               />

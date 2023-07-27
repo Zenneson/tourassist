@@ -5,6 +5,7 @@ import AccountInfo from "./accountInfo";
 import Money from "./money";
 import { useSessionStorage } from "@mantine/hooks";
 import {
+  useMantineColorScheme,
   createStyles,
   Drawer,
   Space,
@@ -76,6 +77,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function ProfileDrawer(props) {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const { classes, cx } = useStyles();
   const {
     active,
@@ -177,15 +180,13 @@ export default function ProfileDrawer(props) {
         styles={(theme) => ({
           content: {
             overflow: "hidden",
-            background:
-              theme.colorScheme === "dark"
-                ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-                : theme.fn.rgba(theme.colors.gray[0], 0.95),
+            background: dark
+              ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+              : theme.fn.rgba(theme.colors.gray[0], 0.95),
           },
         })}
       >
         {/* Close Main Menu Button */}
-        {/* TODO   */}
         <Button onClick={openMenu} className={classes.closeButton}>
           <IconX size={15} />
         </Button>
@@ -207,7 +208,7 @@ export default function ProfileDrawer(props) {
           </>
         )}
         <Group spacing={8} mt={10}>
-          {router.pathname !== "/" && (
+          {router.pathname !== "/map" && (
             // Map Main Menu Button
             <NavLink
               label={
@@ -227,8 +228,7 @@ export default function ProfileDrawer(props) {
               icon={<IconWorld size={30} />}
               variant="subtle"
               onClick={() => {
-                !user && sessionStorage.setItem("noLogin", "true");
-                router.push("/");
+                router.push("/map");
               }}
               classNames={{
                 description: classes.description,
@@ -283,15 +283,12 @@ export default function ProfileDrawer(props) {
           onClick={() => {
             router.push("/legal");
           }}
-          sx={(theme) => ({
+          sx={{
             "&:hover": {
-              color:
-                theme.colorScheme === "dark"
-                  ? theme.colors.gray[0]
-                  : theme.colors.dark[9],
+              color: dark ? "gray.0" : "dark.9",
               backgroundColor: "rgba(0, 0, 0, 0)",
             },
-          })}
+          }}
         >
           Legal Documents
         </Button>
@@ -301,7 +298,7 @@ export default function ProfileDrawer(props) {
             mb={30}
             sx={(theme) => ({
               borderTop: `1px solid ${
-                theme.colorScheme === "dark"
+                dark
                   ? theme.fn.rgba(theme.colors.gray[0], 0.1)
                   : theme.fn.rgba(theme.colors.dark[9], 0.1)
               }`,
@@ -319,24 +316,18 @@ export default function ProfileDrawer(props) {
               mt={10}
               leftIcon={<IconLogout size={18} />}
               sx={(theme) => ({
-                color:
-                  theme.colorScheme === "dark"
-                    ? theme.fn.rgba(theme.colors.gray[0], 0.1)
-                    : theme.fn.rgba(theme.colors.dark[9], 0.1),
-                backgroundColor:
-                  theme.colorScheme === "dark"
-                    ? theme.fn.rgba(theme.colors.gray[0], 0.012)
-                    : theme.fn.rgba(theme.colors.dark[9], 0.05),
+                color: dark
+                  ? theme.fn.rgba(theme.colors.gray[0], 0.1)
+                  : theme.fn.rgba(theme.colors.dark[9], 0.1),
+                backgroundColor: dark
+                  ? theme.fn.rgba(theme.colors.gray[0], 0.012)
+                  : theme.fn.rgba(theme.colors.dark[9], 0.05),
                 transition: "all 200ms ease",
                 "&:hover": {
-                  color:
-                    theme.colorScheme === "dark"
-                      ? theme.colors.gray[0]
-                      : theme.colors.dark[9],
-                  backgroundColor:
-                    theme.colorScheme === "dark"
-                      ? theme.fn.rgba(theme.colors.dark[9], 0.2)
-                      : theme.fn.rgba(theme.colors.gray[0], 0.2),
+                  color: dark ? theme.colors.gray[0] : theme.colors.dark[9],
+                  backgroundColor: dark
+                    ? theme.fn.rgba(theme.colors.dark[9], 0.2)
+                    : theme.fn.rgba(theme.colors.gray[0], 0.2),
                 },
               })}
               onClick={signOutFunc}
@@ -359,16 +350,14 @@ export default function ProfileDrawer(props) {
         }}
         sx={(theme) => ({
           ".mantine-Drawer-content": {
-            background:
-              theme.colorScheme === "dark"
-                ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-                : theme.fn.rgba(theme.colors.gray[0], 0.95),
+            background: dark
+              ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+              : theme.fn.rgba(theme.colors.gray[0], 0.95),
           },
           ".mantine-Drawer-overlay": {
-            background:
-              theme.colorScheme === "dark"
-                ? theme.fn.rgba(theme.colors.dark[9], 0.7)
-                : theme.fn.rgba(theme.colors.gray[0], 0.7),
+            background: dark
+              ? theme.fn.rgba(theme.colors.dark[9], 0.7)
+              : theme.fn.rgba(theme.colors.gray[0], 0.7),
           },
         })}
       >

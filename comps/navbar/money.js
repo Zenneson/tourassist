@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { IconPlayerPlay } from "@tabler/icons-react";
 import { useSessionStorage } from "@mantine/hooks";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   Box,
   Center,
   Flex,
@@ -26,7 +26,8 @@ import {
 } from "chart.js";
 
 export default function Money() {
-  const theme = useMantineTheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const router = useRouter();
 
   const [donations, setDonations] = useSessionStorage({
@@ -93,14 +94,12 @@ export default function Money() {
         </Box>
         <Box
           mb={10}
-          sx={(theme) => ({
+          sx={{
             borderRadius: 3,
-            border: `2px solid ${
-              theme.colorScheme === "dark"
-                ? "rgba(255,255,255,0.1)"
-                : "rgba(0,0,0,0.1)"
-            }`,
-          })}
+            border: `2px solid ${dark}`
+              ? "rgba(255,255,255,0.1)"
+              : "rgba(0,0,0,0.1)",
+          }}
         >
           <Group w={"100%"} spacing={0} grow>
             <Center>
@@ -113,13 +112,11 @@ export default function Money() {
             </Center>
             <Center
               py={10}
-              sx={(theme) => ({
-                borderLeft: `2px solid ${
-                  theme.colorScheme === "dark"
-                    ? "rgba(255,255,255,0.1)"
-                    : "rgba(0,0,0,0.1)"
-                }`,
-              })}
+              sx={{
+                borderLeft: `2px solid ${dark}`
+                  ? "rgba(255,255,255,0.1)"
+                  : "rgba(0,0,0,0.1)",
+              }}
             >
               <Box>
                 <Progress
@@ -141,9 +138,7 @@ export default function Money() {
           <Divider
             size={"xs"}
             c={`2px solid ${
-              theme.colorScheme === "dark"
-                ? "rgba(255,255,255,0.1)"
-                : "rgba(0,0,0,0.1)"
+              dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
             }`}
           />
           <Group w={"100%"} grow spacing={0}>
@@ -159,13 +154,11 @@ export default function Money() {
             </Center>
             <Center
               py={10}
-              sx={(theme) => ({
-                borderLeft: `2px solid ${
-                  theme.colorScheme === "dark"
-                    ? "rgba(255,255,255,0.1)"
-                    : "rgba(0,0,0,0.1)"
-                }`,
-              })}
+              sx={{
+                borderLeft: `2px solid ${dark}`
+                  ? "rgba(255,255,255,0.1)"
+                  : "rgba(0,0,0,0.1)",
+              }}
             >
               <Box>
                 <Title order={4} ta={"center"}>
@@ -180,16 +173,12 @@ export default function Money() {
             <Center
               py={19}
               fw={600}
-              bg={
-                theme.colorScheme === "dark"
-                  ? "rgba(255,255,255,0.1)"
-                  : theme.colors.gray[4]
-              }
+              bg={dark ? "rgba(255,255,255,0.1)" : "gray.4"}
               sx={(theme) => ({
                 transition: "all 0.2s ease",
                 "&:hover": {
                   cursor: "pointer",
-                  color: theme.colorScheme === "dark" ? "#000" : "#fff",
+                  color: dark ? "#000" : "#fff",
                 },
               })}
               onClick={() => {

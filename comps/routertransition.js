@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useMantineTheme } from "@mantine/core";
+import { useWindowEvent } from "@mantine/hooks";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import Loader from "./loader";
 
 export function RouterTransition(props) {
   const { setPanelShow, setMainMenuOpened, setDropDownOpened } = props;
+  const [loaded, setLoaded] = useState(false);
   const theme = useMantineTheme();
   const router = useRouter();
 
-  const [pageLoaded, setPageLoaded] = useState(true);
-  useEffect(() => {
-    if (router.pathname !== "/") {
-      const saved = sessionStorage.getItem("pageLoaded");
-      setPageLoaded(saved ? JSON.parse(saved) : true);
-    }
-  }, [router.pathname]);
+  useWindowEvent("beforeunload", () => {
+    setLoaded(false);
+  });
+
+  useWindowEvent("load", () => {
+    setLoaded(true);
+  });
 
   useEffect(() => {
     const handleStart = (url) => {
@@ -23,11 +25,11 @@ export function RouterTransition(props) {
       setPanelShow(false);
       setMainMenuOpened(false);
       setDropDownOpened(false);
-      setPageLoaded(false);
+      setLoaded(false);
     };
     const handleComplete = () => {
-      setPageLoaded(true);
       nprogress.complete();
+      setLoaded(true);
     };
 
     router.events.on("routeChangeStart", handleStart);
@@ -45,8 +47,6 @@ export function RouterTransition(props) {
     setPanelShow,
     setMainMenuOpened,
     setDropDownOpened,
-    pageLoaded,
-    setPageLoaded,
   ]);
 
   return (
@@ -57,7 +57,7 @@ export function RouterTransition(props) {
         size={"sm"}
         color={theme.colorScheme === "dark" ? "#219cee" : "#9b1616"}
       />
-      <Loader pageLoaded={pageLoaded} />
+      <Loader loaded={loaded} />
     </>
   );
 }

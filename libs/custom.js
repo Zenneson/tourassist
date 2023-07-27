@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "./firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 const moment = require("moment-timezone");
 
 export const estTimeStamp = (timeStamp) => {
@@ -43,23 +44,35 @@ export const formatNumber = (num) => {
   return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-export async function useUserData() {
+export function useUserData() {
   const [userAuth] = useAuthState(auth);
+  const [userData, setUserData] = useState(null);
 
-  if (!userAuth?.email) {
-    console.log("User email not found");
-    return null;
-  }
-
-  const docRef = doc(firestore, "users", userAuth.email);
-  try {
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      console.log("No such document!");
+  useEffect(() => {
+    if (!userAuth?.email) {
+      console.log("User email not found");
+      return;
     }
-  } catch (error) {
-    console.log("Error getting document:", error);
-  }
+
+    const docRef = doc(firestore, "users", userAuth.email);
+
+    const unsubscribe = onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setUserData(docSnap.data());
+        } else {
+          console.log("No such document!");
+        }
+      },
+      (error) => {
+        console.log("Error getting document:", error);
+      }
+    );
+
+    // Cleanup function to unsubscribe from the listener when the component unmounts
+    return () => unsubscribe();
+  }, [userAuth]); // The effect hook depends on userAuth
+
+  return userData;
 }

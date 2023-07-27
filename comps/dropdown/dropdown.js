@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { IconChevronsRight, IconChevronsUp } from "@tabler/icons-react";
 import {
+  useMantineColorScheme,
   ActionIcon,
   Box,
   Drawer,
@@ -11,63 +12,58 @@ import {
 } from "@mantine/core";
 import LatestTrips from "./latesttrips";
 
-const useStyles = createStyles((theme) => ({
-  link: {
-    ...theme.fn.focusStyles(),
-    display: "block",
-    textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-    lineHeight: "2.4rem",
-    fontSize: theme.fontSizes.sm,
-    height: "2.4rem",
-    borderTopRightRadius: theme.radius.sm,
-    borderBottomRightRadius: theme.radius.sm,
-
-    "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? "rgba(0, 0, 0, 0.5)"
-          : theme.colors.gray[0],
-    },
-  },
-
-  linkActive: {
-    color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 7],
-  },
-
-  indicator: {
-    color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 7],
-    transition: "transform 150ms ease",
-    position: "absolute",
-    top: "10px",
-    left: `-20px`,
-  },
-
-  activeBox: {
-    background:
-      theme.colorScheme === "dark"
-        ? "rgba(11, 12, 13, 0.5)"
-        : "rgba(248, 248, 248, 0.5)",
-    borderTop: `2px solid ${
-      theme.colorScheme === "dark"
-        ? theme.fn.rgba(theme.colors.gray[0], 0.1)
-        : theme.fn.rgba(theme.colors.dark[9], 0.1)
-    }`,
-    borderRadius: "0 0 3px 3px",
-    height: "600px",
-    padding: "20px",
-    boxShadow:
-      "0 2px 5px  rgba(0,0,0, 0.1), inset 0 -3px 10px 1px rgba(0,0,0, 0.05)",
-  },
-}));
-
 export default function DropDown(props) {
   const { dropDownOpened, setDropDownOpened } = props;
-  const { classes, cx } = useStyles();
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const [active, setActive] = useState(0);
   const [highlighted, setHighlighted] = useState(0);
+
+  const useStyles = createStyles((theme) => ({
+    link: {
+      ...theme.fn.focusStyles(),
+      display: "block",
+      textDecoration: "none",
+      color: dark ? theme.colors.dark[0] : theme.black,
+      lineHeight: "2.4rem",
+      fontSize: theme.fontSizes.sm,
+      height: "2.4rem",
+      borderTopRightRadius: theme.radius.sm,
+      borderBottomRightRadius: theme.radius.sm,
+
+      "&:hover": {
+        backgroundColor: dark ? "rgba(0, 0, 0, 0.5)" : theme.colors.gray[0],
+      },
+    },
+
+    linkActive: {
+      color: theme.colors[theme.primaryColor][dark ? 3 : 7],
+    },
+
+    indicator: {
+      color: theme.colors[theme.primaryColor][dark ? 3 : 7],
+      transition: "transform 150ms ease",
+      position: "absolute",
+      top: "10px",
+      left: `-20px`,
+    },
+
+    activeBox: {
+      background: dark ? "rgba(11, 12, 13, 0.5)" : "rgba(248, 248, 248, 0.5)",
+      borderTop: `2px solid ${
+        dark
+          ? theme.fn.rgba(theme.colors.gray[0], 0.1)
+          : theme.fn.rgba(theme.colors.dark[9], 0.1)
+      }`,
+      borderRadius: "0 0 3px 3px",
+      height: "600px",
+      padding: "20px",
+      boxShadow:
+        "0 2px 5px  rgba(0,0,0, 0.1), inset 0 -3px 10px 1px rgba(0,0,0, 0.05)",
+    },
+  }));
+
+  const { classes, cx } = useStyles();
 
   const terms = [
     {
@@ -130,10 +126,9 @@ export default function DropDown(props) {
           content: {
             backdropFilter: "blur(10px)",
             overflow: "hidden",
-            background:
-              theme.colorScheme === "dark"
-                ? theme.fn.rgba(theme.colors.dark[7], 0.8)
-                : theme.fn.rgba(theme.colors.gray[0], 0.8),
+            background: dark
+              ? theme.fn.rgba(theme.colors.dark[7], 0.8)
+              : theme.fn.rgba(theme.colors.gray[0], 0.8),
           },
           header: {
             background: "transparent",

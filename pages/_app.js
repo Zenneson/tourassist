@@ -1,19 +1,20 @@
 import Head from "next/head";
+import NextApp from "next/app";
+import { setCookie, getCookie } from "cookies-next";
 import { useState, useEffect } from "react";
-import { useToggle } from "@mantine/hooks";
-import { AppShell, MantineProvider } from "@mantine/core";
+import { AppShell, MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { useSessionStorage } from "@mantine/hooks";
 import { RouterTransition } from "../comps/routertransition";
 import { useUserData } from "../libs/custom";
+import { getAuth } from "firebase/auth";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
 import DropDown from "../comps/dropdown/dropdown";
 require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
-
-export default function Money(props) {
+export default function App(props) {
   const { Component, pageProps } = props;
   const [active, setActive] = useState(-1);
   const [panelShow, setPanelShow] = useState(false);
@@ -21,21 +22,32 @@ export default function Money(props) {
   const [listOpened, setListOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
   const [dropDownOpened, setDropDownOpened] = useState(false);
-  const [colorMode, toggle] = useToggle(["dark", "light"]);
+  const [colorScheme, setColorScheme] = useState("dark");
   const userData = useUserData();
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
   });
 
+  const toggleColorScheme = (value) => {
+    const nextColorScheme =
+      value || (colorScheme === "dark" ? "light" : "dark");
+    setColorScheme(nextColorScheme);
+    setCookie("mantine-color-scheme", nextColorScheme, {
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  };
+
   useEffect(() => {
     if (user === null) {
-      userData.then((res) => setUser(res));
+      setUser(userData);
     }
   }, [userData, user, setUser]);
 
+  const auth = getAuth();
+
   const tourTheme = {
-    colorScheme: colorMode,
+    colorScheme: colorScheme,
     colors: {
       dark: [
         "#C1C2C5",
@@ -50,7 +62,7 @@ export default function Money(props) {
         "#020202",
       ],
     },
-    primaryColor: colorMode === "dark" ? "blue" : "red",
+    primaryColor: colorScheme === "dark" ? "blue" : "red",
     primaryShade: { light: 7, dark: 9 },
     components: {
       Autocomplete: {
@@ -148,43 +160,64 @@ export default function Money(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={tourTheme}>
-        <Notifications position="top-center" zIndex={9999} />
-        <SearchModal
-          searchOpened={searchOpened}
-          setSearchOpened={setSearchOpened}
-        />
-        <DropDown
-          dropDownOpened={dropDownOpened}
-          setDropDownOpened={setDropDownOpened}
-        />
-        <AppShell
-          padding="none"
-          header={
-            <MainMenu
-              active={active}
-              setActive={setActive}
-              panelShow={panelShow}
-              setPanelShow={setPanelShow}
-              mainMenuOpened={mainMenuOpened}
-              setMainMenuOpened={setMainMenuOpened}
-              setListOpened={setListOpened}
-              searchOpened={searchOpened}
-              setSearchOpened={setSearchOpened}
-              setDropDownOpened={setDropDownOpened}
-              toggle={toggle}
-            />
-          }
-        >
-          <RouterTransition
-            setMainMenuOpened={setMainMenuOpened}
-            setPanelShow={setPanelShow}
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider withGlobalStyles withNormalizeCSS theme={tourTheme}>
+          <Notifications position="top-center" zIndex={9999} />
+          <SearchModal
+            searchOpened={searchOpened}
+            setSearchOpened={setSearchOpened}
+          />
+          <DropDown
+            dropDownOpened={dropDownOpened}
             setDropDownOpened={setDropDownOpened}
           />
-          <Component {...pageProps} />
-        </AppShell>
-      </MantineProvider>
+          <AppShell
+            padding="none"
+            header={
+              <MainMenu
+                active={active}
+                setActive={setActive}
+                panelShow={panelShow}
+                setPanelShow={setPanelShow}
+                mainMenuOpened={mainMenuOpened}
+                setMainMenuOpened={setMainMenuOpened}
+                setListOpened={setListOpened}
+                searchOpened={searchOpened}
+                setSearchOpened={setSearchOpened}
+                setDropDownOpened={setDropDownOpened}
+              />
+            }
+          >
+            <RouterTransition
+              setMainMenuOpened={setMainMenuOpened}
+              setPanelShow={setPanelShow}
+              setDropDownOpened={setDropDownOpened}
+            />
+            <Component
+              {...pageProps}
+              setPanelShow={setPanelShow}
+              setMainMenuOpened={setMainMenuOpened}
+              listOpened={listOpened}
+              setListOpened={setListOpened}
+              searchOpened={searchOpened}
+              dropDownOpened={dropDownOpened}
+              setDropDownOpened={setDropDownOpened}
+              auth={auth}
+            />
+          </AppShell>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </>
   );
 }
+
+App.getInitialProps = async (appContext) => {
+  const appProps = await NextApp.getInitialProps(appContext);
+  return {
+    ...appProps,
+    colorScheme: getCookie("mantine-color-scheme", appContext.ctx),
+  };
+};

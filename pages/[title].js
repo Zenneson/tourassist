@@ -4,7 +4,7 @@ import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   Avatar,
   Button,
   Box,
@@ -52,7 +52,8 @@ import TripDescription from "../comps/tripinfo/tripdescription";
 import { formatNumber, daysBefore } from "../libs/custom";
 
 export default function Trippage(props) {
-  const theme = useMantineTheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const [altModal, setAltModal] = useState(false);
   const [editContentModal, setEditContentModal] = useState(false);
   const [editUpdate, setEditUpdate] = useState("");
@@ -67,15 +68,6 @@ export default function Trippage(props) {
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
-  });
-
-  const [visible, setVisible] = useSessionStorage({
-    key: "visible",
-    defaultValue: true,
-  });
-
-  const [mapSpin, setMapSpin] = useSessionStorage({
-    key: "mapSpin",
   });
 
   const [images, setImages] = useSessionStorage({
@@ -105,18 +97,10 @@ export default function Trippage(props) {
 
   useEffect(() => {
     if (props.trip) {
-      setVisible(true);
-      setMapSpin(false);
       setTripData(props.trip);
       setTripImages(props.trip.images);
     }
-  }, [props.trip, setTripData, setMapSpin, setVisible]);
-
-  // {
-  //   name: "Anonymus",
-  //   time: "10 mintues ago",
-  //   text: "Just donated! Can't wait to see the team swimming with the Loch Ness Monster in Scotland! #LegendaryAdventure",
-  // },
+  }, [props.trip, setTripData]);
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -182,16 +166,14 @@ export default function Trippage(props) {
               backgroundColor: "transparent",
             },
             content: {
-              backgroundColor:
-                theme.colorScheme === "dark"
-                  ? "rgba(0,0,0,0.9)"
-                  : "rgba(255,255,255,0.9)",
+              backgroundColor: dark
+                ? "rgba(0,0,0,0.9)"
+                : "rgba(255,255,255,0.9)",
             },
             overlay: {
-              backgroundColor:
-                theme.colorScheme === "dark"
-                  ? "rgba(0,0,0,0.5)"
-                  : "rgba(255,255,255,0.5)",
+              backgroundColor: dark
+                ? "rgba(0,0,0,0.5)"
+                : "rgba(255,255,255,0.5)",
               backdropFilter: "blur(9px)",
             },
           })}
@@ -265,16 +247,14 @@ export default function Trippage(props) {
               backgroundColor: "transparent",
             },
             content: {
-              backgroundColor:
-                theme.colorScheme === "dark"
-                  ? "rgba(0,0,0,0.9)"
-                  : "rgba(255,255,255,0.9)",
+              backgroundColor: dark
+                ? "rgba(0,0,0,0.9)"
+                : "rgba(255,255,255,0.9)",
             },
             overlay: {
-              backgroundColor:
-                theme.colorScheme === "dark"
-                  ? "rgba(0,0,0,0.5)"
-                  : "rgba(255,255,255,0.5)",
+              backgroundColor: dark
+                ? "rgba(0,0,0,0.5)"
+                : "rgba(255,255,255,0.5)",
               backdropFilter: "blur(9px)",
             },
           })}
@@ -289,10 +269,7 @@ export default function Trippage(props) {
           />
           {donating && (
             <Box h={345} w={802}>
-              <Title
-                mb={5}
-                color={theme.colorScheme === "dark" ? "#00E8FC" : "#fa7500"}
-              >
+              <Title mb={5} color={dark ? "#00E8FC" : "#fa7500"}>
                 <Flex align={"center"} gap={5}>
                   {!paid ? "DONATE" : "THANK YOU"}
                   <IconHeartHandshake size={35} />
@@ -307,8 +284,8 @@ export default function Trippage(props) {
                         size="xl"
                         w={"25%"}
                         variant="filled"
-                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                        bg={dark ? "dark.5" : "gray.1"}
+                        c={dark ? "gray.0" : "dark.2"}
                         sx={{
                           "&:hover": {
                             color: "#fff",
@@ -322,8 +299,8 @@ export default function Trippage(props) {
                         size="xl"
                         w={"25%"}
                         variant="filled"
-                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                        bg={dark ? "dark.5" : "gray.1"}
+                        c={dark ? "gray.0" : "dark.2"}
                         sx={{
                           "&:hover": {
                             color: "#fff",
@@ -337,8 +314,8 @@ export default function Trippage(props) {
                         size="xl"
                         w={"25%"}
                         variant="filled"
-                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                        bg={dark ? "dark.5" : "gray.1"}
+                        c={dark ? "gray.0" : "dark.2"}
                         sx={{
                           "&:hover": {
                             color: "#fff",
@@ -352,8 +329,8 @@ export default function Trippage(props) {
                         size="xl"
                         w={"25%"}
                         variant="filled"
-                        bg={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-                        c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                        bg={dark ? "dark.5" : "gray.1"}
+                        c={dark ? "gray.0" : "dark.2"}
                         sx={{
                           "&:hover": {
                             color: "#fff",
@@ -514,11 +491,9 @@ export default function Trippage(props) {
                 }}
                 sx={{
                   ".mantine-Input-input": {
-                    background:
-                      theme.colorScheme === "dark" ? "#101113" : "#ced4da",
+                    background: dark ? "#101113" : "#ced4da",
                     "&:focus": {
-                      background:
-                        theme.colorScheme === "dark" ? "#383a3f" : "#f1f3f5",
+                      background: dark ? "#383a3f" : "#f1f3f5",
                     },
                     "&::placeholder": {
                       fontWeight: 700,
@@ -599,8 +574,8 @@ export default function Trippage(props) {
                   px={44}
                   size={"lg"}
                   variant="filled"
-                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
-                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  bg={dark ? "dark.9" : "gray.3"}
+                  c={dark ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
                       color: "#fff",
@@ -614,8 +589,8 @@ export default function Trippage(props) {
                   px={44}
                   size={"lg"}
                   variant="filled"
-                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
-                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  bg={dark ? "dark.9" : "gray.3"}
+                  c={dark ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
                       color: "#fff",
@@ -629,8 +604,8 @@ export default function Trippage(props) {
                   px={44}
                   size={"lg"}
                   variant="filled"
-                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
-                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  bg={dark ? "dark.9" : "gray.3"}
+                  c={dark ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
                       color: "#fff",
@@ -644,8 +619,8 @@ export default function Trippage(props) {
                   px={44}
                   size={"lg"}
                   variant="filled"
-                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
-                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  bg={dark ? "dark.9" : "gray.3"}
+                  c={dark ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
                       color: "#fff",
@@ -659,8 +634,8 @@ export default function Trippage(props) {
                   px={44}
                   size={"lg"}
                   variant="filled"
-                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
-                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  bg={dark ? "dark.9" : "gray.3"}
+                  c={dark ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
                       color: "#fff",
@@ -674,8 +649,8 @@ export default function Trippage(props) {
                   px={44}
                   size={"lg"}
                   variant="filled"
-                  bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
-                  c={theme.colorScheme === "dark" ? "gray.0" : "dark.2"}
+                  bg={dark ? "dark.9" : "gray.3"}
+                  c={dark ? "gray.0" : "dark.2"}
                   sx={{
                     "&:hover": {
                       color: "#fff",

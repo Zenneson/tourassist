@@ -1,9 +1,13 @@
-import { useEffect } from "react";
 import { motion } from "framer-motion";
+import { useSessionStorage } from "@mantine/hooks";
 import { useMantineTheme, Box, Image, LoadingOverlay } from "@mantine/core";
 
 export default function Loader(props) {
-  const { pageLoaded } = props;
+  const [tripData, setTripData] = useSessionStorage({
+    key: "tripData",
+    defaultValue: null,
+  });
+  const { loaded = false, mapLoaded = false } = props;
   const theme = useMantineTheme();
   const Globe = () => (
     <Box>
@@ -26,14 +30,10 @@ export default function Loader(props) {
     </Box>
   );
 
-  useEffect(() => {
-    sessionStorage.setItem("pageLoaded", JSON.stringify(pageLoaded));
-  }, [pageLoaded]);
-
   return (
     <>
       <LoadingOverlay
-        visible={!pageLoaded}
+        visible={!mapLoaded && !loaded && tripData === null}
         overlayColor={
           theme.colorScheme === "dark"
             ? theme.colors.dark[7]

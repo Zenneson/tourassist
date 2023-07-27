@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   BackgroundImage,
   Box,
   Button,
@@ -39,7 +39,8 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
   const { addUpdateDesc, donating, images, setImages, setTripDesc } = props;
-  const theme = useMantineTheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const [showToolbar, setShowToolbar] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -255,10 +256,7 @@ export default function TripContent(props) {
               disabled={images.length === 6}
               style={{
                 border: "2px dashed rgba(255,255,255,0.05)",
-                backgroundColor:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.dark[7]
-                    : theme.colors.gray[4],
+                backgroundColor: dark ? "dark.7" : "gray.4",
                 cursor: images.length === 6 ? "not-allowed" : "pointer",
               }}
             >
@@ -292,11 +290,7 @@ export default function TripContent(props) {
                   labelPosition="center"
                   my={5}
                   w={"60%"}
-                  color={
-                    theme.colorScheme === "dark"
-                      ? theme.colors.dark[4]
-                      : theme.colors.gray[6]
-                  }
+                  color={dark ? "dark.4" : "gray.6"}
                 />
               </Center>
               <Button
@@ -317,11 +311,7 @@ export default function TripContent(props) {
               py={12}
               fz={12}
               ta={"center"}
-              bg={
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[5]
-                  : theme.colors.gray[1]
-              }
+              bg={dark ? "dark.5" : "gray.1"}
               sx={{
                 borderRadius: "3px",
               }}
@@ -336,7 +326,7 @@ export default function TripContent(props) {
         editor={editor}
         position="relative"
         bg={
-          theme.colorScheme === "dark"
+          dark
             ? editorFocused
               ? "dark.4"
               : "dark.5"
@@ -359,14 +349,13 @@ export default function TripContent(props) {
           maxHeight: donating ? "100px" : "300px",
           ".mantine-RichTextEditor-content": {
             background: "rgba(0, 0, 0, 0)",
-            color:
-              theme.colorScheme === "dark"
-                ? editorFocused
-                  ? "dark.4"
-                  : "dark.5"
-                : editorFocused
-                ? "gray.0"
-                : "gray.4",
+            color: dark
+              ? editorFocused
+                ? "dark.4"
+                : "dark.5"
+              : editorFocused
+              ? "gray.0"
+              : "gray.4",
           },
           ".mantine-RichTextEditor-toolbar": {
             background: "rgba(0, 0, 0, 0)",
@@ -424,21 +413,16 @@ export default function TripContent(props) {
               width={585}
               height={450}
               border={50}
-              color={
-                theme.colorScheme === "dark"
-                  ? [0, 0, 0, 0.7]
-                  : [255, 255, 255, 0.7]
-              } // RGBA
+              color={dark ? [0, 0, 0, 0.7] : [255, 255, 255, 0.7]} // RGBA
               image={imageUpload}
               borderRadius={3}
               scale={scale}
               onWheel={handleScroll}
               onLoadSuccess={() => setLoading(false)}
               style={{
-                borderTop:
-                  theme.colorScheme === "dark"
-                    ? "2px solid rgba(255,255,255,0.1)"
-                    : "2px solid rgba(0,0,0,0.1)",
+                borderTop: dark
+                  ? "2px solid rgba(255,255,255,0.1)"
+                  : "2px solid rgba(0,0,0,0.1)",
               }}
             />
             <MantineSlider
@@ -484,21 +468,9 @@ export default function TripContent(props) {
               </Button>
             </Group>
           </Box>
-          <Overlay
-            color={
-              theme.colorScheme === "dark"
-                ? theme.colors.dark[7]
-                : theme.colors.gray[0]
-            }
-            opacity={0.3}
-            blur={7}
-          />
+          <Overlay color={dark ? "dark.7" : "gray.0"} opacity={0.3} blur={7} />
           <LoadingOverlay
-            overlayColor={
-              theme.colorScheme === "dark"
-                ? theme.colors.dark[7]
-                : theme.colors.gray[0]
-            }
+            overlayColor={dark ? "dark.7" : "gray.0"}
             visible={processingImage}
             overlayBlur={0}
             overlayOpacity={0}

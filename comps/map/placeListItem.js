@@ -1,4 +1,4 @@
-import { useMantineTheme, Avatar, Grid, Text } from "@mantine/core";
+import { useMantineColorScheme, Avatar, Grid, Text } from "@mantine/core";
 import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { Draggable } from "react-beautiful-dnd";
 
@@ -12,7 +12,8 @@ export default function PlaceListItem(props) {
     places,
     setPlaces,
   } = props;
-  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const handleRemove = () => {
     setPlaces(places.filter((location) => location.place !== place));
     if (places.length === 1) {
@@ -44,15 +45,13 @@ export default function PlaceListItem(props) {
             transition: "all 200ms ease",
             cursor: "pointer",
             "&:hover": {
-              background:
-                theme.colorScheme === "dark"
-                  ? "rgba(255, 255, 255, 0.05)"
-                  : "rgba(0, 0, 0, 0.05)",
+              background: dark
+                ? "rgba(255, 255, 255, 0.05)"
+                : "rgba(0, 0, 0, 0.05)",
             },
             "&:active": {
               transform: "scale(1.02)",
-              backgroundColor:
-                theme.colorScheme === "dark" ? "#121212" : "#fff",
+              backgroundColor: dark ? "#121212" : "#fff",
               boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
             },
           }}
@@ -94,7 +93,7 @@ export default function PlaceListItem(props) {
             <Avatar
               variant="gradient"
               gradient={
-                theme.colorScheme === "dark"
+                dark
                   ? { from: "#004585", to: "#00376b", deg: 180 }
                   : { from: "#a30326", to: "#85001d", deg: 180 }
               }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   Drawer,
   Button,
   Divider,
@@ -14,7 +14,8 @@ import PlaceListItem from "./placeListItem";
 
 export default function TourList(props) {
   const { listOpened, setListOpened, places, setPlaces } = props;
-  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const router = useRouter();
 
   useEffect(() => {
@@ -112,27 +113,20 @@ export default function TourList(props) {
             top={77}
             right={0}
             onClick={() => setListOpened(false)}
-            bg={
-              theme.colorScheme === "dark"
-                ? theme.colors.dark[5]
-                : theme.colors.gray[1]
-            }
+            bg={dark ? "dark.5" : "gray.1"}
             sx={{
               borderRadius: "3px 0 0 3px",
               padding: "0 8px",
               transition: "all 100ms ease-in-out",
               "&:hover": {
-                background:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.dark[8]
-                    : theme.colors.gray[4],
+                background: dark ? "dark.8" : "gray.4",
               },
             }}
           >
             <IconX
               size={15}
               style={{
-                color: theme.colorScheme === "dark" ? "#fff" : "#000",
+                color: dark ? "#fff" : "#000",
               }}
             />
           </Button>

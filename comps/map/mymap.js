@@ -4,8 +4,8 @@ import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
 import { useSessionStorage } from "@mantine/hooks";
 import {
+  useMantineColorScheme,
   createStyles,
-  useMantineTheme,
   Center,
   ActionIcon,
   Autocomplete,
@@ -15,7 +15,6 @@ import {
   Flex,
   Text,
   Group,
-  Divider,
   NavLink,
   Drawer,
   Transition,
@@ -36,9 +35,9 @@ import {
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
+import { addEllipsis } from "../../libs/custom";
 import TourList from "./tourList";
 import Loader from "../loader";
-import { addEllipsis } from "../../libs/custom";
 
 export default function Mymap(props) {
   const {
@@ -48,8 +47,10 @@ export default function Mymap(props) {
     dropDownOpened,
     mapLoaded,
     setMapLoaded,
+    setMainMenuOpened,
   } = props;
-  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const mapRef = useRef();
   const router = useRouter();
   const [area, setArea] = useState({ label: "" });
@@ -69,45 +70,25 @@ export default function Mymap(props) {
   const [showChoice, setShowChoice] = useState(false);
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
-  const [mapReady, setMapReady] = useState(false);
   const [geoLat, setGeoLat] = useSessionStorage({
     key: "geoLatState",
-    defaultValue: null,
+    defaultValue: 37,
   });
   const [geoLng, setGeoLng] = useSessionStorage({
     key: "geoLngState",
-    defaultValue: null,
+    defaultValue: -95,
   });
   const [places, setPlaces] = useSessionStorage({
     key: "placeDataState",
     defaultValue: [],
   });
-  const [visible, setVisible] = useSessionStorage({
-    key: "visible",
-    defaultValue: false,
-  });
-  const [mapSpin, setMapSpin] = useSessionStorage({
-    key: "mapSpin",
-    defaultValue: true,
-  });
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
   });
-
-  const [viewState, setViewState] = useState({
-    latitude: 37,
-    longitude: -95,
-    zoom: 2.5,
-    pitch: 0,
+  const [guest, setGuest] = useSessionStorage({
+    key: "guest",
   });
-
-  const initialViewState = {
-    latitude: geoLat,
-    longitude: geoLng,
-    zoom: 2.5,
-    pitch: 0,
-  };
 
   const useStyles = createStyles((theme) => ({
     popup: {
@@ -121,29 +102,26 @@ export default function Mymap(props) {
         paddingBottom: "0rem !important",
         paddingLeft: "0rem !important",
         paddingRight: "0rem !important",
-        backgroundColor:
-          theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-        color: theme.colorScheme === "dark" ? theme.white : theme.black,
+        backgroundColor: dark ? theme.colors.dark[7] : theme.white,
+        color: dark ? theme.white : theme.black,
         borderRadius: theme.radius.sm,
         boxShadow: theme.shadows.sm,
         padding: theme.spacing.xs,
       },
       "& .mapboxgl-popup-tip": {
-        borderTopColor:
-          theme.colorScheme === "dark" ? `#000 !important` : `#fff !important`,
+        borderTopColor: dark ? `#000 !important` : `#fff !important`,
       },
     },
 
     select: {
       "& .mantine-Select-input": {
         "&::placeholder": {
-          color: theme.colorScheme === "dark" ? "#fff" : "#000",
+          color: dark ? "#fff" : "#000",
         },
         border: "none",
-        background:
-          theme.colorScheme === "dark"
-            ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-            : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+        background: dark
+          ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+          : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
       },
       "& .mantine-Select-dropdown": {
         borderRadius: "25px 0 0 25px",
@@ -151,81 +129,57 @@ export default function Mymap(props) {
       },
       "& .mantine-Select-root	": {
         borderRadius: "25px 0 0 25px",
-        boxShadow:
-          theme.colorScheme === "dark"
-            ? "0 2px 5px rgba(255, 255, 255, 0.02)"
-            : "0 2px 5px rgba(0, 0, 0, 0.05)",
+        boxShadow: dark
+          ? "0 2px 5px rgba(255, 255, 255, 0.02)"
+          : "0 2px 5px rgba(0, 0, 0, 0.05)",
       },
     },
   }));
 
   const { classes } = useStyles();
 
-  const filter = useMemo(
-    () => ["in", "name_en", area.label.toString()],
-    [area.label]
-  );
+  const initialViewState = {
+    latitude: 37,
+    longitude: -95,
+    zoom: 2.5,
+    pitch: 0,
+  };
+
+  const [viewState, setViewState] = useState(initialViewState);
+
+  useEffect(() => {
+    if (!geoLat || !geoLng) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          setGeoLat(position.coords.latitude);
+          setGeoLng(position.coords.longitude);
+        },
+        function (error) {
+          console.error("Error Code = " + error.code + " - " + error.message);
+        }
+      );
+    }
+    setViewState({
+      latitude: geoLat,
+      longitude: geoLng,
+      zoom: 2.5,
+    });
+    mapRef.current?.flyTo({
+      center: [geoLng, geoLat],
+      essential: true,
+      duration: 1000,
+    });
+  }, [mapRef, geoLat, geoLng, setGeoLat, setGeoLng]);
+
+  useEffect(() => {
+    if (user === null && guest === false) {
+      router.push("/");
+    }
+  }, [user, guest, router]);
 
   useEffect(() => {
     router.prefetch("/tripplanner");
   }, [router]);
-
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          let { latitude, longitude } = position.coords;
-          setGeoLat(latitude);
-          setGeoLng(longitude);
-        },
-        function (error) {
-          setGeoLat(37);
-          setGeoLng(-95);
-        }
-      );
-    }
-    let rotationIntervalId;
-    if (mapSpin && !user) {
-      rotationIntervalId = setInterval(() => {
-        mapRef.current?.easeTo({
-          center: [
-            mapRef.current?.getCenter().lng + 0.5,
-            mapRef.current?.getCenter().lat,
-          ],
-          zoom: 3.5,
-          pitch: 10,
-          duration: 25,
-        });
-      }, 25);
-    } else {
-      clearInterval(rotationIntervalId);
-      setMapSpin(false);
-      if (geoLat && geoLng) {
-        if (!mapReady) {
-          mapRef.current?.flyTo({
-            center: [geoLng, geoLat],
-            zoom: 2.5,
-            pitch: 0,
-            duration: 1500,
-          });
-          setMapReady(true);
-        }
-      }
-    }
-    return () => clearInterval(rotationIntervalId);
-  }, [
-    visible,
-    user,
-    mapRef,
-    mapSpin,
-    setMapSpin,
-    geoLat,
-    geoLng,
-    mapReady,
-    router,
-    setGeoLat,
-    setGeoLng,
-  ]);
 
   useEffect(() => {
     area.label === "United States" && setShowStates(true);
@@ -555,14 +509,14 @@ export default function Mymap(props) {
                   cursor: "pointer",
                   opacity: 0.7,
                   transform: "scale(1.5)",
-                  color: theme.colorScheme === "dark" ? " #121d47" : "#9c161c",
+                  color: dark ? " #121d47" : "#9c161c",
                 }}
               />
             </Marker>
           )}
         </Transition>
       )),
-    [topCities, theme.colorScheme, showMainMarker]
+    [dark, topCities, showMainMarker]
   );
 
   const fetchCities = async (location) => {
@@ -605,9 +559,8 @@ export default function Mymap(props) {
   const topCitiesList = topCities.map((city, index) => (
     <Group key={index}>
       <NavLink
-        // mb={index === topCities.length - 1 ? 0 : 5}
         label={city[0]}
-        c={theme.colorScheme === "dark" ? "white" : "dark"}
+        c={dark ? "white" : "dark"}
         icon={
           <IconMapPinFilled
             size={15}
@@ -621,7 +574,7 @@ export default function Mymap(props) {
         }
         onClick={() => selectTopCity(city)}
         bg={
-          theme.colorScheme === "dark"
+          dark
             ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
             : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)"
         }
@@ -632,7 +585,7 @@ export default function Mymap(props) {
             borderRadius: "25px 0 0 25px",
           },
           boxShadow: `${
-            theme.colorScheme === "dark"
+            dark
               ? "rgba(0, 0, 0, 0.2) 0px 10px 7px -5px"
               : "rgba(0, 0, 0, 0.1) 0px 5px 7px -5px"
           }`,
@@ -685,6 +638,7 @@ export default function Mymap(props) {
   };
 
   const choosePlace = (choice) => {
+    setMainMenuOpened(false);
     const place = {
       place: area.label,
       region:
@@ -703,7 +657,7 @@ export default function Mymap(props) {
           color: "orange",
           icon: <IconAlertTriangle size={20} />,
           style: {
-            backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+            backgroundColor: dark ? "#2e2e2e" : "#fff",
           },
           title: "Loaction already added",
           message: `${area.label} was already added to your tour`,
@@ -739,9 +693,14 @@ export default function Mymap(props) {
     setPopupInfo(null);
   };
 
+  const filter = useMemo(
+    () => ["in", "name_en", area.label.toString()],
+    [area.label]
+  );
+
   return (
     <>
-      <Loader pageLoaded={mapLoaded} />
+      <Loader mapLoaded={mapLoaded} />
       <Modal
         size={"xs"}
         zIndex={130}
@@ -752,10 +711,7 @@ export default function Mymap(props) {
         styles={(theme) => ({
           zIndex: 130,
           overlay: {
-            backgroundColor:
-              theme.colorScheme === "dark"
-                ? "rgba(0,0,0,0.5)"
-                : "rgba(255,255,255,0.5)",
+            backgroundColor: dark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)",
             backdropFilter: "blur(9px)",
           },
         })}
@@ -810,10 +766,9 @@ export default function Mymap(props) {
             boxShadow: "none",
             paddingTop: 100,
             overflow: "hidden",
-            background:
-              theme.colorScheme === "dark"
-                ? "linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1))"
-                : "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))",
+            background: dark
+              ? "linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1))"
+              : "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))",
           },
         })}
       >
@@ -836,7 +791,7 @@ export default function Mymap(props) {
               }}
             >
               <IconX
-                color={theme.colorScheme === "dark" ? "#9ff5fd" : "#fa7500"}
+                color={dark ? "#9ff5fd" : "#fa7500"}
                 stroke={5}
                 size={headerEm + "em"}
               />
@@ -848,16 +803,14 @@ export default function Mymap(props) {
               fz={headerEm + "em"}
               variant="gradient"
               gradient={{
-                from: theme.colorScheme === "dark" ? "#00E8FC" : "#fa7500",
-                to: theme.colorScheme === "dark" ? "#FFF" : "#000",
+                from: dark ? "#00E8FC" : "#fa7500",
+                to: dark ? "#FFF" : "#000",
                 deg: 45,
               }}
               sx={{
                 textTransform: "uppercase",
                 textShadow: `0 3px 5px ${
-                  theme.colorScheme === "dark"
-                    ? "rgba(255, 255, 255, 0.25)"
-                    : "rgba(0, 0, 0, 0.15)"
+                  dark ? "rgba(255, 255, 255, 0.25)" : "rgba(0, 0, 0, 0.15)"
                 }`,
               }}
             >
@@ -874,7 +827,8 @@ export default function Mymap(props) {
               pointerEvents: "all",
             }}
           >
-            {area.type !== "city" &&
+            {mapLoaded &&
+              area.type !== "city" &&
               !(area.type === "region" && area.country !== "United States") && (
                 <Autocomplete
                   size="md"
@@ -905,37 +859,32 @@ export default function Mymap(props) {
                       size={25}
                       style={{
                         paddingLeft: 5,
-                        color:
-                          theme.colorScheme === "dark" ? " #00e8fa" : "#fa7500",
+                        color: dark ? " #00e8fa" : "#fa7500",
                       }}
                     />
                   }
                   styles={(theme) => ({
                     input: {
                       "&::placeholder": {
-                        color: theme.colorScheme === "dark" ? "#fff" : "#000",
+                        color: dark ? "#fff" : "#000",
                       },
                       borderRadius: "25px 0 0 0",
                       border: "none",
                       borderTop: `2px solid ${
-                        theme.colorScheme === "dark"
-                          ? "rgba(255,255,255,0.1)"
-                          : "rgba(0,0,0,0.1)"
+                        dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
                       }`,
-                      background:
-                        theme.colorScheme === "dark"
-                          ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
-                          : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
+                      background: dark
+                        ? "linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(0, 0, 0, 1) 100%)"
+                        : "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255, 255, 255, 1) 100%)",
                     },
                     item: {
                       borderRadius: "18px 0 0 18px",
                     },
                     dropdown: {
                       borderRadius: "25px 0 0 25px",
-                      backgroundColor:
-                        theme.colorScheme === "dark"
-                          ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-                          : theme.fn.rgba(theme.colors.gray[0], 0.95),
+                      backgroundColor: dark
+                        ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                        : theme.fn.rgba(theme.colors.gray[0], 0.95),
                     },
                   })}
                 />
@@ -955,10 +904,7 @@ export default function Mymap(props) {
                     size={25}
                     style={{
                       paddingLeft: 5,
-                      color:
-                        theme.colorScheme === "dark"
-                          ? " rgba(0, 232, 250)"
-                          : "rgba(250, 117, 0)",
+                      color: dark ? " rgba(0, 232, 250)" : "rgba(250, 117, 0)",
                     }}
                   />
                 }
@@ -1002,10 +948,7 @@ export default function Mymap(props) {
                   size={25}
                   style={{
                     paddingLeft: 5,
-                    color:
-                      theme.colorScheme === "dark"
-                        ? " rgba(0, 232, 250)"
-                        : "rgba(250, 117, 0)",
+                    color: dark ? " rgba(0, 232, 250)" : "rgba(250, 117, 0)",
                   }}
                 />
               }
@@ -1014,11 +957,11 @@ export default function Mymap(props) {
           </Box>
         </Box>
       </Drawer>
-      {places.length >= 1 && !listOpened && !mapSpin && (
+      {places.length >= 1 && !listOpened && (
         // Tour List Button
         <Button
           onClick={() => setListOpened(true)}
-          bg={theme.colorScheme === "dark" ? "dark.9" : "gray.0"}
+          bg={dark ? "dark.9" : "gray.0"}
           opacity={0.7}
           radius={"0 3px 3px 0"}
           pos={"absolute"}
@@ -1038,294 +981,269 @@ export default function Mymap(props) {
           <IconList
             size={15}
             style={{
-              color: theme.colorScheme === "dark" ? "#fff" : "#000",
+              color: dark ? "#fff" : "#000",
             }}
           />
         </Button>
       )}
-      {!searchOpened &&
-        visible &&
-        !mapSpin &&
-        !dropDownOpened &&
-        !locationDrawer && (
-          <Center pos={"absolute"} top={"27px"} w={"100%"}>
-            {/* Main Place Search */}
-            <Box
-              w={400}
-              pos={"relative"}
-              style={{
-                zIndex: 200,
+      {!searchOpened && !dropDownOpened && !locationDrawer && (
+        <Center pos={"absolute"} top={"27px"} w={"100%"}>
+          {/* Main Place Search */}
+          <Box
+            w={400}
+            pos={"relative"}
+            style={{
+              zIndex: 200,
+            }}
+          >
+            <Autocomplete
+              icon={
+                <IconWorldSearch
+                  size={30}
+                  style={{
+                    paddingLeft: 5,
+                    color: dark ? " #00e8fa" : "#fa7500",
+                  }}
+                />
+              }
+              size="lg"
+              defaultValue=""
+              itemComponent={AutoCompItem}
+              value={countrySearch}
+              placeholder="Where would you like to go?"
+              onItemSubmit={(e) => locationHandler(e)}
+              data={countryData}
+              filter={(id, item) => item}
+              radius={25}
+              onChange={(e) => {
+                setCountrySearch(e);
+                handleChange("country");
               }}
-            >
-              <Autocomplete
-                icon={
-                  <IconWorldSearch
-                    size={30}
-                    style={{
-                      paddingLeft: 5,
-                      color:
-                        theme.colorScheme === "dark" ? " #00e8fa" : "#fa7500",
-                    }}
-                  />
-                }
-                size="lg"
-                defaultValue=""
-                itemComponent={AutoCompItem}
-                value={countrySearch}
-                placeholder="Where would you like to go?"
-                onItemSubmit={(e) => locationHandler(e)}
-                data={countryData}
-                filter={(id, item) => item}
-                radius={25}
-                onChange={(e) => {
-                  setCountrySearch(e);
-                  handleChange("country");
+              styles={(theme) => ({
+                root: {
+                  borderTop: `2px solid ${
+                    dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.1)"
+                  }`,
+                  borderRadius: "25px",
+                  boxShadow: dark
+                    ? "0 3px 5px rgba(255, 255, 255, 0.07)"
+                    : "0 3px 5px rgba(0, 0, 0, 0.2)",
+                },
+                item: { borderRadius: "17px" },
+                dropdown: {
+                  borderRadius: "25px",
+                  backgroundColor: dark
+                    ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                    : theme.fn.rgba(theme.colors.gray[0], 0.95),
+                },
+              })}
+            />
+          </Box>
+        </Center>
+      )}
+      <Map
+        {...viewState}
+        onMove={(e) => setViewState(e.viewState)}
+        initialViewState={initialViewState}
+        renderWorldCopies={true}
+        styleDiffing={false}
+        maxPitch={80}
+        onZoomEnd={onZoomEnd}
+        maxZoom={14}
+        minZoom={2}
+        reuseMaps={true}
+        onLoad={() => {
+          setMapLoaded(true);
+        }}
+        touchPitch={false}
+        ref={mapRef}
+        onClick={(e) => {
+          locationHandler(e.features[0]);
+        }}
+        projection="globe"
+        doubleClickZoom={false}
+        interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
+        mapStyle={
+          dark
+            ? "mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
+            : "mapbox://styles/zenneson/clk2aa9s401ed01padxsqanrd"
+        }
+        style={{ width: "100%", height: "100%" }}
+        mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
+      >
+        {!searchOpened && (
+          <TourList
+            listOpened={listOpened}
+            setListOpened={setListOpened}
+            places={places}
+            setPlaces={setPlaces}
+          />
+        )}
+        {colorScheme ? pins : {}}
+        {popupInfo && (
+          <Popup
+            className={classes.popup}
+            anchor="bottom"
+            offset={[0, -30]}
+            closeOnMove={false}
+            closeButton={false}
+            closeOnClick={false}
+            longitude={popupInfo[1][0]}
+            latitude={popupInfo[1][1]}
+          >
+            <Box py={10} px={20} onClick={() => selectTopCity(popupInfo)}>
+              {popupInfo[0]}
+            </Box>
+          </Popup>
+        )}
+        {showChoice && (
+          <Popup
+            className={classes.popup}
+            anchor="bottom"
+            offset={[0, -30]}
+            closeOnMove={false}
+            closeButton={false}
+            closeOnClick={false}
+            longitude={lngLat[0]}
+            latitude={lngLat[1]}
+          >
+            <Box py={10} px={20}>
+              {area.label}
+              <NavLink
+                mt={5}
+                icon={<IconPlane size={15} />}
+                label={"Choose as destination"}
+                onClick={() => choosePlace("travel")}
+                sx={{
+                  borderLeft: `1px solid ${
+                    dark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)"
+                  }`,
                 }}
-                styles={(theme) => ({
-                  root: {
-                    borderTop: `2px solid ${
-                      theme.colorScheme === "dark"
-                        ? "rgba(255,255,255,0.3)"
-                        : "rgba(0,0,0,0.1)"
-                    }`,
-                    borderRadius: "25px",
-                    boxShadow:
-                      theme.colorScheme === "dark"
-                        ? "0 3px 5px rgba(255, 255, 255, 0.07)"
-                        : "0 3px 5px rgba(0, 0, 0, 0.2)",
-                  },
-                  item: { borderRadius: "17px" },
-                  dropdown: {
-                    borderRadius: "25px",
-                    backgroundColor:
-                      theme.colorScheme === "dark"
-                        ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-                        : theme.fn.rgba(theme.colors.gray[0], 0.95),
-                  },
-                })}
+              />
+              <NavLink
+                icon={<IconList size={15} />}
+                label={"Add to Tour List"}
+                onClick={() => choosePlace("tour")}
+                sx={{
+                  borderLeft: `1px solid ${
+                    dark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)"
+                  }`,
+                }}
               />
             </Box>
-          </Center>
+          </Popup>
         )}
-      {geoLat && geoLng && (
-        <Map
-          {...viewState}
-          onMove={(e) => setViewState(e.viewState)}
-          initialViewState={initialViewState}
-          renderWorldCopies={true}
-          styleDiffing={false}
-          maxPitch={80}
-          onZoomEnd={onZoomEnd}
-          maxZoom={14}
-          minZoom={2}
-          reuseMaps={true}
-          onLoad={() => {
-            setMapLoaded(true);
-            sessionStorage.removeItem("noLogin");
-            setViewState(initialViewState);
-          }}
-          touchPitch={false}
-          ref={mapRef}
-          onClick={(e) => {
-            locationHandler(e.features[0]);
-          }}
-          projection="globe"
-          doubleClickZoom={false}
-          interactiveLayerIds={[
-            "states",
-            "country-boundaries",
-            "clicked-state",
-          ]}
-          mapStyle={
-            theme.colorScheme === "dark"
-              ? "mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
-              : "mapbox://styles/zenneson/clk2aa9s401ed01padxsqanrd"
-          }
-          style={{ width: "100%", height: "100%" }}
-          mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
+        <Transition
+          mounted={showMainMarker}
+          transition="fade"
+          duration={300}
+          timingFunction="ease"
         >
-          {visible && !searchOpened && (
-            <TourList
-              listOpened={listOpened}
-              setListOpened={setListOpened}
-              places={places}
-              setPlaces={setPlaces}
-            />
-          )}
-          {theme.colorScheme ? pins : {}}
-          {popupInfo && (
-            <Popup
-              className={classes.popup}
-              anchor="bottom"
-              offset={[0, -30]}
-              closeOnMove={false}
-              closeButton={false}
-              closeOnClick={false}
-              longitude={popupInfo[1][0]}
-              latitude={popupInfo[1][1]}
-            >
-              <Box py={10} px={20} onClick={() => selectTopCity(popupInfo)}>
-                {popupInfo[0]}
-              </Box>
-            </Popup>
-          )}
-          {showChoice && (
-            <Popup
-              className={classes.popup}
-              anchor="bottom"
-              offset={[0, -30]}
-              closeOnMove={false}
-              closeButton={false}
-              closeOnClick={false}
+          {(styles) => (
+            <Marker
+              style={styles}
               longitude={lngLat[0]}
               latitude={lngLat[1]}
+              onClick={(e) => {
+                e.originalEvent.stopPropagation();
+                setShowChoice(true);
+              }}
             >
-              <Box py={10} px={20}>
-                {area.label}
-                <NavLink
-                  mt={5}
-                  icon={<IconPlane size={15} />}
-                  label={"Choose as destination"}
-                  onClick={() => choosePlace("travel")}
-                  sx={{
-                    borderLeft: `1px solid ${
-                      theme.colorScheme === "dark"
-                        ? "rgba(255, 255, 255, 0.2)"
-                        : "rgba(0, 0, 0, 0.2)"
-                    }`,
-                  }}
-                />
-                <NavLink
-                  icon={<IconList size={15} />}
-                  label={"Add to Tour List"}
-                  onClick={() => choosePlace("tour")}
-                  sx={{
-                    borderLeft: `1px solid ${
-                      theme.colorScheme === "dark"
-                        ? "rgba(255, 255, 255, 0.2)"
-                        : "rgba(0, 0, 0, 0.2)"
-                    }`,
-                  }}
-                />
-              </Box>
-            </Popup>
-          )}
-          <Transition
-            mounted={showMainMarker}
-            transition="fade"
-            duration={300}
-            timingFunction="ease"
-          >
-            {(styles) => (
-              <Marker
-                style={styles}
-                longitude={lngLat[0]}
-                latitude={lngLat[1]}
-                onClick={(e) => {
-                  e.originalEvent.stopPropagation();
-                  setShowChoice(true);
+              <IconMapPinFilled
+                style={{
+                  cursor: "pointer",
+                  transform: "scale(5)",
+                  color: dark ? "#00e8fa" : "#fa7500",
                 }}
-              >
-                <IconMapPinFilled
-                  style={{
-                    cursor: "pointer",
-                    transform: "scale(5)",
-                    color: theme.colorScheme === "dark" ? "#00e8fa" : "#fa7500",
-                  }}
-                />
-              </Marker>
-            )}
-          </Transition>
-          <Source
+              />
+            </Marker>
+          )}
+        </Transition>
+        <Source
+          id="country-boundaries"
+          type="vector"
+          url="mapbox://mapbox.country-boundaries-v1"
+        >
+          <Layer
             id="country-boundaries"
-            type="vector"
-            url="mapbox://mapbox.country-boundaries-v1"
-          >
-            <Layer
-              id="country-boundaries"
-              source="country-boundaries"
-              source-layer="country_boundaries"
-              type="fill"
-              paint={{
-                "fill-color": "rgba(0,0,0,0)",
-              }}
-            />
-            <Layer
-              id="country-boundaries-fill"
-              source="country-boundaries"
-              source-layer="country_boundaries"
-              type="fill"
-              filter={!showStates ? filter : ["in", "name", "United States"]}
-              paint={{
-                "fill-color": `${
-                  theme.colorScheme === "dark"
-                    ? " rgba(0, 232, 250, 0.8)"
-                    : "rgba(250, 117, 0, 0.8)"
-                }`,
-              }}
-            />
-            <Layer
-              id="country-boundaries-lines"
-              source="country-boundaries"
-              source-layer="country_boundaries"
-              type="line"
-              filter={filter}
-              paint={{
-                "line-color": "rgba(255, 255, 255, 1)",
-                "line-width": 4,
-              }}
-            />
-          </Source>
-          <Source
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="fill"
+            paint={{
+              "fill-color": "rgba(0,0,0,0)",
+            }}
+          />
+          <Layer
+            id="country-boundaries-fill"
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="fill"
+            filter={!showStates ? filter : ["in", "name", "United States"]}
+            paint={{
+              "fill-color": `${
+                dark ? " rgba(0, 232, 250, 0.8)" : "rgba(250, 117, 0, 0.8)"
+              }`,
+            }}
+          />
+          <Layer
+            id="country-boundaries-lines"
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="line"
+            filter={filter}
+            paint={{
+              "line-color": "rgba(255, 255, 255, 1)",
+              "line-width": 4,
+            }}
+          />
+        </Source>
+        <Source
+          id="states-boundaries"
+          type="geojson"
+          data="data/states.geojson"
+        >
+          <Layer
+            id="states"
+            type="fill"
+            source="states-boundaries"
+            paint={{
+              "fill-color": "rgba(0,0,0,0)",
+            }}
+            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+          />
+          <Layer
             id="states-boundaries"
-            type="geojson"
-            data="data/states.geojson"
-          >
-            <Layer
-              id="states"
-              type="fill"
-              source="states-boundaries"
-              paint={{
-                "fill-color": "rgba(0,0,0,0)",
-              }}
-              filter={!showStates ? filter : ["!", ["in", "name", ""]]}
-            />
-            <Layer
-              id="states-boundaries"
-              type="line"
-              source="states-boundaries"
-              paint={{
-                "line-color": "rgba(255, 255, 255, 1)",
-                "line-width": 4,
-              }}
-              filter={!showStates ? filter : ["!", ["in", "name", ""]]}
-            />
-          </Source>
-          <Source id="clicked-state" type="geojson" data="data/states.geojson">
-            <Layer
-              id="clicked-state"
-              type="fill"
-              paint={{
-                "fill-color": `${
-                  theme.colorScheme === "dark"
-                    ? " rgba(0, 232, 250, 0.8)"
-                    : "rgba(250, 117, 0, 0.8)"
-                }`,
-              }}
-              filter={["==", "NAME", area.label]}
-            />
-            <Layer
-              id="state-borders"
-              type="line"
-              paint={{
-                "line-color": "rgba(255, 255, 255, 1)",
-                "line-width": 4,
-              }}
-              filter={["==", "NAME", area.label]}
-            />
-          </Source>
-        </Map>
-      )}
+            type="line"
+            source="states-boundaries"
+            paint={{
+              "line-color": "rgba(255, 255, 255, 1)",
+              "line-width": 4,
+            }}
+            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+          />
+        </Source>
+        <Source id="clicked-state" type="geojson" data="data/states.geojson">
+          <Layer
+            id="clicked-state"
+            type="fill"
+            paint={{
+              "fill-color": `${
+                dark ? " rgba(0, 232, 250, 0.8)" : "rgba(250, 117, 0, 0.8)"
+              }`,
+            }}
+            filter={["==", "NAME", area.label]}
+          />
+          <Layer
+            id="state-borders"
+            type="line"
+            paint={{
+              "line-color": "rgba(255, 255, 255, 1)",
+              "line-width": 4,
+            }}
+            filter={["==", "NAME", area.label]}
+          />
+        </Source>
+      </Map>
     </>
   );
 }

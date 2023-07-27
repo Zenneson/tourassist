@@ -1,5 +1,6 @@
+import { useState, useRef } from "react";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   ActionIcon,
   Box,
   Button,
@@ -8,6 +9,7 @@ import {
   Group,
   Title,
   Switch,
+  Tooltip,
 } from "@mantine/core";
 import {
   IconKey,
@@ -23,15 +25,34 @@ import {
   IconDeviceSim2,
   IconPhone,
   IconBuildingBank,
+  IconPencil,
 } from "@tabler/icons-react";
-import { useSessionStorage } from "@mantine/hooks";
+import { updateDoc, doc } from "firebase/firestore";
+import { firestore } from "../../libs/firebase";
 
-export default function AccountInfo() {
-  const theme = useMantineTheme();
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
+export default function AccountInfo(props) {
+  const { user } = props;
+  const firstNameRef = useRef();
+  const [firstName, setFirstName] = useState(false);
+  const [firstNameValue, setFirstNameValue] = useState(
+    user && user.firstName ? user.firstName : ""
+  );
+  const lastNameRef = useRef();
+  const [lastName, setLastName] = useState(false);
+  const [lastNameValue, setLastNameValue] = useState(
+    user && user.lastName ? user.lastName : ""
+  );
+  const phoneRef = useRef();
+  const [phone, setPhone] = useState(false);
+  const [phoneValue, setPhoneValue] = useState(
+    user && user.phone ? user.phone : ""
+  );
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
+
+  const updateField = async (update) => {
+    await updateDoc(doc(firestore, "users", user.email), update);
+  };
 
   return (
     <Box pr={30} mt={15} pos={"relative"} h={"calc(100vh - 120px)"}>
@@ -52,41 +73,133 @@ export default function AccountInfo() {
           pt={10}
           pb={12}
           sx={{
-            borderLeft: `3px solid ${
-              theme.colorScheme === "dark"
-                ? theme.colors.gray[8]
-                : theme.colors.gray[4]
-            }`,
+            borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
           }}
         >
           <Group grow spacing={10}>
             <Input
+              ref={firstNameRef}
               icon={<IconDeviceSim1 size={20} />}
-              placeholder="First Name"
+              value={firstNameValue}
+              placeholder={"First Name"}
+              onChange={(e) => setFirstNameValue(e.target.value)}
+              sx={{
+                pointerEvents: !firstName ? "none" : "all",
+              }}
               rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
-                </ActionIcon>
+                <Tooltip
+                  label="Edit First Name"
+                  color={dark ? "dark" : "gray.0"}
+                  c={dark ? "gray.0" : "dark.9"}
+                  withArrow
+                >
+                  <ActionIcon
+                    opacity={0.5}
+                    variant="subtle"
+                    sx={{
+                      pointerEvents: "all",
+                    }}
+                    onClick={() => {
+                      if (!firstName) {
+                        setFirstName(true);
+                        firstNameRef.current.focus();
+                      } else {
+                        updateField({ firstName: firstNameValue });
+                        setFirstName(false);
+                      }
+                    }}
+                  >
+                    {user && user.firstName ? (
+                      <IconPencil size={20} />
+                    ) : (
+                      <IconCirclePlus size={16} />
+                    )}
+                  </ActionIcon>
+                </Tooltip>
               }
             />
             <Input
+              ref={lastNameRef}
               icon={<IconDeviceSim2 size={20} />}
-              placeholder="Last Name"
+              value={lastNameValue}
+              placeholder={"Last Name"}
+              onChange={(e) => setLastNameValue(e.target.value)}
+              sx={{
+                pointerEvents: !lastName ? "none" : "all",
+              }}
               rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
-                </ActionIcon>
+                <Tooltip
+                  label="Edit Last Name"
+                  color={dark ? "dark" : "gray.0"}
+                  c={dark ? "gray.0" : "dark.9"}
+                  withArrow
+                >
+                  <ActionIcon
+                    opacity={0.5}
+                    variant="subtle"
+                    sx={{
+                      pointerEvents: "all",
+                    }}
+                    onClick={() => {
+                      if (!lastName) {
+                        setLastName(true);
+                        lastNameRef.current.focus();
+                      } else {
+                        updateField({ lastName: lastNameValue });
+                        setLastName(false);
+                      }
+                    }}
+                  >
+                    {user && user.lastName ? (
+                      <IconPencil size={20} />
+                    ) : (
+                      <IconCirclePlus size={16} />
+                    )}
+                  </ActionIcon>
+                </Tooltip>
               }
             />
           </Group>
           <Group grow spacing={10}>
             <Input
+              ref={phoneRef}
               icon={<IconPhone size={20} />}
-              placeholder="Phone #"
+              value={phoneValue}
+              placeholder={"Phone #"}
+              onChange={(e) => setPhoneValue(e.target.value)}
+              sx={{
+                pointerEvents: !phone ? "none" : "all",
+              }}
               rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
-                </ActionIcon>
+                <Tooltip
+                  label="Edit Phone #"
+                  color={dark ? "dark" : "gray.0"}
+                  c={dark ? "gray.0" : "dark.9"}
+                  withArrow
+                >
+                  <ActionIcon
+                    opacity={0.5}
+                    variant="subtle"
+                    sx={{
+                      pointerEvents: "all",
+                    }}
+                    onClick={() => {
+                      if (!phone) {
+                        setPhone(true);
+                        phoneRef.current.focus();
+                      } else {
+                        updateField({ phone: phoneValue });
+                        setPhone(false);
+                      }
+                    }}
+                  >
+                    {user && user.phone ? (
+                      <IconPencil size={20} />
+                    ) : (
+                      <IconCirclePlus size={16} />
+                    )}
+                  </ActionIcon>
+                </Tooltip>
               }
             />
             <Button variant="light" color="green" fz={12}>
@@ -119,11 +232,7 @@ export default function AccountInfo() {
           pt={10}
           pb={12}
           sx={{
-            borderLeft: `3px solid ${
-              theme.colorScheme === "dark"
-                ? theme.colors.gray[8]
-                : theme.colors.gray[4]
-            }`,
+            borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
           }}
         >
           <Group grow spacing={10}>
@@ -183,11 +292,7 @@ export default function AccountInfo() {
           pt={10}
           pb={12}
           sx={{
-            borderLeft: `3px solid ${
-              theme.colorScheme === "dark"
-                ? theme.colors.gray[8]
-                : theme.colors.gray[4]
-            }`,
+            borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
           }}
         >
           <Flex direction="column" gap={8} align="flex-start" pl={20}>

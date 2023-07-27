@@ -3,7 +3,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import { motion } from "framer-motion";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   Autocomplete,
   ActionIcon,
   Space,
@@ -55,7 +55,8 @@ import TripContent from "../comps/tripinfo/tripContent";
 
 export default function TripPlannerPage(props) {
   let { auth, mapLoaded } = props;
-  const theme = useMantineTheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startLocale, setStartLocale] = useState("");
@@ -63,7 +64,6 @@ export default function TripPlannerPage(props) {
   const travelersHandlerRef = useRef(null);
   const [travelDates, setTravelDates] = useState(null);
   const [roundTrip, setRoundTrip] = useState(false);
-  const forceUpdate = useForceUpdate();
   const startLocaleRef = useRef(null);
   const [newCost, setNewCost] = useState([]);
   const newCostRef = useRef(null);
@@ -73,9 +73,11 @@ export default function TripPlannerPage(props) {
   const [costsObj, setCostsObj] = useState({});
   const [destinations, setDestinations] = useState([]);
   const [costsSum, setCostsSum] = useState(0);
-  const router = useRouter();
-  const dayjs = require("dayjs");
   const [active, setActive] = useState(0);
+  const [infoAdded, setInfoAdded] = useState(false);
+  const router = useRouter();
+  const forceUpdate = useForceUpdate();
+  const dayjs = require("dayjs");
 
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -120,9 +122,7 @@ export default function TripPlannerPage(props) {
             marginTop: -25,
             width: "50%",
             border: `1px dotted ${
-              theme.colorScheme === "dark"
-                ? "rgba(255, 255, 255, 0.05)"
-                : "rgba(0, 0, 0, 0.234)"
+              dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.234)"
             }`,
           }}
         ></div>
@@ -286,9 +286,7 @@ export default function TripPlannerPage(props) {
           </Box>
           <Divider
             opacity={0.2}
-            color={
-              theme.colorScheme === "dark" ? "rgba(255, 255, 255, 0.4)" : "#000"
-            }
+            color={dark ? "rgba(255, 255, 255, 0.4)" : "#000"}
           />
           <Group position="right">
             <Popover
@@ -445,7 +443,7 @@ export default function TripPlannerPage(props) {
     message: `${startLocale} is set as a destination. Please choose another location.`,
     color: "orange",
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
@@ -457,7 +455,7 @@ export default function TripPlannerPage(props) {
     message: "Please provide a title for your trip.",
     color: "red",
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
@@ -469,7 +467,7 @@ export default function TripPlannerPage(props) {
     message: "Please provide a longer Title for your trip.",
     color: "orange",
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
@@ -481,7 +479,7 @@ export default function TripPlannerPage(props) {
     message: "Please provide a description of your trip below.",
     color: "red",
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
@@ -493,7 +491,19 @@ export default function TripPlannerPage(props) {
     message: "Please provide more information about your trip.",
     color: "orange",
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
+    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+  };
+
+  const noAccountInfo = {
+    title: "Account Information Required",
+    message: "Please provide your account information below.",
+    color: "orange",
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
@@ -530,9 +540,10 @@ export default function TripPlannerPage(props) {
       tripId: tripId,
       user: user.email,
     });
-    setImages([]);
-    setTripDesc("");
-    setPlaceData([]);
+    sessionStorage.removeItem("placeDataState");
+    sessionStorage.removeItem("images");
+    sessionStorage.removeItem("tripDesc");
+    router.push("/" + tripId);
   };
 
   // TODO - Pass info to Trippage
@@ -562,8 +573,11 @@ export default function TripPlannerPage(props) {
     }
     if (active === 3) {
       setTripId(generateTripId());
+      if (!user && !infoAdded && router.pathname === "/tripplanner") {
+        notifications.show(noAccountInfo);
+        return;
+      }
       saveToDB(user);
-      router.push("/" + tripId);
     }
   };
 
@@ -716,11 +730,7 @@ export default function TripPlannerPage(props) {
                             <Flex align={"center"}>
                               <IconFriends
                                 size={16}
-                                color={
-                                  theme.colorScheme === "dark"
-                                    ? "rgb(255,255,255)"
-                                    : "rgb(0,0,0)"
-                                }
+                                color={dark ? "rgb(255,255,255)" : "rgb(0,0,0)"}
                               />
                               <Text ta={"right"} ml={5} fz={13} opacity={0.4}>
                                 Travelers:
@@ -733,12 +743,8 @@ export default function TripPlannerPage(props) {
                           <Button
                             variant="filled"
                             fz={15}
-                            color={
-                              theme.colorScheme === "dark" ? "dark.5" : "gray.1"
-                            }
-                            c={
-                              theme.colorScheme === "dark" ? "gray.0" : "dark.9"
-                            }
+                            color={dark ? "dark.5" : "gray.1"}
+                            c={dark ? "gray.0" : "dark.9"}
                             onClick={() =>
                               travelersHandlerRef.current.decrement()
                             }
@@ -766,12 +772,8 @@ export default function TripPlannerPage(props) {
                           <Button
                             variant="filled"
                             fz={15}
-                            color={
-                              theme.colorScheme === "dark" ? "dark.5" : "gray.1"
-                            }
-                            c={
-                              theme.colorScheme === "dark" ? "gray.0" : "dark.9"
-                            }
+                            color={dark ? "dark.5" : "gray.1"}
+                            c={dark ? "gray.0" : "dark.9"}
                             onClick={() =>
                               travelersHandlerRef.current.increment()
                             }
@@ -793,9 +795,7 @@ export default function TripPlannerPage(props) {
                                   <IconRotate360
                                     size={16}
                                     color={
-                                      theme.colorScheme === "dark"
-                                        ? "rgb(255,255,255)"
-                                        : "rgb(0,0,0)"
+                                      dark ? "rgb(255,255,255)" : "rgb(0,0,0)"
                                     }
                                   />
                                   <Text
@@ -829,9 +829,7 @@ export default function TripPlannerPage(props) {
                             spacing={0}
                             p={20}
                             h={150}
-                            bg={
-                              theme.colorScheme === "dark" ? "dark.5" : "gray.1"
-                            }
+                            bg={dark ? "dark.5" : "gray.1"}
                             sx={{
                               overflowX: "auto",
                               borderRadius: "3px",
@@ -907,11 +905,7 @@ export default function TripPlannerPage(props) {
                                 />
                                 <Group spacing={5} fz={12}>
                                   <Title
-                                    color={
-                                      theme.colorScheme === "dark"
-                                        ? "red"
-                                        : "blue"
-                                    }
+                                    color={dark ? "red" : "blue"}
                                     order={3}
                                   >
                                     •
@@ -998,9 +992,7 @@ export default function TripPlannerPage(props) {
                         return (
                           <Indicator
                             size={5}
-                            color={
-                              theme.colorScheme === "dark" ? "red" : "blue"
-                            }
+                            color={dark ? "red" : "blue"}
                             offset={-3}
                             disabled={!isSpecificDay}
                           >
@@ -1010,37 +1002,29 @@ export default function TripPlannerPage(props) {
                       }}
                       sx={{
                         ".mantine-DatePicker-day[data-disabled]": {
-                          color:
-                            theme.colorScheme === "dark"
-                              ? theme.colors.dark[6]
-                              : theme.colors.gray[2],
+                          color: dark
+                            ? theme.colors.dark[6]
+                            : theme.colors.gray[2],
                         },
                         ".mantine-DatePicker-day[data-weekend]": {
-                          color:
-                            theme.colorScheme === "dark"
-                              ? theme.colors.blue[2]
-                              : theme.colors.red[3],
+                          color: dark
+                            ? theme.colors.blue[2]
+                            : theme.colors.red[3],
                         },
                         ".mantine-DatePicker-day[data-outside]": {
-                          color:
-                            theme.colorScheme === "dark"
-                              ? theme.colors.dark[3]
-                              : theme.colors.gray[5],
+                          color: dark
+                            ? theme.colors.dark[3]
+                            : theme.colors.gray[5],
                         },
                         ".mantine-DatePicker-day[data-selected]": {
                           border: `1px solid ${
-                            theme.colorScheme === "dark"
-                              ? theme.colors.blue[1]
-                              : theme.colors.red[2]
+                            dark ? theme.colors.blue[1] : theme.colors.red[2]
                           }`,
-                          backgroundColor:
-                            theme.colorScheme === "dark"
-                              ? theme.colors.gray[5]
-                              : theme.colors.red[0],
+                          backgroundColor: dark
+                            ? theme.colors.gray[5]
+                            : theme.colors.red[0],
                           borderTop: `4px solid ${
-                            theme.colorScheme === "dark"
-                              ? theme.colors.blue[7]
-                              : theme.colors.red[9]
+                            dark ? theme.colors.blue[7] : theme.colors.red[9]
                           }`,
                           color: "#404040",
                           transition: "all 0.15s ease-in-out",
@@ -1116,13 +1100,9 @@ export default function TripPlannerPage(props) {
                     onChange={(e) => setTripTitle(e.target.value)}
                     sx={{
                       ".mantine-Input-input": {
-                        background:
-                          theme.colorScheme === "dark" ? "#101113" : "#ced4da",
+                        background: dark ? "#101113" : "#ced4da",
                         "&:focus": {
-                          background:
-                            theme.colorScheme === "dark"
-                              ? "#383a3f"
-                              : "#f1f3f5",
+                          background: dark ? "#383a3f" : "#f1f3f5",
                         },
                         "&::placeholder": {
                           fontWeight: 700,
@@ -1152,7 +1132,11 @@ export default function TripPlannerPage(props) {
                   >
                     <Box hidden={user} w={"100%"} mb={5}>
                       <Box>
-                        <LoginComp mapLoaded={mapLoaded} auth={auth} />
+                        <LoginComp
+                          setInfoAdded={setInfoAdded}
+                          mapLoaded={mapLoaded}
+                          auth={auth}
+                        />
                       </Box>
                     </Box>
                     <Center mt={user ? 20 : 0}>
@@ -1274,7 +1258,7 @@ export default function TripPlannerPage(props) {
               <Button
                 fullWidth
                 variant={"filled"}
-                bg={theme.colorScheme === "dark" ? "dark.9" : "gray.3"}
+                bg={dark ? "dark.9" : "gray.3"}
                 c={"white"}
                 mb={10}
                 onClick={prevStep}
@@ -1287,13 +1271,7 @@ export default function TripPlannerPage(props) {
               <Button
                 fullWidth
                 variant={"filled"}
-                bg={
-                  active === 3
-                    ? "primary"
-                    : theme.colorScheme === "dark"
-                    ? "dark.9"
-                    : "gray.3"
-                }
+                bg={active === 3 ? "primary" : dark ? "dark.9" : "gray.3"}
                 c={"white"}
                 onClick={changeNextStep}
               >

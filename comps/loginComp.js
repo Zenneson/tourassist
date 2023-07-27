@@ -6,7 +6,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
-  useMantineTheme,
+  useMantineColorScheme,
   Anchor,
   Box,
   Button,
@@ -60,8 +60,9 @@ const useStyles = createStyles((theme, { floating }) => ({
 }));
 
 export default function LoginComp(props) {
-  const { auth, mapLoaded } = props;
-  const theme = useMantineTheme();
+  const { auth, setInfoAdded } = props;
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [firstNameFocus, setFirstNameFocus] = useState(false);
@@ -73,12 +74,12 @@ export default function LoginComp(props) {
   const [passPopOpened, setPassPopOpened] = useState(false);
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const router = useRouter();
-  const [visible, setVisible] = useSessionStorage({
-    key: "visible",
-    defaultValue: false,
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
   });
 
-  if (type === "login" && router.pathname === "/tripplanner") {
+  if (!user && type === "login" && router.pathname === "/tripplanner") {
     toggle();
   }
 
@@ -162,7 +163,7 @@ export default function LoginComp(props) {
     color: "green",
     icon: <IconCheck size={20} />,
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     title: "Account Created",
     message: `${form.values.firstName} ${form.values.lastName}'s account has been created.`,
@@ -172,7 +173,7 @@ export default function LoginComp(props) {
     color: "red",
     icon: <IconX size={20} />,
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     title: "Email already in use",
     message: `${form.values.email} is linked to another account.`,
@@ -182,7 +183,7 @@ export default function LoginComp(props) {
     color: "red",
     icon: <IconX size={20} />,
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     title: "User not found",
     message: `An account for ${form.values.email} does not exist.`,
@@ -192,14 +193,13 @@ export default function LoginComp(props) {
     color: "red",
     icon: <IconX size={20} />,
     style: {
-      backgroundColor: theme.colorScheme === "dark" ? "#2e2e2e" : "#fff",
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
     title: "Wrong password",
     message: `The password you entered is incorrect.`,
   };
 
   const addUser = async (user) => {
-    setVisible(true);
     await setDoc(doc(firestore, "users", user.email), {
       firstName: form.values.firstName,
       lastName: form.values.lastName,
@@ -208,10 +208,13 @@ export default function LoginComp(props) {
       creationTime: estTimeStamp(user.metadata.creationTime),
     });
     notifications.show(newAccount);
+    if (router.pathname !== "/tripplanner") {
+      router.push("/map");
+    }
   };
 
   const setLogin = async (user) => {
-    setVisible(true);
+    router.push("/map");
   };
 
   const handleLogin = () => {
@@ -223,6 +226,7 @@ export default function LoginComp(props) {
       )
         .then((userCredential) => {
           addUser(userCredential.user);
+          setInfoAdded(true);
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -273,7 +277,8 @@ export default function LoginComp(props) {
               </>
             }
             labelPosition="left"
-            c={theme.colorScheme === "dark" ? "#fff" : "#000"}
+            color={dark ? "#fff" : "#000"}
+            c={dark ? "#fff" : "#000"}
             mt={16}
             opacity={0.7}
           />
@@ -410,13 +415,12 @@ export default function LoginComp(props) {
               </Anchor>
             )}
             <Button
-              loading={!mapLoaded}
               size={"sm"}
               mt={0}
               fw={700}
               uppercase={true}
               variant="light"
-              bg={theme.colorScheme === "dark" ? "dark.5" : "gray.2"}
+              bg={dark ? "dark.5" : "gray.2"}
               c="gray.5"
               sx={{ color: "rgba(255,255,255,0.3)" }}
               type="submit"
