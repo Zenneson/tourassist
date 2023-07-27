@@ -48,9 +48,9 @@ export default function Intro(props) {
         opacity={firstDown ? 0 : 1}
         w={firstDown ? 0 : 700}
         h={"100vh"}
-        bg={dark ? "rgba(2, 2, 2, 0.5)" : "rgba(255, 255, 255, 0.5)"}
+        bg={dark ? "rgba(2, 2, 2, 0.5)" : "rgba(255, 255, 255, 0.85)"}
         sx={{
-          backdropFilter: "blur(50px)",
+          backdropFilter: "blur(5px)",
           flexDirection: "column",
         }}
       >
@@ -79,7 +79,7 @@ export default function Intro(props) {
         </Box>
       </Center>
       <Center
-        bg={dark ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.9)"}
+        bg={dark ? "rgba(0,0,0,0.95)" : "rgba(255,255,255,0.8)"}
         w={"100%"}
         sx={
           {
@@ -113,6 +113,7 @@ export default function Intro(props) {
             fw={400}
             transform="uppercase"
             fz={!firstDown ? "4.3vw" : "7vw"}
+            color="#8c8c8c"
             sx={{
               lineHeight: "1",
               textShadow: "0 2px 5px rgba(0,0,0,0.2)",

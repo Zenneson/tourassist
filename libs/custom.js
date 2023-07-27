@@ -44,6 +44,15 @@ export const formatNumber = (num) => {
   return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+export const formatPhoneNumber = (phoneNumberString) => {
+  const cleaned = ("" + phoneNumberString).replace(/\D/g, "");
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  if (match) {
+    return "(" + match[1] + ") " + match[2] + "-" + match[3];
+  }
+  return null;
+};
+
 export function useUserData() {
   const [userAuth] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
@@ -73,6 +82,5 @@ export function useUserData() {
     // Cleanup function to unsubscribe from the listener when the component unmounts
     return () => unsubscribe();
   }, [userAuth]); // The effect hook depends on userAuth
-
   return userData;
 }

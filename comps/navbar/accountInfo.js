@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, use } from "react";
 import {
   useMantineColorScheme,
   ActionIcon,
@@ -27,8 +27,10 @@ import {
   IconBuildingBank,
   IconPencil,
 } from "@tabler/icons-react";
+import { useWindowEvent } from "@mantine/hooks";
 import { updateDoc, doc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
+import { formatPhoneNumber } from "../../libs/custom";
 
 export default function AccountInfo(props) {
   const { user } = props;
@@ -53,6 +55,44 @@ export default function AccountInfo(props) {
   const updateField = async (update) => {
     await updateDoc(doc(firestore, "users", user.email), update);
   };
+
+  const refs = {
+    firstName: firstNameRef,
+    lastName: lastNameRef,
+    phone: phoneRef,
+  };
+
+  const values = {
+    firstName: firstNameValue,
+    lastName: lastNameValue,
+    phone: phoneValue,
+  };
+
+  const setters = {
+    firstName: setFirstName,
+    lastName: setLastName,
+    phone: setPhone,
+  };
+
+  const useUpdateOnEnter = (refs, values, setters) => {
+    useWindowEvent("keydown", (event) => {
+      if (event.key === "Enter") {
+        for (let field in refs) {
+          if (
+            refs[field].current &&
+            refs[field].current === document.activeElement
+          ) {
+            updateField({ [field]: values[field] });
+            setters[field](false);
+            refs[field].current.blur();
+            break;
+          }
+        }
+      }
+    });
+  };
+
+  useUpdateOnEnter(refs, values, setters);
 
   return (
     <Box pr={30} mt={15} pos={"relative"} h={"calc(100vh - 120px)"}>
@@ -164,7 +204,7 @@ export default function AccountInfo(props) {
             <Input
               ref={phoneRef}
               icon={<IconPhone size={20} />}
-              value={phoneValue}
+              value={formatPhoneNumber(phoneValue)}
               placeholder={"Phone #"}
               onChange={(e) => setPhoneValue(e.target.value)}
               sx={{

@@ -148,17 +148,15 @@ export default function Mymap(props) {
   const [viewState, setViewState] = useState(initialViewState);
 
   useEffect(() => {
-    if (!geoLat || !geoLng) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          setGeoLat(position.coords.latitude);
-          setGeoLng(position.coords.longitude);
-        },
-        function (error) {
-          console.error("Error Code = " + error.code + " - " + error.message);
-        }
-      );
-    }
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        setGeoLat(position.coords.latitude);
+        setGeoLng(position.coords.longitude);
+      },
+      function (error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+      }
+    );
     setViewState({
       latitude: geoLat,
       longitude: geoLng,
@@ -476,7 +474,7 @@ export default function Mymap(props) {
 
   const onZoomEnd = (e) => {
     if (e.target.getZoom() < 3.5) {
-      mapRef.current.flyTo({
+      mapRef.current?.flyTo({
         duration: 2000,
         pitch: 0,
       });

@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useSessionStorage } from "@mantine/hooks";
+import { useSessionStorage, useForceUpdate } from "@mantine/hooks";
 import { useMantineTheme, Box, Image, LoadingOverlay } from "@mantine/core";
 
 export default function Loader(props) {
@@ -7,8 +8,10 @@ export default function Loader(props) {
     key: "tripData",
     defaultValue: null,
   });
-  const { loaded = false, mapLoaded = false } = props;
+  const loaded = props.loaded;
+  const mapLoaded = props.mapLoaded;
   const theme = useMantineTheme();
+  const forceUpdate = useForceUpdate();
   const Globe = () => (
     <Box>
       <motion.div
@@ -29,6 +32,12 @@ export default function Loader(props) {
       </motion.div>
     </Box>
   );
+
+  useEffect(() => {
+    if (mapLoaded === true) {
+      forceUpdate();
+    }
+  }, [mapLoaded, forceUpdate]);
 
   return (
     <>

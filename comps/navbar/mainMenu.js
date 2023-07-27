@@ -85,7 +85,6 @@ export default function MainMenu(props) {
   };
 
   const signOutFunc = async () => {
-    sessionStorage.removeItem("user");
     sessionStorage.removeItem("tripData");
     sessionStorage.removeItem("guest");
     sessionStorage.removeItem("placeDataState");

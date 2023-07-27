@@ -39,7 +39,7 @@ export default function App(props) {
   };
 
   useEffect(() => {
-    if (user === null) {
+    if (user === null || user !== userData) {
       setUser(userData);
     }
   }, [userData, user, setUser]);

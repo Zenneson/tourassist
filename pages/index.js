@@ -17,48 +17,45 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (!geoLat || !geoLng) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          setGeoLat(position.coords.latitude);
-          setGeoLng(position.coords.longitude);
-        },
-        function (error) {
-          console.error("Error Code = " + error.code + " - " + error.message);
-        }
-      );
-    }
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        setGeoLat(position.coords.latitude);
+        setGeoLng(position.coords.longitude);
+      },
+      function (error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+      }
+    );
   }, [geoLat, geoLng, setGeoLat, setGeoLng]);
 
   return (
     <>
       <Intro auth={auth} />
-      <Box
-        sx={{
-          overflow: "hidden",
-          position: "absolute",
+      <video
+        autoPlay
+        muted
+        loop
+        style={{
+          zIndex: -1,
+          position: "fixed",
           top: 0,
-          left: 0,
-          width: "100%",
+          bottom: 0,
+          width: "100vw",
           height: "100vh",
+          transform: "scale(1.5)",
         }}
       >
-        <video
-          loop
-          muted
-          autoPlay
-          playsInline
-          src={"globe.mp4"}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100vh",
-            transform: "scale(2.3)",
-          }}
-        />
-      </Box>
+        <source src="globe.mp4" type="video/mp4" />
+      </video>
+      <Box
+        pos={"fixed"}
+        w={"100%"}
+        h={"100%"}
+        bg={"#000"}
+        sx={{
+          zIndex: -2,
+        }}
+      />
     </>
   );
 }
