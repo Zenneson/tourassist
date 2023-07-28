@@ -53,6 +53,19 @@ export const formatPhoneNumber = (phoneNumberString) => {
   return null;
 };
 
+export const addAtSymbol = (inputStr, symbol) => {
+  if (!inputStr) return;
+
+  if (typeof inputStr === "string") {
+    if (!inputStr.startsWith(symbol)) {
+      return symbol + inputStr;
+    }
+    return inputStr;
+  } else {
+    throw new Error("Input must be a string");
+  }
+};
+
 export function useUserData() {
   const [userAuth] = useAuthState(auth);
   const [userData, setUserData] = useState(null);

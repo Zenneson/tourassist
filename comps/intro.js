@@ -28,14 +28,40 @@ export default function Intro(props) {
   const dark = colorScheme === "dark";
 
   const firstDown = useMediaQuery("(max-width: 950px)");
-
+  const [geoLat, setGeoLat] = useSessionStorage({
+    key: "geoLatState",
+    defaultValue: 37,
+  });
+  const [geoLng, setGeoLng] = useSessionStorage({
+    key: "geoLngState",
+    defaultValue: -95,
+  });
+  const [allowGeo, setAllowGeo] = useSessionStorage({
+    key: "allowGeo",
+    defaultValue: false,
+  });
   const [guest, setGuest] = useSessionStorage({
     key: "guest",
     defaultValue: false,
   });
 
+  const getUserCords = () => {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        setGeoLat(position.coords.latitude);
+        setGeoLng(position.coords.longitude);
+        setAllowGeo(true);
+      },
+      function (error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+        setAllowGeo(false);
+      }
+    );
+  };
+
   const enterSite = () => {
     setGuest(true);
+    getUserCords();
     router.push("/map");
   };
 

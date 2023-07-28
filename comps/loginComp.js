@@ -74,6 +74,18 @@ export default function LoginComp(props) {
   const [passPopOpened, setPassPopOpened] = useState(false);
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const router = useRouter();
+  const [geoLat, setGeoLat] = useSessionStorage({
+    key: "geoLatState",
+    defaultValue: 37,
+  });
+  const [geoLng, setGeoLng] = useSessionStorage({
+    key: "geoLngState",
+    defaultValue: -95,
+  });
+  const [allowGeo, setAllowGeo] = useSessionStorage({
+    key: "allowGeo",
+    defaultValue: false,
+  });
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
@@ -165,8 +177,18 @@ export default function LoginComp(props) {
     style: {
       backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
-    title: "Account Created",
+    title: "Welcome",
     message: `${form.values.firstName} ${form.values.lastName}'s account has been created.`,
+  };
+
+  const loggedIn = {
+    color: "green",
+    icon: <IconCheck size={20} />,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+    title: "Welocme Back",
+    message: `${form.values.email} has logged in`,
   };
 
   const alreadyExists = {
@@ -217,7 +239,22 @@ export default function LoginComp(props) {
     router.push("/map");
   };
 
+  const getUserCords = () => {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        setGeoLat(position.coords.latitude);
+        setGeoLng(position.coords.longitude);
+        setAllowGeo(true);
+      },
+      function (error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+        setAllowGeo(false);
+      }
+    );
+  };
+
   const handleLogin = () => {
+    getUserCords();
     if (type === "sign-up") {
       createUserWithEmailAndPassword(
         auth,
@@ -241,6 +278,7 @@ export default function LoginComp(props) {
       signInWithEmailAndPassword(auth, form.values.email, form.values.password)
         .then((userCredential) => {
           setLogin(userCredential.user);
+          notifications.show(loggedIn);
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -291,6 +329,7 @@ export default function LoginComp(props) {
                   required
                   label="First Name"
                   placeholder="John"
+                  autoComplete="given-name"
                   classNames={firstNameClass}
                   value={form.values.firstName}
                   onChange={(event) => {
@@ -304,6 +343,7 @@ export default function LoginComp(props) {
                   required
                   label="Last Name"
                   placeholder="Doe"
+                  autoComplete="family-name"
                   classNames={lastNameClass}
                   value={form.values.lastName}
                   onChange={(event) => {
@@ -320,6 +360,7 @@ export default function LoginComp(props) {
               required
               label="Email"
               placeholder="johndoe@gmail.com"
+              autoComplete="username"
               classNames={emailClass}
               value={form.values.email}
               onChange={(event) => {
@@ -346,6 +387,9 @@ export default function LoginComp(props) {
                   <PasswordInput
                     required
                     label="Password"
+                    type="password"
+                    name="password"
+                    autoComplete="current-password"
                     classNames={passClass}
                     value={form.values.password}
                     onChange={(event) => {

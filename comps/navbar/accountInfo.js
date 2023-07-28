@@ -30,25 +30,53 @@ import {
 import { useWindowEvent } from "@mantine/hooks";
 import { updateDoc, doc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
-import { formatPhoneNumber } from "../../libs/custom";
+import { formatPhoneNumber, addAtSymbol } from "../../libs/custom";
 
 export default function AccountInfo(props) {
   const { user } = props;
+
   const firstNameRef = useRef();
   const [firstName, setFirstName] = useState(false);
   const [firstNameValue, setFirstNameValue] = useState(
     user && user.firstName ? user.firstName : ""
   );
+
   const lastNameRef = useRef();
   const [lastName, setLastName] = useState(false);
   const [lastNameValue, setLastNameValue] = useState(
     user && user.lastName ? user.lastName : ""
   );
+
   const phoneRef = useRef();
   const [phone, setPhone] = useState(false);
   const [phoneValue, setPhoneValue] = useState(
     user && user.phone ? user.phone : ""
   );
+
+  const faceBookRef = useRef();
+  const [faceBook, setFaceBook] = useState(false);
+  const [faceBookValue, setFaceBookValue] = useState(
+    user && user.faceBook ? user.faceBook : ""
+  );
+
+  const instagramRef = useRef();
+  const [instagram, setInstagram] = useState(false);
+  const [instagramValue, setInstagramValue] = useState(
+    user && user.instagram ? user.instagram : ""
+  );
+
+  const tikTokRef = useRef();
+  const [tikTok, setTikTok] = useState(false);
+  const [tikTokValue, setTikTokValue] = useState(
+    user && user.tikTok ? user.tikTok : ""
+  );
+
+  const twitterRef = useRef();
+  const [twitter, setTwitter] = useState(false);
+  const [twitterValue, setTwitterValue] = useState(
+    user && user.twitter ? user.twitter : ""
+  );
+
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
 
@@ -60,18 +88,30 @@ export default function AccountInfo(props) {
     firstName: firstNameRef,
     lastName: lastNameRef,
     phone: phoneRef,
+    faceBook: faceBookRef,
+    instagram: instagramRef,
+    tiktok: tikTokRef,
+    twitter: twitterRef,
   };
 
   const values = {
     firstName: firstNameValue,
     lastName: lastNameValue,
     phone: phoneValue,
+    faceBook: faceBookValue,
+    instagram: instagramValue,
+    tiktok: tikTokValue,
+    twitter: twitterValue,
   };
 
   const setters = {
     firstName: setFirstName,
     lastName: setLastName,
     phone: setPhone,
+    faceBook: setFaceBook,
+    instagram: setInstagram,
+    tiktok: setTikTok,
+    twitter: setTwitter,
   };
 
   const useUpdateOnEnter = (refs, values, setters) => {
@@ -277,40 +317,140 @@ export default function AccountInfo(props) {
         >
           <Group grow spacing={10}>
             <Input
+              ref={faceBookRef}
+              value={addAtSymbol(faceBookValue, "/")}
               icon={<IconBrandFacebook size={20} />}
               placeholder="/Facebook"
+              onChange={(e) => setFaceBookValue(e.target.value)}
+              sx={{
+                pointerEvents: !faceBook ? "none" : "all",
+              }}
               rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
+                <ActionIcon
+                  opacity={0.5}
+                  variant="subtle"
+                  sx={{
+                    pointerEvents: "all",
+                  }}
+                  onClick={() => {
+                    if (!faceBook) {
+                      setFaceBook(true);
+                      faceBookRef.current.focus();
+                    } else {
+                      updateField({ faceBook: faceBookValue });
+                      setFaceBook(false);
+                    }
+                  }}
+                >
+                  {user && user.faceBook ? (
+                    <IconPencil size={20} />
+                  ) : (
+                    <IconCirclePlus size={16} />
+                  )}
                 </ActionIcon>
               }
             />
             <Input
+              ref={instagramRef}
+              value={addAtSymbol(instagramValue, "@")}
               icon={<IconBrandInstagram size={20} />}
               placeholder="@Instagram"
+              onChange={(e) => setInstagramValue(e.target.value)}
+              sx={{
+                pointerEvents: !instagram ? "none" : "all",
+              }}
               rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
+                <ActionIcon
+                  opacity={0.5}
+                  variant="subtle"
+                  sx={{
+                    pointerEvents: "all",
+                  }}
+                  onClick={() => {
+                    if (!instagram) {
+                      setInstagram(true);
+                      instagramRef.current.focus();
+                    } else {
+                      updateField({ instagram: instagramValue });
+                      setInstagram(false);
+                    }
+                  }}
+                >
+                  {user && user.instagram ? (
+                    <IconPencil size={20} />
+                  ) : (
+                    <IconCirclePlus size={16} />
+                  )}
                 </ActionIcon>
               }
             />
           </Group>
           <Group grow spacing={10}>
             <Input
+              ref={tikTokRef}
+              value={addAtSymbol(tikTokValue, "@")}
               icon={<IconBrandTiktok size={20} />}
               placeholder="@TikTok"
+              onChange={(e) => setTikTokValue(e.target.value)}
+              sx={{
+                pointerEvents: !tikTok ? "none" : "all",
+              }}
               rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
+                <ActionIcon
+                  opacity={0.5}
+                  variant="subtle"
+                  sx={{
+                    pointerEvents: "all",
+                  }}
+                  onClick={() => {
+                    if (!tikTok) {
+                      setTikTok(true);
+                      tikTokRef.current.focus();
+                    } else {
+                      updateField({ tikTok: tikTokValue });
+                      setTikTok(false);
+                    }
+                  }}
+                >
+                  {user && user.tikTok ? (
+                    <IconPencil size={20} />
+                  ) : (
+                    <IconCirclePlus size={16} />
+                  )}
                 </ActionIcon>
               }
             />
             <Input
+              ref={twitterRef}
+              value={addAtSymbol(twitterValue, "@")}
               icon={<IconBrandTwitter size={20} />}
               placeholder="@Twitter"
+              onChange={(e) => setTwitterValue(e.target.value)}
+              sx={{
+                pointerEvents: !twitter ? "none" : "all",
+              }}
               rightSection={
-                <ActionIcon opacity={0.5} variant="subtle">
-                  <IconCirclePlus size={16} />
+                <ActionIcon
+                  opacity={0.5}
+                  variant="subtle"
+                  sx={{
+                    pointerEvents: "all",
+                  }}
+                  onClick={() => {
+                    if (!twitter) {
+                      setTwitter(true);
+                      twitterRef.current.focus();
+                    } else {
+                      updateField({ twitter: twitterValue });
+                      setTwitter(false);
+                    }
+                  }}
+                >
+                  {user && user.twitter ? (
+                    <IconPencil size={20} />
+                  ) : (
+                    <IconCirclePlus size={16} />
+                  )}
                 </ActionIcon>
               }
             />

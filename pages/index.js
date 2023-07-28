@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { BackgroundImage, Box } from "@mantine/core";
-import { useSessionStorage, useViewportSize } from "@mantine/hooks";
+import { useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
 import Intro from "../comps/intro";
 import Slider from "react-slick";
@@ -11,14 +10,6 @@ const auth = getAuth();
 
 export default function Home() {
   const { height, width } = useViewportSize();
-  const [geoLat, setGeoLat] = useSessionStorage({
-    key: "geoLatState",
-    defaultValue: 37,
-  });
-  const [geoLng, setGeoLng] = useSessionStorage({
-    key: "geoLngState",
-    defaultValue: -95,
-  });
 
   const slideSettings = {
     dots: false,
@@ -34,29 +25,15 @@ export default function Home() {
   };
 
   const images = [
-    "slides/slide1.png",
-    "slides/slide2.png",
-    "slides/slide3.png",
-    "slides/slide4.png",
-    "slides/slide5.png",
-    "slides/slide6.png",
-    "slides/slide7.png",
-    "slides/slide8.png",
-    "slides/slide10.png",
-    "slides/slide11.png",
+    "ppl/ppl1.jpg",
+    "ppl/ppl2.jpg",
+    "ppl/ppl3.jpg",
+    "ppl/ppl4.jpg",
+    "ppl/ppl5.jpg",
+    "ppl/ppl6.jpg",
+    "ppl/ppl7.jpg",
+    "ppl/ppl8.jpg",
   ];
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        setGeoLat(position.coords.latitude);
-        setGeoLng(position.coords.longitude);
-      },
-      function (error) {
-        console.error("Error Code = " + error.code + " - " + error.message);
-      }
-    );
-  }, [geoLat, geoLng, setGeoLat, setGeoLng]);
 
   return (
     <>

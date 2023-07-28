@@ -86,6 +86,10 @@ export default function Mymap(props) {
     key: "user",
     defaultValue: null,
   });
+  const [allowGeo, setAllowGeo] = useSessionStorage({
+    key: "allowGeo",
+    defaultValue: false,
+  });
   const [guest, setGuest] = useSessionStorage({
     key: "guest",
   });
@@ -148,26 +152,28 @@ export default function Mymap(props) {
   const [viewState, setViewState] = useState(initialViewState);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        setGeoLat(position.coords.latitude);
-        setGeoLng(position.coords.longitude);
-      },
-      function (error) {
-        console.error("Error Code = " + error.code + " - " + error.message);
-      }
-    );
-    setViewState({
-      latitude: geoLat,
-      longitude: geoLng,
-      zoom: 2.5,
-    });
-    mapRef.current?.flyTo({
-      center: [geoLng, geoLat],
-      essential: true,
-      duration: 1000,
-    });
-  }, [mapRef, geoLat, geoLng, setGeoLat, setGeoLng]);
+    if (allowGeo) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          setGeoLat(position.coords.latitude);
+          setGeoLng(position.coords.longitude);
+        },
+        function (error) {
+          console.error("Error Code = " + error.code + " - " + error.message);
+        }
+      );
+      setViewState({
+        latitude: geoLat,
+        longitude: geoLng,
+        zoom: 2.5,
+      });
+      mapRef.current?.flyTo({
+        center: [geoLng, geoLat],
+        essential: true,
+        duration: 1000,
+      });
+    }
+  }, [mapRef, geoLat, geoLng, setGeoLat, setGeoLng, allowGeo]);
 
   useEffect(() => {
     if (user === null && guest === false) {
