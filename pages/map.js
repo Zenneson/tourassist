@@ -1,25 +1,16 @@
-import { useState } from "react";
 import Mymap from "../comps/map/mymap";
 
 export default function Map(props) {
-  const {
-    listOpened,
-    setListOpened,
-    searchOpened,
-    dropDownOpened,
-    mapLoaded,
-    setMapLoaded,
-  } = props;
-
   return (
     <>
       <Mymap
-        listOpened={listOpened}
-        setListOpened={setListOpened}
-        searchOpened={searchOpened}
-        dropDownOpened={dropDownOpened}
-        mapLoaded={mapLoaded}
-        setMapLoaded={setMapLoaded}
+        listOpened={props.listOpened}
+        setListOpened={props.setListOpened}
+        searchOpened={props.searchOpened}
+        dropDownOpened={props.dropDownOpened}
+        mapLoaded={props.mapLoaded}
+        setMainMenuOpened={props.setMainMenuOpened}
+        setMapLoaded={props.setMapLoaded}
       />
     </>
   );

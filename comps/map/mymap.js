@@ -713,7 +713,6 @@ export default function Mymap(props) {
         withCloseButton={false}
         centered
         styles={(theme) => ({
-          zIndex: 130,
           overlay: {
             backgroundColor: dark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)",
             backdropFilter: "blur(9px)",
@@ -1026,12 +1025,12 @@ export default function Mymap(props) {
               styles={(theme) => ({
                 root: {
                   borderTop: `2px solid ${
-                    dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.1)"
+                    dark ? "rgba(75, 75, 75, 0.3)" : "rgba(0,0,0,0.05)"
                   }`,
                   borderRadius: "25px",
                   boxShadow: dark
-                    ? "0 3px 5px rgba(255, 255, 255, 0.07)"
-                    : "0 3px 5px rgba(0, 0, 0, 0.2)",
+                    ? "0 3px 5px rgba(255, 255, 255, 0.04)"
+                    : "0 3px 5px rgba(0, 0, 0, 0.04)",
                 },
                 item: { borderRadius: "17px" },
                 dropdown: {

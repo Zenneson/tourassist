@@ -10,6 +10,12 @@ import {
   Title,
   Switch,
   Tooltip,
+  Modal,
+  TextInput,
+  Stack,
+  PasswordInput,
+  Popover,
+  Divider,
 } from "@mantine/core";
 import {
   IconKey,
@@ -24,16 +30,20 @@ import {
   IconDeviceSim1,
   IconDeviceSim2,
   IconPhone,
-  IconBuildingBank,
   IconPencil,
+  IconBuildingBank,
+  IconAsterisk,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import { useWindowEvent } from "@mantine/hooks";
 import { updateDoc, doc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import { formatPhoneNumber, addAtSymbol } from "../../libs/custom";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function AccountInfo(props) {
   const { user } = props;
+  const [changePass, setChangePass] = useState(false);
 
   const firstNameRef = useRef();
   const [firstName, setFirstName] = useState(false);
@@ -134,452 +144,474 @@ export default function AccountInfo(props) {
 
   useUpdateOnEnter(refs, values, setters);
 
+  const sendPassReset = () => {
+    setChangePass(false);
+    notifications.show({
+      title: "Password Reset Email send to " + user.email,
+      message: "Check your email for the password reset link",
+      color: "green",
+      icon: <IconCheck />,
+    });
+  };
+
   return (
-    <Box pr={30} mt={15} pos={"relative"} h={"calc(100vh - 120px)"}>
-      <Flex direction="column" gap="xs" w={"100%"}>
-        <Title
-          order={6}
-          pb={5}
-          sx={{
-            textTransform: "uppercase",
-          }}
-        >
-          Personal Info
-        </Title>
-        <Flex
-          direction="column"
-          gap={10}
-          pl={20}
-          pt={10}
-          pb={12}
-          sx={{
-            borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
-          }}
-        >
-          <Group grow spacing={10}>
-            <Input
-              ref={firstNameRef}
-              icon={<IconDeviceSim1 size={20} />}
-              value={firstNameValue}
-              placeholder={"First Name"}
-              onChange={(e) => setFirstNameValue(e.target.value)}
-              sx={{
-                pointerEvents: !firstName ? "none" : "all",
-              }}
-              rightSection={
-                <Tooltip
-                  label="Edit First Name"
-                  color={dark ? "dark" : "gray.0"}
-                  c={dark ? "gray.0" : "dark.9"}
-                  withArrow
-                >
-                  <ActionIcon
-                    opacity={0.5}
-                    variant="subtle"
-                    sx={{
-                      pointerEvents: "all",
-                    }}
-                    onClick={() => {
-                      if (!firstName) {
-                        setFirstName(true);
-                        firstNameRef.current.focus();
-                      } else {
-                        updateField({ firstName: firstNameValue });
-                        setFirstName(false);
-                      }
-                    }}
-                  >
-                    {user && user.firstName ? (
-                      <IconPencil size={20} />
-                    ) : (
-                      <IconCirclePlus size={16} />
-                    )}
-                  </ActionIcon>
-                </Tooltip>
-              }
-            />
-            <Input
-              ref={lastNameRef}
-              icon={<IconDeviceSim2 size={20} />}
-              value={lastNameValue}
-              placeholder={"Last Name"}
-              onChange={(e) => setLastNameValue(e.target.value)}
-              sx={{
-                pointerEvents: !lastName ? "none" : "all",
-              }}
-              rightSection={
-                <Tooltip
-                  label="Edit Last Name"
-                  color={dark ? "dark" : "gray.0"}
-                  c={dark ? "gray.0" : "dark.9"}
-                  withArrow
-                >
-                  <ActionIcon
-                    opacity={0.5}
-                    variant="subtle"
-                    sx={{
-                      pointerEvents: "all",
-                    }}
-                    onClick={() => {
-                      if (!lastName) {
-                        setLastName(true);
-                        lastNameRef.current.focus();
-                      } else {
-                        updateField({ lastName: lastNameValue });
-                        setLastName(false);
-                      }
-                    }}
-                  >
-                    {user && user.lastName ? (
-                      <IconPencil size={20} />
-                    ) : (
-                      <IconCirclePlus size={16} />
-                    )}
-                  </ActionIcon>
-                </Tooltip>
-              }
-            />
-          </Group>
-          <Group grow spacing={10}>
-            <Input
-              ref={phoneRef}
-              icon={<IconPhone size={20} />}
-              value={formatPhoneNumber(phoneValue)}
-              placeholder={"Phone #"}
-              onChange={(e) => setPhoneValue(e.target.value)}
-              sx={{
-                pointerEvents: !phone ? "none" : "all",
-              }}
-              rightSection={
-                <Tooltip
-                  label="Edit Phone #"
-                  color={dark ? "dark" : "gray.0"}
-                  c={dark ? "gray.0" : "dark.9"}
-                  withArrow
-                >
-                  <ActionIcon
-                    opacity={0.5}
-                    variant="subtle"
-                    sx={{
-                      pointerEvents: "all",
-                    }}
-                    onClick={() => {
-                      if (!phone) {
-                        setPhone(true);
-                        phoneRef.current.focus();
-                      } else {
-                        updateField({ phone: phoneValue });
-                        setPhone(false);
-                      }
-                    }}
-                  >
-                    {user && user.phone ? (
-                      <IconPencil size={20} />
-                    ) : (
-                      <IconCirclePlus size={16} />
-                    )}
-                  </ActionIcon>
-                </Tooltip>
-              }
-            />
-            <Button variant="light" color="green" fz={12}>
-              <IconBuildingBank
-                size={15}
-                stroke={3}
-                opacity={0.4}
-                style={{
-                  marginRight: "5px",
-                  marginBottom: "2px",
+    <>
+      <Box pr={30} mt={15} pos={"relative"} h={"calc(100vh - 120px)"}>
+        <Flex direction="column" gap="xs" w={"100%"}>
+          <Title
+            order={6}
+            pb={5}
+            sx={{
+              textTransform: "uppercase",
+            }}
+          >
+            Personal Info
+          </Title>
+          <Flex
+            direction="column"
+            gap={10}
+            pl={20}
+            pt={10}
+            pb={12}
+            sx={{
+              borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
+            }}
+          >
+            <Group grow spacing={10}>
+              <TextInput
+                ref={firstNameRef}
+                icon={<IconDeviceSim1 size={20} />}
+                value={firstNameValue}
+                placeholder={"First Name"}
+                onChange={(e) => setFirstNameValue(e.target.value)}
+                sx={{
+                  pointerEvents: !firstName ? "none" : "all",
                 }}
-              />{" "}
-              ADD BANKING INFO
-            </Button>
-          </Group>
-        </Flex>
-        <Title
-          order={6}
-          pb={5}
-          sx={{
-            textTransform: "uppercase",
-          }}
-        >
-          Social Links
-        </Title>
-        <Flex
-          direction="column"
-          gap={10}
-          pl={20}
-          pt={10}
-          pb={12}
-          sx={{
-            borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
-          }}
-        >
-          <Group grow spacing={10}>
-            <Input
-              ref={faceBookRef}
-              value={addAtSymbol(faceBookValue, "/")}
-              icon={<IconBrandFacebook size={20} />}
-              placeholder="/Facebook"
-              onChange={(e) => setFaceBookValue(e.target.value)}
-              sx={{
-                pointerEvents: !faceBook ? "none" : "all",
-              }}
-              rightSection={
-                <ActionIcon
-                  opacity={0.5}
-                  variant="subtle"
-                  sx={{
-                    pointerEvents: "all",
+                rightSection={
+                  <Tooltip
+                    label="Edit First Name"
+                    color={dark ? "dark" : "gray.0"}
+                    c={dark ? "gray.0" : "dark.9"}
+                    withArrow
+                  >
+                    <ActionIcon
+                      opacity={0.5}
+                      variant="subtle"
+                      sx={{
+                        pointerEvents: "all",
+                      }}
+                      onClick={() => {
+                        if (!firstName) {
+                          setFirstName(true);
+                          firstNameRef.current.focus();
+                        } else {
+                          updateField({ firstName: firstNameValue });
+                          setFirstName(false);
+                        }
+                      }}
+                    >
+                      {user && user.firstName ? (
+                        <IconPencil size={20} />
+                      ) : (
+                        <IconCirclePlus size={16} />
+                      )}
+                    </ActionIcon>
+                  </Tooltip>
+                }
+              />
+              <TextInput
+                ref={lastNameRef}
+                icon={<IconDeviceSim2 size={20} />}
+                value={lastNameValue}
+                placeholder={"Last Name"}
+                onChange={(e) => setLastNameValue(e.target.value)}
+                sx={{
+                  pointerEvents: !lastName ? "none" : "all",
+                }}
+                rightSection={
+                  <Tooltip
+                    label="Edit Last Name"
+                    color={dark ? "dark" : "gray.0"}
+                    c={dark ? "gray.0" : "dark.9"}
+                    withArrow
+                  >
+                    <ActionIcon
+                      opacity={0.5}
+                      variant="subtle"
+                      sx={{
+                        pointerEvents: "all",
+                      }}
+                      onClick={() => {
+                        if (!lastName) {
+                          setLastName(true);
+                          lastNameRef.current.focus();
+                        } else {
+                          updateField({ lastName: lastNameValue });
+                          setLastName(false);
+                        }
+                      }}
+                    >
+                      {user && user.lastName ? (
+                        <IconPencil size={20} />
+                      ) : (
+                        <IconCirclePlus size={16} />
+                      )}
+                    </ActionIcon>
+                  </Tooltip>
+                }
+              />
+            </Group>
+            <Group grow spacing={10}>
+              <Input
+                ref={phoneRef}
+                icon={<IconPhone size={20} />}
+                value={formatPhoneNumber(phoneValue)}
+                placeholder={"Phone #"}
+                onChange={(e) => setPhoneValue(e.target.value)}
+                sx={{
+                  pointerEvents: !phone ? "none" : "all",
+                }}
+                rightSection={
+                  <Tooltip
+                    label="Edit Phone #"
+                    color={dark ? "dark" : "gray.0"}
+                    c={dark ? "gray.0" : "dark.9"}
+                    withArrow
+                  >
+                    <ActionIcon
+                      opacity={0.5}
+                      variant="subtle"
+                      sx={{
+                        pointerEvents: "all",
+                      }}
+                      onClick={() => {
+                        if (!phone) {
+                          setPhone(true);
+                          phoneRef.current.focus();
+                        } else {
+                          updateField({ phone: phoneValue });
+                          setPhone(false);
+                        }
+                      }}
+                    >
+                      {user && user.phone ? (
+                        <IconPencil size={20} />
+                      ) : (
+                        <IconCirclePlus size={16} />
+                      )}
+                    </ActionIcon>
+                  </Tooltip>
+                }
+              />
+              <Popover
+                width="target"
+                position="bottom"
+                withArrow={false}
+                opened={changePass}
+                styles={(theme) => ({
+                  dropdown: {
+                    border: dark ? "1px solid #1c1c1c" : "1px solid #ececec",
+                  },
+                })}
+              >
+                <Popover.Target>
+                  <Button
+                    variant="filled"
+                    color={dark ? "dark.5" : "gray.2"}
+                    c={dark ? "gray.0" : "dark.3"}
+                    fz={13}
+                    sx={{
+                      "&:hover": {
+                        background: dark && "#909296",
+                      },
+                    }}
+                    onClick={() => setChangePass((o) => !o)}
+                  >
+                    CHANGE PASSWORD
+                    <IconKey
+                      size={18}
+                      stroke={2}
+                      color={dark ? "#ccc" : "#222"}
+                      style={{
+                        marginLeft: "2px",
+                      }}
+                    />
+                  </Button>
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <Button size="xs" onClick={sendPassReset}>
+                    SEND PASSWORD RESET CODE
+                  </Button>
+                </Popover.Dropdown>
+              </Popover>
+            </Group>
+            <Group grow spacing={10}>
+              <Divider opacity={0.5} />
+              <Button
+                variant="light"
+                color="green"
+                bg={!dark && "rgba(0, 151, 0, 0.2)"}
+                fz={12}
+              >
+                <IconBuildingBank
+                  size={15}
+                  stroke={3}
+                  opacity={0.4}
+                  style={{
+                    marginRight: "5px",
+                    marginBottom: "2px",
                   }}
-                  onClick={() => {
-                    if (!faceBook) {
-                      setFaceBook(true);
-                      faceBookRef.current.focus();
-                    } else {
-                      updateField({ faceBook: faceBookValue });
-                      setFaceBook(false);
-                    }
-                  }}
-                >
-                  {user && user.faceBook ? (
-                    <IconPencil size={20} />
-                  ) : (
-                    <IconCirclePlus size={16} />
-                  )}
-                </ActionIcon>
-              }
-            />
-            <Input
-              ref={instagramRef}
-              value={addAtSymbol(instagramValue, "@")}
-              icon={<IconBrandInstagram size={20} />}
-              placeholder="@Instagram"
-              onChange={(e) => setInstagramValue(e.target.value)}
-              sx={{
-                pointerEvents: !instagram ? "none" : "all",
-              }}
-              rightSection={
-                <ActionIcon
-                  opacity={0.5}
-                  variant="subtle"
-                  sx={{
-                    pointerEvents: "all",
-                  }}
-                  onClick={() => {
-                    if (!instagram) {
-                      setInstagram(true);
-                      instagramRef.current.focus();
-                    } else {
-                      updateField({ instagram: instagramValue });
-                      setInstagram(false);
-                    }
-                  }}
-                >
-                  {user && user.instagram ? (
-                    <IconPencil size={20} />
-                  ) : (
-                    <IconCirclePlus size={16} />
-                  )}
-                </ActionIcon>
-              }
-            />
-          </Group>
-          <Group grow spacing={10}>
-            <Input
-              ref={tikTokRef}
-              value={addAtSymbol(tikTokValue, "@")}
-              icon={<IconBrandTiktok size={20} />}
-              placeholder="@TikTok"
-              onChange={(e) => setTikTokValue(e.target.value)}
-              sx={{
-                pointerEvents: !tikTok ? "none" : "all",
-              }}
-              rightSection={
-                <ActionIcon
-                  opacity={0.5}
-                  variant="subtle"
-                  sx={{
-                    pointerEvents: "all",
-                  }}
-                  onClick={() => {
-                    if (!tikTok) {
-                      setTikTok(true);
-                      tikTokRef.current.focus();
-                    } else {
-                      updateField({ tikTok: tikTokValue });
-                      setTikTok(false);
-                    }
-                  }}
-                >
-                  {user && user.tikTok ? (
-                    <IconPencil size={20} />
-                  ) : (
-                    <IconCirclePlus size={16} />
-                  )}
-                </ActionIcon>
-              }
-            />
-            <Input
-              ref={twitterRef}
-              value={addAtSymbol(twitterValue, "@")}
-              icon={<IconBrandTwitter size={20} />}
-              placeholder="@Twitter"
-              onChange={(e) => setTwitterValue(e.target.value)}
-              sx={{
-                pointerEvents: !twitter ? "none" : "all",
-              }}
-              rightSection={
-                <ActionIcon
-                  opacity={0.5}
-                  variant="subtle"
-                  sx={{
-                    pointerEvents: "all",
-                  }}
-                  onClick={() => {
-                    if (!twitter) {
-                      setTwitter(true);
-                      twitterRef.current.focus();
-                    } else {
-                      updateField({ twitter: twitterValue });
-                      setTwitter(false);
-                    }
-                  }}
-                >
-                  {user && user.twitter ? (
-                    <IconPencil size={20} />
-                  ) : (
-                    <IconCirclePlus size={16} />
-                  )}
-                </ActionIcon>
-              }
-            />
-          </Group>
-        </Flex>
-        <Title
-          order={6}
-          pb={5}
-          sx={{
-            textTransform: "uppercase",
-          }}
-        >
-          Notifications
-        </Title>
-        <Group
-          grow
-          align="stretch"
-          fw={700}
-          pt={10}
-          pb={12}
-          sx={{
-            borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
-          }}
-        >
-          <Flex direction="column" gap={8} align="flex-start" pl={20}>
-            <Switch
-              p={0}
-              size="xs"
-              offLabel={<IconX size={12} />}
-              onLabel={<IconCheck size={12} />}
-              color="dark"
-              radius="xs"
-              labelPosition="right"
-              label="General Newsletter"
-            />
-            <Switch
-              p={0}
-              size="xs"
-              offLabel={<IconX size={12} />}
-              onLabel={<IconCheck size={12} />}
-              color="dark"
-              radius="xs"
-              labelPosition="right"
-              label="Campaign Creation"
-            />
-            <Switch
-              p={0}
-              size="xs"
-              offLabel={<IconX size={12} />}
-              onLabel={<IconCheck size={12} />}
-              color="dark"
-              radius="xs"
-              labelPosition="right"
-              label="New Campaign Comment"
-            />
+                />{" "}
+                ADD BANKING INFO
+              </Button>
+            </Group>
           </Flex>
-          <Flex direction="column" gap={8} align="flex-start">
-            <Switch
-              p={0}
-              size="xs"
-              offLabel={<IconX size={12} />}
-              onLabel={<IconCheck size={12} />}
-              color="dark"
-              radius="xs"
-              labelPosition="right"
-              label="Campaign Milestones"
-            />
-            <Switch
-              p={0}
-              size="xs"
-              offLabel={<IconX size={12} />}
-              onLabel={<IconCheck size={12} />}
-              color="dark"
-              radius="xs"
-              labelPosition="right"
-              label="Campaign Ending Soon"
-            />
-            <Switch
-              p={0}
-              size="xs"
-              offLabel={<IconX size={12} />}
-              onLabel={<IconCheck size={12} />}
-              color="dark"
-              radius="xs"
-              labelPosition="right"
-              label="Campaign Ended"
-            />
-          </Flex>
-        </Group>
-      </Flex>
-      <Group
-        position="right"
-        w={"100%"}
-        pos={"absolute"}
-        bottom={10}
-        right={-20}
-        sx={{
-          transform: "scale(0.85)",
-        }}
-      >
-        <Button.Group>
-          <Button
-            variant="subtle"
-            size="xs"
-            leftIcon={<IconKey size={18} stroke={2} />}
+          <Title
+            order={6}
+            pb={5}
             sx={{
-              opacity: 0.5,
-              "&:hover": {
-                opacity: 1,
-              },
+              textTransform: "uppercase",
             }}
           >
-            CHANGE PASSWORD
-          </Button>
-          <Button
-            variant="subtle"
-            size="xs"
-            leftIcon={<IconUserX size={18} stroke={2} />}
+            Social Links
+          </Title>
+          <Flex
+            direction="column"
+            gap={10}
+            pl={20}
+            pt={10}
+            pb={12}
             sx={{
-              opacity: 0.5,
-              "&:hover": {
-                opacity: 1,
-              },
+              borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
             }}
           >
-            DELETE ACCOUNT
-          </Button>
-        </Button.Group>
-      </Group>
-    </Box>
+            <Group grow spacing={10}>
+              <Input
+                ref={faceBookRef}
+                value={addAtSymbol(faceBookValue, "/")}
+                icon={<IconBrandFacebook size={20} />}
+                placeholder="/Facebook"
+                onChange={(e) => setFaceBookValue(e.target.value)}
+                sx={{
+                  pointerEvents: !faceBook ? "none" : "all",
+                }}
+                rightSection={
+                  <ActionIcon
+                    opacity={0.5}
+                    variant="subtle"
+                    sx={{
+                      pointerEvents: "all",
+                    }}
+                    onClick={() => {
+                      if (!faceBook) {
+                        setFaceBook(true);
+                        faceBookRef.current.focus();
+                      } else {
+                        updateField({ faceBook: faceBookValue });
+                        setFaceBook(false);
+                      }
+                    }}
+                  >
+                    {user && user.faceBook ? (
+                      <IconPencil size={20} />
+                    ) : (
+                      <IconCirclePlus size={16} />
+                    )}
+                  </ActionIcon>
+                }
+              />
+              <Input
+                ref={instagramRef}
+                value={addAtSymbol(instagramValue, "@")}
+                icon={<IconBrandInstagram size={20} />}
+                placeholder="@Instagram"
+                onChange={(e) => setInstagramValue(e.target.value)}
+                sx={{
+                  pointerEvents: !instagram ? "none" : "all",
+                }}
+                rightSection={
+                  <ActionIcon
+                    opacity={0.5}
+                    variant="subtle"
+                    sx={{
+                      pointerEvents: "all",
+                    }}
+                    onClick={() => {
+                      if (!instagram) {
+                        setInstagram(true);
+                        instagramRef.current.focus();
+                      } else {
+                        updateField({ instagram: instagramValue });
+                        setInstagram(false);
+                      }
+                    }}
+                  >
+                    {user && user.instagram ? (
+                      <IconPencil size={20} />
+                    ) : (
+                      <IconCirclePlus size={16} />
+                    )}
+                  </ActionIcon>
+                }
+              />
+            </Group>
+            <Group grow spacing={10}>
+              <Input
+                ref={tikTokRef}
+                value={addAtSymbol(tikTokValue, "@")}
+                icon={<IconBrandTiktok size={20} />}
+                placeholder="@TikTok"
+                onChange={(e) => setTikTokValue(e.target.value)}
+                sx={{
+                  pointerEvents: !tikTok ? "none" : "all",
+                }}
+                rightSection={
+                  <ActionIcon
+                    opacity={0.5}
+                    variant="subtle"
+                    sx={{
+                      pointerEvents: "all",
+                    }}
+                    onClick={() => {
+                      if (!tikTok) {
+                        setTikTok(true);
+                        tikTokRef.current.focus();
+                      } else {
+                        updateField({ tikTok: tikTokValue });
+                        setTikTok(false);
+                      }
+                    }}
+                  >
+                    {user && user.tikTok ? (
+                      <IconPencil size={20} />
+                    ) : (
+                      <IconCirclePlus size={16} />
+                    )}
+                  </ActionIcon>
+                }
+              />
+              <Input
+                ref={twitterRef}
+                value={addAtSymbol(twitterValue, "@")}
+                icon={<IconBrandTwitter size={20} />}
+                placeholder="@Twitter"
+                onChange={(e) => setTwitterValue(e.target.value)}
+                sx={{
+                  pointerEvents: !twitter ? "none" : "all",
+                }}
+                rightSection={
+                  <ActionIcon
+                    opacity={0.5}
+                    variant="subtle"
+                    sx={{
+                      pointerEvents: "all",
+                    }}
+                    onClick={() => {
+                      if (!twitter) {
+                        setTwitter(true);
+                        twitterRef.current.focus();
+                      } else {
+                        updateField({ twitter: twitterValue });
+                        setTwitter(false);
+                      }
+                    }}
+                  >
+                    {user && user.twitter ? (
+                      <IconPencil size={20} />
+                    ) : (
+                      <IconCirclePlus size={16} />
+                    )}
+                  </ActionIcon>
+                }
+              />
+            </Group>
+          </Flex>
+          <Title
+            order={6}
+            pb={5}
+            sx={{
+              textTransform: "uppercase",
+            }}
+          >
+            Notifications
+          </Title>
+          <Group
+            grow
+            align="stretch"
+            fw={700}
+            pt={10}
+            pb={12}
+            sx={{
+              borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
+            }}
+          >
+            <Flex direction="column" gap={8} align="flex-start" pl={20}>
+              <Switch
+                p={0}
+                size="xs"
+                offLabel={<IconX size={12} />}
+                onLabel={<IconCheck size={12} />}
+                color="dark"
+                radius="xs"
+                labelPosition="right"
+                label="General Newsletter"
+              />
+              <Switch
+                p={0}
+                size="xs"
+                offLabel={<IconX size={12} />}
+                onLabel={<IconCheck size={12} />}
+                color="dark"
+                radius="xs"
+                labelPosition="right"
+                label="Campaign Creation"
+              />
+              <Switch
+                p={0}
+                size="xs"
+                offLabel={<IconX size={12} />}
+                onLabel={<IconCheck size={12} />}
+                color="dark"
+                radius="xs"
+                labelPosition="right"
+                label="New Campaign Comment"
+              />
+            </Flex>
+            <Flex direction="column" gap={8} align="flex-start">
+              <Switch
+                p={0}
+                size="xs"
+                offLabel={<IconX size={12} />}
+                onLabel={<IconCheck size={12} />}
+                color="dark"
+                radius="xs"
+                labelPosition="right"
+                label="Campaign Milestones"
+              />
+              <Switch
+                p={0}
+                size="xs"
+                offLabel={<IconX size={12} />}
+                onLabel={<IconCheck size={12} />}
+                color="dark"
+                radius="xs"
+                labelPosition="right"
+                label="Campaign Ending Soon"
+              />
+              <Switch
+                p={0}
+                size="xs"
+                offLabel={<IconX size={12} />}
+                onLabel={<IconCheck size={12} />}
+                color="dark"
+                radius="xs"
+                labelPosition="right"
+                label="Campaign Ended"
+              />
+            </Flex>
+          </Group>
+        </Flex>
+      </Box>
+    </>
   );
 }
