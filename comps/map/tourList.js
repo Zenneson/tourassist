@@ -119,7 +119,7 @@ export default function TourList(props) {
               padding: "0 8px",
               transition: "all 100ms ease-in-out",
               "&:hover": {
-                background: dark ? "dark.8" : "gray.4",
+                background: dark ? "#050506" : "#bbb",
               },
             }}
           >

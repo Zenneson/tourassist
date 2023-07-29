@@ -1,4 +1,4 @@
-import { BackgroundImage, Box } from "@mantine/core";
+import { useMantineColorScheme, BackgroundImage, Box } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
 import Intro from "../comps/intro";
@@ -10,6 +10,8 @@ const auth = getAuth();
 
 export default function Home() {
   const { height, width } = useViewportSize();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
 
   const slideSettings = {
     dots: false,
@@ -51,7 +53,17 @@ export default function Home() {
       >
         <Slider {...slideSettings}>
           {images.map((image, index) => (
-            <BackgroundImage key={index} src={image} h={height} alt="intro" />
+            <BackgroundImage
+              key={index}
+              src={image}
+              h={height}
+              alt="intro"
+              sx={{
+                filter: dark
+                  ? "brightness(70%) saturate(144%)"
+                  : "brightness(110%) saturate(100%)",
+              }}
+            />
           ))}
         </Slider>
       </Box>

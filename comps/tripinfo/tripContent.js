@@ -22,6 +22,7 @@ import imageCompression from "browser-image-compression";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
+import Placeholder from "@tiptap/extension-placeholder";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -54,11 +55,11 @@ export default function TripContent(props) {
 
   const router = useRouter();
 
-  const updateDetails = "Update Content";
-
   const sliderRef = useRef();
   const cropperRef = useRef(null);
   const cropperContainerRef = useRef(null);
+
+  const updateDetails = "Update Content";
 
   const next = () => {
     sliderRef.current.slickNext();
@@ -100,18 +101,20 @@ export default function TripContent(props) {
       StarterKit,
       TextStyle,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Placeholder.configure({
+        placeholder:
+          router.pathname === "/tripplanner"
+            ? "Add a detailed description to your trip here, to inspire support..."
+            : donating
+            ? "Add a comment here..."
+            : "Update us here...",
+      }),
     ],
     parseOptions: {
       preserveWhitespace: "full",
     },
-    content:
-      tripDesc !== ""
-        ? tripDesc.toString()
-        : "<p>Tell us about yourself and what you can share about this trip...</p>",
+    content: tripDesc !== "" ? tripDesc.toString() : "",
     // content: donating ? "" : addUpdateDesc ? updateDetails : "",
-    onUpdate({ editor }) {
-      setTripDesc(editor.getHTML());
-    },
   });
 
   useEffect(() => {
@@ -324,7 +327,10 @@ export default function TripContent(props) {
       <RichTextEditor
         editor={editor}
         position="relative"
-        bg={dark ? "dark.6" : "gray.4"}
+        bg={dark ? "dark.6" : "gray.2"}
+        onBlur={() => {
+          setTripDesc(editor.getHTML());
+        }}
         sx={{
           ":root": {
             borderRadius: "3px",
@@ -343,7 +349,7 @@ export default function TripContent(props) {
           },
           ".mantine-RichTextEditor-content": {
             background: "rgba(0, 0, 0, 0)",
-            color: dark ? "dark.6" : "gray.4",
+            color: dark ? "dark.9" : "gray.0",
             minHeight: donating ? "100px" : "200px",
             maxHeight: donating ? "100px" : "300px",
             "& .ProseMirror": {

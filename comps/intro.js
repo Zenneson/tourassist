@@ -107,7 +107,7 @@ export default function Intro(props) {
           opacity={firstDown ? 0 : 1}
           w={firstDown ? 0 : 600}
           h={"100vh"}
-          bg={dark ? "rgba(2, 2, 2, 0.9)" : "rgba(255, 255, 255, 0.6)"}
+          bg={dark ? "rgba(2, 2, 2, 0.75)" : "rgba(255, 255, 255, 0.6)"}
           sx={{
             backdropFilter: "blur(5px)",
             flexDirection: "column",
@@ -147,10 +147,7 @@ export default function Intro(props) {
             <LoginComp auth={auth} />
           </Box>
         </Center>
-        <Center
-          bg={dark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.2)"}
-          w={"100%"}
-        >
+        <Center w={"100%"}>
           <Flex
             direction={"column"}
             align={"center"}
@@ -190,8 +187,9 @@ export default function Intro(props) {
               fw={400}
               transform="uppercase"
               fz={!firstDown ? "4.3vw" : "7vw"}
-              color={dark ? "#fff" : "#555555"}
+              color={"gray.0"}
               sx={{
+                textShadow: "0 2px 5px rgba(0,0,0,0.2)",
                 lineHeight: "1",
               }}
             >
@@ -207,9 +205,6 @@ export default function Intro(props) {
                 inherit
                 span
                 variant="gradient"
-                sx={{
-                  textShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                }}
                 gradient={
                   dark
                     ? { from: "#2DC7F3", to: "#0D3F82", deg: 45 }
@@ -224,9 +219,6 @@ export default function Intro(props) {
                 inherit
                 span
                 variant="gradient"
-                sx={{
-                  textShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                }}
                 gradient={
                   dark
                     ? { from: "#2DC7F3", to: "#0D3F82", deg: 45 }
@@ -243,9 +235,6 @@ export default function Intro(props) {
                   inherit
                   span
                   variant="gradient"
-                  sx={{
-                    textShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                  }}
                   gradient={
                     dark
                       ? { from: "#2DC7F3", to: "#0D3F82", deg: 45 }

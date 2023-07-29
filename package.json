@@ -58,6 +58,7 @@
     "eslint-plugin-react": "^7.32.2",
     "firebase": "^9.16.0",
     "framer-motion": "^8.5.2",
+    "lodash": "^4.17.21",
     "mapbox-gl": "^2.15.0",
     "moment-timezone": "^0.5.43",
     "next": "13.0.6",

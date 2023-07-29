@@ -41,7 +41,7 @@ export default function Loader(props) {
     ) {
       setTimeout(() => {
         setLoaded(true);
-      }, 100);
+      }, 1000);
     }
   }, [setLoaded, loaded, tripData]);
 

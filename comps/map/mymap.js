@@ -977,7 +977,7 @@ export default function Mymap(props) {
             boxShadow: "0 0 10px rgba(255, 255, 255, 0.02)",
             "&:hover": {
               opacity: 1,
-              boxShadow: "0 0 20px rgba(255, 255, 255, 0.04)",
+              background: dark ? "#050506" : "#bbb",
             },
           }}
         >

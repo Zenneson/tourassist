@@ -97,3 +97,25 @@ export function useUserData() {
   }, [userAuth]); // The effect hook depends on userAuth
   return userData;
 }
+
+export const useCountdown = (initialValue = 2000, interval = 100) => {
+  const [countdownValue, setCountdownValue] = useState(initialValue);
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setCountdownValue((prevValue) => {
+        const newValue = prevValue - interval;
+        if (newValue <= 0) {
+          clearInterval(countdown);
+          return 0;
+        }
+        return newValue;
+      });
+    }, interval);
+
+    // Clear interval on unmount
+    return () => clearInterval(countdown);
+  }, [interval]);
+
+  return countdownValue;
+};
