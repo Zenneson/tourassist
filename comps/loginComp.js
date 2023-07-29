@@ -387,7 +387,6 @@ export default function LoginComp(props) {
                   <PasswordInput
                     required
                     label="Password"
-                    type="password"
                     name="password"
                     autoComplete="current-password"
                     classNames={passClass}

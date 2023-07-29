@@ -1,9 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
+import {
+  ref,
+  getStorage,
+  uploadString,
+  getDownloadURL,
+} from "firebase/storage";
 import { motion } from "framer-motion";
 import {
   useMantineColorScheme,
+  useMantineTheme,
   Autocomplete,
   ActionIcon,
   Space,
@@ -47,6 +54,7 @@ import {
   IconAlertTriangle,
   IconFriends,
   IconRotate360,
+  IconCheck,
 } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
@@ -55,6 +63,7 @@ import TripContent from "../comps/tripinfo/tripContent";
 
 export default function TripPlannerPage(props) {
   let { auth, mapLoaded } = props;
+  const theme = useMantineTheme();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
@@ -75,9 +84,12 @@ export default function TripPlannerPage(props) {
   const [costsSum, setCostsSum] = useState(0);
   const [active, setActive] = useState(0);
   const [infoAdded, setInfoAdded] = useState(false);
+  const [focusedCostId, setFocusedCostId] = useState(null);
+  const storage = getStorage();
   const router = useRouter();
   const forceUpdate = useForceUpdate();
   const dayjs = require("dayjs");
+  const sumRef = useRef(null);
 
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -101,8 +113,10 @@ export default function TripPlannerPage(props) {
   dayjs.extend(localizedFormat);
 
   useEffect(() => {
-    router.prefetch("/trippage");
-  }, [router]);
+    if (tripId) {
+      router.prefetch("/" + tripId);
+    }
+  }, [router, tripId]);
 
   const animation = {
     initial: { y: -50, duration: 500 },
@@ -111,51 +125,68 @@ export default function TripPlannerPage(props) {
     transition: { type: "ease-in-out" },
   };
 
-  const Costs = ({ cost, costid }) => (
-    <div key={index}>
-      <Group position="right" mr={20}>
-        <Text size={12} fs="italic" color="dimmed" mt={-25}>
-          <Badge variant="default">{cost || "NEW COST"}</Badge>
-        </Text>
-        <div
-          style={{
-            marginTop: -25,
-            width: "50%",
-            border: `1px dotted ${
-              dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.234)"
-            }`,
-          }}
-        ></div>
-        <NumberInput
-          costid={costid}
-          onChange={(value) => handleInputChange(value, costid)}
-          defaultValue={costList[costid] || 0}
-          icon={<IconCurrencyDollar />}
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          formatter={(value) =>
-            !Number.isNaN(parseFloat(value))
-              ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              : ""
-          }
-          stepHoldDelay={800}
-          stepHoldInterval={400}
-          precision={2}
-          min={0}
-          size="md"
-          w={150}
-          mb={20}
-          variant="filled"
-          sx={{
-            ".mantine-NumberInput-input": {
-              textAlign: "right",
-              fontWeight: 700,
-              paddingRight: 40,
-            },
-          }}
-        />
-      </Group>
-    </div>
-  );
+  const Costs = ({ cost, costid }) => {
+    useEffect(() => {
+      if (focusedCostId === costid && typeof window !== "undefined") {
+        const inputElement = document.querySelector(
+          `input[costid="${costid}"]`
+        );
+        if (inputElement) {
+          inputElement.focus();
+        }
+      }
+    }, [costid]);
+
+    return (
+      <div key={index}>
+        <Group position="right" mr={20}>
+          <Text size={12} fs="italic" color="dimmed" mt={-25}>
+            <Badge variant="default">{cost || "NEW COST"}</Badge>
+          </Text>
+          <div
+            style={{
+              marginTop: -25,
+              width: "50%",
+              border: `1px dotted ${
+                dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.234)"
+              }`,
+            }}
+          ></div>
+          <NumberInput
+            tabIndex={index}
+            costid={costid}
+            onFocus={(event) => {
+              setFocusedCostId(costid);
+              event.target.select();
+            }}
+            onChange={(value) => handleInputChange(value, costid)}
+            defaultValue={costList[costid] || 0}
+            icon={<IconCurrencyDollar />}
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            formatter={(value) =>
+              !Number.isNaN(parseFloat(value))
+                ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                : ""
+            }
+            stepHoldDelay={600}
+            stepHoldInterval={400}
+            min={0}
+            size="md"
+            w={150}
+            mb={20}
+            variant="filled"
+            sx={{
+              ".mantine-NumberInput-input": {
+                textAlign: "right",
+                fontWeight: 700,
+                paddingRight: 40,
+              },
+            }}
+          />
+        </Group>
+      </div>
+    );
+  };
 
   let formValue = "";
   const AddCost = (event) => {
@@ -367,7 +398,8 @@ export default function TripPlannerPage(props) {
       );
       setCostList(updatedCosts);
       setCostsSum(sum);
-    }, 300);
+      setFocusedCostId(costid);
+    }, 400);
   };
 
   const handleCostRemoval = (
@@ -510,43 +542,90 @@ export default function TripPlannerPage(props) {
     style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
   };
 
+  const createTrip = {
+    id: "creating-trip",
+    title: "Creating Trip Campaign...",
+    message: "Please wait while we create your trip campaign.",
+    color: "green",
+    loading: true,
+    withCloseButton: false,
+    autoClose: false,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
+
+  const tripMade = {
+    id: "creating-trip",
+    title: "Trip Campaign Created!",
+    message: "Welcome to your trip Campaign!",
+    color: "green",
+    loading: false,
+    autoClose: 5000,
+    icon: <IconCheck size={17} />,
+  };
+
   const generateTripId = () => {
-    const trip_title = tripTitle.replace(/ /g, "").toLowerCase();
+    const trip_title = tripTitle
+      .replace(/ /g, "")
+      .replace(/[^a-z0-9]/gi, "")
+      .toLowerCase();
     let now = new Date();
-    let date_time_string =
-      now.toISOString().slice(5, 7) +
-      now.toISOString().slice(8, 10) +
-      now.toISOString().slice(11, 13) +
-      now.toISOString().slice(14, 16) +
-      now.toISOString().slice(17, 19);
+    let date_time_string = convertDateString(now);
     let trip_id = `${trip_title}_${date_time_string}`;
     return trip_id;
   };
 
-  const saveToDB = async (user) => {
-    const travel_date = travelDates.toString();
-    await setDoc(doc(firestore, "users", user.email, "trips", tripId), {
-      creationTime: estTimeStamp(new Date()),
-      tripTitle: tripTitle,
-      images: images,
-      tripDesc: tripDesc,
-      startLocale: startLocale,
-      travelers: travelers,
-      travelDate: convertDateString(travel_date),
-      roundTrip: roundTrip,
-      costsObj: costsObj,
-      costsSum: costsSum,
-      destinations: destinations,
-      tripId: tripId,
-      user: user.email,
-    });
-    sessionStorage.removeItem("placeDataState");
-    sessionStorage.removeItem("images");
-    sessionStorage.removeItem("tripDesc");
-    router.push("/" + tripId);
+  // TODO - DB
+  const saveToDB = async (user, campaignId) => {
+    notifications.show(createTrip);
+    try {
+      const imageUploadPromises = images.map(async (imageDataUrl, index) => {
+        const storageRef = ref(
+          storage,
+          `images/${user.email}/${campaignId}/trip_img_${index}.png`
+        );
+        const snapshot = await uploadString(
+          storageRef,
+          imageDataUrl,
+          "data_url",
+          {
+            contentType: "image/png",
+          }
+        );
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        return downloadURL;
+      });
+
+      const imageURLs = await Promise.all(imageUploadPromises);
+
+      const travel_date = travelDates.toString();
+      await setDoc(doc(firestore, "users", user.email, "trips", campaignId), {
+        creationTime: estTimeStamp(new Date()),
+        tripTitle: tripTitle,
+        images: imageURLs,
+        tripDesc: tripDesc,
+        startLocale: startLocale,
+        travelers: travelers,
+        travelDate: convertDateString(travel_date),
+        roundTrip: roundTrip,
+        costsObj: costsObj,
+        costsSum: costsSum,
+        destinations: destinations,
+        tripId: campaignId,
+        user: user.email,
+      });
+      notifications.update(tripMade);
+      sessionStorage.removeItem("placeDataState");
+      sessionStorage.removeItem("images");
+      sessionStorage.removeItem("tripDesc");
+      router.push("/" + campaignId);
+    } catch (error) {
+      console.error("Failed to save to database:", error);
+      // Handle any errors that occurred during the image upload or database write
+    }
   };
 
-  // TODO - Pass info to Trippage
   const changeNextStep = () => {
     if (active === 2) {
       if (tripTitle === "") {
@@ -572,12 +651,14 @@ export default function TripPlannerPage(props) {
       nextStep();
     }
     if (active === 3) {
-      setTripId(generateTripId());
       if (!user && !infoAdded && router.pathname === "/tripplanner") {
         notifications.show(noAccountInfo);
         return;
       }
-      saveToDB(user);
+      () => {
+        setTripId(generateTripId());
+      };
+      saveToDB(user, generateTripId());
     }
   };
 
@@ -1002,9 +1083,7 @@ export default function TripPlannerPage(props) {
                       }}
                       sx={{
                         ".mantine-DatePicker-day[data-disabled]": {
-                          color: dark
-                            ? theme.colors.dark[6]
-                            : theme.colors.gray[2],
+                          color: dark ? "dark.6" : "gray.2",
                         },
                         ".mantine-DatePicker-day[data-weekend]": {
                           color: dark
@@ -1012,9 +1091,7 @@ export default function TripPlannerPage(props) {
                             : theme.colors.red[3],
                         },
                         ".mantine-DatePicker-day[data-outside]": {
-                          color: dark
-                            ? theme.colors.dark[3]
-                            : theme.colors.gray[5],
+                          color: dark ? "dark.3" : "gray.5",
                         },
                         ".mantine-DatePicker-day[data-selected]": {
                           border: `1px solid ${
@@ -1095,8 +1172,9 @@ export default function TripPlannerPage(props) {
                 >
                   <Input
                     size={"xl"}
-                    placeholder="Title..."
                     w="100%"
+                    placeholder="Title..."
+                    value={tripTitle}
                     onChange={(e) => setTripTitle(e.target.value)}
                     sx={{
                       ".mantine-Input-input": {
@@ -1112,8 +1190,8 @@ export default function TripPlannerPage(props) {
                     }}
                   />
                   <TripContent
+                    active={active}
                     images={images}
-                    setTripDesc={setTripDesc}
                     setImages={setImages}
                   />
                 </Stack>
@@ -1219,17 +1297,21 @@ export default function TripPlannerPage(props) {
                   labelPosition="center"
                 />
                 <NumberInput
+                  ref={sumRef}
                   icon={<IconCurrencyDollar />}
                   size="xl"
                   w={225}
                   value={costsSum}
+                  onFocus={(event) => {
+                    event.target.select();
+                  }}
                   onChange={(value) => {
                     const numericValue = parseFloat(value);
                     if (!Number.isNaN(numericValue)) {
                       setCostsSum(numericValue);
                     }
                   }}
-                  stepHoldDelay={800}
+                  stepHoldDelay={600}
                   stepHoldInterval={400}
                   variant="filled"
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
@@ -1238,7 +1320,6 @@ export default function TripPlannerPage(props) {
                       ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       : ""
                   }
-                  precision={2}
                   min={0}
                   sx={{
                     ".mantine-NumberInput-input": {

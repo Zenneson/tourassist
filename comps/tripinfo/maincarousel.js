@@ -32,6 +32,8 @@ export default function MainCarousel(props) {
     sliderRef.current.slickPrev();
   };
 
+  console.log("tripImages: ", tripImages);
+
   const slides = tripImages.map((image, index) => (
     <BackgroundImage
       key={index}

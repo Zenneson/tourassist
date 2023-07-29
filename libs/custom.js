@@ -37,7 +37,7 @@ export const convertDateString = (dateString) => {
     return;
   }
   const formattedDate = date.format("MMDDYYYY");
-  return formattedDate;
+  return formattedDate.toString();
 };
 
 export const formatNumber = (num) => {

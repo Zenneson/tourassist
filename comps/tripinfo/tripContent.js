@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   useMantineColorScheme,
@@ -14,13 +14,13 @@ import {
   LoadingOverlay,
   Slider as MantineSlider,
 } from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useEditor } from "@tiptap/react";
 import imageCompression from "browser-image-compression";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
-import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import {
   IconChevronLeft,
@@ -38,17 +38,19 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  const { addUpdateDesc, donating, images, setImages, setTripDesc } = props;
+  const { addUpdateDesc, donating, images, setImages } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
-  const [showToolbar, setShowToolbar] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
   const [imageUpload, setImageUpload] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
-  const [editorFocused, setEditorFocused] = useState(false);
+  const [tripDesc, setTripDesc] = useSessionStorage({
+    key: "tripDesc",
+    defaultValue: "",
+  });
 
   const router = useRouter();
 
@@ -92,22 +94,31 @@ export default function TripContent(props) {
   ));
 
   const editor = useEditor({
+    editable: true,
     extensions: [
       Link,
       StarterKit,
       TextStyle,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Placeholder.configure({
-        placeholder:
-          router.pathname === "/tripplanner"
-            ? "Add a detailed description to your trip here, to inspire support..."
-            : donating
-            ? "Add a comment here..."
-            : "Update us here...",
-      }),
     ],
-    content: donating ? "" : addUpdateDesc ? updateDetails : "",
+    parseOptions: {
+      preserveWhitespace: "full",
+    },
+    content:
+      tripDesc !== ""
+        ? tripDesc.toString()
+        : "<p>Tell us about yourself and what you can share about this trip...</p>",
+    // content: donating ? "" : addUpdateDesc ? updateDetails : "",
+    onUpdate({ editor }) {
+      setTripDesc(editor.getHTML());
+    },
   });
+
+  useEffect(() => {
+    if (tripDesc !== "") {
+      editor.commands.setContent(tripDesc.toString());
+    }
+  }, [tripDesc, editor]);
 
   const handleScroll = (event) => {
     let newScale = scale - event.deltaY * 0.005;
@@ -175,17 +186,6 @@ export default function TripContent(props) {
   const dontAddImage = () => {
     setImageUpload(null);
     setScale(1);
-  };
-
-  const focusEditor = () => {
-    setShowToolbar(true);
-    editor?.chain().focus().run();
-  };
-
-  const blurEditor = () => {
-    setShowToolbar(false);
-    setEditorFocused(false);
-    setTripDesc(editor.getHTML());
   };
 
   return (
@@ -256,7 +256,6 @@ export default function TripContent(props) {
               disabled={images.length === 6}
               style={{
                 border: "2px dashed rgba(255,255,255,0.05)",
-                backgroundColor: dark ? "dark.7" : "gray.4",
                 cursor: images.length === 6 ? "not-allowed" : "pointer",
               }}
             >
@@ -311,7 +310,7 @@ export default function TripContent(props) {
               py={12}
               fz={12}
               ta={"center"}
-              bg={dark ? "dark.5" : "gray.1"}
+              bg={dark ? "dark.6" : "gray.1"}
               sx={{
                 borderRadius: "3px",
               }}
@@ -325,47 +324,64 @@ export default function TripContent(props) {
       <RichTextEditor
         editor={editor}
         position="relative"
-        bg={
-          dark
-            ? editorFocused
-              ? "dark.4"
-              : "dark.5"
-            : editorFocused
-            ? "gray.0"
-            : "gray.4"
-        }
-        onClick={focusEditor}
-        onFocus={() => {
-          setEditorFocused(true);
-        }}
-        onBlur={blurEditor}
+        bg={dark ? "dark.6" : "gray.4"}
         sx={{
+          ":root": {
+            borderRadius: "3px",
+          },
+          borderRadius: "3px",
           transition: "border-top 0.2s ease",
           border: "none",
-          overflow: "auto",
           width: "100%",
           minWidth: "500px",
-          minHeight: donating ? "100px" : "200px",
-          maxHeight: donating ? "100px" : "300px",
+          overflow: "auto",
+          ".mantine-RichTextEditor-toolbar": {
+            background: dark
+              ? "rgba(0, 0, 0, 0.3)"
+              : "rgba(255, 255, 255, 0.3)",
+            borderColor: "rgba(255,255,255,0)",
+          },
           ".mantine-RichTextEditor-content": {
             background: "rgba(0, 0, 0, 0)",
-            color: dark
-              ? editorFocused
-                ? "dark.4"
-                : "dark.5"
-              : editorFocused
-              ? "gray.0"
-              : "gray.4",
-          },
-          ".mantine-RichTextEditor-toolbar": {
-            background: "rgba(0, 0, 0, 0)",
-            borderColor: "rgba(255,255,255,0.2)",
+            color: dark ? "dark.6" : "gray.4",
+            minHeight: donating ? "100px" : "200px",
+            maxHeight: donating ? "100px" : "300px",
+            "& .ProseMirror": {
+              minHeight: donating ? "100px" : "200px",
+              maxHeight: donating ? "100px" : "300px",
+              overflow: "hidden",
+              paddingLeft: "21px",
+              paddingRight: "21px",
+              "&:hover": {
+                paddingRight: "16px",
+                overflow: "auto",
+              },
+              "&::-webkit-scrollbar": {
+                width: "5px",
+                height: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: dark
+                  ? "rgba(255, 255, 255, 0.386)"
+                  : "rgba(0, 0, 0, 0.245)",
+                borderRadius: "8px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                background: dark ? "dark.3" : "gray.3",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: dark
+                  ? "rgba(0, 0, 0, 0.6)"
+                  : "rgba(255, 255, 255, 0.6)",
+                borderRadius: "0 3px 3px 0",
+              },
+            },
           },
         }}
       >
-        {editor && showToolbar && (
+        {editor && (
           <>
-            <RichTextEditor.Toolbar>
+            <RichTextEditor.Toolbar sticky>
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />
                 <RichTextEditor.H1 />
@@ -390,7 +406,7 @@ export default function TripContent(props) {
         <RichTextEditor.Content
           sx={{
             "& p": {
-              fontSize: "1rem",
+              fontSize: ".9rem",
               textAlign: "justify",
             },
           }}

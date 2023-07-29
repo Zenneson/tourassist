@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSessionStorage } from "@mantine/hooks";
 import { useMantineTheme, Box, Image, LoadingOverlay } from "@mantine/core";
@@ -8,7 +9,7 @@ export default function Loader(props) {
     key: "tripData",
     defaultValue: null,
   });
-  let { loaded, mapLoaded } = props;
+  let { loaded, setLoaded = () => {}, mapLoaded } = props;
   const theme = useMantineTheme();
   const router = useRouter();
   const Globe = () => (
@@ -32,9 +33,32 @@ export default function Loader(props) {
     </Box>
   );
 
+  useEffect(() => {
+    if (
+      document &&
+      document.readyState === "interactive" &&
+      tripData === null
+    ) {
+      setTimeout(() => {
+        setLoaded(true);
+      }, 100);
+    }
+  }, [setLoaded, loaded, tripData]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!loaded) {
+        setLoaded(true);
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [loaded, setLoaded]);
+
   if (router.pathname === "/") {
     return;
   }
+
+  console.log("Loaded: ", loaded);
 
   return (
     <>

@@ -166,7 +166,7 @@ export default function App(props) {
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider withGlobalStyles withNormalizeCSS theme={tourTheme}>
-          <Notifications position="top-center" zIndex={9999} />
+          <Notifications position="top-center" zIndex={9999} limit={1} />
           <SearchModal
             searchOpened={searchOpened}
             setSearchOpened={setSearchOpened}

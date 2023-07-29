@@ -49,7 +49,7 @@ export function RouterTransition(props) {
         size={"sm"}
         color={theme.colorScheme === "dark" ? "#219cee" : "#9b1616"}
       />
-      <Loader loaded={loaded} mapLoaded={mapLoaded} />
+      <Loader loaded={loaded} setLoaded={setLoaded} mapLoaded={mapLoaded} />
     </>
   );
 }
