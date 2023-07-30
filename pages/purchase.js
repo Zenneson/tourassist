@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   Box,
   Badge,
@@ -35,6 +36,15 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Purchase() {
+  const [loaded, setLoaded] = useSessionStorage({
+    key: "loaded",
+    defaultValue: false,
+  });
+
+  useEffect(() => {
+    setLoaded(true);
+  }, [setLoaded]);
+
   const flightData = [
     {
       airline: "American",

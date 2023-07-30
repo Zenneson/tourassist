@@ -53,6 +53,7 @@ export default function Mymap(props) {
   const dark = colorScheme === "dark";
   const mapRef = useRef();
   const router = useRouter();
+  const [mapUsed, setMapUsed] = useState(false);
   const [area, setArea] = useState({ label: "" });
   const [headerEm, setHeaderEm] = useState(0);
   const [locationDrawer, setLocationDrawer] = useState(false);
@@ -167,13 +168,14 @@ export default function Mymap(props) {
         longitude: geoLng,
         zoom: 2.5,
       });
-      mapRef.current?.flyTo({
-        center: [geoLng, geoLat],
-        essential: true,
-        duration: 1000,
-      });
+      if (!mapUsed)
+        mapRef.current?.flyTo({
+          center: [geoLng, geoLat],
+          essential: true,
+          duration: 1000,
+        });
     }
-  }, [mapRef, geoLat, geoLng, setGeoLat, setGeoLng, allowGeo]);
+  }, [mapUsed, mapRef, geoLat, geoLng, setGeoLat, setGeoLng, allowGeo]);
 
   useEffect(() => {
     if (user === null && guest === false) {
@@ -1060,6 +1062,12 @@ export default function Mymap(props) {
         reuseMaps={true}
         onLoad={() => {
           setMapLoaded(true);
+        }}
+        onTouchStart={() => {
+          setMapUsed(true);
+        }}
+        onMouseDown={() => {
+          setMapUsed(true);
         }}
         touchPitch={false}
         ref={mapRef}

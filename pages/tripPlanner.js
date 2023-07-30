@@ -95,7 +95,6 @@ export default function TripPlannerPage(props) {
     key: "user",
     defaultValue: null,
   });
-
   const [images, setImages] = useSessionStorage({
     key: "images",
     defaultValue: [],
@@ -108,6 +107,14 @@ export default function TripPlannerPage(props) {
     key: "placeDataState",
     defaultValue: [],
   });
+  const [loaded, setLoaded] = useSessionStorage({
+    key: "loaded",
+    defaultValue: false,
+  });
+
+  useEffect(() => {
+    setLoaded(true);
+  }, [setLoaded]);
 
   var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
@@ -1032,7 +1039,7 @@ export default function TripPlannerPage(props) {
                       className="pagePanel"
                       allowDeselect
                       firstDayOfWeek={0}
-                      defaultDate={today}
+                      defaultDate={dayjs().add(7, "day")}
                       minDate={weekAhead}
                       value={travelDates}
                       size={"md"}
@@ -1077,7 +1084,7 @@ export default function TripPlannerPage(props) {
                       }}
                       sx={{
                         ".mantine-DatePicker-day[data-disabled]": {
-                          color: "rgba(255, 0, 0, 0.2)",
+                          color: "rgba(141, 156, 57, 0.4)",
                         },
                         ".mantine-DatePicker-day[data-weekend]": {
                           color: dark

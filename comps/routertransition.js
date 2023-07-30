@@ -25,6 +25,7 @@ export function RouterTransition(props) {
       setPanelShow(false);
       setMainMenuOpened(false);
       setDropDownOpened(false);
+      setLoaded(false);
     };
 
     const handleComplete = () => {
@@ -41,9 +42,9 @@ export function RouterTransition(props) {
       router.events.off("routeChangeError", handleComplete);
     };
   }, [
+    setLoaded,
     router.asPath,
     router.events,
-    setLoaded,
     setPanelShow,
     setMainMenuOpened,
     setDropDownOpened,

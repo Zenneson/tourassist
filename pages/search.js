@@ -1,4 +1,4 @@
-import {} from "react";
+import { useEffect } from "react";
 import {
   Box,
   Center,
@@ -11,6 +11,7 @@ import {
   Stack,
   Progress,
 } from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
 
 const results = [
   {
@@ -126,6 +127,15 @@ const searchData = results.map((result, index) => (
 ));
 
 export default function SearchPage() {
+  const [loaded, setLoaded] = useSessionStorage({
+    key: "loaded",
+    defaultValue: false,
+  });
+
+  useEffect(() => {
+    setLoaded(true);
+  }, [setLoaded]);
+
   return (
     <>
       <Center mt={120} mb={50}>

@@ -11,7 +11,7 @@ export default function Loader(props) {
   });
   const [tripData, setTripData] = useSessionStorage({
     key: "tripData",
-    defaultValue: null,
+    defaultValue: [],
   });
   let { mapLoaded } = props;
   const theme = useMantineTheme();
@@ -38,15 +38,8 @@ export default function Loader(props) {
   );
 
   useEffect(() => {
-    if (
-      !tripData ||
-      router.query.title === tripData.tripId ||
-      router.pathname === "/map"
-    ) {
-      return;
-    }
     setLoaded(true);
-  }, [router.pathname, router.query, tripData, setLoaded]);
+  }, [setLoaded]);
 
   if (router.pathname === "/") return;
 

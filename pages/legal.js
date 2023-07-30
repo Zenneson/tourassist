@@ -14,7 +14,7 @@ import {
   Space,
 } from "@mantine/core";
 import { IconChevronsRight } from "@tabler/icons-react";
-import { useWindowScroll } from "@mantine/hooks";
+import { useSessionStorage, useWindowScroll } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -63,6 +63,14 @@ export default function Legal() {
   const [highlighted, setHighlighted] = useState(0);
   const [scroll, scrollTo] = useWindowScroll();
   const { classes, cx } = useStyles();
+  const [loaded, setLoaded] = useSessionStorage({
+    key: "loaded",
+    defaultValue: false,
+  });
+
+  useEffect(() => {
+    setLoaded(true);
+  }, [setLoaded]);
 
   const router = useRouter();
 
