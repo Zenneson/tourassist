@@ -5,11 +5,15 @@ import { useMantineTheme, Box, Image, LoadingOverlay } from "@mantine/core";
 import { useRouter } from "next/router";
 
 export default function Loader(props) {
+  const [loaded, setLoaded] = useSessionStorage({
+    key: "loaded",
+    defaultValue: false,
+  });
   const [tripData, setTripData] = useSessionStorage({
     key: "tripData",
     defaultValue: null,
   });
-  let { loaded, setLoaded = () => {}, mapLoaded } = props;
+  let { mapLoaded } = props;
   const theme = useMantineTheme();
   const router = useRouter();
   const Globe = () => (
@@ -35,35 +39,21 @@ export default function Loader(props) {
 
   useEffect(() => {
     if (
-      document &&
-      document.readyState === "interactive" &&
-      tripData === null
+      !tripData ||
+      router.query.title === tripData.tripId ||
+      router.pathname === "/map"
     ) {
-      setTimeout(() => {
-        setLoaded(true);
-      }, 1000);
+      return;
     }
-  }, [setLoaded, loaded, tripData]);
+    setLoaded(true);
+  }, [router.pathname, router.query, tripData, setLoaded]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!loaded) {
-        setLoaded(true);
-      }
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [loaded, setLoaded]);
-
-  if (router.pathname === "/") {
-    return;
-  }
-
-  console.log("Loaded: ", loaded);
+  if (router.pathname === "/") return;
 
   return (
     <>
       <LoadingOverlay
-        visible={!mapLoaded && !loaded && tripData === null}
+        visible={!mapLoaded && !loaded}
         overlayColor={
           theme.colorScheme === "dark"
             ? theme.colors.dark[7]

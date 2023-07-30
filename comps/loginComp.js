@@ -191,6 +191,16 @@ export default function LoginComp(props) {
     message: `${form.values.email} has logged in`,
   };
 
+  const emailInvalid = {
+    color: "red",
+    icon: <IconX size={20} />,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+    title: "Invalid Email",
+    message: `${form.values.email} is not a valid email address.`,
+  };
+
   const alreadyExists = {
     color: "red",
     icon: <IconX size={20} />,
@@ -270,6 +280,9 @@ export default function LoginComp(props) {
           const errorMessage = error.message;
           console.log("Error Code: ", errorCode);
           console.log("Error Message: ", errorMessage);
+          if (errorCode === "auth/invalid-email") {
+            notifications.show(emailInvalid);
+          }
           if (errorCode === "auth/email-already-in-use") {
             notifications.show(alreadyExists);
           }

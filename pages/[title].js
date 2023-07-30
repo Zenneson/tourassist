@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
-import { useSessionStorage } from "@mantine/hooks";
+import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
 import {
   useMantineColorScheme,
   Avatar,
@@ -731,7 +731,7 @@ export default function Trippage(props) {
                 }
               />
               <Box pl={10}>
-                {user && user.email !== tripData.user && (
+                {user?.email !== tripData.user && (
                   <Divider
                     mb={20}
                     w={"100%"}
@@ -841,7 +841,7 @@ export default function Trippage(props) {
                   </Button>
                 </Button.Group>
               )}
-              {user && user.email !== tripData.user && (
+              {user?.email !== tripData.user && (
                 <Button
                   mt={10}
                   fullWidth

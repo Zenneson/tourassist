@@ -1,11 +1,23 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { BackgroundImage, Box, Button, Center, Group } from "@mantine/core";
+import {
+  BackgroundImage,
+  Box,
+  Button,
+  Center,
+  Group,
+  Image,
+} from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function MainCarousel(props) {
+  const [loaded, setLoaded] = useSessionStorage({
+    key: "loaded",
+    defaultValue: false,
+  });
   const { tripImages } = props;
   const sliderRef = useRef();
 
@@ -22,6 +34,7 @@ export default function MainCarousel(props) {
     slidesToScroll: 1,
     arrows: false,
     pauseOnHover: true,
+    lazyLoad: null,
   };
 
   const next = () => {
@@ -31,19 +44,6 @@ export default function MainCarousel(props) {
   const previous = () => {
     sliderRef.current.slickPrev();
   };
-
-  console.log("tripImages: ", tripImages);
-
-  const slides = tripImages.map((image, index) => (
-    <BackgroundImage
-      key={index}
-      src={image}
-      h={500}
-      maw={650}
-      alt="Image Slideshow"
-      radius={3}
-    />
-  ));
 
   if (tripImages.length === 1) {
     return (
@@ -55,13 +55,36 @@ export default function MainCarousel(props) {
         }}
       >
         <BackgroundImage src={tripImages} h={500} w={650} alt="Main Image" />
+        <Image
+          src={tripImages}
+          onLoad={() => setLoaded(true)}
+          display={"none"}
+          alt="preload"
+        />
       </Box>
     );
   }
 
+  const slides = tripImages.map((image, index) => (
+    <BackgroundImage
+      key={index}
+      src={image}
+      h={500}
+      maw={650}
+      radius={3}
+      alt="Image Slideshow"
+    />
+  ));
+
   return (
     tripImages.length > 0 && (
       <Group spacing={0} w={tripImages.length > 1 ? "auto" : "650px"} h={500}>
+        <Image
+          src={tripImages[0]}
+          onLoad={() => setLoaded(true)}
+          display={"none"}
+          alt="preload"
+        />
         <Center>
           {tripImages.length > 1 && (
             // Previous Slider Button

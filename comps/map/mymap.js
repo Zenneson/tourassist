@@ -867,6 +867,9 @@ export default function Mymap(props) {
                     />
                   }
                   styles={(theme) => ({
+                    root: {
+                      transition: "all 250ms ease-in-out",
+                    },
                     input: {
                       "&::placeholder": {
                         color: dark ? "#fff" : "#000",
@@ -1000,15 +1003,6 @@ export default function Mymap(props) {
             }}
           >
             <Autocomplete
-              icon={
-                <IconWorldSearch
-                  size={30}
-                  style={{
-                    paddingLeft: 5,
-                    color: dark ? " #00e8fa" : "#fa7500",
-                  }}
-                />
-              }
               size="lg"
               defaultValue=""
               itemComponent={AutoCompItem}
@@ -1022,6 +1016,15 @@ export default function Mymap(props) {
                 setCountrySearch(e);
                 handleChange("country");
               }}
+              icon={
+                <IconWorldSearch
+                  size={30}
+                  style={{
+                    paddingLeft: 5,
+                    color: dark ? " #00e8fa" : "#fa7500",
+                  }}
+                />
+              }
               styles={(theme) => ({
                 root: {
                   borderTop: `2px solid ${
