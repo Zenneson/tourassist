@@ -5,7 +5,7 @@ import { getStorage } from "firebase/storage";
 // import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB_LeZwAqankwio7WIUYQx7UUhloVuNq7Y",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: "tourassist-836db.firebaseapp.com",
   projectId: "tourassist-836db",
   storageBucket: "tourassist-836db.appspot.com",

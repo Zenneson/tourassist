@@ -25,9 +25,11 @@ import {
   IconInfoCircleFilled,
   IconBrightnessUp,
   IconMoon,
+  IconCurrentLocation,
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
-import { estTimeStamp } from "../../libs/custom";
+import { estTimeStamp, arraysAreEqual } from "../../libs/custom";
+import { useMap } from "react-map-gl";
 import { auth } from "../../libs/firebase";
 
 export default function MainMenu(props) {
@@ -51,6 +53,24 @@ export default function MainMenu(props) {
     key: "user",
     defaultValue: null,
   });
+  const [leaving, setLeaving] = useSessionStorage({
+    key: "leaving",
+    defaultValue: false,
+  });
+  const [userGeo, setUserGeo] = useSessionStorage({
+    key: "userGeo",
+  });
+
+  const { mapRef } = useMap();
+
+  const flyToCurrent = () => {
+    mapRef.flyTo({
+      center: userGeo,
+      zoom: 2.5,
+      pitch: 0,
+      duration: 1000,
+    });
+  };
 
   useEffect(() => {
     router.prefetch("/");
@@ -86,21 +106,16 @@ export default function MainMenu(props) {
 
   const signOutFunc = async () => {
     setLogoutOpened(false);
-    sessionStorage.removeItem("tripData");
-    sessionStorage.removeItem("guest");
-    sessionStorage.removeItem("placeDataState");
-    sessionStorage.removeItem("images");
-    sessionStorage.removeItem("tripDesc");
-    if (user) {
-      await recordLogout(user);
+    if (auth.currentUser) {
       try {
+        // await recordLogout(auth.currentUser);
         await signOut(auth);
       } catch (error) {
         console.log(error);
       }
     }
-    sessionStorage.removeItem("user");
-    router.push("/");
+    sessionStorage.clear();
+    router.push("/", undefined, { shallow: false });
   };
 
   if (router.pathname === "/") {
@@ -161,7 +176,6 @@ export default function MainMenu(props) {
           </Title>
         </Flex>
         <Flex align={"center"} gap={10} px={0} py={10} mt={10} mr={10}>
-          {/* TODO */}
           {user && (
             //  Main Menu Button
             <Button
@@ -176,7 +190,28 @@ export default function MainMenu(props) {
               </Text>
             </Button>
           )}
-          {/* TODO   */}
+          {router.pathname === "/map" &&
+            !arraysAreEqual(userGeo, ["-95", "37"]) && (
+              <Tooltip
+                color={dark ? "dark" : "gray.0"}
+                c={dark ? "gray.0" : "dark.9"}
+                label="Current Location"
+                position="bottom"
+                withArrow
+              >
+                <Button
+                  variant="subtle"
+                  onClick={() => {
+                    flyToCurrent();
+                  }}
+                  radius={"xl"}
+                  p={10}
+                  c={dark ? "gray.0" : "dark.9"}
+                >
+                  <IconCurrentLocation size={17} />
+                </Button>
+              </Tooltip>
+            )}
           <Tooltip
             color={dark ? "dark" : "gray.0"}
             c={dark ? "gray.0" : "dark.9"}
@@ -232,13 +267,13 @@ export default function MainMenu(props) {
                 <Popover.Target>
                   {/* Logout Dropdown */}
                   <Button
+                    p={10}
+                    radius="xl"
+                    variant="subtle"
+                    c={dark ? "gray.0" : "dark.9"}
                     onClick={() => {
                       setLogoutOpened((o) => !o);
                     }}
-                    variant="subtle"
-                    radius="xl"
-                    p={10}
-                    c={dark ? "gray.0" : "dark.9"}
                   >
                     {user ? (
                       <IconDoorExit size={17} />
@@ -255,7 +290,11 @@ export default function MainMenu(props) {
                   fw={700}
                   px={15}
                   variant="default"
-                  onClick={signOutFunc}
+                  onClick={() => {
+                    setUser(null);
+                    setLeaving(true);
+                    signOutFunc();
+                  }}
                   sx={{
                     opacity: 0.35,
                     "&:hover": {

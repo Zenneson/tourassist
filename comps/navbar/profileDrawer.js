@@ -94,6 +94,10 @@ export default function ProfileDrawer(props) {
     key: "user",
     defaultValue: null,
   });
+  const [leaving, setLeaving] = useSessionStorage({
+    key: "leaving",
+    defaultValue: false,
+  });
 
   useEffect(() => {
     router.prefetch("/");
@@ -330,7 +334,11 @@ export default function ProfileDrawer(props) {
                     : theme.fn.rgba(theme.colors.gray[0], 0.2),
                 },
               })}
-              onClick={signOutFunc}
+              onClick={() => {
+                setUser(null);
+                setLeaving(true);
+                signOutFunc();
+              }}
             >
               Logout
             </Button>

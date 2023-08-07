@@ -37,7 +37,6 @@ import {
   useWindowEvent,
   useSessionStorage,
 } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
 import {
   IconCurrencyDollar,
   IconPlus,
@@ -55,9 +54,10 @@ import {
   IconRotate360,
   IconCheck,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
-import { estTimeStamp, convertDateString } from "../libs/custom";
+import { estTimeStamp, dateId } from "../libs/custom";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/tripinfo/tripContent";
 
@@ -74,20 +74,13 @@ export default function TripPlannerPage(props) {
   const [travelDates, setTravelDates] = useState(null);
   const [roundTrip, setRoundTrip] = useState(false);
   const startLocaleRef = useRef(null);
-  const [newCost, setNewCost] = useState([]);
-  const newCostRef = useRef(null);
   const [tripTitle, setTripTitle] = useState("");
   const [tripId, setTripId] = useState("");
-  const [costList, setCostList] = useState({});
-  const [costsObj, setCostsObj] = useState({});
   const [destinations, setDestinations] = useState([]);
-  const [costsSum, setCostsSum] = useState(0);
   const [active, setActive] = useState(0);
   const [infoAdded, setInfoAdded] = useState(false);
-  const [focusedCostId, setFocusedCostId] = useState(null);
   const storage = getStorage();
   const router = useRouter();
-  const forceUpdate = useForceUpdate();
   const dayjs = require("dayjs");
   const sumRef = useRef(null);
 
@@ -126,22 +119,6 @@ export default function TripPlannerPage(props) {
     transition: { type: "ease-in-out" },
   };
 
-  let formValue = "";
-  const AddCost = (event) => {
-    let index =
-      event.target.parentElement.parentElement.parentElement.parentElement
-        .parentElement.parentElement.id ||
-      event.target.parentElement.parentElement.parentElement.parentElement.id;
-    newCost[index]?.push(formValue.toUpperCase());
-    forceUpdate();
-  };
-
-  useWindowEvent("keydown", (event) => {
-    if (event.key === "Enter" && newCostRef.current) {
-      AddCost(event);
-    }
-  });
-
   const index = startLocale?.indexOf(",");
   const startCity = startLocale.substring(0, index);
   const startRegion = startLocale?.substring(index + 1);
@@ -155,24 +132,23 @@ export default function TripPlannerPage(props) {
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
 
-  const formatCostBreakdown = (obj) => {
-    const result = {};
-    for (let key in obj) {
-      const [country, expense] = key.split("_");
-      if (!result[country]) {
-        result[country] = {};
-      }
-      result[country][expense] = obj[key];
-    }
-    return result;
-  };
-
   const formatPlaces = (input) => {
     return input.map((item) => {
       return {
         place: item.place,
         region: item.region,
       };
+    });
+  };
+
+  const placeCheck = () => {
+    placeData.map((place) => {
+      if (`${place.place}, ${place.region}` === startLocale) {
+        notifications.show(placeExists);
+        setStartLocale("");
+        setStartLocaleSearch("");
+        setStartLocaleData([]);
+      }
     });
   };
 
@@ -277,8 +253,9 @@ export default function TripPlannerPage(props) {
       .replace(/[^a-z0-9]/gi, "")
       .toLowerCase();
     let now = new Date();
-    let date_time_string = convertDateString(now);
-    let trip_id = `${trip_title}_${date_time_string}`;
+    let date_time_string = dateId(now);
+    let name = user.email.match(/^(.*?)@/);
+    let trip_id = `${trip_title}${date_time_string}${name[1]}`;
     return trip_id;
   };
 
@@ -287,20 +264,22 @@ export default function TripPlannerPage(props) {
     notifications.show(createTrip);
     try {
       const imageUploadPromises = images.map(async (imageDataUrl, index) => {
-        const storageRef = ref(
-          storage,
-          `images/${user.email}/${campaignId}/trip_img_${index}.png`
-        );
-        const snapshot = await uploadString(
-          storageRef,
-          imageDataUrl,
-          "data_url",
-          {
-            contentType: "image/png",
-          }
-        );
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        return downloadURL;
+        if (imageDataUrl.startsWith("data:")) {
+          const storageRef = ref(
+            storage,
+            `images/${user.email}/${campaignId}/trip_img_${index}.png`
+          );
+          const snapshot = await uploadString(
+            storageRef,
+            imageDataUrl,
+            "data_url",
+            {
+              contentType: "image/png",
+            }
+          );
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          return downloadURL;
+        }
       });
 
       const imageURLs = await Promise.all(imageUploadPromises);
@@ -313,7 +292,7 @@ export default function TripPlannerPage(props) {
         tripDesc: tripDesc,
         startLocale: startLocale,
         travelers: travelers,
-        travelDate: convertDateString(travel_date),
+        travelDate: dateId(travel_date),
         roundTrip: roundTrip,
         costsObj: costsObj,
         costsSum: costsSum,
@@ -350,7 +329,6 @@ export default function TripPlannerPage(props) {
         notifications.show(descIsShort);
         return;
       }
-      setCostsObj(formatCostBreakdown(costList));
       setDestinations(formatPlaces(placeData));
     }
     if (active !== 3) {
@@ -366,17 +344,6 @@ export default function TripPlannerPage(props) {
       };
       saveToDB(user, generateTripId());
     }
-  };
-
-  const placeCheck = () => {
-    placeData.map((place) => {
-      if (`${place.place}, ${place.region}` === startLocale) {
-        notifications.show(placeExists);
-        setStartLocale("");
-        setStartLocaleSearch("");
-        setStartLocaleData([]);
-      }
-    });
   };
 
   const handleChange = async (e) => {
@@ -404,301 +371,6 @@ export default function TripPlannerPage(props) {
       }
     }
   };
-
-  const handleCostRemoval = (
-    costId,
-    placeIndex,
-    costIndex,
-    originalArray,
-    setOriginalArray
-  ) => {
-    let copyData = JSON.parse(JSON.stringify(originalArray));
-    let newCostList = { ...costList };
-
-    // remove the cost from the original array
-    if (Array.isArray(copyData[placeIndex])) {
-      copyData[placeIndex] = copyData[placeIndex].filter(
-        (_, i) => i !== costIndex
-      ); // If it's an array, remove the cost
-    } else if (
-      typeof copyData[placeIndex] === "object" &&
-      copyData[placeIndex] !== null &&
-      Array.isArray(copyData[placeIndex].costs)
-    ) {
-      copyData[placeIndex].costs = copyData[placeIndex].costs.filter(
-        (_, i) => i !== costIndex
-      ); // If it's an object, remove the cost from the `costs` array
-    }
-
-    // remove the cost from costList
-    if (newCostList[costId] !== undefined) {
-      delete newCostList[costId];
-    }
-
-    setOriginalArray(copyData);
-    setCostList(newCostList);
-
-    // recalculate the total cost
-    let sum = Object.values(newCostList).reduce(
-      (acc, current) => acc + current,
-      0
-    );
-    setCostsSum(sum);
-  };
-
-  const Costs = ({ cost, costid }) => {
-    useEffect(() => {
-      if (focusedCostId === costid && typeof window !== "undefined") {
-        const inputElement = document.querySelector(
-          `input[costid="${costid}"]`
-        );
-        if (inputElement) {
-          inputElement.focus();
-        }
-      }
-    }, [costid]);
-
-    let delayTimer = null;
-    const handleInputChange = (value, costid) => {
-      setFocusedCostId(costid);
-      if (delayTimer) {
-        clearTimeout(delayTimer);
-      }
-
-      delayTimer = setTimeout(() => {
-        let updatedCosts = { ...costList, [costid]: parseFloat(value) || 0 };
-        let sum = Object.values(updatedCosts).reduce(
-          (acc, current) => acc + current,
-          0
-        );
-        setCostList(updatedCosts);
-        setTimeout(() => {
-          setCostsSum(sum);
-        }, 400);
-      }, 0);
-    };
-
-    return (
-      <div key={index}>
-        <Group position="right" mr={20}>
-          <Text size={12} fs="italic" color="dimmed" mt={-25}>
-            <Badge variant="default">{cost || "NEW COST"}</Badge>
-          </Text>
-          <div
-            style={{
-              marginTop: -25,
-              width: "50%",
-              border: `1px dotted ${
-                dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.234)"
-              }`,
-            }}
-          ></div>
-          <NumberInput
-            tabIndex={index}
-            costid={costid}
-            onFocus={(event) => {
-              setFocusedCostId(costid);
-            }}
-            onChange={(value) => handleInputChange(value, costid)}
-            defaultValue={costList[costid] || 0}
-            icon={<IconCurrencyDollar />}
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            formatter={(value) =>
-              !Number.isNaN(parseFloat(value))
-                ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                : ""
-            }
-            min={0}
-            size="md"
-            w={150}
-            mb={20}
-            variant="filled"
-            sx={{
-              ".mantine-NumberInput-input": {
-                background: dark ? theme.colors.dark[4] : theme.colors.gray[3],
-                textAlign: "right",
-                fontWeight: 700,
-                paddingRight: 40,
-              },
-            }}
-          />
-        </Group>
-      </div>
-    );
-  };
-
-  const Places = () =>
-    placeData.map((place, index) => {
-      newCost[index] = newCost[index] || [];
-      return (
-        <Box
-          id={index}
-          key={index}
-          p={20}
-          mb={20}
-          radius={3}
-          className="pagePanel"
-        >
-          <Group position="apart">
-            <Stack
-              spacing={0}
-              pl={10}
-              pt={5}
-              pb={10}
-              sx={{
-                borderLeft: "5px solid rgba(150,150,150,0.1)",
-              }}
-            >
-              <Title
-                order={4}
-                fw={600}
-                sx={{
-                  textTransform: "uppercase",
-                }}
-              >
-                {place.place}
-              </Title>
-              <Text size="xs" color="dimmed">
-                {place.region}
-              </Text>
-            </Stack>
-            <Divider
-              w={"40%"}
-              labelPosition="right"
-              label={
-                placeData.length === 1 &&
-                roundTrip && (
-                  <Text color="dimmed" fz={10} fs={"italic"}>
-                    ROUND TRIP
-                  </Text>
-                )
-              }
-            />
-          </Group>
-          <Box id={index}>
-            {place.costs &&
-              place.costs.map(
-                (cost, index) =>
-                  (cost === "FLIGHT" || cost === "HOTEL") && (
-                    <Box key={index} pos="relative" pr={10}>
-                      {/* Remove Cost Button */}
-                      <ActionIcon
-                        pos="absolute"
-                        variant="default"
-                        opacity={0.2}
-                        right={-3}
-                        top={-1}
-                        h={43}
-                        onClick={(event) => {
-                          const placeIndex =
-                            event.target.parentElement.parentElement?.id;
-                          const costId = place.place + "_" + cost;
-                          handleCostRemoval(
-                            costId,
-                            placeIndex,
-                            index,
-                            placeData,
-                            setPlaceData
-                          );
-                        }}
-                      >
-                        <IconTrash size={17} pointerEvents="none" />
-                      </ActionIcon>
-                      <Costs costid={place.place + "_" + cost} cost={cost} />
-                    </Box>
-                  )
-              )}
-            {newCost[index] &&
-              newCost[index].map((cost, index) => (
-                <Box key={index} pos="relative" pr={10}>
-                  {/* Remove Cost Button */}
-                  <ActionIcon
-                    pos="absolute"
-                    variant="default"
-                    opacity={0.2}
-                    right={-3}
-                    top={-1}
-                    h={43}
-                    onClick={(event) => {
-                      const placeIndex =
-                        event.target.parentElement.parentElement?.id;
-                      const costId = place.place + "_" + cost;
-                      handleCostRemoval(
-                        costId,
-                        placeIndex,
-                        index,
-                        newCost,
-                        setNewCost
-                      );
-                    }}
-                  >
-                    <IconTrash size={17} pointerEvents="none" />
-                  </ActionIcon>
-                  <Costs costid={place.place + "_" + cost} cost={cost} />
-                </Box>
-              ))}
-          </Box>
-          <Divider
-            opacity={0.2}
-            color={dark ? "rgba(255, 255, 255, 0.4)" : "#000"}
-          />
-          <Group position="right">
-            <Popover
-              width={250}
-              position="left"
-              shadow="xl"
-              trapFocus
-              radius="xl"
-            >
-              <Popover.Target>
-                <Button
-                  id={index}
-                  variant="subtle"
-                  size="xs"
-                  color="gray"
-                  leftIcon={<IconPlus size={15} />}
-                  sx={{
-                    opacity: 0.25,
-                    transition: "opacity 0.2s ease-in-out",
-                    "&:hover": {
-                      opacity: 0.5,
-                    },
-                  }}
-                >
-                  <span id={index}>ADD COST</span>
-                </Button>
-              </Popover.Target>
-              <Popover.Dropdown>
-                <Input
-                  placeholder="NEW COST"
-                  variant="unstyled"
-                  ref={newCostRef}
-                  size="xs"
-                  pl={10}
-                  maxLength={25}
-                  onChange={(value) => (formValue = value.target.value)}
-                  sx={{
-                    ".mantine-Input-input": {
-                      textTransform: "uppercase",
-                    },
-                  }}
-                  rightSection={
-                    // Add New Cost Button
-                    <ActionIcon
-                      onClick={(event) => {
-                        AddCost(event);
-                      }}
-                    >
-                      <IconCirclePlus />
-                    </ActionIcon>
-                  }
-                />
-              </Popover.Dropdown>
-            </Popover>
-          </Group>
-        </Box>
-      );
-    });
 
   return (
     <Box px={20} pb={50}>
@@ -1084,15 +756,14 @@ export default function TripPlannerPage(props) {
                       }}
                       sx={{
                         ".mantine-DatePicker-day[data-disabled]": {
-                          color: "rgba(141, 156, 57, 0.4)",
+                          color: dark
+                            ? "rgba(36, 36, 36, 0.4)"
+                            : "rgba(233, 233, 233, 0.5)",
                         },
                         ".mantine-DatePicker-day[data-weekend]": {
                           color: dark
                             ? theme.colors.blue[2]
                             : theme.colors.red[3],
-                        },
-                        ".mantine-DatePicker-day[data-outside]": {
-                          color: dark ? "dark.3" : "gray.5",
                         },
                         ".mantine-DatePicker-day[data-selected]": {
                           border: `1px solid ${
@@ -1118,49 +789,7 @@ export default function TripPlannerPage(props) {
                 </Flex>
               </motion.div>
             )}
-            {active === 1 && (
-              <motion.div {...animation}>
-                <Places />
-                {roundTrip && placeData.length > 1 && (
-                  <Box className="pagePanel" p={20} mb={20}>
-                    <Group position="apart">
-                      <Stack
-                        spacing={0}
-                        pl={10}
-                        pt={5}
-                        pb={10}
-                        sx={{
-                          borderLeft: "5px solid rgba(150,150,150,0.1)",
-                        }}
-                      >
-                        <Title
-                          order={4}
-                          fw={600}
-                          sx={{
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          {startCity}
-                        </Title>
-                        <Text size="xs" color="dimmed">
-                          {startRegion}
-                        </Text>
-                      </Stack>
-                      <Divider
-                        w={"40%"}
-                        labelPosition="right"
-                        label={
-                          <Text color="dimmed" fz={10} fs={"italic"}>
-                            RETURN FLIGHT
-                          </Text>
-                        }
-                      />
-                    </Group>
-                    <Costs costid={"RETURN_FLIGHT"} cost={"Flight"} />
-                  </Box>
-                )}
-              </motion.div>
-            )}
+            {active === 1 && <motion.div {...animation}></motion.div>}
             {active === 2 && (
               <motion.div {...animation}>
                 <Stack
@@ -1302,15 +931,8 @@ export default function TripPlannerPage(props) {
                   icon={<IconCurrencyDollar />}
                   size="xl"
                   w={225}
-                  value={costsSum}
                   onFocus={(event) => {
                     event.target.select();
-                  }}
-                  onChange={(value) => {
-                    const numericValue = parseFloat(value);
-                    if (!Number.isNaN(numericValue)) {
-                      setCostsSum(numericValue);
-                    }
                   }}
                   stepHoldDelay={600}
                   stepHoldInterval={400}
@@ -1337,26 +959,13 @@ export default function TripPlannerPage(props) {
             )}
             {active !== 0 && (
               // Move Up Sections Button
-              <Button
-                fullWidth
-                variant={"filled"}
-                bg={dark ? "dark.9" : "gray.3"}
-                c={"white"}
-                mb={10}
-                onClick={prevStep}
-              >
+              <Button fullWidth variant={"default"} mb={10} onClick={prevStep}>
                 <IconChevronUp />
               </Button>
             )}
             {startLocale && travelDates && (
               // Move Down Sections Button
-              <Button
-                fullWidth
-                variant={"filled"}
-                bg={active === 3 ? "primary" : dark ? "dark.9" : "gray.3"}
-                c={"white"}
-                onClick={changeNextStep}
-              >
+              <Button fullWidth variant={"default"} onClick={changeNextStep}>
                 {active === 3 ? "DONE" : <IconChevronDown />}
               </Button>
             )}

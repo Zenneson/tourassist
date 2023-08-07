@@ -35,11 +35,12 @@ import {
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
-import { addEllipsis } from "../../libs/custom";
+import { addEllipsis, calculateFontSize } from "../../libs/custom";
 import TourList from "./tourList";
 import Loader from "../loader";
 
 export default function Mymap(props) {
+  const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
   const {
     listOpened,
     setListOpened,
@@ -48,12 +49,14 @@ export default function Mymap(props) {
     mapLoaded,
     setMapLoaded,
     setMainMenuOpened,
+    latitude,
+    longitude,
   } = props;
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const mapRef = useRef();
   const router = useRouter();
-  const [mapUsed, setMapUsed] = useState(false);
+  const [touched, setTouched] = useState(false);
   const [area, setArea] = useState({ label: "" });
   const [headerEm, setHeaderEm] = useState(0);
   const [locationDrawer, setLocationDrawer] = useState(false);
@@ -71,14 +74,6 @@ export default function Mymap(props) {
   const [showChoice, setShowChoice] = useState(false);
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
-  const [geoLat, setGeoLat] = useSessionStorage({
-    key: "geoLatState",
-    defaultValue: 37,
-  });
-  const [geoLng, setGeoLng] = useSessionStorage({
-    key: "geoLngState",
-    defaultValue: -95,
-  });
   const [places, setPlaces] = useSessionStorage({
     key: "placeDataState",
     defaultValue: [],
@@ -87,13 +82,20 @@ export default function Mymap(props) {
     key: "user",
     defaultValue: null,
   });
-  const [allowGeo, setAllowGeo] = useSessionStorage({
-    key: "allowGeo",
-    defaultValue: false,
-  });
   const [guest, setGuest] = useSessionStorage({
     key: "guest",
   });
+  const [userGeo, setUserGeo] = useSessionStorage({
+    key: "userGeo",
+    defaultValue: [longitude, latitude],
+  });
+
+  const initialViewState = {
+    latitude: latitude,
+    longitude: longitude,
+    zoom: 2.5,
+    pitch: 0,
+  };
 
   const useStyles = createStyles((theme) => ({
     popup: {
@@ -143,69 +145,19 @@ export default function Mymap(props) {
 
   const { classes } = useStyles();
 
-  const initialViewState = {
-    latitude: 37,
-    longitude: -95,
-    zoom: 2.5,
-    pitch: 0,
-  };
-
   const [viewState, setViewState] = useState(initialViewState);
 
   useEffect(() => {
-    if (allowGeo) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          setGeoLat(position.coords.latitude);
-          setGeoLng(position.coords.longitude);
-        },
-        function (error) {
-          console.error("Error Code = " + error.code + " - " + error.message);
-        }
-      );
-      setViewState({
-        latitude: geoLat,
-        longitude: geoLng,
-        zoom: 2.5,
-      });
-      if (!mapUsed)
-        mapRef.current?.flyTo({
-          center: [geoLng, geoLat],
-          essential: true,
-          duration: 1000,
-        });
-    }
-  }, [mapUsed, mapRef, geoLat, geoLng, setGeoLat, setGeoLng, allowGeo]);
-
-  useEffect(() => {
+    router.prefetch("/tripplanner");
+    area.label === "United States" && setShowStates(true);
     if (user === null && guest === false) {
       router.push("/");
     }
-  }, [user, guest, router]);
-
-  useEffect(() => {
-    router.prefetch("/tripplanner");
-  }, [router]);
-
-  useEffect(() => {
-    area.label === "United States" && setShowStates(true);
-  }, [area.label]);
+  }, [user, guest, area.label, router]);
 
   function getCords(feature) {
     const center = centerOfMass(feature);
     return center.geometry.coordinates;
-  }
-
-  function calculateFontSize(text) {
-    const containerWidthPx = 700;
-    const stringLength = text.length;
-    let fontSizePx = containerWidthPx / stringLength;
-    let fontSizeEm = fontSizePx / 16;
-
-    fontSizeEm = Math.max(fontSizeEm, 1.7);
-    fontSizeEm = Math.min(fontSizeEm, 6);
-
-    return fontSizeEm;
   }
 
   const prefaceThe = [
@@ -444,9 +396,9 @@ export default function Mymap(props) {
 
     let endpoint;
     if (field === "country") {
-      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&fuzzyMatch=true&limit=5&types=country%2Cregion%2Cplace&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&fuzzyMatch=true&limit=5&types=country%2Cregion%2Cplace&language=en&access_token=${mapboxAccessToken}`;
     } else {
-      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearch}.json?country=${shortCode}&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&language=en&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+      endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearch}.json?country=${shortCode}&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&language=en&access_token=${mapboxAccessToken}`;
     }
 
     try {
@@ -722,7 +674,7 @@ export default function Mymap(props) {
         })}
       >
         <Text fz={14} ta={"center"} mb={10} px={20}>
-          {places.length > 0 && !placeChoosen
+          {places && places.length > 0 && !placeChoosen
             ? "Clear the Tour List and s"
             : "S"}
           elect{" "}
@@ -965,7 +917,7 @@ export default function Mymap(props) {
           </Box>
         </Box>
       </Drawer>
-      {places.length >= 1 && !listOpened && (
+      {places && places.length >= 1 && !listOpened && (
         // Tour List Button
         <Button
           onClick={() => setListOpened(true)}
@@ -1050,8 +1002,13 @@ export default function Mymap(props) {
         </Center>
       )}
       <Map
+        id="mapRef"
+        ref={mapRef}
         {...viewState}
-        onMove={(e) => setViewState(e.viewState)}
+        onMove={(e) => {
+          setViewState(e.viewState);
+          setTouched(true);
+        }}
         initialViewState={initialViewState}
         renderWorldCopies={true}
         styleDiffing={false}
@@ -1062,15 +1019,9 @@ export default function Mymap(props) {
         reuseMaps={true}
         onLoad={() => {
           setMapLoaded(true);
-        }}
-        onTouchStart={() => {
-          setMapUsed(true);
-        }}
-        onMouseDown={() => {
-          setMapUsed(true);
+          setUserGeo([longitude, latitude]);
         }}
         touchPitch={false}
-        ref={mapRef}
         onClick={(e) => {
           locationHandler(e.features[0]);
         }}
@@ -1083,7 +1034,7 @@ export default function Mymap(props) {
             : "mapbox://styles/zenneson/clk2aa9s401ed01padxsqanrd"
         }
         style={{ width: "100%", height: "100%" }}
-        mapboxAccessToken="pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw"
+        mapboxAccessToken={mapboxAccessToken}
       >
         {!searchOpened && (
           <TourList

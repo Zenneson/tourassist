@@ -316,9 +316,7 @@ export default function AccountInfo(props) {
               >
                 <Popover.Target>
                   <Button
-                    variant="filled"
-                    color={dark ? "dark.5" : "gray.2"}
-                    c={dark ? "gray.0" : "dark.3"}
+                    variant="default"
                     fz={13}
                     sx={{
                       "&:hover": {

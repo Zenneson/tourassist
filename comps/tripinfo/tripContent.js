@@ -1,5 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
+import { doc, updateDoc } from "firebase/firestore";
+import { firestore } from "../../libs/firebase";
+import {
+  ref,
+  getStorage,
+  uploadString,
+  getDownloadURL,
+} from "firebase/storage";
 import {
   useMantineColorScheme,
   BackgroundImage,
@@ -34,12 +42,22 @@ import {
   IconFrame,
 } from "@tabler/icons-react";
 import AvatarEditor from "react-avatar-editor";
+import { parseDate } from "../../libs/custom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  const { addUpdateDesc, donating, images, setImages } = props;
+  const {
+    donating,
+    images,
+    setImages,
+    setAltModal,
+    modalMode,
+    setModalMode,
+    user,
+    weekAhead,
+  } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [loading, setLoading] = useState(true);
@@ -48,18 +66,25 @@ export default function TripContent(props) {
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
+  const [tripData, setTripData] = useSessionStorage({
+    key: "tripData",
+    defaultValue: [],
+  });
   const [tripDesc, setTripDesc] = useSessionStorage({
     key: "tripDesc",
     defaultValue: "",
   });
+  const [travelDate, setTravelDate] = useSessionStorage({
+    key: "travelDate",
+    defaultValue: weekAhead,
+  });
 
+  const storage = getStorage();
   const router = useRouter();
 
   const sliderRef = useRef();
   const cropperRef = useRef(null);
   const cropperContainerRef = useRef(null);
-
-  const updateDetails = "Update Content";
 
   const next = () => {
     sliderRef.current.slickNext();
@@ -94,6 +119,18 @@ export default function TripContent(props) {
     />
   ));
 
+  let content;
+  if (router.pathname === "/tripplanner") {
+    content = tripDesc !== "" ? tripDesc.toString() : "";
+    // content= donating ? "" : addUpdateDesc ? updateDetails : "",
+  } else if (
+    router.pathname !== "/tripplanner" &&
+    tripData &&
+    tripData.tripDesc
+  ) {
+    content = tripData.tripDesc;
+  }
+
   const editor = useEditor({
     editable: true,
     extensions: [
@@ -113,15 +150,16 @@ export default function TripContent(props) {
     parseOptions: {
       preserveWhitespace: "full",
     },
-    content: tripDesc !== "" ? tripDesc.toString() : "",
-    // content: donating ? "" : addUpdateDesc ? updateDetails : "",
+    content: content,
   });
 
   useEffect(() => {
-    if (tripDesc !== "") {
-      editor.commands.setContent(tripDesc.toString());
+    if (editor) {
+      editor.commands.setContent(
+        tripDesc.toString() || tripData.tripDesc?.toString()
+      );
     }
-  }, [tripDesc, editor]);
+  }, [editor, tripDesc, tripData]);
 
   const handleScroll = (event) => {
     let newScale = scale - event.deltaY * 0.005;
@@ -137,6 +175,7 @@ export default function TripContent(props) {
     setImages(images.filter((_, imgIndex) => imgIndex !== activeSlide));
   }
 
+  // TODO - add setState vars to hold images for different upload types
   async function addCroppedImage() {
     const canvas = cropperRef.current.getImage();
     const dataUrl = canvas.toDataURL();
@@ -189,6 +228,47 @@ export default function TripContent(props) {
   const dontAddImage = () => {
     setImageUpload(null);
     setScale(1);
+  };
+
+  const updateEditedTrip = async () => {
+    try {
+      const imageUploadPromises = images.map(async (imageDataUrl, index) => {
+        const storageRef = ref(
+          storage,
+          `images/${user.email}/${tripData.tripId}/trip_img_${index}.png`
+        );
+        const snapshot = await uploadString(
+          storageRef,
+          imageDataUrl,
+          "data_url",
+          {
+            contentType: "image/png",
+          }
+        );
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        return downloadURL;
+      });
+
+      const imageURLs = await Promise.all(imageUploadPromises);
+
+      const tripRef = doc(
+        firestore,
+        "users",
+        user.email,
+        "trips",
+        tripData.tripId
+      );
+      updateDoc(tripRef, {
+        images: imageURLs,
+        travelDate: parseDate(travelDate),
+        tripDesc: tripDesc,
+      });
+      setModalMode("");
+      setAltModal(false);
+      setTripDesc(editor.getHTML());
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -329,7 +409,7 @@ export default function TripContent(props) {
         position="relative"
         bg={dark ? "dark.6" : "gray.2"}
         onBlur={() => {
-          setTripDesc(editor.getHTML());
+          if (router.pathname === "/tripplanner") setTripDesc(editor.getHTML());
         }}
         sx={{
           ":root": {
@@ -353,15 +433,9 @@ export default function TripContent(props) {
             minHeight: donating ? "100px" : "200px",
             maxHeight: donating ? "100px" : "300px",
             "& .ProseMirror": {
-              minHeight: donating ? "100px" : "200px",
-              maxHeight: donating ? "100px" : "300px",
-              overflow: "hidden",
+              maxHeight: donating ? "100px" : "200px",
               paddingLeft: "21px",
               paddingRight: "21px",
-              "&:hover": {
-                paddingRight: "16px",
-                overflow: "auto",
-              },
               "&::-webkit-scrollbar": {
                 width: "5px",
                 height: "8px",
@@ -413,11 +487,23 @@ export default function TripContent(props) {
           sx={{
             "& p": {
               fontSize: ".9rem",
-              textAlign: "justify",
             },
           }}
         />
       </RichTextEditor>
+      {modalMode !== "editTrip" ||
+        (router.pathname === "/tripplanner" && (
+          <Group position="right" mt={5} w={"100%"}>
+            <Button
+              variant="default"
+              size="md"
+              w={"40%"}
+              onClick={modalMode === "editTrip" ? updateEditedTrip : null}
+            >
+              SUBMIT EDIT
+            </Button>
+          </Group>
+        ))}
       {showCropper && imageUpload && (
         <>
           <Box

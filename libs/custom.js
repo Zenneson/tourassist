@@ -14,30 +14,11 @@ export const estTimeStamp = (timeStamp) => {
 };
 
 export const addEllipsis = (string, num) => {
-  if (string.length > num) {
+  if (string && string.length > num) {
     return string.substring(0, num) + "...";
   } else {
     return string;
   }
-};
-
-export const daysBefore = (dateString) => {
-  const format = "MMDDYYYY";
-  const inputDate = moment(dateString, format);
-  inputDate.subtract(1, "days");
-  const today = moment();
-  const days = inputDate.diff(today, "days");
-  return days;
-};
-
-export const convertDateString = (dateString) => {
-  const date = moment.tz(dateString, "UTC");
-  if (!date.isValid()) {
-    console.error("Invalid date string");
-    return;
-  }
-  const formattedDate = date.format("MMDDYYYY");
-  return formattedDate.toString();
 };
 
 export const formatNumber = (num) => {
@@ -65,6 +46,18 @@ export const addAtSymbol = (inputStr, symbol) => {
     throw new Error("Input must be a string");
   }
 };
+
+export function calculateFontSize(text) {
+  const containerWidthPx = 700;
+  const stringLength = text.length;
+  let fontSizePx = containerWidthPx / stringLength;
+  let fontSizeEm = fontSizePx / 16;
+
+  fontSizeEm = Math.max(fontSizeEm, 1.7);
+  fontSizeEm = Math.min(fontSizeEm, 6);
+
+  return fontSizeEm;
+}
 
 export function useUserData() {
   const [userAuth] = useAuthState(auth);
@@ -118,4 +111,22 @@ export const useCountdown = (initialValue = 2000, interval = 100) => {
   }, [interval]);
 
   return countdownValue;
+};
+
+export const arraysAreEqual = (arr1, arr2) => {
+  if (arr1?.length !== arr2?.length) return false;
+
+  return arr1.every((value, index) => value === arr2[index]);
+};
+
+export const parseDate = (dateString) => {
+  return moment(dateString, "ddd MMM D YYYY").toString();
+};
+
+export const dateId = (dateString) => {
+  return moment(dateString).format("MMDDYY");
+};
+
+export const daysBefore = (dateString) => {
+  return moment(dateString, "ddd MMM D YYYY").diff(moment(), "days");
 };

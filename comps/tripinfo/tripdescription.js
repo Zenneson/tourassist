@@ -1,16 +1,19 @@
 import {} from "react";
-import { useToggle, useElementSize } from "@mantine/hooks";
+import { useToggle, useElementSize, useSessionStorage } from "@mantine/hooks";
 import { Box, Button, Divider, Text } from "@mantine/core";
 
 export default function TripDescription(props) {
-  const { desc } = props;
+  const [tripDesc, setTripDesc] = useSessionStorage({
+    key: "tripDesc",
+    defaultValue: "",
+  });
   const [readmore, toggle] = useToggle(["closed", "open"]);
   const { ref, width, height } = useElementSize();
 
   return (
     <>
       <Text lineClamp={readmore === "closed" && 5}>
-        <Box ref={ref} dangerouslySetInnerHTML={{ __html: desc }} />
+        <Box ref={ref} dangerouslySetInnerHTML={{ __html: tripDesc }} />
       </Text>
       {(height > 100 || readmore === "open") && (
         <Divider

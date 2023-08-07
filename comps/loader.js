@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSessionStorage } from "@mantine/hooks";
 import { useMantineTheme, Box, Image, LoadingOverlay } from "@mantine/core";
@@ -8,10 +7,6 @@ export default function Loader(props) {
   const [loaded, setLoaded] = useSessionStorage({
     key: "loaded",
     defaultValue: false,
-  });
-  const [tripData, setTripData] = useSessionStorage({
-    key: "tripData",
-    defaultValue: [],
   });
   let { mapLoaded } = props;
   const theme = useMantineTheme();
@@ -26,6 +21,7 @@ export default function Loader(props) {
         transition={{ duration: 2, repeat: Infinity }}
       >
         <Image
+          style={{ cursor: "wait" }}
           src={
             theme.colorScheme === "dark"
               ? "img/blue_loader.png"
@@ -36,10 +32,6 @@ export default function Loader(props) {
       </motion.div>
     </Box>
   );
-
-  useEffect(() => {
-    setLoaded(true);
-  }, [setLoaded]);
 
   if (router.pathname === "/") return;
 
@@ -56,7 +48,8 @@ export default function Loader(props) {
         zIndex={1000}
         transitionDuration={1000}
         loader={<Globe />}
-        style={{ pointerEvents: "none" }}
+        pos={"fixed"}
+        style={{ cursor: "wait" }}
       />
     </>
   );

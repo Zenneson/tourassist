@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -74,21 +74,13 @@ export default function LoginComp(props) {
   const [passPopOpened, setPassPopOpened] = useState(false);
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const router = useRouter();
-  const [geoLat, setGeoLat] = useSessionStorage({
-    key: "geoLatState",
-    defaultValue: 37,
-  });
-  const [geoLng, setGeoLng] = useSessionStorage({
-    key: "geoLngState",
-    defaultValue: -95,
-  });
-  const [allowGeo, setAllowGeo] = useSessionStorage({
-    key: "allowGeo",
-    defaultValue: false,
-  });
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
+  });
+  const [leaving, setLeaving] = useSessionStorage({
+    key: "leaving",
+    defaultValue: false,
   });
 
   if (!user && type === "login" && router.pathname === "/tripplanner") {
@@ -249,22 +241,8 @@ export default function LoginComp(props) {
     router.push("/map");
   };
 
-  const getUserCords = () => {
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        setGeoLat(position.coords.latitude);
-        setGeoLng(position.coords.longitude);
-        setAllowGeo(true);
-      },
-      function (error) {
-        console.error("Error Code = " + error.code + " - " + error.message);
-        setAllowGeo(false);
-      }
-    );
-  };
-
   const handleLogin = () => {
-    getUserCords();
+    setLeaving(false);
     if (type === "sign-up") {
       createUserWithEmailAndPassword(
         auth,

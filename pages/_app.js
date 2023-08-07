@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { AppShell, MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { useSessionStorage } from "@mantine/hooks";
+import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
 import { useUserData } from "../libs/custom";
 import { getAuth } from "firebase/auth";
@@ -29,6 +30,10 @@ export default function App(props) {
     key: "user",
     defaultValue: null,
   });
+  const [leaving, setLeaving] = useSessionStorage({
+    key: "leaving",
+    defaultValue: false,
+  });
 
   const toggleColorScheme = (value) => {
     const nextColorScheme =
@@ -40,10 +45,11 @@ export default function App(props) {
   };
 
   useEffect(() => {
-    if (user === null || user !== userData) {
+    if (leaving) return;
+    if (user === null && user !== userData) {
       setUser(userData);
     }
-  }, [userData, user, setUser]);
+  }, [userData, user, setUser, leaving]);
 
   const auth = getAuth();
 
@@ -175,43 +181,45 @@ export default function App(props) {
             dropDownOpened={dropDownOpened}
             setDropDownOpened={setDropDownOpened}
           />
-          <AppShell
-            padding="none"
-            header={
-              <MainMenu
-                active={active}
-                setActive={setActive}
-                panelShow={panelShow}
-                setPanelShow={setPanelShow}
-                mainMenuOpened={mainMenuOpened}
+          <MapProvider>
+            <AppShell
+              padding="none"
+              header={
+                <MainMenu
+                  active={active}
+                  setActive={setActive}
+                  panelShow={panelShow}
+                  setPanelShow={setPanelShow}
+                  mainMenuOpened={mainMenuOpened}
+                  setMainMenuOpened={setMainMenuOpened}
+                  setListOpened={setListOpened}
+                  searchOpened={searchOpened}
+                  setSearchOpened={setSearchOpened}
+                  setDropDownOpened={setDropDownOpened}
+                />
+              }
+            >
+              <RouterTransition
+                mapLoaded={mapLoaded}
                 setMainMenuOpened={setMainMenuOpened}
-                setListOpened={setListOpened}
-                searchOpened={searchOpened}
-                setSearchOpened={setSearchOpened}
+                setPanelShow={setPanelShow}
                 setDropDownOpened={setDropDownOpened}
               />
-            }
-          >
-            <RouterTransition
-              mapLoaded={mapLoaded}
-              setMainMenuOpened={setMainMenuOpened}
-              setPanelShow={setPanelShow}
-              setDropDownOpened={setDropDownOpened}
-            />
-            <Component
-              {...pageProps}
-              setPanelShow={setPanelShow}
-              setMainMenuOpened={setMainMenuOpened}
-              listOpened={listOpened}
-              setListOpened={setListOpened}
-              searchOpened={searchOpened}
-              dropDownOpened={dropDownOpened}
-              setDropDownOpened={setDropDownOpened}
-              mapLoaded={mapLoaded}
-              setMapLoaded={setMapLoaded}
-              auth={auth}
-            />
-          </AppShell>
+              <Component
+                {...pageProps}
+                setPanelShow={setPanelShow}
+                setMainMenuOpened={setMainMenuOpened}
+                listOpened={listOpened}
+                setListOpened={setListOpened}
+                searchOpened={searchOpened}
+                dropDownOpened={dropDownOpened}
+                setDropDownOpened={setDropDownOpened}
+                mapLoaded={mapLoaded}
+                setMapLoaded={setMapLoaded}
+                auth={auth}
+              />
+            </AppShell>
+          </MapProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>

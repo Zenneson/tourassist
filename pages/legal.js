@@ -565,7 +565,7 @@ export default function Legal() {
                 <Button.Group orientation="vertical">
                   {/* Go to Help Page */}
                   <Button
-                    variant="light"
+                    variant="default"
                     compact
                     fz={10}
                     onClick={() => {
@@ -576,7 +576,7 @@ export default function Legal() {
                   </Button>
                   {/* Go to Contact Page */}
                   <Button
-                    variant="light"
+                    variant="default"
                     compact
                     fz={10}
                     onClick={() => {

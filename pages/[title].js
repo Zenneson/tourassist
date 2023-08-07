@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
-import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   useMantineColorScheme,
   Avatar,
@@ -42,6 +42,7 @@ import {
   IconBrandPaypal,
   IconAt,
   IconUser,
+  IconCalendarEvent,
 } from "@tabler/icons-react";
 import { DateInput } from "@mantine/dates";
 import Donations from "../comps/tripinfo/donations";
@@ -54,6 +55,7 @@ import { formatNumber, daysBefore } from "../libs/custom";
 export default function Trippage(props) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+  const [modalMode, setModalMode] = useState("");
   const [altModal, setAltModal] = useState(false);
   const [editContentModal, setEditContentModal] = useState(false);
   const [editUpdate, setEditUpdate] = useState("");
@@ -63,16 +65,17 @@ export default function Trippage(props) {
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
   const [tripImages, setTripImages] = useState([]);
+  const [passTravelDate, setPassTravelDate] = useState("");
   const router = useRouter();
+
+  const [loaded, setLoaded] = useSessionStorage({
+    key: "loaded",
+    defaultValue: false,
+  });
 
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
-  });
-
-  const [images, setImages] = useSessionStorage({
-    key: "images",
-    defaultValue: [],
   });
 
   const [tripDesc, setTripDesc] = useSessionStorage({
@@ -90,6 +93,17 @@ export default function Trippage(props) {
     defaultValue: [],
   });
 
+  const [images, setImages] = useSessionStorage({
+    key: "images",
+    defaultValue: tripData.images,
+  });
+
+  useEffect(() => {
+    if (tripData && tripData.images && tripData.images.length === 0) {
+      setLoaded(true);
+    }
+  }, [tripData, setLoaded]);
+
   useEffect(() => {
     router.prefetch("/thankyou");
     router.prefetch("/purchase");
@@ -100,7 +114,7 @@ export default function Trippage(props) {
       setTripData(props.trip);
       setTripImages(props.trip.images);
     }
-  }, [props.trip, setTripData]);
+  }, [images, props.trip, setTripData]);
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -122,8 +136,13 @@ export default function Trippage(props) {
     </Box>
   ));
 
+  const today = new Date();
+  const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+
   const showEditContentModal = () => {
     setAltModal(true);
+    setImages(tripData.images);
+    setModalMode("editTrip");
     setDonating(false);
   };
 
@@ -148,7 +167,40 @@ export default function Trippage(props) {
     setAddUpdateDesc(false);
   };
 
+  const DateChanger = () => {
+    const [travelDate, setTravelDate] = useSessionStorage({
+      key: "travelDate",
+      defaultValue: weekAhead,
+    });
+
+    return (
+      <DateInput
+        icon={<IconCalendarEvent size={20} />}
+        iconWidth={50}
+        variant="filled"
+        minDate={weekAhead}
+        firstDayOfWeek={0}
+        size="sm"
+        ta={"right"}
+        w={"100%"}
+        maw={170}
+        onChange={(e) => setTravelDate(new Date(e))}
+        value={new Date(travelDate) || new Date(tripData.travelDate)}
+        sx={{
+          "& .mantine-DateInput-input": {
+            cursor: "pointer",
+          },
+        }}
+      />
+    );
+  };
+
   const ModalsFunc = () => {
+    const [tripDesc, setTripDesc] = useSessionStorage({
+      key: "tripDesc",
+      defaultValue: "",
+    });
+
     return (
       <>
         <Modal
@@ -190,48 +242,35 @@ export default function Trippage(props) {
             <Title order={4} w={"100%"} ta={"left"} fs={"italic"}>
               EDIT TRIP DETAILS:
             </Title>
-            <Box
+            <Group
               w={"100%"}
               pl={15}
               pt={5}
               pb={10}
               ml={-3}
+              position="apart"
               sx={{
-                borderLeft: "3px solid rgba(255,255,255,0.05)",
+                borderLeft: `3px solid ${
+                  dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"
+                }`,
               }}
             >
-              <Text fw={400} mb={7} fs={"italic"} w={"100%"} ta={"left"}>
-                Help me raise money to go on a Music Tour
+              <Text fw={400} mb={7} w={"70%"} fs={"italic"} lineClamp={1}>
+                {tripData.tripTitle}
               </Text>
-              <Flex w={"100%"} justify={"flex-start"} align={"center"} gap={10}>
-                <Text w={185} fz={12} fs={"italic"} fw={700}>
-                  Change Travel Date:
-                </Text>
-                <DateInput
-                  variant="filled"
-                  defaultValue={new Date()}
-                  size="sm"
-                />
-                <Divider w={"100%"} size={"sm"} />
-              </Flex>
-            </Box>
+              <DateChanger />
+            </Group>
             <TripContent
-              setTripDesc={setTripDesc}
+              user={user}
               addUpdateDesc={addUpdateDesc}
               donating={donating}
               images={images}
               setImages={setImages}
+              setAltModal={setAltModal}
+              modalMode={modalMode}
+              setModalMode={setModalMode}
+              weekAhead={weekAhead}
             />
-            <Group position="right" mt={5} w={"100%"}>
-              <Button
-                variant="filled"
-                size="md"
-                w={"40%"}
-                onClick={closeEditContentModal}
-              >
-                UPDATE DETAILS
-              </Button>
-            </Group>
           </Stack>
         </Modal>
         <Modal
@@ -253,7 +292,7 @@ export default function Trippage(props) {
             },
             overlay: {
               backgroundColor: dark
-                ? "rgba(0,0,0,0.5)"
+                ? "rgba(0,0,0,0.3)"
                 : "rgba(255,255,255,0.5)",
               backdropFilter: "blur(9px)",
             },
@@ -507,11 +546,11 @@ export default function Trippage(props) {
             {!donating && (
               <>
                 <TripContent
-                  setTripDesc={setTripDesc}
                   addUpdateDesc={addUpdateDesc}
                   donating={donating}
                   images={images}
                   setImages={setImages}
+                  weekAhead={weekAhead}
                 />
                 <Group position="right" mt={5} w={"100%"}>
                   <Button
@@ -696,12 +735,12 @@ export default function Trippage(props) {
                       }
                       onClick={showEditContentModal}
                     >
-                      Edit Travel Details
+                      Edit Trip Details
                     </Button>
                   }
                 />
               )}
-              <TripDescription desc={tripData.tripDesc} />
+              <TripDescription />
             </Box>
             {updates.length > 0 && (
               <Update
@@ -818,9 +857,16 @@ export default function Trippage(props) {
                 size={"xl"}
                 radius={"xl"}
                 mt={5}
+                mb={12}
               />
               {user && user.email === tripData.user && (
-                <Button.Group mt={10} w={"100%"}>
+                <Button.Group
+                  w={"100%"}
+                  sx={{
+                    borderRadius: "25px",
+                    overflow: "hidden",
+                  }}
+                >
                   <Button
                     w={"100%"}
                     variant="filled"
@@ -842,9 +888,10 @@ export default function Trippage(props) {
                 </Button.Group>
               )}
               {user?.email !== tripData.user && (
+                // Main Donate Button
                 <Button
-                  mt={10}
                   fullWidth
+                  radius={25}
                   variant="gradient"
                   gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
                   onClick={showDonateModal}

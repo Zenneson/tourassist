@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   useMantineColorScheme,
   Center,
@@ -18,6 +19,7 @@ import {
   IconMoon,
 } from "@tabler/icons-react";
 import { useMediaQuery, useSessionStorage } from "@mantine/hooks";
+import { useGeo } from "../libs/custom";
 import { useRouter } from "next/router";
 import LoginComp from "./loginComp";
 
@@ -28,40 +30,13 @@ export default function Intro(props) {
   const dark = colorScheme === "dark";
 
   const firstDown = useMediaQuery("(max-width: 950px)");
-  const [geoLat, setGeoLat] = useSessionStorage({
-    key: "geoLatState",
-    defaultValue: 37,
-  });
-  const [geoLng, setGeoLng] = useSessionStorage({
-    key: "geoLngState",
-    defaultValue: -95,
-  });
-  const [allowGeo, setAllowGeo] = useSessionStorage({
-    key: "allowGeo",
-    defaultValue: false,
-  });
   const [guest, setGuest] = useSessionStorage({
     key: "guest",
     defaultValue: false,
   });
 
-  const getUserCords = () => {
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        setGeoLat(position.coords.latitude);
-        setGeoLng(position.coords.longitude);
-        setAllowGeo(true);
-      },
-      function (error) {
-        console.error("Error Code = " + error.code + " - " + error.message);
-        setAllowGeo(false);
-      }
-    );
-  };
-
   const enterSite = () => {
     setGuest(true);
-    getUserCords();
     router.push("/map");
   };
 
@@ -279,7 +254,10 @@ export default function Intro(props) {
                 bg={dark ? "rgba(0, 0, 0, 0.5)" : "rgba(255, 255, 255, 0.2)"}
                 c={"#fff"}
                 radius={3}
-                onClick={enterSite}
+                onClick={() => {
+                  getPosition();
+                  enterSite();
+                }}
                 sx={{
                   textShadow: "0 2px 5px rgba(0,0,0,0.2)",
                   border: dark ? "none" : "1px solid rgba(255,255,255,0.07)",
