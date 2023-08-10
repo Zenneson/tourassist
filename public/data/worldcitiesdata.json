@@ -2,6 +2,10 @@
 	{
 		"country": "Afghanistan",
 		"shortcode": "AF",
+		"counrty_center": [
+			67.7,
+			33.9
+		],
 		"cities": [
 			{
 				"name": "Kabul",
@@ -43,6 +47,10 @@
 	{
 		"country": "Albania",
 		"shortcode": "AL",
+		"counrty_center": [
+			20,
+			41
+		],
 		"cities": [
 			{
 				"name": "Tirana",
@@ -84,6 +92,10 @@
 	{
 		"country": "Algeria",
 		"shortcode": "DZ",
+		"counrty_center": [
+			1.6,
+			28
+		],
 		"cities": [
 			{
 				"name": "Algiers",
@@ -125,6 +137,10 @@
 	{
 		"country": "American Samoa",
 		"shortcode": "AS",
+		"counrty_center": [
+			-170,
+			-14
+		],
 		"cities": [
 			{
 				"name": "Pago Pago",
@@ -166,6 +182,10 @@
 	{
 		"country": "Andorra",
 		"shortcode": "AD",
+		"counrty_center": [
+			1.6,
+			42.5
+		],
 		"cities": [
 			{
 				"name": "Andorra la Vella",
@@ -207,6 +227,10 @@
 	{
 		"country": "Angola",
 		"shortcode": "AO",
+		"counrty_center": [
+			17.87,
+			-11.2
+		],
 		"cities": [
 			{
 				"name": "Luanda",
@@ -248,6 +272,10 @@
 	{
 		"country": "Anguilla",
 		"shortcode": "AI",
+		"counrty_center": [
+			-63,
+			18
+		],
 		"cities": [
 			{
 				"name": "The Valley",
@@ -289,6 +317,10 @@
 	{
 		"country": "Antarctica",
 		"shortcode": "AQ",
+		"counrty_center": [
+			0,
+			-75
+		],
 		"cities": [
 			{
 				"name": "McMurdo Station",
@@ -302,6 +334,10 @@
 	{
 		"country": "Antigua and Barbuda",
 		"shortcode": "AG",
+		"counrty_center": [
+			-61.7,
+			17
+		],
 		"cities": [
 			{
 				"name": "Saint John’s",
@@ -343,6 +379,10 @@
 	{
 		"country": "Argentina",
 		"shortcode": "AR",
+		"counrty_center": [
+			-63.6,
+			-38.4
+		],
 		"cities": [
 			{
 				"name": "Buenos Aires",
@@ -384,6 +424,10 @@
 	{
 		"country": "Armenia",
 		"shortcode": "AM",
+		"counrty_center": [
+			45,
+			40
+		],
 		"cities": [
 			{
 				"name": "Yerevan",
@@ -425,6 +469,10 @@
 	{
 		"country": "Aruba",
 		"shortcode": "AW",
+		"counrty_center": [
+			-69.96,
+			12.5
+		],
 		"cities": [
 			{
 				"name": "Oranjestad",
@@ -466,6 +514,10 @@
 	{
 		"country": "Australia",
 		"shortcode": "AU",
+		"counrty_center": [
+			133.775,
+			-25.27
+		],
 		"cities": [
 			{
 				"name": "Sydney",
@@ -507,6 +559,10 @@
 	{
 		"country": "Austria",
 		"shortcode": "AT",
+		"counrty_center": [
+			14.55,
+			47.5
+		],
 		"cities": [
 			{
 				"name": "Vienna",
@@ -548,6 +604,10 @@
 	{
 		"country": "Azerbaijan",
 		"shortcode": "AZ",
+		"counrty_center": [
+			47.57,
+			40
+		],
 		"cities": [
 			{
 				"name": "Baku",
@@ -589,6 +649,10 @@
 	{
 		"country": "Bahamas",
 		"shortcode": "BS",
+		"counrty_center": [
+			-77,
+			25
+		],
 		"cities": [
 			{
 				"name": "Nassau",
@@ -630,6 +694,10 @@
 	{
 		"country": "Bahrain",
 		"shortcode": "BH",
+		"counrty_center": [
+			50.63,
+			25.93
+		],
 		"cities": [
 			{
 				"name": "Ar Rifā‘",
@@ -671,6 +739,10 @@
 	{
 		"country": "Bangladesh",
 		"shortcode": "BD",
+		"counrty_center": [
+			90,
+			23.68
+		],
 		"cities": [
 			{
 				"name": "Dhaka",
@@ -712,6 +784,10 @@
 	{
 		"country": "Barbados",
 		"shortcode": "BB",
+		"counrty_center": [
+			-59.54,
+			13
+		],
 		"cities": [
 			{
 				"name": "Bridgetown",
@@ -753,6 +829,10 @@
 	{
 		"country": "Belarus",
 		"shortcode": "BY",
+		"counrty_center": [
+			27.95,
+			53.7
+		],
 		"cities": [
 			{
 				"name": "Minsk",
@@ -794,6 +874,10 @@
 	{
 		"country": "Belgium",
 		"shortcode": "BE",
+		"counrty_center": [
+			4.46,
+			50.5
+		],
 		"cities": [
 			{
 				"name": "Brussels",
@@ -835,6 +919,10 @@
 	{
 		"country": "Belize",
 		"shortcode": "BZ",
+		"counrty_center": [
+			-88.49,
+			17.19
+		],
 		"cities": [
 			{
 				"name": "Belize City",
@@ -876,6 +964,10 @@
 	{
 		"country": "Benin",
 		"shortcode": "BJ",
+		"counrty_center": [
+			2.3,
+			9.3
+		],
 		"cities": [
 			{
 				"name": "Cotonou",
@@ -917,6 +1009,10 @@
 	{
 		"country": "Bermuda",
 		"shortcode": "BM",
+		"counrty_center": [
+			-64.75,
+			32.32
+		],
 		"cities": [
 			{
 				"name": "Saint George",
@@ -937,6 +1033,10 @@
 	{
 		"country": "Bhutan",
 		"shortcode": "BT",
+		"counrty_center": [
+			90.4,
+			27.5
+		],
 		"cities": [
 			{
 				"name": "Thimphu",
@@ -978,6 +1078,10 @@
 	{
 		"country": "Bolivia",
 		"shortcode": "BO",
+		"counrty_center": [
+			-63.58,
+			-16.29
+		],
 		"cities": [
 			{
 				"name": "La Paz",
@@ -1019,6 +1123,10 @@
 	{
 		"country": "Bosnia and Herzegovina",
 		"shortcode": "BA",
+		"counrty_center": [
+			17.67,
+			43.9
+		],
 		"cities": [
 			{
 				"name": "Sarajevo",
@@ -1060,6 +1168,10 @@
 	{
 		"country": "Botswana",
 		"shortcode": "BW",
+		"counrty_center": [
+			24.68,
+			-22.32
+		],
 		"cities": [
 			{
 				"name": "Gaborone",
@@ -1101,6 +1213,10 @@
 	{
 		"country": "Brazil",
 		"shortcode": "BR",
+		"counrty_center": [
+			-51.92,
+			-14.235
+		],
 		"cities": [
 			{
 				"name": "São Paulo",
@@ -1142,6 +1258,10 @@
 	{
 		"country": "British Virgin Islands",
 		"shortcode": "VG",
+		"counrty_center": [
+			-64.63,
+			18.42
+		],
 		"cities": [
 			{
 				"name": "Road Town",
@@ -1153,8 +1273,12 @@
 		]
 	},
 	{
-		"country": "Brunei Darussalam",
+		"country": "Brunei",
 		"shortcode": "BN",
+		"counrty_center": [
+			114.727,
+			4.535
+		],
 		"cities": [
 			{
 				"name": "Bandar Seri Begawan",
@@ -1196,6 +1320,10 @@
 	{
 		"country": "Bulgaria",
 		"shortcode": "BG",
+		"counrty_center": [
+			25.49,
+			42.73
+		],
 		"cities": [
 			{
 				"name": "Sofia",
@@ -1237,6 +1365,10 @@
 	{
 		"country": "Burkina Faso",
 		"shortcode": "BF",
+		"counrty_center": [
+			-1.56,
+			12.24
+		],
 		"cities": [
 			{
 				"name": "Ouagadougou",
@@ -1278,6 +1410,10 @@
 	{
 		"country": "Burundi",
 		"shortcode": "BI",
+		"counrty_center": [
+			29.92,
+			-3.36
+		],
 		"cities": [
 			{
 				"name": "Bujumbura",
@@ -1319,6 +1455,10 @@
 	{
 		"country": "Cambodia",
 		"shortcode": "KH",
+		"counrty_center": [
+			104.91,
+			12.72
+		],
 		"cities": [
 			{
 				"name": "Phnom Penh",
@@ -1360,6 +1500,10 @@
 	{
 		"country": "Cameroon",
 		"shortcode": "CM",
+		"counrty_center": [
+			12.35,
+			7.37
+		],
 		"cities": [
 			{
 				"name": "Douala",
@@ -1401,6 +1545,10 @@
 	{
 		"country": "Canada",
 		"shortcode": "CA",
+		"counrty_center": [
+			-106.34677,
+			56.13037
+		],
 		"cities": [
 			{
 				"name": "Toronto",
@@ -1442,6 +1590,10 @@
 	{
 		"country": "Cape Verde",
 		"shortcode": "CV",
+		"counrty_center": [
+			-23.60517,
+			15.12014
+		],
 		"cities": [
 			{
 				"name": "Praia",
@@ -1483,11 +1635,15 @@
 	{
 		"country": "Caribbean Netherlands",
 		"shortcode": "BQ",
+		"counrty_center": [
+			-68.25,
+			12.15
+		],
 		"cities": [
 			{
 				"name": "Kralendijk",
 				"center": [
-					-68.26667,
+					-68.267,
 					12.15
 				]
 			},
@@ -1524,6 +1680,10 @@
 	{
 		"country": "Cayman Islands",
 		"shortcode": "KY",
+		"counrty_center": [
+			-80.91278,
+			19.3133
+		],
 		"cities": [
 			{
 				"name": "George Town",
@@ -1565,6 +1725,10 @@
 	{
 		"country": "Central African Republic",
 		"shortcode": "CF",
+		"counrty_center": [
+			20.46817,
+			6.56823
+		],
 		"cities": [
 			{
 				"name": "Bangui",
@@ -1606,6 +1770,10 @@
 	{
 		"country": "Chad",
 		"shortcode": "TD",
+		"counrty_center": [
+			18.64493,
+			15.334
+		],
 		"cities": [
 			{
 				"name": "N'Djamena",
@@ -1647,6 +1815,10 @@
 	{
 		"country": "Chile",
 		"shortcode": "CL",
+		"counrty_center": [
+			-71.38256,
+			-37.73071
+		],
 		"cities": [
 			{
 				"name": "Santiago",
@@ -1688,6 +1860,10 @@
 	{
 		"country": "China",
 		"shortcode": "CN",
+		"counrty_center": [
+			103.81984,
+			36.5613
+		],
 		"cities": [
 			{
 				"name": "Shanghai",
@@ -1729,6 +1905,10 @@
 	{
 		"country": "Christmas Island",
 		"shortcode": "CX",
+		"counrty_center": [
+			105.69045,
+			-10.44774
+		],
 		"cities": [
 			{
 				"name": "Flying Fish Cove",
@@ -1742,6 +1922,10 @@
 	{
 		"country": "Cocos Islands",
 		"shortcode": "CC",
+		"counrty_center": [
+			96.82922,
+			-12.12894
+		],
 		"cities": [
 			{
 				"name": "West Island",
@@ -1755,6 +1939,10 @@
 	{
 		"country": "Colombia",
 		"shortcode": "CO",
+		"counrty_center": [
+			-73.08115,
+			3.91383
+		],
 		"cities": [
 			{
 				"name": "Bogotá",
@@ -1796,6 +1984,10 @@
 	{
 		"country": "Comoros",
 		"shortcode": "KM",
+		"counrty_center": [
+			43.6825,
+			-11.87758
+		],
 		"cities": [
 			{
 				"name": "Moroni",
@@ -1837,6 +2029,10 @@
 	{
 		"country": "Congo",
 		"shortcode": "CG",
+		"counrty_center": [
+			15.21965,
+			-0.83787
+		],
 		"cities": [
 			{
 				"name": "Brazzaville",
@@ -1878,6 +2074,10 @@
 	{
 		"country": "Democratic Republic of the Congo",
 		"shortcode": "CD",
+		"counrty_center": [
+			23.6445,
+			-2.87747
+		],
 		"cities": [
 			{
 				"name": "Kinshasa",
@@ -1919,6 +2119,10 @@
 	{
 		"country": "Cook Islands",
 		"shortcode": "CK",
+		"counrty_center": [
+			-159.77767,
+			-21.23673
+		],
 		"cities": [
 			{
 				"name": "Avarua",
@@ -1932,6 +2136,10 @@
 	{
 		"country": "Costa Rica",
 		"shortcode": "CR",
+		"counrty_center": [
+			-84.19775,
+			9.984
+		],
 		"cities": [
 			{
 				"name": "San José",
@@ -1973,6 +2181,10 @@
 	{
 		"country": "Croatia",
 		"shortcode": "HR",
+		"counrty_center": [
+			16.40447,
+			45.16667
+		],
 		"cities": [
 			{
 				"name": "Zagreb",
@@ -2014,6 +2226,10 @@
 	{
 		"country": "Cuba",
 		"shortcode": "CU",
+		"counrty_center": [
+			-79.01667,
+			21.5
+		],
 		"cities": [
 			{
 				"name": "Havana",
@@ -2053,8 +2269,12 @@
 		]
 	},
 	{
-		"country": "Curacao",
+		"country": "Curaçao",
 		"shortcode": "CW",
+		"counrty_center": [
+			-68.93333,
+			12.1
+		],
 		"cities": [
 			{
 				"name": "Willemstad",
@@ -2089,6 +2309,10 @@
 	{
 		"country": "Cyprus",
 		"shortcode": "CY",
+		"counrty_center": [
+			33.4,
+			35.126
+		],
 		"cities": [
 			{
 				"name": "Nicosia",
@@ -2130,6 +2354,10 @@
 	{
 		"country": "Czechia",
 		"shortcode": "CZ",
+		"counrty_center": [
+			15.5,
+			49.75
+		],
 		"cities": [
 			{
 				"name": "Prague",
@@ -2171,6 +2399,10 @@
 	{
 		"country": "Ivory Coast",
 		"shortcode": "CI",
+		"counrty_center": [
+			-5,
+			8
+		],
 		"cities": [
 			{
 				"name": "Abidjan",
@@ -2212,6 +2444,10 @@
 	{
 		"country": "Denmark",
 		"shortcode": "DK",
+		"counrty_center": [
+			10,
+			56
+		],
 		"cities": [
 			{
 				"name": "Copenhagen",
@@ -2253,6 +2489,10 @@
 	{
 		"country": "Djibouti",
 		"shortcode": "DJ",
+		"counrty_center": [
+			43,
+			11.5
+		],
 		"cities": [
 			{
 				"name": "Djibouti",
@@ -2294,6 +2534,10 @@
 	{
 		"country": "Dominica",
 		"shortcode": "DM",
+		"counrty_center": [
+			-61.37,
+			15.41667
+		],
 		"cities": [
 			{
 				"name": "Roseau",
@@ -2335,6 +2579,10 @@
 	{
 		"country": "Dominican Republic",
 		"shortcode": "DO",
+		"counrty_center": [
+			-70.667,
+			19
+		],
 		"cities": [
 			{
 				"name": "Santo Domingo",
@@ -2376,6 +2624,10 @@
 	{
 		"country": "Ecuador",
 		"shortcode": "EC",
+		"counrty_center": [
+			-77.5,
+			-2
+		],
 		"cities": [
 			{
 				"name": "Quito",
@@ -2417,6 +2669,10 @@
 	{
 		"country": "Egypt",
 		"shortcode": "EG",
+		"counrty_center": [
+			30,
+			27
+		],
 		"cities": [
 			{
 				"name": "Cairo",
@@ -2458,6 +2714,10 @@
 	{
 		"country": "El Salvador",
 		"shortcode": "SV",
+		"counrty_center": [
+			-88.91667,
+			13.833
+		],
 		"cities": [
 			{
 				"name": "San Salvador",
@@ -2499,6 +2759,10 @@
 	{
 		"country": "Equatorial Guinea",
 		"shortcode": "GQ",
+		"counrty_center": [
+			10,
+			2
+		],
 		"cities": [
 			{
 				"name": "Bata",
@@ -2540,6 +2804,10 @@
 	{
 		"country": "Eritrea",
 		"shortcode": "ER",
+		"counrty_center": [
+			39.999,
+			15
+		],
 		"cities": [
 			{
 				"name": "Asmara",
@@ -2581,6 +2849,10 @@
 	{
 		"country": "Estonia",
 		"shortcode": "EE",
+		"counrty_center": [
+			26,
+			59
+		],
 		"cities": [
 			{
 				"name": "Tallinn",
@@ -2622,6 +2894,10 @@
 	{
 		"country": "Ethiopia",
 		"shortcode": "ET",
+		"counrty_center": [
+			38,
+			8
+		],
 		"cities": [
 			{
 				"name": "Addis Ababa",
@@ -2663,6 +2939,10 @@
 	{
 		"country": "Faeroe Islands",
 		"shortcode": "FO",
+		"counrty_center": [
+			-7,
+			62
+		],
 		"cities": [
 			{
 				"name": "Tórshavn",
@@ -2704,6 +2984,10 @@
 	{
 		"country": "Falkland Islands (Islas Malvinas)",
 		"shortcode": "FK",
+		"counrty_center": [
+			-59,
+			-51.75
+		],
 		"cities": [
 			{
 				"name": "Stanley",
@@ -2717,6 +3001,10 @@
 	{
 		"country": "Fiji",
 		"shortcode": "FJ",
+		"counrty_center": [
+			175,
+			-18
+		],
 		"cities": [
 			{
 				"name": "Nasinu",
@@ -2758,6 +3046,10 @@
 	{
 		"country": "Finland",
 		"shortcode": "FI",
+		"counrty_center": [
+			26,
+			64
+		],
 		"cities": [
 			{
 				"name": "Helsinki",
@@ -2799,6 +3091,10 @@
 	{
 		"country": "France",
 		"shortcode": "FR",
+		"counrty_center": [
+			2,
+			46
+		],
 		"cities": [
 			{
 				"name": "Paris",
@@ -2840,6 +3136,10 @@
 	{
 		"country": "French Guiana",
 		"shortcode": "GF",
+		"counrty_center": [
+			-53,
+			4
+		],
 		"cities": [
 			{
 				"name": "Cayenne",
@@ -2881,6 +3181,10 @@
 	{
 		"country": "French Polynesia",
 		"shortcode": "PF",
+		"counrty_center": [
+			-140,
+			-15
+		],
 		"cities": [
 			{
 				"name": "Faaa",
@@ -2922,6 +3226,10 @@
 	{
 		"country": "French Southern Territories",
 		"shortcode": "TF",
+		"counrty_center": [
+			69.5,
+			-49.25
+		],
 		"cities": [
 			{
 				"name": "Port-aux-Français",
@@ -2935,6 +3243,10 @@
 	{
 		"country": "Gabon",
 		"shortcode": "GA",
+		"counrty_center": [
+			11.75,
+			-1
+		],
 		"cities": [
 			{
 				"name": "Libreville",
@@ -2976,6 +3288,10 @@
 	{
 		"country": "The Gambia",
 		"shortcode": "GM",
+		"counrty_center": [
+			-16.5667,
+			13.4667
+		],
 		"cities": [
 			{
 				"name": "Serekunda",
@@ -3017,6 +3333,10 @@
 	{
 		"country": "Georgia",
 		"shortcode": "GE",
+		"counrty_center": [
+			43.5,
+			42
+		],
 		"cities": [
 			{
 				"name": "Tbilisi",
@@ -3058,6 +3378,10 @@
 	{
 		"country": "Germany",
 		"shortcode": "DE",
+		"counrty_center": [
+			10.5,
+			51.5
+		],
 		"cities": [
 			{
 				"name": "Berlin",
@@ -3099,6 +3423,10 @@
 	{
 		"country": "Ghana",
 		"shortcode": "GH",
+		"counrty_center": [
+			-1,
+			8
+		],
 		"cities": [
 			{
 				"name": "Accra",
@@ -3140,6 +3468,10 @@
 	{
 		"country": "Gibraltar",
 		"shortcode": "GI",
+		"counrty_center": [
+			-5.3667,
+			36.1833
+		],
 		"cities": [
 			{
 				"name": "Gibraltar",
@@ -3153,6 +3485,10 @@
 	{
 		"country": "Greece",
 		"shortcode": "GR",
+		"counrty_center": [
+			22,
+			39
+		],
 		"cities": [
 			{
 				"name": "Athens",
@@ -3194,6 +3530,10 @@
 	{
 		"country": "Greenland",
 		"shortcode": "GL",
+		"counrty_center": [
+			-40,
+			72
+		],
 		"cities": [
 			{
 				"name": "Nuuk",
@@ -3235,6 +3575,10 @@
 	{
 		"country": "Grenada",
 		"shortcode": "GD",
+		"counrty_center": [
+			-61.667,
+			12.117
+		],
 		"cities": [
 			{
 				"name": "Saint George's",
@@ -3276,6 +3620,10 @@
 	{
 		"country": "Guadeloupe",
 		"shortcode": "GP",
+		"counrty_center": [
+			-62.8333,
+			16.25
+		],
 		"cities": [
 			{
 				"name": "Les Abymes",
@@ -3317,6 +3665,10 @@
 	{
 		"country": "Guam",
 		"shortcode": "GU",
+		"counrty_center": [
+			144.7833,
+			13.4667
+		],
 		"cities": [
 			{
 				"name": "Dededo Village",
@@ -3358,6 +3710,10 @@
 	{
 		"country": "Guatemala",
 		"shortcode": "GT",
+		"counrty_center": [
+			-90.22998,
+			15.69404
+		],
 		"cities": [
 			{
 				"name": "Guatemala City",
@@ -3399,6 +3755,10 @@
 	{
 		"country": "Guernsey",
 		"shortcode": "GG",
+		"counrty_center": [
+			-2.56,
+			49.47
+		],
 		"cities": [
 			{
 				"name": "Saint Peter Port",
@@ -3440,6 +3800,10 @@
 	{
 		"country": "Guinea",
 		"shortcode": "GN",
+		"counrty_center": [
+			-10.9408,
+			10.4366
+		],
 		"cities": [
 			{
 				"name": "Camayenne",
@@ -3481,6 +3845,10 @@
 	{
 		"country": "Guinea-Bissau",
 		"shortcode": "GW",
+		"counrty_center": [
+			-14.9497,
+			12.0479
+		],
 		"cities": [
 			{
 				"name": "Bissau",
@@ -3522,6 +3890,10 @@
 	{
 		"country": "Guyana",
 		"shortcode": "GY",
+		"counrty_center": [
+			-58.982,
+			4.793
+		],
 		"cities": [
 			{
 				"name": "Georgetown",
@@ -3563,6 +3935,10 @@
 	{
 		"country": "Haiti",
 		"shortcode": "HT",
+		"counrty_center": [
+			-72.2852,
+			18.9712
+		],
 		"cities": [
 			{
 				"name": "Port-au-Prince",
@@ -3604,6 +3980,10 @@
 	{
 		"country": "Honduras",
 		"shortcode": "HN",
+		"counrty_center": [
+			-86.6152,
+			14.8268
+		],
 		"cities": [
 			{
 				"name": "Tegucigalpa",
@@ -3645,6 +4025,10 @@
 	{
 		"country": "Hong Kong, China",
 		"shortcode": "HK",
+		"counrty_center": [
+			114.1095,
+			22.3964
+		],
 		"cities": [
 			{
 				"name": "Hong Kong",
@@ -3686,6 +4070,10 @@
 	{
 		"country": "Hungary",
 		"shortcode": "HU",
+		"counrty_center": [
+			19.5033,
+			47.1625
+		],
 		"cities": [
 			{
 				"name": "Budapest",
@@ -3727,6 +4115,10 @@
 	{
 		"country": "Iceland",
 		"shortcode": "IS",
+		"counrty_center": [
+			-18.1059,
+			64.9842
+		],
 		"cities": [
 			{
 				"name": "Reykjavík",
@@ -3768,6 +4160,10 @@
 	{
 		"country": "India",
 		"shortcode": "IN",
+		"counrty_center": [
+			79.61198,
+			22.88578
+		],
 		"cities": [
 			{
 				"name": "Mumbai",
@@ -3809,6 +4205,10 @@
 	{
 		"country": "Indonesia",
 		"shortcode": "ID",
+		"counrty_center": [
+			113.9213,
+			-0.7893
+		],
 		"cities": [
 			{
 				"name": "Jakarta",
@@ -3850,6 +4250,10 @@
 	{
 		"country": "Iran",
 		"shortcode": "IR",
+		"counrty_center": [
+			54.27407,
+			32.57515
+		],
 		"cities": [
 			{
 				"name": "Tehran",
@@ -3891,6 +4295,10 @@
 	{
 		"country": "Iraq",
 		"shortcode": "IQ",
+		"counrty_center": [
+			43.74353,
+			33.03971
+		],
 		"cities": [
 			{
 				"name": "Baghdad",
@@ -3932,6 +4340,10 @@
 	{
 		"country": "Ireland",
 		"shortcode": "IE",
+		"counrty_center": [
+			-8.13784,
+			53.1755
+		],
 		"cities": [
 			{
 				"name": "Dublin",
@@ -3973,6 +4385,10 @@
 	{
 		"country": "Isle of Man",
 		"shortcode": "IM",
+		"counrty_center": [
+			-4.5387,
+			54.22937
+		],
 		"cities": [
 			{
 				"name": "Douglas",
@@ -4014,6 +4430,10 @@
 	{
 		"country": "Israel",
 		"shortcode": "IL",
+		"counrty_center": [
+			34.92866,
+			31.04605
+		],
 		"cities": [
 			{
 				"name": "Jerusalem",
@@ -4055,6 +4475,10 @@
 	{
 		"country": "Italy",
 		"shortcode": "IT",
+		"counrty_center": [
+			12.07001,
+			42.79663
+		],
 		"cities": [
 			{
 				"name": "Rome",
@@ -4096,6 +4520,10 @@
 	{
 		"country": "Jamaica",
 		"shortcode": "JM",
+		"counrty_center": [
+			-77.31483,
+			18.10958
+		],
 		"cities": [
 			{
 				"name": "Kingston",
@@ -4137,6 +4565,10 @@
 	{
 		"country": "Japan",
 		"shortcode": "JP",
+		"counrty_center": [
+			139.23944,
+			36.13075
+		],
 		"cities": [
 			{
 				"name": "Tokyo",
@@ -4178,6 +4610,10 @@
 	{
 		"country": "Jersey",
 		"shortcode": "JE",
+		"counrty_center": [
+			-2.1295,
+			49.21444
+		],
 		"cities": [
 			{
 				"name": "Saint Helier",
@@ -4205,6 +4641,10 @@
 	{
 		"country": "Jordan",
 		"shortcode": "JO",
+		"counrty_center": [
+			36.86281,
+			31.24579
+		],
 		"cities": [
 			{
 				"name": "Amman",
@@ -4246,6 +4686,10 @@
 	{
 		"country": "Kazakhstan",
 		"shortcode": "KZ",
+		"counrty_center": [
+			66.92368,
+			48.01957
+		],
 		"cities": [
 			{
 				"name": "Almaty",
@@ -4287,6 +4731,10 @@
 	{
 		"country": "Kenya",
 		"shortcode": "KE",
+		"counrty_center": [
+			37.81667,
+			0.58333
+		],
 		"cities": [
 			{
 				"name": "Nairobi",
@@ -4328,6 +4776,10 @@
 	{
 		"country": "Kiribati",
 		"shortcode": "KI",
+		"counrty_center": [
+			-157.364,
+			-0.837
+		],
 		"cities": [
 			{
 				"name": "Tarawa",
@@ -4369,6 +4821,10 @@
 	{
 		"country": "North Korea",
 		"shortcode": "KP",
+		"counrty_center": [
+			127,
+			40
+		],
 		"cities": [
 			{
 				"name": "Pyongyang",
@@ -4410,6 +4866,10 @@
 	{
 		"country": "South Korea",
 		"shortcode": "KR",
+		"counrty_center": [
+			127.5,
+			37
+		],
 		"cities": [
 			{
 				"name": "Seoul",
@@ -4451,6 +4911,10 @@
 	{
 		"country": "Kosovo",
 		"shortcode": "XK",
+		"counrty_center": [
+			20.9025,
+			42.60278
+		],
 		"cities": [
 			{
 				"name": "Pristina",
@@ -4492,6 +4956,10 @@
 	{
 		"country": "Kuwait",
 		"shortcode": "KW",
+		"counrty_center": [
+			47.5875,
+			29.33417
+		],
 		"cities": [
 			{
 				"name": "Al Aḩmadī",
@@ -4533,6 +5001,10 @@
 	{
 		"country": "Kyrgyzstan",
 		"shortcode": "KG",
+		"counrty_center": [
+			74.5,
+			41
+		],
 		"cities": [
 			{
 				"name": "Bishkek",
@@ -4574,6 +5046,10 @@
 	{
 		"country": "Laos",
 		"shortcode": "LA",
+		"counrty_center": [
+			105,
+			18
+		],
 		"cities": [
 			{
 				"name": "Vientiane",
@@ -4615,6 +5091,10 @@
 	{
 		"country": "Latvia",
 		"shortcode": "LV",
+		"counrty_center": [
+			25,
+			57
+		],
 		"cities": [
 			{
 				"name": "Riga",
@@ -4656,6 +5136,10 @@
 	{
 		"country": "Lebanon",
 		"shortcode": "LB",
+		"counrty_center": [
+			35.833,
+			33.833
+		],
 		"cities": [
 			{
 				"name": "Beirut",
@@ -4697,6 +5181,10 @@
 	{
 		"country": "Lesotho",
 		"shortcode": "LS",
+		"counrty_center": [
+			28.25,
+			-29.5
+		],
 		"cities": [
 			{
 				"name": "Maseru",
@@ -4738,6 +5226,10 @@
 	{
 		"country": "Liberia",
 		"shortcode": "LR",
+		"counrty_center": [
+			-9.5,
+			6.5
+		],
 		"cities": [
 			{
 				"name": "Monrovia",
@@ -4779,6 +5271,10 @@
 	{
 		"country": "Libya",
 		"shortcode": "LY",
+		"counrty_center": [
+			17,
+			25
+		],
 		"cities": [
 			{
 				"name": "Tripoli",
@@ -4820,6 +5316,10 @@
 	{
 		"country": "Liechtenstein",
 		"shortcode": "LI",
+		"counrty_center": [
+			9.533,
+			47.166
+		],
 		"cities": [
 			{
 				"name": "Schaan",
@@ -4861,6 +5361,10 @@
 	{
 		"country": "Lithuania",
 		"shortcode": "LT",
+		"counrty_center": [
+			24,
+			56
+		],
 		"cities": [
 			{
 				"name": "Vilnius",
@@ -4902,6 +5406,10 @@
 	{
 		"country": "Luxembourg",
 		"shortcode": "LU",
+		"counrty_center": [
+			6.1667,
+			49.75
+		],
 		"cities": [
 			{
 				"name": "Luxembourg",
@@ -4943,6 +5451,10 @@
 	{
 		"country": "Macau, China",
 		"shortcode": "MO",
+		"counrty_center": [
+			113.55,
+			22.1667
+		],
 		"cities": [
 			{
 				"name": "Macau",
@@ -4956,6 +5468,10 @@
 	{
 		"country": "North Macedonia",
 		"shortcode": "MK",
+		"counrty_center": [
+			22,
+			41.833
+		],
 		"cities": [
 			{
 				"name": "Skopje",
@@ -4997,6 +5513,10 @@
 	{
 		"country": "Madagascar",
 		"shortcode": "MG",
+		"counrty_center": [
+			47,
+			-20
+		],
 		"cities": [
 			{
 				"name": "Antananarivo",
@@ -5038,6 +5558,10 @@
 	{
 		"country": "Malawi",
 		"shortcode": "MW",
+		"counrty_center": [
+			34,
+			-13.5
+		],
 		"cities": [
 			{
 				"name": "Lilongwe",
@@ -5079,6 +5603,10 @@
 	{
 		"country": "Malaysia",
 		"shortcode": "MY",
+		"counrty_center": [
+			112.5,
+			2.5
+		],
 		"cities": [
 			{
 				"name": "Kuala Lumpur",
@@ -5120,6 +5648,10 @@
 	{
 		"country": "Maldives",
 		"shortcode": "MV",
+		"counrty_center": [
+			73,
+			3.25
+		],
 		"cities": [
 			{
 				"name": "Male",
@@ -5161,6 +5693,10 @@
 	{
 		"country": "Mali",
 		"shortcode": "ML",
+		"counrty_center": [
+			-4,
+			17
+		],
 		"cities": [
 			{
 				"name": "Bamako",
@@ -5202,6 +5738,10 @@
 	{
 		"country": "Malta",
 		"shortcode": "MT",
+		"counrty_center": [
+			14.58333,
+			35.83333
+		],
 		"cities": [
 			{
 				"name": "San Pawl il-Baħar",
@@ -5243,6 +5783,10 @@
 	{
 		"country": "Marshall Islands",
 		"shortcode": "MH",
+		"counrty_center": [
+			168,
+			10
+		],
 		"cities": [
 			{
 				"name": "Majuro",
@@ -5284,6 +5828,10 @@
 	{
 		"country": "Martinique",
 		"shortcode": "MQ",
+		"counrty_center": [
+			-61,
+			14.667
+		],
 		"cities": [
 			{
 				"name": "Fort-de-France",
@@ -5325,6 +5873,10 @@
 	{
 		"country": "Mauritania",
 		"shortcode": "MR",
+		"counrty_center": [
+			-12,
+			20
+		],
 		"cities": [
 			{
 				"name": "Nouakchott",
@@ -5366,6 +5918,10 @@
 	{
 		"country": "Mauritius",
 		"shortcode": "MU",
+		"counrty_center": [
+			57.55,
+			-20.28333
+		],
 		"cities": [
 			{
 				"name": "Port Louis",
@@ -5407,6 +5963,10 @@
 	{
 		"country": "Mayotte",
 		"shortcode": "YT",
+		"counrty_center": [
+			45.1667,
+			-12.833
+		],
 		"cities": [
 			{
 				"name": "Mamoudzou",
@@ -5448,6 +6008,10 @@
 	{
 		"country": "Mexico",
 		"shortcode": "MX",
+		"counrty_center": [
+			-102,
+			23
+		],
 		"cities": [
 			{
 				"name": "Mexico City",
@@ -5489,6 +6053,10 @@
 	{
 		"country": "Micronesia",
 		"shortcode": "FM",
+		"counrty_center": [
+			158.25,
+			6.91667
+		],
 		"cities": [
 			{
 				"name": "Weno",
@@ -5530,6 +6098,10 @@
 	{
 		"country": "Moldova",
 		"shortcode": "MD",
+		"counrty_center": [
+			28.5,
+			47
+		],
 		"cities": [
 			{
 				"name": "Chisinau",
@@ -5571,6 +6143,10 @@
 	{
 		"country": "Monaco",
 		"shortcode": "MC",
+		"counrty_center": [
+			7.4,
+			43.733
+		],
 		"cities": [
 			{
 				"name": "Monaco",
@@ -5612,6 +6188,10 @@
 	{
 		"country": "Mongolia",
 		"shortcode": "MN",
+		"counrty_center": [
+			105,
+			46
+		],
 		"cities": [
 			{
 				"name": "Ulan Bator",
@@ -5653,6 +6233,10 @@
 	{
 		"country": "Montenegro",
 		"shortcode": "ME",
+		"counrty_center": [
+			19.3,
+			42.5
+		],
 		"cities": [
 			{
 				"name": "Podgorica",
@@ -5694,6 +6278,10 @@
 	{
 		"country": "Montserrat",
 		"shortcode": "MS",
+		"counrty_center": [
+			-62.2,
+			16.75
+		],
 		"cities": [
 			{
 				"name": "Brades",
@@ -5721,6 +6309,10 @@
 	{
 		"country": "Morocco",
 		"shortcode": "MA",
+		"counrty_center": [
+			-5,
+			32
+		],
 		"cities": [
 			{
 				"name": "Casablanca",
@@ -5762,6 +6354,10 @@
 	{
 		"country": "Mozambique",
 		"shortcode": "MZ",
+		"counrty_center": [
+			35,
+			-18.25
+		],
 		"cities": [
 			{
 				"name": "Maputo",
@@ -5803,6 +6399,10 @@
 	{
 		"country": "Myanmar (Burma)",
 		"shortcode": "MM",
+		"counrty_center": [
+			98,
+			22
+		],
 		"cities": [
 			{
 				"name": "Yangon",
@@ -5844,6 +6444,10 @@
 	{
 		"country": "Namibia",
 		"shortcode": "NA",
+		"counrty_center": [
+			17,
+			-22
+		],
 		"cities": [
 			{
 				"name": "Windhoek",
@@ -5885,6 +6489,10 @@
 	{
 		"country": "Nauru",
 		"shortcode": "NR",
+		"counrty_center": [
+			166.91667,
+			-0.53333
+		],
 		"cities": [
 			{
 				"name": "Arijejen",
@@ -5926,6 +6534,10 @@
 	{
 		"country": "Nepal",
 		"shortcode": "NP",
+		"counrty_center": [
+			84,
+			28
+		],
 		"cities": [
 			{
 				"name": "Kathmandu",
@@ -5967,6 +6579,10 @@
 	{
 		"country": "Netherlands",
 		"shortcode": "NL",
+		"counrty_center": [
+			5.75,
+			52.5
+		],
 		"cities": [
 			{
 				"name": "Amsterdam",
@@ -6008,6 +6624,10 @@
 	{
 		"country": "New Caledonia",
 		"shortcode": "NC",
+		"counrty_center": [
+			165.5,
+			-21.5
+		],
 		"cities": [
 			{
 				"name": "Nouméa",
@@ -6049,6 +6669,10 @@
 	{
 		"country": "New Zealand",
 		"shortcode": "NZ",
+		"counrty_center": [
+			174,
+			-41
+		],
 		"cities": [
 			{
 				"name": "Auckland",
@@ -6090,6 +6714,10 @@
 	{
 		"country": "Nicaragua",
 		"shortcode": "NI",
+		"counrty_center": [
+			-85,
+			13
+		],
 		"cities": [
 			{
 				"name": "Managua",
@@ -6131,6 +6759,10 @@
 	{
 		"country": "Niger",
 		"shortcode": "NE",
+		"counrty_center": [
+			8,
+			16
+		],
 		"cities": [
 			{
 				"name": "Niamey",
@@ -6172,6 +6804,10 @@
 	{
 		"country": "Nigeria",
 		"shortcode": "NG",
+		"counrty_center": [
+			8,
+			10
+		],
 		"cities": [
 			{
 				"name": "Lagos",
@@ -6213,6 +6849,10 @@
 	{
 		"country": "Niue",
 		"shortcode": "NU",
+		"counrty_center": [
+			-169.8667,
+			-19.0333
+		],
 		"cities": [
 			{
 				"name": "Alofi",
@@ -6226,6 +6866,10 @@
 	{
 		"country": "Norfolk Island",
 		"shortcode": "NF",
+		"counrty_center": [
+			167.95,
+			-29.033
+		],
 		"cities": [
 			{
 				"name": "Kingston",
@@ -6239,6 +6883,10 @@
 	{
 		"country": "Northern Mariana Islands",
 		"shortcode": "MP",
+		"counrty_center": [
+			145.38,
+			15.2
+		],
 		"cities": [
 			{
 				"name": "Saipan",
@@ -6259,6 +6907,10 @@
 	{
 		"country": "Norway",
 		"shortcode": "NO",
+		"counrty_center": [
+			10,
+			62
+		],
 		"cities": [
 			{
 				"name": "Oslo",
@@ -6300,6 +6952,10 @@
 	{
 		"country": "Oman",
 		"shortcode": "OM",
+		"counrty_center": [
+			57,
+			21
+		],
 		"cities": [
 			{
 				"name": "Muscat",
@@ -6341,6 +6997,10 @@
 	{
 		"country": "Pakistan",
 		"shortcode": "PK",
+		"counrty_center": [
+			70,
+			30
+		],
 		"cities": [
 			{
 				"name": "Karachi",
@@ -6382,6 +7042,10 @@
 	{
 		"country": "Palau",
 		"shortcode": "PW",
+		"counrty_center": [
+			134.5,
+			7.5
+		],
 		"cities": [
 			{
 				"name": "Koror",
@@ -6423,6 +7087,10 @@
 	{
 		"country": "Panama",
 		"shortcode": "PA",
+		"counrty_center": [
+			-80,
+			9
+		],
 		"cities": [
 			{
 				"name": "Panamá",
@@ -6464,6 +7132,10 @@
 	{
 		"country": "Papua New Guinea",
 		"shortcode": "PG",
+		"counrty_center": [
+			147,
+			-6
+		],
 		"cities": [
 			{
 				"name": "Port Moresby",
@@ -6505,6 +7177,10 @@
 	{
 		"country": "Paraguay",
 		"shortcode": "PY",
+		"counrty_center": [
+			-58,
+			-23
+		],
 		"cities": [
 			{
 				"name": "Asunción",
@@ -6546,6 +7222,10 @@
 	{
 		"country": "Peru",
 		"shortcode": "PE",
+		"counrty_center": [
+			-76,
+			-10
+		],
 		"cities": [
 			{
 				"name": "Lima",
@@ -6587,6 +7267,10 @@
 	{
 		"country": "Philippines",
 		"shortcode": "PH",
+		"counrty_center": [
+			122,
+			13
+		],
 		"cities": [
 			{
 				"name": "Quezon City",
@@ -6628,6 +7312,10 @@
 	{
 		"country": "Pitcairn",
 		"shortcode": "PN",
+		"counrty_center": [
+			-130,
+			-25
+		],
 		"cities": [
 			{
 				"name": "Adamstown",
@@ -6641,6 +7329,10 @@
 	{
 		"country": "Poland",
 		"shortcode": "PL",
+		"counrty_center": [
+			20,
+			52
+		],
 		"cities": [
 			{
 				"name": "Warsaw",
@@ -6682,6 +7374,10 @@
 	{
 		"country": "Portugal",
 		"shortcode": "PT",
+		"counrty_center": [
+			-8.0,
+			39.5
+		],
 		"cities": [
 			{
 				"name": "Lisbon",
@@ -6723,6 +7419,10 @@
 	{
 		"country": "Puerto Rico",
 		"shortcode": "PR",
+		"counrty_center": [
+			-66.5,
+			18.25
+		],
 		"cities": [
 			{
 				"name": "San Juan",
@@ -6764,6 +7464,10 @@
 	{
 		"country": "Qatar",
 		"shortcode": "QA",
+		"counrty_center": [
+			51.25,
+			25.5
+		],
 		"cities": [
 			{
 				"name": "Doha",
@@ -6805,6 +7509,10 @@
 	{
 		"country": "Romania",
 		"shortcode": "RO",
+		"counrty_center": [
+			25,
+			46
+		],
 		"cities": [
 			{
 				"name": "Bucharest",
@@ -6846,6 +7554,10 @@
 	{
 		"country": "Russia",
 		"shortcode": "RU",
+		"counrty_center": [
+			100,
+			60
+		],
 		"cities": [
 			{
 				"name": "Moscow",
@@ -6887,6 +7599,10 @@
 	{
 		"country": "Rwanda",
 		"shortcode": "RW",
+		"counrty_center": [
+			30,
+			-2
+		],
 		"cities": [
 			{
 				"name": "Kigali",
@@ -6926,8 +7642,12 @@
 		]
 	},
 	{
-		"country": "Réunion",
+		"country": "Reunion",
 		"shortcode": "RE",
+		"counrty_center": [
+			55.5,
+			-21.1
+		],
 		"cities": [
 			{
 				"name": "Saint-Denis",
@@ -6967,8 +7687,12 @@
 		]
 	},
 	{
-		"country": "Saint Barthélemy",
+		"country": "Saint-Barthélemy",
 		"shortcode": "BL",
+		"counrty_center": [
+			-62.833,
+			17.9
+		],
 		"cities": [
 			{
 				"name": "Gustavia",
@@ -6980,21 +7704,12 @@
 		]
 	},
 	{
-		"country": "Saint Barthélemy",
-		"shortcode": "VA",
-		"cities": [
-			{
-				"name": "Vatican City",
-				"center": [
-					12.45414,
-					41.90268
-				]
-			}
-		]
-	},
-	{
 		"country": "Saint Helena",
 		"shortcode": "SH",
+		"counrty_center": [
+			-10,
+			-24
+		],
 		"cities": [
 			{
 				"name": "Jamestown",
@@ -7022,6 +7737,10 @@
 	{
 		"country": "Saint Kitts and Nevis",
 		"shortcode": "KN",
+		"counrty_center": [
+			-62.75,
+			17.33
+		],
 		"cities": [
 			{
 				"name": "Basseterre",
@@ -7063,6 +7782,10 @@
 	{
 		"country": "Saint Lucia",
 		"shortcode": "LC",
+		"counrty_center": [
+			-61,
+			13.8833
+		],
 		"cities": [
 			{
 				"name": "Castries",
@@ -7104,6 +7827,10 @@
 	{
 		"country": "Saint Martin",
 		"shortcode": "MF",
+		"counrty_center": [
+			-63.0667,
+			18.0833
+		],
 		"cities": [
 			{
 				"name": "Marigot",
@@ -7117,6 +7844,10 @@
 	{
 		"country": "Saint Pierre and Miquelon",
 		"shortcode": "PM",
+		"counrty_center": [
+			-56.33,
+			46.833
+		],
 		"cities": [
 			{
 				"name": "Saint-Pierre",
@@ -7137,6 +7868,10 @@
 	{
 		"country": "Saint Vincent and the Grenadines",
 		"shortcode": "VC",
+		"counrty_center": [
+			-61.2,
+			13.25
+		],
 		"cities": [
 			{
 				"name": "Kingstown",
@@ -7178,6 +7913,10 @@
 	{
 		"country": "Samoa",
 		"shortcode": "WS",
+		"counrty_center": [
+			-172.33,
+			-13.5833
+		],
 		"cities": [
 			{
 				"name": "Apia",
@@ -7219,6 +7958,10 @@
 	{
 		"country": "São Tomé and Príncipe",
 		"shortcode": "ST",
+		"counrty_center": [
+			7.4167,
+			0.33
+		],
 		"cities": [
 			{
 				"name": "São Tomé",
@@ -7260,6 +8003,10 @@
 	{
 		"country": "Saudi Arabia",
 		"shortcode": "SA",
+		"counrty_center": [
+			46.73,
+			24.64
+		],
 		"cities": [
 			{
 				"name": "Jeddah",
@@ -7301,6 +8048,10 @@
 	{
 		"country": "Senegal",
 		"shortcode": "SN",
+		"counrty_center": [
+			-14.45,
+			14.45
+		],
 		"cities": [
 			{
 				"name": "Dakar",
@@ -7342,6 +8093,10 @@
 	{
 		"country": "Serbia",
 		"shortcode": "RS",
+		"counrty_center": [
+			20.79,
+			44.02
+		],
 		"cities": [
 			{
 				"name": "Belgrade",
@@ -7383,6 +8138,10 @@
 	{
 		"country": "Seychelles",
 		"shortcode": "SC",
+		"counrty_center": [
+			55.49,
+			-4.67
+		],
 		"cities": [
 			{
 				"name": "Victoria",
@@ -7424,6 +8183,10 @@
 	{
 		"country": "Sierra Leone",
 		"shortcode": "SL",
+		"counrty_center": [
+			-11.79271,
+			8.56329
+		],
 		"cities": [
 			{
 				"name": "Freetown",
@@ -7465,6 +8228,10 @@
 	{
 		"country": "Singapore",
 		"shortcode": "SG",
+		"counrty_center": [
+			103.81983,
+			1.35208
+		],
 		"cities": [
 			{
 				"name": "Singapore",
@@ -7506,6 +8273,10 @@
 	{
 		"country": "Sint Maarten",
 		"shortcode": "SX",
+		"counrty_center": [
+			-63.05071,
+			18.03448
+		],
 		"cities": [
 			{
 				"name": "Cul de Sac",
@@ -7540,6 +8311,10 @@
 	{
 		"country": "Slovakia",
 		"shortcode": "SK",
+		"counrty_center": [
+			19.479052,
+			48.705475
+		],
 		"cities": [
 			{
 				"name": "Bratislava",
@@ -7581,6 +8356,10 @@
 	{
 		"country": "Slovenia",
 		"shortcode": "SI",
+		"counrty_center": [
+			14.99546,
+			46.15124
+		],
 		"cities": [
 			{
 				"name": "Ljubljana",
@@ -7622,6 +8401,10 @@
 	{
 		"country": "Solomon Islands",
 		"shortcode": "SB",
+		"counrty_center": [
+			159.5,
+			-8
+		],
 		"cities": [
 			{
 				"name": "Honiara",
@@ -7663,6 +8446,10 @@
 	{
 		"country": "Somalia",
 		"shortcode": "SO",
+		"counrty_center": [
+			47.25,
+			10.25
+		],
 		"cities": [
 			{
 				"name": "Mogadishu",
@@ -7704,6 +8491,10 @@
 	{
 		"country": "South Africa",
 		"shortcode": "ZA",
+		"counrty_center": [
+			24.99164,
+			-28.81662
+		],
 		"cities": [
 			{
 				"name": "Johannesburg",
@@ -7745,6 +8536,10 @@
 	{
 		"country": "South Georgia",
 		"shortcode": "GS",
+		"counrty_center": [
+			-36.5,
+			-54.5
+		],
 		"cities": [
 			{
 				"name": "Grytviken",
@@ -7758,6 +8553,10 @@
 	{
 		"country": "South Sudan",
 		"shortcode": "SS",
+		"counrty_center": [
+			30,
+			7
+		],
 		"cities": [
 			{
 				"name": "Juba",
@@ -7799,6 +8598,10 @@
 	{
 		"country": "Spain",
 		"shortcode": "ES",
+		"counrty_center": [
+			-3.64756,
+			40.24448
+		],
 		"cities": [
 			{
 				"name": "Madrid",
@@ -7840,6 +8643,10 @@
 	{
 		"country": "Sri Lanka",
 		"shortcode": "LK",
+		"counrty_center": [
+			80.7718,
+			7.61266
+		],
 		"cities": [
 			{
 				"name": "Colombo",
@@ -7881,6 +8688,10 @@
 	{
 		"country": "Sudan",
 		"shortcode": "SD",
+		"counrty_center": [
+			30.217636,
+			15.628065
+		],
 		"cities": [
 			{
 				"name": "Khartoum",
@@ -7922,6 +8733,10 @@
 	{
 		"country": "Suriname",
 		"shortcode": "SR",
+		"counrty_center": [
+			-55.91206,
+			4.13055
+		],
 		"cities": [
 			{
 				"name": "Paramaribo",
@@ -7963,6 +8778,10 @@
 	{
 		"country": "Svalbard and Jan Mayen",
 		"shortcode": "SJ",
+		"counrty_center": [
+			23.6,
+			78
+		],
 		"cities": [
 			{
 				"name": "Longyearbyen",
@@ -7983,6 +8802,10 @@
 	{
 		"country": "Swaziland",
 		"shortcode": "SZ",
+		"counrty_center": [
+			31.5,
+			-26.5
+		],
 		"cities": [
 			{
 				"name": "Manzini",
@@ -8024,6 +8847,10 @@
 	{
 		"country": "Sweden",
 		"shortcode": "SE",
+		"counrty_center": [
+			18.6435,
+			60.12816
+		],
 		"cities": [
 			{
 				"name": "Stockholm",
@@ -8065,6 +8892,10 @@
 	{
 		"country": "Switzerland",
 		"shortcode": "CH",
+		"counrty_center": [
+			8.22,
+			46.82
+		],
 		"cities": [
 			{
 				"name": "Zürich",
@@ -8106,6 +8937,10 @@
 	{
 		"country": "Syria",
 		"shortcode": "SY",
+		"counrty_center": [
+			38.9,
+			35.5
+		],
 		"cities": [
 			{
 				"name": "Aleppo",
@@ -8147,6 +8982,10 @@
 	{
 		"country": "Taiwan",
 		"shortcode": "TW",
+		"counrty_center": [
+			121,
+			23.5
+		],
 		"cities": [
 			{
 				"name": "Taipei",
@@ -8188,6 +9027,10 @@
 	{
 		"country": "Tajikistan",
 		"shortcode": "TJ",
+		"counrty_center": [
+			71.01363,
+			38.53045
+		],
 		"cities": [
 			{
 				"name": "Dushanbe",
@@ -8229,6 +9072,10 @@
 	{
 		"country": "Tanzania",
 		"shortcode": "TZ",
+		"counrty_center": [
+			39.28734,
+			-6.52471
+		],
 		"cities": [
 			{
 				"name": "Dar es Salaam",
@@ -8270,6 +9117,10 @@
 	{
 		"country": "Thailand",
 		"shortcode": "TH",
+		"counrty_center": [
+			100.99,
+			15.87
+		],
 		"cities": [
 			{
 				"name": "Bangkok",
@@ -8311,6 +9162,10 @@
 	{
 		"country": "Timor-Leste",
 		"shortcode": "TL",
+		"counrty_center": [
+			125.7275390625,
+			-8.87421705453181
+		],
 		"cities": [
 			{
 				"name": "Dili",
@@ -8352,6 +9207,10 @@
 	{
 		"country": "Togo",
 		"shortcode": "TG",
+		"counrty_center": [
+			0.82478,
+			8.61954
+		],
 		"cities": [
 			{
 				"name": "Lomé",
@@ -8393,6 +9252,10 @@
 	{
 		"country": "Tokelau",
 		"shortcode": "TK",
+		"counrty_center": [
+			-172,
+			-9
+		],
 		"cities": [
 			{
 				"name": "Atafu Village",
@@ -8420,6 +9283,10 @@
 	{
 		"country": "Tonga",
 		"shortcode": "TO",
+		"counrty_center": [
+			-175.19824,
+			-21.17828
+		],
 		"cities": [
 			{
 				"name": "Nuku‘alofa",
@@ -8461,6 +9328,10 @@
 	{
 		"country": "Trinidad and Tobago",
 		"shortcode": "TT",
+		"counrty_center": [
+			-61.2225,
+			10.69194
+		],
 		"cities": [
 			{
 				"name": "Chaguanas",
@@ -8502,6 +9373,10 @@
 	{
 		"country": "Tunisia",
 		"shortcode": "TN",
+		"counrty_center": [
+			9.55288,
+			34.11956
+		],
 		"cities": [
 			{
 				"name": "Tunis",
@@ -8543,6 +9418,10 @@
 	{
 		"country": "Turkey",
 		"shortcode": "TR",
+		"counrty_center": [
+			28.94966,
+			41.01384
+		],
 		"cities": [
 			{
 				"name": "Istanbul",
@@ -8584,6 +9463,10 @@
 	{
 		"country": "Turkmenistan",
 		"shortcode": "TM",
+		"counrty_center": [
+			55.667,
+			38
+		],
 		"cities": [
 			{
 				"name": "Ashgabat",
@@ -8625,6 +9508,10 @@
 	{
 		"country": "Turks and Caicos Islands",
 		"shortcode": "TC",
+		"counrty_center": [
+			-71.97388,
+			21.83083
+		],
 		"cities": [
 			{
 				"name": "Cockburn Town",
@@ -8638,6 +9525,10 @@
 	{
 		"country": "Tuvalu",
 		"shortcode": "TV",
+		"counrty_center": [
+			179.1962,
+			-8.525
+		],
 		"cities": [
 			{
 				"name": "Funafuti",
@@ -8679,6 +9570,10 @@
 	{
 		"country": "Uganda",
 		"shortcode": "UG",
+		"counrty_center": [
+			32.36908,
+			1.27469
+		],
 		"cities": [
 			{
 				"name": "Kampala",
@@ -8720,6 +9615,10 @@
 	{
 		"country": "Ukraine",
 		"shortcode": "UA",
+		"counrty_center": [
+			31,
+			49
+		],
 		"cities": [
 			{
 				"name": "Kyiv",
@@ -8761,6 +9660,10 @@
 	{
 		"country": "United Arab Emirates",
 		"shortcode": "AE",
+		"counrty_center": [
+			53.84,
+			23.905
+		],
 		"cities": [
 			{
 				"name": "Dubai",
@@ -8802,6 +9705,10 @@
 	{
 		"country": "United Kingdom",
 		"shortcode": "GB",
+		"counrty_center": [
+			-2.86563,
+			54.12387
+		],
 		"cities": [
 			{
 				"name": "London",
@@ -8843,6 +9750,10 @@
 	{
 		"country": "Uruguay",
 		"shortcode": "UY",
+		"counrty_center": [
+			-56.01807,
+			-32.79952
+		],
 		"cities": [
 			{
 				"name": "Montevideo",
@@ -8884,6 +9795,10 @@
 	{
 		"country": "Uzbekistan",
 		"shortcode": "UZ",
+		"counrty_center": [
+			69.22697,
+			41.7447
+		],
 		"cities": [
 			{
 				"name": "Tashkent",
@@ -8925,6 +9840,10 @@
 	{
 		"country": "Vanuatu",
 		"shortcode": "VU",
+		"counrty_center": [
+			168.321,
+			-16.2264
+		],
 		"cities": [
 			{
 				"name": "Port-Vila",
@@ -8966,6 +9885,10 @@
 	{
 		"country": "Venezuela",
 		"shortcode": "VE",
+		"counrty_center": [
+			-66.181841,
+			7.124224
+		],
 		"cities": [
 			{
 				"name": "Caracas",
@@ -9007,6 +9930,10 @@
 	{
 		"country": "Vietnam",
 		"shortcode": "VN",
+		"counrty_center": [
+			106.299148,
+			16.646017
+		],
 		"cities": [
 			{
 				"name": "Ho Chi Minh City",
@@ -9048,6 +9975,10 @@
 	{
 		"country": "U.S. Virgin Islands",
 		"shortcode": "VI",
+		"counrty_center": [
+			-64.803015,
+			17.955006
+		],
 		"cities": [
 			{
 				"name": "Saint Croix",
@@ -9082,6 +10013,10 @@
 	{
 		"country": "Wallis and Futuna Islands",
 		"shortcode": "WF",
+		"counrty_center": [
+			-177.348348,
+			-13.887370
+		],
 		"cities": [
 			{
 				"name": "Mata-Utu",
@@ -9109,6 +10044,10 @@
 	{
 		"country": "Palestinian Territories",
 		"shortcode": "PS",
+		"counrty_center": [
+			35.233154,
+			31.952162
+		],
 		"cities": [
 			{
 				"name": "East Jerusalem",
@@ -9150,6 +10089,10 @@
 	{
 		"country": "Western Sahara",
 		"shortcode": "EH",
+		"counrty_center": [
+			-12.885834,
+			24.215527
+		],
 		"cities": [
 			{
 				"name": "Laayoune",
@@ -9184,6 +10127,10 @@
 	{
 		"country": "Yemen",
 		"shortcode": "YE",
+		"counrty_center": [
+			47.586765,
+			15.909280
+		],
 		"cities": [
 			{
 				"name": "Sanaa",
@@ -9225,6 +10172,10 @@
 	{
 		"country": "Zambia",
 		"shortcode": "ZM",
+		"counrty_center": [
+			27.849332,
+			-13.458242
+		],
 		"cities": [
 			{
 				"name": "Lusaka",
@@ -9266,6 +10217,10 @@
 	{
 		"country": "Zimbabwe",
 		"shortcode": "ZW",
+		"counrty_center": [
+			29.851441,
+			-19.004204
+		],
 		"cities": [
 			{
 				"name": "Harare",
@@ -9305,8 +10260,12 @@
 		]
 	},
 	{
-		"country": "Åland",
+		"country": "Åland Islands",
 		"shortcode": "AX",
+		"counrty_center": [
+			19.941868,
+			60.199548
+		],
 		"cities": [
 			{
 				"name": "Mariehamn",

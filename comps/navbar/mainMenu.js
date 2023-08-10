@@ -25,10 +25,9 @@ import {
   IconInfoCircleFilled,
   IconBrightnessUp,
   IconMoon,
-  IconCurrentLocation,
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
-import { estTimeStamp, arraysAreEqual } from "../../libs/custom";
+import { estTimeStamp } from "../../libs/custom";
 import { useMap } from "react-map-gl";
 import { auth } from "../../libs/firebase";
 
@@ -62,15 +61,6 @@ export default function MainMenu(props) {
   });
 
   const { mapRef } = useMap();
-
-  const flyToCurrent = () => {
-    mapRef.flyTo({
-      center: userGeo,
-      zoom: 2.5,
-      pitch: 0,
-      duration: 1000,
-    });
-  };
 
   useEffect(() => {
     router.prefetch("/");
@@ -190,28 +180,6 @@ export default function MainMenu(props) {
               </Text>
             </Button>
           )}
-          {router.pathname === "/map" &&
-            !arraysAreEqual(userGeo, ["-95", "37"]) && (
-              <Tooltip
-                color={dark ? "dark" : "gray.0"}
-                c={dark ? "gray.0" : "dark.9"}
-                label="Current Location"
-                position="bottom"
-                withArrow
-              >
-                <Button
-                  variant="subtle"
-                  onClick={() => {
-                    flyToCurrent();
-                  }}
-                  radius={"xl"}
-                  p={10}
-                  c={dark ? "gray.0" : "dark.9"}
-                >
-                  <IconCurrentLocation size={17} />
-                </Button>
-              </Tooltip>
-            )}
           <Tooltip
             color={dark ? "dark" : "gray.0"}
             c={dark ? "gray.0" : "dark.9"}

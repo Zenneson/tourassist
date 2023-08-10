@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import Mymap from "../comps/map/mymap";
 
 export const getServerSideProps = async () => {
@@ -10,37 +12,63 @@ export const getServerSideProps = async () => {
       console.error("Failed to fetch API:", response.statusText);
       return {
         props: {
-          latitude: 37,
-          longitude: -95,
+          country_name: "United States",
+          country_center: [37, -95],
         },
       };
     }
 
     const data = await response.json();
-    const { latitude, longitude } = data;
+    const { country_name } = data;
+
+    if (country_name === "United States") {
+      return {
+        props: {
+          country_name,
+          country_center: [-95, 37],
+        },
+      };
+    }
+
+    const filePath = path.join(
+      process.cwd(),
+      "public",
+      "data",
+      "worldcitiesdata.json"
+    );
+    const jsonData = fs.readFileSync(filePath, "utf8");
+    const worldCitiesData = JSON.parse(jsonData);
+
+    const countryData = worldCitiesData.find(
+      (countryObj) => countryObj.country === country_name
+    );
+    const countryCenter = countryData ? countryData.counrty_center : [-95, 37];
+
     return {
       props: {
-        latitude,
-        longitude,
+        country_name,
+        country_center: countryCenter,
       },
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       props: {
-        latitude: 37,
-        longitude: -95,
+        country_name: "United States",
+        country_center: countryCenter,
+        error: error.message,
       },
     };
   }
 };
 
 export default function Map(props) {
+  if (props.error) console.log(props.error);
   return (
     <>
       <Mymap
-        latitude={props.latitude}
-        longitude={props.longitude}
+        country_name={props.country_name}
+        country_center={props.country_center}
         listOpened={props.listOpened}
         setListOpened={props.setListOpened}
         searchOpened={props.searchOpened}

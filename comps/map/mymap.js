@@ -49,8 +49,8 @@ export default function Mymap(props) {
     mapLoaded,
     setMapLoaded,
     setMainMenuOpened,
-    latitude,
-    longitude,
+    country_name,
+    country_center,
   } = props;
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
@@ -75,7 +75,7 @@ export default function Mymap(props) {
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
   const [places, setPlaces] = useSessionStorage({
-    key: "placeDataState",
+    key: "placeData",
     defaultValue: [],
   });
   const [user, setUser] = useSessionStorage({
@@ -85,10 +85,9 @@ export default function Mymap(props) {
   const [guest, setGuest] = useSessionStorage({
     key: "guest",
   });
-  const [userGeo, setUserGeo] = useSessionStorage({
-    key: "userGeo",
-    defaultValue: [longitude, latitude],
-  });
+
+  const latitude = country_center[1];
+  const longitude = country_center[0];
 
   const initialViewState = {
     latitude: latitude,
@@ -205,6 +204,14 @@ export default function Mymap(props) {
       feature.properties?.iso_3166_1 ||
       "";
     locationObj.shortcode = locationObj.shortcode.toLowerCase();
+    if (locationObj.label === "Czech Republic") locationObj.label = "Czechia";
+    if (locationObj.label === "Aland Islands")
+      locationObj.label = "Åland Islands";
+    if (locationObj.label === "East Timor") locationObj.label = "Timor-Leste";
+    if (locationObj.label === "Myanmar") locationObj.label = "Myanmar (Burma)";
+    if (locationObj.label === "Réunion") locationObj.label = "Reunion";
+    if (locationObj.label === "Saint Barthélemy")
+      locationObj.label = "Saint-Barthélemy";
 
     setLngLat(locationObj.center);
     setArea(locationObj);
@@ -496,9 +503,14 @@ export default function Mymap(props) {
         location.country === "United States" && location.type === "region"
           ? "state"
           : "country";
-      const dataArray = data.filter(
-        (region) => region[filterKey] === location.label
-      );
+      const dataArray = data.filter((region) => {
+        const filterKeyLower = region[filterKey].toLowerCase();
+        const labelLower = location.label.toLowerCase();
+        return (
+          filterKeyLower.includes(labelLower) ||
+          labelLower.includes(filterKeyLower)
+        );
+      });
       const regionCities = dataArray[0]?.cities;
       let topFive = [];
       regionCities &&
@@ -605,7 +617,6 @@ export default function Mymap(props) {
           : area.country === area.label
           ? ""
           : area.country,
-      costs: ["FLIGHT", "HOTEL"],
     };
     setPlaceLocation([place]);
     if (choice === "tour") {
@@ -1019,7 +1030,6 @@ export default function Mymap(props) {
         reuseMaps={true}
         onLoad={() => {
           setMapLoaded(true);
-          setUserGeo([longitude, latitude]);
         }}
         touchPitch={false}
         onClick={(e) => {

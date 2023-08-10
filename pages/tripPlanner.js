@@ -7,12 +7,10 @@ import {
   uploadString,
   getDownloadURL,
 } from "firebase/storage";
-import { motion } from "framer-motion";
 import {
   useMantineColorScheme,
   useMantineTheme,
   Autocomplete,
-  ActionIcon,
   Space,
   Stepper,
   Title,
@@ -26,20 +24,14 @@ import {
   Stack,
   Button,
   Input,
-  Popover,
   Flex,
   Badge,
   Switch,
   Indicator,
 } from "@mantine/core";
-import {
-  useForceUpdate,
-  useWindowEvent,
-  useSessionStorage,
-} from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   IconCurrencyDollar,
-  IconPlus,
   IconCirclePlus,
   IconChevronUp,
   IconChevronDown,
@@ -54,6 +46,8 @@ import {
   IconRotate360,
   IconCheck,
 } from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
@@ -97,7 +91,7 @@ export default function TripPlannerPage(props) {
     defaultValue: "",
   });
   const [placeData, setPlaceData] = useSessionStorage({
-    key: "placeDataState",
+    key: "placeData",
     defaultValue: [],
   });
   const [loaded, setLoaded] = useSessionStorage({
@@ -259,7 +253,6 @@ export default function TripPlannerPage(props) {
     return trip_id;
   };
 
-  // TODO - DB
   const saveToDB = async (user, campaignId) => {
     notifications.show(createTrip);
     try {
@@ -346,8 +339,8 @@ export default function TripPlannerPage(props) {
     }
   };
 
-  const handleChange = async (e) => {
-    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=pk.eyJ1IjoiemVubmVzb24iLCJhIjoiY2xiaDB6d2VqMGw2ejNucXcwajBudHJlNyJ9.7g5DppqamDmn1T9AIwToVw`;
+  const handleChange = async () => {
+    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`;
 
     if (startLocaleSearch.length > 1) {
       try {
@@ -371,6 +364,42 @@ export default function TripPlannerPage(props) {
       }
     }
   };
+
+  // TODO - CALC FUNCS
+
+  // const placeCosts = placeData.map((place, index) => ({
+  //   name: place.place,
+  //   region: place.region,
+  //   costs: ["FLIGHT", "HOTEL"],
+  // }));
+
+  const placeCosts = placeData.map((place, index) => ({
+    [place.place]: [
+      {
+        name: "FLIGHT",
+      },
+      {
+        name: "HOTEL",
+      },
+    ],
+  }));
+
+  const form = useForm();
+
+  console.log(form.values);
+
+  const destination = placeCosts.map((place, index) => {
+    return (
+      <Box key={index} mb={20} className="pagePanel">
+        <Group p={10}>
+          <Box>
+            <Title order={2}>{place.name}</Title>
+            <Text>{place.region}</Text>
+          </Box>
+        </Group>
+      </Box>
+    );
+  });
 
   return (
     <Box px={20} pb={50}>
@@ -789,7 +818,12 @@ export default function TripPlannerPage(props) {
                 </Flex>
               </motion.div>
             )}
-            {active === 1 && <motion.div {...animation}></motion.div>}
+            {/* TODO  REWORK CALC */}
+            {active === 1 && (
+              <motion.div {...animation}>
+                <Box maw={950}>{destination}</Box>
+              </motion.div>
+            )}
             {active === 2 && (
               <motion.div {...animation}>
                 <Stack

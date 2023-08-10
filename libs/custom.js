@@ -65,7 +65,7 @@ export function useUserData() {
 
   useEffect(() => {
     if (!userAuth?.email) {
-      console.log("User email not found");
+      console.log("Searching for user data...");
       return;
     }
 
