@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, use } from "react";
+import { useState, useRef, useEffect } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
@@ -384,6 +384,24 @@ export default function TripPlannerPage(props) {
   };
   let bookings = convertPlaceData(placeData);
   const form = useForm();
+
+  const splitAtComma = (inputString) => {
+    const indexOfComma = inputString.indexOf(",");
+    const beforeComma = inputString.substring(0, indexOfComma);
+    const afterComma = inputString.substring(indexOfComma + 1).trim();
+    return [beforeComma, afterComma];
+  };
+  const [initialCity, initialRegion] = splitAtComma(startLocale);
+  if (roundTrip) {
+    bookings.places.push({
+      place: initialCity,
+      region: initialRegion,
+      returning: true,
+      costs: {
+        flight: 0,
+      },
+    });
+  }
   form.values = bookings;
 
   const Tickets = () => {
@@ -452,15 +470,33 @@ export default function TripPlannerPage(props) {
 
       setTotalCost(calculateTotalCost());
     }, [totalCost, setTotalCost, places]);
-    console.log(totalCost);
 
     return places.map((place, index) => (
       <Box key={index} p={10} pb={20} mb={20} className="pagePanel">
-        <Group px={5}>
+        <Group px={5} position="apart">
           <Box>
             <Title order={4}>{place.place}</Title>
             <Text fz={12}>{place.region}</Text>
           </Box>
+          <Flex
+            gap={10}
+            w={"100%"}
+            maw={500}
+            align={"center"}
+            justify={"flex-end"}
+          >
+            <Divider size={"sm"} w={"70%"} />
+            {place.returning === true && (
+              <Badge mr={5} variant="dot" size="xs">
+                Return flight
+              </Badge>
+            )}
+            {roundTrip && places.length === 1 && (
+              <Badge mr={5} variant="dot" size="xs">
+                Round Trip
+              </Badge>
+            )}
+          </Flex>
         </Group>
         {Object.keys(place.costs).map((cost, subIndex) => (
           <Group position="right" key={subIndex} spacing={10} p={10}>
