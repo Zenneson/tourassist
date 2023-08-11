@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
@@ -28,11 +28,15 @@ import {
   Badge,
   Switch,
   Indicator,
+  ActionIcon,
+  Popover,
+  TextInput,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import {
   IconCurrencyDollar,
   IconCirclePlus,
+  IconRowInsertBottom,
   IconChevronUp,
   IconChevronDown,
   IconBuildingBank,
@@ -366,40 +370,248 @@ export default function TripPlannerPage(props) {
   };
 
   // TODO - CALC FUNCS
-
-  // const placeCosts = placeData.map((place, index) => ({
-  //   name: place.place,
-  //   region: place.region,
-  //   costs: ["FLIGHT", "HOTEL"],
-  // }));
-
-  const placeCosts = placeData.map((place, index) => ({
-    [place.place]: [
-      {
-        name: "FLIGHT",
-      },
-      {
-        name: "HOTEL",
-      },
-    ],
-  }));
-
+  const convertPlaceData = (places) => {
+    return {
+      places: places.map((place) => ({
+        place: place.place,
+        region: place.region,
+        costs: {
+          flight: 0,
+          hotel: 0,
+        },
+      })),
+    };
+  };
+  let bookings = convertPlaceData(placeData);
   const form = useForm();
+  form.values = bookings;
 
-  console.log(form.values);
+  const Tickets = () => {
+    const [places, setPlaces] = useState([]);
+    const [newCostName, setNewCostName] = useState(
+      Array(places.length).fill("")
+    );
+    const [popoverOpened, setPopoverOpened] = useState(
+      Array(places.length).fill(false)
+    );
 
-  const destination = placeCosts.map((place, index) => {
-    return (
-      <Box key={index} mb={20} className="pagePanel">
-        <Group p={10}>
+    useEffect(() => {
+      if (places.length === 0) {
+        setPlaces(form.values.places);
+      }
+    }, [places]);
+
+    const removeCost = (placeIndex, costKey) => {
+      const newPlaces = [...places];
+      if (newPlaces[placeIndex] && newPlaces[placeIndex].costs) {
+        delete newPlaces[placeIndex].costs[costKey];
+      }
+      setPlaces(newPlaces);
+    };
+
+    const handleKeyPress = (e, index) => {
+      if (e.key === "Enter") {
+        addCost(index, newCostName[index]);
+        setPopoverOpened({ ...popoverOpened, [index]: false });
+      }
+    };
+
+    const addCost = (placeIndex, costName) => {
+      const newPlaces = [...places];
+      let adjustedCostName = costName || "NEW COST";
+      if (newPlaces[placeIndex]) {
+        let count = 2;
+        while (newPlaces[placeIndex].costs.hasOwnProperty(adjustedCostName)) {
+          adjustedCostName = `${costName || "NEW COST"} #${count}`;
+          count++;
+        }
+        newPlaces[placeIndex].costs = {
+          ...newPlaces[placeIndex].costs,
+          [adjustedCostName]: 0,
+        };
+        setPlaces(newPlaces);
+        setNewCostName("");
+      }
+    };
+
+    const [totalCost, setTotalCost] = useSessionStorage({
+      key: "totalCost",
+      defaultValue: 0,
+    });
+
+    useEffect(() => {
+      const calculateTotalCost = () => {
+        return places.reduce((total, place) => {
+          const placeCost = Object.values(place.costs || {}).reduce(
+            (costTotal, costValue) => costTotal + Number(costValue || 0),
+            0
+          );
+          return total + placeCost;
+        }, 0);
+      };
+
+      setTotalCost(calculateTotalCost());
+    }, [totalCost, setTotalCost, places]);
+    console.log(totalCost);
+
+    return places.map((place, index) => (
+      <Box key={index} p={10} pb={20} mb={20} className="pagePanel">
+        <Group px={5}>
           <Box>
-            <Title order={2}>{place.name}</Title>
-            <Text>{place.region}</Text>
+            <Title order={4}>{place.place}</Title>
+            <Text fz={12}>{place.region}</Text>
           </Box>
         </Group>
+        {Object.keys(place.costs).map((cost, subIndex) => (
+          <Group position="right" key={subIndex} spacing={10} p={10}>
+            <Text
+              sx={{
+                textTransform: "uppercase",
+                fontStyle: "italic",
+                fontSize: 12,
+              }}
+            >
+              {cost}
+            </Text>
+            <Divider my="xs" w={"50%"} variant="dotted" />
+            <NumberInput
+              tabIndex={index * Object.keys(place.costs).length + subIndex + 1}
+              min={0}
+              w={130}
+              size="md"
+              value={place.costs[cost]}
+              onFocus={(e) => {
+                if (e.target.value === "0") {
+                  e.target.select();
+                }
+              }}
+              onChange={(value) => {
+                const newPlaces = [...places];
+                newPlaces[index].costs[cost] = value;
+                setPlaces(newPlaces);
+              }}
+              defaultValue={0}
+              hideControls={true}
+              icon={<IconCurrencyDollar />}
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              formatter={(value) =>
+                !Number.isNaN(parseFloat(value))
+                  ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  : 0
+              }
+              sx={{
+                ".mantine-NumberInput-input": {
+                  textAlign: "right",
+                  fontWeight: 700,
+                },
+              }}
+            />
+            <ActionIcon
+              py={20}
+              bg={dark ? "dark.5" : "gray.1"}
+              sx={{
+                "&:hover": {
+                  background: "rgba(255,0,0,0.05)",
+                },
+              }}
+              onClick={() => {
+                removeCost(index, cost);
+              }}
+            >
+              <IconTrash size={15} />
+            </ActionIcon>
+          </Group>
+        ))}
+        <Group position="right" spacing={10} p={10}>
+          <Divider my="xs" w={"65%"} opacity={0.3} />
+          <Popover
+            trapFocus
+            position="left"
+            withArrow={true}
+            opened={popoverOpened[index]}
+            onClose={() =>
+              setPopoverOpened({ ...popoverOpened, [index]: false })
+            }
+          >
+            <Popover.Target>
+              <Button
+                size="xs"
+                variant="default"
+                opacity={0.2}
+                leftIcon={<IconRowInsertBottom size={17} />}
+                onClick={() =>
+                  setPopoverOpened({ ...popoverOpened, [index]: true })
+                }
+                sx={{
+                  "&:hover": {
+                    opacity: 1,
+                  },
+                }}
+              >
+                NEW COST
+              </Button>
+            </Popover.Target>
+            <Popover.Dropdown>
+              <TextInput
+                size="xs"
+                placeholder="NEW COST"
+                value={newCostName[index]}
+                onKeyDown={(e) => handleKeyPress(e, index)}
+                onChange={(e) =>
+                  setNewCostName({ ...newCostName, [index]: e.target.value })
+                }
+                rightSection={
+                  <ActionIcon
+                    onClick={() => {
+                      addCost(index, newCostName[index]);
+                      setPopoverOpened({ ...popoverOpened, [index]: false });
+                    }}
+                  >
+                    <IconCirclePlus size={15} />
+                  </ActionIcon>
+                }
+              />
+            </Popover.Dropdown>
+          </Popover>
+        </Group>
       </Box>
+    ));
+  };
+
+  const SumInput = () => {
+    const [totalCost, setTotalCost] = useSessionStorage({
+      key: "totalCost",
+    });
+
+    return (
+      <NumberInput
+        ref={sumRef}
+        icon={<IconCurrencyDollar />}
+        size="xl"
+        w={225}
+        value={totalCost}
+        onFocus={(event) => {
+          event.target.select();
+        }}
+        stepHoldDelay={600}
+        stepHoldInterval={400}
+        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        formatter={(value) =>
+          !Number.isNaN(parseFloat(value))
+            ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            : ""
+        }
+        min={0}
+        sx={{
+          ".mantine-NumberInput-input": {
+            textAlign: "right",
+            fontWeight: 700,
+            paddingRight: 50,
+          },
+        }}
+      />
     );
-  });
+  };
 
   return (
     <Box px={20} pb={50}>
@@ -821,7 +1033,9 @@ export default function TripPlannerPage(props) {
             {/* TODO  REWORK CALC */}
             {active === 1 && (
               <motion.div {...animation}>
-                <Box maw={950}>{destination}</Box>
+                <Box maw={950}>
+                  <Tickets />
+                </Box>
               </motion.div>
             )}
             {active === 2 && (
@@ -960,32 +1174,7 @@ export default function TripPlannerPage(props) {
                   label={"Total Cost"}
                   labelPosition="center"
                 />
-                <NumberInput
-                  ref={sumRef}
-                  icon={<IconCurrencyDollar />}
-                  size="xl"
-                  w={225}
-                  onFocus={(event) => {
-                    event.target.select();
-                  }}
-                  stepHoldDelay={600}
-                  stepHoldInterval={400}
-                  variant="filled"
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  formatter={(value) =>
-                    !Number.isNaN(parseFloat(value))
-                      ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      : ""
-                  }
-                  min={0}
-                  sx={{
-                    ".mantine-NumberInput-input": {
-                      textAlign: "right",
-                      fontWeight: 700,
-                      paddingRight: 50,
-                    },
-                  }}
-                />
+                <SumInput />
               </>
             )}
             {startLocale && travelDates && (
