@@ -1,6 +1,4 @@
 import Head from "next/head";
-import NextApp from "next/app";
-import { setCookie, getCookie } from "cookies-next";
 import { useState, useEffect } from "react";
 import { AppShell, MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
@@ -15,6 +13,7 @@ import DropDown from "../comps/dropdown/dropdown";
 require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
+
 export default function App(props) {
   const { Component, pageProps } = props;
   const [active, setActive] = useState(-1);
@@ -39,9 +38,6 @@ export default function App(props) {
     const nextColorScheme =
       value || (colorScheme === "dark" ? "light" : "dark");
     setColorScheme(nextColorScheme);
-    setCookie("mantine-color-scheme", nextColorScheme, {
-      maxAge: 60 * 60 * 24 * 30,
-    });
   };
 
   useEffect(() => {
@@ -225,11 +221,3 @@ export default function App(props) {
     </>
   );
 }
-
-App.getInitialProps = async (appContext) => {
-  const appProps = await NextApp.getInitialProps(appContext);
-  return {
-    ...appProps,
-    colorScheme: getCookie("mantine-color-scheme", appContext.ctx),
-  };
-};

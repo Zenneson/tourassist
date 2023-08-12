@@ -8,6 +8,24 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import {
+  IconCurrencyDollar,
+  IconCirclePlus,
+  IconRowInsertBottom,
+  IconChevronUp,
+  IconChevronDown,
+  IconBuildingBank,
+  IconTrash,
+  IconMapPin,
+  IconCalendarEvent,
+  IconChevronsRight,
+  IconArrowRightTail,
+  IconAlertTriangle,
+  IconFriends,
+  IconRotate360,
+  IconCheck,
+  IconRefreshDot,
+} from "@tabler/icons-react";
+import {
   useMantineColorScheme,
   useMantineTheme,
   Autocomplete,
@@ -32,24 +50,7 @@ import {
   Popover,
   TextInput,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
-import {
-  IconCurrencyDollar,
-  IconCirclePlus,
-  IconRowInsertBottom,
-  IconChevronUp,
-  IconChevronDown,
-  IconBuildingBank,
-  IconTrash,
-  IconMapPin,
-  IconCalendarEvent,
-  IconChevronsRight,
-  IconArrowRightTail,
-  IconAlertTriangle,
-  IconFriends,
-  IconRotate360,
-  IconCheck,
-} from "@tabler/icons-react";
+import { useSessionStorage, useShallowEffect } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -102,6 +103,10 @@ export default function TripPlannerPage(props) {
     key: "loaded",
     defaultValue: false,
   });
+  const [renderState, setRenderState] = useSessionStorage({
+    key: "renderState",
+    defaultValue: 0,
+  });
 
   useEffect(() => {
     setLoaded(true);
@@ -124,8 +129,9 @@ export default function TripPlannerPage(props) {
   const today = new Date();
   const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-  const prevStep = () =>
+  const prevStep = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
+  };
 
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
@@ -245,6 +251,448 @@ export default function TripPlannerPage(props) {
     icon: <IconCheck size={17} />,
   };
 
+  const convertPlaceData = (places) => {
+    return {
+      places: places.map((place) => ({
+        place: place.place,
+        region: place.region,
+        returning: false,
+        costs: {
+          flight: 0,
+          hotel: 0,
+        },
+      })),
+    };
+  };
+  let bookings = convertPlaceData(placeData);
+  const form = useForm();
+
+  const splitAtComma = (inputString) => {
+    const indexOfComma = inputString.indexOf(",");
+    const beforeComma = inputString.substring(0, indexOfComma);
+    const afterComma = inputString.substring(indexOfComma + 1).trim();
+    return [beforeComma, afterComma];
+  };
+
+  const [initialCity, initialRegion] = splitAtComma(startLocale);
+
+  useEffect(() => {
+    if (roundTrip && bookings.places.length > 1) {
+      bookings.places.push({
+        place: initialCity,
+        region: initialRegion,
+        returning: true,
+        costs: {
+          flight: 0,
+        },
+      });
+      form.values = bookings;
+    }
+  }, [form, roundTrip, bookings, initialCity, initialRegion, form.values]);
+
+  const UseTickets = () => {
+    const [renderState, setRenderState] = useSessionStorage({
+      key: "renderState",
+      defaultValue: 0,
+    });
+    const [places, setPlaces] = useSessionStorage({
+      key: "places",
+      defaultValue: form.values.places || bookings.places || [],
+    });
+    const [totalCost, setTotalCost] = useSessionStorage({
+      key: "totalCost",
+      defaultValue: 0,
+    });
+
+    const [resetBtnPop, setResetBtnPop] = useState(false);
+    let tabIndexCounter = 1;
+
+    const [newCostName, setNewCostName] = useState(
+      Array(places.length).fill("")
+    );
+    const [popoverOpened, setPopoverOpened] = useState(
+      Array(places.length).fill(false)
+    );
+
+    useShallowEffect(() => {
+      if (places.length === 0) {
+        setPlaces(form.values.places || bookings.places || []);
+      }
+    }, [places, setPlaces]);
+
+    const removeCost = (placeIndex, costKey) => {
+      const newPlaces = [...places];
+      let removedCostValue = 0;
+      if (newPlaces[placeIndex] && newPlaces[placeIndex].costs) {
+        removedCostValue = newPlaces[placeIndex].costs[costKey] || 0;
+        delete newPlaces[placeIndex].costs[costKey];
+        if (Object.keys(newPlaces[placeIndex].costs).length === 0) {
+          newPlaces.splice(placeIndex, 1);
+        }
+      }
+      setPlaces(newPlaces);
+      setTotalCost((prevTotalCost) => prevTotalCost - Number(removedCostValue));
+    };
+
+    const handleKeyPress = (e, index) => {
+      if (e.key === "Enter") {
+        addCost(index, newCostName[index]);
+        setPopoverOpened({ ...popoverOpened, [index]: false });
+      }
+    };
+
+    const addCost = (placeIndex, costName) => {
+      const newPlaces = [...places];
+      let adjustedCostName = costName || "NEW COST";
+      if (newPlaces[placeIndex]) {
+        let count = 2;
+        while (newPlaces[placeIndex].costs.hasOwnProperty(adjustedCostName)) {
+          adjustedCostName = `${costName || "NEW COST"} #${count}`;
+          count++;
+        }
+        newPlaces[placeIndex].costs = {
+          ...newPlaces[placeIndex].costs,
+          [adjustedCostName]: 0,
+        };
+        setPlaces(newPlaces);
+        setNewCostName("");
+      }
+    };
+
+    const setCostsToZero = (trips) => {
+      return trips.map((trip) => ({
+        ...trip,
+        costs: {
+          flight: 0,
+          hotel: 0,
+        },
+      }));
+    };
+
+    useEffect(() => {
+      if (document.activeElement.id === "totalId") return;
+      const calculateTotalCost = () => {
+        return places.reduce((total, place) => {
+          if (!roundTrip && place.returning) return total;
+
+          const placeCost = Object.values(place.costs || {}).reduce(
+            (costTotal, costValue) => costTotal + Number(costValue || 0),
+            0
+          );
+          return total + placeCost;
+        }, 0);
+      };
+      setTotalCost(calculateTotalCost());
+    }, [totalCost, setTotalCost, places]);
+
+    const handleReset = () => {
+      const newData = [...places];
+      const resetVals = setCostsToZero(newData);
+      setPlaces(resetVals);
+    };
+
+    return places.length > 0
+      ? places.map((place, index) => {
+          if (place.returning && !roundTrip) return null;
+          return (
+            <Box
+              key={index}
+              p={10}
+              pb={20}
+              mb={20}
+              pos={"relative"}
+              className="pagePanel"
+            >
+              <Group pt={10} pl={10} position="apart">
+                <Box
+                  pl={10}
+                  sx={{
+                    borderLeft: "2px solid rgba(137, 137, 137, 0.4)",
+                  }}
+                >
+                  <Title order={4}>{place.place}</Title>
+                  <Text fz={12}>{place.region}</Text>
+                </Box>
+                <Flex
+                  gap={10}
+                  mr={place.returning ? 5 : 10}
+                  w={"100%"}
+                  maw={place.returning ? 400 : 335}
+                  align={"center"}
+                  justify={"flex-end"}
+                >
+                  <Divider
+                    size={"xs"}
+                    w={
+                      place.returning || (roundTrip && places.length === 1)
+                        ? "60%"
+                        : "100%"
+                    }
+                  />
+                  {!place.returning ||
+                    (roundTrip && (
+                      <Badge mr={5} variant="dot" size="xs">
+                        Return flight
+                      </Badge>
+                    ))}
+                  {roundTrip && places.length === 1 && (
+                    <Badge mr={5} variant="dot" size="xs">
+                      Round Trip
+                    </Badge>
+                  )}
+                </Flex>
+              </Group>
+              {!place.returning &&
+                Object.keys(place.costs).map((cost, subIndex) => (
+                  <Group position="right" key={subIndex} spacing={10} p={10}>
+                    <Text
+                      sx={{
+                        textTransform: "uppercase",
+                        fontStyle: "italic",
+                        fontSize: 12,
+                      }}
+                    >
+                      {cost}
+                    </Text>
+                    <Divider my="xs" w={"50%"} variant="dotted" />
+                    <NumberInput
+                      id="cost"
+                      tabIndex={tabIndexCounter++}
+                      min={0}
+                      w={130}
+                      size="md"
+                      value={place.costs[cost] || 0}
+                      onClick={(e) => {
+                        if (e.target.value === 0 || e.target.value === "0") {
+                          e.target.select();
+                        }
+                      }}
+                      onChange={(value) => {
+                        const newPlaces = [...places];
+                        newPlaces[index].costs[cost] = value;
+                        setPlaces(newPlaces);
+                      }}
+                      hideControls={true}
+                      icon={<IconCurrencyDollar />}
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      formatter={(value) =>
+                        !Number.isNaN(parseFloat(value))
+                          ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          : 0
+                      }
+                      sx={{
+                        ".mantine-NumberInput-input": {
+                          textAlign: "right",
+                          fontWeight: 700,
+                        },
+                      }}
+                    />
+                    <ActionIcon
+                      py={20}
+                      bg={dark ? "dark.5" : "gray.1"}
+                      sx={{
+                        "&:hover": {
+                          background: "rgba(255,0,0,0.05)",
+                        },
+                      }}
+                      onClick={() => {
+                        removeCost(index, cost);
+                      }}
+                    >
+                      <IconTrash size={15} />
+                    </ActionIcon>
+                  </Group>
+                ))}
+              {place.returning && (
+                <Group position="right" spacing={10} p={10}>
+                  <Text
+                    sx={{
+                      textTransform: "uppercase",
+                      fontStyle: "italic",
+                      fontSize: 12,
+                    }}
+                  >
+                    FLIGHT
+                  </Text>
+                  <Divider my="xs" w={"50%"} variant="dotted" />
+                  <NumberInput
+                    id="cost"
+                    tabIndex={tabIndexCounter++}
+                    min={0}
+                    w={130}
+                    size="md"
+                    value={place.costs[cost] || 0}
+                    onClick={(e) => {
+                      if (e.target.value === 0 || e.target.value === "0") {
+                        e.target.select();
+                      }
+                    }}
+                    onChange={(value) => {
+                      const newPlaces = [...places];
+                      newPlaces[index].costs[cost] = value;
+                      setPlaces(newPlaces);
+                    }}
+                    hideControls={true}
+                    icon={<IconCurrencyDollar />}
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    formatter={(value) =>
+                      !Number.isNaN(parseFloat(value))
+                        ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        : 0
+                    }
+                    sx={{
+                      ".mantine-NumberInput-input": {
+                        textAlign: "right",
+                        fontWeight: 700,
+                      },
+                    }}
+                  />
+                </Group>
+              )}
+              {!place.returning && (
+                <Group position="right" spacing={10} p={10}>
+                  <Divider my="xs" w={"65%"} opacity={0.3} />
+                  <Popover
+                    trapFocus
+                    position="left"
+                    withArrow={true}
+                    opened={popoverOpened[index]}
+                    onClose={() =>
+                      setPopoverOpened({ ...popoverOpened, [index]: false })
+                    }
+                  >
+                    <Popover.Target>
+                      <Button
+                        size="xs"
+                        variant="default"
+                        opacity={0.2}
+                        leftIcon={<IconRowInsertBottom size={17} />}
+                        onClick={() =>
+                          setPopoverOpened({
+                            ...popoverOpened,
+                            [index]: true,
+                          })
+                        }
+                        sx={{
+                          "&:hover": {
+                            opacity: 1,
+                          },
+                        }}
+                      >
+                        NEW COST
+                      </Button>
+                    </Popover.Target>
+                    <Popover.Dropdown>
+                      <TextInput
+                        size="xs"
+                        placeholder="NEW COST"
+                        value={newCostName[index] || ""}
+                        onKeyDown={(e) => handleKeyPress(e, index)}
+                        onChange={(e) =>
+                          setNewCostName({
+                            ...newCostName,
+                            [index]: e.target.value,
+                          })
+                        }
+                        rightSection={
+                          <ActionIcon
+                            onClick={() => {
+                              addCost(index, newCostName[index]);
+                              setPopoverOpened({
+                                ...popoverOpened,
+                                [index]: false,
+                              });
+                            }}
+                          >
+                            <IconCirclePlus size={15} />
+                          </ActionIcon>
+                        }
+                      />
+                    </Popover.Dropdown>
+                  </Popover>
+                </Group>
+              )}
+              {index === 0 && (
+                <Group pos={"absolute"} spacing={10} top={0} left={-50}>
+                  <Popover position="top" opened={resetBtnPop}>
+                    <Popover.Target>
+                      <ActionIcon
+                        variant="subtle"
+                        size="xl"
+                        opacity={0.4}
+                        onMouseEnter={() => setResetBtnPop(true)}
+                        onMouseLeave={() => setResetBtnPop(false)}
+                        onClick={handleReset}
+                        sx={{
+                          "&:hover": {
+                            opacity: 1,
+                          },
+                        }}
+                      >
+                        <IconRefreshDot size={40} />
+                      </ActionIcon>
+                    </Popover.Target>
+                    <Popover.Dropdown sx={{ pointerEvents: "none" }}>
+                      <Text
+                        ta={"center"}
+                        fz={10}
+                        sx={{
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        Reset form fields
+                      </Text>
+                    </Popover.Dropdown>
+                  </Popover>
+                </Group>
+              )}
+            </Box>
+          );
+        })
+      : null;
+  };
+
+  const SumInput = () => {
+    const [totalCost, setTotalCost] = useSessionStorage({
+      key: "totalCost",
+      defaultValue: 0,
+    });
+
+    const handleChange = (e) => {
+      setTotalCost(e);
+    };
+
+    return (
+      <NumberInput
+        ref={sumRef}
+        id="totalId"
+        min={0}
+        icon={<IconCurrencyDollar />}
+        size="xl"
+        w={225}
+        value={totalCost}
+        onChange={(e) => {
+          handleChange(e);
+        }}
+        stepHoldDelay={600}
+        stepHoldInterval={400}
+        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        formatter={(value) =>
+          !Number.isNaN(parseFloat(value))
+            ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            : ""
+        }
+        sx={{
+          ".mantine-NumberInput-input": {
+            textAlign: "right",
+            fontWeight: 700,
+            paddingRight: 50,
+          },
+        }}
+      />
+    );
+  };
+
   const generateTripId = () => {
     const trip_title = tripTitle
       .replace(/ /g, "")
@@ -304,7 +752,6 @@ export default function TripPlannerPage(props) {
       router.push("/" + campaignId);
     } catch (error) {
       console.error("Failed to save to database:", error);
-      // Handle any errors that occurred during the image upload or database write
     }
   };
 
@@ -367,286 +814,6 @@ export default function TripPlannerPage(props) {
         console.log("Error fetching data for Country Autocomplete: ", error);
       }
     }
-  };
-
-  // TODO - CALC FUNCS
-  const convertPlaceData = (places) => {
-    return {
-      places: places.map((place) => ({
-        place: place.place,
-        region: place.region,
-        costs: {
-          flight: 0,
-          hotel: 0,
-        },
-      })),
-    };
-  };
-  let bookings = convertPlaceData(placeData);
-  const form = useForm();
-
-  const splitAtComma = (inputString) => {
-    const indexOfComma = inputString.indexOf(",");
-    const beforeComma = inputString.substring(0, indexOfComma);
-    const afterComma = inputString.substring(indexOfComma + 1).trim();
-    return [beforeComma, afterComma];
-  };
-  const [initialCity, initialRegion] = splitAtComma(startLocale);
-  if (roundTrip) {
-    bookings.places.push({
-      place: initialCity,
-      region: initialRegion,
-      returning: true,
-      costs: {
-        flight: 0,
-      },
-    });
-  }
-  form.values = bookings;
-
-  const Tickets = () => {
-    const [places, setPlaces] = useState([]);
-    const [newCostName, setNewCostName] = useState(
-      Array(places.length).fill("")
-    );
-    const [popoverOpened, setPopoverOpened] = useState(
-      Array(places.length).fill(false)
-    );
-
-    useEffect(() => {
-      if (places.length === 0) {
-        setPlaces(form.values.places);
-      }
-    }, [places]);
-
-    const removeCost = (placeIndex, costKey) => {
-      const newPlaces = [...places];
-      if (newPlaces[placeIndex] && newPlaces[placeIndex].costs) {
-        delete newPlaces[placeIndex].costs[costKey];
-      }
-      setPlaces(newPlaces);
-    };
-
-    const handleKeyPress = (e, index) => {
-      if (e.key === "Enter") {
-        addCost(index, newCostName[index]);
-        setPopoverOpened({ ...popoverOpened, [index]: false });
-      }
-    };
-
-    const addCost = (placeIndex, costName) => {
-      const newPlaces = [...places];
-      let adjustedCostName = costName || "NEW COST";
-      if (newPlaces[placeIndex]) {
-        let count = 2;
-        while (newPlaces[placeIndex].costs.hasOwnProperty(adjustedCostName)) {
-          adjustedCostName = `${costName || "NEW COST"} #${count}`;
-          count++;
-        }
-        newPlaces[placeIndex].costs = {
-          ...newPlaces[placeIndex].costs,
-          [adjustedCostName]: 0,
-        };
-        setPlaces(newPlaces);
-        setNewCostName("");
-      }
-    };
-
-    const [totalCost, setTotalCost] = useSessionStorage({
-      key: "totalCost",
-      defaultValue: 0,
-    });
-
-    useEffect(() => {
-      const calculateTotalCost = () => {
-        return places.reduce((total, place) => {
-          const placeCost = Object.values(place.costs || {}).reduce(
-            (costTotal, costValue) => costTotal + Number(costValue || 0),
-            0
-          );
-          return total + placeCost;
-        }, 0);
-      };
-
-      setTotalCost(calculateTotalCost());
-    }, [totalCost, setTotalCost, places]);
-
-    return places.map((place, index) => (
-      <Box key={index} p={10} pb={20} mb={20} className="pagePanel">
-        <Group px={5} position="apart">
-          <Box>
-            <Title order={4}>{place.place}</Title>
-            <Text fz={12}>{place.region}</Text>
-          </Box>
-          <Flex
-            gap={10}
-            w={"100%"}
-            maw={500}
-            align={"center"}
-            justify={"flex-end"}
-          >
-            <Divider size={"sm"} w={"70%"} />
-            {place.returning === true && (
-              <Badge mr={5} variant="dot" size="xs">
-                Return flight
-              </Badge>
-            )}
-            {roundTrip && places.length === 1 && (
-              <Badge mr={5} variant="dot" size="xs">
-                Round Trip
-              </Badge>
-            )}
-          </Flex>
-        </Group>
-        {Object.keys(place.costs).map((cost, subIndex) => (
-          <Group position="right" key={subIndex} spacing={10} p={10}>
-            <Text
-              sx={{
-                textTransform: "uppercase",
-                fontStyle: "italic",
-                fontSize: 12,
-              }}
-            >
-              {cost}
-            </Text>
-            <Divider my="xs" w={"50%"} variant="dotted" />
-            <NumberInput
-              tabIndex={index * Object.keys(place.costs).length + subIndex + 1}
-              min={0}
-              w={130}
-              size="md"
-              value={place.costs[cost]}
-              onFocus={(e) => {
-                if (e.target.value === "0") {
-                  e.target.select();
-                }
-              }}
-              onChange={(value) => {
-                const newPlaces = [...places];
-                newPlaces[index].costs[cost] = value;
-                setPlaces(newPlaces);
-              }}
-              defaultValue={0}
-              hideControls={true}
-              icon={<IconCurrencyDollar />}
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-              formatter={(value) =>
-                !Number.isNaN(parseFloat(value))
-                  ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  : 0
-              }
-              sx={{
-                ".mantine-NumberInput-input": {
-                  textAlign: "right",
-                  fontWeight: 700,
-                },
-              }}
-            />
-            <ActionIcon
-              py={20}
-              bg={dark ? "dark.5" : "gray.1"}
-              sx={{
-                "&:hover": {
-                  background: "rgba(255,0,0,0.05)",
-                },
-              }}
-              onClick={() => {
-                removeCost(index, cost);
-              }}
-            >
-              <IconTrash size={15} />
-            </ActionIcon>
-          </Group>
-        ))}
-        <Group position="right" spacing={10} p={10}>
-          <Divider my="xs" w={"65%"} opacity={0.3} />
-          <Popover
-            trapFocus
-            position="left"
-            withArrow={true}
-            opened={popoverOpened[index]}
-            onClose={() =>
-              setPopoverOpened({ ...popoverOpened, [index]: false })
-            }
-          >
-            <Popover.Target>
-              <Button
-                size="xs"
-                variant="default"
-                opacity={0.2}
-                leftIcon={<IconRowInsertBottom size={17} />}
-                onClick={() =>
-                  setPopoverOpened({ ...popoverOpened, [index]: true })
-                }
-                sx={{
-                  "&:hover": {
-                    opacity: 1,
-                  },
-                }}
-              >
-                NEW COST
-              </Button>
-            </Popover.Target>
-            <Popover.Dropdown>
-              <TextInput
-                size="xs"
-                placeholder="NEW COST"
-                value={newCostName[index]}
-                onKeyDown={(e) => handleKeyPress(e, index)}
-                onChange={(e) =>
-                  setNewCostName({ ...newCostName, [index]: e.target.value })
-                }
-                rightSection={
-                  <ActionIcon
-                    onClick={() => {
-                      addCost(index, newCostName[index]);
-                      setPopoverOpened({ ...popoverOpened, [index]: false });
-                    }}
-                  >
-                    <IconCirclePlus size={15} />
-                  </ActionIcon>
-                }
-              />
-            </Popover.Dropdown>
-          </Popover>
-        </Group>
-      </Box>
-    ));
-  };
-
-  const SumInput = () => {
-    const [totalCost, setTotalCost] = useSessionStorage({
-      key: "totalCost",
-    });
-
-    return (
-      <NumberInput
-        ref={sumRef}
-        icon={<IconCurrencyDollar />}
-        size="xl"
-        w={225}
-        value={totalCost}
-        onFocus={(event) => {
-          event.target.select();
-        }}
-        stepHoldDelay={600}
-        stepHoldInterval={400}
-        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        formatter={(value) =>
-          !Number.isNaN(parseFloat(value))
-            ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            : ""
-        }
-        min={0}
-        sx={{
-          ".mantine-NumberInput-input": {
-            textAlign: "right",
-            fontWeight: 700,
-            paddingRight: 50,
-          },
-        }}
-      />
-    );
   };
 
   return (
@@ -753,27 +920,44 @@ export default function TripPlannerPage(props) {
                       />
                       <Group mt={15} spacing={0}>
                         <Divider
-                          w={"60%"}
+                          w={"77%"}
                           pr={10}
                           labelPosition="right"
                           variant="dashed"
+                          color={
+                            dark
+                              ? "rgba(255, 255, 255, 0.08)"
+                              : "rgba(0, 0, 0, 0.08)"
+                          }
                           label={
                             <Flex align={"center"}>
                               <IconFriends
                                 size={16}
                                 color={dark ? "rgb(255,255,255)" : "rgb(0,0,0)"}
                               />
-                              <Text ta={"right"} ml={5} fz={13} opacity={0.4}>
+                              <Text
+                                ta={"right"}
+                                ml={5}
+                                fz={13}
+                                c={
+                                  dark
+                                    ? "rgba(255, 255, 255, 1)"
+                                    : "rgba(0, 0, 0, 1)"
+                                }
+                              >
                                 Travelers:
                               </Text>
                             </Flex>
                           }
                         />
-                        <Group spacing={5} w={"40%"} grow>
+                        <Group spacing={5} w={"23%"} grow>
                           {/* Decrease Traveler Count  */}
                           <Button
-                            variant="filled"
-                            fz={15}
+                            fz={20}
+                            maw={30}
+                            p={0}
+                            pb={5}
+                            variant="subtle"
                             color={dark ? "dark.5" : "gray.1"}
                             c={dark ? "gray.0" : "dark.9"}
                             onClick={() =>
@@ -796,13 +980,16 @@ export default function TripPlannerPage(props) {
                                 textAlign: "center",
                                 fontWeight: 700,
                                 fontSize: "1.1rem",
+                                padding: 0,
                               },
                             }}
                           />
                           {/* Increase Traveler Count  */}
                           <Button
-                            variant="filled"
-                            fz={15}
+                            fz={20}
+                            maw={30}
+                            p={0}
+                            variant="subtle"
                             color={dark ? "dark.5" : "gray.1"}
                             c={dark ? "gray.0" : "dark.9"}
                             onClick={() =>
@@ -819,6 +1006,11 @@ export default function TripPlannerPage(props) {
                           my={15}
                           labelPosition="right"
                           variant="dashed"
+                          color={
+                            dark
+                              ? "rgba(255, 255, 255, 0.08)"
+                              : "rgba(0, 0, 0, 0.08)"
+                          }
                           label={
                             <Switch
                               label={
@@ -833,7 +1025,11 @@ export default function TripPlannerPage(props) {
                                     ta={"right"}
                                     ml={5}
                                     fz={12}
-                                    opacity={0.4}
+                                    c={
+                                      dark
+                                        ? "rgba(255, 255, 255, 1)"
+                                        : "rgba(0, 0, 0, 1)"
+                                    }
                                   >
                                     Round Trip?
                                   </Text>
@@ -843,7 +1039,10 @@ export default function TripPlannerPage(props) {
                               onLabel="YES"
                               offLabel="NO"
                               checked={roundTrip}
-                              onChange={() => setRoundTrip(!roundTrip)}
+                              onChange={() => {
+                                setRoundTrip(!roundTrip);
+                                setRenderState(renderState + 1);
+                              }}
                             />
                           }
                         />
@@ -1066,11 +1265,10 @@ export default function TripPlannerPage(props) {
                 </Flex>
               </motion.div>
             )}
-            {/* TODO  REWORK CALC */}
             {active === 1 && (
               <motion.div {...animation}>
                 <Box maw={950}>
-                  <Tickets />
+                  <UseTickets />
                 </Box>
               </motion.div>
             )}

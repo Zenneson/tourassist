@@ -1,4 +1,4 @@
-import { useState, useRef, use } from "react";
+import { useState, useRef } from "react";
 import {
   useMantineColorScheme,
   ActionIcon,
@@ -10,10 +10,7 @@ import {
   Title,
   Switch,
   Tooltip,
-  Modal,
   TextInput,
-  Stack,
-  PasswordInput,
   Popover,
   Divider,
 } from "@mantine/core";
@@ -26,13 +23,11 @@ import {
   IconBrandTiktok,
   IconBrandTwitter,
   IconCirclePlus,
-  IconUserX,
   IconDeviceSim1,
   IconDeviceSim2,
   IconPhone,
   IconPencil,
   IconBuildingBank,
-  IconAsterisk,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { useWindowEvent } from "@mantine/hooks";

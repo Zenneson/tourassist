@@ -86,6 +86,7 @@ export default function ProfileDrawer(props) {
     panelShow,
     setPanelShow,
     mainMenuOpened,
+    setMainMenuOpened,
     openMenu,
     signOutFunc,
   } = props;
@@ -232,6 +233,7 @@ export default function ProfileDrawer(props) {
               icon={<IconWorld size={30} />}
               variant="subtle"
               onClick={() => {
+                setMainMenuOpened(false);
                 router.push("/map");
               }}
               classNames={{

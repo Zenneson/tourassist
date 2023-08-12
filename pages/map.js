@@ -12,7 +12,6 @@ export const getServerSideProps = async () => {
       console.error("Failed to fetch API:", response.statusText);
       return {
         props: {
-          country_name: "United States",
           country_center: [37, -95],
         },
       };
@@ -24,7 +23,6 @@ export const getServerSideProps = async () => {
     if (country_name === "United States") {
       return {
         props: {
-          country_name,
           country_center: [-95, 37],
         },
       };
@@ -54,7 +52,6 @@ export const getServerSideProps = async () => {
     console.error("Error fetching data:", error);
     return {
       props: {
-        country_name: "United States",
         country_center: countryCenter,
         error: error.message,
       },

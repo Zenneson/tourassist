@@ -5,7 +5,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
-import { RemoveScroll } from "@mantine/core";
+import { Box, RemoveScroll } from "@mantine/core";
 import {
   useMantineColorScheme,
   Header,
@@ -28,29 +28,30 @@ import {
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
 import { estTimeStamp } from "../../libs/custom";
-import { useMap } from "react-map-gl";
 import { auth } from "../../libs/firebase";
 
 export default function MainMenu(props) {
-  const {
-    active,
-    setActive,
-    panelShow,
-    setPanelShow,
-    mainMenuOpened,
-    setMainMenuOpened,
-    setListOpened,
-    searchOpened,
-    setSearchOpened,
-    setDropDownOpened,
-  } = props;
+  const { setListOpened, searchOpened, setSearchOpened, setDropDownOpened } =
+    props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
   const [logoutOpened, setLogoutOpened] = useState(false);
+  const [mainMenuOpened, setMainMenuOpened] = useSessionStorage({
+    key: "mainMenuOpened",
+    defaultValue: false,
+  });
+  const [panelShow, setPanelShow] = useSessionStorage({
+    key: "panelShow",
+    defaultValue: false,
+  });
   const [user, setUser] = useSessionStorage({
     key: "user",
     defaultValue: null,
+  });
+  const [active, setActive] = useSessionStorage({
+    key: "active",
+    defaultValue: -1,
   });
   const [leaving, setLeaving] = useSessionStorage({
     key: "leaving",
@@ -59,8 +60,6 @@ export default function MainMenu(props) {
   const [userGeo, setUserGeo] = useSessionStorage({
     key: "userGeo",
   });
-
-  const { mapRef } = useMap();
 
   useEffect(() => {
     router.prefetch("/");
@@ -113,13 +112,18 @@ export default function MainMenu(props) {
   }
 
   return (
-    <>
+    <Box
+      sx={{
+        userSelect: "none",
+      }}
+    >
       <ProfileDrawer
         active={active}
         setActive={setActive}
         panelShow={panelShow}
         setPanelShow={setPanelShow}
         mainMenuOpened={mainMenuOpened}
+        setMainMenuOpened={setMainMenuOpened}
         openMenu={openMenu}
         signOutFunc={signOutFunc}
       />
@@ -306,6 +310,6 @@ export default function MainMenu(props) {
           </motion.div>
         </Flex>
       </Header>
-    </>
+    </Box>
   );
 }
