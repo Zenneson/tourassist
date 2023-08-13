@@ -1,6 +1,11 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
-import { AppShell, MantineProvider, ColorSchemeProvider } from "@mantine/core";
+import {
+  AppShell,
+  MantineProvider,
+  ColorSchemeProvider,
+  ScrollArea,
+} from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import { MapProvider } from "react-map-gl";
@@ -180,6 +185,14 @@ export default function App(props) {
           <MapProvider>
             <AppShell
               padding="none"
+              component={ScrollArea}
+              type="hover"
+              h={"100vh"}
+              sx={{
+                ".mantine-ScrollArea-scrollbar": {
+                  maxWidth: 8,
+                },
+              }}
               header={
                 <MainMenu
                   active={active}

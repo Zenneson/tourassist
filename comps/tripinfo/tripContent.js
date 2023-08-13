@@ -19,6 +19,7 @@ import {
   Text,
   Group,
   Overlay,
+  ScrollArea,
   LoadingOverlay,
   Slider as MantineSlider,
 } from "@mantine/core";
@@ -49,7 +50,6 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
   const {
-    donating,
     images,
     setImages,
     setAltModal,
@@ -122,7 +122,6 @@ export default function TripContent(props) {
   let content;
   if (router.pathname === "/tripplanner") {
     content = tripDesc !== "" ? tripDesc.toString() : "";
-    // content= donating ? "" : addUpdateDesc ? updateDetails : "",
   } else if (
     router.pathname !== "/tripplanner" &&
     tripData &&
@@ -140,11 +139,7 @@ export default function TripContent(props) {
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({
         placeholder:
-          router.pathname === "/tripplanner"
-            ? "Add a detailed description to your trip here, to inspire support..."
-            : donating
-            ? "Add a comment here..."
-            : "Update us here...",
+          "Add a detailed description to your trip here, to inspire support...",
       }),
     ],
     parseOptions: {
@@ -273,7 +268,7 @@ export default function TripContent(props) {
 
   return (
     <>
-      {!donating && (
+      {modalMode === "editTrip" && (
         <Group spacing={20} w="100%" grow>
           {images.length > 0 && (
             <Box
@@ -404,106 +399,90 @@ export default function TripContent(props) {
         </Group>
       )}
       {/* Text Editor */}
-      <RichTextEditor
-        editor={editor}
-        position="relative"
-        bg={dark ? "dark.6" : "gray.2"}
-        onBlur={() => {
-          if (router.pathname === "/tripplanner") setTripDesc(editor.getHTML());
-        }}
+      <ScrollArea
+        h={300}
+        scrollbarSize={8}
+        scrollHideDelay={250}
         sx={{
-          ":root": {
-            borderRadius: "3px",
-          },
+          overflow: "hidden",
           borderRadius: "3px",
-          transition: "border-top 0.2s ease",
-          border: "none",
-          width: "100%",
-          minWidth: "500px",
-          overflow: "auto",
-          ".mantine-RichTextEditor-toolbar": {
-            background: dark
-              ? "rgba(0, 0, 0, 0.3)"
-              : "rgba(255, 255, 255, 0.3)",
-            borderColor: "rgba(255,255,255,0)",
-          },
-          ".mantine-RichTextEditor-content": {
-            background: "rgba(0, 0, 0, 0)",
-            color: dark ? "dark.9" : "gray.0",
-            minHeight: donating ? "100px" : "200px",
-            maxHeight: donating ? "100px" : "300px",
-            "& .ProseMirror": {
-              maxHeight: donating ? "100px" : "200px",
-              paddingLeft: "21px",
-              paddingRight: "21px",
-              "&::-webkit-scrollbar": {
-                width: "5px",
-                height: "8px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: dark
-                  ? "rgba(255, 255, 255, 0.386)"
-                  : "rgba(0, 0, 0, 0.245)",
-                borderRadius: "8px",
-              },
-              "&::-webkit-scrollbar-thumb:hover": {
-                background: dark ? "dark.3" : "gray.3",
-              },
-              "&::-webkit-scrollbar-track": {
-                background: dark
-                  ? "rgba(0, 0, 0, 0.6)"
-                  : "rgba(255, 255, 255, 0.6)",
-                borderRadius: "0 3px 3px 0",
-              },
-            },
-          },
         }}
       >
-        {editor && (
-          <>
-            <RichTextEditor.Toolbar sticky>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Bold />
-                <RichTextEditor.H1 />
-                <RichTextEditor.H2 />
-                <RichTextEditor.H3 />
-                <RichTextEditor.H4 />
-                <RichTextEditor.BulletList />
-                <RichTextEditor.OrderedList />
-              </RichTextEditor.ControlsGroup>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Italic />
-                <RichTextEditor.AlignLeft />
-                <RichTextEditor.AlignCenter />
-                <RichTextEditor.AlignRight />
-                <RichTextEditor.AlignJustify />
-                <RichTextEditor.Link />
-                <RichTextEditor.Unlink />
-              </RichTextEditor.ControlsGroup>
-            </RichTextEditor.Toolbar>
-          </>
-        )}
-        <RichTextEditor.Content
+        <RichTextEditor
+          editor={editor}
+          position="relative"
+          bg={dark ? "dark.6" : "gray.2"}
+          onBlur={() => {
+            if (router.pathname === "/tripplanner")
+              setTripDesc(editor.getHTML());
+          }}
           sx={{
-            "& p": {
-              fontSize: ".9rem",
+            transition: "border-top 0.2s ease",
+            border: "none",
+            width: "100%",
+            minWidth: "500px",
+            ".mantine-RichTextEditor-toolbar": {
+              background: dark
+                ? "rgba(0, 0, 0, 0.7)"
+                : "rgba(255, 255, 255, 0.7)",
+              borderColor: "rgba(255,255,255,0)",
+            },
+            ".mantine-RichTextEditor-content": {
+              background: "rgba(0, 0, 0, 0)",
+              color: dark ? "dark.9" : "gray.0",
+              minHeight: "200px",
+              "& .ProseMirror": {
+                paddingLeft: "21px",
+                paddingRight: "21px",
+              },
             },
           }}
-        />
-      </RichTextEditor>
-      {modalMode !== "editTrip" ||
-        (router.pathname === "/tripplanner" && (
-          <Group position="right" mt={5} w={"100%"}>
-            <Button
-              variant="default"
-              size="md"
-              w={"40%"}
-              onClick={modalMode === "editTrip" ? updateEditedTrip : null}
-            >
-              SUBMIT EDIT
-            </Button>
-          </Group>
-        ))}
+        >
+          {editor && (
+            <>
+              <RichTextEditor.Toolbar sticky>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Bold />
+                  <RichTextEditor.H1 />
+                  <RichTextEditor.H2 />
+                  <RichTextEditor.H3 />
+                  <RichTextEditor.H4 />
+                  <RichTextEditor.BulletList />
+                  <RichTextEditor.OrderedList />
+                </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Italic />
+                  <RichTextEditor.AlignLeft />
+                  <RichTextEditor.AlignCenter />
+                  <RichTextEditor.AlignRight />
+                  <RichTextEditor.AlignJustify />
+                  <RichTextEditor.Link />
+                  <RichTextEditor.Unlink />
+                </RichTextEditor.ControlsGroup>
+              </RichTextEditor.Toolbar>
+            </>
+          )}
+          <RichTextEditor.Content
+            sx={{
+              "& p": {
+                fontSize: ".9rem",
+              },
+            }}
+          />
+        </RichTextEditor>
+      </ScrollArea>
+      {router.pathname !== "/tripplanner" && (
+        <Group position="right" mt={5} w={"100%"}>
+          <Button
+            variant="default"
+            size="md"
+            w={"25%"}
+            onClick={modalMode === "editTrip" ? updateEditedTrip : null}
+          >
+            SUBMIT EDIT
+          </Button>
+        </Group>
+      )}
       {showCropper && imageUpload && (
         <>
           <Box

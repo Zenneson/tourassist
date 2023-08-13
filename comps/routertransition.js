@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useMantineTheme } from "@mantine/core";
 import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
@@ -16,21 +16,22 @@ export function RouterTransition(props) {
   const router = useRouter();
   const { title } = router.query;
 
-  console.log(router);
-
-  useWindowEvent("beforeunload", () => {
+  const readyAppStates = useCallback(() => {
+    setPanelShow(false);
+    setMainMenuOpened(false);
+    setDropDownOpened(false);
     setLoaded(false);
     if (title !== undefined) sessionStorage.clear();
+  }, [setPanelShow, setMainMenuOpened, setDropDownOpened, setLoaded, title]);
+
+  useWindowEvent("beforeunload", () => {
+    readyAppStates();
   });
 
   useEffect(() => {
     const handleStart = (url) => {
       url !== router.asPath && nprogress.start();
-      setPanelShow(false);
-      setMainMenuOpened(false);
-      setDropDownOpened(false);
-      setLoaded(false);
-      if (title !== undefined) sessionStorage.clear();
+      readyAppStates();
     };
 
     const handleComplete = () => {
@@ -54,6 +55,7 @@ export function RouterTransition(props) {
     setMainMenuOpened,
     setDropDownOpened,
     title,
+    readyAppStates,
   ]);
 
   return (

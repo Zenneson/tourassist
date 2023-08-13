@@ -22,40 +22,19 @@ import {
   IconShare,
   IconPencil,
 } from "@tabler/icons-react";
-import UpdateCarousel from "./updatecarousel";
 import UpdateContent from "./updatecontent";
 
 export default function Update(props) {
-  const { setEditContentModal, setEditUpdate, setAddUpdateDesc, setDonating } =
-    props;
+  const { setAltModal, setModalMode, tripData, user } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [showall, toggle] = useToggle(["hide", "show"]);
-
-  const imagesone = [
-    "img/women.jpg",
-    "img/intro/coast.jpg",
-    "img/intro/bluehair.jpg",
-  ];
-
-  const imagestwo = [
-    "img/intro/street.jpg",
-    "img/intro/concert.jpg",
-    "img/intro/planewindow.jpg",
-  ];
-
-  const imagesthree = [
-    "img/intro/happyguy.jpg",
-    "img/intro/boat.jpg",
-    "img/intro/plane.jpg",
-  ];
 
   const updateData = [
     {
       month: "May",
       day: "5",
       year: "2023",
-      updateImages: ["img/intro/bluehair.jpg"],
       title: "Heres an update on the Trip",
       content:
         "Hello from Bali! Day 5 has been packed with incredible experiences. We started our day with a sunrise yoga session, feeling the warmth of the sun as we stretched and centered ourselves. Next, we participated in an engaging Indonesian cooking class, learning to create delicious local dishes from scratch. Our day continued with a visit to the breathtaking Tegalalang Rice Terraces, where we marveled at the lush green landscape and intricate irrigation system. To top it all off, we embarked on an exhilarating whitewater rafting adventure down the Ayung River, feeling the adrenaline rush through our veins. Throughout our time here, new friendships have been formed, and unforgettable memories are being made in this beautiful paradise.",
@@ -108,7 +87,6 @@ export default function Update(props) {
       month: "June",
       day: "20",
       year: "2023",
-      updateImages: imagestwo,
       title: "Huge Update about the Trip",
       content:
         "Greetings from Ubud! Day 6 has been another day filled with wonder and excitement. We began by visiting the enchanting Sacred Monkey Forest Sanctuary, where we had the opportunity to interact with friendly, curious macaques in their natural habitat. Witnessing these playful creatures up close was a truly remarkable experience. Following our time at the sanctuary, we indulged in a rejuvenating Balinese massage at a serene spa, allowing us to fully relax and unwind. The soothing atmosphere and skilled therapists left us feeling refreshed and recharged, ready for more adventures in this magical island.",
@@ -117,7 +95,6 @@ export default function Update(props) {
       month: "July",
       day: "4",
       year: "2023",
-      updateImages: imagesthree,
       title: "Update number 3 of the trip",
       content:
         "Hello from Uluwatu! Day 7 has been nothing short of spectacular. Our journey took us to the awe-inspiring Uluwatu Temple, perched atop dramatic cliffs with breathtaking views of the Indian Ocean. The temple's unique location and stunning architecture left us all in awe. As the sun began to set, we were treated to a captivating Kecak fire dance performance, an unforgettable display of culture and tradition. The rhythmic chanting and mesmerizing movements had us all enthralled. To conclude our day, we enjoyed a sumptuous beachside seafood feast, savoring the delectable flavors of the island's fresh catch. This unforgettable day has truly been the cherry on top of our extraordinary journey.",
@@ -125,10 +102,8 @@ export default function Update(props) {
   ];
 
   const updateTrip = () => {
-    setEditUpdate(true);
-    setAddUpdateDesc(true);
-    setDonating(false);
-    setEditContentModal(true);
+    setModalMode("editUpdate");
+    setAltModal(true);
   };
 
   const updates = updateData.map((update, index) => (
@@ -138,16 +113,18 @@ export default function Update(props) {
       pos={"relative"}
       radius={3}
       w={"85%"}
-      mt={20}
+      mb={index === updateData.length - 1 ? 0 : 20}
       py={20}
       px={30}
       fz={14}
       gap={10}
     >
       {/* Show Update Modal Button  */}
-      <ActionIcon pos={"absolute"} top={17} right={10} onClick={updateTrip}>
-        <IconPencil />
-      </ActionIcon>
+      {user?.email === tripData.user && (
+        <ActionIcon pos={"absolute"} top={17} right={10} onClick={updateTrip}>
+          <IconPencil />
+        </ActionIcon>
+      )}
       <Flex direction={"column"} w={"15%"}>
         <Stack
           spacing={0}
@@ -212,11 +189,6 @@ export default function Update(props) {
       </Flex>
 
       <Flex direction={"column"} w={"85%"}>
-        <Center>
-          {update.updateImages && (
-            <UpdateCarousel images={update.updateImages} />
-          )}
-        </Center>
         <Box
           mx={"5%"}
           py={5}

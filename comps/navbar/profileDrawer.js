@@ -19,6 +19,7 @@ import {
   Divider,
   Center,
   Badge,
+  ScrollArea,
 } from "@mantine/core";
 import {
   IconUser,
@@ -172,181 +173,185 @@ export default function ProfileDrawer(props) {
 
   return (
     <>
-      <Drawer
-        zIndex={500}
-        pos={"relative"}
-        padding={0}
-        opened={mainMenuOpened}
-        onClose={openMenu}
-        size={305}
-        lockScroll={false}
-        withOverlay={false}
-        withCloseButton={false}
-        styles={(theme) => ({
-          content: {
-            overflow: "hidden",
-            background: dark
-              ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-              : theme.fn.rgba(theme.colors.gray[0], 0.95),
-          },
-        })}
-      >
-        {/* Close Main Menu Button */}
-        <Button onClick={openMenu} className={classes.closeButton}>
-          <IconX size={15} />
-        </Button>
-        <Space h={95} />
-        <Divider mt={0} mb={20} w={"253px"} ml={"15px"} opacity={0.4} />
-        {user && (
-          <>
-            <Center>
-              <Badge
-                variant="dot"
-                sx={{
-                  cursor: "pointer",
+      <ScrollArea>
+        <Drawer
+          zIndex={500}
+          pos={"relative"}
+          padding={0}
+          opened={mainMenuOpened}
+          onClose={openMenu}
+          size={305}
+          trapFocus={false}
+          lockScroll={false}
+          withOverlay={false}
+          withCloseButton={false}
+          styles={(theme) => ({
+            content: {
+              minHeight: 570,
+              overflow: "hidden",
+              background: dark
+                ? theme.fn.rgba(theme.colors.dark[7], 0.95)
+                : theme.fn.rgba(theme.colors.gray[0], 0.95),
+            },
+          })}
+        >
+          {/* Close Main Menu Button */}
+          <Button onClick={openMenu} className={classes.closeButton}>
+            <IconX size={15} />
+          </Button>
+          <Space h={95} />
+          <Divider mt={0} mb={20} w={"253px"} ml={"15px"} opacity={0.4} />
+          {user && (
+            <>
+              <Center>
+                <Badge
+                  variant="dot"
+                  sx={{
+                    cursor: "pointer",
+                  }}
+                >
+                  {addEllipsis(user.email, 40)}
+                </Badge>
+              </Center>
+              <Divider w={"90%"} mt={20} ml={"5%"} opacity={0.2} />
+            </>
+          )}
+          <Group spacing={8} mt={10}>
+            {router.pathname !== "/map" && (
+              // Map Main Menu Button
+              <NavLink
+                label={
+                  <Text
+                    fw={700}
+                    fz={12}
+                    sx={{
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Map
+                  </Text>
+                }
+                description="View the Map"
+                px={25}
+                py={8}
+                icon={<IconWorld size={30} />}
+                variant="subtle"
+                onClick={() => {
+                  setMainMenuOpened(false);
+                  router.push("/map");
+                }}
+                classNames={{
+                  description: classes.description,
+                  icon: classes.icon,
+                  root: classes.root,
+                }}
+              />
+            )}
+
+            {user && items}
+            {router.pathname !== "/help" && (
+              // Help Main Menu Button
+              <NavLink
+                label={
+                  <Text
+                    fw={700}
+                    fz={12}
+                    fs={"italic"}
+                    sx={{
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    How?
+                  </Text>
+                }
+                description="About TourAssit | FAQs"
+                px={25}
+                py={8}
+                icon={<IconInfoCircle size={30} />}
+                variant="subtle"
+                onClick={() => {
+                  router.push("/help");
+                }}
+                classNames={{
+                  description: classes.description,
+                  icon: classes.icon,
+                  root: classes.root,
+                }}
+              />
+            )}
+          </Group>
+          {/* Legal Documents Main Menu Button */}
+          <Button
+            variant="subtle"
+            pos={"absolute"}
+            bottom={user ? 100 : 30}
+            w={"100%"}
+            fz={10}
+            color="gray.7"
+            leftIcon={<IconGavel size={18} />}
+            hidden={router.pathname === "/legal"}
+            onClick={() => {
+              router.push("/legal");
+            }}
+            sx={{
+              "&:hover": {
+                color: dark ? "gray.0" : "dark.9",
+                backgroundColor: "rgba(0, 0, 0, 0)",
+              },
+            }}
+          >
+            Legal Documents
+          </Button>
+          {user && (
+            <Box
+              pt={10}
+              mb={30}
+              sx={(theme) => ({
+                borderTop: `1px solid ${
+                  dark
+                    ? theme.fn.rgba(theme.colors.gray[0], 0.1)
+                    : theme.fn.rgba(theme.colors.dark[9], 0.1)
+                }`,
+                position: "absolute",
+                left: "15%",
+                bottom: 0,
+                width: "70%",
+              })}
+            >
+              {/* SignOut Button */}
+              <Button
+                variant="subtle"
+                w="60%"
+                ml="20%"
+                mt={10}
+                leftIcon={<IconLogout size={18} />}
+                sx={(theme) => ({
+                  color: dark
+                    ? theme.fn.rgba(theme.colors.gray[0], 0.1)
+                    : theme.fn.rgba(theme.colors.dark[9], 0.1),
+                  backgroundColor: dark
+                    ? theme.fn.rgba(theme.colors.gray[0], 0.012)
+                    : theme.fn.rgba(theme.colors.dark[9], 0.05),
+                  transition: "all 200ms ease",
+                  "&:hover": {
+                    color: dark ? theme.colors.gray[0] : theme.colors.dark[9],
+                    backgroundColor: dark
+                      ? theme.fn.rgba(theme.colors.dark[9], 0.2)
+                      : theme.fn.rgba(theme.colors.gray[0], 0.2),
+                  },
+                })}
+                onClick={() => {
+                  setUser(null);
+                  setLeaving(true);
+                  signOutFunc();
                 }}
               >
-                {addEllipsis(user.email, 40)}
-              </Badge>
-            </Center>
-            <Divider w={"90%"} mt={20} ml={"5%"} opacity={0.2} />
-          </>
-        )}
-        <Group spacing={8} mt={10}>
-          {router.pathname !== "/map" && (
-            // Map Main Menu Button
-            <NavLink
-              label={
-                <Text
-                  fw={700}
-                  fz={12}
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Map
-                </Text>
-              }
-              description="View the Map"
-              px={25}
-              py={8}
-              icon={<IconWorld size={30} />}
-              variant="subtle"
-              onClick={() => {
-                setMainMenuOpened(false);
-                router.push("/map");
-              }}
-              classNames={{
-                description: classes.description,
-                icon: classes.icon,
-                root: classes.root,
-              }}
-            />
+                Logout
+              </Button>
+            </Box>
           )}
-
-          {user && items}
-          {router.pathname !== "/help" && (
-            // Help Main Menu Button
-            <NavLink
-              label={
-                <Text
-                  fw={700}
-                  fz={12}
-                  fs={"italic"}
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                >
-                  How?
-                </Text>
-              }
-              description="About TourAssit | FAQs"
-              px={25}
-              py={8}
-              icon={<IconInfoCircle size={30} />}
-              variant="subtle"
-              onClick={() => {
-                router.push("/help");
-              }}
-              classNames={{
-                description: classes.description,
-                icon: classes.icon,
-                root: classes.root,
-              }}
-            />
-          )}
-        </Group>
-        {/* Legal Documents Main Menu Button */}
-        <Button
-          variant="subtle"
-          pos={"absolute"}
-          bottom={user ? 100 : 30}
-          w={"100%"}
-          fz={10}
-          color="gray.7"
-          leftIcon={<IconGavel size={18} />}
-          hidden={router.pathname === "/legal"}
-          onClick={() => {
-            router.push("/legal");
-          }}
-          sx={{
-            "&:hover": {
-              color: dark ? "gray.0" : "dark.9",
-              backgroundColor: "rgba(0, 0, 0, 0)",
-            },
-          }}
-        >
-          Legal Documents
-        </Button>
-        {user && (
-          <Box
-            pt={10}
-            mb={30}
-            sx={(theme) => ({
-              borderTop: `1px solid ${
-                dark
-                  ? theme.fn.rgba(theme.colors.gray[0], 0.1)
-                  : theme.fn.rgba(theme.colors.dark[9], 0.1)
-              }`,
-              position: "absolute",
-              left: "15%",
-              bottom: 0,
-              width: "70%",
-            })}
-          >
-            {/* SignOut Button */}
-            <Button
-              variant="subtle"
-              w="60%"
-              ml="20%"
-              mt={10}
-              leftIcon={<IconLogout size={18} />}
-              sx={(theme) => ({
-                color: dark
-                  ? theme.fn.rgba(theme.colors.gray[0], 0.1)
-                  : theme.fn.rgba(theme.colors.dark[9], 0.1),
-                backgroundColor: dark
-                  ? theme.fn.rgba(theme.colors.gray[0], 0.012)
-                  : theme.fn.rgba(theme.colors.dark[9], 0.05),
-                transition: "all 200ms ease",
-                "&:hover": {
-                  color: dark ? theme.colors.gray[0] : theme.colors.dark[9],
-                  backgroundColor: dark
-                    ? theme.fn.rgba(theme.colors.dark[9], 0.2)
-                    : theme.fn.rgba(theme.colors.gray[0], 0.2),
-                },
-              })}
-              onClick={() => {
-                setUser(null);
-                setLeaving(true);
-                signOutFunc();
-              }}
-            >
-              Logout
-            </Button>
-          </Box>
-        )}
-      </Drawer>
+        </Drawer>
+      </ScrollArea>
       <Drawer
         zIndex={499}
         opened={panelShow}
@@ -354,6 +359,7 @@ export default function ProfileDrawer(props) {
         size={900}
         onClose={closePanel}
         withCloseButton={false}
+        scrollAreaComponent={ScrollArea.Autosize}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
         overlayProps={{
           blur: 9,

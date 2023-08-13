@@ -127,7 +127,6 @@ export default function MainMenu(props) {
         signOutFunc={signOutFunc}
       />
       <Header
-        className={RemoveScroll.classNames.zeroRight}
         zIndex={998}
         bg="none"
         pb={0}

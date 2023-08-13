@@ -24,6 +24,7 @@ import {
   TextInput,
   Select,
   Textarea,
+  ScrollArea,
 } from "@mantine/core";
 import {
   IconBrandFacebook,
@@ -43,6 +44,7 @@ import {
   IconAt,
   IconUser,
   IconCalendarEvent,
+  IconSlash,
 } from "@tabler/icons-react";
 import { DateInput } from "@mantine/dates";
 import Donations from "../comps/tripinfo/donations";
@@ -57,10 +59,6 @@ export default function Trippage(props) {
   const dark = colorScheme === "dark";
   const [modalMode, setModalMode] = useState("");
   const [altModal, setAltModal] = useState(false);
-  const [editContentModal, setEditContentModal] = useState(false);
-  const [editUpdate, setEditUpdate] = useState("");
-  const [addUpdateDesc, setAddUpdateDesc] = useState(false);
-  const [donating, setDonating] = useState(false);
   const [paid, setPaid] = useState(false);
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
@@ -87,6 +85,8 @@ export default function Trippage(props) {
     key: "donations",
     defaultValue: [],
   });
+
+  const [donationsSum, setDonationsSum] = useState(0);
 
   const [tripData, setTripData] = useSessionStorage({
     key: "tripData",
@@ -140,38 +140,34 @@ export default function Trippage(props) {
   const today = new Date();
   const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-  const showEditContentModal = () => {
-    setAltModal(true);
+  const showEditTripModal = () => {
     setImages(tripData.images);
     setModalMode("editTrip");
-    setDonating(false);
   };
 
   const showUpdateModal = () => {
-    setEditContentModal(true);
-    setDonating(false);
+    setAltModal(true);
+    setModalMode("postUpdate");
   };
 
   const showDonateModal = () => {
-    setDonating(true);
-    setEditContentModal(true);
-  };
-
-  const closeEditContentModal = () => {
-    setEditContentModal(false);
-    setEditUpdate("");
-    setPaid(false);
+    setModalMode("donating");
+    setAltModal(true);
   };
 
   const closeAltModal = () => {
     setAltModal(false);
-    setAddUpdateDesc(false);
+    setPaid(false);
+  };
+
+  const closeEditTripModal = () => {
+    setModalMode("");
   };
 
   const DateChanger = () => {
     const [travelDate, setTravelDate] = useSessionStorage({
       key: "travelDate",
-      defaultValue: weekAhead,
+      defaultValue: null,
     });
 
     return (
@@ -186,7 +182,10 @@ export default function Trippage(props) {
         w={"100%"}
         maw={170}
         onChange={(e) => setTravelDate(new Date(e))}
-        value={new Date(travelDate) || new Date(tripData.travelDate)}
+        value={
+          travelDate ? new Date(travelDate) : new Date(tripData.travelDate)
+        }
+        valueFormat="MMMM DD, YYYY"
         sx={{
           "& .mantine-DateInput-input": {
             cursor: "pointer",
@@ -203,16 +202,25 @@ export default function Trippage(props) {
     });
 
     return (
-      <>
+      <Box>
         <Modal
+          centered
           withCloseButton={false}
           size={850}
           padding={"xl"}
-          opened={altModal}
-          centered
-          onClose={closeAltModal}
+          opened={modalMode === "editTrip"}
+          scrollAreaComponent={ScrollArea.Autosize}
+          onClose={closeEditTripModal}
+          lockScroll={false}
           overlayProps={{
             blur: 9,
+          }}
+          sx={{
+            "& .mantine-ScrollArea-root": {
+              "& .mantine-ScrollArea-scrollbar": {
+                width: 8,
+              },
+            },
           }}
           styles={(theme) => ({
             header: {
@@ -232,47 +240,46 @@ export default function Trippage(props) {
           })}
         >
           {/* Close Alt Modal */}
-          <CloseButton
-            pos={"absolute"}
-            top={21}
-            right={21}
-            size={25}
-            onClick={closeAltModal}
-          />
-          <Stack align="center">
-            <Title order={4} w={"100%"} ta={"left"} fs={"italic"}>
-              EDIT TRIP DETAILS:
-            </Title>
-            <Group
-              w={"100%"}
-              pl={15}
-              pt={5}
-              pb={10}
-              ml={-3}
-              position="apart"
-              sx={{
-                borderLeft: `3px solid ${
-                  dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"
-                }`,
-              }}
-            >
-              <Text fw={400} mb={7} w={"70%"} fs={"italic"} lineClamp={1}>
-                {tripData.tripTitle}
-              </Text>
-              <DateChanger />
-            </Group>
-            <TripContent
-              user={user}
-              addUpdateDesc={addUpdateDesc}
-              donating={donating}
-              images={images}
-              setImages={setImages}
-              setAltModal={setAltModal}
-              modalMode={modalMode}
-              setModalMode={setModalMode}
-              weekAhead={weekAhead}
+          <Box maw={800}>
+            <CloseButton
+              pos={"absolute"}
+              top={21}
+              right={21}
+              size={25}
+              onClick={closeEditTripModal}
             />
-          </Stack>
+            <Stack align="center">
+              <Title order={6} w={"100%"} ta={"left"} fs={"italic"}>
+                EDIT TRIP DETAILS:
+              </Title>
+              <Group
+                w={"100%"}
+                pl={15}
+                pt={5}
+                pb={10}
+                ml={-3}
+                position="apart"
+                sx={{
+                  borderLeft: `3px solid ${
+                    dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"
+                  }`,
+                }}
+              >
+                <Text fw={700} fz={30} w={"70%"} fs={"italic"} lineClamp={1}>
+                  {tripData.tripTitle}
+                </Text>
+                <DateChanger />
+              </Group>
+              <TripContent
+                user={user}
+                images={images}
+                setImages={setImages}
+                modalMode={modalMode}
+                setModalMode={setModalMode}
+                weekAhead={weekAhead}
+              />
+            </Stack>
+          </Box>
         </Modal>
         <Modal
           pos={"relative"}
@@ -280,8 +287,8 @@ export default function Trippage(props) {
           size={850}
           padding={"xl"}
           centered
-          opened={editContentModal}
-          onClose={closeEditContentModal}
+          opened={altModal}
+          onClose={closeAltModal}
           styles={(theme) => ({
             header: {
               backgroundColor: "transparent",
@@ -305,9 +312,9 @@ export default function Trippage(props) {
             top={21}
             right={21}
             size={25}
-            onClick={closeEditContentModal}
+            onClick={closeAltModal}
           />
-          {donating && (
+          {modalMode === "donating" && (
             <Box h={345} w={802}>
               <Title mb={5} color={dark ? "#00E8FC" : "#fa7500"}>
                 <Flex align={"center"} gap={5}>
@@ -502,7 +509,7 @@ export default function Trippage(props) {
                       size="md"
                       mt={10}
                       w={"40%"}
-                      onClick={closeEditContentModal}
+                      onClick={closeAltModal}
                     >
                       POST MESSAGE
                     </Button>
@@ -511,14 +518,22 @@ export default function Trippage(props) {
               )}
             </Box>
           )}
-          <Title order={4} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
-            {editUpdate ? "EDIT UPDATE:" : !donating ? "POST UPDATE:" : ""}
+          <Title order={6} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
+            {modalMode === "editUpdate"
+              ? "EDIT UPDATE:"
+              : modalMode === "postUpdate"
+              ? "POST UPDATE:"
+              : ""}
           </Title>
           <Stack align="center">
-            {!donating && (
+            {modalMode !== "donating" && (
               <Input
                 size={"xl"}
-                value={editUpdate && "Update number 3 of the trip"}
+                value={
+                  modalMode === "editUpdate"
+                    ? "Update number 3 of the trip"
+                    : ""
+                }
                 w="100%"
                 placeholder="Update Title..."
                 maw={800}
@@ -544,30 +559,12 @@ export default function Trippage(props) {
                 }}
               />
             )}
-            {!donating && (
-              <>
-                <TripContent
-                  addUpdateDesc={addUpdateDesc}
-                  donating={donating}
-                  images={images}
-                  setImages={setImages}
-                  weekAhead={weekAhead}
-                />
-                <Group position="right" mt={5} w={"100%"}>
-                  <Button
-                    variant="filled"
-                    size="md"
-                    w={"40%"}
-                    onClick={closeEditContentModal}
-                  >
-                    {editUpdate ? "EDIT" : "POST"} UPDATE
-                  </Button>
-                </Group>
-              </>
-            )}
+            {/* {modalMode !== "donating" && (
+
+            )} */}
           </Stack>
         </Modal>
-      </>
+      </Box>
     );
   };
 
@@ -596,14 +593,14 @@ export default function Trippage(props) {
               w={"80%"}
               color="dark.4"
               size={"md"}
-              mt={tripData.images?.length > 0 ? 50 : 0}
+              my={tripData.images?.length > 0 ? 15 : 0}
               label={
                 <Title order={3} px={5} maw={"800px"} color="gray.6" fw={700}>
                   {tripData.tripTitle}
                 </Title>
               }
             />
-            <Center mt={20}>
+            <Center>
               <Button.Group
                 sx={{
                   borderRadius: 50,
@@ -734,7 +731,7 @@ export default function Trippage(props) {
                           }}
                         />
                       }
-                      onClick={showEditContentModal}
+                      onClick={showEditTripModal}
                     >
                       Edit Trip Details
                     </Button>
@@ -743,23 +740,15 @@ export default function Trippage(props) {
               )}
               <TripDescription />
             </Box>
-            {updates.length > 0 && (
-              <Update
-                setEditContentModal={setEditContentModal}
-                setEditUpdate={setEditUpdate}
-                setAddUpdateDesc={setAddUpdateDesc}
-                setDonating={setDonating}
-                images={images}
-                setImages={setImages}
-              />
-            )}
-            <Box
-              className="pagePanel"
-              w={"85%"}
-              mt={25}
-              mb={50}
-              p={"20px 30px"}
-            >
+            {/* {updates.length > 0 && ( */}
+            <Update
+              setAltModal={setAltModal}
+              setModalMode={setModalMode}
+              tripData={tripData}
+              user={user}
+            />
+            {/* )} */}
+            <Box className="pagePanel" w={"85%"} mb={50} p={"20px 30px"}>
               <Divider
                 size={"xl"}
                 w={"100%"}
@@ -822,25 +811,50 @@ export default function Trippage(props) {
               px={20}
               mb={20}
             >
-              <Group spacing={0} w={"100%"}>
-                <Box w={"70%"} pl={20}>
-                  <Text ta={"left"} fz={10} mb={-3}>
-                    GOAL
-                  </Text>
-                  <Title order={2} ta={"left"} color="green.7">
-                    $0
-                    <Text ml={7} span inherit color="gray.7">
-                      <Text fw={400} span inherit>
-                        /
-                      </Text>{" "}
+              <Group spacing={0} w={"100%"} position="apart">
+                <Box w={"70%"} mb={-5}>
+                  <Divider
+                    w={"90%"}
+                    size={"xs"}
+                    color={
+                      dark ? "rgba(255, 255, 255, 0.07)" : "rgba(0,0,0,0.07)"
+                    }
+                    label={
+                      <Text
+                        fz={10}
+                        mb={-5}
+                        sx={{
+                          color: dark
+                            ? "rgba(255, 255, 255, 1)"
+                            : "rgba(0,0,0,1)",
+                        }}
+                      >
+                        GOAL
+                      </Text>
+                    }
+                  />
+                  <Title order={1} ta={"left"} color="green.5">
+                    ${donationsSum}
+                    <Text span inherit fz={20} fw={400} color="gray.7">
+                      <IconSlash
+                        size={25}
+                        stroke={3}
+                        style={{
+                          transform: "rotate(-10deg)",
+                          position: "relative",
+                          top: 5,
+                        }}
+                      />
                       ${formatNumber(tripData.costsSum)}
                     </Text>
                   </Title>
                 </Box>
                 <Box
                   w={"30%"}
+                  pt={5}
+                  bg={dark ? "dark.6" : "gray.3"}
                   sx={{
-                    borderLeft: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "3px",
                   }}
                 >
                   <Text ta={"center"} fz={10} mb={-7}>
@@ -855,9 +869,9 @@ export default function Trippage(props) {
                 value={50}
                 color="green.7"
                 bg={"gray.6"}
-                size={"xl"}
+                size={"sm"}
                 radius={"xl"}
-                mt={5}
+                mt={10}
                 mb={12}
               />
               {user && user.email === tripData.user && (
