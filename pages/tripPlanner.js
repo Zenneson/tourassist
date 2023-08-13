@@ -746,13 +746,18 @@ export default function TripPlannerPage(props) {
         user: user.email,
       });
       notifications.update(tripMade);
-      router.push("/" + campaignId);
+      sessionStorage.removeItem("placeDataState");
+      sessionStorage.removeItem("places");
+      sessionStorage.removeItem("images");
+      sessionStorage.removeItem("tripDesc");
+      sessionStorage.removeItem("totalCost");
+      sessionStorage.removeItem("renderState");
     } catch (error) {
       console.error("Failed to save to database:", error);
     }
   };
 
-  const changeNextStep = () => {
+  const changeNextStep = async () => {
     if (active === 1) {
       setCostsObj(sessionStorage.getItem("places"));
     }
@@ -786,7 +791,8 @@ export default function TripPlannerPage(props) {
       () => {
         setTripId(generateTripId());
       };
-      saveToDB(user, generateTripId());
+      await saveToDB(user, generateTripId());
+      router.push("/" + tripId);
     }
   };
 

@@ -14,11 +14,13 @@ export function RouterTransition(props) {
     props;
   const theme = useMantineTheme();
   const router = useRouter();
+  const { title } = router.query;
+
+  console.log(router);
 
   useWindowEvent("beforeunload", () => {
     setLoaded(false);
-    if (router.pathname !== "/tripplanner" || router.pathname !== "/map")
-      sessionStorage.clear();
+    if (title !== undefined) sessionStorage.clear();
   });
 
   useEffect(() => {
@@ -28,8 +30,7 @@ export function RouterTransition(props) {
       setMainMenuOpened(false);
       setDropDownOpened(false);
       setLoaded(false);
-      if (router.pathname !== "/tripplanner" || router.pathname !== "/map")
-        sessionStorage.clear();
+      if (title !== undefined) sessionStorage.clear();
     };
 
     const handleComplete = () => {
@@ -52,7 +53,7 @@ export function RouterTransition(props) {
     setPanelShow,
     setMainMenuOpened,
     setDropDownOpened,
-    router.pathname,
+    title,
   ]);
 
   return (
