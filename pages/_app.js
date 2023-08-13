@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { AppShell, MantineProvider, ColorSchemeProvider } from "@mantine/core";
-import { Notifications } from "@mantine/notifications";
 import { useSessionStorage } from "@mantine/hooks";
+import { Notifications } from "@mantine/notifications";
 import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
 import { useUserData } from "../libs/custom";

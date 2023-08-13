@@ -17,6 +17,8 @@ export function RouterTransition(props) {
 
   useWindowEvent("beforeunload", () => {
     setLoaded(false);
+    if (router.pathname !== "/tripplanner" || router.pathname !== "/map")
+      sessionStorage.clear();
   });
 
   useEffect(() => {
@@ -26,6 +28,8 @@ export function RouterTransition(props) {
       setMainMenuOpened(false);
       setDropDownOpened(false);
       setLoaded(false);
+      if (router.pathname !== "/tripplanner" || router.pathname !== "/map")
+        sessionStorage.clear();
     };
 
     const handleComplete = () => {
@@ -48,6 +52,7 @@ export function RouterTransition(props) {
     setPanelShow,
     setMainMenuOpened,
     setDropDownOpened,
+    router.pathname,
   ]);
 
   return (

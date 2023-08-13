@@ -124,6 +124,10 @@ export const parseDate = (dateString) => {
 };
 
 export const dateId = (dateString) => {
+  return moment(dateString).format("MMDDYY");
+};
+
+export const dateFormat = (dateString) => {
   return moment(dateString).format("MMMM D, YYYY");
 };
 

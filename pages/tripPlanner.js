@@ -56,7 +56,7 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
-import { estTimeStamp, dateId } from "../libs/custom";
+import { estTimeStamp, dateId, dateFormat } from "../libs/custom";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/tripinfo/tripContent";
 
@@ -701,7 +701,7 @@ export default function TripPlannerPage(props) {
     let now = new Date();
     let date_time_string = dateId(now);
     let name = user.email.match(/^(.*?)@/);
-    let trip_id = `${trip_title}${date_time_string}${name[1]}`;
+    let trip_id = `${name[1]}_${trip_title}${date_time_string}`;
     return trip_id;
   };
 
@@ -737,7 +737,7 @@ export default function TripPlannerPage(props) {
         tripDesc: tripDesc,
         startLocale: startLocale,
         travelers: travelers,
-        travelDate: dateId(travel_date),
+        travelDate: dateFormat(travel_date),
         roundTrip: roundTrip,
         costsObj: costsObj,
         costsSum: sessionStorage.getItem("totalCost"),
@@ -746,12 +746,6 @@ export default function TripPlannerPage(props) {
         user: user.email,
       });
       notifications.update(tripMade);
-      sessionStorage.removeItem("placeData");
-      sessionStorage.removeItem("places");
-      sessionStorage.removeItem("images");
-      sessionStorage.removeItem("tripDesc");
-      sessionStorage.removeItem("totalCost");
-      sessionStorage.removeItem("renderState");
       router.push("/" + campaignId);
     } catch (error) {
       console.error("Failed to save to database:", error);
