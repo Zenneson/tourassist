@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
@@ -124,7 +124,7 @@ export default function TripPlannerPage(props) {
 
   const index = startLocale?.indexOf(",");
   const startCity = startLocale.substring(0, index);
-  const startRegion = startLocale?.substring(index + 1);
+  const [costsObj, setCostsObj] = useState([]);
 
   const today = new Date();
   const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -740,7 +740,7 @@ export default function TripPlannerPage(props) {
         travelDate: dateId(travel_date),
         roundTrip: roundTrip,
         costsObj: costsObj,
-        costsSum: costsSum,
+        costsSum: sessionStorage.getItem("totalCost"),
         destinations: destinations,
         tripId: campaignId,
         user: user.email,
@@ -756,6 +756,9 @@ export default function TripPlannerPage(props) {
   };
 
   const changeNextStep = () => {
+    if (active === 1) {
+      setCostsObj(sessionStorage.getItem("places"));
+    }
     if (active === 2) {
       if (tripTitle === "") {
         notifications.show(noTitle);
