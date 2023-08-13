@@ -113,8 +113,9 @@ export default function Trippage(props) {
     if (props.trip) {
       setTripData(props.trip);
       setTripImages(props.trip.images);
+      setTripDesc(props.trip.tripDesc);
     }
-  }, [images, props.trip, setTripData]);
+  }, [images, , props.trip, setTripData, setTripDesc]);
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>

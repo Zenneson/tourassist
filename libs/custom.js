@@ -124,9 +124,12 @@ export const parseDate = (dateString) => {
 };
 
 export const dateId = (dateString) => {
-  return moment(dateString).format("MMDDYY");
+  return moment(dateString).format("MMMM D, YYYY");
 };
 
 export const daysBefore = (dateString) => {
-  return moment(dateString, "ddd MMM D YYYY").diff(moment(), "days");
+  return moment(dateString, "MMMM D, YYYY")
+    .startOf("day")
+    .diff(moment().startOf("day"), "days")
+    .toString();
 };

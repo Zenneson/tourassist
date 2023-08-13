@@ -746,9 +746,12 @@ export default function TripPlannerPage(props) {
         user: user.email,
       });
       notifications.update(tripMade);
-      sessionStorage.removeItem("placeDataState");
+      sessionStorage.removeItem("placeData");
+      sessionStorage.removeItem("places");
       sessionStorage.removeItem("images");
       sessionStorage.removeItem("tripDesc");
+      sessionStorage.removeItem("totalCost");
+      sessionStorage.removeItem("renderState");
       router.push("/" + campaignId);
     } catch (error) {
       console.error("Failed to save to database:", error);
