@@ -23,7 +23,7 @@ import {
   LoadingOverlay,
   Slider as MantineSlider,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
+import { useSessionStorage, useClickOutside } from "@mantine/hooks";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useEditor } from "@tiptap/react";
@@ -42,14 +42,15 @@ import {
   IconCheck,
   IconFrame,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import AvatarEditor from "react-avatar-editor";
-import { parseDate } from "../../libs/custom";
+import { dateFormat, timeStamper } from "../../libs/custom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  const { images, setImages, modalMode, setModalMode, user, weekAhead } = props;
+  let { images, setImages, modalMode, setModalMode, user, weekAhead } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [loading, setLoading] = useState(true);
@@ -64,11 +65,15 @@ export default function TripContent(props) {
   });
   const [tripDesc, setTripDesc] = useSessionStorage({
     key: "tripDesc",
-    defaultValue: "",
+    defaultValue: tripData.tripDesc,
   });
   const [travelDate, setTravelDate] = useSessionStorage({
     key: "travelDate",
-    defaultValue: weekAhead,
+    defaultValue: tripData.travelDate,
+  });
+  const [updatedDesc, setUpdatedDesc] = useSessionStorage({
+    key: "updatedDesc",
+    defaultValue: "",
   });
 
   const storage = getStorage();
@@ -143,10 +148,12 @@ export default function TripContent(props) {
   useEffect(() => {
     if (editor) {
       editor.commands.setContent(
-        tripDesc.toString() || tripData.tripDesc?.toString()
+        updatedDesc.toString() ||
+          tripDesc.toString() ||
+          tripData.tripDesc?.toString()
       );
     }
-  }, [editor, tripDesc, tripData]);
+  }, [editor, tripDesc, tripData, updatedDesc]);
 
   const handleScroll = (event) => {
     let newScale = scale - event.deltaY * 0.005;
@@ -220,20 +227,25 @@ export default function TripContent(props) {
   const updateEditedTrip = async () => {
     try {
       const imageUploadPromises = images.map(async (imageDataUrl, index) => {
-        const storageRef = ref(
-          storage,
-          `images/${user.email}/${tripData.tripId}/trip_img_${index}.png`
-        );
-        const snapshot = await uploadString(
-          storageRef,
-          imageDataUrl,
-          "data_url",
-          {
-            contentType: "image/png",
-          }
-        );
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        return downloadURL;
+        if (imageDataUrl.includes("firebasestorage")) return imageDataUrl;
+        if (imageDataUrl.startsWith("data:")) {
+          const storageRef = ref(
+            storage,
+            `images/${user.email}/${
+              tripData.tripId
+            }/trip_img_${timeStamper()}.png`
+          );
+          const snapshot = await uploadString(
+            storageRef,
+            imageDataUrl,
+            "data_url",
+            {
+              contentType: "image/png",
+            }
+          );
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          return downloadURL;
+        }
       });
 
       const imageURLs = await Promise.all(imageUploadPromises);
@@ -247,15 +259,27 @@ export default function TripContent(props) {
       );
       updateDoc(tripRef, {
         images: imageURLs,
-        travelDate: parseDate(travelDate),
-        tripDesc: tripDesc,
+        travelDate: dateFormat(travelDate),
+        tripDesc: editor.getHTML(),
       });
+      setImages(imageURLs);
+      setTripDesc(updatedDesc || editor.getHTML());
       setModalMode("");
-      setTripDesc(editor.getHTML());
+      notifications.show({
+        title: "Trip Details Updated",
+        color: "green",
+        autoClose: 3000,
+        style: {
+          backgroundColor: dark ? "#2e2e2e" : "#fff",
+        },
+      });
+      router.reload();
     } catch (error) {
       console.error(error);
     }
   };
+
+  const saveUpdateRef = useClickOutside(() => setUpdatedDesc(editor.getHTML()));
 
   return (
     <>
@@ -402,6 +426,7 @@ export default function TripContent(props) {
         }}
       >
         <RichTextEditor
+          ref={saveUpdateRef}
           editor={editor}
           position="relative"
           bg={dark ? "dark.6" : "gray.2"}

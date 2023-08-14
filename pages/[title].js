@@ -98,6 +98,8 @@ export default function Trippage(props) {
 
   const [donationsSum, setDonationsSum] = useState(0);
 
+  const [pageState, setPageState] = useState(0);
+
   useEffect(() => {
     if (tripData && tripData.images && tripData.images.length === 0) {
       setLoaded(true);
@@ -167,7 +169,7 @@ export default function Trippage(props) {
   const DateChanger = () => {
     const [travelDate, setTravelDate] = useSessionStorage({
       key: "travelDate",
-      defaultValue: null,
+      defaultValue: tripData.travelDate,
     });
 
     return (
@@ -180,12 +182,12 @@ export default function Trippage(props) {
         size="sm"
         ta={"right"}
         w={"100%"}
-        maw={170}
+        maw={150}
         onChange={(e) => setTravelDate(new Date(e))}
         value={
           travelDate ? new Date(travelDate) : new Date(tripData.travelDate)
         }
-        valueFormat="MMMM DD, YYYY"
+        valueFormat="MMM DD, YYYY"
         sx={{
           "& .mantine-DateInput-input": {
             cursor: "pointer",

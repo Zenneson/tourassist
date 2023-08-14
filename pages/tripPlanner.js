@@ -145,17 +145,6 @@ export default function TripPlannerPage(props) {
     });
   };
 
-  const placeCheck = () => {
-    placeData.map((place) => {
-      if (`${place.place}, ${place.region}` === startLocale) {
-        notifications.show(placeExists);
-        setStartLocale("");
-        setStartLocaleSearch("");
-        setStartLocaleData([]);
-      }
-    });
-  };
-
   const placeExists = {
     title: "Already set as destination",
     message: `${startLocale} is set as a destination. Please choose another location.`,
@@ -249,6 +238,17 @@ export default function TripPlannerPage(props) {
     loading: false,
     autoClose: 5000,
     icon: <IconCheck size={17} />,
+  };
+
+  const placeCheck = () => {
+    placeData.map((place) => {
+      if (`${place.place}, ${place.region}` === startLocale) {
+        notifications.show(placeExists);
+        setStartLocale("");
+        setStartLocaleSearch("");
+        setStartLocaleData([]);
+      }
+    });
   };
 
   const convertPlaceData = (places) => {
@@ -698,8 +698,8 @@ export default function TripPlannerPage(props) {
       .replace(/ /g, "")
       .replace(/[^a-z0-9]/gi, "")
       .toLowerCase();
-    let now = new Date();
-    let date_time_string = dateId(now);
+    // let now = new Date();
+    let date_time_string = dateId(travelDates.toString());
     let name = user.email.match(/^(.*?)@/);
     let trip_id = `${name[1]}_${trip_title}${date_time_string}`;
     return trip_id;
@@ -788,11 +788,12 @@ export default function TripPlannerPage(props) {
         notifications.show(noAccountInfo);
         return;
       }
+      const url = generateTripId();
       () => {
-        setTripId(generateTripId());
+        setTripId(url);
       };
-      await saveToDB(user, generateTripId());
-      router.push("/" + tripId);
+      await saveToDB(user, url);
+      router.push("/" + url);
     }
   };
 
@@ -1193,7 +1194,7 @@ export default function TripPlannerPage(props) {
                       className="pagePanel"
                       allowDeselect
                       firstDayOfWeek={0}
-                      defaultDate={dayjs().add(7, "day")}
+                      defaultDate={travelDates || dayjs().add(7, "day")}
                       minDate={weekAhead}
                       value={travelDates}
                       size={"md"}
@@ -1326,22 +1327,23 @@ export default function TripPlannerPage(props) {
                     maw={700}
                     w={"100%"}
                   >
-                    <Box hidden={user} w={"100%"} mb={5}>
-                      <Box>
-                        <LoginComp
-                          setInfoAdded={setInfoAdded}
-                          mapLoaded={mapLoaded}
-                          auth={auth}
-                        />
+                    {!user && (
+                      <Box w={"100%"} mb={5}>
+                        <Box>
+                          <LoginComp
+                            setInfoAdded={setInfoAdded}
+                            mapLoaded={mapLoaded}
+                            auth={auth}
+                          />
+                        </Box>
                       </Box>
-                    </Box>
+                    )}
                     <Center mt={user ? 20 : 0}>
                       <Button
                         leftIcon={<IconBuildingBank size={34} />}
-                        variant="light"
-                        color="green"
+                        variant="default"
                         size="xl"
-                        h={90}
+                        h={70}
                         w={"100%"}
                       >
                         <Title order={2}>ADD BANKING INFORMATION</Title>
