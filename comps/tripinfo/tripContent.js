@@ -49,15 +49,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  const {
-    images,
-    setImages,
-    setAltModal,
-    modalMode,
-    setModalMode,
-    user,
-    weekAhead,
-  } = props;
+  const { images, setImages, modalMode, setModalMode, user, weekAhead } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [loading, setLoading] = useState(true);
@@ -259,7 +251,6 @@ export default function TripContent(props) {
         tripDesc: tripDesc,
       });
       setModalMode("");
-      setAltModal(false);
       setTripDesc(editor.getHTML());
     } catch (error) {
       console.error(error);
@@ -268,7 +259,7 @@ export default function TripContent(props) {
 
   return (
     <>
-      {modalMode === "editTrip" && (
+      {(modalMode === "editTrip" || router.pathname === "/tripplanner") && (
         <Group spacing={20} w="100%" grow>
           {images.length > 0 && (
             <Box
@@ -288,7 +279,7 @@ export default function TripContent(props) {
               >
                 {slides}
               </Slider>
-              <Group mt={17} spacing={15} h={40} grow>
+              <Group mt={20} spacing={15} h={40} grow>
                 {images.length > 1 && (
                   // Previous Slide
                   <Button variant="subtle" color="gray" onClick={previous}>
@@ -384,7 +375,8 @@ export default function TripContent(props) {
               </Button>
             </Dropzone>
             <Title
-              mt={23}
+              mt={30}
+              mb={router.pathname === "/tripplanner" ? 0 : 10}
               py={12}
               fz={12}
               ta={"center"}
@@ -401,6 +393,7 @@ export default function TripContent(props) {
       {/* Text Editor */}
       <ScrollArea
         h={300}
+        w={"100%"}
         scrollbarSize={8}
         scrollHideDelay={250}
         sx={{
@@ -430,10 +423,11 @@ export default function TripContent(props) {
             ".mantine-RichTextEditor-content": {
               background: "rgba(0, 0, 0, 0)",
               color: dark ? "dark.9" : "gray.0",
-              minHeight: "200px",
+              minHeight: "250px",
               "& .ProseMirror": {
                 paddingLeft: "21px",
                 paddingRight: "21px",
+                minHeight: "250px",
               },
             },
           }}
@@ -477,7 +471,7 @@ export default function TripContent(props) {
             variant="default"
             size="md"
             w={"25%"}
-            onClick={modalMode === "editTrip" ? updateEditedTrip : null}
+            onClick={updateEditedTrip}
           >
             SUBMIT EDIT
           </Button>

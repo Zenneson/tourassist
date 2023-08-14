@@ -671,32 +671,38 @@ export default function Mymap(props) {
     <>
       <Loader mapLoaded={mapLoaded} />
       <Modal
-        size={"xs"}
+        size={"auto"}
         zIndex={130}
         opened={showModal}
         onClose={setShowModal}
         withCloseButton={false}
         centered
         styles={(theme) => ({
+          header: {
+            backgroundColor: "transparent",
+          },
+          content: {
+            backgroundColor: dark ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.7)",
+          },
           overlay: {
             backgroundColor: dark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)",
             backdropFilter: "blur(9px)",
           },
         })}
       >
-        <Text fz={14} ta={"center"} mb={10} px={20}>
+        <Text fz={14} ta={"center"} mb={10}>
           {places && places.length > 0 && !placeChoosen
-            ? "Clear the Tour List and s"
-            : "S"}
-          elect{" "}
+            ? "Clear the Tour List and c"
+            : "C"}
+          ontinue with{" "}
           <Text fw={700} span>
             {area.label}
           </Text>{" "}
           as your destination?
         </Text>
-        <Group grow spacing={15}>
+        <Group grow spacing={10}>
           <Button
-            variant="light"
+            variant="filled"
             size="xs"
             color="green"
             onClick={() => {
@@ -705,15 +711,15 @@ export default function Mymap(props) {
               router.push("/tripplanner");
             }}
           >
-            <IconCheck />
+            <IconCheck stroke={4} />
           </Button>
           <Button
-            variant="light"
+            variant="filled"
             size="xs"
             color="red"
             onClick={() => setShowModal(false)}
           >
-            <IconX />
+            <IconX stroke={4} />
           </Button>
         </Group>
       </Modal>

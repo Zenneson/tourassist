@@ -871,7 +871,7 @@ export default function TripPlannerPage(props) {
                       <Text opacity={0.7}>
                         Provide the{" "}
                         <Text inherit span hidden={startLocale}>
-                          Departure Location{" "}
+                          Departure City{" "}
                         </Text>
                         <Text inherit span hidden={startLocale || travelDates}>
                           and
@@ -903,7 +903,7 @@ export default function TripPlannerPage(props) {
                         w={"100%"}
                         defaultValue=""
                         value={startLocaleSearch}
-                        placeholder="Departure Location..."
+                        placeholder="Add Departure City..."
                         onItemSubmit={(e) => setStartLocale(e.value)}
                         ref={startLocaleRef}
                         data={startLocaleData}

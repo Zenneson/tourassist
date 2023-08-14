@@ -76,9 +76,19 @@ export default function Trippage(props) {
     defaultValue: null,
   });
 
+  const [tripData, setTripData] = useSessionStorage({
+    key: "tripData",
+    defaultValue: [],
+  });
+
   const [tripDesc, setTripDesc] = useSessionStorage({
     key: "tripDesc",
     defaultValue: [],
+  });
+
+  const [images, setImages] = useSessionStorage({
+    key: "images",
+    defaultValue: tripData.images,
   });
 
   const [donations, setDonations] = useSessionStorage({
@@ -87,16 +97,6 @@ export default function Trippage(props) {
   });
 
   const [donationsSum, setDonationsSum] = useState(0);
-
-  const [tripData, setTripData] = useSessionStorage({
-    key: "tripData",
-    defaultValue: [],
-  });
-
-  const [images, setImages] = useSessionStorage({
-    key: "images",
-    defaultValue: tripData.images,
-  });
 
   useEffect(() => {
     if (tripData && tripData.images && tripData.images.length === 0) {
