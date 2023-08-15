@@ -154,7 +154,17 @@ export default function TripPlannerPage(props) {
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
-    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
+  };
+
+  const noCosts = {
+    title: "Trip Cost Missing",
+    message: "Add your trip costs.",
+    color: "red",
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
   };
 
   const noTitle = {
@@ -166,7 +176,6 @@ export default function TripPlannerPage(props) {
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
-    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
   };
 
   const titleIsShort = {
@@ -178,7 +187,6 @@ export default function TripPlannerPage(props) {
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
-    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
   };
 
   const noDesc = {
@@ -190,7 +198,6 @@ export default function TripPlannerPage(props) {
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
-    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
   };
 
   const descIsShort = {
@@ -202,7 +209,6 @@ export default function TripPlannerPage(props) {
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
-    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
   };
 
   const noAccountInfo = {
@@ -214,7 +220,6 @@ export default function TripPlannerPage(props) {
     },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
-    style: { backgroundColor: "#2e2e2e", fontWeight: "bold" },
   };
 
   const createTrip = {
@@ -235,6 +240,17 @@ export default function TripPlannerPage(props) {
     title: "Trip Campaign Created!",
     message: "Welcome to your trip Campaign!",
     color: "green",
+    loading: false,
+    autoClose: 5000,
+    icon: <IconCheck size={17} />,
+  };
+
+  const tripFailed = {
+    id: "creating-trip",
+    title: "Failed to Create Trip Campaign",
+    message:
+      "There was an error while creating your trip campaign. Please try again later.",
+    color: "red",
     loading: false,
     autoClose: 5000,
     icon: <IconCheck size={17} />,
@@ -705,21 +721,31 @@ export default function TripPlannerPage(props) {
     return trip_id;
   };
 
+  const fileNameString = (string) => {
+    const lastPeriodIndex = string.lastIndexOf(".");
+    return lastPeriodIndex !== -1
+      ? string.substring(0, lastPeriodIndex)
+      : string;
+  };
+
+  //TODO - save to DB
   const saveToDB = async (user, campaignId) => {
     notifications.show(createTrip);
     try {
-      const imageUploadPromises = images.map(async (imageDataUrl, index) => {
-        if (imageDataUrl.startsWith("data:")) {
+      const imageUploadPromises = images.map(async (imageDataUrl) => {
+        if (imageDataUrl.file.startsWith("data:")) {
+          const fileName = fileNameString(imageDataUrl.name);
           const storageRef = ref(
             storage,
-            `images/${user.email}/${campaignId}/trip_img_${index}.png`
+            `images/${user.email}/${campaignId}/${fileName}.png`
           );
           const snapshot = await uploadString(
             storageRef,
-            imageDataUrl,
+            imageDataUrl.file,
             "data_url",
             {
               contentType: "image/png",
+              name: fileName,
             }
           );
           const downloadURL = await getDownloadURL(snapshot.ref);
@@ -752,13 +778,21 @@ export default function TripPlannerPage(props) {
       sessionStorage.removeItem("tripDesc");
       sessionStorage.removeItem("totalCost");
       sessionStorage.removeItem("renderState");
+      router.push("/" + campaignId);
     } catch (error) {
+      notifications.update(tripFailed);
       console.error("Failed to save to database:", error);
     }
   };
 
   const changeNextStep = async () => {
     if (active === 1) {
+      if (
+        sessionStorage.getItem("totalCost") === "0" ||
+        sessionStorage.getItem("totalCost") === 0
+      ) {
+        return notifications.show(noCosts);
+      }
       setCostsObj(sessionStorage.getItem("places"));
     }
     if (active === 2) {
@@ -788,12 +822,10 @@ export default function TripPlannerPage(props) {
         notifications.show(noAccountInfo);
         return;
       }
-      const url = generateTripId();
       () => {
-        setTripId(url);
+        setTripId(generateTripId());
       };
-      await saveToDB(user, url);
-      router.push("/" + url);
+      saveToDB(user, generateTripId());
     }
   };
 
@@ -1287,7 +1319,7 @@ export default function TripPlannerPage(props) {
                   maw={950}
                   p={30}
                   align="center"
-                  spacing={25}
+                  spacing={20}
                 >
                   <Input
                     size={"xl"}

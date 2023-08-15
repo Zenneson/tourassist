@@ -176,7 +176,7 @@ export default function Trippage(props) {
       <DateInput
         icon={<IconCalendarEvent size={20} />}
         iconWidth={50}
-        variant="filled"
+        variant="default"
         minDate={weekAhead}
         firstDayOfWeek={0}
         size="sm"
@@ -250,7 +250,7 @@ export default function Trippage(props) {
               size={25}
               onClick={closeEditTripModal}
             />
-            <Stack align="center">
+            <Stack align="center" spacing={20}>
               <Title order={6} w={"100%"} ta={"left"} fs={"italic"}>
                 EDIT TRIP DETAILS:
               </Title>

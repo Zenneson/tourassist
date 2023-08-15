@@ -14,14 +14,18 @@ import {
   Box,
   Button,
   Center,
-  Divider,
-  Title,
+  Flex,
+  FileButton,
   Text,
   Group,
   Overlay,
+  Stack,
   ScrollArea,
   LoadingOverlay,
   Slider as MantineSlider,
+  Title,
+  ActionIcon,
+  Badge,
 } from "@mantine/core";
 import { useSessionStorage, useClickOutside } from "@mantine/hooks";
 import { RichTextEditor, Link } from "@mantine/tiptap";
@@ -44,17 +48,16 @@ import {
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import AvatarEditor from "react-avatar-editor";
-import { dateFormat, timeStamper } from "../../libs/custom";
+import { dateFormat } from "../../libs/custom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  let { images, setImages, modalMode, setModalMode, user, weekAhead } = props;
+  let { images, setImages, modalMode, setModalMode, user } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [loading, setLoading] = useState(true);
-  const [activeSlide, setActiveSlide] = useState(0);
   const [imageUpload, setImageUpload] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
@@ -91,6 +94,25 @@ export default function TripContent(props) {
     sliderRef.current.slickPrev();
   };
 
+  const extractFileName = (url) => {
+    const pngIndex = url.lastIndexOf(".png?alt");
+    if (pngIndex === -1) return null;
+    const partBeforePngAlt = url.substring(0, pngIndex);
+    const lastSlashIndex = partBeforePngAlt.lastIndexOf("%2F");
+    if (lastSlashIndex === -1) return null;
+    const filename = partBeforePngAlt.substring(lastSlashIndex + 3) + ".png";
+    return filename;
+  };
+
+  images = images.map((image) => {
+    if (image && !image.name && !image.file) {
+      const filename = extractFileName(image);
+      return { name: filename, file: image };
+    } else {
+      return image;
+    }
+  });
+
   const slideSettings = {
     dots: false,
     fade: true,
@@ -110,15 +132,15 @@ export default function TripContent(props) {
     <BackgroundImage
       radius={3}
       key={index}
-      src={image}
+      src={image.file}
       h={300}
-      alt={`Image number ${index + 1}`}
+      alt={image.name}
     />
   ));
 
   let content;
   if (router.pathname === "/tripplanner") {
-    content = tripDesc !== "" ? tripDesc.toString() : "";
+    content = tripDesc !== "" ? tripDesc?.toString() : "";
   } else if (
     router.pathname !== "/tripplanner" &&
     tripData &&
@@ -149,7 +171,7 @@ export default function TripContent(props) {
     if (editor) {
       editor.commands.setContent(
         updatedDesc.toString() ||
-          tripDesc.toString() ||
+          tripDesc?.toString() ||
           tripData.tripDesc?.toString()
       );
     }
@@ -161,15 +183,19 @@ export default function TripContent(props) {
     setScale(newScale);
   };
 
-  function removeImage(activeSlide) {
-    if (images.length === 1) {
-      setImages([]);
-      return;
+  const checkName = (name) => {
+    let counter = 0;
+    const baseName = name.substring(0, name.length - 4);
+    const nameExists = (imageName) => {
+      return images.some((img) => img.name === imageName);
+    };
+    while (nameExists(name)) {
+      counter++;
+      name = `${baseName}_${counter}.png`;
     }
-    setImages(images.filter((_, imgIndex) => imgIndex !== activeSlide));
-  }
+    return name;
+  };
 
-  // TODO - add setState vars to hold images for different upload types
   async function addCroppedImage() {
     const canvas = cropperRef.current.getImage();
     const dataUrl = canvas.toDataURL();
@@ -178,7 +204,7 @@ export default function TripContent(props) {
     const blob = await response.blob(); // convert dataUrl to Blob
 
     const options = {
-      maxSizeMB: 0.5,
+      maxSizeMB: 0.3,
       maxWidthOrHeight: 650,
     };
 
@@ -189,8 +215,13 @@ export default function TripContent(props) {
       reader.onloadend = () => {
         const compressedDataUrl = reader.result; // convert Blob to dataUrl
 
+        const uniqueName = checkName(imageUpload.name);
+        const imgObj = {
+          name: uniqueName,
+          file: compressedDataUrl,
+        };
         setImages((prevImages) => {
-          const newImages = [...prevImages, compressedDataUrl]; // create new images array
+          const newImages = [...prevImages, imgObj]; // create new images array
           return newImages; // return new images array to update state
         });
 
@@ -224,23 +255,31 @@ export default function TripContent(props) {
     setScale(1);
   };
 
+  const fileNameString = (string) => {
+    const lastPeriodIndex = string.lastIndexOf(".");
+    return lastPeriodIndex !== -1
+      ? string.substring(0, lastPeriodIndex)
+      : string;
+  };
+
+  //TODO - update to DB
   const updateEditedTrip = async () => {
     try {
-      const imageUploadPromises = images.map(async (imageDataUrl, index) => {
-        if (imageDataUrl.includes("firebasestorage")) return imageDataUrl;
-        if (imageDataUrl.startsWith("data:")) {
+      const imageUploadPromises = images.map(async (imageDataUrl) => {
+        if (imageDataUrl.file.includes("firebasestorage")) return imageDataUrl;
+        if (imageDataUrl.file.startsWith("data:")) {
+          const fileName = fileNameString(imageDataUrl.name);
           const storageRef = ref(
             storage,
-            `images/${user.email}/${
-              tripData.tripId
-            }/trip_img_${timeStamper()}.png`
+            `images/${user.email}/${tripData.tripId}/${fileName}.png`
           );
           const snapshot = await uploadString(
             storageRef,
-            imageDataUrl,
+            imageDataUrl.file,
             "data_url",
             {
               contentType: "image/png",
+              name: fileName,
             }
           );
           const downloadURL = await getDownloadURL(snapshot.ref);
@@ -281,138 +320,222 @@ export default function TripContent(props) {
 
   const saveUpdateRef = useClickOutside(() => setUpdatedDesc(editor.getHTML()));
 
+  const imageItems = images.map((image, index) => {
+    const removeImageByName = (imageName) => {
+      return images.filter((image) => image.name !== imageName);
+    };
+
+    return (
+      <Flex
+        key={index}
+        align={"center"}
+        gap={10}
+        p={10}
+        sx={{
+          borderRadius: 3,
+          cursor: "pointer",
+          ":hover": {
+            backgroundColor: dark
+              ? "rgba(255, 255, 255, 0.01)"
+              : "rgba(0, 0, 0, 0.03)",
+          },
+        }}
+      >
+        <Title
+          order={6}
+          w={25}
+          ta={"center"}
+          sx={{
+            borderRadius: 5,
+            borderRight: `1px solid ${
+              dark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"
+            }`,
+          }}
+        >
+          {index + 1}
+        </Title>
+        <Text fz={12} w={"100%"} truncate>
+          {image.name}
+        </Text>
+        <ActionIcon
+          size={"sm"}
+          maw={"10%"}
+          variant="subtle"
+          color="red.9"
+          opacity={0.3}
+          sx={{
+            ":hover": {
+              opacity: 1,
+            },
+          }}
+          onClick={() => {
+            setImages(removeImageByName(image.name));
+          }}
+        >
+          <IconTrash size={17} />
+        </ActionIcon>
+      </Flex>
+    );
+  });
+
+  const grabImage = (file, type) => {
+    const imgObj = {
+      name: type === "dropzone" ? file[0].name : file.name,
+      file: type === "dropzone" ? file[0] : file,
+    };
+    setImageUpload(imgObj);
+    setLoading(true);
+    setShowCropper(true);
+  };
+
   return (
     <>
       {(modalMode === "editTrip" || router.pathname === "/tripplanner") && (
-        <Group spacing={20} w="100%" grow>
-          {images.length > 0 && (
-            <Box
-              sx={{
-                borderRadius: 3,
-                overflow: "hidden",
-              }}
-            >
-              <Slider
-                ref={sliderRef}
-                afterChange={setActiveSlide}
-                {...slideSettings}
-                style={{
-                  width: "100%",
-                  height: "100%",
+        <>
+          <Group spacing={20} w="100%" grow>
+            <Box>
+              {images.length > 0 ? (
+                <>
+                  <Box
+                    h={300}
+                    sx={{
+                      borderRadius: 3,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Slider
+                      ref={sliderRef}
+                      {...slideSettings}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      {slides}
+                    </Slider>
+                  </Box>
+                  {images.length > 1 && (
+                    <Group spacing={15} h={40} mt={10} grow>
+                      <Button variant="subtle" color="gray" onClick={previous}>
+                        <IconChevronLeft size={20} />
+                      </Button>
+                      <Button variant="subtle" color="gray" onClick={next}>
+                        <IconChevronRight size={20} />
+                      </Button>
+                    </Group>
+                  )}
+                </>
+              ) : (
+                <BackgroundImage
+                  radius={3}
+                  opacity={dark ? 0.1 : 0.2}
+                  src={
+                    dark
+                      ? "img/placeholder/books_blk.jpg"
+                      : "img/placeholder/books_wht.jpg"
+                  }
+                  h={300}
+                  alt={"Placeholder Image"}
+                />
+              )}
+            </Box>
+            <Box h={images.length > 1 ? 350 : 300}>
+              <FileButton
+                accept={IMAGE_MIME_TYPE}
+                disabled={images.length === 6}
+                opacity={images.length === 6 ? 0.3 : 1}
+                onChange={(file) => {
+                  grabImage(file, "input");
                 }}
               >
-                {slides}
-              </Slider>
-              <Group mt={20} spacing={15} h={40} grow>
-                {images.length > 1 && (
-                  // Previous Slide
-                  <Button variant="subtle" color="gray" onClick={previous}>
-                    <IconChevronLeft size={20} />
+                {(props) => (
+                  <Button variant="default" size="lg" fullWidth {...props}>
+                    <Group spacing={7}>
+                      <Title order={3}>
+                        {images.length === 6 ? "MAX REACHED" : "UPLOAD IMAGE"}
+                      </Title>
+                      {images.length < 6 && <IconUpload size={23} />}
+                    </Group>
                   </Button>
                 )}
-                {/* Remove Image */}
-                <Button
-                  variant="light"
-                  color="red.9"
-                  opacity={0.7}
-                  onClick={() => removeImage(activeSlide)}
-                  sx={{
-                    transitions: "opacity 250ms ease",
-                    "&:hover": {
-                      opacity: 1,
-                    },
-                  }}
-                >
-                  <IconTrash size={21} />
-                </Button>
-                {images.length > 1 && (
-                  // Next Slide
-                  <Button variant="subtle" color="gray" onClick={next}>
-                    <IconChevronRight size={20} />
-                  </Button>
-                )}
-              </Group>
-            </Box>
-          )}
-          <Box>
-            <Dropzone
-              onDrop={(files) => {
-                setImageUpload(files[0]);
-                setLoading(true);
-                setShowCropper(true);
-              }}
-              onReject={(files) => console.log("rejected files", files)}
-              accept={IMAGE_MIME_TYPE}
-              ta="center"
-              h={300}
-              opacity={images.length === 6 ? 0.3 : 1}
-              disabled={images.length === 6}
-              style={{
-                border: "2px dashed rgba(255,255,255,0.05)",
-                cursor: images.length === 6 ? "not-allowed" : "pointer",
-              }}
-            >
+              </FileButton>
               <Group
                 position="center"
+                opacity={0.4}
                 spacing={5}
-                mt={80}
-                style={{
-                  pointerEvents: "none",
-                }}
+                fz={11}
+                fs={"italic"}
+                mt={10}
+                mb={5}
               >
-                <Dropzone.Accept>
-                  <IconUpload size={50} opacity={0.3} />
-                </Dropzone.Accept>
-                <Dropzone.Reject>
-                  <IconX size={50} opacity={0.3} />
-                </Dropzone.Reject>
-                <Dropzone.Idle>
-                  <IconPhoto size={50} opacity={0.3} />
-                </Dropzone.Idle>
-
-                <div>
-                  <Text size="xl" fw={700} inline>
-                    DRAG IMAGES HERE
-                  </Text>
-                </div>
+                You may drag and drop files into the browser window{" "}
               </Group>
-              <Center>
-                <Divider
-                  label="OR"
-                  labelPosition="center"
-                  my={5}
-                  w={"60%"}
-                  color={dark ? "dark.4" : "gray.6"}
-                />
-              </Center>
-              <Button
-                variant="light"
-                color="gray"
-                radius={"xl"}
-                px={70}
-                mt={7}
-                fz={14}
-                size="lg"
-                compact
+              <Stack spacing={2}>
+                {imageItems}
+                {images.length < 6 && (
+                  <Badge
+                    variant="filled"
+                    size="lg"
+                    color={dark ? "dark.4" : "gray.5"}
+                    c={dark ? "dark.9" : "gray.0"}
+                    w={"60%"}
+                    ml={"20%"}
+                    opacity={dark ? 0.2 : 0.5}
+                    mt={5}
+                    sx={{
+                      cursor: "default",
+                    }}
+                  >
+                    {6 - images.length} space{images.length < 5 ? "s" : ""} left
+                  </Badge>
+                )}
+              </Stack>
+              <Dropzone.FullScreen
+                maxFiles={1}
+                onDrop={(file) => {
+                  grabImage(file, "dropzone");
+                }}
+                onReject={(file) => console.log("rejected files", file)}
+                accept={IMAGE_MIME_TYPE}
+                ta="center"
+                active={images.length < 6}
               >
-                Select Files
-              </Button>
-            </Dropzone>
-            <Title
-              mt={30}
-              mb={router.pathname === "/tripplanner" ? 0 : 10}
-              py={12}
-              fz={12}
-              ta={"center"}
-              bg={dark ? "dark.6" : "gray.1"}
-              sx={{
-                borderRadius: "3px",
-              }}
-            >
-              {`${images.length} / 6 IMAGES UPLOADED`}
-            </Title>
-          </Box>
-        </Group>
+                <Center
+                  h={"calc(100vh - 60px)"}
+                  sx={{
+                    border: `2px dashed ${
+                      dark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"
+                    }`,
+                  }}
+                >
+                  <Group
+                    position="center"
+                    spacing={5}
+                    style={{
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <Dropzone.Accept>
+                      <IconUpload size={50} opacity={0.3} />
+                    </Dropzone.Accept>
+                    <Dropzone.Reject>
+                      <IconX size={50} opacity={0.3} />
+                    </Dropzone.Reject>
+                    <Dropzone.Idle>
+                      <IconPhoto size={50} opacity={0.3} />
+                    </Dropzone.Idle>
+
+                    <div>
+                      <Text size="xl" fw={700} inline>
+                        DRAG IMAGES HERE
+                      </Text>
+                    </div>
+                  </Group>
+                </Center>
+              </Dropzone.FullScreen>
+            </Box>
+          </Group>
+        </>
       )}
       {/* Text Editor */}
       <ScrollArea
@@ -491,7 +614,7 @@ export default function TripContent(props) {
         </RichTextEditor>
       </ScrollArea>
       {router.pathname !== "/tripplanner" && (
-        <Group position="right" mt={5} w={"100%"}>
+        <Group position="right" w={"100%"}>
           <Button
             variant="default"
             size="md"
@@ -519,8 +642,8 @@ export default function TripContent(props) {
               width={585}
               height={450}
               border={50}
-              color={dark ? [0, 0, 0, 0.7] : [255, 255, 255, 0.7]} // RGBA
-              image={imageUpload}
+              color={dark ? [0, 0, 0, 0.7] : [100, 100, 100, 0.4]} // RGBA
+              image={imageUpload.file}
               borderRadius={3}
               scale={scale}
               onWheel={handleScroll}

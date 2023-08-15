@@ -103,6 +103,11 @@ export default function App(props) {
           },
         },
       },
+      Tooltip: {
+        defaultProps: {
+          events: { hover: true, focus: false, touch: false },
+        },
+      },
     },
     defaultRadius: 3,
     focusRing: "auto",
@@ -173,7 +178,7 @@ export default function App(props) {
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider withGlobalStyles withNormalizeCSS theme={tourTheme}>
-          <Notifications position="top-center" zIndex={9999} limit={1} />
+          <Notifications position="bottom-right" zIndex={9999} limit={1} />
           <SearchModal
             searchOpened={searchOpened}
             setSearchOpened={setSearchOpened}

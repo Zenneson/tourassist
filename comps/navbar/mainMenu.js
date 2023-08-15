@@ -103,6 +103,7 @@ export default function MainMenu(props) {
         console.log(error);
       }
     }
+    sessionStorage.clear();
     router.push("/", undefined, { shallow: false });
   };
 
