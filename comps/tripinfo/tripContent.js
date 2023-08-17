@@ -1,13 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../../libs/firebase";
-import {
-  ref,
-  getStorage,
-  uploadString,
-  getDownloadURL,
-} from "firebase/storage";
 import {
   useMantineColorScheme,
   BackgroundImage,
@@ -47,14 +39,14 @@ import {
   IconFrame,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
+import { updateEditedTrip, removeImageByName } from "../../libs/custom";
 import AvatarEditor from "react-avatar-editor";
-import { dateFormat } from "../../libs/custom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  let { images, setImages, modalMode, setModalMode, user } = props;
+  let { images, setImages, modalMode, user } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [loading, setLoading] = useState(true);
@@ -79,9 +71,7 @@ export default function TripContent(props) {
     defaultValue: "",
   });
 
-  const storage = getStorage();
   const router = useRouter();
-
   const sliderRef = useRef();
   const cropperRef = useRef(null);
   const cropperContainerRef = useRef(null);
@@ -93,25 +83,6 @@ export default function TripContent(props) {
   const previous = () => {
     sliderRef.current.slickPrev();
   };
-
-  const extractFileName = (url) => {
-    const pngIndex = url.lastIndexOf(".png?alt");
-    if (pngIndex === -1) return null;
-    const partBeforePngAlt = url.substring(0, pngIndex);
-    const lastSlashIndex = partBeforePngAlt.lastIndexOf("%2F");
-    if (lastSlashIndex === -1) return null;
-    const filename = partBeforePngAlt.substring(lastSlashIndex + 3) + ".png";
-    return filename;
-  };
-
-  images = images.map((image) => {
-    if (image && !image.name && !image.file) {
-      const filename = extractFileName(image);
-      return { name: filename, file: image };
-    } else {
-      return image;
-    }
-  });
 
   const slideSettings = {
     dots: false,
@@ -137,6 +108,31 @@ export default function TripContent(props) {
       alt={image.name}
     />
   ));
+
+  const updatingTrip = {
+    iid: "updatingTrip",
+    title: "Updating Trip Details...",
+    message: "Please wait while we update your trip details.",
+    color: "green",
+    loading: true,
+    withCloseButton: false,
+    autoClose: false,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
+
+  const tripUpdated = {
+    id: "updatingTrip",
+    title: "Trip Details Updated",
+    loading: false,
+    withCloseButton: true,
+    color: "green",
+    autoClose: 3000,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
 
   let content;
   if (router.pathname === "/tripplanner") {
@@ -255,76 +251,9 @@ export default function TripContent(props) {
     setScale(1);
   };
 
-  const fileNameString = (string) => {
-    const lastPeriodIndex = string.lastIndexOf(".");
-    return lastPeriodIndex !== -1
-      ? string.substring(0, lastPeriodIndex)
-      : string;
-  };
-
-  //TODO - update to DB
-  const updateEditedTrip = async () => {
-    try {
-      const imageUploadPromises = images.map(async (imageDataUrl) => {
-        if (imageDataUrl.file.includes("firebasestorage")) return imageDataUrl;
-        if (imageDataUrl.file.startsWith("data:")) {
-          const fileName = fileNameString(imageDataUrl.name);
-          const storageRef = ref(
-            storage,
-            `images/${user.email}/${tripData.tripId}/${fileName}.png`
-          );
-          const snapshot = await uploadString(
-            storageRef,
-            imageDataUrl.file,
-            "data_url",
-            {
-              contentType: "image/png",
-              name: fileName,
-            }
-          );
-          const downloadURL = await getDownloadURL(snapshot.ref);
-          return downloadURL;
-        }
-      });
-
-      const imageURLs = await Promise.all(imageUploadPromises);
-
-      const tripRef = doc(
-        firestore,
-        "users",
-        user.email,
-        "trips",
-        tripData.tripId
-      );
-      updateDoc(tripRef, {
-        images: imageURLs,
-        travelDate: dateFormat(travelDate),
-        tripDesc: editor.getHTML(),
-      });
-      setImages(imageURLs);
-      setTripDesc(updatedDesc || editor.getHTML());
-      setModalMode("");
-      notifications.show({
-        title: "Trip Details Updated",
-        color: "green",
-        autoClose: 3000,
-        style: {
-          backgroundColor: dark ? "#2e2e2e" : "#fff",
-        },
-      });
-      router.reload();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const saveUpdateRef = useClickOutside(() => setUpdatedDesc(editor.getHTML()));
 
   const imageItems = images.map((image, index) => {
-    const removeImageByName = (imageName) => {
-      return images.filter((image) => image.name !== imageName);
-    };
-
     return (
       <Flex
         key={index}
@@ -369,7 +298,15 @@ export default function TripContent(props) {
             },
           }}
           onClick={() => {
-            setImages(removeImageByName(image.name));
+            setImages(
+              removeImageByName(
+                images,
+                image.name,
+                router.query,
+                tripData.tripId,
+                user
+              )
+            );
           }}
         >
           <IconTrash size={17} />
@@ -495,7 +432,7 @@ export default function TripContent(props) {
                 onDrop={(file) => {
                   grabImage(file, "dropzone");
                 }}
-                onReject={(file) => console.log("rejected files", file)}
+                onReject={(file) => console.error("rejected files", file)}
                 accept={IMAGE_MIME_TYPE}
                 ta="center"
                 active={images.length < 6}
@@ -619,7 +556,26 @@ export default function TripContent(props) {
             variant="default"
             size="md"
             w={"25%"}
-            onClick={updateEditedTrip}
+            onClick={() => {
+              const newDesc = updatedDesc || editor.getHTML();
+              notifications.show(updatingTrip);
+              updateEditedTrip(
+                user.email,
+                tripData.tripId,
+                images,
+                newDesc,
+                travelDate
+              )
+                .then((imageObjects) => {
+                  setTripDesc(newDesc);
+                  setImages(imageObjects);
+                  notifications.update(tripUpdated);
+                  router.reload();
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            }}
           >
             SUBMIT EDIT
           </Button>

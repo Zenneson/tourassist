@@ -256,8 +256,8 @@ export default function LoginComp(props) {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log("Error Code: ", errorCode);
-          console.log("Error Message: ", errorMessage);
+          console.error("Error Code: ", errorCode);
+          console.error("Error Message: ", errorMessage);
           if (errorCode === "auth/invalid-email") {
             notifications.show(emailInvalid);
           }
@@ -274,8 +274,8 @@ export default function LoginComp(props) {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log("Error Code: ", errorCode);
-          console.log("Error Message: ", errorMessage);
+          console.error("Error Code: ", errorCode);
+          console.error("Error Message: ", errorMessage);
           if (errorCode === "auth/user-not-found") {
             notifications.show(userNotFound);
           }

@@ -1,12 +1,4 @@
-import { useState, useRef, useEffect, use } from "react";
-import { doc, setDoc } from "firebase/firestore";
-import { firestore } from "../libs/firebase";
-import {
-  ref,
-  getStorage,
-  uploadString,
-  getDownloadURL,
-} from "firebase/storage";
+import { useState, useRef, useEffect } from "react";
 import {
   IconCurrencyDollar,
   IconCirclePlus,
@@ -20,8 +12,6 @@ import {
   IconChevronsRight,
   IconArrowRightTail,
   IconAlertTriangle,
-  IconFriends,
-  IconRotate360,
   IconCheck,
   IconRefreshDot,
 } from "@tabler/icons-react";
@@ -29,6 +19,7 @@ import {
   useMantineColorScheme,
   useMantineTheme,
   Autocomplete,
+  BackgroundImage,
   Space,
   Stepper,
   Title,
@@ -49,6 +40,7 @@ import {
   ActionIcon,
   Popover,
   TextInput,
+  Tooltip,
 } from "@mantine/core";
 import { useSessionStorage, useShallowEffect } from "@mantine/hooks";
 import { motion } from "framer-motion";
@@ -56,7 +48,7 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
-import { estTimeStamp, dateId, dateFormat } from "../libs/custom";
+import { dateFormat } from "../libs/custom";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/tripinfo/tripContent";
 
@@ -74,14 +66,12 @@ export default function TripPlannerPage(props) {
   const [roundTrip, setRoundTrip] = useState(false);
   const startLocaleRef = useRef(null);
   const [tripTitle, setTripTitle] = useState("");
-  const [tripId, setTripId] = useState("");
   const [destinations, setDestinations] = useState([]);
   const [active, setActive] = useState(0);
   const [infoAdded, setInfoAdded] = useState(false);
-  const storage = getStorage();
   const router = useRouter();
-  const dayjs = require("dayjs");
   const sumRef = useRef(null);
+  const dayjs = require("dayjs");
 
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -630,36 +620,28 @@ export default function TripPlannerPage(props) {
               )}
               {index === 0 && (
                 <Group pos={"absolute"} spacing={10} top={0} left={-50}>
-                  <Popover position="top" opened={resetBtnPop}>
-                    <Popover.Target>
-                      <ActionIcon
-                        variant="subtle"
-                        size="xl"
-                        opacity={0.4}
-                        onMouseEnter={() => setResetBtnPop(true)}
-                        onMouseLeave={() => setResetBtnPop(false)}
-                        onClick={handleReset}
-                        sx={{
-                          "&:hover": {
-                            opacity: 1,
-                          },
-                        }}
-                      >
-                        <IconRefreshDot size={40} />
-                      </ActionIcon>
-                    </Popover.Target>
-                    <Popover.Dropdown sx={{ pointerEvents: "none" }}>
-                      <Text
-                        ta={"center"}
-                        fz={10}
-                        sx={{
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        Reset form fields
-                      </Text>
-                    </Popover.Dropdown>
-                  </Popover>
+                  <Tooltip
+                    label="Reset form fields"
+                    color={dark ? "dark" : "gray.0"}
+                    c={dark ? "gray.0" : "dark.9"}
+                    withArrow
+                  >
+                    <ActionIcon
+                      variant="subtle"
+                      size="xl"
+                      opacity={0.4}
+                      onMouseEnter={() => setResetBtnPop(true)}
+                      onMouseLeave={() => setResetBtnPop(false)}
+                      onClick={handleReset}
+                      sx={{
+                        "&:hover": {
+                          opacity: 1,
+                        },
+                      }}
+                    >
+                      <IconRefreshDot size={40} />
+                    </ActionIcon>
+                  </Tooltip>
                 </Group>
               )}
             </Box>
@@ -714,75 +696,10 @@ export default function TripPlannerPage(props) {
       .replace(/ /g, "")
       .replace(/[^a-z0-9]/gi, "")
       .toLowerCase();
-    // let now = new Date();
     let date_time_string = dateId(travelDates.toString());
     let name = user.email.match(/^(.*?)@/);
     let trip_id = `${name[1]}_${trip_title}${date_time_string}`;
     return trip_id;
-  };
-
-  const fileNameString = (string) => {
-    const lastPeriodIndex = string.lastIndexOf(".");
-    return lastPeriodIndex !== -1
-      ? string.substring(0, lastPeriodIndex)
-      : string;
-  };
-
-  //TODO - save to DB
-  const saveToDB = async (user, campaignId) => {
-    notifications.show(createTrip);
-    try {
-      const imageUploadPromises = images.map(async (imageDataUrl) => {
-        if (imageDataUrl.file.startsWith("data:")) {
-          const fileName = fileNameString(imageDataUrl.name);
-          const storageRef = ref(
-            storage,
-            `images/${user.email}/${campaignId}/${fileName}.png`
-          );
-          const snapshot = await uploadString(
-            storageRef,
-            imageDataUrl.file,
-            "data_url",
-            {
-              contentType: "image/png",
-              name: fileName,
-            }
-          );
-          const downloadURL = await getDownloadURL(snapshot.ref);
-          return downloadURL;
-        }
-      });
-
-      const imageURLs = await Promise.all(imageUploadPromises);
-
-      const travel_date = travelDates.toString();
-      await setDoc(doc(firestore, "users", user.email, "trips", campaignId), {
-        creationTime: estTimeStamp(new Date()),
-        tripTitle: tripTitle,
-        images: imageURLs,
-        tripDesc: tripDesc,
-        startLocale: startLocale,
-        travelers: travelers,
-        travelDate: dateFormat(travel_date),
-        roundTrip: roundTrip,
-        costsObj: costsObj,
-        costsSum: sessionStorage.getItem("totalCost"),
-        destinations: destinations,
-        tripId: campaignId,
-        user: user.email,
-      });
-      notifications.update(tripMade);
-      sessionStorage.removeItem("placeDataState");
-      sessionStorage.removeItem("places");
-      sessionStorage.removeItem("images");
-      sessionStorage.removeItem("tripDesc");
-      sessionStorage.removeItem("totalCost");
-      sessionStorage.removeItem("renderState");
-      router.push("/" + campaignId);
-    } catch (error) {
-      notifications.update(tripFailed);
-      console.error("Failed to save to database:", error);
-    }
   };
 
   const changeNextStep = async () => {
@@ -822,10 +739,32 @@ export default function TripPlannerPage(props) {
         notifications.show(noAccountInfo);
         return;
       }
-      () => {
-        setTripId(generateTripId());
-      };
-      saveToDB(user, generateTripId());
+      const travel_date = dateFormat(travelDates.toString());
+      const createdId = generateTripId();
+      const costsSum = sessionStorage.getItem("totalCost");
+      notifications.show(createTrip);
+      saveToDB(
+        tripTitle,
+        images,
+        tripDesc,
+        startLocale,
+        travelers,
+        travel_date,
+        roundTrip,
+        costsObj,
+        createdId,
+        costsSum,
+        destinations,
+        user.email
+      )
+        .then(() => {
+          notifications.update(tripMade);
+          router.push("/" + generateTripId());
+        })
+        .catch((error) => {
+          notifications.update(tripFailed);
+          console.error("Failed to save to database:", error);
+        });
     }
   };
 
@@ -850,7 +789,7 @@ export default function TripPlannerPage(props) {
         }));
         setStartLocaleData(data);
       } catch (error) {
-        console.log("Error fetching data for Country Autocomplete: ", error);
+        console.error("Error fetching data for Country Autocomplete: ", error);
       }
     }
   };
@@ -957,134 +896,105 @@ export default function TripPlannerPage(props) {
                           },
                         }}
                       />
-                      <Group mt={15} spacing={0}>
-                        <Divider
-                          w={"77%"}
-                          pr={10}
-                          labelPosition="right"
-                          variant="dashed"
-                          color={
-                            dark
-                              ? "rgba(255, 255, 255, 0.08)"
-                              : "rgba(0, 0, 0, 0.08)"
-                          }
-                          label={
-                            <Flex align={"center"}>
-                              <IconFriends
-                                size={16}
-                                color={dark ? "rgb(255,255,255)" : "rgb(0,0,0)"}
-                              />
-                              <Text
-                                ta={"right"}
-                                ml={5}
-                                fz={13}
-                                c={
-                                  dark
-                                    ? "rgba(255, 255, 255, 1)"
-                                    : "rgba(0, 0, 0, 1)"
-                                }
-                              >
-                                Travelers:
-                              </Text>
-                            </Flex>
-                          }
-                        />
-                        <Group spacing={5} w={"23%"} grow>
-                          {/* Decrease Traveler Count  */}
-                          <Button
-                            fz={20}
-                            maw={30}
-                            p={0}
-                            pb={5}
-                            variant="subtle"
-                            color={dark ? "dark.5" : "gray.1"}
-                            c={dark ? "gray.0" : "dark.9"}
-                            onClick={() =>
-                              travelersHandlerRef.current.decrement()
-                            }
-                          >
-                            -
-                          </Button>
-                          <NumberInput
-                            hideControls
-                            variant="filled"
-                            type="number"
-                            value={travelers}
-                            onChange={(e) => setTravelers(e)}
-                            handlersRef={travelersHandlerRef}
-                            defaultValue={1}
-                            min={1}
-                            styles={{
-                              input: {
-                                textAlign: "center",
-                                fontWeight: 700,
-                                fontSize: "1.1rem",
-                                padding: 0,
-                              },
-                            }}
-                          />
-                          {/* Increase Traveler Count  */}
-                          <Button
-                            fz={20}
-                            maw={30}
-                            p={0}
-                            variant="subtle"
-                            color={dark ? "dark.5" : "gray.1"}
-                            c={dark ? "gray.0" : "dark.9"}
-                            onClick={() =>
-                              travelersHandlerRef.current.increment()
-                            }
-                          >
-                            +
-                          </Button>
-                        </Group>
-                      </Group>
-                      <Group pos={"relative"}>
-                        <Divider
-                          w={"100%"}
-                          my={15}
-                          labelPosition="right"
-                          variant="dashed"
-                          color={
-                            dark
-                              ? "rgba(255, 255, 255, 0.08)"
-                              : "rgba(0, 0, 0, 0.08)"
-                          }
-                          label={
-                            <Switch
-                              label={
-                                <Flex align={"center"}>
-                                  <IconRotate360
-                                    size={16}
-                                    color={
-                                      dark ? "rgb(255,255,255)" : "rgb(0,0,0)"
-                                    }
-                                  />
-                                  <Text
-                                    ta={"right"}
-                                    ml={5}
-                                    fz={12}
-                                    c={
-                                      dark
-                                        ? "rgba(255, 255, 255, 1)"
-                                        : "rgba(0, 0, 0, 1)"
-                                    }
-                                  >
-                                    Round Trip?
-                                  </Text>
-                                </Flex>
+                      <Group my={15} grow spacing={0}>
+                        <Group
+                          spacing={0}
+                          position="center"
+                          sx={{
+                            borderRight: `2px solid ${
+                              dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
+                            }`,
+                          }}
+                        >
+                          <Flex align={"center"}>
+                            <Text
+                              fz={15}
+                              c={
+                                dark
+                                  ? "rgba(255, 255, 255, 1)"
+                                  : "rgba(0, 0, 0, 1)"
                               }
-                              labelPosition="left"
-                              onLabel="YES"
-                              offLabel="NO"
-                              checked={roundTrip}
-                              onChange={() => {
-                                setRoundTrip(!roundTrip);
-                                setRenderState(renderState + 1);
+                            >
+                              Travelers
+                            </Text>
+                          </Flex>
+                          <Group spacing={5} w={"50%"} grow>
+                            {/* Decrease Traveler Count  */}
+                            <Button
+                              fz={20}
+                              p={0}
+                              pb={5}
+                              variant="subtle"
+                              color={dark ? "dark.5" : "gray.1"}
+                              c={dark ? "gray.0" : "dark.9"}
+                              onClick={() =>
+                                travelersHandlerRef.current.decrement()
+                              }
+                            >
+                              -
+                            </Button>
+                            <NumberInput
+                              hideControls
+                              variant="filled"
+                              type="number"
+                              value={travelers}
+                              onChange={(e) => setTravelers(e)}
+                              handlersRef={travelersHandlerRef}
+                              defaultValue={1}
+                              min={1}
+                              styles={{
+                                input: {
+                                  textAlign: "center",
+                                  fontWeight: 700,
+                                  fontSize: "1.1rem",
+                                  padding: 0,
+                                },
                               }}
                             />
-                          }
-                        />
+                            {/* Increase Traveler Count  */}
+                            <Button
+                              fz={20}
+                              p={0}
+                              variant="subtle"
+                              color={dark ? "dark.5" : "gray.1"}
+                              c={dark ? "gray.0" : "dark.9"}
+                              onClick={() =>
+                                travelersHandlerRef.current.increment()
+                              }
+                            >
+                              +
+                            </Button>
+                          </Group>
+                        </Group>
+                        <Group pos={"relative"} position="center">
+                          <Switch
+                            label={
+                              <Flex align={"center"}>
+                                <Text
+                                  ta={"right"}
+                                  ml={5}
+                                  fz={14}
+                                  c={
+                                    dark
+                                      ? "rgba(255, 255, 255, 1)"
+                                      : "rgba(0, 0, 0, 1)"
+                                  }
+                                >
+                                  Round Trip?
+                                </Text>
+                              </Flex>
+                            }
+                            labelPosition="left"
+                            onLabel="YES"
+                            offLabel="NO"
+                            size="md"
+                            checked={roundTrip}
+                            onChange={() => {
+                              setRoundTrip(!roundTrip);
+                              setRenderState(renderState + 1);
+                            }}
+                          />
+                        </Group>
                       </Group>
                       <Box>
                         <Box
@@ -1095,129 +1005,154 @@ export default function TripPlannerPage(props) {
                           <Stack
                             align="center"
                             justify="center"
+                            pos={"relative"}
                             spacing={0}
                             p={20}
-                            h={150}
+                            h={210}
                             bg={dark ? "dark.5" : "gray.1"}
                             sx={{
                               overflowX: "auto",
                               borderRadius: "3px",
                             }}
                           >
-                            <Box>
-                              <Group spacing={7} mb={15}>
-                                <IconMapPin
-                                  size={20}
-                                  color="gray"
-                                  opacity={0.4}
-                                />
-                                {startLocale && (
-                                  <>
-                                    <Badge
-                                      variant="outline"
-                                      color="gray"
-                                      size="xs"
-                                    >
-                                      {startCity}
-                                    </Badge>
-                                    <IconArrowRightTail
-                                      size={18}
-                                      opacity={0.4}
-                                    />
-                                  </>
-                                )}
-                                {placeData.map((place, index) => (
-                                  <Group key={index} spacing={5}>
-                                    <Badge
-                                      variant="outline"
-                                      color="gray"
-                                      size="xs"
-                                    >
-                                      {place.place}
-                                    </Badge>
-                                    {placeData.length - 1 !== index && (
+                            <BackgroundImage
+                              pos={"absolute"}
+                              w={"100%"}
+                              h={"100%"}
+                              sx={{
+                                zIndex: 0,
+                              }}
+                              opacity={
+                                dark
+                                  ? startLocale || travelDates
+                                    ? 0.02
+                                    : 0.1
+                                  : startLocale || travelDates
+                                  ? 0.08
+                                  : 0.2
+                              }
+                              src={
+                                dark
+                                  ? "img/placeholder/boardingpass_blk.jpg"
+                                  : "img/placeholder/boardingpass_wht.jpg"
+                              }
+                            />
+                            <Box
+                              sx={{
+                                zIndex: 1,
+                              }}
+                            >
+                              <Box>
+                                <Group spacing={7} mb={15}>
+                                  <IconMapPin size={20} color="gray" />
+                                  {startLocale && (
+                                    <>
+                                      <Badge
+                                        variant="outline"
+                                        color="gray"
+                                        size="xs"
+                                      >
+                                        {startCity}
+                                      </Badge>
+                                      <IconArrowRightTail size={18} />
+                                    </>
+                                  )}
+                                  {placeData.map((place, index) => (
+                                    <Group key={index} spacing={5}>
+                                      <Badge
+                                        variant="outline"
+                                        color="gray"
+                                        size="xs"
+                                      >
+                                        {place.place}
+                                      </Badge>
+                                      {placeData.length - 1 !== index && (
+                                        <IconArrowRightTail
+                                          size={18}
+                                          opacity={0.4}
+                                        />
+                                      )}
+                                    </Group>
+                                  ))}
+                                  {roundTrip && startLocale && (
+                                    <>
                                       <IconArrowRightTail
                                         size={18}
                                         opacity={0.4}
                                       />
-                                    )}
-                                  </Group>
-                                ))}
-                                {roundTrip && startLocale && (
-                                  <>
-                                    <IconArrowRightTail
-                                      size={18}
+                                      <Badge
+                                        variant="outline"
+                                        color="gray"
+                                        size="xs"
+                                      >
+                                        {startCity}
+                                      </Badge>
+                                    </>
+                                  )}
+                                </Group>
+                              </Box>
+                              {travelDates !== null && (
+                                <Flex align={"center"} justify={"center"}>
+                                  <Group spacing={7} fz={14} fw={700}>
+                                    <IconCalendarEvent
+                                      size={20}
                                       opacity={0.4}
                                     />
-                                    <Badge
-                                      variant="outline"
-                                      color="gray"
-                                      size="xs"
+                                    {dayjs(travelDates).format("LL")}
+                                  </Group>
+                                  <Divider
+                                    orientation="vertical"
+                                    ml={10}
+                                    mr={7}
+                                    opacity={0.7}
+                                  />
+                                  <Group spacing={5} fz={12}>
+                                    <Title
+                                      color={dark ? "red" : "blue"}
+                                      order={3}
                                     >
-                                      {startCity}
-                                    </Badge>
-                                  </>
-                                )}
-                              </Group>
-                            </Box>
-                            {travelDates !== null && (
-                              <Flex align={"center"} justify={"center"}>
-                                <Group spacing={7} fz={14} fw={700}>
-                                  <IconCalendarEvent size={20} opacity={0.4} />
-                                  {dayjs(travelDates).format("LL")}
-                                </Group>
-                                <Divider
-                                  orientation="vertical"
-                                  ml={10}
-                                  mr={7}
-                                  opacity={0.7}
-                                />
-                                <Group spacing={5} fz={12}>
-                                  <Title
-                                    color={dark ? "red" : "blue"}
-                                    order={3}
-                                  >
-                                    •
-                                  </Title>
-                                  {dayjs(travelDates)
-                                    .subtract(1, "day")
-                                    .format("LL")}
-                                  <Flex
-                                    align={"center"}
-                                    gap={7}
-                                    mt={-4}
-                                    ml={-7}
-                                    sx={{
-                                      transform: "scale(0.85)",
-                                    }}
-                                  >
-                                    <Text fz={25} opacity={0.2}>
-                                      (
-                                    </Text>
-                                    <Text
-                                      mt={4}
-                                      fw={700}
-                                      fz={9}
-                                      lh={1}
-                                      ta={"center"}
-                                      color="gray.7"
+                                      •
+                                    </Title>
+                                    {dayjs(travelDates)
+                                      .subtract(1, "day")
+                                      .format("LL")}
+                                    <Flex
+                                      align={"center"}
+                                      gap={7}
+                                      mt={-4}
+                                      ml={-7}
                                       sx={{
-                                        textTransform: "uppercase",
+                                        transform: "scale(0.85)",
                                       }}
                                     >
-                                      <Text fz={".68rem"} span>
-                                        Campgain Ends
+                                      <Text fz={25} opacity={0.2}>
+                                        (
                                       </Text>
-                                      <br />
-                                      Day Before Travel
-                                    </Text>
-                                    <Text fz={25} opacity={0.2}>
-                                      )
-                                    </Text>
-                                  </Flex>
-                                </Group>
-                              </Flex>
-                            )}
+                                      <Text
+                                        mt={4}
+                                        fw={700}
+                                        fz={9}
+                                        lh={1}
+                                        ta={"center"}
+                                        color="gray.7"
+                                        sx={{
+                                          textTransform: "uppercase",
+                                        }}
+                                      >
+                                        <Text fz={".68rem"} span>
+                                          Campgain Ends
+                                        </Text>
+                                        <br />
+                                        Day Before Travel
+                                      </Text>
+                                      <Text fz={25} opacity={0.2}>
+                                        )
+                                      </Text>
+                                    </Flex>
+                                  </Group>
+                                </Flex>
+                              )}
+                            </Box>
                           </Stack>
                         </Box>
                       </Box>
@@ -1281,12 +1216,17 @@ export default function TripPlannerPage(props) {
                             : theme.colors.red[3],
                         },
                         ".mantine-DatePicker-day[data-selected]": {
+                          boxShadow: `0 2px 2px ${
+                            dark
+                              ? "rgba(255, 255, 255, 0.08)"
+                              : "rgba(0, 0, 0, 0.1)"
+                          }`,
                           border: `1px solid ${
-                            dark ? theme.colors.blue[1] : theme.colors.red[2]
+                            dark ? theme.colors.dark[4] : theme.colors.gray[4]
                           }`,
                           backgroundColor: dark
-                            ? theme.colors.gray[5]
-                            : theme.colors.red[0],
+                            ? theme.colors.dark[5]
+                            : theme.colors.gray[0],
                           borderTop: `4px solid ${
                             dark ? theme.colors.blue[7] : theme.colors.red[9]
                           }`,
@@ -1295,7 +1235,7 @@ export default function TripPlannerPage(props) {
                           borderRadius: "0 0 3px 3px",
                           fontSize: "1.7rem",
                           "&:hover": {
-                            backgroundColor: "#fff",
+                            transform: "scale(1.05)",
                           },
                         },
                       }}

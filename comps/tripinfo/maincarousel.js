@@ -54,9 +54,14 @@ export default function MainCarousel(props) {
           overflow: "hidden",
         }}
       >
-        <BackgroundImage src={tripImages} h={500} w={650} alt="Main Image" />
+        <BackgroundImage
+          src={tripImages[0].file}
+          h={500}
+          w={650}
+          alt="Main Image"
+        />
         <Image
-          src={tripImages}
+          src={tripImages[0].file}
           onLoad={() => setLoaded(true)}
           display={"none"}
           alt="preload"
@@ -68,7 +73,7 @@ export default function MainCarousel(props) {
   const slides = tripImages.map((image, index) => (
     <BackgroundImage
       key={index}
-      src={image}
+      src={image.file}
       h={500}
       maw={650}
       radius={3}

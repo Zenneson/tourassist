@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { IconPlayerPlay } from "@tabler/icons-react";
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "../../libs/firebase";
+import { IconAppWindow } from "@tabler/icons-react";
 import { useSessionStorage } from "@mantine/hooks";
+import { daysBefore } from "../../libs/custom";
 import {
   useMantineColorScheme,
   Box,
@@ -13,6 +16,7 @@ import {
   Divider,
   Progress,
   Select,
+  LoadingOverlay,
 } from "@mantine/core";
 import { Line } from "react-chartjs-2";
 import Donations from "../tripinfo/donations";
@@ -25,15 +29,57 @@ import {
   Tooltip,
 } from "chart.js";
 
-export default function Money() {
+export default function Money(props) {
+  const { setMainMenuOpened, setPanelShow } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
+
+  const [user, setUser] = useSessionStorage({
+    key: "user",
+    defaultValue: null,
+  });
 
   const [donations, setDonations] = useSessionStorage({
     key: "donations",
     defaultValue: [],
   });
+
+  const [allTrips, setAllTrips] = useSessionStorage({
+    key: "allTrips",
+    defaultValue: [],
+  });
+
+  const [currentTrip, setCurrentTrip] = useSessionStorage({
+    key: "currentTrip",
+    defaultValue: allTrips[0],
+  });
+
+  useEffect(() => {
+    const grabAllTrips = async (user) => {
+      const queryData = collection(firestore, "users", user, "trips");
+
+      try {
+        const querySnapshot = await getDocs(queryData);
+        const tripsData = querySnapshot.docs.map((doc) =>
+          doc.data(
+            setAllTrips((prevTrip) => {
+              const newTrips = [...prevTrip, doc.data()]; // create new images array
+              return newTrips; // return new images array to update state
+            })
+          )
+        );
+
+        return tripsData;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (allTrips.length === 0 && user) {
+      grabAllTrips(user.email);
+    }
+  }, [user, allTrips, setAllTrips, setCurrentTrip]);
 
   useEffect(() => {
     router.prefetch("/trippage");
@@ -74,13 +120,32 @@ export default function Money() {
   };
 
   return (
-    <>
+    <Box pos="relative">
+      <LoadingOverlay
+        visible={allTrips.length === 0 || currentTrip === undefined}
+        overlayBlur={10}
+        overlayOpacity={1}
+        overlayColor="#0b0c0d"
+      />
       <Select
         w={"95%"}
         mt={7}
         variant="filled"
-        placeholder="Help me raise money to go on a Music Tour"
-        data={["Help me raise money to go on a Music Tour"]}
+        placeholder={currentTrip?.tripTitle || "No Trips found..."}
+        data={allTrips.map((trip) => {
+          return { value: trip, label: trip.tripTitle, key: trip.tripTitle };
+        })}
+        sx={{
+          pointerEvents: allTrips.length > 1 ? "all" : "none",
+          ".mantine-Select-rightSection": {
+            opacity: allTrips.length > 1 ? 1 : 0,
+          },
+        }}
+        onChange={(e) => {
+          setCurrentTrip(
+            allTrips.find((trip) => trip.tripTitle === e.tripTitle)
+          );
+        }}
       />
       <Box pr={20}>
         <Box my={20} w="100%" h={"250px"}>
@@ -105,7 +170,7 @@ export default function Money() {
             <Center>
               <Box>
                 <Title order={3} ta={"center"}>
-                  $1234
+                  $0
                 </Title>
                 <Text fz={10}>AVAILABLE FUNDS</Text>
               </Box>
@@ -127,7 +192,7 @@ export default function Money() {
                   w={"100%"}
                 />
                 <Title order={3} ta={"center"}>
-                  $1500 / $5000
+                  $0 / $ {currentTrip?.costsSum}
                 </Title>
                 <Text ta={"right"} mr={4} fz={10}>
                   RAISED
@@ -145,7 +210,8 @@ export default function Money() {
             <Center>
               <Box>
                 <Title order={6} ta={"center"}>
-                  Feb 12, 2023
+                  {/* Feb 12, 2023 */}
+                  {currentTrip && currentTrip.travelDate}
                 </Title>
                 <Text fz={10} ta={"center"}>
                   TRAVEL DATE
@@ -162,7 +228,7 @@ export default function Money() {
             >
               <Box>
                 <Title order={4} ta={"center"}>
-                  15
+                  {currentTrip && daysBefore(currentTrip.travelDate)}
                 </Title>
                 <Text ta={"center"} mr={4} fz={10}>
                   DAYS LEFT
@@ -173,7 +239,7 @@ export default function Money() {
             <Center
               py={19}
               fw={600}
-              bg={dark ? "rgba(255,255,255,0.1)" : "gray.4"}
+              fz={20}
               sx={(theme) => ({
                 transition: "all 0.2s ease",
                 "&:hover": {
@@ -182,10 +248,14 @@ export default function Money() {
                 },
               })}
               onClick={() => {
-                router.push("/trippage");
+                router.push("/" + currentTrip?.tripId);
+                setMainMenuOpened(false);
+                setPanelShow(false);
               }}
             >
-              VIEW <IconPlayerPlay size={17} />
+              <Group spacing={4}>
+                <IconAppWindow size={23} /> VIEW
+              </Group>
             </Center>
           </Group>
         </Box>
@@ -202,6 +272,6 @@ export default function Money() {
           </Box>
         </Flex>
       </Box>
-    </>
+    </Box>
   );
 }

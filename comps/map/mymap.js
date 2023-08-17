@@ -435,7 +435,7 @@ export default function Mymap(props) {
       if (field === "country") setCountryData(searchData);
       if (field === "place") setPlaceData(searchData);
     } catch (error) {
-      console.log("Error fetching data for Country Autocomplete: ", error);
+      console.error("Error fetching data for Country Autocomplete: ", error);
     }
   };
 

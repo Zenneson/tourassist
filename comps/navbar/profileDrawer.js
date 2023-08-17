@@ -63,6 +63,7 @@ const useStyles = createStyles((theme) => ({
         ? theme.colors.gray[0]
         : theme.colors.dark[9],
     borderRadius: "5px 0 0 5px",
+    zIndex: 1000,
     position: "absolute",
     padding: "5px 10px",
     top: 77,
@@ -414,7 +415,10 @@ export default function ProfileDrawer(props) {
                 Money <IconWallet size={40} />
               </Flex>
             </Title>
-            <Money />
+            <Money
+              setPanelShow={setPanelShow}
+              setMainMenuOpened={setMainMenuOpened}
+            />
           </motion.div>
         )}
       </Drawer>

@@ -98,10 +98,8 @@ export default function Trippage(props) {
 
   const [donationsSum, setDonationsSum] = useState(0);
 
-  const [pageState, setPageState] = useState(0);
-
   useEffect(() => {
-    if (tripData && tripData.images && tripData.images.length === 0) {
+    if (tripData && tripData.images) {
       setLoaded(true);
     }
   }, [tripData, setLoaded]);
@@ -277,7 +275,6 @@ export default function Trippage(props) {
                 images={images}
                 setImages={setImages}
                 modalMode={modalMode}
-                setModalMode={setModalMode}
                 weekAhead={weekAhead}
               />
             </Stack>
@@ -597,7 +594,14 @@ export default function Trippage(props) {
               size={"md"}
               my={tripData.images?.length > 0 ? 15 : 0}
               label={
-                <Title order={3} px={5} maw={"800px"} color="gray.6" fw={700}>
+                <Title
+                  order={3}
+                  px={5}
+                  mb={10}
+                  maw={"800px"}
+                  color="gray.6"
+                  fw={700}
+                >
                   {tripData.tripTitle}
                 </Title>
               }
@@ -945,7 +949,7 @@ export const getStaticPaths = async () => {
       return { params: { title } };
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 
   return {
@@ -980,7 +984,7 @@ export const getStaticProps = async ({ params }) => {
       },
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     // In case of error, return an empty props object
     return {
       props: {},

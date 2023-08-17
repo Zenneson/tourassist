@@ -100,10 +100,11 @@ export default function MainMenu(props) {
         // await recordLogout(auth.currentUser);
         await signOut(auth);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
     sessionStorage.clear();
+    setMainMenuOpened(false);
     router.push("/", undefined, { shallow: false });
   };
 
