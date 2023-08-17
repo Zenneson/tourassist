@@ -50,13 +50,7 @@ export default function Intro(props) {
           zIndex: 1400,
         }}
       >
-        <Tooltip
-          color={dark ? "dark" : "gray.0"}
-          c={dark ? "gray.0" : "dark.9"}
-          label="Toggle Color Scheme"
-          position="left"
-          withArrow
-        >
+        <Tooltip label="Toggle Color Scheme" position="left" withArrow>
           <Button
             variant="subtle"
             onClick={() => toggleColorScheme()}

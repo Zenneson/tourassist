@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Box,
   Center,
@@ -127,15 +126,6 @@ const searchData = results.map((result, index) => (
 ));
 
 export default function SearchPage() {
-  const [loaded, setLoaded] = useSessionStorage({
-    key: "loaded",
-    defaultValue: false,
-  });
-
-  useEffect(() => {
-    setLoaded(true);
-  }, [setLoaded]);
-
   return (
     <>
       <Center mt={120} mb={50}>

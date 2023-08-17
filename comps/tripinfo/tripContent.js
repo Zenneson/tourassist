@@ -21,13 +21,13 @@ import {
 } from "@mantine/core";
 import { useSessionStorage, useClickOutside } from "@mantine/hooks";
 import { RichTextEditor, Link } from "@mantine/tiptap";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useEditor } from "@tiptap/react";
-import imageCompression from "browser-image-compression";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import imageCompression from "browser-image-compression";
 import {
   IconChevronLeft,
   IconChevronRight,

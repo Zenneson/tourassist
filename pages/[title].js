@@ -25,6 +25,8 @@ import {
   Select,
   Textarea,
   ScrollArea,
+  Tooltip,
+  Skeleton,
 } from "@mantine/core";
 import {
   IconBrandFacebook,
@@ -44,9 +46,15 @@ import {
   IconAt,
   IconUser,
   IconCalendarEvent,
-  IconSlash,
+  IconQrcode,
 } from "@tabler/icons-react";
 import { DateInput } from "@mantine/dates";
+import { RichTextEditor, Link } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import TextStyle from "@tiptap/extension-text-style";
+import TextAlign from "@tiptap/extension-text-align";
+import Placeholder from "@tiptap/extension-placeholder";
 import Donations from "../comps/tripinfo/donations";
 import Update from "../comps/tripinfo/update";
 import TripContent from "../comps/tripinfo/tripContent";
@@ -63,13 +71,7 @@ export default function Trippage(props) {
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
   const [tripImages, setTripImages] = useState([]);
-  const [passTravelDate, setPassTravelDate] = useState("");
   const router = useRouter();
-
-  const [loaded, setLoaded] = useSessionStorage({
-    key: "loaded",
-    defaultValue: false,
-  });
 
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -97,12 +99,25 @@ export default function Trippage(props) {
   });
 
   const [donationsSum, setDonationsSum] = useState(0);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  useEffect(() => {
-    if (tripData && tripData.images) {
-      setLoaded(true);
-    }
-  }, [tripData, setLoaded]);
+  const editor = useEditor({
+    editable: true,
+    extensions: [
+      Link,
+      StarterKit,
+      TextStyle,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Placeholder.configure({
+        placeholder:
+          "Add a detailed description to your trip here, to inspire support...",
+      }),
+    ],
+    parseOptions: {
+      preserveWhitespace: "full",
+    },
+    // content: content,
+  });
 
   useEffect(() => {
     router.prefetch("/thankyou");
@@ -115,7 +130,7 @@ export default function Trippage(props) {
       setTripImages(props.trip.images);
       setTripDesc(props.trip.tripDesc);
     }
-  }, [images, , props.trip, setTripData, setTripDesc]);
+  }, [images, props.trip, setTripData, setTripDesc]);
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -196,11 +211,6 @@ export default function Trippage(props) {
   };
 
   const ModalsFunc = () => {
-    const [tripDesc, setTripDesc] = useSessionStorage({
-      key: "tripDesc",
-      defaultValue: "",
-    });
-
     return (
       <Box>
         <Modal
@@ -314,7 +324,7 @@ export default function Trippage(props) {
             onClick={closeAltModal}
           />
           {modalMode === "donating" && (
-            <Box h={345} w={802}>
+            <Box w={802}>
               <Title mb={5} color={dark ? "#00E8FC" : "#fa7500"}>
                 <Flex align={"center"} gap={5}>
                   {!paid ? "DONATE" : "THANK YOU"}
@@ -517,55 +527,140 @@ export default function Trippage(props) {
               )}
             </Box>
           )}
-          <Title order={6} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
-            {modalMode === "editUpdate"
-              ? "EDIT UPDATE:"
-              : modalMode === "postUpdate"
-              ? "POST UPDATE:"
-              : ""}
-          </Title>
-          <Stack align="center">
-            {modalMode !== "donating" && (
-              <Input
-                size={"xl"}
-                value={
-                  modalMode === "editUpdate"
-                    ? "Update number 3 of the trip"
-                    : ""
-                }
-                w="100%"
-                placeholder="Update Title..."
-                maw={800}
-                bg="dark.5"
-                onChange={(e) => e.preventDefault()}
-                wrapperProps={{
-                  style: {
-                    borderRadius: 3,
-                  },
-                }}
-                sx={{
-                  ".mantine-Input-input": {
-                    background: dark ? "#101113" : "#ced4da",
-                    "&:focus": {
-                      background: dark ? "#383a3f" : "#f1f3f5",
+          {(modalMode === "editUpdate" || modalMode === "postUpdate") && (
+            <>
+              <Title order={6} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
+                {modalMode === "editUpdate"
+                  ? "EDIT UPDATE:"
+                  : modalMode === "postUpdate"
+                  ? "POST UPDATE:"
+                  : ""}
+              </Title>
+              <Stack align="center">
+                <Input
+                  size={"xl"}
+                  value={
+                    modalMode === "editUpdate"
+                      ? "Update number 3 of the trip"
+                      : ""
+                  }
+                  w="100%"
+                  placeholder="Update Title..."
+                  maw={800}
+                  onChange={(e) => e.preventDefault()}
+                  wrapperProps={{
+                    style: {
+                      borderRadius: 3,
                     },
-                    "&::placeholder": {
-                      fontWeight: 700,
-                      fontStyle: "italic",
-                      color: "rgba(255,255,255,0.0.08)",
+                  }}
+                  sx={{
+                    ".mantine-Input-input": {
+                      background: dark ? "#101113" : "gray.3",
+                      "&::placeholder": {
+                        fontWeight: 700,
+                        fontStyle: "italic",
+                        color: "rgba(255,255,255,0.0.08)",
+                      },
                     },
-                  },
-                }}
-              />
-            )}
-            {/* {modalMode !== "donating" && (
-
-            )} */}
-          </Stack>
+                  }}
+                />
+                <ScrollArea
+                  h={300}
+                  w={"100%"}
+                  scrollbarSize={8}
+                  scrollHideDelay={250}
+                  sx={{
+                    overflow: "hidden",
+                    borderRadius: "3px",
+                  }}
+                >
+                  <RichTextEditor
+                    editor={editor}
+                    position="relative"
+                    bg={dark ? "dark.6" : "gray.2"}
+                    sx={{
+                      transition: "border-top 0.2s ease",
+                      border: "none",
+                      width: "100%",
+                      minWidth: "500px",
+                      ".mantine-RichTextEditor-toolbar": {
+                        background: dark
+                          ? "rgba(0, 0, 0, 0.7)"
+                          : "rgba(255, 255, 255, 0.7)",
+                        borderColor: "rgba(255,255,255,0)",
+                      },
+                      ".mantine-RichTextEditor-content": {
+                        background: "rgba(0, 0, 0, 0)",
+                        color: dark ? "dark.9" : "gray.0",
+                        minHeight: "250px",
+                        "& .ProseMirror": {
+                          paddingLeft: "21px",
+                          paddingRight: "21px",
+                          minHeight: "250px",
+                        },
+                      },
+                    }}
+                  >
+                    {editor && (
+                      <>
+                        <RichTextEditor.Toolbar sticky>
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.Bold />
+                            <RichTextEditor.H1 />
+                            <RichTextEditor.H2 />
+                            <RichTextEditor.H3 />
+                            <RichTextEditor.H4 />
+                            <RichTextEditor.BulletList />
+                            <RichTextEditor.OrderedList />
+                          </RichTextEditor.ControlsGroup>
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.Italic />
+                            <RichTextEditor.AlignLeft />
+                            <RichTextEditor.AlignCenter />
+                            <RichTextEditor.AlignRight />
+                            <RichTextEditor.AlignJustify />
+                            <RichTextEditor.Link />
+                            <RichTextEditor.Unlink />
+                          </RichTextEditor.ControlsGroup>
+                        </RichTextEditor.Toolbar>
+                      </>
+                    )}
+                    <RichTextEditor.Content
+                      sx={{
+                        "& p": {
+                          fontSize: ".9rem",
+                        },
+                      }}
+                    />
+                  </RichTextEditor>
+                </ScrollArea>
+                <Group position="right" mt={5} w={"100%"}>
+                  <Button
+                    variant="default"
+                    size="md"
+                    w={"40%"}
+                    onClick={closeAltModal}
+                  >
+                    {modalMode === "editUpdate"
+                      ? "SAVE UPDATE"
+                      : modalMode === "postUpdate"
+                      ? "POST UPDATE"
+                      : ""}
+                  </Button>
+                </Group>
+              </Stack>
+            </>
+          )}
         </Modal>
       </Box>
     );
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (props.trip) setDataLoaded(true);
+    }, 1000);
+  }, [props.trip]);
 
   return (
     <>
@@ -587,7 +682,17 @@ export default function Trippage(props) {
             align={"center"}
             pos={"relative"}
           >
-            <MainCarousel tripImages={tripImages} />
+            <Skeleton
+              width={650}
+              height={500}
+              animate={false}
+              visible={!dataLoaded}
+              sx={{
+                opacity: dataLoaded ? 1 : 0,
+              }}
+            >
+              <MainCarousel tripImages={tripImages} />
+            </Skeleton>
             <Divider
               w={"80%"}
               color="dark.4"
@@ -613,96 +718,118 @@ export default function Trippage(props) {
                   overflow: "hidden",
                 }}
               >
-                <Button
-                  px={44}
-                  size={"lg"}
-                  variant="filled"
-                  bg={dark ? "dark.9" : "gray.3"}
-                  c={dark ? "gray.0" : "dark.2"}
-                  sx={{
-                    "&:hover": {
-                      color: "#fff",
-                      backgroundColor: "#A6A7AB",
-                    },
-                  }}
-                >
-                  <IconBrandFacebook size={20} />
-                </Button>
-                <Button
-                  px={44}
-                  size={"lg"}
-                  variant="filled"
-                  bg={dark ? "dark.9" : "gray.3"}
-                  c={dark ? "gray.0" : "dark.2"}
-                  sx={{
-                    "&:hover": {
-                      color: "#fff",
-                      backgroundColor: "#A6A7AB",
-                    },
-                  }}
-                >
-                  <IconBrandInstagram size={20} />
-                </Button>
-                <Button
-                  px={44}
-                  size={"lg"}
-                  variant="filled"
-                  bg={dark ? "dark.9" : "gray.3"}
-                  c={dark ? "gray.0" : "dark.2"}
-                  sx={{
-                    "&:hover": {
-                      color: "#fff",
-                      backgroundColor: "#A6A7AB",
-                    },
-                  }}
-                >
-                  <IconBrandTiktok size={20} />
-                </Button>
-                <Button
-                  px={44}
-                  size={"lg"}
-                  variant="filled"
-                  bg={dark ? "dark.9" : "gray.3"}
-                  c={dark ? "gray.0" : "dark.2"}
-                  sx={{
-                    "&:hover": {
-                      color: "#fff",
-                      backgroundColor: "#A6A7AB",
-                    },
-                  }}
-                >
-                  <IconBrandTwitter size={20} />
-                </Button>
-                <Button
-                  px={44}
-                  size={"lg"}
-                  variant="filled"
-                  bg={dark ? "dark.9" : "gray.3"}
-                  c={dark ? "gray.0" : "dark.2"}
-                  sx={{
-                    "&:hover": {
-                      color: "#fff",
-                      backgroundColor: "#A6A7AB",
-                    },
-                  }}
-                >
-                  <IconBrandWhatsapp size={20} />
-                </Button>
-                <Button
-                  px={44}
-                  size={"lg"}
-                  variant="filled"
-                  bg={dark ? "dark.9" : "gray.3"}
-                  c={dark ? "gray.0" : "dark.2"}
-                  sx={{
-                    "&:hover": {
-                      color: "#fff",
-                      backgroundColor: "#A6A7AB",
-                    },
-                  }}
-                >
-                  <IconSourceCode size={20} />
-                </Button>
+                <Tooltip label="Share on Facebook">
+                  <Button
+                    size={"lg"}
+                    variant="filled"
+                    bg={dark ? "dark.9" : "gray.3"}
+                    c={dark ? "gray.0" : "dark.2"}
+                    sx={{
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "#A6A7AB",
+                      },
+                    }}
+                  >
+                    <IconBrandFacebook size={20} />
+                  </Button>
+                </Tooltip>
+                <Tooltip label="Share on Instagram">
+                  <Button
+                    size={"lg"}
+                    variant="filled"
+                    bg={dark ? "dark.9" : "gray.3"}
+                    c={dark ? "gray.0" : "dark.2"}
+                    sx={{
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "#A6A7AB",
+                      },
+                    }}
+                  >
+                    <IconBrandInstagram size={20} />
+                  </Button>
+                </Tooltip>
+                <Tooltip label="Share on Tiktok">
+                  <Button
+                    size={"lg"}
+                    variant="filled"
+                    bg={dark ? "dark.9" : "gray.3"}
+                    c={dark ? "gray.0" : "dark.2"}
+                    sx={{
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "#A6A7AB",
+                      },
+                    }}
+                  >
+                    <IconBrandTiktok size={20} />
+                  </Button>
+                </Tooltip>
+                <Tooltip label="Share on Twitter">
+                  <Button
+                    size={"lg"}
+                    variant="filled"
+                    bg={dark ? "dark.9" : "gray.3"}
+                    c={dark ? "gray.0" : "dark.2"}
+                    sx={{
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "#A6A7AB",
+                      },
+                    }}
+                  >
+                    <IconBrandTwitter size={20} />
+                  </Button>
+                </Tooltip>
+                <Tooltip label="Share on Whatsapp">
+                  <Button
+                    size={"lg"}
+                    variant="filled"
+                    bg={dark ? "dark.9" : "gray.3"}
+                    c={dark ? "gray.0" : "dark.2"}
+                    sx={{
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "#A6A7AB",
+                      },
+                    }}
+                  >
+                    <IconBrandWhatsapp size={20} />
+                  </Button>
+                </Tooltip>
+                <Tooltip label="HTML Embed Code">
+                  <Button
+                    size={"lg"}
+                    variant="filled"
+                    bg={dark ? "dark.9" : "gray.3"}
+                    c={dark ? "gray.0" : "dark.2"}
+                    sx={{
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "#A6A7AB",
+                      },
+                    }}
+                  >
+                    <IconSourceCode size={20} />
+                  </Button>
+                </Tooltip>
+                <Tooltip label="Share with QR Code">
+                  <Button
+                    size={"lg"}
+                    variant="filled"
+                    bg={dark ? "dark.9" : "gray.3"}
+                    c={dark ? "gray.0" : "dark.2"}
+                    sx={{
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "#A6A7AB",
+                      },
+                    }}
+                  >
+                    <IconQrcode size={20} />
+                  </Button>
+                </Tooltip>
               </Button.Group>
             </Center>
             <Box
@@ -746,6 +873,26 @@ export default function Trippage(props) {
               )}
               <TripDescription />
             </Box>
+            {user?.email === tripData.user && (
+              <Button
+                variant="default"
+                w={"80%"}
+                radius={25}
+                mb={30}
+                opacity={0.3}
+                onClick={showUpdateModal}
+                sx={{
+                  "&:hover": {
+                    opacity: 1,
+                    background: dark
+                      ? "rgba(0,0,0,0.3)"
+                      : "rgba(255,255,255,0.3)",
+                  },
+                }}
+              >
+                POST UPDATE
+              </Button>
+            )}
             {/* {updates.length > 0 && ( */}
             <Update
               setAltModal={setAltModal}
@@ -812,121 +959,97 @@ export default function Trippage(props) {
             <Box
               className="pagePanel"
               w={"100%"}
-              pt={15}
-              pb={25}
               px={20}
+              pt={15}
+              pb={20}
               mb={20}
             >
-              <Group spacing={0} w={"100%"} position="apart">
-                <Box w={"70%"} mb={-5}>
-                  <Divider
-                    w={"90%"}
-                    size={"xs"}
-                    color={
-                      dark ? "rgba(255, 255, 255, 0.07)" : "rgba(0,0,0,0.07)"
-                    }
-                    label={
-                      <Text
-                        fz={10}
-                        mb={-5}
-                        sx={{
-                          color: dark
-                            ? "rgba(255, 255, 255, 1)"
-                            : "rgba(0,0,0,1)",
-                        }}
-                      >
+              <Skeleton
+                height={"100%"}
+                width={"100%"}
+                visible={!dataLoaded}
+                sx={{
+                  opacity: dataLoaded ? 1 : 0,
+                }}
+              >
+                <Group spacing={0} w={"100%"} position="apart">
+                  <Stack spacing={0} w={"70%"}>
+                    <Flex align={"flex-end"} mb={-2} gap={3} pl={5}>
+                      <Title color="green.4" order={1}>
+                        ${donationsSum}
+                      </Title>
+                      <Text fz={11} mb={8} span>
+                        RAISED
+                      </Text>
+                    </Flex>
+                    <Divider w={"90%"} opacity={0.4} my={3} pb={2} />
+                    <Flex align={"flex-end"} opacity={0.4} gap={3} pl={5}>
+                      <Title order={4}>
+                        ${formatNumber(tripData.costsSum)}
+                      </Title>
+                      <Text fz={11} mb={4} span>
                         GOAL
                       </Text>
-                    }
-                  />
-                  <Title order={1} ta={"left"} color="green.5">
-                    ${donationsSum}
-                    <Text span inherit fz={20} fw={400} color="gray.7">
-                      <IconSlash
-                        size={25}
-                        stroke={3}
-                        style={{
-                          transform: "rotate(-10deg)",
-                          position: "relative",
-                          top: 5,
-                        }}
-                      />
-                      ${formatNumber(tripData.costsSum)}
+                    </Flex>
+                  </Stack>
+                  <Box
+                    w={"30%"}
+                    pt={12}
+                    bg={dark ? "dark.6" : "gray.3"}
+                    sx={{
+                      borderRadius: "3px",
+                    }}
+                  >
+                    <Text ta={"center"} fz={10} mb={-7}>
+                      DAYS LEFT
                     </Text>
-                  </Title>
-                </Box>
-                <Box
-                  w={"30%"}
-                  pt={5}
-                  bg={dark ? "dark.6" : "gray.3"}
-                  sx={{
-                    borderRadius: "3px",
-                  }}
-                >
-                  <Text ta={"center"} fz={10} mb={-7}>
-                    DAYS LEFT
-                  </Text>
-                  <Title order={2} ta={"center"} color="gray.7">
-                    {daysBefore(tripData?.travelDate).toString()}
-                  </Title>
-                </Box>
-              </Group>
-              <Progress
-                value={50}
-                color="green.7"
-                bg={"gray.6"}
-                size={"sm"}
-                radius={"xl"}
-                mt={10}
-                mb={12}
-              />
-              {user && user.email === tripData.user && (
-                <Button.Group
-                  w={"100%"}
-                  sx={{
-                    borderRadius: "25px",
-                    overflow: "hidden",
-                  }}
-                >
+                    <Title pb={5} ta={"center"} color="gray.7">
+                      {daysBefore(tripData?.travelDate).toString()}
+                    </Title>
+                  </Box>
+                </Group>
+                <Progress
+                  value={50}
+                  color="green.7"
+                  bg={"gray.6"}
+                  size={"sm"}
+                  radius={"xl"}
+                  mt={10}
+                  mb={12}
+                />
+                {user && user.email === tripData.user && (
                   <Button
                     w={"100%"}
-                    variant="filled"
-                    color="green.9"
+                    radius={25}
+                    variant="gradient"
+                    gradient={{ from: "green.3", to: "green.9", deg: 45 }}
                     onClick={() => {
                       router.push("/purchase");
                     }}
                   >
                     <Text>USE FUNDS</Text>
                   </Button>
+                )}
+                {user?.email !== tripData.user && (
+                  // Main Donate Button
                   <Button
-                    variant="filled"
-                    color="blue"
                     fullWidth
-                    onClick={showUpdateModal}
+                    radius={25}
+                    variant="gradient"
+                    gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
+                    onClick={showDonateModal}
                   >
-                    POST UPDATE
+                    <Text fz={20}>
+                      <Flex align={"center"} gap={5}>
+                        DONATE <IconHeartHandshake size={23} />
+                      </Flex>
+                    </Text>
                   </Button>
-                </Button.Group>
-              )}
-              {user?.email !== tripData.user && (
-                // Main Donate Button
-                <Button
-                  fullWidth
-                  radius={25}
-                  variant="gradient"
-                  gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
-                  onClick={showDonateModal}
-                >
-                  <Text fz={20}>
-                    <Flex align={"center"} gap={5}>
-                      DONATE <IconHeartHandshake size={23} />
-                    </Flex>
-                  </Text>
-                </Button>
-              )}
+                )}
+              </Skeleton>
             </Box>
             <Box className="pagePanel">
-              <Donations dHeight={"calc(100vh - 365px)"} />
+              <Donations dHeight={"calc(100vh - 405px)"} />
             </Box>
           </Flex>
         </Flex>

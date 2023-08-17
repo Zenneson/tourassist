@@ -105,7 +105,15 @@ export default function App(props) {
       },
       Tooltip: {
         defaultProps: {
-          events: { hover: true, focus: false, touch: false },
+          withArrow: true,
+          arrowSize: 10,
+          events: { hover: true, focus: true, touch: false },
+        },
+        styles: {
+          tooltip: {
+            background: colorScheme === "dark" ? "#020202" : "#ededed",
+            color: colorScheme === "dark" ? "#ededed" : "#020202",
+          },
         },
       },
     },

@@ -184,10 +184,10 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    label="Edit First Name"
-                    color={dark ? "dark" : "gray.0"}
-                    c={dark ? "gray.0" : "dark.9"}
-                    withArrow
+                    label={
+                      firstNameValue ? "Edit First Name" : "Add First Name"
+                    }
+                    position="bottom"
                   >
                     <ActionIcon
                       opacity={0.5}
@@ -225,10 +225,8 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    label="Edit Last Name"
-                    color={dark ? "dark" : "gray.0"}
-                    c={dark ? "gray.0" : "dark.9"}
-                    withArrow
+                    label={lastNameValue ? "Edit Last Name" : "Add Last Name"}
+                    position="bottom"
                   >
                     <ActionIcon
                       opacity={0.5}
@@ -268,10 +266,8 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    label="Edit Phone #"
-                    color={dark ? "dark" : "gray.0"}
-                    c={dark ? "gray.0" : "dark.9"}
-                    withArrow
+                    label={phoneValue ? "Edit Phone #" : "Add Phone #"}
+                    position="bottom"
                   >
                     <ActionIcon
                       opacity={0.5}
@@ -301,7 +297,6 @@ export default function AccountInfo(props) {
               <Popover
                 width="target"
                 position="bottom"
-                withArrow={false}
                 opened={changePass}
                 styles={(theme) => ({
                   dropdown: {
@@ -389,28 +384,37 @@ export default function AccountInfo(props) {
                   pointerEvents: !faceBook ? "none" : "all",
                 }}
                 rightSection={
-                  <ActionIcon
-                    opacity={0.5}
-                    variant="subtle"
-                    sx={{
-                      pointerEvents: "all",
-                    }}
-                    onClick={() => {
-                      if (!faceBook) {
-                        setFaceBook(true);
-                        faceBookRef.current.focus();
-                      } else {
-                        updateField({ faceBook: faceBookValue });
-                        setFaceBook(false);
-                      }
-                    }}
+                  <Tooltip
+                    label={
+                      faceBookValue
+                        ? "Edit Facebook handle"
+                        : "Add Facebook handle"
+                    }
+                    position="bottom"
                   >
-                    {user && user.faceBook ? (
-                      <IconPencil size={20} />
-                    ) : (
-                      <IconCirclePlus size={16} />
-                    )}
-                  </ActionIcon>
+                    <ActionIcon
+                      opacity={0.5}
+                      variant="subtle"
+                      sx={{
+                        pointerEvents: "all",
+                      }}
+                      onClick={() => {
+                        if (!faceBook) {
+                          setFaceBook(true);
+                          faceBookRef.current.focus();
+                        } else {
+                          updateField({ faceBook: faceBookValue });
+                          setFaceBook(false);
+                        }
+                      }}
+                    >
+                      {user && user.faceBook ? (
+                        <IconPencil size={20} />
+                      ) : (
+                        <IconCirclePlus size={16} />
+                      )}
+                    </ActionIcon>
+                  </Tooltip>
                 }
               />
               <Input
@@ -423,28 +427,37 @@ export default function AccountInfo(props) {
                   pointerEvents: !instagram ? "none" : "all",
                 }}
                 rightSection={
-                  <ActionIcon
-                    opacity={0.5}
-                    variant="subtle"
-                    sx={{
-                      pointerEvents: "all",
-                    }}
-                    onClick={() => {
-                      if (!instagram) {
-                        setInstagram(true);
-                        instagramRef.current.focus();
-                      } else {
-                        updateField({ instagram: instagramValue });
-                        setInstagram(false);
-                      }
-                    }}
+                  <Tooltip
+                    label={
+                      instagramValue
+                        ? "Edit Instagram handle"
+                        : "Add Instagram handle"
+                    }
+                    position="bottom"
                   >
-                    {user && user.instagram ? (
-                      <IconPencil size={20} />
-                    ) : (
-                      <IconCirclePlus size={16} />
-                    )}
-                  </ActionIcon>
+                    <ActionIcon
+                      opacity={0.5}
+                      variant="subtle"
+                      sx={{
+                        pointerEvents: "all",
+                      }}
+                      onClick={() => {
+                        if (!instagram) {
+                          setInstagram(true);
+                          instagramRef.current.focus();
+                        } else {
+                          updateField({ instagram: instagramValue });
+                          setInstagram(false);
+                        }
+                      }}
+                    >
+                      {user && user.instagram ? (
+                        <IconPencil size={20} />
+                      ) : (
+                        <IconCirclePlus size={16} />
+                      )}
+                    </ActionIcon>
+                  </Tooltip>
                 }
               />
             </Group>
@@ -459,28 +472,35 @@ export default function AccountInfo(props) {
                   pointerEvents: !tikTok ? "none" : "all",
                 }}
                 rightSection={
-                  <ActionIcon
-                    opacity={0.5}
-                    variant="subtle"
-                    sx={{
-                      pointerEvents: "all",
-                    }}
-                    onClick={() => {
-                      if (!tikTok) {
-                        setTikTok(true);
-                        tikTokRef.current.focus();
-                      } else {
-                        updateField({ tikTok: tikTokValue });
-                        setTikTok(false);
-                      }
-                    }}
+                  <Tooltip
+                    label={
+                      tikTokValue ? "Edit Tiktok handle" : "Add Tiktok handle"
+                    }
+                    position="bottom"
                   >
-                    {user && user.tikTok ? (
-                      <IconPencil size={20} />
-                    ) : (
-                      <IconCirclePlus size={16} />
-                    )}
-                  </ActionIcon>
+                    <ActionIcon
+                      opacity={0.5}
+                      variant="subtle"
+                      sx={{
+                        pointerEvents: "all",
+                      }}
+                      onClick={() => {
+                        if (!tikTok) {
+                          setTikTok(true);
+                          tikTokRef.current.focus();
+                        } else {
+                          updateField({ tikTok: tikTokValue });
+                          setTikTok(false);
+                        }
+                      }}
+                    >
+                      {user && user.tikTok ? (
+                        <IconPencil size={20} />
+                      ) : (
+                        <IconCirclePlus size={16} />
+                      )}
+                    </ActionIcon>
+                  </Tooltip>
                 }
               />
               <Input
@@ -493,28 +513,37 @@ export default function AccountInfo(props) {
                   pointerEvents: !twitter ? "none" : "all",
                 }}
                 rightSection={
-                  <ActionIcon
-                    opacity={0.5}
-                    variant="subtle"
-                    sx={{
-                      pointerEvents: "all",
-                    }}
-                    onClick={() => {
-                      if (!twitter) {
-                        setTwitter(true);
-                        twitterRef.current.focus();
-                      } else {
-                        updateField({ twitter: twitterValue });
-                        setTwitter(false);
-                      }
-                    }}
+                  <Tooltip
+                    label={
+                      twitterValue
+                        ? "Edit Twitter handle"
+                        : "Add Twitter handle"
+                    }
+                    position="bottom"
                   >
-                    {user && user.twitter ? (
-                      <IconPencil size={20} />
-                    ) : (
-                      <IconCirclePlus size={16} />
-                    )}
-                  </ActionIcon>
+                    <ActionIcon
+                      opacity={0.5}
+                      variant="subtle"
+                      sx={{
+                        pointerEvents: "all",
+                      }}
+                      onClick={() => {
+                        if (!twitter) {
+                          setTwitter(true);
+                          twitterRef.current.focus();
+                        } else {
+                          updateField({ twitter: twitterValue });
+                          setTwitter(false);
+                        }
+                      }}
+                    >
+                      {user && user.twitter ? (
+                        <IconPencil size={20} />
+                      ) : (
+                        <IconCirclePlus size={16} />
+                      )}
+                    </ActionIcon>
+                  </Tooltip>
                 }
               />
             </Group>

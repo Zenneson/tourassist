@@ -1,18 +1,12 @@
 import { useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useMantineTheme } from "@mantine/core";
-import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
+import { useWindowEvent } from "@mantine/hooks";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { clearSessionStorageExcept } from "../libs/custom";
-import Loader from "./loader";
 
 export function RouterTransition(props) {
-  const [loaded, setLoaded] = useSessionStorage({
-    key: "loaded",
-    defaultValue: false,
-  });
-  const { setPanelShow, setMainMenuOpened, setDropDownOpened, mapLoaded } =
-    props;
+  const { setPanelShow, setMainMenuOpened, setDropDownOpened } = props;
   const theme = useMantineTheme();
   const router = useRouter();
   const { title } = router.query;
@@ -21,9 +15,8 @@ export function RouterTransition(props) {
     setPanelShow(false);
     setMainMenuOpened(false);
     setDropDownOpened(false);
-    setLoaded(false);
     if (title !== undefined) clearSessionStorageExcept(["user"]);
-  }, [setPanelShow, setMainMenuOpened, setDropDownOpened, setLoaded, title]);
+  }, [setPanelShow, setMainMenuOpened, setDropDownOpened, title]);
 
   useWindowEvent("beforeunload", () => {
     readyAppStates();
@@ -49,7 +42,6 @@ export function RouterTransition(props) {
       router.events.off("routeChangeError", handleComplete);
     };
   }, [
-    setLoaded,
     router.asPath,
     router.events,
     setPanelShow,
@@ -67,7 +59,6 @@ export function RouterTransition(props) {
         size={"sm"}
         color={theme.colorScheme === "dark" ? "#219cee" : "#9b1616"}
       />
-      <Loader mapLoaded={mapLoaded} />
     </>
   );
 }

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Box,
   Center,
@@ -9,19 +8,9 @@ import {
   Group,
   Button,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 
 export default function Contact() {
-  const [loaded, setLoaded] = useSessionStorage({
-    key: "loaded",
-    defaultValue: false,
-  });
-
-  useEffect(() => {
-    setLoaded(true);
-  }, [setLoaded]);
-
   const form = useForm({
     initialValues: {
       name: "",

@@ -1,17 +1,6 @@
-import { useEffect } from "react";
 import { Accordion, Stack, Title } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 
 export default function Help() {
-  const [loaded, setLoaded] = useSessionStorage({
-    key: "loaded",
-    defaultValue: false,
-  });
-
-  useEffect(() => {
-    setLoaded(true);
-  }, [setLoaded]);
-
   const questions = [
     {
       question: "What is Tourassist?",

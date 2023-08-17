@@ -10,6 +10,7 @@ import {
   Title,
   Menu,
   Stack,
+  Tooltip,
 } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
 import {
@@ -121,9 +122,17 @@ export default function Update(props) {
     >
       {/* Show Update Modal Button  */}
       {user?.email === tripData.user && (
-        <ActionIcon pos={"absolute"} top={17} right={10} onClick={updateTrip}>
-          <IconPencil />
-        </ActionIcon>
+        <Tooltip label={"Edit Update"}>
+          <ActionIcon
+            variant="Transparent"
+            pos={"absolute"}
+            top={17}
+            right={10}
+            onClick={updateTrip}
+          >
+            <IconPencil />
+          </ActionIcon>
+        </Tooltip>
       )}
       <Flex direction={"column"} w={"15%"}>
         <Stack
@@ -159,9 +168,11 @@ export default function Update(props) {
         <Menu>
           <Menu.Target>
             <Center mt={15}>
-              <ActionIcon variant="transparent" size={"xl"}>
-                <IconShare size={"100%"} />
-              </ActionIcon>
+              <Tooltip label={"Share Update"} position="bottom">
+                <ActionIcon variant="transparent" size={"xl"}>
+                  <IconShare size={"100%"} />
+                </ActionIcon>
+              </Tooltip>
             </Center>
           </Menu.Target>
 

@@ -125,7 +125,7 @@ export default function Money(props) {
         visible={allTrips.length === 0 || currentTrip === undefined}
         overlayBlur={10}
         overlayOpacity={1}
-        overlayColor="#0b0c0d"
+        overlayColor={dark ? "#0b0c0d" : "#F8F9FA"}
       />
       <Select
         w={"95%"}

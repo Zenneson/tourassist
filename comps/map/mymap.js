@@ -37,7 +37,6 @@ import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
 import { addEllipsis, calculateFontSize } from "../../libs/custom";
 import TourList from "./tourList";
-import Loader from "../loader";
 
 export default function Mymap(props) {
   const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
@@ -669,7 +668,6 @@ export default function Mymap(props) {
 
   return (
     <>
-      <Loader mapLoaded={mapLoaded} />
       <Modal
         size={"auto"}
         zIndex={130}

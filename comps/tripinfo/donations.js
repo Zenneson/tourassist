@@ -217,7 +217,7 @@ export default function Donations(props) {
             entry?.isIntersecting
               ? "none"
               : theme.colorScheme === "dark"
-              ? "rgba(0, 0, 0, 1) 0px -15px 7px -5px inset"
+              ? "rgba(0, 0, 0, 0.7) 0px -15px 7px -5px inset"
               : "rgba(0, 0, 0, 0.25) 0px -10px 7px -5px inset"
           }`,
         }}
@@ -238,7 +238,16 @@ export default function Donations(props) {
           },
         }}
       >
-        <Table verticalSpacing="xs" highlightOnHover striped withColumnBorders>
+        <Table
+          verticalSpacing="xs"
+          highlightOnHover
+          striped
+          withColumnBorders
+          sx={{
+            borderRadius: 3,
+            overflow: "hidden",
+          }}
+        >
           <tbody>{rows.length !== 0 && rows}</tbody>
         </Table>
         {rows.length === 0 && (

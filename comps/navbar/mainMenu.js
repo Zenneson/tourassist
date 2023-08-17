@@ -184,13 +184,7 @@ export default function MainMenu(props) {
               </Text>
             </Button>
           )}
-          <Tooltip
-            color={dark ? "dark" : "gray.0"}
-            c={dark ? "gray.0" : "dark.9"}
-            label="Toggle Color Scheme"
-            position="bottom"
-            withArrow
-          >
+          <Tooltip label="Toggle Color Scheme" position="bottom">
             <Button
               variant="subtle"
               onClick={() => toggleColorScheme()}
@@ -202,13 +196,7 @@ export default function MainMenu(props) {
             </Button>
           </Tooltip>
           <Group spacing={0}>
-            <Tooltip
-              color={dark ? "dark" : "gray.0"}
-              c={dark ? "gray.0" : "dark.9"}
-              label="Search Trips"
-              position="bottom"
-              withArrow
-            >
+            <Tooltip label="Search Trips" position="bottom">
               {/* Search button */}
               <Button
                 onClick={openSearch}
@@ -229,13 +217,7 @@ export default function MainMenu(props) {
               shadow="md"
               opened={logoutOpened}
             >
-              <Tooltip
-                color={dark ? "dark" : "gray.0"}
-                c={dark ? "gray.0" : "dark.9"}
-                label={user ? "Logout" : "Login"}
-                position="bottom"
-                withArrow
-              >
+              <Tooltip label={user ? "Logout" : "Login"} position="bottom">
                 <Popover.Target>
                   {/* Logout Dropdown */}
                   <Button
@@ -289,13 +271,7 @@ export default function MainMenu(props) {
             transition={{ duration: 7, repeat: Infinity }}
           >
             {/* DropDown Button */}
-            <Tooltip
-              color={dark ? "dark" : "gray.0"}
-              c={dark ? "gray.0" : "dark.9"}
-              label={"TourAssist?"}
-              position="bottom"
-              withArrow
-            >
+            <Tooltip label={"TourAssist?"} position="bottom">
               <IconInfoCircleFilled
                 stroke={1}
                 size={30}

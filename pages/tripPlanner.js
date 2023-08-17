@@ -89,18 +89,10 @@ export default function TripPlannerPage(props) {
     key: "placeData",
     defaultValue: [],
   });
-  const [loaded, setLoaded] = useSessionStorage({
-    key: "loaded",
-    defaultValue: false,
-  });
   const [renderState, setRenderState] = useSessionStorage({
     key: "renderState",
     defaultValue: 0,
   });
-
-  useEffect(() => {
-    setLoaded(true);
-  }, [setLoaded]);
 
   var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
@@ -620,12 +612,7 @@ export default function TripPlannerPage(props) {
               )}
               {index === 0 && (
                 <Group pos={"absolute"} spacing={10} top={0} left={-50}>
-                  <Tooltip
-                    label="Reset form fields"
-                    color={dark ? "dark" : "gray.0"}
-                    c={dark ? "gray.0" : "dark.9"}
-                    withArrow
-                  >
+                  <Tooltip label="Reset form fields">
                     <ActionIcon
                       variant="subtle"
                       size="xl"
