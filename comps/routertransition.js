@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useMantineTheme } from "@mantine/core";
 import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
+import { clearSessionStorageExcept } from "../libs/custom";
 import Loader from "./loader";
 
 export function RouterTransition(props) {
@@ -21,7 +22,7 @@ export function RouterTransition(props) {
     setMainMenuOpened(false);
     setDropDownOpened(false);
     setLoaded(false);
-    if (title !== undefined) sessionStorage.clear();
+    if (title !== undefined) clearSessionStorageExcept(["user"]);
   }, [setPanelShow, setMainMenuOpened, setDropDownOpened, setLoaded, title]);
 
   useWindowEvent("beforeunload", () => {

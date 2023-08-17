@@ -242,9 +242,9 @@ export default function Money(props) {
               fz={20}
               sx={(theme) => ({
                 transition: "all 0.2s ease",
+                cursor: "pointer",
                 "&:hover": {
-                  cursor: "pointer",
-                  color: dark ? "#000" : "#fff",
+                  transform: "scale(1.1)",
                 },
               })}
               onClick={() => {

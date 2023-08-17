@@ -45,6 +45,16 @@ export function useUserData() {
   return userData;
 }
 
+export const clearSessionStorageExcept = (keysToKeep) => {
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i);
+    if (keysToKeep.indexOf(key) === -1) {
+      sessionStorage.removeItem(key);
+      i--; // Decrement the index as the length changes
+    }
+  }
+};
+
 export const estTimeStamp = (timeStamp) => {
   let dateStr = timeStamp;
   let dateInEST = moment(dateStr)
@@ -117,7 +127,7 @@ export const addAtSymbol = (inputStr, symbol) => {
   }
 };
 
-export function calculateFontSize(text) {
+export const calculateFontSize = (text) => {
   const containerWidthPx = 700;
   const stringLength = text.length;
   let fontSizePx = containerWidthPx / stringLength;
@@ -127,7 +137,7 @@ export function calculateFontSize(text) {
   fontSizeEm = Math.min(fontSizeEm, 6);
 
   return fontSizeEm;
-}
+};
 
 export const useCountdown = (initialValue = 2000, interval = 100) => {
   const [countdownValue, setCountdownValue] = useState(initialValue);
