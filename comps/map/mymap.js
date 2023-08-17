@@ -20,6 +20,7 @@ import {
   Transition,
   Select,
   Modal,
+  LoadingOverlay,
 } from "@mantine/core";
 import {
   IconList,
@@ -668,6 +669,7 @@ export default function Mymap(props) {
 
   return (
     <>
+      <LoadingOverlay visible={!mapLoaded} overlayOpacity={1} />
       <Modal
         size={"auto"}
         zIndex={130}

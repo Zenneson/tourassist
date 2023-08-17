@@ -26,7 +26,7 @@ import {
   Textarea,
   ScrollArea,
   Tooltip,
-  Skeleton,
+  LoadingOverlay,
 } from "@mantine/core";
 import {
   IconBrandFacebook,
@@ -101,6 +101,25 @@ export default function Trippage(props) {
   const [donationsSum, setDonationsSum] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (props.trip) setDataLoaded(true);
+    }, 1000);
+  }, [props.trip]);
+
+  useEffect(() => {
+    router.prefetch("/thankyou");
+    router.prefetch("/purchase");
+  }, [router]);
+
+  useEffect(() => {
+    if (props.trip) {
+      setTripData(props.trip);
+      setTripImages(props.trip.images);
+      setTripDesc(props.trip.tripDesc);
+    }
+  }, [images, props.trip, setTripData, setTripDesc]);
+
   const editor = useEditor({
     editable: true,
     extensions: [
@@ -118,19 +137,6 @@ export default function Trippage(props) {
     },
     // content: content,
   });
-
-  useEffect(() => {
-    router.prefetch("/thankyou");
-    router.prefetch("/purchase");
-  }, [router]);
-
-  useEffect(() => {
-    if (props.trip) {
-      setTripData(props.trip);
-      setTripImages(props.trip.images);
-      setTripDesc(props.trip.tripDesc);
-    }
-  }, [images, props.trip, setTripData, setTripDesc]);
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -656,14 +662,9 @@ export default function Trippage(props) {
     );
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (props.trip) setDataLoaded(true);
-    }, 1000);
-  }, [props.trip]);
-
   return (
     <>
+      <LoadingOverlay visible={!dataLoaded} overlayOpacity={1} />
       <Center mt={120}>
         <Flex
           gap={30}
@@ -682,17 +683,7 @@ export default function Trippage(props) {
             align={"center"}
             pos={"relative"}
           >
-            <Skeleton
-              width={650}
-              height={500}
-              animate={false}
-              visible={!dataLoaded}
-              sx={{
-                opacity: dataLoaded ? 1 : 0,
-              }}
-            >
-              <MainCarousel tripImages={tripImages} />
-            </Skeleton>
+            <MainCarousel tripImages={tripImages} />
             <Divider
               w={"80%"}
               color="dark.4"
@@ -958,95 +949,85 @@ export default function Trippage(props) {
           >
             <Box
               className="pagePanel"
+              pos={"relative"}
               w={"100%"}
               px={20}
               pt={15}
               pb={20}
               mb={20}
             >
-              <Skeleton
-                height={"100%"}
-                width={"100%"}
-                visible={!dataLoaded}
-                sx={{
-                  opacity: dataLoaded ? 1 : 0,
-                }}
-              >
-                <Group spacing={0} w={"100%"} position="apart">
-                  <Stack spacing={0} w={"70%"}>
-                    <Flex align={"flex-end"} mb={-2} gap={3} pl={5}>
-                      <Title color="green.4" order={1}>
-                        ${donationsSum}
-                      </Title>
-                      <Text fz={11} mb={8} span>
-                        RAISED
-                      </Text>
-                    </Flex>
-                    <Divider w={"90%"} opacity={0.4} my={3} pb={2} />
-                    <Flex align={"flex-end"} opacity={0.4} gap={3} pl={5}>
-                      <Title order={4}>
-                        ${formatNumber(tripData.costsSum)}
-                      </Title>
-                      <Text fz={11} mb={4} span>
-                        GOAL
-                      </Text>
-                    </Flex>
-                  </Stack>
-                  <Box
-                    w={"30%"}
-                    pt={12}
-                    bg={dark ? "dark.6" : "gray.3"}
-                    sx={{
-                      borderRadius: "3px",
-                    }}
-                  >
-                    <Text ta={"center"} fz={10} mb={-7}>
-                      DAYS LEFT
-                    </Text>
-                    <Title pb={5} ta={"center"} color="gray.7">
-                      {daysBefore(tripData?.travelDate).toString()}
+              <Group spacing={0} w={"100%"} position="apart">
+                <Stack spacing={0} w={"70%"}>
+                  <Flex align={"flex-end"} mb={-2} gap={3} pl={5}>
+                    <Title color="green.4" order={1}>
+                      ${donationsSum}
                     </Title>
-                  </Box>
-                </Group>
-                <Progress
-                  value={50}
-                  color="green.7"
-                  bg={"gray.6"}
-                  size={"sm"}
-                  radius={"xl"}
-                  mt={10}
-                  mb={12}
-                />
-                {user && user.email === tripData.user && (
-                  <Button
-                    w={"100%"}
-                    radius={25}
-                    variant="gradient"
-                    gradient={{ from: "green.3", to: "green.9", deg: 45 }}
-                    onClick={() => {
-                      router.push("/purchase");
-                    }}
-                  >
-                    <Text>USE FUNDS</Text>
-                  </Button>
-                )}
-                {user?.email !== tripData.user && (
-                  // Main Donate Button
-                  <Button
-                    fullWidth
-                    radius={25}
-                    variant="gradient"
-                    gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
-                    onClick={showDonateModal}
-                  >
-                    <Text fz={20}>
-                      <Flex align={"center"} gap={5}>
-                        DONATE <IconHeartHandshake size={23} />
-                      </Flex>
+                    <Text fz={11} mb={8} span>
+                      RAISED
                     </Text>
-                  </Button>
-                )}
-              </Skeleton>
+                  </Flex>
+                  <Divider w={"90%"} opacity={0.4} my={3} pb={2} />
+                  <Flex align={"flex-end"} opacity={0.4} gap={3} pl={5}>
+                    <Title order={4}>${formatNumber(tripData.costsSum)}</Title>
+                    <Text fz={11} mb={4} span>
+                      GOAL
+                    </Text>
+                  </Flex>
+                </Stack>
+                <Box
+                  w={"30%"}
+                  pt={12}
+                  bg={dark ? "dark.6" : "gray.3"}
+                  sx={{
+                    borderRadius: "3px",
+                  }}
+                >
+                  <Text ta={"center"} fz={10} mb={-7}>
+                    DAYS LEFT
+                  </Text>
+                  <Title pb={5} ta={"center"} color="gray.7">
+                    {daysBefore(tripData?.travelDate).toString()}
+                  </Title>
+                </Box>
+              </Group>
+              <Progress
+                value={50}
+                color="green.7"
+                bg={"gray.6"}
+                size={"sm"}
+                radius={"xl"}
+                mt={10}
+                mb={12}
+              />
+              {user && user.email === tripData.user && (
+                <Button
+                  w={"100%"}
+                  radius={25}
+                  variant="gradient"
+                  gradient={{ from: "green.3", to: "green.9", deg: 45 }}
+                  onClick={() => {
+                    router.push("/purchase");
+                  }}
+                >
+                  <Text>USE FUNDS</Text>
+                </Button>
+              )}
+              {user?.email !== tripData.user && (
+                // Main Donate Button
+                <Button
+                  fullWidth
+                  radius={25}
+                  variant="gradient"
+                  gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
+                  onClick={showDonateModal}
+                >
+                  <Text fz={20}>
+                    <Flex align={"center"} gap={5}>
+                      DONATE <IconHeartHandshake size={23} />
+                    </Flex>
+                  </Text>
+                </Button>
+              )}
             </Box>
             <Box className="pagePanel">
               <Donations dHeight={"calc(100vh - 405px)"} />

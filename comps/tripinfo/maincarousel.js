@@ -37,6 +37,7 @@ export default function MainCarousel(props) {
     return (
       <Box
         style={{
+          position: "relative",
           boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
           borderRadius: "3px",
           overflow: "hidden",
@@ -53,16 +54,15 @@ export default function MainCarousel(props) {
   }
 
   const slides = tripImages.map((image, index) => (
-    <>
+    <Box key={index} h={500} pos={"relative"}>
       <BackgroundImage
-        key={index}
         src={image.file}
         h={500}
         maw={650}
         radius={3}
         alt="Image Slideshow"
       />
-    </>
+    </Box>
   ));
 
   return (
