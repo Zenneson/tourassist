@@ -31,9 +31,7 @@ import {
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { useWindowEvent } from "@mantine/hooks";
-import { updateDoc, doc } from "firebase/firestore";
-import { firestore } from "../../libs/firebase";
-import { formatPhoneNumber, addAtSymbol } from "../../libs/custom";
+import { formatPhoneNumber, addAtSymbol, updateField } from "../../libs/custom";
 import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function AccountInfo(props) {
@@ -84,10 +82,6 @@ export default function AccountInfo(props) {
 
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
-
-  const updateField = async (update) => {
-    await updateDoc(doc(firestore, "users", user.email), update);
-  };
 
   const refs = {
     firstName: firstNameRef,

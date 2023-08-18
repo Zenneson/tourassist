@@ -26,7 +26,7 @@ import {
 import UpdateContent from "./updatecontent";
 
 export default function Update(props) {
-  const { setAltModal, setModalMode, tripData, user } = props;
+  const { setModalMode, tripData, user } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [showall, toggle] = useToggle(["hide", "show"]);
@@ -104,7 +104,6 @@ export default function Update(props) {
 
   const updateTrip = () => {
     setModalMode("editUpdate");
-    setAltModal(true);
   };
 
   const updates = updateData.map((update, index) => (

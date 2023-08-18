@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
+import { updateDoc, doc } from "firebase/firestore";
 import { useSessionStorage } from "@mantine/hooks";
 import {
   useMantineColorScheme,
@@ -47,6 +48,8 @@ import {
   IconUser,
   IconCalendarEvent,
   IconQrcode,
+  IconAlertTriangle,
+  IconCheck,
 } from "@tabler/icons-react";
 import { DateInput } from "@mantine/dates";
 import { RichTextEditor, Link } from "@mantine/tiptap";
@@ -60,13 +63,13 @@ import Update from "../comps/tripinfo/update";
 import TripContent from "../comps/tripinfo/tripContent";
 import MainCarousel from "../comps/tripinfo/maincarousel";
 import TripDescription from "../comps/tripinfo/tripdescription";
-import { formatNumber, daysBefore } from "../libs/custom";
+import { formatNumber, daysBefore, dateFormat } from "../libs/custom";
+import { notifications } from "@mantine/notifications";
 
 export default function Trippage(props) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [modalMode, setModalMode] = useState("");
-  const [altModal, setAltModal] = useState(false);
   const [paid, setPaid] = useState(false);
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
@@ -120,23 +123,51 @@ export default function Trippage(props) {
     }
   }, [images, props.trip, setTripData, setTripDesc]);
 
-  const editor = useEditor({
-    editable: true,
-    extensions: [
-      Link,
-      StarterKit,
-      TextStyle,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Placeholder.configure({
-        placeholder:
-          "Add a detailed description to your trip here, to inspire support...",
-      }),
-    ],
-    parseOptions: {
-      preserveWhitespace: "full",
+  const addUpdateTitle = {
+    color: "orange",
+    icon: <IconAlertTriangle size={20} />,
+    title: "Please add a title",
+    autoClose: 3000,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
-    // content: content,
-  });
+  };
+
+  const addUpdateContent = {
+    color: "orange",
+    icon: <IconAlertTriangle size={20} />,
+    title: "You have not added any text to your update",
+    autoClose: 3000,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
+
+  const postingUpdate = {
+    id: "postingUpdate",
+    color: "green",
+    icon: <IconCheck size={20} />,
+    title: "Update posted!",
+    autoClose: false,
+    loading: true,
+    withCloseButton: false,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
+
+  const updatePosted = {
+    id: "postingUpdate",
+    color: "green",
+    icon: <IconCheck size={20} />,
+    title: "Update posted!",
+    autoClose: 3000,
+    loading: false,
+    withCloseButton: true,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -167,17 +198,15 @@ export default function Trippage(props) {
   };
 
   const showUpdateModal = () => {
-    setAltModal(true);
     setModalMode("postUpdate");
   };
 
   const showDonateModal = () => {
     setModalMode("donating");
-    setAltModal(true);
   };
 
   const closeAltModal = () => {
-    setAltModal(false);
+    setModalMode("");
     setPaid(false);
   };
 
@@ -213,6 +242,189 @@ export default function Trippage(props) {
           },
         }}
       />
+    );
+  };
+
+  const UpdateForm = () => {
+    const [updateTitle, setUpdateTitle] = useState("");
+
+    const updateEditor = useEditor({
+      editable: true,
+      extensions: [
+        Link,
+        StarterKit,
+        TextStyle,
+        TextAlign.configure({ types: ["heading", "paragraph"] }),
+        Placeholder.configure({
+          placeholder:
+            "Add an update about your trip. This could be a new milestone, a new goal, or a new challenge you're facing.",
+        }),
+      ],
+      parseOptions: {
+        preserveWhitespace: "full",
+      },
+    });
+
+    // TODO - UPDATE THE UPDATE CONTENT
+    // const [updateContent, setUpdateContent] = useState("");
+    // useEffect(() => {
+    //   if (updateEditor) {
+    //     updateEditor.commands.setContent(updateContent);
+    //   }
+    // }, [updateEditor, updateContent]);
+
+    const handleUpdate = async () => {
+      try {
+        if (updateTitle === "") {
+          notifications.show(addUpdateTitle);
+          console.error("Update Title is empty");
+          return;
+        }
+        if (
+          updateEditor &&
+          (updateEditor.getHTML() === "<p></p>" ||
+            updateEditor.getHTML() === "")
+        ) {
+          notifications.show(addUpdateContent);
+          console.error("Update Content is empty");
+          return;
+        }
+        notifications.show(postingUpdate);
+        const updateObj = {
+          updateTitle: updateTitle,
+          updateContent: updateEditor && updateEditor.getHTML(),
+          updateDate: dateFormat(new Date().toLocaleDateString()),
+          updateId: updates.length + 1,
+        };
+        const newUpdates = [...updates, updateObj];
+        setUpdates(newUpdates);
+        await updateDoc(
+          doc(firestore, "users", user.email, "trips", tripData.tripId),
+          { updates: newUpdates }
+        );
+        notifications.update(updatePosted);
+        setUpdateTitle("");
+        setModalMode("");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    console.log("TITLE: ", updateTitle);
+    console.log("CONTENT: ", updateEditor && updateEditor.getHTML());
+
+    return (
+      <>
+        <Input
+          tabIndex={1}
+          size={"xl"}
+          w="100%"
+          placeholder="Update Title..."
+          maw={800}
+          value={updateTitle}
+          onKeyDown={(e) => {
+            if (e.key === "Tab") {
+              e.preventDefault();
+              updateEditor.commands.focus("end");
+            }
+          }}
+          onChange={(e) => setUpdateTitle(e.target.value)}
+          wrapperProps={{
+            style: {
+              borderRadius: 3,
+            },
+          }}
+          sx={{
+            ".mantine-Input-input": {
+              background: dark ? "#101113" : "gray.3",
+              "&::placeholder": {
+                fontWeight: 700,
+                fontStyle: "italic",
+                color: "rgba(255,255,255,0.0.08)",
+              },
+            },
+          }}
+        />
+        <ScrollArea
+          h={300}
+          w={"100%"}
+          scrollbarSize={8}
+          scrollHideDelay={250}
+          sx={{
+            overflow: "hidden",
+            borderRadius: "3px",
+          }}
+        >
+          <RichTextEditor
+            editor={updateEditor}
+            position="relative"
+            bg={dark ? "dark.6" : "gray.2"}
+            onChange={() => {
+              const content = updateEditor.getHTML();
+              setUpdateContent(content);
+            }}
+            sx={{
+              transition: "border-top 0.2s ease",
+              border: "none",
+              width: "100%",
+              minWidth: "500px",
+              ".mantine-RichTextEditor-toolbar": {
+                background: dark
+                  ? "rgba(0, 0, 0, 0.7)"
+                  : "rgba(255, 255, 255, 0.7)",
+                borderColor: "rgba(255,255,255,0)",
+              },
+              ".mantine-RichTextEditor-content": {
+                background: "rgba(0, 0, 0, 0)",
+                color: dark ? "dark.9" : "gray.0",
+                minHeight: "250px",
+                "& .ProseMirror": {
+                  paddingLeft: "21px",
+                  paddingRight: "21px",
+                  minHeight: "250px",
+                },
+              },
+            }}
+          >
+            <RichTextEditor.Toolbar sticky>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Bold />
+                <RichTextEditor.H1 />
+                <RichTextEditor.H2 />
+                <RichTextEditor.H3 />
+                <RichTextEditor.H4 />
+                <RichTextEditor.BulletList />
+                <RichTextEditor.OrderedList />
+              </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Italic />
+                <RichTextEditor.AlignLeft />
+                <RichTextEditor.AlignCenter />
+                <RichTextEditor.AlignRight />
+                <RichTextEditor.AlignJustify />
+                <RichTextEditor.Link />
+                <RichTextEditor.Unlink />
+              </RichTextEditor.ControlsGroup>
+            </RichTextEditor.Toolbar>
+            <RichTextEditor.Content
+              sx={{
+                "& p": {
+                  fontSize: ".9rem",
+                },
+              }}
+            />
+          </RichTextEditor>
+        </ScrollArea>
+        <Group position="right" mt={5} w={"100%"}>
+          <Button variant="default" size="md" w={"25%"} onClick={handleUpdate}>
+            {modalMode === "editUpdate"
+              ? "SAVE UPDATE"
+              : modalMode === "postUpdate"
+              ? "POST UPDATE"
+              : ""}
+          </Button>
+        </Group>
+      </>
     );
   };
 
@@ -291,6 +503,7 @@ export default function Trippage(props) {
                 images={images}
                 setImages={setImages}
                 modalMode={modalMode}
+                setModalMode={setModalMode}
                 weekAhead={weekAhead}
               />
             </Stack>
@@ -302,7 +515,7 @@ export default function Trippage(props) {
           size={850}
           padding={"xl"}
           centered
-          opened={altModal}
+          opened={modalMode === "postUpdate" || modalMode === "editUpdate"}
           onClose={closeAltModal}
           styles={(theme) => ({
             header: {
@@ -543,117 +756,7 @@ export default function Trippage(props) {
                   : ""}
               </Title>
               <Stack align="center">
-                <Input
-                  size={"xl"}
-                  value={
-                    modalMode === "editUpdate"
-                      ? "Update number 3 of the trip"
-                      : ""
-                  }
-                  w="100%"
-                  placeholder="Update Title..."
-                  maw={800}
-                  onChange={(e) => e.preventDefault()}
-                  wrapperProps={{
-                    style: {
-                      borderRadius: 3,
-                    },
-                  }}
-                  sx={{
-                    ".mantine-Input-input": {
-                      background: dark ? "#101113" : "gray.3",
-                      "&::placeholder": {
-                        fontWeight: 700,
-                        fontStyle: "italic",
-                        color: "rgba(255,255,255,0.0.08)",
-                      },
-                    },
-                  }}
-                />
-                <ScrollArea
-                  h={300}
-                  w={"100%"}
-                  scrollbarSize={8}
-                  scrollHideDelay={250}
-                  sx={{
-                    overflow: "hidden",
-                    borderRadius: "3px",
-                  }}
-                >
-                  <RichTextEditor
-                    editor={editor}
-                    position="relative"
-                    bg={dark ? "dark.6" : "gray.2"}
-                    sx={{
-                      transition: "border-top 0.2s ease",
-                      border: "none",
-                      width: "100%",
-                      minWidth: "500px",
-                      ".mantine-RichTextEditor-toolbar": {
-                        background: dark
-                          ? "rgba(0, 0, 0, 0.7)"
-                          : "rgba(255, 255, 255, 0.7)",
-                        borderColor: "rgba(255,255,255,0)",
-                      },
-                      ".mantine-RichTextEditor-content": {
-                        background: "rgba(0, 0, 0, 0)",
-                        color: dark ? "dark.9" : "gray.0",
-                        minHeight: "250px",
-                        "& .ProseMirror": {
-                          paddingLeft: "21px",
-                          paddingRight: "21px",
-                          minHeight: "250px",
-                        },
-                      },
-                    }}
-                  >
-                    {editor && (
-                      <>
-                        <RichTextEditor.Toolbar sticky>
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.Bold />
-                            <RichTextEditor.H1 />
-                            <RichTextEditor.H2 />
-                            <RichTextEditor.H3 />
-                            <RichTextEditor.H4 />
-                            <RichTextEditor.BulletList />
-                            <RichTextEditor.OrderedList />
-                          </RichTextEditor.ControlsGroup>
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.Italic />
-                            <RichTextEditor.AlignLeft />
-                            <RichTextEditor.AlignCenter />
-                            <RichTextEditor.AlignRight />
-                            <RichTextEditor.AlignJustify />
-                            <RichTextEditor.Link />
-                            <RichTextEditor.Unlink />
-                          </RichTextEditor.ControlsGroup>
-                        </RichTextEditor.Toolbar>
-                      </>
-                    )}
-                    <RichTextEditor.Content
-                      sx={{
-                        "& p": {
-                          fontSize: ".9rem",
-                        },
-                      }}
-                    />
-                  </RichTextEditor>
-                </ScrollArea>
-                <Group position="right" mt={5} w={"100%"}>
-                  <Button
-                    variant="default"
-                    size="md"
-                    w={"40%"}
-                    onClick={closeAltModal}
-                  >
-                    {modalMode === "editUpdate"
-                      ? "SAVE UPDATE"
-                      : modalMode === "postUpdate"
-                      ? "POST UPDATE"
-                      : ""}
-                  </Button>
-                </Group>
+                <UpdateForm />
               </Stack>
             </>
           )}
@@ -711,7 +814,7 @@ export default function Trippage(props) {
               >
                 <Tooltip label="Share on Facebook">
                   <Button
-                    size={"lg"}
+                    size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
@@ -722,12 +825,12 @@ export default function Trippage(props) {
                       },
                     }}
                   >
-                    <IconBrandFacebook size={20} />
+                    <IconBrandFacebook size={26} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share on Instagram">
                   <Button
-                    size={"lg"}
+                    size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
@@ -738,12 +841,12 @@ export default function Trippage(props) {
                       },
                     }}
                   >
-                    <IconBrandInstagram size={20} />
+                    <IconBrandInstagram size={26} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share on Tiktok">
                   <Button
-                    size={"lg"}
+                    size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
@@ -754,12 +857,12 @@ export default function Trippage(props) {
                       },
                     }}
                   >
-                    <IconBrandTiktok size={20} />
+                    <IconBrandTiktok size={26} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share on Twitter">
                   <Button
-                    size={"lg"}
+                    size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
@@ -770,12 +873,12 @@ export default function Trippage(props) {
                       },
                     }}
                   >
-                    <IconBrandTwitter size={20} />
+                    <IconBrandTwitter size={26} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share on Whatsapp">
                   <Button
-                    size={"lg"}
+                    size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
@@ -786,12 +889,12 @@ export default function Trippage(props) {
                       },
                     }}
                   >
-                    <IconBrandWhatsapp size={20} />
+                    <IconBrandWhatsapp size={26} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="HTML Embed Code">
                   <Button
-                    size={"lg"}
+                    size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
@@ -802,12 +905,12 @@ export default function Trippage(props) {
                       },
                     }}
                   >
-                    <IconSourceCode size={20} />
+                    <IconSourceCode size={26} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share with QR Code">
                   <Button
-                    size={"lg"}
+                    size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
@@ -818,7 +921,7 @@ export default function Trippage(props) {
                       },
                     }}
                   >
-                    <IconQrcode size={20} />
+                    <IconQrcode size={26} />
                   </Button>
                 </Tooltip>
               </Button.Group>
@@ -886,7 +989,6 @@ export default function Trippage(props) {
             )}
             {/* {updates.length > 0 && ( */}
             <Update
-              setAltModal={setAltModal}
               setModalMode={setModalMode}
               tripData={tripData}
               user={user}
@@ -1089,7 +1191,6 @@ export const getStaticProps = async ({ params }) => {
     };
   } catch (error) {
     console.error(error);
-    // In case of error, return an empty props object
     return {
       props: {},
     };

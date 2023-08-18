@@ -71,6 +71,7 @@ export default function TripPlannerPage(props) {
   const [infoAdded, setInfoAdded] = useState(false);
   const router = useRouter();
   const sumRef = useRef(null);
+  const titleRef = useRef(null);
   const dayjs = require("dayjs");
 
   const [user, setUser] = useSessionStorage({
@@ -1249,6 +1250,7 @@ export default function TripPlannerPage(props) {
                   spacing={20}
                 >
                   <Input
+                    ref={titleRef}
                     size={"xl"}
                     w="100%"
                     placeholder="Title..."
@@ -1268,6 +1270,7 @@ export default function TripPlannerPage(props) {
                     }}
                   />
                   <TripContent
+                    titleRef={titleRef}
                     active={active}
                     images={images}
                     setImages={setImages}

@@ -185,7 +185,6 @@ export const fileNameString = (string) => {
 };
 
 export const extractFileName = (url) => {
-  console.log("URL: ", url);
   const pngIndex = url.lastIndexOf(".png?alt");
   if (pngIndex === -1) return null;
   const partBeforePngAlt = url.substring(0, pngIndex);
@@ -196,8 +195,6 @@ export const extractFileName = (url) => {
 };
 
 export const createImageObjects = (imageURLs) => {
-  console.log("imageURLs: ", imageURLs);
-  console.log(typeof imageURLs);
   return imageURLs.map((imageURL) => {
     if (typeof imageURL === "object") {
       return imageURL;
@@ -206,6 +203,30 @@ export const createImageObjects = (imageURLs) => {
       name: extractFileName(imageURL),
       file: imageURL,
     };
+  });
+};
+
+const handleImages = (images, tripId, user) => {
+  return images.map(async (imageDataUrl) => {
+    if (imageDataUrl.file.includes("firebasestorage")) return imageDataUrl;
+    if (imageDataUrl.file.startsWith("data:")) {
+      const fileName = fileNameString(imageDataUrl.name);
+      const storageRef = ref(
+        storage,
+        `images/${user}/${tripId}/${fileName}.png`
+      );
+      const snapshot = await uploadString(
+        storageRef,
+        imageDataUrl.file,
+        "data_url",
+        {
+          contentType: "image/png",
+          name: fileName,
+        }
+      );
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      return downloadURL;
+    }
   });
 };
 
@@ -225,26 +246,7 @@ export const saveToDB = async (
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const imageUploadPromises = images.map(async (imageDataUrl) => {
-        if (imageDataUrl.file.startsWith("data:")) {
-          const fileName = fileNameString(imageDataUrl.name);
-          const storageRef = ref(
-            storage,
-            `images/${user}/${createdId}/${fileName}.png`
-          );
-          const snapshot = await uploadString(
-            storageRef,
-            imageDataUrl.file,
-            "data_url",
-            {
-              contentType: "image/png",
-              name: fileName,
-            }
-          );
-          const downloadURL = await getDownloadURL(snapshot.ref);
-          return downloadURL;
-        }
-      });
+      const imageUploadPromises = handleImages(images, createdId, user);
 
       const imageURLs = await Promise.all(imageUploadPromises);
 
@@ -288,34 +290,11 @@ export const updateEditedTrip = async (
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const imageUploadPromises = images.map(async (imageDataUrl) => {
-        if (imageDataUrl.file.includes("firebasestorage")) return imageDataUrl;
-        if (imageDataUrl.file.startsWith("data:")) {
-          const fileName = fileNameString(imageDataUrl.name);
-          const storageRef = ref(
-            storage,
-            `images/${user}/${tripId}/${fileName}.png`
-          );
-          const snapshot = await uploadString(
-            storageRef,
-            imageDataUrl.file,
-            "data_url",
-            {
-              contentType: "image/png",
-              name: fileName,
-            }
-          );
-          const downloadURL = await getDownloadURL(snapshot.ref);
-          return downloadURL;
-        }
-      });
+      const imageUploadPromises = handleImages(images, tripId, user);
 
       const imageURLs = await Promise.all(imageUploadPromises);
 
       const imageObjects = createImageObjects(imageURLs);
-
-      console.log("imageObjects: ", imageObjects);
-      console.log("imageURLs: ", imageURLs);
 
       const tripRef = doc(firestore, "users", user, "trips", tripId);
       updateDoc(tripRef, {
@@ -323,9 +302,14 @@ export const updateEditedTrip = async (
         travelDate: dateFormat(travelDate),
         tripDesc: newDesc,
       });
+
       resolve(imageObjects);
     } catch (error) {
       reject(error);
     }
   });
+};
+
+export const updateField = async (update) => {
+  await updateDoc(doc(firestore, "users", user.email), update);
 };

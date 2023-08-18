@@ -19,7 +19,7 @@ import {
   ActionIcon,
   Badge,
 } from "@mantine/core";
-import { useSessionStorage, useClickOutside } from "@mantine/hooks";
+import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -46,7 +46,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  let { images, setImages, modalMode, user } = props;
+  let { images, setImages, modalMode, setModalMode, user, titleRef } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [loading, setLoading] = useState(true);
@@ -110,7 +110,7 @@ export default function TripContent(props) {
   ));
 
   const updatingTrip = {
-    iid: "updatingTrip",
+    id: "updatingTrip",
     title: "Updating Trip Details...",
     message: "Please wait while we update your trip details.",
     color: "green",
@@ -137,11 +137,7 @@ export default function TripContent(props) {
   let content;
   if (router.pathname === "/tripplanner") {
     content = tripDesc !== "" ? tripDesc?.toString() : "";
-  } else if (
-    router.pathname !== "/tripplanner" &&
-    tripData &&
-    tripData.tripDesc
-  ) {
+  } else if (router.query.hasOwnProperty("title")) {
     content = tripData.tripDesc;
   }
 
@@ -161,6 +157,15 @@ export default function TripContent(props) {
       preserveWhitespace: "full",
     },
     content: content,
+  });
+
+  useWindowEvent("keydown", (e) => {
+    if (e.key === "Tab" && document.activeElement === titleRef.current) {
+      e.preventDefault();
+      if (titleRef.current) {
+        editor.commands.focus();
+      }
+    }
   });
 
   useEffect(() => {
@@ -251,8 +256,6 @@ export default function TripContent(props) {
     setScale(1);
   };
 
-  const saveUpdateRef = useClickOutside(() => setUpdatedDesc(editor.getHTML()));
-
   const imageItems = images.map((image, index) => {
     return (
       <Flex
@@ -323,6 +326,29 @@ export default function TripContent(props) {
     setImageUpload(imgObj);
     setLoading(true);
     setShowCropper(true);
+  };
+
+  const updateTripData = async () => {
+    const newDesc = updatedDesc || editor.getHTML();
+    notifications.show(updatingTrip);
+    try {
+      const imageObjects = await updateEditedTrip(
+        user.email,
+        tripData.tripId,
+        images,
+        newDesc,
+        travelDate
+      );
+
+      setTripDesc(newDesc);
+      setImages(imageObjects);
+      await router.replace("/" + tripData.tripId);
+
+      notifications.update(tripUpdated);
+      setModalMode("");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -486,7 +512,6 @@ export default function TripContent(props) {
         }}
       >
         <RichTextEditor
-          ref={saveUpdateRef}
           editor={editor}
           position="relative"
           bg={dark ? "dark.6" : "gray.2"}
@@ -517,30 +542,26 @@ export default function TripContent(props) {
             },
           }}
         >
-          {editor && (
-            <>
-              <RichTextEditor.Toolbar sticky>
-                <RichTextEditor.ControlsGroup>
-                  <RichTextEditor.Bold />
-                  <RichTextEditor.H1 />
-                  <RichTextEditor.H2 />
-                  <RichTextEditor.H3 />
-                  <RichTextEditor.H4 />
-                  <RichTextEditor.BulletList />
-                  <RichTextEditor.OrderedList />
-                </RichTextEditor.ControlsGroup>
-                <RichTextEditor.ControlsGroup>
-                  <RichTextEditor.Italic />
-                  <RichTextEditor.AlignLeft />
-                  <RichTextEditor.AlignCenter />
-                  <RichTextEditor.AlignRight />
-                  <RichTextEditor.AlignJustify />
-                  <RichTextEditor.Link />
-                  <RichTextEditor.Unlink />
-                </RichTextEditor.ControlsGroup>
-              </RichTextEditor.Toolbar>
-            </>
-          )}
+          <RichTextEditor.Toolbar sticky>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.H1 />
+              <RichTextEditor.H2 />
+              <RichTextEditor.H3 />
+              <RichTextEditor.H4 />
+              <RichTextEditor.BulletList />
+              <RichTextEditor.OrderedList />
+            </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Italic />
+              <RichTextEditor.AlignLeft />
+              <RichTextEditor.AlignCenter />
+              <RichTextEditor.AlignRight />
+              <RichTextEditor.AlignJustify />
+              <RichTextEditor.Link />
+              <RichTextEditor.Unlink />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
           <RichTextEditor.Content
             sx={{
               "& p": {
@@ -556,26 +577,7 @@ export default function TripContent(props) {
             variant="default"
             size="md"
             w={"25%"}
-            onClick={() => {
-              const newDesc = updatedDesc || editor.getHTML();
-              notifications.show(updatingTrip);
-              updateEditedTrip(
-                user.email,
-                tripData.tripId,
-                images,
-                newDesc,
-                travelDate
-              )
-                .then((imageObjects) => {
-                  setTripDesc(newDesc);
-                  setImages(imageObjects);
-                  notifications.update(tripUpdated);
-                  router.reload();
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
-            }}
+            onClick={updateTripData}
           >
             SUBMIT EDIT
           </Button>
