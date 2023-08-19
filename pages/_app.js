@@ -103,6 +103,11 @@ export default function App(props) {
           },
         },
       },
+      LoadingOverlay: {
+        defaultProps: {
+          transitionDuration: 500,
+        },
+      },
       Tooltip: {
         defaultProps: {
           withArrow: true,

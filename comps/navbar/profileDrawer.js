@@ -239,6 +239,7 @@ export default function ProfileDrawer(props) {
                 variant="subtle"
                 onClick={() => {
                   setMainMenuOpened(false);
+                  setPanelShow(false);
                   router.push("/map");
                 }}
                 classNames={{

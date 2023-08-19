@@ -676,6 +676,7 @@ export default function Mymap(props) {
         opened={showModal}
         onClose={setShowModal}
         withCloseButton={false}
+        padding={"xl"}
         centered
         styles={(theme) => ({
           header: {

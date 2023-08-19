@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { collectionGroup, getDocs } from "firebase/firestore";
+import { doc, updateDoc, collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
-import { updateDoc, doc } from "firebase/firestore";
 import { useSessionStorage } from "@mantine/hooks";
 import {
   useMantineColorScheme,
@@ -59,7 +58,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
 import Donations from "../comps/tripinfo/donations";
-import Update from "../comps/tripinfo/update";
+import Updates from "../comps/tripinfo/updates";
 import TripContent from "../comps/tripinfo/tripContent";
 import MainCarousel from "../comps/tripinfo/maincarousel";
 import TripDescription from "../comps/tripinfo/tripdescription";
@@ -101,6 +100,8 @@ export default function Trippage(props) {
     defaultValue: [],
   });
 
+  const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
+  const [currentUpdateId, setCurrentUpdateId] = useState(0);
   const [donationsSum, setDonationsSum] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -120,6 +121,7 @@ export default function Trippage(props) {
       setTripData(props.trip);
       setTripImages(props.trip.images);
       setTripDesc(props.trip.tripDesc);
+      setUpdates(props.trip.updates);
     }
   }, [images, props.trip, setTripData, setTripDesc]);
 
@@ -246,8 +248,6 @@ export default function Trippage(props) {
   };
 
   const UpdateForm = () => {
-    const [updateTitle, setUpdateTitle] = useState("");
-
     const updateEditor = useEditor({
       editable: true,
       extensions: [
@@ -265,13 +265,34 @@ export default function Trippage(props) {
       },
     });
 
-    // TODO - UPDATE THE UPDATE CONTENT
-    // const [updateContent, setUpdateContent] = useState("");
-    // useEffect(() => {
-    //   if (updateEditor) {
-    //     updateEditor.commands.setContent(updateContent);
-    //   }
-    // }, [updateEditor, updateContent]);
+    const [allUpdates, setAllUpdates] = useState([]);
+    const [updateTitle, setUpdateTitle] = useState("");
+    const [updateContent, setUpdateContent] = useState("");
+
+    useEffect(() => {
+      if (updates && allUpdates.length > 0) {
+        setAllUpdates(updates);
+      }
+    }, [allUpdates, setAllUpdates]);
+
+    useEffect(() => {
+      const findUpdateById = (currentUpdateId) => {
+        return updates.find((update) => update.updateId === currentUpdateId);
+      };
+
+      if (
+        modalMode === "editUpdate" &&
+        updates &&
+        updateEditor &&
+        currentUpdateId !== 0
+      ) {
+        const currentUpdate = findUpdateById(currentUpdateId);
+        setUpdateTitle(currentUpdate.updateTitle);
+        setUpdateContent(currentUpdate.updateContent);
+        updateEditor.commands.setContent(updateContent);
+        setUpdateDataLoaded(true);
+      }
+    }, [updateEditor, updateContent]);
 
     const handleUpdate = async () => {
       try {
@@ -290,28 +311,48 @@ export default function Trippage(props) {
           return;
         }
         notifications.show(postingUpdate);
-        const updateObj = {
-          updateTitle: updateTitle,
-          updateContent: updateEditor && updateEditor.getHTML(),
-          updateDate: dateFormat(new Date().toLocaleDateString()),
-          updateId: updates.length + 1,
-        };
-        const newUpdates = [...updates, updateObj];
+
+        let newUpdates;
+        if (modalMode === "editUpdate") {
+          const updateIndex = updates.findIndex(
+            (update) => update.updateId === currentUpdateId
+          );
+          if (updateIndex !== -1) {
+            const updateObj = { ...updates[updateIndex] };
+            updateObj.updateTitle = updateTitle;
+            updateObj.updateContent = updateEditor && updateEditor.getHTML();
+            newUpdates = [...updates];
+            newUpdates[updateIndex] = updateObj;
+          } else {
+            console.error("Update not found");
+            return;
+          }
+        }
+        if (modalMode === "postUpdate") {
+          const updatesArray = Array.isArray(updates) ? updates : [];
+          const updateObj = {
+            updateTitle: updateTitle,
+            updateContent: updateEditor && updateEditor.getHTML(),
+            updateDate: dateFormat(new Date().toLocaleDateString()),
+            updateId: updatesArray.length + 1 || 1,
+          };
+          newUpdates = [...updatesArray, updateObj];
+        }
+
         setUpdates(newUpdates);
+        setModalMode("");
         await updateDoc(
           doc(firestore, "users", user.email, "trips", tripData.tripId),
           { updates: newUpdates }
         );
+        await router.replace(router.asPath);
         notifications.update(updatePosted);
         setUpdateTitle("");
-        setModalMode("");
+        setUpdateDataLoaded(false);
       } catch (error) {
         console.error(error);
       }
     };
-
-    console.log("TITLE: ", updateTitle);
-    console.log("CONTENT: ", updateEditor && updateEditor.getHTML());
 
     return (
       <>
@@ -515,7 +556,11 @@ export default function Trippage(props) {
           size={850}
           padding={"xl"}
           centered
-          opened={modalMode === "postUpdate" || modalMode === "editUpdate"}
+          opened={
+            modalMode === "postUpdate" ||
+            modalMode === "editUpdate" ||
+            modalMode === "donating"
+          }
           onClose={closeAltModal}
           styles={(theme) => ({
             header: {
@@ -534,6 +579,10 @@ export default function Trippage(props) {
             },
           })}
         >
+          <LoadingOverlay
+            visible={modalMode === "editUpdate" && !updateDataLoaded}
+            overlayOpacity={1}
+          />
           {/* Close Edit Content Modal */}
           <CloseButton
             pos={"absolute"}
@@ -796,7 +845,7 @@ export default function Trippage(props) {
                 <Title
                   order={3}
                   px={5}
-                  mb={10}
+                  mb={tripData.images?.length === 0 ? 15 : 0}
                   maw={"800px"}
                   color="gray.6"
                   fw={700}
@@ -987,14 +1036,23 @@ export default function Trippage(props) {
                 POST UPDATE
               </Button>
             )}
-            {/* {updates.length > 0 && ( */}
-            <Update
-              setModalMode={setModalMode}
-              tripData={tripData}
-              user={user}
-            />
-            {/* )} */}
-            <Box className="pagePanel" w={"85%"} mb={50} p={"20px 30px"}>
+            {updates && updates.length > 0 && (
+              <Updates
+                setCurrentUpdateId={setCurrentUpdateId}
+                updates={updates}
+                setUpdates={setUpdates}
+                setModalMode={setModalMode}
+                tripData={tripData}
+                user={user}
+              />
+            )}
+            <Box
+              className="pagePanel"
+              w={"85%"}
+              mt={updates.length === 1 ? 30 : 0}
+              mb={50}
+              p={"20px 30px"}
+            >
               <Divider
                 size={"xl"}
                 w={"100%"}
