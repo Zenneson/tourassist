@@ -489,7 +489,7 @@ export default function Trippage(props) {
                       RAISED
                     </Text>
                   </Flex>
-                  <Divider w={"90%"} opacity={0.4} my={3} pb={2} />
+                  <Divider w={"90%"} opacity={0.4} my={3} />
                   <Flex align={"flex-end"} opacity={0.4} gap={3} pl={5}>
                     <Title order={4}>${formatNumber(tripData.costsSum)}</Title>
                     <Text fz={11} mb={4} span>

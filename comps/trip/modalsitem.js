@@ -69,6 +69,7 @@ export default function ModalsItem(props) {
   const donationRef = useRef(null);
   const donorNameRef = useRef(null);
   const [paymentToken, setPaymentToken] = useState(null);
+  const [paymentId, setPaymentId] = useState(null);
   const [tokenUpdated, setTokenUpdated] = useState(false);
 
   const addUpdateTitle = {
@@ -411,14 +412,6 @@ export default function ModalsItem(props) {
   };
 
   // TODO: DUFFEL FUNCS
-  const successfulPayment = () => {
-    // Show 'successful payment' page and confirm Duffel PaymentIntent
-  };
-
-  const errorPayment = (error) => {
-    // Show error page
-  };
-
   const donationReq = () => {
     if (donationAmount === 0) {
       notifications.show(noDonation);
@@ -451,11 +444,39 @@ export default function ModalsItem(props) {
       .then((data) => {
         const token = data.data.client_token;
         setPaymentToken(token);
+        setPaymentId(data.data.id);
         setTokenUpdated(true);
+        console.log("DATA: ", data.data);
       })
       .catch((error) => {
         console.error("Failed to create payment intent:", error);
       });
+  };
+
+  console.log("PAYEMNTID: ", paymentId);
+
+  const successfulPayment = () => {
+    fetch("/api/confirm", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DUFFEL_AC}`,
+        Accept: "application/json",
+        "Accept-Encoding": "gzip",
+        "Duffel-Version": "v1",
+      },
+      body: paymentId,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const errorPayment = (error) => {
+    console.log(error);
   };
 
   useEffect(() => {
@@ -694,8 +715,8 @@ export default function ModalsItem(props) {
                 </Group>
                 <DuffelPayments
                   paymentIntentClientToken={paymentToken}
-                  onSuccessfulPayment={console.log}
-                  onFailedPayment={console.log}
+                  onSuccessfulPayment={successfulPayment}
+                  onFailedPayment={errorPayment}
                   debug={true}
                   styles={{
                     buttonCornerRadius: "3px",

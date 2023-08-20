@@ -1,6 +1,6 @@
 import { Duffel } from "@duffel/api";
 
-export default async function DuffelPayments(req, res) {
+export default async function CreatePayment(req, res) {
   const duffel = new Duffel({
     token: process.env.NEXT_PUBLIC_DUFFEL_AC,
   });
@@ -9,7 +9,6 @@ export default async function DuffelPayments(req, res) {
     return amount.toFixed(2);
   };
   const donation = formatDonation(req.body);
-  console.log(donation);
 
   try {
     const paymentIntent = await duffel.paymentIntents.create({
