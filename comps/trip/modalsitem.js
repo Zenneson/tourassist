@@ -67,6 +67,7 @@ export default function ModalsItem(props) {
     setDonorName,
   } = props;
   const donationRef = useRef(null);
+  const donorNameRef = useRef(null);
   const [paymentToken, setPaymentToken] = useState(null);
   const [tokenUpdated, setTokenUpdated] = useState(false);
 
@@ -130,6 +131,16 @@ export default function ModalsItem(props) {
     color: "orange",
     icon: <IconAlertTriangle size={20} />,
     title: "$5,000 is the maximum donation amount",
+    autoClose: 3000,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
+
+  const noDonorName = {
+    color: "orange",
+    icon: <IconAlertTriangle size={20} />,
+    title: "Please add your name or choose to stay anonymous",
     autoClose: 3000,
     style: {
       backgroundColor: dark ? "#2e2e2e" : "#fff",
@@ -420,6 +431,11 @@ export default function ModalsItem(props) {
       setDonationAmount(5000);
       return;
     }
+    if (donorName === "" && !stayAnon) {
+      notifications.show(noDonorName);
+      donorNameRef.current.focus();
+      return;
+    }
     fetch("/api/payment", {
       method: "POST",
       headers: {
@@ -608,6 +624,7 @@ export default function ModalsItem(props) {
                     }}
                   />
                   <Input
+                    ref={donorNameRef}
                     placeholder={stayAnon ? "Anonymous" : "Name..."}
                     size="md"
                     w={"100%"}
