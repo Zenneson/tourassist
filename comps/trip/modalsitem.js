@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   IconHeartHandshake,
   IconCurrencyDollar,
@@ -18,11 +18,11 @@ import {
   Text,
   LoadingOverlay,
   Group,
-  Image,
   NumberInput,
   Input,
   ScrollArea,
   Textarea,
+  Checkbox,
 } from "@mantine/core";
 import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
@@ -35,7 +35,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
 import { DateInput } from "@mantine/dates";
 import TripContent from "./tripContent";
-import { dateFormat } from "../../libs/custom";
+import { dateFormat, formatDonation } from "../../libs/custom";
 import { notifications } from "@mantine/notifications";
 import { DuffelPayments } from "@duffel/components";
 
@@ -52,15 +52,23 @@ export default function ModalsItem(props) {
     setImages,
     weekAhead,
     closeAltModal,
-    paid,
-    setPaid,
     updates,
     setUpdates,
     updateDataLoaded,
     setUpdateDataLoaded,
+    dontaionMode,
+    setDonationMode,
+    currentUpdateId,
+    donationAmount,
+    setDonationAmount,
+    stayAnon,
+    setStayAnon,
+    donorName,
+    setDonorName,
   } = props;
-  const [donationAmount, setDonationAmount] = useState(0);
+  const donationRef = useRef(null);
   const [paymentToken, setPaymentToken] = useState(null);
+  const [tokenUpdated, setTokenUpdated] = useState(false);
 
   const addUpdateTitle = {
     color: "orange",
@@ -95,6 +103,16 @@ export default function ModalsItem(props) {
     },
   };
 
+  const noDonation = {
+    color: "orange",
+    icon: <IconAlertTriangle size={20} />,
+    title: "Please add a donation amount",
+    autoClose: 3000,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
+
   const updatePosted = {
     id: "postingUpdate",
     color: "green",
@@ -106,6 +124,26 @@ export default function ModalsItem(props) {
     style: {
       backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
+  };
+
+  const maxReached = {
+    color: "orange",
+    icon: <IconAlertTriangle size={20} />,
+    title: "$5,000 is the maximum donation amount",
+    autoClose: 3000,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+  };
+
+  const processingFee = () => {
+    return Math.min(donationAmount * 0.029, 145).toFixed(2);
+  };
+
+  const totalDonation = () => {
+    const fee = Number(processingFee());
+    const total = Math.min(donationAmount + fee, 5145);
+    return formatDonation(total);
   };
 
   const DateChanger = () => {
@@ -371,6 +409,17 @@ export default function ModalsItem(props) {
   };
 
   const donationReq = () => {
+    if (donationAmount === 0) {
+      notifications.show(noDonation);
+      donationRef.current.focus();
+      donationRef.current.select();
+      return;
+    }
+    if (donationAmount > 5000) {
+      notifications.show(maxReached);
+      setDonationAmount(5000);
+      return;
+    }
     fetch("/api/payment", {
       method: "POST",
       headers: {
@@ -384,16 +433,21 @@ export default function ModalsItem(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        const token = data.client_token;
+        const token = data.data.client_token;
         setPaymentToken(token);
-        setDonationAmount(0);
-        setPaid(true);
+        setTokenUpdated(true);
       })
       .catch((error) => {
         console.error("Failed to create payment intent:", error);
       });
   };
+
+  useEffect(() => {
+    if (tokenUpdated) {
+      setDonationMode("pay");
+      setTokenUpdated(false);
+    }
+  }, [tokenUpdated, setDonationMode]);
 
   return (
     <Box>
@@ -512,19 +566,19 @@ export default function ModalsItem(props) {
           <Box w={modalMode === "donating" ? 490 : 800}>
             <Title mb={5} color={dark ? "#00E8FC" : "#fa7500"}>
               <Flex align={"center"} gap={5}>
-                {!paid ? "DONATE" : "THANK YOU"}
+                {dontaionMode === "thanks" ? "THANK YOU" : "DONATE"}
                 <IconHeartHandshake size={35} />
               </Flex>
             </Title>
             <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
-            {!paid && (
+            {dontaionMode === "donating" && (
               <Group mb={15} grow>
                 <Stack>
                   {/* TODO: Duffel */}
                   <NumberInput
+                    ref={donationRef}
                     icon={<IconCurrencyDollar size={35} />}
                     size="xl"
-                    mb={10}
                     hideControls
                     precision={2}
                     variant="filled"
@@ -553,17 +607,23 @@ export default function ModalsItem(props) {
                       },
                     }}
                   />
-                  <DuffelPayments
-                    // paymentIntentClientToken={paymentToken}
-                    paymentIntentClientToken="eyJjbGllbnRfc2VjcmV0IjoicGlfM0psczlVQWcySmhFeTh2WTBSTm1MU0JkX3NlY3JldF9QUW9yZXNuU3laeWJadGRiejZwNzBCbUdPIiwicHVibGlzaGFibGVfa2V5IjoicGtfdGVzdF9EQUJLY0E2Vzh6OTc0cTdPSWY0YmJ2MVQwMEpwRmMyOUpWIn0="
-                    onSuccessfulPayment={console.log}
-                    onFailedPayment={console.log}
-                    debug={true}
-                    styles={{
-                      buttonCornerRadius: "3px",
-                      fontFamily: "inherit",
-                    }}
+                  <Input
+                    placeholder={stayAnon ? "Anonymous" : "Name..."}
+                    size="md"
+                    w={"100%"}
+                    value={!stayAnon ? donorName : ""}
+                    onChange={(e) => setDonorName(e.currentTarget.value)}
+                    disabled={stayAnon}
                   />
+                  <Group position="right" w={"100%"}>
+                    <Checkbox
+                      labelPosition="left"
+                      label="Stay Anonymous"
+                      checked={stayAnon}
+                      onChange={(e) => setStayAnon(e.currentTarget.checked)}
+                      size={"xs"}
+                    />
+                  </Group>
                   <Box
                     pl={20}
                     py={5}
@@ -573,7 +633,7 @@ export default function ModalsItem(props) {
                   >
                     <Flex align={"center"} gap={10}>
                       <Divider label="Processing fee" w={"100%"} />{" "}
-                      <Text fz={12}>$0.00</Text>
+                      <Text fz={12}>${processingFee()}</Text>
                     </Flex>
                     <Flex align={"center"} gap={10}>
                       <Divider
@@ -585,41 +645,49 @@ export default function ModalsItem(props) {
                         w={"100%"}
                       />
                       <Text fz={14} fw={700}>
-                        $0.00
+                        ${totalDonation()}
                       </Text>
                     </Flex>
                   </Box>
-                  <Group spacing={0} my={8}>
-                    <Text fz={11} w={"70%"} pr={10}>
-                      We use Stripe, a trusted payment processor, to securely
-                      handle transactions and disburse funds, ensuring the
-                      protection of your sensitive banking information.
-                    </Text>
-                    <Image
-                      src="img/stripe.png"
-                      fit="contain"
-                      display={"block"}
-                      opacity={0.3}
-                      pl={10}
-                      style={{
-                        width: "30%",
-                        borderLeft: "2px solid rgba(255,255,255,0.3)",
-                      }}
-                      alt=""
-                    />
-                  </Group>
                   <Button
-                    variant="filled"
-                    size="xl"
+                    variant="default"
+                    size="sm"
                     w={"100%"}
                     onClick={donationReq}
                   >
-                    DONATE NOW
+                    Continue...
                   </Button>
                 </Stack>
               </Group>
             )}
-            {paid && (
+            {dontaionMode === "pay" && paymentToken && (
+              <>
+                <Group position="apart" px={5} mb={10}>
+                  <Text fz={15} fw={700} fs={"italic"}>
+                    Thanks for the Assist...
+                  </Text>
+                  <Flex align={"flex-start"} gap={7}>
+                    <Text fz={11} mt={5} fs={"italic"} fw={100} opacity={0.2}>
+                      Donation
+                    </Text>
+                    <Text fz={20} fw={700} opacity={0.5}>
+                      ${totalDonation()}
+                    </Text>
+                  </Flex>
+                </Group>
+                <DuffelPayments
+                  paymentIntentClientToken={paymentToken}
+                  onSuccessfulPayment={console.log}
+                  onFailedPayment={console.log}
+                  debug={true}
+                  styles={{
+                    buttonCornerRadius: "3px",
+                    fontFamily: "inherit",
+                  }}
+                />
+              </>
+            )}
+            {dontaionMode === "thanks" && (
               <>
                 <Text w={"100%"} ta={"center"} c={"#777"}>
                   Thank you for your donation, please leave a message of

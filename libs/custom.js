@@ -97,6 +97,21 @@ export const formatNumber = (num) => {
   return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+export const formatDonation = (num) => {
+  if (num === null || num === undefined) return;
+
+  let [integerPart, fractionalPart] = num.toFixed(2).toString().split(".");
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  if (!fractionalPart) {
+    fractionalPart = "00";
+  } else if (fractionalPart.length === 1) {
+    fractionalPart += "0";
+  }
+
+  return `${integerPart}.${fractionalPart}`;
+};
+
 export const addEllipsis = (string, num) => {
   if (string && string.length > num) {
     return string.substring(0, num) + "...";

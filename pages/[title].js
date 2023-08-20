@@ -69,10 +69,11 @@ export default function Trippage(props) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [modalMode, setModalMode] = useState("");
-  const [paid, setPaid] = useState(false);
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
   const [tripImages, setTripImages] = useState([]);
+  const [dontaionMode, setDonationMode] = useState("donating");
+
   const router = useRouter();
 
   const [user, setUser] = useSessionStorage({
@@ -100,6 +101,9 @@ export default function Trippage(props) {
     defaultValue: [],
   });
 
+  const [donationAmount, setDonationAmount] = useState(0);
+  const [donorName, setDonorName] = useState("");
+  const [stayAnon, setStayAnon] = useState(false);
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
   const [donationsSum, setDonationsSum] = useState(0);
@@ -163,7 +167,10 @@ export default function Trippage(props) {
 
   const closeAltModal = () => {
     setModalMode("");
-    setPaid(false);
+    setDonationMode("donating");
+    setDonationAmount(0);
+    setStayAnon(false);
+    setDonorName("");
   };
 
   const closeEditTripModal = () => {
@@ -563,12 +570,19 @@ export default function Trippage(props) {
         setImages={setImages}
         weekAhead={weekAhead}
         closeAltModal={closeAltModal}
-        paid={paid}
-        setPaid={setPaid}
         updates={updates}
         setUpdates={setUpdates}
         updateDataLoaded={updateDataLoaded}
         setUpdateDataLoaded={setUpdateDataLoaded}
+        dontaionMode={dontaionMode}
+        setDonationMode={setDonationMode}
+        currentUpdateId={currentUpdateId}
+        donationAmount={donationAmount}
+        setDonationAmount={setDonationAmount}
+        stayAnon={stayAnon}
+        setStayAnon={setStayAnon}
+        donorName={donorName}
+        setDonorName={setDonorName}
       />
     </>
   );
