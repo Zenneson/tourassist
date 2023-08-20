@@ -50,7 +50,7 @@ import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import { dateFormat } from "../libs/custom";
 import LoginComp from "../comps/loginComp";
-import TripContent from "../comps/tripinfo/tripContent";
+import TripContent from "../comps/trip/tripContent";
 
 export default function TripPlannerPage(props) {
   let { auth, mapLoaded } = props;

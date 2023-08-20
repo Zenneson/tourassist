@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { doc, updateDoc, collectionGroup, getDocs } from "firebase/firestore";
+import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
 import {
@@ -8,23 +8,14 @@ import {
   Avatar,
   Button,
   Box,
-  Input,
   Center,
   Divider,
-  Modal,
   Group,
-  Image,
   Flex,
   Progress,
   Title,
   Text,
   Stack,
-  CloseButton,
-  NumberInput,
-  TextInput,
-  Select,
-  Textarea,
-  ScrollArea,
   Tooltip,
   LoadingOverlay,
 } from "@mantine/core";
@@ -38,32 +29,41 @@ import {
   IconPencil,
   IconHeartHandshake,
   IconQuote,
-  IconCurrencyDollar,
-  IconCreditCard,
-  IconBrandApple,
-  IconBrandGoogle,
-  IconBrandPaypal,
-  IconAt,
-  IconUser,
-  IconCalendarEvent,
   IconQrcode,
-  IconAlertTriangle,
-  IconCheck,
 } from "@tabler/icons-react";
-import { DateInput } from "@mantine/dates";
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import TextStyle from "@tiptap/extension-text-style";
-import TextAlign from "@tiptap/extension-text-align";
-import Placeholder from "@tiptap/extension-placeholder";
-import Donations from "../comps/tripinfo/donations";
-import Updates from "../comps/tripinfo/updates";
-import TripContent from "../comps/tripinfo/tripContent";
-import MainCarousel from "../comps/tripinfo/maincarousel";
-import TripDescription from "../comps/tripinfo/tripdescription";
-import { formatNumber, daysBefore, dateFormat } from "../libs/custom";
-import { notifications } from "@mantine/notifications";
+import Donations from "../comps/trip/donations";
+import Updates from "../comps/trip/updates";
+import MainCarousel from "../comps/trip/maincarousel";
+import TripDescription from "../comps/trip/tripdescription";
+import ModalsItem from "../comps/trip/modalsitem";
+import { formatNumber, daysBefore } from "../libs/custom";
+
+export const getStaticProps = async ({ params }) => {
+  const { title } = params;
+  const query = collectionGroup(firestore, "trips");
+  try {
+    const querySnapshot = await getDocs(query);
+    const tripDoc = querySnapshot.docs.find((doc) => doc.id === title);
+    if (!tripDoc) {
+      console.log("No document found with the matching 'title'");
+      return {
+        notFound: true,
+      };
+    }
+
+    const trip = tripDoc.data();
+    return {
+      props: {
+        trip,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      props: {},
+    };
+  }
+};
 
 export default function Trippage(props) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -125,52 +125,6 @@ export default function Trippage(props) {
     }
   }, [images, props.trip, setTripData, setTripDesc]);
 
-  const addUpdateTitle = {
-    color: "orange",
-    icon: <IconAlertTriangle size={20} />,
-    title: "Please add a title",
-    autoClose: 3000,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
-  };
-
-  const addUpdateContent = {
-    color: "orange",
-    icon: <IconAlertTriangle size={20} />,
-    title: "You have not added any text to your update",
-    autoClose: 3000,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
-  };
-
-  const postingUpdate = {
-    id: "postingUpdate",
-    color: "green",
-    icon: <IconCheck size={20} />,
-    title: "Update posted!",
-    autoClose: false,
-    loading: true,
-    withCloseButton: false,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
-  };
-
-  const updatePosted = {
-    id: "postingUpdate",
-    color: "green",
-    icon: <IconCheck size={20} />,
-    title: "Update posted!",
-    autoClose: 3000,
-    loading: false,
-    withCloseButton: true,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
-  };
-
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
       <Group>
@@ -214,604 +168,6 @@ export default function Trippage(props) {
 
   const closeEditTripModal = () => {
     setModalMode("");
-  };
-
-  const DateChanger = () => {
-    const [travelDate, setTravelDate] = useSessionStorage({
-      key: "travelDate",
-      defaultValue: tripData.travelDate,
-    });
-
-    return (
-      <DateInput
-        icon={<IconCalendarEvent size={20} />}
-        iconWidth={50}
-        variant="default"
-        minDate={weekAhead}
-        firstDayOfWeek={0}
-        size="sm"
-        ta={"right"}
-        w={"100%"}
-        maw={150}
-        onChange={(e) => setTravelDate(new Date(e))}
-        value={
-          travelDate ? new Date(travelDate) : new Date(tripData.travelDate)
-        }
-        valueFormat="MMM DD, YYYY"
-        sx={{
-          "& .mantine-DateInput-input": {
-            cursor: "pointer",
-          },
-        }}
-      />
-    );
-  };
-
-  const UpdateForm = () => {
-    const updateEditor = useEditor({
-      editable: true,
-      extensions: [
-        Link,
-        StarterKit,
-        TextStyle,
-        TextAlign.configure({ types: ["heading", "paragraph"] }),
-        Placeholder.configure({
-          placeholder:
-            "Add an update about your trip. This could be a new milestone, a new goal, or a new challenge you're facing.",
-        }),
-      ],
-      parseOptions: {
-        preserveWhitespace: "full",
-      },
-    });
-
-    const [allUpdates, setAllUpdates] = useState([]);
-    const [updateTitle, setUpdateTitle] = useState("");
-    const [updateContent, setUpdateContent] = useState("");
-
-    useEffect(() => {
-      if (updates && allUpdates.length > 0) {
-        setAllUpdates(updates);
-      }
-    }, [allUpdates, setAllUpdates]);
-
-    useEffect(() => {
-      const findUpdateById = (currentUpdateId) => {
-        return updates.find((update) => update.updateId === currentUpdateId);
-      };
-
-      if (
-        modalMode === "editUpdate" &&
-        updates &&
-        updateEditor &&
-        currentUpdateId !== 0
-      ) {
-        const currentUpdate = findUpdateById(currentUpdateId);
-        setUpdateTitle(currentUpdate.updateTitle);
-        setUpdateContent(currentUpdate.updateContent);
-        updateEditor.commands.setContent(updateContent);
-        setUpdateDataLoaded(true);
-      }
-    }, [updateEditor, updateContent]);
-
-    const handleUpdate = async () => {
-      try {
-        if (updateTitle === "") {
-          notifications.show(addUpdateTitle);
-          console.error("Update Title is empty");
-          return;
-        }
-        if (
-          updateEditor &&
-          (updateEditor.getHTML() === "<p></p>" ||
-            updateEditor.getHTML() === "")
-        ) {
-          notifications.show(addUpdateContent);
-          console.error("Update Content is empty");
-          return;
-        }
-        notifications.show(postingUpdate);
-
-        let newUpdates;
-        if (modalMode === "editUpdate") {
-          const updateIndex = updates.findIndex(
-            (update) => update.updateId === currentUpdateId
-          );
-          if (updateIndex !== -1) {
-            const updateObj = { ...updates[updateIndex] };
-            updateObj.updateTitle = updateTitle;
-            updateObj.updateContent = updateEditor && updateEditor.getHTML();
-            newUpdates = [...updates];
-            newUpdates[updateIndex] = updateObj;
-          } else {
-            console.error("Update not found");
-            return;
-          }
-        }
-        if (modalMode === "postUpdate") {
-          const updatesArray = Array.isArray(updates) ? updates : [];
-          const updateObj = {
-            updateTitle: updateTitle,
-            updateContent: updateEditor && updateEditor.getHTML(),
-            updateDate: dateFormat(new Date().toLocaleDateString()),
-            updateId: updatesArray.length + 1 || 1,
-          };
-          newUpdates = [...updatesArray, updateObj];
-        }
-
-        setUpdates(newUpdates);
-        setModalMode("");
-        await updateDoc(
-          doc(firestore, "users", user.email, "trips", tripData.tripId),
-          { updates: newUpdates }
-        );
-        await router.replace(router.asPath);
-        notifications.update(updatePosted);
-        setUpdateTitle("");
-        setUpdateDataLoaded(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    return (
-      <>
-        <Input
-          tabIndex={1}
-          size={"xl"}
-          w="100%"
-          placeholder="Update Title..."
-          maw={800}
-          value={updateTitle}
-          onKeyDown={(e) => {
-            if (e.key === "Tab") {
-              e.preventDefault();
-              updateEditor.commands.focus("end");
-            }
-          }}
-          onChange={(e) => setUpdateTitle(e.target.value)}
-          wrapperProps={{
-            style: {
-              borderRadius: 3,
-            },
-          }}
-          sx={{
-            ".mantine-Input-input": {
-              background: dark ? "#101113" : "gray.3",
-              "&::placeholder": {
-                fontWeight: 700,
-                fontStyle: "italic",
-                color: "rgba(255,255,255,0.0.08)",
-              },
-            },
-          }}
-        />
-        <ScrollArea
-          h={300}
-          w={"100%"}
-          scrollbarSize={8}
-          scrollHideDelay={250}
-          sx={{
-            overflow: "hidden",
-            borderRadius: "3px",
-          }}
-        >
-          <RichTextEditor
-            editor={updateEditor}
-            position="relative"
-            bg={dark ? "dark.6" : "gray.2"}
-            onChange={() => {
-              const content = updateEditor.getHTML();
-              setUpdateContent(content);
-            }}
-            sx={{
-              transition: "border-top 0.2s ease",
-              border: "none",
-              width: "100%",
-              minWidth: "500px",
-              ".mantine-RichTextEditor-toolbar": {
-                background: dark
-                  ? "rgba(0, 0, 0, 0.7)"
-                  : "rgba(255, 255, 255, 0.7)",
-                borderColor: "rgba(255,255,255,0)",
-              },
-              ".mantine-RichTextEditor-content": {
-                background: "rgba(0, 0, 0, 0)",
-                color: dark ? "dark.9" : "gray.0",
-                minHeight: "250px",
-                "& .ProseMirror": {
-                  paddingLeft: "21px",
-                  paddingRight: "21px",
-                  minHeight: "250px",
-                },
-              },
-            }}
-          >
-            <RichTextEditor.Toolbar sticky>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Bold />
-                <RichTextEditor.H1 />
-                <RichTextEditor.H2 />
-                <RichTextEditor.H3 />
-                <RichTextEditor.H4 />
-                <RichTextEditor.BulletList />
-                <RichTextEditor.OrderedList />
-              </RichTextEditor.ControlsGroup>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Italic />
-                <RichTextEditor.AlignLeft />
-                <RichTextEditor.AlignCenter />
-                <RichTextEditor.AlignRight />
-                <RichTextEditor.AlignJustify />
-                <RichTextEditor.Link />
-                <RichTextEditor.Unlink />
-              </RichTextEditor.ControlsGroup>
-            </RichTextEditor.Toolbar>
-            <RichTextEditor.Content
-              sx={{
-                "& p": {
-                  fontSize: ".9rem",
-                },
-              }}
-            />
-          </RichTextEditor>
-        </ScrollArea>
-        <Group position="right" mt={5} w={"100%"}>
-          <Button variant="default" size="md" w={"25%"} onClick={handleUpdate}>
-            {modalMode === "editUpdate"
-              ? "SAVE UPDATE"
-              : modalMode === "postUpdate"
-              ? "POST UPDATE"
-              : ""}
-          </Button>
-        </Group>
-      </>
-    );
-  };
-
-  const ModalsFunc = () => {
-    return (
-      <Box>
-        <Modal
-          centered
-          withCloseButton={false}
-          size={850}
-          padding={"xl"}
-          opened={modalMode === "editTrip"}
-          scrollAreaComponent={ScrollArea.Autosize}
-          onClose={closeEditTripModal}
-          lockScroll={false}
-          overlayProps={{
-            blur: 9,
-          }}
-          sx={{
-            "& .mantine-ScrollArea-root": {
-              "& .mantine-ScrollArea-scrollbar": {
-                width: 8,
-              },
-            },
-          }}
-          styles={(theme) => ({
-            header: {
-              backgroundColor: "transparent",
-            },
-            content: {
-              backgroundColor: dark
-                ? "rgba(0,0,0,0.9)"
-                : "rgba(255,255,255,0.9)",
-            },
-            overlay: {
-              backgroundColor: dark
-                ? "rgba(0,0,0,0.5)"
-                : "rgba(255,255,255,0.5)",
-              backdropFilter: "blur(9px)",
-            },
-          })}
-        >
-          {/* Close Alt Modal */}
-          <Box maw={800}>
-            <CloseButton
-              pos={"absolute"}
-              top={21}
-              right={21}
-              size={25}
-              onClick={closeEditTripModal}
-            />
-            <Stack align="center" spacing={20}>
-              <Title order={6} w={"100%"} ta={"left"} fs={"italic"}>
-                EDIT TRIP DETAILS:
-              </Title>
-              <Group
-                w={"100%"}
-                pl={15}
-                pt={5}
-                pb={10}
-                ml={-3}
-                position="apart"
-                sx={{
-                  borderLeft: `3px solid ${
-                    dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"
-                  }`,
-                }}
-              >
-                <Text fw={700} fz={30} w={"70%"} fs={"italic"} lineClamp={1}>
-                  {tripData.tripTitle}
-                </Text>
-                <DateChanger />
-              </Group>
-              <TripContent
-                user={user}
-                images={images}
-                setImages={setImages}
-                modalMode={modalMode}
-                setModalMode={setModalMode}
-                weekAhead={weekAhead}
-              />
-            </Stack>
-          </Box>
-        </Modal>
-        <Modal
-          pos={"relative"}
-          withCloseButton={false}
-          size={850}
-          padding={"xl"}
-          centered
-          opened={
-            modalMode === "postUpdate" ||
-            modalMode === "editUpdate" ||
-            modalMode === "donating"
-          }
-          onClose={closeAltModal}
-          styles={(theme) => ({
-            header: {
-              backgroundColor: "transparent",
-            },
-            content: {
-              backgroundColor: dark
-                ? "rgba(0,0,0,0.9)"
-                : "rgba(255,255,255,0.9)",
-            },
-            overlay: {
-              backgroundColor: dark
-                ? "rgba(0,0,0,0.3)"
-                : "rgba(255,255,255,0.5)",
-              backdropFilter: "blur(9px)",
-            },
-          })}
-        >
-          <LoadingOverlay
-            visible={modalMode === "editUpdate" && !updateDataLoaded}
-            overlayOpacity={1}
-          />
-          {/* Close Edit Content Modal */}
-          <CloseButton
-            pos={"absolute"}
-            top={21}
-            right={21}
-            size={25}
-            onClick={closeAltModal}
-          />
-          {modalMode === "donating" && (
-            <Box w={802}>
-              <Title mb={5} color={dark ? "#00E8FC" : "#fa7500"}>
-                <Flex align={"center"} gap={5}>
-                  {!paid ? "DONATE" : "THANK YOU"}
-                  <IconHeartHandshake size={35} />
-                </Flex>
-              </Title>
-              <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
-              {!paid && (
-                <Group mb={15} grow>
-                  <Stack>
-                    <Button.Group>
-                      <Button
-                        size="xl"
-                        w={"25%"}
-                        variant="filled"
-                        bg={dark ? "dark.5" : "gray.1"}
-                        c={dark ? "gray.0" : "dark.2"}
-                        sx={{
-                          "&:hover": {
-                            color: "#fff",
-                            backgroundColor: "#A6A7AB",
-                          },
-                        }}
-                      >
-                        <IconCreditCard size={30} />
-                      </Button>
-                      <Button
-                        size="xl"
-                        w={"25%"}
-                        variant="filled"
-                        bg={dark ? "dark.5" : "gray.1"}
-                        c={dark ? "gray.0" : "dark.2"}
-                        sx={{
-                          "&:hover": {
-                            color: "#fff",
-                            backgroundColor: "#A6A7AB",
-                          },
-                        }}
-                      >
-                        <IconBrandApple size={30} />
-                      </Button>
-                      <Button
-                        size="xl"
-                        w={"25%"}
-                        variant="filled"
-                        bg={dark ? "dark.5" : "gray.1"}
-                        c={dark ? "gray.0" : "dark.2"}
-                        sx={{
-                          "&:hover": {
-                            color: "#fff",
-                            backgroundColor: "#A6A7AB",
-                          },
-                        }}
-                      >
-                        <IconBrandGoogle size={30} />
-                      </Button>
-                      <Button
-                        size="xl"
-                        w={"25%"}
-                        variant="filled"
-                        bg={dark ? "dark.5" : "gray.1"}
-                        c={dark ? "gray.0" : "dark.2"}
-                        sx={{
-                          "&:hover": {
-                            color: "#fff",
-                            backgroundColor: "#A6A7AB",
-                          },
-                        }}
-                      >
-                        <IconBrandPaypal size={30} />
-                      </Button>
-                    </Button.Group>
-                    <Divider />
-                    <TextInput
-                      variant="filled"
-                      placeholder="E-mail Address"
-                      icon={<IconAt size={20} opacity={0.4} />}
-                    />
-                    <TextInput
-                      variant="filled"
-                      placeholder="Name on Card"
-                      icon={<IconUser size={20} opacity={0.4} />}
-                    />
-                    <Flex gap={10}>
-                      <Input
-                        placeholder="Card Number"
-                        w={"60%"}
-                        icon={<IconCreditCard size={20} opacity={0.4} />}
-                      />
-                      <Input placeholder="MM/YY" w={"20%"} />
-                      <Input placeholder="CVV" w={"20%"} />
-                    </Flex>
-                    <Flex gap={10}>
-                      <Select
-                        placeholder="Country"
-                        variant="filled"
-                        data={[]}
-                        w={"60%"}
-                      />
-                      <Input placeholder="Postal Code" w={"calc(40% + 10px)"} />
-                    </Flex>
-                  </Stack>
-                  <Stack spacing={5}>
-                    <NumberInput
-                      icon={<IconCurrencyDollar size={35} />}
-                      type="number"
-                      size="xl"
-                      mb={10}
-                      hideControls
-                      precision={2}
-                      variant="filled"
-                      placeholder="Enter Amount..."
-                      sx={{
-                        ".mantine-NumberInput-input": {
-                          textAlign: "right",
-                          fontWeight: 700,
-                        },
-                      }}
-                    />
-                    <Box
-                      pl={20}
-                      py={5}
-                      sx={{
-                        borderLeft: "3px solid rgba(255,255,255,0.1)",
-                      }}
-                    >
-                      <Flex align={"center"} gap={10}>
-                        <Divider label="Processing fee" w={"100%"} />{" "}
-                        <Text fz={12}>$0.00</Text>
-                      </Flex>
-                      <Flex align={"center"} gap={10}>
-                        <Divider
-                          label={
-                            <Text fz={15} fw={700}>
-                              Total
-                            </Text>
-                          }
-                          w={"100%"}
-                        />
-                        <Text fz={14} fw={700}>
-                          $0.00
-                        </Text>
-                      </Flex>
-                    </Box>
-                    <Group spacing={0} my={8}>
-                      <Text fz={11} w={"70%"} pr={10}>
-                        We use Stripe, a trusted payment processor, to securely
-                        handle transactions and disburse funds, ensuring the
-                        protection of your sensitive banking information.
-                      </Text>
-                      <Image
-                        src="img/stripe.png"
-                        fit="contain"
-                        display={"block"}
-                        opacity={0.3}
-                        pl={10}
-                        style={{
-                          width: "30%",
-                          borderLeft: "2px solid rgba(255,255,255,0.3)",
-                        }}
-                        alt=""
-                      />
-                    </Group>
-                    {/* Complete Donation Button  */}
-                    <Button
-                      variant="filled"
-                      size="xl"
-                      w={"100%"}
-                      onClick={() => setPaid(true)}
-                    >
-                      DONATE NOW
-                    </Button>
-                  </Stack>
-                </Group>
-              )}
-              {paid && (
-                <>
-                  <Text w={"100%"} ta={"center"} c={"#777"}>
-                    Thank you for your donation, please leave a message of
-                    suppport{" "}
-                  </Text>
-                  <Textarea
-                    placeholder="Bon voyage!"
-                    variant="filled"
-                    mt={10}
-                    minRows={8}
-                  />
-                  <Group position="right" mt={5} w={"100%"}>
-                    <Button
-                      variant="filled"
-                      size="md"
-                      mt={10}
-                      w={"40%"}
-                      onClick={closeAltModal}
-                    >
-                      POST MESSAGE
-                    </Button>
-                  </Group>
-                </>
-              )}
-            </Box>
-          )}
-          {(modalMode === "editUpdate" || modalMode === "postUpdate") && (
-            <>
-              <Title order={6} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
-                {modalMode === "editUpdate"
-                  ? "EDIT UPDATE:"
-                  : modalMode === "postUpdate"
-                  ? "POST UPDATE:"
-                  : ""}
-              </Title>
-              <Stack align="center">
-                <UpdateForm />
-              </Stack>
-            </>
-          )}
-        </Modal>
-      </Box>
-    );
   };
 
   return (
@@ -1049,7 +405,7 @@ export default function Trippage(props) {
             <Box
               className="pagePanel"
               w={"85%"}
-              mt={updates.length === 1 ? 30 : 0}
+              mt={updates && updates.length === 1 ? 30 : 0}
               mb={50}
               p={"20px 30px"}
             >
@@ -1195,7 +551,25 @@ export default function Trippage(props) {
           </Flex>
         </Flex>
       </Center>
-      <ModalsFunc />
+      <ModalsItem
+        modalMode={modalMode}
+        setModalMode={setModalMode}
+        tripData={tripData}
+        user={user}
+        router={router}
+        closeEditTripModal={closeEditTripModal}
+        dark={dark}
+        images={images}
+        setImages={setImages}
+        weekAhead={weekAhead}
+        closeAltModal={closeAltModal}
+        paid={paid}
+        setPaid={setPaid}
+        updates={updates}
+        setUpdates={setUpdates}
+        updateDataLoaded={updateDataLoaded}
+        setUpdateDataLoaded={setUpdateDataLoaded}
+      />
     </>
   );
 }
@@ -1220,37 +594,4 @@ export const getStaticPaths = async () => {
     paths,
     fallback: true,
   };
-};
-
-export const getStaticProps = async ({ params }) => {
-  const { title } = params;
-
-  // Query all 'trips' collection
-  const query = collectionGroup(firestore, "trips");
-  try {
-    const querySnapshot = await getDocs(query);
-
-    // Find the document with an ID matching the 'title'
-    const tripDoc = querySnapshot.docs.find((doc) => doc.id === title);
-
-    if (!tripDoc) {
-      // No document found with the matching 'title'
-      console.log("No document found with the matching 'title'");
-      return {
-        notFound: true,
-      };
-    }
-
-    const trip = tripDoc.data();
-    return {
-      props: {
-        trip,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      props: {},
-    };
-  }
 };

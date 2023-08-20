@@ -19,7 +19,7 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { Line } from "react-chartjs-2";
-import Donations from "../tripinfo/donations";
+import Donations from "../trip/donations";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -254,7 +254,7 @@ export default function Money(props) {
               }}
             >
               <Group spacing={4}>
-                <IconAppWindow size={23} /> VIEW
+                VIEW <IconAppWindow size={23} />
               </Group>
             </Center>
           </Group>
