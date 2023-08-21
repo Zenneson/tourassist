@@ -13,7 +13,7 @@ const moment = require("moment-timezone");
 
 const storage = getStorage();
 
-export function useUserData() {
+export const useUserData = () => {
   const [userAuth] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
 
@@ -43,7 +43,7 @@ export function useUserData() {
     return () => unsubscribe();
   }, [userAuth]); // The effect hook depends on userAuth
   return userData;
-}
+};
 
 export const clearSessionStorageExcept = (keysToKeep) => {
   for (let i = 0; i < sessionStorage.length; i++) {
@@ -59,7 +59,7 @@ export const estTimeStamp = (timeStamp) => {
   let dateStr = timeStamp;
   let dateInEST = moment(dateStr)
     .tz("America/New_York")
-    .format("MMMM Do YYYY, hh:mm A");
+    .format("MMMM Do YYYY, hh:mm:ss A");
 
   return dateInEST + " EST";
 };

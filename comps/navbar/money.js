@@ -268,7 +268,10 @@ export default function Money(props) {
               overflow: "hidden",
             }}
           >
-            <Donations dHeight={"calc(100vh - 635px)"} />
+            <Donations
+              donationSectionLimit={6}
+              dHeight={"calc(100vh - 635px)"}
+            />
           </Box>
         </Flex>
       </Box>

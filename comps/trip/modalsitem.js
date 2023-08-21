@@ -65,6 +65,8 @@ export default function ModalsItem(props) {
     setStayAnon,
     donorName,
     setDonorName,
+    donations,
+    setDonations,
   } = props;
   const donationRef = useRef(null);
   const donorNameRef = useRef(null);
@@ -148,8 +150,21 @@ export default function ModalsItem(props) {
     },
   };
 
+  const paymentError = (error) => {
+    return {
+      color: "orange",
+      title: "Payment Error",
+      message: "Please try again. Error: " + error.message,
+      autoClose: false,
+      icon: <IconAlertTriangle size={20} />,
+      style: {
+        backgroundColor: dark ? "#2e2e2e" : "#fff",
+      },
+    };
+  };
+
   const processingFee = () => {
-    return Math.min(donationAmount * 0.029, 145).toFixed(2);
+    return Math.ceil(Math.min(donationAmount * 0.03, 145)).toFixed(2);
   };
 
   const totalDonation = () => {
@@ -412,6 +427,22 @@ export default function ModalsItem(props) {
   };
 
   // TODO: DUFFEL FUNCS
+  const updateDonations = async (data) => {
+    const dArray = Array.isArray(donations) ? donations : [];
+    const entry = {
+      name: donorName,
+      amount: data.net_amount,
+      time: data.created_at,
+    };
+    const newDonations = [...dArray, entry];
+    setDonations(newDonations);
+    await updateDoc(
+      doc(firestore, "users", tripData.user, "trips", tripData.tripId),
+      { donations: newDonations }
+    );
+    router.replace(router.asPath);
+  };
+
   const donationReq = () => {
     if (donationAmount === 0) {
       notifications.show(noDonation);
@@ -429,6 +460,8 @@ export default function ModalsItem(props) {
       donorNameRef.current.focus();
       return;
     }
+
+    const passingTotal = parseFloat(totalDonation().replace(/,/g, ""));
     fetch("/api/payment", {
       method: "POST",
       headers: {
@@ -438,7 +471,7 @@ export default function ModalsItem(props) {
         "Duffel-Version": "v1",
         "Accept-Encoding": "gzip",
       },
-      body: donationAmount,
+      body: passingTotal,
     })
       .then((response) => response.json())
       .then((data) => {
@@ -446,14 +479,11 @@ export default function ModalsItem(props) {
         setPaymentToken(token);
         setPaymentId(data.data.id);
         setTokenUpdated(true);
-        console.log("DATA: ", data.data);
       })
       .catch((error) => {
         console.error("Failed to create payment intent:", error);
       });
   };
-
-  console.log("PAYEMNTID: ", paymentId);
 
   const successfulPayment = () => {
     fetch("/api/confirm", {
@@ -468,14 +498,19 @@ export default function ModalsItem(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        setDonationMode("thanks");
+        updateDonations(data.data);
       })
       .catch((error) => {
+        closeAltModal();
+        notifications.show(paymentError(error));
         console.error(error);
       });
   };
 
   const errorPayment = (error) => {
+    closeAltModal();
+    notifications.show(paymentError(error));
     console.log(error);
   };
 
@@ -485,6 +520,10 @@ export default function ModalsItem(props) {
       setTokenUpdated(false);
     }
   }, [tokenUpdated, setDonationMode]);
+
+  const postMessage = () => {
+    closeAltModal();
+  };
 
   return (
     <Box>
@@ -565,7 +604,7 @@ export default function ModalsItem(props) {
       <Modal
         pos={"relative"}
         withCloseButton={false}
-        size={modalMode === "donating" ? 540 : 850}
+        size={modalMode === "donating" ? "auto" : 850}
         padding={"xl"}
         centered
         opened={
@@ -575,6 +614,11 @@ export default function ModalsItem(props) {
         }
         onClose={closeAltModal}
         styles={(theme) => ({
+          root: {
+            "& .mantine-Modal-content": {
+              overflow: "hidden",
+            },
+          },
           header: {
             backgroundColor: "transparent",
           },
@@ -600,7 +644,7 @@ export default function ModalsItem(props) {
           onClick={closeAltModal}
         />
         {modalMode === "donating" && (
-          <Box w={modalMode === "donating" ? 490 : 800}>
+          <Box w={modalMode === "donating" ? "auto" : 800}>
             <Title mb={5} color={dark ? "#00E8FC" : "#fa7500"}>
               <Flex align={"center"} gap={5}>
                 {dontaionMode === "thanks" ? "THANK YOU" : "DONATE"}
@@ -648,18 +692,26 @@ export default function ModalsItem(props) {
                     ref={donorNameRef}
                     placeholder={stayAnon ? "Anonymous" : "Name..."}
                     size="md"
+                    maxLength={20}
                     w={"100%"}
-                    value={!stayAnon ? donorName : ""}
+                    value={!stayAnon ? donorName : "Anonymous"}
                     onChange={(e) => setDonorName(e.currentTarget.value)}
                     disabled={stayAnon}
                   />
                   <Group position="right" w={"100%"}>
                     <Checkbox
+                      size={"xs"}
                       labelPosition="left"
                       label="Stay Anonymous"
                       checked={stayAnon}
-                      onChange={(e) => setStayAnon(e.currentTarget.checked)}
-                      size={"xs"}
+                      onChange={(e) => {
+                        setStayAnon(e.currentTarget.checked);
+                        if (e.currentTarget.checked) {
+                          setDonorName("Anonymous");
+                        } else {
+                          setDonorName("");
+                        }
+                      }}
                     />
                   </Group>
                   <Box
@@ -709,7 +761,7 @@ export default function ModalsItem(props) {
                       Donation
                     </Text>
                     <Text fz={20} fw={700} opacity={0.5}>
-                      ${totalDonation()}
+                      ${formatDonation(donationAmount)}
                     </Text>
                   </Flex>
                 </Group>
@@ -737,15 +789,22 @@ export default function ModalsItem(props) {
                   mt={10}
                   minRows={8}
                 />
-                <Group position="right" mt={5} w={"100%"}>
+                <Group position="right" mt={20} w={"100%"} spacing={0}>
                   <Button
-                    variant="filled"
-                    size="md"
-                    mt={10}
-                    w={"40%"}
+                    variant="Transparent"
+                    fw={100}
+                    fz={10}
                     onClick={closeAltModal}
                   >
-                    POST MESSAGE
+                    No Thanks
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="md"
+                    w={"25%"}
+                    onClick={postMessage}
+                  >
+                    POST
                   </Button>
                 </Group>
               </>

@@ -102,18 +102,58 @@ export default function Trippage(props) {
   });
 
   const [donationAmount, setDonationAmount] = useState(0);
+  const [donationSum, setDonationSum] = useState(0);
+  const [donationProgress, setDonationProgress] = useState(0);
   const [donorName, setDonorName] = useState("");
   const [stayAnon, setStayAnon] = useState(false);
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
-  const [donationsSum, setDonationsSum] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  const sumAmounts = (array) => {
+    if (!Array.isArray(array)) {
+      console.warn("Input is not an array");
+      return 0;
+    }
+
+    return array.reduce((total, item) => {
+      return total + (Number(item.amount) || 0);
+    }, 0);
+  };
 
   useEffect(() => {
     setTimeout(() => {
       if (props.trip) setDataLoaded(true);
     }, 1000);
   }, [props.trip]);
+
+  useEffect(() => {
+    if (tripData && donations.length !== tripData.donations?.length) {
+      setDonations(tripData?.donations);
+      setDonationSum(Math.floor(sumAmounts(tripData?.donations)));
+    }
+  }, [
+    donations,
+    donationSum,
+    tripData,
+    setDonations,
+    setDonationSum,
+    setDonationProgress,
+  ]);
+
+  sumAmounts;
+  setDonationSum;
+  setDonationProgress;
+
+  useEffect(() => {
+    const calculatePercentage = () => {
+      return (donationSum / tripData.costsSum) * 100;
+    };
+
+    if (tripData && donationProgress === 0 && donations.length !== 0) {
+      setDonationProgress(calculatePercentage);
+    }
+  }, [donationProgress, donations, donationSum, tripData]);
 
   useEffect(() => {
     router.prefetch("/thankyou");
@@ -483,7 +523,7 @@ export default function Trippage(props) {
                 <Stack spacing={0} w={"70%"}>
                   <Flex align={"flex-end"} mb={-2} gap={3} pl={5}>
                     <Title color="green.4" order={1}>
-                      ${donationsSum}
+                      ${donationSum}
                     </Title>
                     <Text fz={11} mb={8} span>
                       RAISED
@@ -514,7 +554,7 @@ export default function Trippage(props) {
                 </Box>
               </Group>
               <Progress
-                value={50}
+                value={donationProgress}
                 color="green.7"
                 bg={"gray.6"}
                 size={"sm"}
@@ -532,7 +572,7 @@ export default function Trippage(props) {
                     router.push("/purchase");
                   }}
                 >
-                  <Text>USE FUNDS</Text>
+                  <Text>USE FUNDS: ${donationSum}</Text>
                 </Button>
               )}
               {user?.email !== tripData.user && (
@@ -553,7 +593,10 @@ export default function Trippage(props) {
               )}
             </Box>
             <Box className="pagePanel">
-              <Donations dHeight={"calc(100vh - 405px)"} />
+              <Donations
+                donationSectionLimit={10}
+                dHeight={"calc(100vh - 405px)"}
+              />
             </Box>
           </Flex>
         </Flex>
@@ -583,6 +626,8 @@ export default function Trippage(props) {
         setStayAnon={setStayAnon}
         donorName={donorName}
         setDonorName={setDonorName}
+        donations={donations}
+        setDonations={setDonations}
       />
     </>
   );

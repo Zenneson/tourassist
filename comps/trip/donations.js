@@ -15,10 +15,11 @@ import {
   ScrollArea,
 } from "@mantine/core";
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
+import { useRouter } from "next/router";
 import { IconReload } from "@tabler/icons-react";
 
 export default function Donations(props) {
-  const { dHeight } = props;
+  const { dHeight, donationSectionLimit } = props;
   const theme = useMantineTheme();
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
@@ -32,124 +33,15 @@ export default function Donations(props) {
     defaultValue: null,
   });
 
-  const [donations, setDonations] = useSessionStorage({
-    key: "donations",
-    defaultValue: [],
-  });
-
   const [tripData, setTripData] = useSessionStorage({
     key: "tripData",
     defaultValue: [],
   });
 
-  useEffect(() => {
-    const donateData = [
-      {
-        name: "Anonymus",
-        amount: 100,
-        time: "8/5/2023, 2:30:22 PM",
-      },
-      {
-        name: "Jill Jailbreaker",
-        amount: 50,
-        time: "7/12/2023, 6:23:45 PM",
-      },
-      {
-        name: "Henry Silkeater",
-        amount: 20,
-        time: "5/25/2023, 10:51:13 AM",
-      },
-      {
-        name: "Bill Horsefighter",
-        amount: 150,
-        time: "5/1/2023, 4:23:10 PM",
-      },
-      {
-        name: "Anonymus",
-        amount: 100,
-        time: "3/11/2023, 8:15:32 AM",
-      },
-      {
-        name: "Anonymus",
-        amount: 200,
-        time: "2/12/2023, 1:32:40 PM",
-      },
-      {
-        name: "Henry Silkeater",
-        amount: 20,
-        time: "1/30/2023, 4:58:11 PM",
-      },
-      {
-        name: "Anonymus",
-        amount: 100,
-        time: "12/2/2022, 6:24:19 PM",
-      },
-      {
-        name: "Jill Jailbreaker",
-        amount: 50,
-        time: "11/30/2022, 5:42:17 PM",
-      },
-      {
-        name: "Anonymus",
-        amount: 200,
-        time: "11/8/2022, 12:55:30 AM",
-      },
-      {
-        name: "Bill Horsefighter",
-        amount: 150,
-        time: "10/15/2022, 9:45:00 PM",
-      },
-      {
-        name: "Bill Horsefighter",
-        amount: 150,
-        time: "9/23/2022, 5:30:00 PM",
-      },
-      {
-        name: "Henry Silkeater",
-        amount: 20,
-        time: "9/18/2022, 2:12:05 AM",
-      },
-      {
-        name: "Jill Jailbreaker",
-        amount: 50,
-        time: "7/1/2022, 1:14:54 PM",
-      },
-      {
-        name: "Anonymus",
-        amount: 200,
-        time: "6/29/2022, 7:21:07 PM",
-      },
-      {
-        name: "Bill Horsefighter",
-        amount: 150,
-        time: "6/9/2022, 9:30:00 PM",
-      },
-      {
-        name: "Jill Jailbreaker",
-        amount: 50,
-        time: "5/22/2022, 10:13:42 AM",
-      },
-      {
-        name: "Anonymus",
-        amount: 200,
-        time: "4/2/2022, 1:24:54 PM",
-      },
-      {
-        name: "Anonymus",
-        amount: 100,
-        time: "3/15/2022, 7:09:28 PM",
-      },
-      {
-        name: "Henry Silkeater",
-        amount: 20,
-        time: "2/17/2022, 8:33:05 AM",
-      },
-    ];
-
-    if (donations.length === 0) {
-      setDonations(donateData);
-    }
-  }, [donations, setDonations]);
+  const [donations, setDonations] = useSessionStorage({
+    key: "donations",
+    defaultValue: tripData?.donations || [],
+  });
 
   const donateOrder =
     sorted === "amount"
@@ -168,11 +60,17 @@ export default function Donations(props) {
       </td>
       <td>
         <Text size="xs" fw={700} color="dimmed" ta="center">
-          ${item.amount}
+          ${Math.floor(item.amount)}
         </Text>
       </td>
     </tr>
   ));
+
+  useEffect(() => {
+    if (donations.length === 0 && tripData.donations?.length !== 0) {
+      setDonations(tripData?.donations);
+    }
+  }, [donations, tripData, setDonations]);
 
   return (
     <Box w="100%" pos={"relative"}>
@@ -181,7 +79,7 @@ export default function Donations(props) {
           w="100%"
           label={
             <Title order={6} opacity={0.4} mr={20}>
-              10 Donations
+              {donations.length} Donation{donations.length !== 1 && "s"}
             </Title>
           }
         />
@@ -226,7 +124,7 @@ export default function Donations(props) {
         p={10}
         pb={20}
         m={0}
-        h={dHeight}
+        h={donations.length > donationSectionLimit ? dHeight : "auto"}
         mih={donations.length === 0 ? "0px" : "200px"}
         ref={donationsRef}
         component={ScrollArea}
