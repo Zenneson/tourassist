@@ -112,7 +112,6 @@ export default function Trippage(props) {
 
   const sumAmounts = (array) => {
     if (!Array.isArray(array)) {
-      console.warn("Input is not an array");
       return 0;
     }
 
@@ -140,10 +139,6 @@ export default function Trippage(props) {
     setDonationSum,
     setDonationProgress,
   ]);
-
-  sumAmounts;
-  setDonationSum;
-  setDonationProgress;
 
   useEffect(() => {
     const calculatePercentage = () => {
@@ -594,6 +589,8 @@ export default function Trippage(props) {
             </Box>
             <Box className="pagePanel">
               <Donations
+                donations={donations}
+                setDonations={setDonations}
                 donationSectionLimit={10}
                 dHeight={"calc(100vh - 405px)"}
               />

@@ -164,12 +164,12 @@ export default function ModalsItem(props) {
   };
 
   const processingFee = () => {
-    return Math.ceil(Math.min(donationAmount * 0.03, 145)).toFixed(2);
+    return Math.ceil(Math.min(donationAmount * 0.03, 150)).toFixed(2);
   };
 
   const totalDonation = () => {
     const fee = Number(processingFee());
-    const total = Math.min(donationAmount + fee, 5145);
+    const total = Math.min(donationAmount + fee, 5150);
     return formatDonation(total);
   };
 
@@ -431,7 +431,7 @@ export default function ModalsItem(props) {
     const dArray = Array.isArray(donations) ? donations : [];
     const entry = {
       name: donorName,
-      amount: data.net_amount,
+      amount: donationAmount,
       time: data.created_at,
     };
     const newDonations = [...dArray, entry];
@@ -656,6 +656,16 @@ export default function ModalsItem(props) {
               <Group mb={15} grow>
                 <Stack>
                   {/* TODO: Duffel */}
+                  <Input
+                    ref={donorNameRef}
+                    placeholder={stayAnon ? "Anonymous" : "Name..."}
+                    size="md"
+                    maxLength={20}
+                    w={"100%"}
+                    value={!stayAnon ? donorName : "Anonymous"}
+                    onChange={(e) => setDonorName(e.currentTarget.value)}
+                    disabled={stayAnon}
+                  />
                   <NumberInput
                     ref={donationRef}
                     icon={<IconCurrencyDollar size={35} />}
@@ -666,11 +676,17 @@ export default function ModalsItem(props) {
                     defaultValue={0}
                     value={donationAmount}
                     onChange={(e) => setDonationAmount(e)}
-                    parser={(value) => value.replace(/[\$\s,]/g, "")}
+                    parser={(value) =>
+                      Math.ceil(
+                        parseFloat(value.replace(/[\$\s,a-zA-Z]/g, ""))
+                      ).toFixed(2)
+                    }
                     formatter={(value) =>
                       !Number.isNaN(parseFloat(value))
-                        ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        : 0
+                        ? Math.ceil(parseFloat(value))
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        : "0.00"
                     }
                     onClick={(e) => {
                       if (
@@ -688,16 +704,6 @@ export default function ModalsItem(props) {
                       },
                     }}
                   />
-                  <Input
-                    ref={donorNameRef}
-                    placeholder={stayAnon ? "Anonymous" : "Name..."}
-                    size="md"
-                    maxLength={20}
-                    w={"100%"}
-                    value={!stayAnon ? donorName : "Anonymous"}
-                    onChange={(e) => setDonorName(e.currentTarget.value)}
-                    disabled={stayAnon}
-                  />
                   <Group position="right" w={"100%"}>
                     <Checkbox
                       size={"xs"}
@@ -714,31 +720,6 @@ export default function ModalsItem(props) {
                       }}
                     />
                   </Group>
-                  <Box
-                    pl={20}
-                    py={5}
-                    sx={{
-                      borderLeft: "3px solid rgba(255,255,255,0.1)",
-                    }}
-                  >
-                    <Flex align={"center"} gap={10}>
-                      <Divider label="Processing fee" w={"100%"} />{" "}
-                      <Text fz={12}>${processingFee()}</Text>
-                    </Flex>
-                    <Flex align={"center"} gap={10}>
-                      <Divider
-                        label={
-                          <Text fz={15} fw={700}>
-                            Total
-                          </Text>
-                        }
-                        w={"100%"}
-                      />
-                      <Text fz={14} fw={700}>
-                        ${totalDonation()}
-                      </Text>
-                    </Flex>
-                  </Box>
                   <Button
                     variant="default"
                     size="sm"
@@ -752,7 +733,7 @@ export default function ModalsItem(props) {
             )}
             {dontaionMode === "pay" && paymentToken && (
               <>
-                <Group position="apart" px={5} mb={10}>
+                <Group position="apart" px={5} mb={5}>
                   <Text fz={15} fw={700} fs={"italic"}>
                     Thanks for the Assist...
                   </Text>
@@ -765,6 +746,33 @@ export default function ModalsItem(props) {
                     </Text>
                   </Flex>
                 </Group>
+                <Box
+                  pl={20}
+                  py={5}
+                  mx={5}
+                  mb={10}
+                  sx={{
+                    borderLeft: "3px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <Flex align={"center"} gap={10}>
+                    <Divider label="Processing fee" w={"100%"} />{" "}
+                    <Text fz={12}>${processingFee()}</Text>
+                  </Flex>
+                  <Flex align={"center"} gap={10}>
+                    <Divider
+                      label={
+                        <Text fz={15} fw={700}>
+                          Total
+                        </Text>
+                      }
+                      w={"100%"}
+                    />
+                    <Text fz={14} fw={700}>
+                      ${totalDonation()}
+                    </Text>
+                  </Flex>
+                </Box>
                 <DuffelPayments
                   paymentIntentClientToken={paymentToken}
                   onSuccessfulPayment={successfulPayment}

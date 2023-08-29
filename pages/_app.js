@@ -162,17 +162,12 @@ export default function App(props) {
       },
 
       ".pagePanel": {
-        borderTop: `2px solid ${
-          theme.colorScheme === "dark"
-            ? "rgba(255,255,255,0.1)"
-            : "rgba(0,0,0,0.1)"
-        }`,
         background:
           theme.colorScheme === "dark"
             ? "rgba(0,0,0,0.3)"
             : "rgba(255,255,255,0.3)",
         boxShadow: "0 3px 5px 0 rgba(0,0,0,0.08)",
-        borderRadius: "0 0 3px 3px",
+        borderRadius: 3,
       },
     }),
   };

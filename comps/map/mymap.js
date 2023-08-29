@@ -474,7 +474,7 @@ export default function Mymap(props) {
                   cursor: "pointer",
                   opacity: 0.7,
                   transform: "scale(1.5)",
-                  color: dark ? " #121d47" : "#9c161c",
+                  color: dark ? " #121d47" : "#ffffff",
                 }}
               />
             </Marker>
@@ -766,7 +766,7 @@ export default function Mymap(props) {
               }}
             >
               <IconX
-                color={dark ? "#9ff5fd" : "#fa7500"}
+                color={dark ? "#9ff5fd" : "#0D3F82"}
                 stroke={5}
                 size={headerEm + "em"}
               />
@@ -778,7 +778,7 @@ export default function Mymap(props) {
               fz={headerEm + "em"}
               variant="gradient"
               gradient={{
-                from: dark ? "#00E8FC" : "#fa7500",
+                from: dark ? "#00E8FC" : "#0D3F82",
                 to: dark ? "#FFF" : "#000",
                 deg: 45,
               }}
@@ -834,7 +834,7 @@ export default function Mymap(props) {
                       size={25}
                       style={{
                         paddingLeft: 5,
-                        color: dark ? " #00e8fa" : "#fa7500",
+                        color: dark ? " #00e8fa" : "#0D3F82",
                       }}
                     />
                   }
@@ -882,7 +882,7 @@ export default function Mymap(props) {
                     size={25}
                     style={{
                       paddingLeft: 5,
-                      color: dark ? " rgba(0, 232, 250)" : "rgba(250, 117, 0)",
+                      color: dark ? " rgba(0, 232, 250)" : "rgb(13, 63, 130)",
                     }}
                   />
                 }
@@ -926,7 +926,7 @@ export default function Mymap(props) {
                   size={25}
                   style={{
                     paddingLeft: 5,
-                    color: dark ? " rgba(0, 232, 250)" : "rgba(250, 117, 0)",
+                    color: dark ? " rgba(0, 232, 250)" : "rgb(13, 63, 130)",
                   }}
                 />
               }
@@ -993,7 +993,7 @@ export default function Mymap(props) {
                   size={30}
                   style={{
                     paddingLeft: 5,
-                    color: dark ? " #00e8fa" : "#fa7500",
+                    color: dark ? " #00e8fa" : "#0D3F82",
                   }}
                 />
               }
@@ -1135,7 +1135,7 @@ export default function Mymap(props) {
                 style={{
                   cursor: "pointer",
                   transform: "scale(5)",
-                  color: dark ? "#00e8fa" : "#fa7500",
+                  color: dark ? "#00e8fa" : "#0D3F82",
                 }}
               />
             </Marker>
@@ -1163,7 +1163,7 @@ export default function Mymap(props) {
             filter={!showStates ? filter : ["in", "name", "United States"]}
             paint={{
               "fill-color": `${
-                dark ? " rgba(0, 232, 250, 0.8)" : "rgba(250, 117, 0, 0.8)"
+                dark ? " rgba(0, 232, 250, 0.8)" : "rgba(13, 64, 130, 0.8)"
               }`,
             }}
           />
@@ -1210,7 +1210,7 @@ export default function Mymap(props) {
             type="fill"
             paint={{
               "fill-color": `${
-                dark ? " rgba(0, 232, 250, 0.8)" : "rgba(250, 117, 0, 0.8)"
+                dark ? " rgba(0, 232, 250, 0.8)" : "rgba(13, 64, 130, 0.8)"
               }`,
             }}
             filter={["==", "NAME", area.label]}

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
@@ -40,11 +40,6 @@ export default function Money(props) {
     defaultValue: null,
   });
 
-  const [donations, setDonations] = useSessionStorage({
-    key: "donations",
-    defaultValue: [],
-  });
-
   const [allTrips, setAllTrips] = useSessionStorage({
     key: "allTrips",
     defaultValue: [],
@@ -54,6 +49,18 @@ export default function Money(props) {
     key: "currentTrip",
     defaultValue: allTrips[0],
   });
+
+  const [dataLoaded, setDataLoaded] = useSessionStorage({
+    key: "dataLoaded",
+    defaultValue: false,
+  });
+
+  const [donations, setDonations] = useSessionStorage({
+    key: "donations",
+    defaultValue: [],
+  });
+
+  const [donationSum, setDonationSum] = useState(0);
 
   useEffect(() => {
     const grabAllTrips = async (user) => {
@@ -79,7 +86,14 @@ export default function Money(props) {
     if (allTrips.length === 0 && user) {
       grabAllTrips(user.email);
     }
-  }, [user, allTrips, setAllTrips, setCurrentTrip]);
+  }, [user, allTrips, setAllTrips]);
+
+  useEffect(() => {
+    if (allTrips.length === 0) return;
+    if (currentTrip === undefined) return;
+    if (currentTrip.donations?.length === 0) return;
+    setDonations(currentTrip.donations);
+  }, [currentTrip, allTrips, setDonations]);
 
   useEffect(() => {
     router.prefetch("/trippage");
@@ -119,6 +133,19 @@ export default function Money(props) {
     ],
   };
 
+  const changeTrip = (event) => {
+    setDataLoaded(false);
+    setDonations([]);
+    const newTrip = allTrips.find((trip) => trip.tripTitle === event.tripTitle);
+    if (newTrip.tripId === currentTrip.tripId) return;
+    if (newTrip.donations?.length === 0) {
+      setDonations([]);
+      return;
+    }
+    setCurrentTrip(newTrip);
+    setDonations(newTrip.donations);
+  };
+
   return (
     <Box pos="relative">
       <LoadingOverlay
@@ -141,11 +168,7 @@ export default function Money(props) {
             opacity: allTrips.length > 1 ? 1 : 0,
           },
         }}
-        onChange={(e) => {
-          setCurrentTrip(
-            allTrips.find((trip) => trip.tripTitle === e.tripTitle)
-          );
-        }}
+        onChange={(e) => changeTrip(e)}
       />
       <Box pr={20}>
         <Box my={20} w="100%" h={"250px"}>
@@ -269,6 +292,9 @@ export default function Money(props) {
             }}
           >
             <Donations
+              menu={true}
+              donations={currentTrip?.donations || []}
+              setDonations={setDonations}
               donationSectionLimit={6}
               dHeight={"calc(100vh - 635px)"}
             />

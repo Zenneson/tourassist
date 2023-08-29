@@ -57,7 +57,7 @@ export function RouterTransition(props) {
         zIndex={9999}
         autoReset={true}
         size={"sm"}
-        color={theme.colorScheme === "dark" ? "#219cee" : "#9b1616"}
+        color={"#219cee"}
       />
     </>
   );

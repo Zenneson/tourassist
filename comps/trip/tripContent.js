@@ -391,11 +391,11 @@ export default function TripContent(props) {
               ) : (
                 <BackgroundImage
                   radius={3}
-                  opacity={dark ? 0.1 : 0.2}
+                  opacity={0.4}
                   src={
                     dark
-                      ? "img/placeholder/books_blk.jpg"
-                      : "img/placeholder/books_wht.jpg"
+                      ? "img/placeholder/bags_blk.jpg"
+                      : "img/placeholder/bags_wht.jpg"
                   }
                   h={300}
                   alt={"Placeholder Image"}

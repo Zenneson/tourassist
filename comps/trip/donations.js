@@ -15,11 +15,10 @@ import {
   ScrollArea,
 } from "@mantine/core";
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
-import { useRouter } from "next/router";
 import { IconReload } from "@tabler/icons-react";
 
 export default function Donations(props) {
-  const { dHeight, donationSectionLimit } = props;
+  const { menu, dHeight, donationSectionLimit, donations } = props;
   const theme = useMantineTheme();
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
@@ -38,15 +37,39 @@ export default function Donations(props) {
     defaultValue: [],
   });
 
-  const [donations, setDonations] = useSessionStorage({
-    key: "donations",
-    defaultValue: tripData?.donations || [],
+  const [dataLoaded, setDataLoaded] = useSessionStorage({
+    key: "dataLoaded",
+    defaultValue: false,
   });
 
+  const [donationsData, setDonationsData] = useState(donations || []);
+
+  useEffect(() => {
+    if (dataLoaded && donationsData.length !== 0) return;
+    if (
+      (donationsData.length !== tripData.donations?.length ||
+        donationsData.length !== donations?.length) &&
+      menu
+    ) {
+      setDonationsData(donations);
+      setDataLoaded(true);
+    }
+  }, [
+    menu,
+    donations,
+    tripData,
+    donationsData,
+    setDonationsData,
+    dataLoaded,
+    setDataLoaded,
+  ]);
+
   const donateOrder =
-    sorted === "amount"
-      ? donations.sort((a, b) => b.amount - a.amount)
-      : donations.sort((a, b) => new Date(b.time) - new Date(a.time));
+    donationsData?.length !== 0
+      ? sorted === "amount"
+        ? donationsData.sort((a, b) => b.amount - a.amount)
+        : donationsData?.sort((a, b) => new Date(b.time) - new Date(a.time))
+      : [];
 
   const rows = donateOrder?.map((item, index) => (
     <tr key={index}>
@@ -66,12 +89,6 @@ export default function Donations(props) {
     </tr>
   ));
 
-  useEffect(() => {
-    if (donations.length === 0 && tripData.donations?.length !== 0) {
-      setDonations(tripData?.donations);
-    }
-  }, [donations, tripData, setDonations]);
-
   return (
     <Box w="100%" pos={"relative"}>
       <Flex gap={0} pt={10} px={10}>
@@ -79,11 +96,12 @@ export default function Donations(props) {
           w="100%"
           label={
             <Title order={6} opacity={0.4} mr={20}>
-              {donations.length} Donation{donations.length !== 1 && "s"}
+              {donationsData?.length} Donation
+              {donationsData?.length !== 1 && "s"}
             </Title>
           }
         />
-        {donations?.length !== 0 && (
+        {donationsData?.length !== 0 && (
           <SegmentedControl
             value={sorted}
             onChange={setSorted}
@@ -124,8 +142,8 @@ export default function Donations(props) {
         p={10}
         pb={20}
         m={0}
-        h={donations.length > donationSectionLimit ? dHeight : "auto"}
-        mih={donations.length === 0 ? "0px" : "200px"}
+        h={donationsData?.length > donationSectionLimit ? dHeight : "auto"}
+        mih={donationsData?.length === 0 ? "0px" : "200px"}
         ref={donationsRef}
         component={ScrollArea}
         type="hover"
@@ -146,9 +164,9 @@ export default function Donations(props) {
             overflow: "hidden",
           }}
         >
-          <tbody>{rows.length !== 0 && rows}</tbody>
+          <tbody>{rows?.length !== 0 && rows}</tbody>
         </Table>
-        {rows.length === 0 && (
+        {rows?.length === 0 && (
           <Text color="dimmed" ta="center" fz={12}>
             {user && user.email === tripData?.user
               ? "Donations will be listed here"

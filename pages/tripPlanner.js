@@ -473,7 +473,7 @@ export default function TripPlannerPage(props) {
                       }}
                       hideControls={true}
                       icon={<IconCurrencyDollar />}
-                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      parser={(value) => value.replace(/[\$\s,a-zA-Z]/g, "")}
                       formatter={(value) =>
                         !Number.isNaN(parseFloat(value))
                           ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -533,7 +533,7 @@ export default function TripPlannerPage(props) {
                     }}
                     hideControls={true}
                     icon={<IconCurrencyDollar />}
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    parser={(value) => value.replace(/[\$\s,a-zA-Z]/g, "")}
                     formatter={(value) =>
                       !Number.isNaN(parseFloat(value))
                         ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -662,11 +662,11 @@ export default function TripPlannerPage(props) {
         }}
         stepHoldDelay={600}
         stepHoldInterval={400}
-        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        parser={(value) => value.replace(/[\$\s,a-zA-Z]/g, "")}
         formatter={(value) =>
           !Number.isNaN(parseFloat(value))
             ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            : ""
+            : 0
         }
         sx={{
           ".mantine-NumberInput-input": {
@@ -819,7 +819,9 @@ export default function TripPlannerPage(props) {
             {active === 0 && (
               <motion.div {...animation}>
                 <Flex
-                  p={30}
+                  pt={25}
+                  pb={30}
+                  px={30}
                   maw={950}
                   direction={"column"}
                   className="pagePanel"

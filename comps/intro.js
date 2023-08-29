@@ -88,7 +88,7 @@ export default function Intro(props) {
           <Image
             mb={25}
             sx={{ width: "100%", maxWidth: "250px" }}
-            src={dark ? "img/TA_GlobeLogo.png" : "img/TA_GlobeRed.png"}
+            src={"img/TA_GlobeLogo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
@@ -141,7 +141,7 @@ export default function Intro(props) {
               hidden={!firstDown}
               mb={25}
               sx={{ maxWidth: "45vw" }}
-              src={dark ? "img/TA_GlobeLogo.png" : "img/TA_GlobeRed.png"}
+              src={"img/TA_GlobeLogo.png"}
               alt="TouraSSist_logo"
               withPlaceholder
             />
@@ -174,11 +174,7 @@ export default function Intro(props) {
                 inherit
                 span
                 variant="gradient"
-                gradient={
-                  dark
-                    ? { from: "#2DC7F3", to: "#0D3F82", deg: 45 }
-                    : { from: "#fa7500", to: "#820d0d", deg: 45 }
-                }
+                gradient={{ from: "#2DC7F3", to: "#0D3F82", deg: 45 }}
               >
                 Tourist
               </Text>{" "}
@@ -188,11 +184,7 @@ export default function Intro(props) {
                 inherit
                 span
                 variant="gradient"
-                gradient={
-                  dark
-                    ? { from: "#2DC7F3", to: "#0D3F82", deg: 45 }
-                    : { from: "#fa7500", to: "#820d0d", deg: 45 }
-                }
+                gradient={{ from: "#2DC7F3", to: "#0D3F82", deg: 45 }}
               >
                 Tour
               </Text>
@@ -204,11 +196,7 @@ export default function Intro(props) {
                   inherit
                   span
                   variant="gradient"
-                  gradient={
-                    dark
-                      ? { from: "#2DC7F3", to: "#0D3F82", deg: 45 }
-                      : { from: "#fa7500", to: "#820d0d", deg: 45 }
-                  }
+                  gradient={{ from: "#2DC7F3", to: "#0D3F82", deg: 45 }}
                 >
                   assist
                 </Text>
@@ -277,11 +265,7 @@ export default function Intro(props) {
                 sx={{
                   textShadow: "0 2px 5px rgba(0,0,0,0.2)",
                 }}
-                gradient={
-                  dark
-                    ? { from: "#11a3cc", to: "#0D3F82", deg: 45 }
-                    : { from: "#b85906", to: "#820d0d", deg: 45 }
-                }
+                gradient={{ from: "#11a3cc", to: "#0D3F82", deg: 45 }}
                 onClick={enterSite}
                 leftIcon={
                   <IconWorld
