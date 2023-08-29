@@ -37,19 +37,22 @@ export default function Donations(props) {
     defaultValue: [],
   });
 
-  const [dataLoaded, setDataLoaded] = useSessionStorage({
-    key: "dataLoaded",
-    defaultValue: false,
-  });
-
   const [donationsData, setDonationsData] = useState(donations || []);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
-    if (dataLoaded && donationsData.length !== 0) return;
+    if (tripData?.donations?.length !== donationsData?.length)
+      setDataLoaded(false);
     if (
       (donationsData.length !== tripData.donations?.length ||
         donationsData.length !== donations?.length) &&
       menu
+    ) {
+      setDonationsData(donations);
+    }
+    if (
+      (donationsData.length === 0 && tripData.donations?.length !== 0) ||
+      (donationsData.length !== donations?.length && !dataLoaded)
     ) {
       setDonationsData(donations);
       setDataLoaded(true);
@@ -175,7 +178,7 @@ export default function Donations(props) {
         )}
         <Box ref={ref} />
         <Center>
-          <Button
+          {/* <Button
             variant="default"
             compact
             pr={10}
@@ -183,7 +186,7 @@ export default function Donations(props) {
             leftIcon={<IconReload size={14} />}
           >
             Load More
-          </Button>
+          </Button> */}
         </Center>
       </Box>
     </Box>

@@ -127,18 +127,15 @@ export default function Trippage(props) {
   }, [props.trip]);
 
   useEffect(() => {
-    if (tripData && donations.length !== tripData.donations?.length) {
+    if (
+      donations &&
+      tripData &&
+      donations.length !== tripData.donations?.length
+    ) {
       setDonations(tripData?.donations);
       setDonationSum(Math.floor(sumAmounts(tripData?.donations)));
     }
-  }, [
-    donations,
-    donationSum,
-    tripData,
-    setDonations,
-    setDonationSum,
-    setDonationProgress,
-  ]);
+  }, [donations, donationSum, tripData, setDonations, setDonationSum]);
 
   useEffect(() => {
     const calculatePercentage = () => {
@@ -157,12 +154,24 @@ export default function Trippage(props) {
 
   useEffect(() => {
     if (props.trip) {
+      const dSum = Math.floor(sumAmounts(props.trip.donations));
+      setDonationSum(dSum);
+      setDonationProgress((dSum / props.trip.costsSum) * 100);
       setTripData(props.trip);
       setTripImages(props.trip.images);
       setTripDesc(props.trip.tripDesc);
       setUpdates(props.trip.updates);
+      setDonations(props.trip.donations);
     }
-  }, [images, props.trip, setTripData, setTripDesc]);
+  }, [
+    images,
+    props.trip,
+    setTripData,
+    setTripDesc,
+    setDonations,
+    setDonationSum,
+    setDonationProgress,
+  ]);
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
