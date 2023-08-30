@@ -30,13 +30,14 @@ import {
   IconHeartHandshake,
   IconQuote,
   IconQrcode,
+  IconTargetArrow,
 } from "@tabler/icons-react";
 import Donations from "../comps/trip/donations";
 import Updates from "../comps/trip/updates";
 import MainCarousel from "../comps/trip/maincarousel";
 import TripDescription from "../comps/trip/tripdescription";
 import ModalsItem from "../comps/trip/modalsitem";
-import { formatNumber, daysBefore } from "../libs/custom";
+import { formatNumber, daysBefore, sumAmounts } from "../libs/custom";
 
 export const getStaticProps = async ({ params }) => {
   const { title } = params;
@@ -66,15 +67,14 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export default function Trippage(props) {
+  const router = useRouter();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
   const [modalMode, setModalMode] = useState("");
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
   const [tripImages, setTripImages] = useState([]);
   const [dontaionMode, setDonationMode] = useState("donating");
-
-  const router = useRouter();
+  const dark = colorScheme === "dark";
 
   const [user, setUser] = useSessionStorage({
     key: "user",
@@ -109,16 +109,6 @@ export default function Trippage(props) {
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
-
-  const sumAmounts = (array) => {
-    if (!Array.isArray(array)) {
-      return 0;
-    }
-
-    return array.reduce((total, item) => {
-      return total + (Number(item.amount) || 0);
-    }, 0);
-  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -534,9 +524,12 @@ export default function Trippage(props) {
                     </Text>
                   </Flex>
                   <Divider w={"90%"} opacity={0.4} my={3} />
-                  <Flex align={"flex-end"} opacity={0.4} gap={3} pl={5}>
-                    <Title order={4}>${formatNumber(tripData.costsSum)}</Title>
-                    <Text fz={11} mb={4} span>
+                  <Flex align={"center"} gap={3} pl={5}>
+                    <IconTargetArrow size={20} stroke={1} opacity={0.2} />
+                    <Title order={4} opacity={0.5}>
+                      ${formatNumber(tripData.costsSum)}
+                    </Title>
+                    <Text fz={11} span>
                       GOAL
                     </Text>
                   </Flex>

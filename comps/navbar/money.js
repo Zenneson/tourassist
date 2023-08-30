@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import { IconAppWindow } from "@tabler/icons-react";
 import { useSessionStorage } from "@mantine/hooks";
-import { daysBefore } from "../../libs/custom";
+import { daysBefore, sumAmounts } from "../../libs/custom";
 import {
   useMantineColorScheme,
   Box,
@@ -50,11 +50,6 @@ export default function Money(props) {
     defaultValue: allTrips[0],
   });
 
-  const [dataLoaded, setDataLoaded] = useSessionStorage({
-    key: "dataLoaded",
-    defaultValue: false,
-  });
-
   const [donations, setDonations] = useSessionStorage({
     key: "donations",
     defaultValue: [],
@@ -71,8 +66,8 @@ export default function Money(props) {
         const tripsData = querySnapshot.docs.map((doc) =>
           doc.data(
             setAllTrips((prevTrip) => {
-              const newTrips = [...prevTrip, doc.data()]; // create new images array
-              return newTrips; // return new images array to update state
+              const newTrips = [...prevTrip, doc.data()];
+              return newTrips;
             })
           )
         );
@@ -93,6 +88,8 @@ export default function Money(props) {
     if (currentTrip === undefined) return;
     if (currentTrip.donations?.length === 0) return;
     setDonations(currentTrip.donations);
+    const dSum = Math.floor(sumAmounts(currentTrip.donations));
+    setDonationSum(dSum);
   }, [currentTrip, allTrips, setDonations]);
 
   useEffect(() => {
@@ -107,35 +104,64 @@ export default function Money(props) {
     Tooltip
   );
 
-  const labels = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+  const getLastNDays = (n) => {
+    const result = {
+      matchFormat: [],
+      displayFormat: [],
+    };
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "Amount received",
-        data: labels.map(() => Math.round(Math.random() * 100)),
-        borderColor: "red",
-      },
-      {
-        label: "Donors",
-        data: labels.map(() => Math.round(Math.random() * 100)),
-        borderColor: "lime",
-      },
-    ],
+    for (let i = 0; i < n; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+
+      const matchString = `${d.getFullYear()}-${String(
+        d.getMonth() + 1
+      ).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      const displayString = `${d.getMonth() + 1}/${d.getDate()}`;
+
+      result.matchFormat.unshift(matchString);
+      result.displayFormat.unshift(displayString);
+    }
+
+    return result;
   };
 
+  const getChartData = (n) => {
+    const lastNDays = getLastNDays(n);
+    const dSums = {};
+
+    lastNDays.matchFormat.forEach((day) => {
+      dSums[day] = 0;
+    });
+
+    if (currentTrip && currentTrip.donations?.length !== 0) {
+      if (currentTrip.donations?.length === 0) return;
+      currentTrip.donations?.forEach((donation) => {
+        const donationDay = donation.time.split("T")[0];
+        if (lastNDays.matchFormat.includes(donationDay)) {
+          dSums[donationDay] += donation.amount;
+        }
+      });
+    }
+
+    const labels = lastNDays.displayFormat;
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: "Funds Raised",
+          data: lastNDays.matchFormat.map((day) => dSums[day]),
+          borderColor: "green",
+        },
+      ],
+    };
+  };
+
+  const [graphSpan, setGraphSpan] = useState(7);
+  const graphData = getChartData(graphSpan);
+
   const changeTrip = (event) => {
-    setDataLoaded(false);
-    setDonations([]);
     const newTrip = allTrips.find((trip) => trip.tripTitle === event.tripTitle);
     if (newTrip.tripId === currentTrip.tripId) return;
     if (newTrip.donations?.length === 0) {
@@ -171,13 +197,35 @@ export default function Money(props) {
         onChange={(e) => changeTrip(e)}
       />
       <Box pr={20}>
-        <Box my={20} w="100%" h={"250px"}>
+        <Box my={20} w="100%" h={"250px"} pos={"relative"}>
+          <Select
+            pos={"absolute"}
+            top={-10}
+            right={-10}
+            opacity={0.4}
+            w={110}
+            size="xs"
+            placeholder={`Last ${graphSpan} days`}
+            data={[
+              { value: 7, label: "Last 7 days" },
+              { value: 30, label: "Last 30 days" },
+              { value: 90, label: "Last 90 days" },
+            ]}
+            onChange={(e) => setGraphSpan(e)}
+            sx={{
+              transform: "scale(0.8)",
+              transition: "all 1s ease",
+              "&:hover": {
+                opacity: 1,
+              },
+            }}
+          />
           <Line
             options={{
               responsive: true,
               maintainAspectRatio: false,
             }}
-            data={data}
+            data={graphData}
           />
         </Box>
         <Box
@@ -208,14 +256,14 @@ export default function Money(props) {
             >
               <Box>
                 <Progress
-                  color="blue"
-                  value={30}
+                  color="green"
+                  value={(donationSum / currentTrip?.costsSum) * 100}
                   mb={5}
                   size={"xs"}
                   w={"100%"}
                 />
                 <Title order={3} ta={"center"}>
-                  $0 / $ {currentTrip?.costsSum}
+                  ${donationSum} / ${currentTrip?.costsSum}
                 </Title>
                 <Text ta={"right"} mr={4} fz={10}>
                   RAISED

@@ -39,10 +39,19 @@ export const useUserData = () => {
       }
     );
 
-    // Cleanup function to unsubscribe from the listener when the component unmounts
     return () => unsubscribe();
-  }, [userAuth]); // The effect hook depends on userAuth
+  }, [userAuth]);
   return userData;
+};
+
+export const sumAmounts = (array) => {
+  if (!Array.isArray(array)) {
+    return 0;
+  }
+
+  return array.reduce((total, item) => {
+    return total + (Number(item.amount) || 0);
+  }, 0);
 };
 
 export const clearSessionStorageExcept = (keysToKeep) => {
