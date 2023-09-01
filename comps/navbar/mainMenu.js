@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { Box } from "@mantine/core";
@@ -28,7 +26,6 @@ import {
   IconMoon,
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
-import { estTimeStamp } from "../../libs/custom";
 import { auth } from "../../libs/firebase";
 
 export default function MainMenu(props) {
@@ -86,17 +83,10 @@ export default function MainMenu(props) {
     setPanelShow(false);
   };
 
-  const recordLogout = async (user) => {
-    await updateDoc(doc(firestore, "users", user.email), {
-      lastLogout: estTimeStamp(new Date()),
-    });
-  };
-
   const signOutFunc = async () => {
     setLogoutOpened(false);
     if (auth.currentUser) {
       try {
-        // await recordLogout(auth.currentUser);
         await signOut(auth);
       } catch (error) {
         console.error(error);

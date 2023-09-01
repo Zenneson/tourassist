@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { useRouter } from "next/router";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
@@ -49,12 +55,12 @@ export default function Mymap(props) {
     mapLoaded,
     setMapLoaded,
     setMainMenuOpened,
-    country_name,
     country_center,
   } = props;
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const mapRef = useRef();
+  const fullMapRef = mapRef.current?.getMap();
   const router = useRouter();
   const [touched, setTouched] = useState(false);
   const [area, setArea] = useState({ label: "" });
@@ -152,6 +158,18 @@ export default function Mymap(props) {
       router.push("/");
     }
   }, [user, guest, area.label, router]);
+
+  useEffect(() => {
+    if (fullMapRef) {
+      fullMapRef.setFog({
+        color: dark ? "#0f2e57" : "#fff",
+        "high-color": dark ? "#000" : "#245cdf",
+        "space-color": dark
+          ? ["interpolate", ["linear"], ["zoom"], 4, "#010b19", 7, "#367ab9"]
+          : ["interpolate", ["linear"], ["zoom"], 4, "#fff", 7, "#fff"],
+      });
+    }
+  }, [fullMapRef, dark]);
 
   function getCords(feature) {
     const center = centerOfMass(feature);
@@ -1058,11 +1076,8 @@ export default function Mymap(props) {
         projection="globe"
         doubleClickZoom={false}
         interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-        mapStyle={
-          dark
-            ? "mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"
-            : "mapbox://styles/zenneson/clk2aa9s401ed01padxsqanrd"
-        }
+        // mapStyle={"mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"}
+        mapStyle={"mapbox://styles/zenneson/clm07y8pz01ur01qieykmcji3"}
         style={{ width: "100%", height: "100%" }}
         mapboxAccessToken={mapboxAccessToken}
       >

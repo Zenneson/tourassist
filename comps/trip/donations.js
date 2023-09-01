@@ -123,13 +123,13 @@ export default function Donations(props) {
             bg={!dark && "gray.3"}
             onChange={setSorted}
             data={[
-              { label: "Time", value: "time" },
+              { label: "Most Recent", value: "time" },
               { label: "Amount", value: "amount" },
             ]}
             size="xs"
             top={-4}
             right={-16}
-            w="45%"
+            w={menu ? "50%" : "77%"}
             sx={{
               transform: "scale(0.8)",
             }}

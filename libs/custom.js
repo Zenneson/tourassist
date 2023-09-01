@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "./firebase";
 import { doc, setDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { IconCheck } from "@tabler/icons-react";
 import {
   ref,
   deleteObject,
@@ -49,6 +50,7 @@ export const useUserData = () => {
 
     return () => unsubscribe();
   }, [userAuth]);
+  if (userData) userData.lastLogDate = moment().format("MMDDYY");
   return userData;
 };
 
@@ -355,4 +357,16 @@ export const updateEditedTrip = async (
       reject(error);
     }
   });
+};
+
+export const loggedIn = (dark, user) => {
+  return {
+    color: "green",
+    icon: <IconCheck size={20} />,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+    title: "Welocme Back",
+    message: `${user.email} is logged in`,
+  };
 };

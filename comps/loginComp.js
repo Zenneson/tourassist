@@ -26,7 +26,7 @@ import { useToggle, useSessionStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconX, IconCheck, IconUserCircle } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { estTimeStamp } from "../libs/custom";
+import { estTimeStamp, loggedIn } from "../libs/custom";
 
 const useStyles = createStyles((theme, { floating }) => ({
   root: {
@@ -173,16 +173,6 @@ export default function LoginComp(props) {
     message: `${form.values.firstName} ${form.values.lastName}'s account has been created.`,
   };
 
-  const loggedIn = {
-    color: "green",
-    icon: <IconCheck size={20} />,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
-    title: "Welocme Back",
-    message: `${form.values.email} has logged in`,
-  };
-
   const emailInvalid = {
     color: "red",
     icon: <IconX size={20} />,
@@ -269,7 +259,8 @@ export default function LoginComp(props) {
       signInWithEmailAndPassword(auth, form.values.email, form.values.password)
         .then((userCredential) => {
           setLogin(userCredential.user);
-          notifications.show(loggedIn);
+          const message = loggedIn(dark, form.values);
+          notifications.show(message);
         })
         .catch((error) => {
           const errorCode = error.code;
