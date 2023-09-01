@@ -173,15 +173,15 @@ export default function Updates(props) {
           >
             <Text
               w={"100%"}
-              bg={dark ? "blue.9" : "blue.4"}
+              bg={dark ? "blue.9" : "rgba(45, 200, 243, 0.7)"}
               ta={"center"}
               py={5}
               fw={700}
-              fz={12}
+              fz={8}
               sx={{
                 zIndex: 1,
                 textTransform: "uppercase",
-                boxShadow: "0 5px 5px 0 rgba(0,0,0,0.15)",
+                boxShadow: "0 5px 5px 0 rgba(0,0,0,0.1)",
               }}
             >
               {month}

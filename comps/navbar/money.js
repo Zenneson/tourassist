@@ -363,6 +363,7 @@ export default function Money(props) {
                   cursor: "pointer",
                   "&:hover": {
                     transform: "scale(1.1)",
+                    backgroundColor: dark ? "#0D3F82" : "#2DC7F3",
                     color: "#fff",
                   },
                 }}
