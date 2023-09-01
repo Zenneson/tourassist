@@ -48,7 +48,7 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
-import { dateFormat, dateId } from "../libs/custom";
+import { dateFormat, dateId, saveToDB } from "../libs/custom";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
 
