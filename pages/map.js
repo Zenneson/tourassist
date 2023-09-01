@@ -94,7 +94,7 @@ export default function Map(props) {
       setUser(null);
       signOut(auth);
     } else if (
-      (user && user.lastLogDate && !isWithin(user.lastLogDate, 2)) === false ||
+      (user && user.lastLogDate && !isWithin(user.lastLogDate, 1)) ||
       (user && !user.lastLogDate)
     ) {
       const message = loggedIn(dark, user);
