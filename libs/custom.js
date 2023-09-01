@@ -13,6 +13,14 @@ const moment = require("moment-timezone");
 
 const storage = getStorage();
 
+export const updateField = async (update, user) => {
+  await updateDoc(doc(firestore, "users", user.email), update);
+};
+
+export const compareObj = (obj1, obj2) => {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+};
+
 export const useUserData = () => {
   const [userAuth] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
@@ -42,6 +50,16 @@ export const useUserData = () => {
     return () => unsubscribe();
   }, [userAuth]);
   return userData;
+};
+
+export const parseCustomDate = (dateString) => {
+  if (!dateString) return null;
+  const formatString = "MMMM D YYYY hh:mm A Z";
+  const dateMoment = moment.tz(dateString, formatString, "UTC");
+  if (!dateMoment.isValid()) {
+    return null;
+  }
+  return dateMoment.toDate();
 };
 
 export const sumAmounts = (array) => {
@@ -93,6 +111,11 @@ export const timeStamper = () => {
 
 export const dateFormat = (dateString) => {
   return moment(dateString).format("MMMM D, YYYY");
+};
+
+export const formatDateFullMonth = (dateString) => {
+  const date = moment(dateString, "M/D");
+  return date.format("MMMM D, YYYY");
 };
 
 export const daysBefore = (dateString) => {
@@ -332,8 +355,4 @@ export const updateEditedTrip = async (
       reject(error);
     }
   });
-};
-
-export const updateField = async (update) => {
-  await updateDoc(doc(firestore, "users", user.email), update);
 };

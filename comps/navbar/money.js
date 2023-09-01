@@ -1,13 +1,23 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
-import { IconAppWindow } from "@tabler/icons-react";
+import {
+  IconAppWindow,
+  IconCurrencyDollar,
+  IconSlash,
+} from "@tabler/icons-react";
 import { useSessionStorage } from "@mantine/hooks";
-import { daysBefore, sumAmounts } from "../../libs/custom";
+import {
+  daysBefore,
+  sumAmounts,
+  parseCustomDate,
+  formatDateFullMonth,
+} from "../../libs/custom";
 import {
   useMantineColorScheme,
   Box,
+  Button,
   Center,
   Flex,
   Group,
@@ -18,20 +28,20 @@ import {
   Select,
   LoadingOverlay,
 } from "@mantine/core";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import Donations from "../trip/donations";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
+  BarElement,
   Tooltip,
 } from "chart.js";
 
 export default function Money(props) {
   const { setMainMenuOpened, setPanelShow } = props;
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
 
@@ -100,7 +110,7 @@ export default function Money(props) {
     CategoryScale,
     LinearScale,
     PointElement,
-    LineElement,
+    BarElement,
     Tooltip
   );
 
@@ -126,33 +136,79 @@ export default function Money(props) {
     return result;
   };
 
-  const getChartData = (n) => {
-    const lastNDays = getLastNDays(n);
-    const dSums = {};
+  const getDatesFromCreationToNow = (creationTime) => {
+    const result = {
+      matchFormat: [],
+      displayFormat: [],
+    };
 
-    lastNDays.matchFormat.forEach((day) => {
+    const startDate = new Date(creationTime);
+    const endDate = new Date();
+    let currentDate = startDate;
+
+    while (currentDate <= endDate) {
+      const matchString = `${currentDate.getFullYear()}-${String(
+        currentDate.getMonth() + 1
+      ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
+      const displayString = `${
+        currentDate.getMonth() + 1
+      }/${currentDate.getDate()}`;
+
+      result.matchFormat.push(matchString);
+      result.displayFormat.push(displayString);
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return result;
+  };
+
+  const getChartData = (n) => {
+    let dateRange;
+
+    if (n !== 7 && n !== 30) {
+      dateRange = getDatesFromCreationToNow(n);
+    } else {
+      dateRange = getLastNDays(n);
+    }
+
+    const dSums = {};
+    const donationCounts = {};
+
+    dateRange.matchFormat.forEach((day) => {
       dSums[day] = 0;
+      donationCounts[day] = 0;
     });
 
     if (currentTrip && currentTrip.donations?.length !== 0) {
-      if (currentTrip.donations?.length === 0) return;
       currentTrip.donations?.forEach((donation) => {
         const donationDay = donation.time.split("T")[0];
-        if (lastNDays.matchFormat.includes(donationDay)) {
+        if (dateRange.matchFormat.includes(donationDay)) {
           dSums[donationDay] += donation.amount;
+          donationCounts[donationDay]++;
         }
       });
     }
 
-    const labels = lastNDays.displayFormat;
+    const labels = dateRange.displayFormat;
+
+    const data = dateRange.matchFormat.map((day) => ({
+      total: dSums[day],
+      times: donationCounts[day],
+    }));
 
     return {
+      data,
       labels,
       datasets: [
         {
-          label: "Funds Raised",
-          data: lastNDays.matchFormat.map((day) => dSums[day]),
-          borderColor: "green",
+          data: data.map((item) => item.total),
+          backgroundColor: dark ? "#0D3F82" : "#2DC7F3",
+          borderColor: dark ? "#0D3F82" : "#2DC7F3",
+        },
+        {
+          data: data.map((item) => item.times),
+          hidden: true,
         },
       ],
     };
@@ -160,6 +216,27 @@ export default function Money(props) {
 
   const [graphSpan, setGraphSpan] = useState(7);
   const graphData = getChartData(graphSpan);
+
+  ChartJS.defaults.borderColor = dark
+    ? "rgba(255, 255, 255, 0.02)"
+    : "rgba(0, 0, 0, 0.05)";
+  ChartJS.defaults.elements.bar.borderRadius = 3;
+  ChartJS.defaults.plugins.tooltip.displayColors = false;
+  ChartJS.defaults.plugins.tooltip.backgroundColor = dark ? "#000" : "#DEE2E6";
+  ChartJS.defaults.plugins.tooltip.titleColor = dark ? "#fff" : "#000";
+  ChartJS.defaults.plugins.tooltip.bodyColor = dark ? "#fff" : "#000";
+  ChartJS.defaults.plugins.tooltip.titleAlign = "center";
+  ChartJS.defaults.plugins.tooltip.bodyAlign = "center";
+  ChartJS.defaults.plugins.tooltip.callbacks.title = function (tooltipItem) {
+    return formatDateFullMonth(tooltipItem[0].label);
+  };
+  if (graphData.length !== 0) {
+    ChartJS.defaults.plugins.tooltip.callbacks.label = function (tooltipItem) {
+      return `$${tooltipItem.formattedValue} ( ${
+        graphData.data[tooltipItem.dataIndex].times
+      } Donor${graphData.data[tooltipItem.dataIndex].times === 1 ? "" : "s"} )`;
+    };
+  }
 
   const changeTrip = (event) => {
     const newTrip = allTrips.find((trip) => trip.tripTitle === event.tripTitle);
@@ -201,15 +278,23 @@ export default function Money(props) {
           <Select
             pos={"absolute"}
             top={-10}
-            right={-10}
-            opacity={0.4}
+            right={-5}
+            opacity={0.6}
             w={110}
             size="xs"
-            placeholder={`Last ${graphSpan} days`}
+            placeholder={
+              graphSpan === 7 || graphSpan === 30
+                ? `Last ${graphSpan} days`
+                : "All days"
+            }
+            defaultValue={7}
             data={[
               { value: 7, label: "Last 7 days" },
               { value: 30, label: "Last 30 days" },
-              { value: 90, label: "Last 90 days" },
+              {
+                value: parseCustomDate(currentTrip?.creationTime),
+                label: "All days",
+              },
             ]}
             onChange={(e) => setGraphSpan(e)}
             sx={{
@@ -220,7 +305,8 @@ export default function Money(props) {
               },
             }}
           />
-          <Line
+          <Bar
+            key={colorScheme}
             options={{
               responsive: true,
               maintainAspectRatio: false,
@@ -237,46 +323,6 @@ export default function Money(props) {
               : "rgba(0,0,0,0.1)",
           }}
         >
-          <Group w={"100%"} spacing={0} grow>
-            <Center>
-              <Box>
-                <Title order={3} ta={"center"}>
-                  $0
-                </Title>
-                <Text fz={10}>AVAILABLE FUNDS</Text>
-              </Box>
-            </Center>
-            <Center
-              py={10}
-              sx={{
-                borderLeft: `2px solid ${dark}`
-                  ? "rgba(255,255,255,0.1)"
-                  : "rgba(0,0,0,0.1)",
-              }}
-            >
-              <Box>
-                <Progress
-                  color="green"
-                  value={(donationSum / currentTrip?.costsSum) * 100}
-                  mb={5}
-                  size={"xs"}
-                  w={"100%"}
-                />
-                <Title order={3} ta={"center"}>
-                  ${donationSum} / ${currentTrip?.costsSum}
-                </Title>
-                <Text ta={"right"} mr={4} fz={10}>
-                  RAISED
-                </Text>
-              </Box>
-            </Center>
-          </Group>
-          <Divider
-            size={"xs"}
-            c={`2px solid ${
-              dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
-            }`}
-          />
           <Group w={"100%"} grow spacing={0}>
             <Center>
               <Box>
@@ -307,26 +353,96 @@ export default function Money(props) {
               </Box>
             </Center>
             {/* Sends User to Trip Page */}
+            <Center py={19} fw={600} fz={20}>
+              <Button
+                variant="subtle"
+                bg={dark ? "dark.8" : "gray.3"}
+                c={dark ? "#fff" : "#000"}
+                sx={{
+                  transition: "all 0.2s ease",
+                  cursor: "pointer",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                    color: "#fff",
+                  },
+                }}
+                onClick={() => {
+                  router.push("/" + currentTrip?.tripId);
+                  setMainMenuOpened(false);
+                  setPanelShow(false);
+                }}
+              >
+                VIEW{" "}
+                <IconAppWindow
+                  size={23}
+                  style={{
+                    marginLeft: 4,
+                  }}
+                />
+              </Button>
+            </Center>
+          </Group>
+          <Divider size={"sm"} color={dark ? "dark.8" : "gray.3"} />
+          <Group w={"100%"} spacing={0} grow>
+            <Center>
+              <Box>
+                <Title order={3} ta={"center"}>
+                  $0
+                </Title>
+                <Text fz={10}>AVAILABLE FUNDS</Text>
+              </Box>
+            </Center>
             <Center
-              py={19}
-              fw={600}
-              fz={20}
-              sx={(theme) => ({
-                transition: "all 0.2s ease",
-                cursor: "pointer",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                },
-              })}
-              onClick={() => {
-                router.push("/" + currentTrip?.tripId);
-                setMainMenuOpened(false);
-                setPanelShow(false);
+              py={10}
+              bg={dark ? "dark.8" : "gray.3"}
+              sx={{
+                borderRadius: "0 0 3px 3px",
+                borderLeft: `2px solid ${dark}`
+                  ? "rgba(255,255,255,0.1)"
+                  : "rgba(0,0,0,0.1)",
               }}
             >
-              <Group spacing={4}>
-                VIEW <IconAppWindow size={23} />
-              </Group>
+              <Box>
+                <Progress
+                  color={dark ? "blue.9" : "blue.4"}
+                  bg={dark ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,1)"}
+                  value={(donationSum / currentTrip?.costsSum) * 100}
+                  mb={5}
+                  size={"sm"}
+                  w={"100%"}
+                  sx={{
+                    boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
+                  }}
+                />
+                <Title order={3} ta={"center"}>
+                  <Flex align={"center"}>
+                    <IconCurrencyDollar
+                      stroke={1}
+                      style={{
+                        marginRight: -4,
+                      }}
+                    />
+                    {donationSum}{" "}
+                    <IconSlash
+                      stroke={1}
+                      style={{
+                        transform: "rotate(-20deg) scale(1.4)",
+                        marginRight: -6,
+                      }}
+                    />
+                    <IconCurrencyDollar
+                      stroke={1}
+                      style={{
+                        marginRight: -4,
+                      }}
+                    />
+                    {currentTrip?.costsSum}
+                  </Flex>
+                </Title>
+                <Text ta={"right"} mr={4} fz={10}>
+                  RAISED
+                </Text>
+              </Box>
             </Center>
           </Group>
         </Box>

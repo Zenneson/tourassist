@@ -19,7 +19,6 @@ import {
   IconMoon,
 } from "@tabler/icons-react";
 import { useMediaQuery, useSessionStorage } from "@mantine/hooks";
-import { useGeo } from "../libs/custom";
 import { useRouter } from "next/router";
 import LoginComp from "./loginComp";
 

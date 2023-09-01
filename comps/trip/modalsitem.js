@@ -542,6 +542,7 @@ export default function ModalsItem(props) {
         sx={{
           "& .mantine-ScrollArea-root": {
             "& .mantine-ScrollArea-scrollbar": {
+              opacity: 0.3,
               width: 8,
             },
           },
@@ -761,12 +762,12 @@ export default function ModalsItem(props) {
                   </Flex>
                   <Flex align={"center"} gap={10}>
                     <Divider
+                      w={"100%"}
                       label={
                         <Text fz={15} fw={700}>
                           Total
                         </Text>
                       }
-                      w={"100%"}
                     />
                     <Text fz={14} fw={700}>
                       ${totalDonation()}

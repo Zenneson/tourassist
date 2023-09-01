@@ -471,8 +471,8 @@ export default function Legal() {
         color={
           highlighted === index
             ? theme.colorScheme === "dark"
-              ? "blue.3"
-              : "red.3"
+              ? "blue.9"
+              : "blue.4"
             : "inherit"
         }
       >

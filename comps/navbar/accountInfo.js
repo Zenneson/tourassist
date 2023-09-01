@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useRouter } from "next/router";
 import {
   useMantineColorScheme,
   ActionIcon,
@@ -36,6 +37,8 @@ import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function AccountInfo(props) {
   const { user } = props;
+  const router = useRouter();
+
   const [changePass, setChangePass] = useState(false);
 
   const firstNameRef = useRef();
@@ -121,7 +124,8 @@ export default function AccountInfo(props) {
             refs[field].current &&
             refs[field].current === document.activeElement
           ) {
-            updateField({ [field]: values[field] });
+            updateField({ [field]: values[field] }, user);
+            router.replace(router.asPath);
             setters[field](false);
             refs[field].current.blur();
             break;
@@ -163,7 +167,9 @@ export default function AccountInfo(props) {
             pt={10}
             pb={12}
             sx={{
-              borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
+              borderLeft: dark
+                ? "3px solid rgba(255, 255, 255, 0.1)"
+                : "3px solid rgba(0, 0, 0, 0.1)",
             }}
           >
             <Group grow spacing={10}>
@@ -186,6 +192,7 @@ export default function AccountInfo(props) {
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
+                      color={dark ? "gray.3" : "gray.6"}
                       sx={{
                         pointerEvents: "all",
                       }}
@@ -194,7 +201,8 @@ export default function AccountInfo(props) {
                           setFirstName(true);
                           firstNameRef.current.focus();
                         } else {
-                          updateField({ firstName: firstNameValue });
+                          updateField({ firstName: firstNameValue }, user);
+                          router.replace(router.asPath);
                           setFirstName(false);
                         }
                       }}
@@ -225,6 +233,7 @@ export default function AccountInfo(props) {
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
+                      color={dark ? "gray.3" : "gray.6"}
                       sx={{
                         pointerEvents: "all",
                       }}
@@ -233,7 +242,8 @@ export default function AccountInfo(props) {
                           setLastName(true);
                           lastNameRef.current.focus();
                         } else {
-                          updateField({ lastName: lastNameValue });
+                          updateField({ lastName: lastNameValue }, user);
+                          router.replace(router.asPath);
                           setLastName(false);
                         }
                       }}
@@ -266,6 +276,7 @@ export default function AccountInfo(props) {
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
+                      color={dark ? "gray.3" : "gray.6"}
                       sx={{
                         pointerEvents: "all",
                       }}
@@ -274,7 +285,8 @@ export default function AccountInfo(props) {
                           setPhone(true);
                           phoneRef.current.focus();
                         } else {
-                          updateField({ phone: phoneValue });
+                          updateField({ phone: phoneValue }, user);
+                          router.replace(router.asPath);
                           setPhone(false);
                         }
                       }}
@@ -330,15 +342,15 @@ export default function AccountInfo(props) {
             <Group grow spacing={10}>
               <Divider opacity={0.5} />
               <Button
-                variant="light"
+                variant="filled"
                 color="green"
-                bg={!dark && "rgba(0, 151, 0, 0.2)"}
+                bg={"rgb(0, 151, 0)"}
                 fz={12}
               >
                 <IconBuildingBank
                   size={15}
                   stroke={3}
-                  opacity={0.4}
+                  opacity={0.5}
                   style={{
                     marginRight: "5px",
                     marginBottom: "2px",
@@ -364,7 +376,9 @@ export default function AccountInfo(props) {
             pt={10}
             pb={12}
             sx={{
-              borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
+              borderLeft: dark
+                ? "3px solid rgba(255, 255, 255, 0.1)"
+                : "3px solid rgba(0, 0, 0, 0.1)",
             }}
           >
             <Group grow spacing={10}>
@@ -389,6 +403,7 @@ export default function AccountInfo(props) {
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
+                      color={dark ? "gray.3" : "gray.6"}
                       sx={{
                         pointerEvents: "all",
                       }}
@@ -397,7 +412,8 @@ export default function AccountInfo(props) {
                           setFaceBook(true);
                           faceBookRef.current.focus();
                         } else {
-                          updateField({ faceBook: faceBookValue });
+                          updateField({ faceBook: faceBookValue }, user);
+                          router.replace(router.asPath);
                           setFaceBook(false);
                         }
                       }}
@@ -432,6 +448,7 @@ export default function AccountInfo(props) {
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
+                      color={dark ? "gray.3" : "gray.6"}
                       sx={{
                         pointerEvents: "all",
                       }}
@@ -440,7 +457,8 @@ export default function AccountInfo(props) {
                           setInstagram(true);
                           instagramRef.current.focus();
                         } else {
-                          updateField({ instagram: instagramValue });
+                          updateField({ instagram: instagramValue }, user);
+                          router.replace(router.asPath);
                           setInstagram(false);
                         }
                       }}
@@ -475,6 +493,7 @@ export default function AccountInfo(props) {
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
+                      color={dark ? "gray.3" : "gray.6"}
                       sx={{
                         pointerEvents: "all",
                       }}
@@ -483,7 +502,8 @@ export default function AccountInfo(props) {
                           setTikTok(true);
                           tikTokRef.current.focus();
                         } else {
-                          updateField({ tikTok: tikTokValue });
+                          updateField({ tikTok: tikTokValue }, user);
+                          router.replace(router.asPath);
                           setTikTok(false);
                         }
                       }}
@@ -518,6 +538,7 @@ export default function AccountInfo(props) {
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
+                      color={dark ? "gray.3" : "gray.6"}
                       sx={{
                         pointerEvents: "all",
                       }}
@@ -526,7 +547,8 @@ export default function AccountInfo(props) {
                           setTwitter(true);
                           twitterRef.current.focus();
                         } else {
-                          updateField({ twitter: twitterValue });
+                          updateField({ twitter: twitterValue }, user);
+                          router.replace(router.asPath);
                           setTwitter(false);
                         }
                       }}
@@ -558,7 +580,9 @@ export default function AccountInfo(props) {
             pt={10}
             pb={12}
             sx={{
-              borderLeft: `3px solid ${dark}` ? "gray.8" : "gray.4",
+              borderLeft: dark
+                ? "3px solid rgba(255, 255, 255, 0.1)"
+                : "3px solid rgba(0, 0, 0, 0.1)",
             }}
           >
             <Flex direction="column" gap={8} align="flex-start" pl={20}>

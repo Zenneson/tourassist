@@ -173,7 +173,7 @@ export default function Updates(props) {
           >
             <Text
               w={"100%"}
-              bg={dark ? "blue.9" : "red.8"}
+              bg={dark ? "blue.9" : "blue.4"}
               ta={"center"}
               py={5}
               fw={700}
@@ -325,7 +325,7 @@ export default function Updates(props) {
           <Button
             variant="filled"
             size="xs"
-            color="green"
+            color="green.9"
             opacity={0.2}
             sx={{
               "&:hover": {
@@ -341,7 +341,7 @@ export default function Updates(props) {
           <Button
             variant="filled"
             size="xs"
-            color="red"
+            color="red.9"
             opacity={0.2}
             sx={{
               "&:hover": {

@@ -61,7 +61,7 @@ const useStyles = createStyles((theme, { floating }) => ({
 
 export default function LoginComp(props) {
   const { auth, setInfoAdded } = props;
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);

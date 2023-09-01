@@ -70,7 +70,6 @@ export default function Mymap(props) {
   const [countryData, setCountryData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
-  const [placeChoosen, setPlaceChoosen] = useState(false);
   const [showChoice, setShowChoice] = useState(false);
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
@@ -667,6 +666,10 @@ export default function Mymap(props) {
     [area.label]
   );
 
+  const placeChoosen = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <LoadingOverlay visible={!mapLoaded} overlayOpacity={1} />
@@ -692,9 +695,7 @@ export default function Mymap(props) {
         })}
       >
         <Text fz={14} ta={"center"} mb={10}>
-          {places && places.length > 0 && !placeChoosen
-            ? "Clear the Tour List and c"
-            : "C"}
+          {places && places.length > 0 ? "Clear the Tour List and c" : "C"}
           ontinue with{" "}
           <Text fw={700} span>
             {area.label}
@@ -705,9 +706,15 @@ export default function Mymap(props) {
           <Button
             variant="filled"
             size="xs"
-            color="green"
+            color="green.9"
+            opacity={0.3}
+            sx={{
+              "&:hover": {
+                opacity: 1,
+              },
+            }}
             onClick={() => {
-              setPlaceChoosen(true);
+              placeChoosen();
               setPlaces(placeLocation);
               router.push("/tripplanner");
             }}
@@ -717,7 +724,13 @@ export default function Mymap(props) {
           <Button
             variant="filled"
             size="xs"
-            color="red"
+            color="red.9"
+            opacity={0.3}
+            sx={{
+              "&:hover": {
+                opacity: 1,
+              },
+            }}
             onClick={() => setShowModal(false)}
           >
             <IconX stroke={4} />

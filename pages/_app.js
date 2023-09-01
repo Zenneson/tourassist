@@ -10,7 +10,7 @@ import { useSessionStorage } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
-import { useUserData } from "../libs/custom";
+import { useUserData, compareObj } from "../libs/custom";
 import { getAuth } from "firebase/auth";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
@@ -47,7 +47,7 @@ export default function App(props) {
 
   useEffect(() => {
     if (leaving) return;
-    if (user === null && user !== userData) {
+    if (compareObj(userData, user) === false) {
       setUser(userData);
     }
   }, [userData, user, setUser, leaving]);
@@ -69,9 +69,21 @@ export default function App(props) {
         "#050506",
         "#020202",
       ],
+      blue: [
+        "#4DFFFF",
+        "#41FDFF",
+        "#3AEBFD",
+        "#33D9F8",
+        "#2DC7F3",
+        "#1C7BB2",
+        "#186CA6",
+        "#145D9A",
+        "#104E8E",
+        "#0D3F82",
+      ],
     },
-    primaryColor: colorScheme === "dark" ? "blue" : "red",
-    primaryShade: { light: 7, dark: 9 },
+    primaryColor: "blue",
+    primaryShade: { light: 5, dark: 9 },
     components: {
       Autocomplete: {
         defaultProps: {

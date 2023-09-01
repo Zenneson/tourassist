@@ -10,7 +10,7 @@ const auth = getAuth();
 
 export default function Home() {
   const { height, width } = useViewportSize();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
 
   const slideSettings = {

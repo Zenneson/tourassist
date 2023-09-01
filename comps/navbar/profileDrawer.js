@@ -40,17 +40,28 @@ const useStyles = createStyles((theme) => ({
   activeIcon: {
     opacity: 0.7,
   },
-  description: {
-    opacity: 0.4,
-  },
   root: {
+    transition: "all 150ms ease",
     color:
       theme.colorScheme === "dark"
         ? theme.colors.dark[0]
         : theme.colors.gray[9],
-    "&:hover": { transform: "scale(1.02)", transition: "all 200ms ease" },
+    "&:hover": {
+      transform: "scale(1.02)",
+    },
     "&:active": {
       transform: "scale(1)",
+    },
+    "&[data-active='true']": {
+      color: theme.colorScheme === "dark" ? "#fff" : "#2dc8f3",
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? "rgba(170, 170, 170, 0.05)"
+          : "rgba(170, 170, 170, 0.1)",
+      "&:hover": {
+        color: "#fff",
+        backgroundColor: theme.colorScheme === "dark" ? "#0d4082" : "#2dc8f3",
+      },
     },
   },
   closeButton: {
@@ -79,7 +90,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function ProfileDrawer(props) {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const { classes, cx } = useStyles();
   const {
@@ -207,8 +218,11 @@ export default function ProfileDrawer(props) {
               <Center>
                 <Badge
                   variant="dot"
+                  color={dark ? "blue.9" : "blue.4"}
                   sx={{
-                    cursor: "pointer",
+                    cursor: "default",
+                    border: "none",
+                    userSelect: "none",
                   }}
                 >
                   {addEllipsis(user.email, 40)}
@@ -376,6 +390,12 @@ export default function ProfileDrawer(props) {
             background: dark
               ? theme.fn.rgba(theme.colors.dark[9], 0.7)
               : theme.fn.rgba(theme.colors.gray[0], 0.7),
+          },
+          "& .mantine-ScrollArea-root": {
+            "& .mantine-ScrollArea-scrollbar": {
+              opacity: 0.3,
+              width: 8,
+            },
           },
         })}
       >

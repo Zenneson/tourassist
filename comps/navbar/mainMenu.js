@@ -5,9 +5,10 @@ import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
-import { Box, RemoveScroll } from "@mantine/core";
+import { Box } from "@mantine/core";
 import {
   useMantineColorScheme,
+  useMantineTheme,
   Header,
   Button,
   Image,
@@ -33,6 +34,7 @@ import { auth } from "../../libs/firebase";
 export default function MainMenu(props) {
   const { setListOpened, searchOpened, setSearchOpened, setDropDownOpened } =
     props;
+  const theme = useMantineTheme();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
@@ -56,9 +58,6 @@ export default function MainMenu(props) {
   const [leaving, setLeaving] = useSessionStorage({
     key: "leaving",
     defaultValue: false,
-  });
-  const [userGeo, setUserGeo] = useSessionStorage({
-    key: "userGeo",
   });
 
   useEffect(() => {
@@ -158,7 +157,7 @@ export default function MainMenu(props) {
             ml={5}
             width={"auto"}
             height={"60px"}
-            src={dark ? "img/TA_GlobeLogo.png" : "img/TA_GlobeRed.png"}
+            src={"img/TA_GlobeLogo.png"}
             alt="TouraSSist_logo"
             withPlaceholder
           />
@@ -178,6 +177,11 @@ export default function MainMenu(props) {
               onClick={openMenu}
               radius={"xl"}
               mr={-5}
+              sx={{
+                "&:hover": {
+                  background: !dark && "rgba(45, 200, 243, 0.2)",
+                },
+              }}
             >
               <Text fz={12} color={dark ? "gray.0" : "dark.9"}>
                 {user.email}
@@ -191,6 +195,11 @@ export default function MainMenu(props) {
               radius={"xl"}
               p={10}
               c={dark ? "gray.0" : "dark.9"}
+              sx={{
+                "&:hover": {
+                  background: !dark && "rgba(45, 200, 243, 0.2)",
+                },
+              }}
             >
               {dark ? <IconBrightnessUp size={17} /> : <IconMoon size={17} />}
             </Button>
@@ -205,6 +214,11 @@ export default function MainMenu(props) {
                 mr={5}
                 p={10}
                 c={dark ? "gray.0" : "dark.9"}
+                sx={{
+                  "&:hover": {
+                    background: !dark && "rgba(45, 200, 243, 0.2)",
+                  },
+                }}
               >
                 <IconSearch size={17} />
               </Button>
@@ -227,6 +241,11 @@ export default function MainMenu(props) {
                     c={dark ? "gray.0" : "dark.9"}
                     onClick={() => {
                       setLogoutOpened((o) => !o);
+                    }}
+                    sx={{
+                      "&:hover": {
+                        background: !dark && "rgba(45, 200, 243, 0.2)",
+                      },
                     }}
                   >
                     {user ? (
@@ -276,6 +295,7 @@ export default function MainMenu(props) {
                 stroke={1}
                 size={30}
                 style={{
+                  color: dark ? theme.colors.blue[6] : theme.colors.blue[9],
                   paddingTop: "3px",
                   cursor: "pointer",
                   transform: "scale(1.5)",

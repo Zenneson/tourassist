@@ -3,7 +3,6 @@ import {
   useMantineTheme,
   Avatar,
   Box,
-  Button,
   Center,
   Flex,
   Divider,
@@ -20,6 +19,7 @@ import { IconReload } from "@tabler/icons-react";
 export default function Donations(props) {
   const { menu, dHeight, donationSectionLimit, donations } = props;
   const theme = useMantineTheme();
+  const dark = theme.colorScheme === "dark";
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
   const { ref, entry } = useIntersection({
@@ -78,7 +78,20 @@ export default function Donations(props) {
     <tr key={index}>
       <td>
         <Group>
-          <Avatar radius="xl">{item.name.charAt(0)}</Avatar>
+          <Avatar
+            variant={"filled"}
+            radius="xl"
+            color={dark ? "dark.5" : "gray.1"}
+            sx={{
+              boxShadow: dark
+                ? "0 2px 4px rgba(0,0,0,0.3)"
+                : "0 2px 4px rgba(0,0,0,0.1)",
+            }}
+          >
+            <Text color={dark ? "dark.1" : "gray.5"}>
+              {item.name.charAt(0)}
+            </Text>
+          </Avatar>
           <Text size="sm" weight={500}>
             {item.name}
           </Text>
@@ -107,6 +120,7 @@ export default function Donations(props) {
         {donationsData?.length !== 0 && (
           <SegmentedControl
             value={sorted}
+            bg={!dark && "gray.3"}
             onChange={setSorted}
             data={[
               { label: "Time", value: "time" },
@@ -153,6 +167,7 @@ export default function Donations(props) {
         sx={{
           borderRadius: 3,
           ".mantine-ScrollArea-scrollbar": {
+            opacity: 0.3,
             width: 8,
           },
         }}

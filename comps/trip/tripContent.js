@@ -391,7 +391,7 @@ export default function TripContent(props) {
               ) : (
                 <BackgroundImage
                   radius={3}
-                  opacity={0.4}
+                  opacity={dark ? 0.1 : 0.4}
                   src={
                     dark
                       ? "img/placeholder/bags_blk.jpg"
@@ -462,15 +462,23 @@ export default function TripContent(props) {
                 accept={IMAGE_MIME_TYPE}
                 ta="center"
                 active={images.length < 6}
+                styles={{
+                  root: {
+                    border: `5px dashed ${
+                      dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)"
+                    } !important`,
+                    background: dark
+                      ? "rgba(0, 0, 0, 0) !important"
+                      : "rgba(255, 255, 255, 0) !important",
+                    ":hover": {
+                      backgroundColor: dark
+                        ? "rgba(0, 0, 0, 0.1) !important"
+                        : "rgba(255, 255, 255, 0.1) !important",
+                    },
+                  },
+                }}
               >
-                <Center
-                  h={"calc(100vh - 60px)"}
-                  sx={{
-                    border: `2px dashed ${
-                      dark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"
-                    }`,
-                  }}
-                >
+                <Center h={"calc(100vh - 60px)"}>
                   <Group
                     position="center"
                     spacing={5}
@@ -620,7 +628,7 @@ export default function TripContent(props) {
               thumbSize={20}
               thumbChildren={<IconFrame size={14} stroke={3} />}
               defaultValue={1}
-              color="blue.3"
+              color="blue.4"
               label={null}
               showLabelOnHover={false}
               value={scale}

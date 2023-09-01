@@ -55,7 +55,7 @@ import TripContent from "../comps/trip/tripContent";
 export default function TripPlannerPage(props) {
   let { auth, mapLoaded } = props;
   const theme = useMantineTheme();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
@@ -489,9 +489,14 @@ export default function TripPlannerPage(props) {
                     <ActionIcon
                       py={20}
                       bg={dark ? "dark.5" : "gray.1"}
+                      color={dark ? "gray.0" : "gray.5"}
                       sx={{
+                        transition: "all 150ms ease-in-out",
                         "&:hover": {
-                          background: "rgba(255,0,0,0.05)",
+                          background: dark
+                            ? "rgba(255,0,0,0.1)"
+                            : "rgba(255,0,0,0.7)",
+                          color: !dark && "white",
                         },
                       }}
                       onClick={() => {
@@ -559,6 +564,9 @@ export default function TripPlannerPage(props) {
                     onClose={() =>
                       setPopoverOpened({ ...popoverOpened, [index]: false })
                     }
+                    styles={{
+                      dropdown: { padding: 3 },
+                    }}
                   >
                     <Popover.Target>
                       <Button
@@ -615,7 +623,7 @@ export default function TripPlannerPage(props) {
                 <Group pos={"absolute"} spacing={10} top={0} left={-50}>
                   <Tooltip label="Reset form fields">
                     <ActionIcon
-                      variant="subtle"
+                      variant="Transparent"
                       size="xl"
                       opacity={0.4}
                       onMouseEnter={() => setResetBtnPop(true)}
@@ -1039,7 +1047,7 @@ export default function TripPlannerPage(props) {
                                     <>
                                       <Badge
                                         variant="outline"
-                                        color="gray"
+                                        color={dark ? "gray" : "dark.9"}
                                         size="xs"
                                       >
                                         {startCity}
@@ -1051,7 +1059,7 @@ export default function TripPlannerPage(props) {
                                     <Group key={index} spacing={5}>
                                       <Badge
                                         variant="outline"
-                                        color="gray"
+                                        color={dark ? "gray" : "dark.9"}
                                         size="xs"
                                       >
                                         {place.place}
@@ -1072,7 +1080,7 @@ export default function TripPlannerPage(props) {
                                       />
                                       <Badge
                                         variant="outline"
-                                        color="gray"
+                                        color={dark ? "gray" : "dark.9"}
                                         size="xs"
                                       >
                                         {startCity}
@@ -1097,10 +1105,7 @@ export default function TripPlannerPage(props) {
                                     opacity={0.7}
                                   />
                                   <Group spacing={5} fz={12}>
-                                    <Title
-                                      color={dark ? "red" : "blue"}
-                                      order={3}
-                                    >
+                                    <Title color={"red.9"} order={3}>
                                       •
                                     </Title>
                                     {dayjs(travelDates)
@@ -1186,7 +1191,7 @@ export default function TripPlannerPage(props) {
                         return (
                           <Indicator
                             size={5}
-                            color={dark ? "red" : "blue"}
+                            color={"red.9"}
                             offset={-3}
                             disabled={!isSpecificDay}
                           >
@@ -1202,28 +1207,28 @@ export default function TripPlannerPage(props) {
                         },
                         ".mantine-DatePicker-day[data-weekend]": {
                           color: dark
-                            ? theme.colors.blue[2]
-                            : theme.colors.red[3],
+                            ? theme.colors.blue[9]
+                            : theme.colors.blue[4],
                         },
                         ".mantine-DatePicker-day[data-selected]": {
-                          boxShadow: `0 2px 2px ${
-                            dark
-                              ? "rgba(255, 255, 255, 0.08)"
-                              : "rgba(0, 0, 0, 0.1)"
-                          }`,
+                          textShadow: dark
+                            ? "0 2px 3px rgba(0,0,0,0.2)"
+                            : "0 2px 3px rgba(0,0,0,0.1)",
                           border: `1px solid ${
-                            dark ? theme.colors.dark[4] : theme.colors.gray[4]
+                            dark ? theme.colors.dark[4] : theme.colors.gray[3]
+                          }`,
+                          borderTop: `3px solid ${
+                            dark ? theme.colors.blue[9] : theme.colors.blue[4]
                           }`,
                           backgroundColor: dark
-                            ? theme.colors.dark[5]
+                            ? theme.colors.dark[2]
                             : theme.colors.gray[0],
-                          borderTop: `4px solid ${
-                            dark ? theme.colors.blue[7] : theme.colors.red[9]
-                          }`,
-                          color: "#404040",
+                          color: dark
+                            ? theme.colors.gray[0]
+                            : theme.colors.blue[4],
                           transition: "all 0.15s ease-in-out",
                           borderRadius: "0 0 3px 3px",
-                          fontSize: "1.7rem",
+                          fontSize: "1.6rem",
                           "&:hover": {
                             transform: "scale(1.05)",
                           },

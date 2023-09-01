@@ -30,7 +30,7 @@ import {
   IconHeartHandshake,
   IconQuote,
   IconQrcode,
-  IconTargetArrow,
+  IconCurrencyDollar,
 } from "@tabler/icons-react";
 import Donations from "../comps/trip/donations";
 import Updates from "../comps/trip/updates";
@@ -68,7 +68,7 @@ export const getStaticProps = async ({ params }) => {
 
 export default function Trippage(props) {
   const router = useRouter();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
   const [modalMode, setModalMode] = useState("");
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
@@ -515,9 +515,18 @@ export default function Trippage(props) {
             >
               <Group spacing={0} w={"100%"} position="apart">
                 <Stack spacing={0} w={"70%"}>
-                  <Flex align={"flex-end"} mb={-2} gap={3} pl={5}>
+                  <Flex align={"flex-end"} mb={-2} gap={3}>
                     <Title color="green.4" order={1}>
-                      ${donationSum}
+                      <Flex align={"center"}>
+                        <IconCurrencyDollar
+                          stroke={1}
+                          size={35}
+                          style={{
+                            marginRight: -4,
+                          }}
+                        />
+                        {donationSum}
+                      </Flex>
                     </Title>
                     <Text fz={11} mb={8} span>
                       RAISED
@@ -525,9 +534,17 @@ export default function Trippage(props) {
                   </Flex>
                   <Divider w={"90%"} opacity={0.4} my={3} />
                   <Flex align={"center"} gap={3} pl={5}>
-                    <IconTargetArrow size={20} stroke={1} opacity={0.2} />
                     <Title order={4} opacity={0.5}>
-                      ${formatNumber(tripData.costsSum)}
+                      <Flex align={"center"}>
+                        <IconCurrencyDollar
+                          stroke={1}
+                          size={25}
+                          style={{
+                            marginRight: -4,
+                          }}
+                        />
+                        {formatNumber(tripData.costsSum)}
+                      </Flex>
                     </Title>
                     <Text fz={11} span>
                       GOAL
