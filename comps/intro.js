@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import LoginComp from "./loginComp";
 
 export default function Intro(props) {
-  const { auth } = props;
+  const { auth, setShowLegal } = props;
   const router = useRouter();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
@@ -56,6 +56,11 @@ export default function Intro(props) {
             radius={"xl"}
             p={10}
             c={dark ? "#fff" : "#000"}
+            sx={{
+              "&:hover": {
+                background: !dark && "rgba(45, 200, 243, 0.5)",
+              },
+            }}
           >
             {dark ? <IconBrightnessUp size={17} /> : <IconMoon size={17} />}
           </Button>
@@ -112,7 +117,7 @@ export default function Intro(props) {
               maxWidth: "380px",
             }}
           >
-            <LoginComp auth={auth} />
+            <LoginComp auth={auth} setShowLegal={setShowLegal} />
           </Box>
         </Center>
         <Center w={"100%"}>

@@ -37,11 +37,7 @@ const useStyles = createStyles((theme) => ({
   linkActive: {
     fontWeight: 700,
     color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 9 : 4],
-    background:
-      theme.colorScheme === "dark"
-        ? "rgba(255,255,255,0.03)"
-        : "rgba(0,0,0,0.04)",
+      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 7 : 4],
   },
 
   links: {
@@ -50,7 +46,7 @@ const useStyles = createStyles((theme) => ({
 
   indicator: {
     color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 9 : 4],
+      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 7 : 4],
     transition: "transform 150ms ease",
     position: "absolute",
     top: "11px",
@@ -473,7 +469,7 @@ export default function Legal() {
         color={
           highlighted === index
             ? theme.colorScheme === "dark"
-              ? "blue.9"
+              ? "blue.7"
               : "blue.4"
             : "inherit"
         }

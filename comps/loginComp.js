@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -60,7 +60,7 @@ const useStyles = createStyles((theme, { floating }) => ({
 }));
 
 export default function LoginComp(props) {
-  const { auth, setInfoAdded } = props;
+  const { auth, setInfoAdded, setShowLegal } = props;
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [emailFocus, setEmailFocus] = useState(false);
@@ -406,7 +406,20 @@ export default function LoginComp(props) {
             {type === "sign-up" && (
               <Group position={"left"}>
                 <Checkbox
-                  label="I accept terms and conditions"
+                  label={
+                    <>
+                      I accept{" "}
+                      <Anchor
+                        color="blue.5"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowLegal(true);
+                        }}
+                      >
+                        terms and conditions
+                      </Anchor>
+                    </>
+                  }
                   checked={form.values.terms}
                   mt={10}
                   required

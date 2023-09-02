@@ -1,8 +1,18 @@
-import { useMantineColorScheme, BackgroundImage, Box } from "@mantine/core";
+import { useState } from "react";
+import {
+  useMantineColorScheme,
+  BackgroundImage,
+  Box,
+  Group,
+  Modal,
+  ScrollArea,
+  Button,
+} from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
 import Intro from "../comps/intro";
 import Slider from "react-slick";
+import Legal from "./legal";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -11,6 +21,7 @@ const auth = getAuth();
 export default function Home() {
   const { height, width } = useViewportSize();
   const { colorScheme } = useMantineColorScheme();
+  const [showLegal, setShowLegal] = useState(false);
   const dark = colorScheme === "dark";
 
   const slideSettings = {
@@ -39,7 +50,30 @@ export default function Home() {
 
   return (
     <>
-      <Intro auth={auth} />
+      <Modal
+        zIndex={1500}
+        opened={showLegal}
+        fullScreen={true}
+        onClose={() => setShowLegal(false)}
+        scrollAreaComponent={ScrollArea.Autosize}
+        withCloseButton={false}
+        sx={{
+          "& .mantine-ScrollArea-root": {
+            "& .mantine-ScrollArea-scrollbar": {
+              opacity: 0.3,
+              width: 8,
+            },
+          },
+        }}
+      >
+        <Group pos={"absolute"} right={20} w={"100%"} position="right">
+          <Button variant="default" onClick={() => setShowLegal(false)}>
+            CLOSE
+          </Button>
+        </Group>
+        <Legal />
+      </Modal>
+      <Intro auth={auth} setShowLegal={setShowLegal} />
       <Box
         opacity={1}
         pos="absolute"
