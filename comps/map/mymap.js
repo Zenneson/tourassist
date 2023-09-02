@@ -159,15 +159,20 @@ export default function Mymap(props) {
     }
   }, [user, guest, area.label, router]);
 
+  const getFogProperties = (dark) => {
+    return {
+      color: dark ? "#0f2e57" : "#fff",
+      "high-color": dark ? "#000" : "#245cdf",
+      "space-color": dark
+        ? ["interpolate", ["linear"], ["zoom"], 4, "#010b19", 7, "#367ab9"]
+        : ["interpolate", ["linear"], ["zoom"], 4, "#fff", 7, "#fff"],
+    };
+  };
+
   useEffect(() => {
     if (fullMapRef) {
-      fullMapRef.setFog({
-        color: dark ? "#0f2e57" : "#fff",
-        "high-color": dark ? "#000" : "#245cdf",
-        "space-color": dark
-          ? ["interpolate", ["linear"], ["zoom"], 4, "#010b19", 7, "#367ab9"]
-          : ["interpolate", ["linear"], ["zoom"], 4, "#fff", 7, "#fff"],
-      });
+      const fogProperties = getFogProperties(dark);
+      fullMapRef.setFog(fogProperties);
     }
   }, [fullMapRef, dark]);
 
@@ -1066,8 +1071,10 @@ export default function Mymap(props) {
         maxZoom={14}
         minZoom={2}
         reuseMaps={true}
-        onLoad={() => {
+        onLoad={(e) => {
           setMapLoaded(true);
+          const fogProperties = getFogProperties(dark);
+          e.target.setFog(fogProperties);
         }}
         touchPitch={false}
         onClick={(e) => {
@@ -1076,7 +1083,6 @@ export default function Mymap(props) {
         projection="globe"
         doubleClickZoom={false}
         interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-        // mapStyle={"mapbox://styles/zenneson/clbh8pxcu001f14nhm8rwxuyv"}
         mapStyle={"mapbox://styles/zenneson/clm07y8pz01ur01qieykmcji3"}
         style={{ width: "100%", height: "100%" }}
         mapboxAccessToken={mapboxAccessToken}

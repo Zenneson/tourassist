@@ -29,10 +29,15 @@ import ProfileDrawer from "./profileDrawer";
 import { auth } from "../../libs/firebase";
 
 export default function MainMenu(props) {
-  const { setListOpened, searchOpened, setSearchOpened, setDropDownOpened } =
-    props;
+  const {
+    setListOpened,
+    searchOpened,
+    setSearchOpened,
+    setDropDownOpened,
+    colorScheme,
+    toggleColorScheme,
+  } = props;
   const theme = useMantineTheme();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
   const [logoutOpened, setLogoutOpened] = useState(false);

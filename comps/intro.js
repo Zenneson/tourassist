@@ -247,6 +247,11 @@ export default function Intro(props) {
                 sx={{
                   textShadow: "0 2px 5px rgba(0,0,0,0.2)",
                   border: dark ? "none" : "1px solid rgba(255,255,255,0.07)",
+                  "&:hover": {
+                    background: dark
+                      ? "rgba(0, 0, 0, 0.8)"
+                      : "rgba(255, 255, 255, 0.5)",
+                  },
                 }}
                 leftIcon={
                   <IconInfoCircle

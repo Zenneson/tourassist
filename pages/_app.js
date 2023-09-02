@@ -233,6 +233,8 @@ export default function App(props) {
               }}
               header={
                 <MainMenu
+                  colorScheme={colorScheme}
+                  toggleColorScheme={toggleColorScheme}
                   active={active}
                   setActive={setActive}
                   panelShow={panelShow}
