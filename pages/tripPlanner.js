@@ -59,13 +59,9 @@ export default function TripPlannerPage(props) {
   const dark = colorScheme === "dark";
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
-  const [startLocale, setStartLocale] = useState("");
-  const [travelers, setTravelers] = useState(1);
   const travelersHandlerRef = useRef(null);
   const [travelDates, setTravelDates] = useState(null);
-  const [roundTrip, setRoundTrip] = useState(false);
   const startLocaleRef = useRef(null);
-  const [tripTitle, setTripTitle] = useState("");
   const [destinations, setDestinations] = useState([]);
   const [active, setActive] = useState(0);
   const [infoAdded, setInfoAdded] = useState(false);
@@ -81,6 +77,22 @@ export default function TripPlannerPage(props) {
   const [images, setImages] = useSessionStorage({
     key: "images",
     defaultValue: [],
+  });
+  const [startLocale, setStartLocale] = useSessionStorage({
+    key: "startLocale",
+    defaultValue: "",
+  });
+  const [travelers, setTravelers] = useSessionStorage({
+    key: "travelers",
+    defaultValue: 1,
+  });
+  const [roundTrip, setRoundTrip] = useSessionStorage({
+    key: "roundTrip",
+    defaultValue: false,
+  });
+  const [tripTitle, setTripTitle] = useSessionStorage({
+    key: "tripTitle",
+    defaultValue: "",
   });
   const [tripDesc, setTripDesc] = useSessionStorage({
     key: "tripDesc",
@@ -1287,13 +1299,14 @@ export default function TripPlannerPage(props) {
             )}
             {active === 3 && (
               <motion.div {...animation}>
-                <Center>
+                <Center h={"50vh"}>
                   <Stack
                     className="pagePanel"
                     pt={10}
                     pb={30}
                     px={30}
                     maw={700}
+                    h={user ? 205 : "auto"}
                     w={"100%"}
                   >
                     {!user && (
@@ -1308,35 +1321,57 @@ export default function TripPlannerPage(props) {
                       </Box>
                     )}
                     <Center mt={user ? 20 : 0}>
-                      <Button
-                        leftIcon={<IconBuildingBank size={34} />}
-                        variant="default"
-                        size="xl"
-                        h={70}
-                        w={"100%"}
-                      >
-                        <Title order={2}>ADD BANKING INFORMATION</Title>
-                      </Button>
+                      <Button.Group w={"100%"}>
+                        <Button
+                          leftIcon={
+                            <IconBuildingBank size={20} opacity={0.5} />
+                          }
+                          variant="filled"
+                          h={50}
+                          w={"80%"}
+                        >
+                          <Title order={4}>ADD BANKING INFORMATION</Title>
+                        </Button>
+                        <Button
+                          variant="filled"
+                          h={50}
+                          w={"20%"}
+                          opacity={0.8}
+                          sx={{
+                            "&:hover": {
+                              opacity: 1,
+                            },
+                          }}
+                        >
+                          <Title fz={10}>ADD LATER</Title>
+                        </Button>
+                      </Button.Group>
                     </Center>
                     <Divider w={"100%"} my={5} opacity={0.3} />
                     <Group spacing={0}>
-                      <Text fz={12} w={"80%"} pr={5}>
-                        We use Stripe, a trusted payment processor, to securely
-                        handle transactions and disburse funds, ensuring the
-                        protection of your sensitive banking information.
-                      </Text>
+                      <Box w={"80%"}>
+                        <Text fw={700} fz={12}>
+                          Banking Info is needed to disburse raised funds.
+                          Stripe securely handles this process.
+                        </Text>
+                        <Text fz={11}>
+                          Note that you can still use raised funds for flight
+                          and hotel bookings on our platform before adding your
+                          banking info.
+                        </Text>
+                      </Box>
                       <Image
-                        src="img/stripe.png"
+                        src="img/stripe.svg"
                         fit="contain"
                         display={"block"}
                         opacity={0.3}
-                        px={20}
+                        pl={20}
+                        alt="Stripe Logo"
                         style={{
+                          filter: dark && "invert(50%)",
                           width: "20%",
                           borderRadius: "3px",
-                          backgroundColor: "rgba(255,255,255,0.08)",
                         }}
-                        alt=""
                       />
                     </Group>
                   </Stack>

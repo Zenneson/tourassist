@@ -413,7 +413,7 @@ export default function ModalsItem(props) {
             />
           </RichTextEditor>
         </ScrollArea>
-        <Group position="right" mt={5} w={"100%"}>
+        <Group position="right" w={"100%"}>
           <Button variant="default" size="md" w={"25%"} onClick={handleUpdate}>
             {modalMode === "editUpdate"
               ? "SAVE UPDATE"

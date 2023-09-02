@@ -1,4 +1,6 @@
 import Head from "next/head";
+import NextApp from "next/app";
+import { getCookie, setCookie } from "cookies-next";
 import { useState, useEffect } from "react";
 import {
   AppShell,
@@ -19,15 +21,23 @@ require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
 
+App.getInitialProps = async (appContext) => {
+  const appProps = await NextApp.getInitialProps(appContext);
+  return {
+    ...appProps,
+    colorScheme: getCookie("mantine-color-scheme", appContext.ctx) || "light",
+  };
+};
+
 export default function App(props) {
   const { Component, pageProps } = props;
+  const [colorScheme, setColorScheme] = useState(props.colorScheme);
   const [active, setActive] = useState(-1);
   const [panelShow, setPanelShow] = useState(false);
   const [mainMenuOpened, setMainMenuOpened] = useState(false);
   const [listOpened, setListOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
   const [dropDownOpened, setDropDownOpened] = useState(false);
-  const [colorScheme, setColorScheme] = useState("dark");
   const [mapLoaded, setMapLoaded] = useState(false);
   const userData = useUserData();
   const [user, setUser] = useSessionStorage({
@@ -43,6 +53,9 @@ export default function App(props) {
     const nextColorScheme =
       value || (colorScheme === "dark" ? "light" : "dark");
     setColorScheme(nextColorScheme);
+    setCookie("mantine-color-scheme", nextColorScheme, {
+      maxAge: 60 * 60 * 24 * 30,
+    });
   };
 
   useEffect(() => {

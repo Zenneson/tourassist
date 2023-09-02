@@ -59,9 +59,8 @@ const useStyles = createStyles((theme) => ({
           ? "rgba(170, 170, 170, 0.05)"
           : "rgba(170, 170, 170, 0.1)",
       "&:hover": {
-        color: theme.colorScheme === "dark" ? "#fff" : "#000",
         backgroundColor:
-          theme.colorScheme !== "dark" && "rgba(45, 200, 243, 0.4)",
+          theme.colorScheme !== "dark" && "rgba(45, 200, 243, 0.1)",
       },
     },
   },

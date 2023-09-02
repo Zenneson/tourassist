@@ -358,6 +358,8 @@ export default function Money(props) {
                 variant="subtle"
                 bg={dark ? "dark.8" : "gray.3"}
                 c={dark ? "#fff" : "#000"}
+                fz={14}
+                fs={"italic"}
                 sx={{
                   transition: "all 0.2s ease",
                   cursor: "pointer",
@@ -373,9 +375,10 @@ export default function Money(props) {
                   setPanelShow(false);
                 }}
               >
-                VIEW{" "}
+                View{" "}
                 <IconAppWindow
-                  size={23}
+                  size={20}
+                  stroke={1}
                   style={{
                     marginLeft: 4,
                   }}

@@ -297,10 +297,10 @@ export default function LoginComp(props) {
               </>
             }
             labelPosition="left"
-            color={"#fff"}
+            color={dark ? "#fff" : "#000"}
             c={dark ? "#fff" : "#000"}
             mt={16}
-            opacity={0.7}
+            opacity={0.2}
           />
         )}
         <form onSubmit={form.onSubmit(handleLogin)}>

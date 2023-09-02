@@ -29,6 +29,7 @@ import {
   IconTrash,
   IconCheck,
   IconX,
+  IconQrcode,
 } from "@tabler/icons-react";
 import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
@@ -221,22 +222,25 @@ export default function Updates(props) {
 
             <Menu.Dropdown>
               <Menu.Item>
-                <IconBrandFacebook />
+                <IconBrandFacebook size={20} />
               </Menu.Item>
               <Menu.Item>
-                <IconBrandInstagram />
+                <IconBrandInstagram size={20} />
               </Menu.Item>
               <Menu.Item>
-                <IconBrandTiktok />
+                <IconBrandTiktok size={20} />
               </Menu.Item>
               <Menu.Item>
-                <IconBrandTwitter />
+                <IconBrandTwitter size={20} />
               </Menu.Item>
               <Menu.Item>
-                <IconBrandWhatsapp />
+                <IconBrandWhatsapp size={20} />
               </Menu.Item>
               <Menu.Item>
-                <IconSourceCode />
+                <IconSourceCode size={20} />
+              </Menu.Item>
+              <Menu.Item>
+                <IconQrcode size={20} />
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>

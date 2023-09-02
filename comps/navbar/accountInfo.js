@@ -14,6 +14,8 @@ import {
   TextInput,
   Popover,
   Divider,
+  HoverCard,
+  Text,
 } from "@mantine/core";
 import {
   IconKey,
@@ -29,6 +31,7 @@ import {
   IconPhone,
   IconPencil,
   IconBuildingBank,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { useWindowEvent } from "@mantine/hooks";
@@ -340,13 +343,35 @@ export default function AccountInfo(props) {
               </Popover>
             </Group>
             <Group grow spacing={10}>
-              <Divider opacity={0.5} />
-              <Button
-                variant="filled"
-                color="green"
-                bg={"rgb(0, 151, 0)"}
-                fz={12}
-              >
+              <Divider
+                opacity={0.5}
+                labelPosition="right"
+                label={
+                  <HoverCard
+                    width={350}
+                    withArrow={true}
+                    arrowSize={10}
+                    withinPortal={true}
+                    zIndex={9999}
+                  >
+                    <HoverCard.Target>
+                      <IconInfoCircle stroke={1} size={27} />
+                    </HoverCard.Target>
+                    <HoverCard.Dropdown>
+                      <Text fw={700} fz={12} ta={"center"}>
+                        Banking Info is needed to disburse raised funds. Stripe
+                        securely handles this process.
+                      </Text>
+                      <Text fz={11} ta={"center"}>
+                        Note that you can still use raised funds for flight and
+                        hotel bookings on our platform before adding your
+                        banking info.
+                      </Text>
+                    </HoverCard.Dropdown>
+                  </HoverCard>
+                }
+              />
+              <Button variant="filled" fz={12}>
                 <IconBuildingBank
                   size={15}
                   stroke={3}

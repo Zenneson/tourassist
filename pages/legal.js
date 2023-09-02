@@ -10,23 +10,21 @@ import {
   Center,
   Flex,
   Group,
-  SegmentedControl,
   Space,
+  SegmentedControl,
 } from "@mantine/core";
 import { IconChevronsRight } from "@tabler/icons-react";
-import { useSessionStorage, useWindowScroll } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   link: {
     ...theme.fn.focusStyles(),
+    borderRadius: theme.radius.sm,
     display: "block",
     textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
     lineHeight: "2.4rem",
     fontSize: theme.fontSizes.sm,
     height: "2.4rem",
-    borderTopRightRadius: theme.radius.sm,
-    borderBottomRightRadius: theme.radius.sm,
+    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
 
     "&:hover": {
       backgroundColor:
@@ -37,9 +35,13 @@ const useStyles = createStyles((theme) => ({
   },
 
   linkActive: {
-    fontWeight: 500,
+    fontWeight: 700,
     color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 7],
+      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 9 : 4],
+    background:
+      theme.colorScheme === "dark"
+        ? "rgba(255,255,255,0.03)"
+        : "rgba(0,0,0,0.04)",
   },
 
   links: {
@@ -48,7 +50,7 @@ const useStyles = createStyles((theme) => ({
 
   indicator: {
     color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 7],
+      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 9 : 4],
     transition: "transform 150ms ease",
     position: "absolute",
     top: "11px",
@@ -61,7 +63,7 @@ export default function Legal() {
   const [linkState, setLinkState] = useState("terms");
   const [active, setActive] = useState(0);
   const [highlighted, setHighlighted] = useState(0);
-  const [scroll, scrollTo] = useWindowScroll();
+  const [scroll, setScroll] = useState(false);
   const { classes, cx } = useStyles();
 
   const router = useRouter();
@@ -484,11 +486,20 @@ export default function Legal() {
     </Box>
   ));
 
-  const scrollToSection = () => {
+  const scrollToSection = (event) => {
     setActive(0);
     setHighlighted(0);
-    scrollTo({ y: 0 });
+    setScroll(true);
   };
+
+  useEffect(() => {
+    if (scroll) {
+      termsectionsRefs[0].current.scrollIntoView({
+        behavior: "smooth",
+      });
+      setScroll(false);
+    }
+  }, [active, highlighted, scroll, termsectionsRefs]);
 
   const menuItems = (event, index) => {
     event.preventDefault();
@@ -496,7 +507,6 @@ export default function Legal() {
     setHighlighted(index);
     termsectionsRefs[index].current.scrollIntoView({
       behavior: "smooth",
-      offset: -60,
     });
   };
 
@@ -508,7 +518,9 @@ export default function Legal() {
           <SegmentedControl
             value={linkState}
             onChange={setLinkState}
-            onClick={scrollToSection}
+            onClick={(e) => {
+              scrollToSection(e);
+            }}
             ml={-60}
             sx={{
               transform: "scale(.75)",
