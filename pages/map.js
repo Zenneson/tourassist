@@ -1,13 +1,6 @@
-import { useEffect } from "react";
-import { useMantineColorScheme } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
-import { signOut } from "firebase/auth";
-import { loggedIn } from "../libs/custom";
-import { notifications } from "@mantine/notifications";
 import fs from "fs";
 import path from "path";
 import Mymap from "../comps/map/mymap";
-const moment = require("moment-timezone");
 
 export const getServerSideProps = async () => {
   const apiUrl = `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IP_GEO}`;
@@ -67,43 +60,6 @@ export const getServerSideProps = async () => {
 };
 
 export default function Map(props) {
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
-
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
-
-  const isWithin = (dateString, days) => {
-    if (!dateString) return false;
-    const inputDate = moment(dateString, "MMDDYY");
-    const currentDate = moment().startOf("day");
-    const daysDifference = currentDate.diff(inputDate, "days");
-    return daysDifference >= 0 && daysDifference <= days;
-  };
-
-  const [dateChecked, setDateChecked] = useSessionStorage({
-    key: "dateChecked",
-    defaultValue: false,
-  });
-
-  useEffect(() => {
-    if (dateChecked || !user) return;
-    if ((user && user.lastLogDate && isWithin(user.lastLogDate, 7)) === false) {
-      setUser(null);
-      signOut(auth);
-    } else if (
-      (user && user.lastLogDate && !isWithin(user.lastLogDate, 1)) ||
-      (user && !user.lastLogDate)
-    ) {
-      const message = loggedIn(dark, user);
-      notifications.show(message);
-    }
-    setDateChecked(true);
-  }, [dark, user, setUser, dateChecked, setDateChecked]);
-
-  if (props.error) console.log(props.error);
   return (
     <>
       <Mymap

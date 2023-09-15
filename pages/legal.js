@@ -492,6 +492,7 @@ export default function Legal() {
     if (scroll) {
       termsectionsRefs[0].current.scrollIntoView({
         behavior: "smooth",
+        block: "end",
       });
       setScroll(false);
     }

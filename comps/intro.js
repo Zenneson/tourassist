@@ -29,15 +29,6 @@ export default function Intro(props) {
   const dark = colorScheme === "dark";
 
   const firstDown = useMediaQuery("(max-width: 950px)");
-  const [guest, setGuest] = useSessionStorage({
-    key: "guest",
-    defaultValue: false,
-  });
-
-  const enterSite = () => {
-    setGuest(true);
-    router.push("/map");
-  };
 
   return (
     <>
@@ -55,7 +46,7 @@ export default function Intro(props) {
             onClick={() => toggleColorScheme()}
             radius={"xl"}
             p={10}
-            c={dark ? "#fff" : "#000"}
+            c={dark ? "#000" : "#fff"}
             sx={{
               "&:hover": {
                 background: !dark && "rgba(45, 200, 243, 0.5)",
@@ -242,7 +233,7 @@ export default function Intro(props) {
                 radius={3}
                 onClick={() => {
                   getPosition();
-                  enterSite();
+                  router.push("/map");
                 }}
                 sx={{
                   textShadow: "0 2px 5px rgba(0,0,0,0.2)",
@@ -275,7 +266,7 @@ export default function Intro(props) {
                   textShadow: "0 2px 5px rgba(0,0,0,0.2)",
                 }}
                 gradient={{ from: "#11a3cc", to: "#0D3F82", deg: 45 }}
-                onClick={enterSite}
+                onClick={() => router.push("/map")}
                 leftIcon={
                   <IconWorld
                     size={30}

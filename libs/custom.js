@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, firestore } from "./firebase";
-import { doc, setDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { firestore } from "./firebase";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { IconCheck } from "@tabler/icons-react";
 import {
   ref,
@@ -16,42 +15,6 @@ const storage = getStorage();
 
 export const updateField = async (update, user) => {
   await updateDoc(doc(firestore, "users", user.email), update);
-};
-
-export const compareObj = (obj1, obj2) => {
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
-};
-
-export const useUserData = () => {
-  const [userAuth] = useAuthState(auth);
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    if (!userAuth?.email) {
-      console.log("Searching for user data...");
-      return;
-    }
-
-    const docRef = doc(firestore, "users", userAuth.email);
-
-    const unsubscribe = onSnapshot(
-      docRef,
-      (docSnap) => {
-        if (docSnap.exists()) {
-          setUserData(docSnap.data());
-        } else {
-          console.log("No such document!");
-        }
-      },
-      (error) => {
-        console.error("Error getting document:", error);
-      }
-    );
-
-    return () => unsubscribe();
-  }, [userAuth]);
-  if (userData) userData.lastLogDate = moment().format("MMDDYY");
-  return userData;
 };
 
 export const parseCustomDate = (dateString) => {
@@ -72,16 +35,6 @@ export const sumAmounts = (array) => {
   return array.reduce((total, item) => {
     return total + (Number(item.amount) || 0);
   }, 0);
-};
-
-export const clearSessionStorageExcept = (keysToKeep) => {
-  for (let i = 0; i < sessionStorage.length; i++) {
-    const key = sessionStorage.key(i);
-    if (keysToKeep.indexOf(key) === -1) {
-      sessionStorage.removeItem(key);
-      i--; // Decrement the index as the length changes
-    }
-  }
 };
 
 export const estTimeStamp = (timeStamp) => {

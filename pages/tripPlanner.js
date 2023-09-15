@@ -49,6 +49,7 @@ import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import { dateFormat, dateId, saveToDB } from "../libs/custom";
+import { useUser } from "../../libs/context";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
 
@@ -70,10 +71,8 @@ export default function TripPlannerPage(props) {
   const titleRef = useRef(null);
   const dayjs = require("dayjs");
 
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
+  const { user } = useUser();
+
   const [images, setImages] = useSessionStorage({
     key: "images",
     defaultValue: [],
@@ -1312,11 +1311,7 @@ export default function TripPlannerPage(props) {
                     {!user && (
                       <Box w={"100%"} mb={5}>
                         <Box>
-                          <LoginComp
-                            setInfoAdded={setInfoAdded}
-                            mapLoaded={mapLoaded}
-                            auth={auth}
-                          />
+                          <LoginComp mapLoaded={mapLoaded} auth={auth} />
                         </Box>
                       </Box>
                     )}

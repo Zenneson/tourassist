@@ -14,6 +14,7 @@ import {
   ScrollArea,
 } from "@mantine/core";
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
+import { useUser } from "../../libs/context";
 import { IconReload } from "@tabler/icons-react";
 
 export default function Donations(props) {
@@ -27,10 +28,7 @@ export default function Donations(props) {
     threshold: 1,
   });
 
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
+  const { user } = useUser();
 
   const [tripData, setTripData] = useSessionStorage({
     key: "tripData",

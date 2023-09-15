@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
@@ -43,6 +37,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
 import { addEllipsis, calculateFontSize } from "../../libs/custom";
+import { useUser } from "../../libs/context";
 import TourList from "./tourList";
 
 export default function Mymap(props) {
@@ -62,7 +57,6 @@ export default function Mymap(props) {
   const mapRef = useRef();
   const fullMapRef = mapRef.current?.getMap();
   const router = useRouter();
-  const [touched, setTouched] = useState(false);
   const [area, setArea] = useState({ label: "" });
   const [headerEm, setHeaderEm] = useState(0);
   const [locationDrawer, setLocationDrawer] = useState(false);
@@ -79,17 +73,13 @@ export default function Mymap(props) {
   const [showChoice, setShowChoice] = useState(false);
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
+  const [countrySearchFocused, setCountrySearchFocused] = useState(false);
   const [places, setPlaces] = useSessionStorage({
     key: "placeData",
     defaultValue: [],
   });
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
-  const [guest, setGuest] = useSessionStorage({
-    key: "guest",
-  });
+
+  const { user } = useUser();
 
   const latitude = country_center[1];
   const longitude = country_center[0];
@@ -154,10 +144,7 @@ export default function Mymap(props) {
   useEffect(() => {
     router.prefetch("/tripplanner");
     area.label === "United States" && setShowStates(true);
-    if (user === null && guest === false) {
-      router.push("/");
-    }
-  }, [user, guest, area.label, router]);
+  }, [area.label, router]);
 
   const getFogProperties = (dark) => {
     return {
@@ -1011,6 +998,8 @@ export default function Mymap(props) {
             }}
           >
             <Autocomplete
+              onFocus={() => setCountrySearchFocused(true)}
+              onBlur={() => setCountrySearchFocused(false)}
               size="lg"
               defaultValue=""
               itemComponent={AutoCompItem}
@@ -1027,14 +1016,20 @@ export default function Mymap(props) {
               icon={
                 <IconWorldSearch
                   size={30}
+                  opacity={countrySearchFocused ? 1 : 0.5}
                   style={{
                     paddingLeft: 5,
-                    color: dark ? " #00e8fa" : "#0D3F82",
+                    color: dark ? "#0D3F82" : "#00e8fa",
                   }}
                 />
               }
               styles={(theme) => ({
                 root: {
+                  input: {
+                    "&:focus": {
+                      backgroundColor: dark ? "#0b0b0b" : "#fff",
+                    },
+                  },
                   borderTop: `2px solid ${
                     dark ? "rgba(75, 75, 75, 0.3)" : "rgba(0,0,0,0.05)"
                   }`,
@@ -1061,7 +1056,6 @@ export default function Mymap(props) {
         {...viewState}
         onMove={(e) => {
           setViewState(e.viewState);
-          setTouched(true);
         }}
         initialViewState={initialViewState}
         renderWorldCopies={true}

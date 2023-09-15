@@ -5,7 +5,6 @@ import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { Box } from "@mantine/core";
 import {
-  useMantineColorScheme,
   useMantineTheme,
   Header,
   Button,
@@ -27,6 +26,7 @@ import {
 } from "@tabler/icons-react";
 import ProfileDrawer from "./profileDrawer";
 import { auth } from "../../libs/firebase";
+import { useUser } from "../../libs/context";
 
 export default function MainMenu(props) {
   const {
@@ -49,17 +49,12 @@ export default function MainMenu(props) {
     key: "panelShow",
     defaultValue: false,
   });
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
+
+  const { user } = useUser();
+
   const [active, setActive] = useSessionStorage({
     key: "active",
     defaultValue: -1,
-  });
-  const [leaving, setLeaving] = useSessionStorage({
-    key: "leaving",
-    defaultValue: false,
   });
 
   useEffect(() => {
@@ -259,8 +254,6 @@ export default function MainMenu(props) {
                   px={15}
                   variant="default"
                   onClick={() => {
-                    setUser(null);
-                    setLeaving(true);
                     signOutFunc();
                   }}
                   sx={{

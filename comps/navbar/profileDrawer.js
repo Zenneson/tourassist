@@ -32,6 +32,7 @@ import {
   IconInfoCircle,
 } from "@tabler/icons-react";
 import { addEllipsis } from "../../libs/custom";
+import { useUser } from "../../libs/context";
 
 const useStyles = createStyles((theme) => ({
   icon: {
@@ -104,14 +105,8 @@ export default function ProfileDrawer(props) {
     signOutFunc,
   } = props;
   const router = useRouter();
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
-  const [leaving, setLeaving] = useSessionStorage({
-    key: "leaving",
-    defaultValue: false,
-  });
+
+  const { user } = useUser();
 
   useEffect(() => {
     router.prefetch("/");
@@ -357,8 +352,6 @@ export default function ProfileDrawer(props) {
                   },
                 })}
                 onClick={() => {
-                  setUser(null);
-                  setLeaving(true);
                   signOutFunc();
                 }}
               >

@@ -30,6 +30,7 @@ import {
 } from "@mantine/core";
 import { Bar } from "react-chartjs-2";
 import Donations from "../trip/donations";
+import { useUser } from "../../libs/context";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -45,10 +46,7 @@ export default function Money(props) {
   const dark = colorScheme === "dark";
   const router = useRouter();
 
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
+  const { user } = useUser();
 
   const [allTrips, setAllTrips] = useSessionStorage({
     key: "allTrips",
@@ -359,7 +357,7 @@ export default function Money(props) {
                 bg={dark ? "dark.8" : "gray.3"}
                 c={dark ? "#fff" : "#000"}
                 fz={14}
-                fs={"italic"}
+                uppercase={true}
                 sx={{
                   transition: "all 0.2s ease",
                   cursor: "pointer",
@@ -375,7 +373,7 @@ export default function Money(props) {
                   setPanelShow(false);
                 }}
               >
-                View{" "}
+                View Page{" "}
                 <IconAppWindow
                   size={20}
                   stroke={1}

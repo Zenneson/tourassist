@@ -38,6 +38,7 @@ import MainCarousel from "../comps/trip/maincarousel";
 import TripDescription from "../comps/trip/tripdescription";
 import ModalsItem from "../comps/trip/modalsitem";
 import { formatNumber, daysBefore, sumAmounts } from "../libs/custom";
+import { useUser } from "../../libs/context";
 
 export const getStaticProps = async ({ params }) => {
   const { title } = params;
@@ -76,10 +77,7 @@ export default function Trippage(props) {
   const [dontaionMode, setDonationMode] = useState("donating");
   const dark = colorScheme === "dark";
 
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
+  const { user } = useUser();
 
   const [tripData, setTripData] = useSessionStorage({
     key: "tripData",

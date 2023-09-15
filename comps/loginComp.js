@@ -27,6 +27,7 @@ import { notifications } from "@mantine/notifications";
 import { IconX, IconCheck, IconUserCircle } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { estTimeStamp, loggedIn } from "../libs/custom";
+import { useUser } from "../libs/context";
 
 const useStyles = createStyles((theme, { floating }) => ({
   root: {
@@ -74,14 +75,8 @@ export default function LoginComp(props) {
   const [passPopOpened, setPassPopOpened] = useState(false);
   const [type, toggle] = useToggle(["login", "sign-up"]);
   const router = useRouter();
-  const [user, setUser] = useSessionStorage({
-    key: "user",
-    defaultValue: null,
-  });
-  const [leaving, setLeaving] = useSessionStorage({
-    key: "leaving",
-    defaultValue: false,
-  });
+
+  const { user } = useUser();
 
   if (!user && type === "login" && router.pathname === "/tripplanner") {
     toggle();
@@ -219,7 +214,6 @@ export default function LoginComp(props) {
       lastName: form.values.lastName,
       email: form.values.email,
       uid: user.uid,
-      creationTime: estTimeStamp(user.metadata.creationTime),
     });
     notifications.show(newAccount);
     if (router.pathname !== "/tripplanner") {
@@ -227,12 +221,20 @@ export default function LoginComp(props) {
     }
   };
 
-  const setLogin = async (user) => {
-    router.push("/map");
+  const showError = (error, messageOne, messageTwo, codeOne, codeTwo) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error("Error Code: ", errorCode);
+    console.error("Error Message: ", errorMessage);
+    if (errorCode === codeOne) {
+      notifications.show(messageOne);
+    }
+    if (errorCode === codeTwo) {
+      notifications.show(messageTwo);
+    }
   };
 
   const handleLogin = () => {
-    setLeaving(false);
     if (type === "sign-up") {
       createUserWithEmailAndPassword(
         auth,
@@ -240,39 +242,38 @@ export default function LoginComp(props) {
         form.values.password
       )
         .then((userCredential) => {
-          addUser(userCredential.user);
-          setInfoAdded(true);
+          addUser(userCredential.user)
+            .then(() => {
+              setInfoAdded(true);
+            })
+            .catch((error) => {
+              console.error("Error adding user to database: ", error);
+            });
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.error("Error Code: ", errorCode);
-          console.error("Error Message: ", errorMessage);
-          if (errorCode === "auth/invalid-email") {
-            notifications.show(emailInvalid);
-          }
-          if (errorCode === "auth/email-already-in-use") {
-            notifications.show(alreadyExists);
-          }
+          showError(
+            error,
+            emailInvalid,
+            alreadyExists,
+            "auth/invalid-email",
+            "auth/email-already-in-use"
+          );
         });
     } else if (type === "login") {
       signInWithEmailAndPassword(auth, form.values.email, form.values.password)
         .then((userCredential) => {
-          setLogin(userCredential.user);
           const message = loggedIn(dark, form.values);
           notifications.show(message);
+          router.push("/map");
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.error("Error Code: ", errorCode);
-          console.error("Error Message: ", errorMessage);
-          if (errorCode === "auth/user-not-found") {
-            notifications.show(userNotFound);
-          }
-          if (errorCode === "auth/wrong-password") {
-            notifications.show(wrongPassword);
-          }
+          showError(
+            error,
+            userNotFound,
+            wrongPassword,
+            "auth/user-not-found",
+            "auth/wrong-password"
+          );
         });
     }
   };

@@ -39,52 +39,40 @@ import { formatPhoneNumber, addAtSymbol, updateField } from "../../libs/custom";
 import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function AccountInfo(props) {
-  const { user } = props;
+  let user = {};
+  user = props.user;
+
   const router = useRouter();
 
   const [changePass, setChangePass] = useState(false);
 
   const firstNameRef = useRef();
   const [firstName, setFirstName] = useState(false);
-  const [firstNameValue, setFirstNameValue] = useState(
-    user && user.firstName ? user.firstName : ""
-  );
+  const [firstNameValue, setFirstNameValue] = useState(user?.firstName || "");
 
   const lastNameRef = useRef();
   const [lastName, setLastName] = useState(false);
-  const [lastNameValue, setLastNameValue] = useState(
-    user && user.lastName ? user.lastName : ""
-  );
+  const [lastNameValue, setLastNameValue] = useState(user?.lastName || "");
 
   const phoneRef = useRef();
   const [phone, setPhone] = useState(false);
-  const [phoneValue, setPhoneValue] = useState(
-    user && user.phone ? user.phone : ""
-  );
+  const [phoneValue, setPhoneValue] = useState(user?.phone || "");
 
   const faceBookRef = useRef();
   const [faceBook, setFaceBook] = useState(false);
-  const [faceBookValue, setFaceBookValue] = useState(
-    user && user.faceBook ? user.faceBook : ""
-  );
+  const [faceBookValue, setFaceBookValue] = useState(user?.faceBook || "");
 
   const instagramRef = useRef();
   const [instagram, setInstagram] = useState(false);
-  const [instagramValue, setInstagramValue] = useState(
-    user && user.instagram ? user.instagram : ""
-  );
+  const [instagramValue, setInstagramValue] = useState(user?.instagram || "");
 
   const tikTokRef = useRef();
   const [tikTok, setTikTok] = useState(false);
-  const [tikTokValue, setTikTokValue] = useState(
-    user && user.tikTok ? user.tikTok : ""
-  );
+  const [tikTokValue, setTikTokValue] = useState(user?.tikTok || "");
 
   const twitterRef = useRef();
   const [twitter, setTwitter] = useState(false);
-  const [twitterValue, setTwitterValue] = useState(
-    user && user.twitter ? user.twitter : ""
-  );
+  const [twitterValue, setTwitterValue] = useState(user?.twitter || "");
 
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
@@ -179,7 +167,7 @@ export default function AccountInfo(props) {
               <TextInput
                 ref={firstNameRef}
                 icon={<IconDeviceSim1 size={20} />}
-                value={firstNameValue}
+                value={firstNameValue || ""}
                 placeholder={"First Name"}
                 onChange={(e) => setFirstNameValue(e.target.value)}
                 sx={{
@@ -222,7 +210,7 @@ export default function AccountInfo(props) {
               <TextInput
                 ref={lastNameRef}
                 icon={<IconDeviceSim2 size={20} />}
-                value={lastNameValue}
+                value={lastNameValue || ""}
                 placeholder={"Last Name"}
                 onChange={(e) => setLastNameValue(e.target.value)}
                 sx={{
@@ -265,7 +253,7 @@ export default function AccountInfo(props) {
               <Input
                 ref={phoneRef}
                 icon={<IconPhone size={20} />}
-                value={formatPhoneNumber(phoneValue)}
+                value={formatPhoneNumber(phoneValue) || ""}
                 placeholder={"Phone #"}
                 onChange={(e) => setPhoneValue(e.target.value)}
                 sx={{
@@ -409,7 +397,7 @@ export default function AccountInfo(props) {
             <Group grow spacing={10}>
               <Input
                 ref={faceBookRef}
-                value={addAtSymbol(faceBookValue, "/")}
+                value={addAtSymbol(faceBookValue, "/") || ""}
                 icon={<IconBrandFacebook size={20} />}
                 placeholder="/Facebook"
                 onChange={(e) => setFaceBookValue(e.target.value)}
@@ -454,7 +442,7 @@ export default function AccountInfo(props) {
               />
               <Input
                 ref={instagramRef}
-                value={addAtSymbol(instagramValue, "@")}
+                value={addAtSymbol(instagramValue, "@") || ""}
                 icon={<IconBrandInstagram size={20} />}
                 placeholder="@Instagram"
                 onChange={(e) => setInstagramValue(e.target.value)}
@@ -501,7 +489,7 @@ export default function AccountInfo(props) {
             <Group grow spacing={10}>
               <Input
                 ref={tikTokRef}
-                value={addAtSymbol(tikTokValue, "@")}
+                value={addAtSymbol(tikTokValue, "@") || ""}
                 icon={<IconBrandTiktok size={20} />}
                 placeholder="@TikTok"
                 onChange={(e) => setTikTokValue(e.target.value)}
@@ -544,7 +532,7 @@ export default function AccountInfo(props) {
               />
               <Input
                 ref={twitterRef}
-                value={addAtSymbol(twitterValue, "@")}
+                value={addAtSymbol(twitterValue, "@") || ""}
                 icon={<IconBrandTwitter size={20} />}
                 placeholder="@Twitter"
                 onChange={(e) => setTwitterValue(e.target.value)}
