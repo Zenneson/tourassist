@@ -49,7 +49,7 @@ import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import { dateFormat, dateId, saveToDB } from "../libs/custom";
-import { useUser } from "../../libs/context";
+import { useUser } from "../libs/context";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
 

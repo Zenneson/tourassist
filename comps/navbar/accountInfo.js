@@ -115,6 +115,10 @@ export default function AccountInfo(props) {
             refs[field].current &&
             refs[field].current === document.activeElement
           ) {
+            const currentValue = refs[field].current.value;
+            if (currentValue === values[field]) {
+              return refs[field].current.blur();
+            }
             updateField({ [field]: values[field] }, user);
             router.replace(router.asPath);
             setters[field](false);

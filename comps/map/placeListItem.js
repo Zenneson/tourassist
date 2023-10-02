@@ -95,7 +95,7 @@ export default function PlaceListItem(props) {
               gradient={
                 dark
                   ? { from: "#004585", to: "#00376b", deg: 180 }
-                  : { from: "#a30326", to: "#85001d", deg: 180 }
+                  : { from: "#57b2cb", to: "#11a3cc", deg: 180 }
               }
               radius="xl"
               color="#00E8FC"

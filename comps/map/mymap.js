@@ -37,7 +37,6 @@ import {
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
 import { addEllipsis, calculateFontSize } from "../../libs/custom";
-import { useUser } from "../../libs/context";
 import TourList from "./tourList";
 
 export default function Mymap(props) {
@@ -78,8 +77,6 @@ export default function Mymap(props) {
     key: "placeData",
     defaultValue: [],
   });
-
-  const { user } = useUser();
 
   const latitude = country_center[1];
   const longitude = country_center[0];
@@ -157,11 +154,11 @@ export default function Mymap(props) {
   };
 
   useEffect(() => {
-    if (fullMapRef) {
+    if (fullMapRef && mapLoaded) {
       const fogProperties = getFogProperties(dark);
       fullMapRef.setFog(fogProperties);
     }
-  }, [fullMapRef, dark]);
+  }, [fullMapRef, mapLoaded, dark]);
 
   function getCords(feature) {
     const center = centerOfMass(feature);
@@ -513,12 +510,10 @@ export default function Mymap(props) {
           ? "state"
           : "country";
       const dataArray = data.filter((region) => {
+        if (!region[filterKey]) return;
         const filterKeyLower = region[filterKey].toLowerCase();
         const labelLower = location.label.toLowerCase();
-        return (
-          filterKeyLower.includes(labelLower) ||
-          labelLower.includes(filterKeyLower)
-        );
+        return filterKeyLower === labelLower;
       });
       const regionCities = dataArray[0]?.cities;
       let topFive = [];
@@ -896,7 +891,6 @@ export default function Mymap(props) {
                 size="md"
                 placeholder="Select a US State"
                 itemComponent={SelectItem}
-                nothingFound="Nobody here"
                 data={listStates}
                 searchable={true}
                 icon={
@@ -941,7 +935,6 @@ export default function Mymap(props) {
               }
               placeholder={`Select ${addEllipsis(area.label, 19)}?`}
               itemComponent={TravelItem}
-              nothingFound="Nobody here"
               data={travelChoices}
               icon={
                 <IconLuggage

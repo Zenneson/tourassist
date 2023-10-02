@@ -1,14 +1,13 @@
 import Head from "next/head";
 import NextApp from "next/app";
 import { getCookie, setCookie } from "cookies-next";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   AppShell,
   MantineProvider,
   ColorSchemeProvider,
   ScrollArea,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
@@ -233,12 +232,7 @@ export default function App(props) {
                   />
                 }
               >
-                <RouterTransition
-                  mapLoaded={mapLoaded}
-                  setMainMenuOpened={setMainMenuOpened}
-                  setPanelShow={setPanelShow}
-                  setDropDownOpened={setDropDownOpened}
-                />
+                <RouterTransition />
                 <Component
                   {...pageProps}
                   setPanelShow={setPanelShow}

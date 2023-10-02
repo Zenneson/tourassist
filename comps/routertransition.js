@@ -1,28 +1,14 @@
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useWindowEvent } from "@mantine/hooks";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 
 export function RouterTransition(props) {
-  const { setPanelShow, setMainMenuOpened, setDropDownOpened } = props;
   const router = useRouter();
-  const { title } = router.query;
-
-  const readyAppStates = useCallback(() => {
-    setPanelShow(false);
-    setMainMenuOpened(false);
-    setDropDownOpened(false);
-    sessionStorage.clear();
-  }, [setPanelShow, setMainMenuOpened, setDropDownOpened]);
-
-  useWindowEvent("beforeunload", () => {
-    readyAppStates();
-  });
 
   useEffect(() => {
     const handleStart = (url) => {
+      url === "/map" && sessionStorage.clear();
       url !== router.asPath && nprogress.start();
-      readyAppStates();
     };
 
     const handleComplete = () => {
@@ -38,15 +24,7 @@ export function RouterTransition(props) {
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
-  }, [
-    router.asPath,
-    router.events,
-    setPanelShow,
-    setMainMenuOpened,
-    setDropDownOpened,
-    title,
-    readyAppStates,
-  ]);
+  }, [router.asPath, router.events]);
 
   return (
     <>

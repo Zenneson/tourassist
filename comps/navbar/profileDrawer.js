@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
 import Money from "./money";
 import { useSessionStorage } from "@mantine/hooks";
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "../../libs/firebase";
 import {
   useMantineColorScheme,
   createStyles,
@@ -103,10 +105,42 @@ export default function ProfileDrawer(props) {
     setMainMenuOpened,
     openMenu,
     signOutFunc,
+    setDropDownOpened,
   } = props;
   const router = useRouter();
 
   const { user } = useUser();
+
+  const [allTrips, setAllTrips] = useSessionStorage({
+    key: "allTrips",
+    defaultValue: [],
+  });
+
+  useEffect(() => {
+    const grabAllTrips = async (user) => {
+      const queryData = collection(firestore, "users", user, "trips");
+
+      try {
+        const querySnapshot = await getDocs(queryData);
+        const tripsData = querySnapshot.docs.map((doc) =>
+          doc.data(
+            setAllTrips((prevTrip) => {
+              const newTrips = [...prevTrip, doc.data()];
+              return newTrips;
+            })
+          )
+        );
+
+        return tripsData;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (allTrips.length === 0 && user) {
+      grabAllTrips(user.email);
+    }
+  }, [user, allTrips, setAllTrips]);
 
   useEffect(() => {
     router.prefetch("/");
@@ -135,42 +169,51 @@ export default function ProfileDrawer(props) {
     }
   };
 
-  const items = links.map((item, index) => (
+  const items = links.map((item, index) => {
     // Main menu items
-    <NavLink
-      px={25}
-      key={item.label}
-      active={index === active}
-      label={
-        <Text
-          fw={700}
-          fz={12}
-          sx={{
-            textTransform: "uppercase",
-          }}
-        >
-          {item.label}
-        </Text>
-      }
-      description={item.description}
-      rightSection={<IconChevronRight size={14} />}
-      icon={item.icon}
-      variant="subtle"
-      onClick={() => menuLinkFunc(index)}
-      classNames={{
-        icon: cx(classes.icon, { [classes.activeIcon]: active === index }),
-        description: classes.description,
-        label: classes.label,
-        root: classes.root,
-      }}
-    />
-  ));
+    if (index === 1 && allTrips.length === 0) return;
+    return (
+      <NavLink
+        px={25}
+        key={item.label}
+        active={index === active}
+        description={item.description}
+        rightSection={<IconChevronRight size={14} />}
+        icon={item.icon}
+        variant="subtle"
+        onClick={() => menuLinkFunc(index)}
+        classNames={{
+          icon: cx(classes.icon, { [classes.activeIcon]: active === index }),
+          description: classes.description,
+          label: classes.label,
+          root: classes.root,
+        }}
+        label={
+          <Text
+            fw={700}
+            fz={12}
+            sx={{
+              textTransform: "uppercase",
+            }}
+          >
+            {item.label}
+          </Text>
+        }
+      />
+    );
+  });
 
   const animation = {
     initial: { x: -50, duration: 500 },
     animate: { x: 0, duration: 500 },
     exit: { x: 50, duration: 500 },
     transition: { type: "ease-in-out" },
+  };
+
+  const closeAll = () => {
+    setMainMenuOpened(false);
+    setPanelShow(false);
+    setDropDownOpened(false);
   };
 
   const closePanel = () => {
@@ -247,8 +290,7 @@ export default function ProfileDrawer(props) {
                 icon={<IconWorld size={30} />}
                 variant="subtle"
                 onClick={() => {
-                  setMainMenuOpened(false);
-                  setPanelShow(false);
+                  closeAll();
                   router.push("/map");
                 }}
                 classNames={{
@@ -281,6 +323,7 @@ export default function ProfileDrawer(props) {
                 icon={<IconInfoCircle size={30} />}
                 variant="subtle"
                 onClick={() => {
+                  closeAll();
                   router.push("/help");
                 }}
                 classNames={{
@@ -302,6 +345,7 @@ export default function ProfileDrawer(props) {
             leftIcon={<IconGavel size={18} />}
             hidden={router.pathname === "/legal"}
             onClick={() => {
+              closeAll();
               router.push("/legal");
             }}
             sx={{
@@ -352,6 +396,7 @@ export default function ProfileDrawer(props) {
                   },
                 })}
                 onClick={() => {
+                  closeAll();
                   signOutFunc();
                 }}
               >
@@ -430,8 +475,9 @@ export default function ProfileDrawer(props) {
               </Flex>
             </Title>
             <Money
-              setPanelShow={setPanelShow}
               setMainMenuOpened={setMainMenuOpened}
+              setPanelShow={setPanelShow}
+              setDropDownOpened={setDropDownOpened}
             />
           </motion.div>
         )}

@@ -38,7 +38,7 @@ import MainCarousel from "../comps/trip/maincarousel";
 import TripDescription from "../comps/trip/tripdescription";
 import ModalsItem from "../comps/trip/modalsitem";
 import { formatNumber, daysBefore, sumAmounts } from "../libs/custom";
-import { useUser } from "../../libs/context";
+import { useUser } from "../libs/context";
 
 export const getStaticProps = async ({ params }) => {
   const { title } = params;

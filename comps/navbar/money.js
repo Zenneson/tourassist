@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "../../libs/firebase";
 import {
   IconAppWindow,
   IconCurrencyDollar,
@@ -41,7 +39,7 @@ import {
 } from "chart.js";
 
 export default function Money(props) {
-  const { setMainMenuOpened, setPanelShow } = props;
+  const { setMainMenuOpened, setPanelShow, setDropDownOpened } = props;
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
@@ -64,32 +62,6 @@ export default function Money(props) {
   });
 
   const [donationSum, setDonationSum] = useState(0);
-
-  useEffect(() => {
-    const grabAllTrips = async (user) => {
-      const queryData = collection(firestore, "users", user, "trips");
-
-      try {
-        const querySnapshot = await getDocs(queryData);
-        const tripsData = querySnapshot.docs.map((doc) =>
-          doc.data(
-            setAllTrips((prevTrip) => {
-              const newTrips = [...prevTrip, doc.data()];
-              return newTrips;
-            })
-          )
-        );
-
-        return tripsData;
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    if (allTrips.length === 0 && user) {
-      grabAllTrips(user.email);
-    }
-  }, [user, allTrips, setAllTrips]);
 
   useEffect(() => {
     if (allTrips.length === 0) return;
@@ -250,7 +222,7 @@ export default function Money(props) {
   return (
     <Box pos="relative">
       <LoadingOverlay
-        visible={allTrips.length === 0 || currentTrip === undefined}
+        visible={allTrips.length === 0 && currentTrip === undefined}
         overlayBlur={10}
         overlayOpacity={1}
         overlayColor={dark ? "#0b0c0d" : "#F8F9FA"}
@@ -368,9 +340,10 @@ export default function Money(props) {
                   },
                 }}
                 onClick={() => {
-                  router.push("/" + currentTrip?.tripId);
                   setMainMenuOpened(false);
                   setPanelShow(false);
+                  setDropDownOpened(false);
+                  router.push("/" + currentTrip?.tripId);
                 }}
               >
                 View Page{" "}

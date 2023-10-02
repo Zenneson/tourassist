@@ -36,19 +36,15 @@ export default function MainMenu(props) {
     setDropDownOpened,
     colorScheme,
     toggleColorScheme,
+    mainMenuOpened,
+    setMainMenuOpened,
+    panelShow,
+    setPanelShow,
   } = props;
   const theme = useMantineTheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
   const [logoutOpened, setLogoutOpened] = useState(false);
-  const [mainMenuOpened, setMainMenuOpened] = useSessionStorage({
-    key: "mainMenuOpened",
-    defaultValue: false,
-  });
-  const [panelShow, setPanelShow] = useSessionStorage({
-    key: "panelShow",
-    defaultValue: false,
-  });
 
   const { user } = useUser();
 
@@ -114,6 +110,7 @@ export default function MainMenu(props) {
         setPanelShow={setPanelShow}
         mainMenuOpened={mainMenuOpened}
         setMainMenuOpened={setMainMenuOpened}
+        setDropDownOpened={setDropDownOpened}
         openMenu={openMenu}
         signOutFunc={signOutFunc}
       />
