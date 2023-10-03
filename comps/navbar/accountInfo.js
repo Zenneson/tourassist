@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { useRouter } from "next/router";
 import {
   useMantineColorScheme,
   ActionIcon,
@@ -39,10 +38,7 @@ import { formatPhoneNumber, addAtSymbol, updateField } from "../../libs/custom";
 import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function AccountInfo(props) {
-  let user = {};
-  user = props.user;
-
-  const router = useRouter();
+  const { user } = props;
 
   const [changePass, setChangePass] = useState(false);
 
@@ -115,12 +111,7 @@ export default function AccountInfo(props) {
             refs[field].current &&
             refs[field].current === document.activeElement
           ) {
-            const currentValue = refs[field].current.value;
-            if (currentValue === values[field]) {
-              return refs[field].current.blur();
-            }
             updateField({ [field]: values[field] }, user);
-            router.replace(router.asPath);
             setters[field](false);
             refs[field].current.blur();
             break;
@@ -197,7 +188,6 @@ export default function AccountInfo(props) {
                           firstNameRef.current.focus();
                         } else {
                           updateField({ firstName: firstNameValue }, user);
-                          router.replace(router.asPath);
                           setFirstName(false);
                         }
                       }}
@@ -238,7 +228,6 @@ export default function AccountInfo(props) {
                           lastNameRef.current.focus();
                         } else {
                           updateField({ lastName: lastNameValue }, user);
-                          router.replace(router.asPath);
                           setLastName(false);
                         }
                       }}
@@ -281,7 +270,6 @@ export default function AccountInfo(props) {
                           phoneRef.current.focus();
                         } else {
                           updateField({ phone: phoneValue }, user);
-                          router.replace(router.asPath);
                           setPhone(false);
                         }
                       }}
@@ -430,7 +418,6 @@ export default function AccountInfo(props) {
                           faceBookRef.current.focus();
                         } else {
                           updateField({ faceBook: faceBookValue }, user);
-                          router.replace(router.asPath);
                           setFaceBook(false);
                         }
                       }}
@@ -475,7 +462,6 @@ export default function AccountInfo(props) {
                           instagramRef.current.focus();
                         } else {
                           updateField({ instagram: instagramValue }, user);
-                          router.replace(router.asPath);
                           setInstagram(false);
                         }
                       }}
@@ -520,7 +506,6 @@ export default function AccountInfo(props) {
                           tikTokRef.current.focus();
                         } else {
                           updateField({ tikTok: tikTokValue }, user);
-                          router.replace(router.asPath);
                           setTikTok(false);
                         }
                       }}
@@ -565,7 +550,6 @@ export default function AccountInfo(props) {
                           twitterRef.current.focus();
                         } else {
                           updateField({ twitter: twitterValue }, user);
-                          router.replace(router.asPath);
                           setTwitter(false);
                         }
                       }}

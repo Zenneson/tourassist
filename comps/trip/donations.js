@@ -42,15 +42,15 @@ export default function Donations(props) {
     if (tripData?.donations?.length !== donationsData?.length)
       setDataLoaded(false);
     if (
-      (donationsData.length !== tripData.donations?.length ||
-        donationsData.length !== donations?.length) &&
+      (donationsData?.length !== tripData.donations?.length ||
+        donationsData?.length !== donations?.length) &&
       menu
     ) {
       setDonationsData(donations);
     }
     if (
-      (donationsData.length === 0 && tripData.donations?.length !== 0) ||
-      (donationsData.length !== donations?.length && !dataLoaded)
+      (donationsData?.length === 0 && tripData.donations?.length !== 0) ||
+      (donationsData?.length !== donations?.length && !dataLoaded)
     ) {
       setDonationsData(donations);
       setDataLoaded(true);
@@ -66,42 +66,45 @@ export default function Donations(props) {
   ]);
 
   const donateOrder =
-    donationsData?.length !== 0
+    (donationsData ?? []).length !== 0
       ? sorted === "amount"
-        ? donationsData.sort((a, b) => b.amount - a.amount)
-        : donationsData?.sort((a, b) => new Date(b.time) - new Date(a.time))
+        ? [...donationsData].sort((a, b) => b.amount - a.amount)
+        : [...donationsData].sort((a, b) => new Date(b.time) - new Date(a.time))
       : [];
 
-  const rows = donateOrder?.map((item, index) => (
-    <tr key={index}>
-      <td>
-        <Group>
-          <Avatar
-            variant={"filled"}
-            radius="xl"
-            color={dark ? "dark.5" : "gray.1"}
-            sx={{
-              boxShadow: dark
-                ? "0 2px 4px rgba(0,0,0,0.3)"
-                : "0 2px 4px rgba(0,0,0,0.1)",
-            }}
-          >
-            <Text color={dark ? "dark.1" : "gray.5"}>
-              {item.name.charAt(0)}
+  const rows = donateOrder?.map((item, index) => {
+    if (!item.name || !item.amount) return null;
+    return (
+      <tr key={index}>
+        <td>
+          <Group>
+            <Avatar
+              variant={"filled"}
+              radius="xl"
+              color={dark ? "dark.5" : "gray.1"}
+              sx={{
+                boxShadow: dark
+                  ? "0 2px 4px rgba(0,0,0,0.3)"
+                  : "0 2px 4px rgba(0,0,0,0.1)",
+              }}
+            >
+              <Text color={dark ? "dark.1" : "gray.5"}>
+                {item.name.charAt(0)}
+              </Text>
+            </Avatar>
+            <Text size="sm" weight={500}>
+              {item.name}
             </Text>
-          </Avatar>
-          <Text size="sm" weight={500}>
-            {item.name}
+          </Group>
+        </td>
+        <td>
+          <Text size="xs" fw={700} color="dimmed" ta="center">
+            ${Math.floor(item.amount)}
           </Text>
-        </Group>
-      </td>
-      <td>
-        <Text size="xs" fw={700} color="dimmed" ta="center">
-          ${Math.floor(item.amount)}
-        </Text>
-      </td>
-    </tr>
-  ));
+        </td>
+      </tr>
+    );
+  });
 
   return (
     <Box w="100%" pos={"relative"}>

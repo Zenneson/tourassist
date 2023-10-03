@@ -39,22 +39,13 @@ import {
 } from "chart.js";
 
 export default function Money(props) {
-  const { setMainMenuOpened, setPanelShow, setDropDownOpened } = props;
+  const { allTrips, setMainMenuOpened, setPanelShow, setDropDownOpened } =
+    props;
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const router = useRouter();
 
-  const { user } = useUser();
-
-  const [allTrips, setAllTrips] = useSessionStorage({
-    key: "allTrips",
-    defaultValue: [],
-  });
-
-  const [currentTrip, setCurrentTrip] = useSessionStorage({
-    key: "currentTrip",
-    defaultValue: allTrips[0],
-  });
+  const [currentTrip, setCurrentTrip] = useState(allTrips[0] || undefined);
 
   const [donations, setDonations] = useSessionStorage({
     key: "donations",
@@ -222,7 +213,7 @@ export default function Money(props) {
   return (
     <Box pos="relative">
       <LoadingOverlay
-        visible={allTrips.length === 0 && currentTrip === undefined}
+        visible={!allTrips || currentTrip === undefined}
         overlayBlur={10}
         overlayOpacity={1}
         overlayColor={dark ? "#0b0c0d" : "#F8F9FA"}

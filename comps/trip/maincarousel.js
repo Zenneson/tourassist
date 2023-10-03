@@ -33,7 +33,7 @@ export default function MainCarousel(props) {
     sliderRef.current.slickPrev();
   };
 
-  if (tripImages.length === 1) {
+  if (tripImages?.length === 1) {
     return (
       <Box
         style={{
@@ -53,7 +53,7 @@ export default function MainCarousel(props) {
     );
   }
 
-  const slides = tripImages.map((image, index) => (
+  const slides = tripImages?.map((image, index) => (
     <Box key={index} h={500} pos={"relative"}>
       <BackgroundImage
         src={image.file}
@@ -66,10 +66,10 @@ export default function MainCarousel(props) {
   ));
 
   return (
-    tripImages.length > 0 && (
-      <Group spacing={0} w={tripImages.length > 1 ? "auto" : "650px"} h={500}>
+    tripImages?.length > 0 && (
+      <Group spacing={0} w={tripImages?.length > 1 ? "auto" : "650px"} h={500}>
         <Center>
-          {tripImages.length > 1 && (
+          {tripImages?.length > 1 && (
             // Previous Slider Button
             <Button
               h={490}
@@ -102,7 +102,7 @@ export default function MainCarousel(props) {
           >
             {slides}
           </Slider>
-          {tripImages.length > 1 && (
+          {tripImages?.length > 1 && (
             // Next Slider Button
             <Button
               h={490}

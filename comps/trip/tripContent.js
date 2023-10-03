@@ -46,7 +46,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  let { images, setImages, modalMode, setModalMode, user, titleRef } = props;
+  let {
+    tripData,
+    images,
+    setImages,
+    modalMode,
+    setModalMode,
+    user,
+    titleRef,
+    setRefresh,
+  } = props;
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [loading, setLoading] = useState(true);
@@ -54,14 +63,7 @@ export default function TripContent(props) {
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
-  const [tripData, setTripData] = useSessionStorage({
-    key: "tripData",
-    defaultValue: [],
-  });
-  const [tripDesc, setTripDesc] = useSessionStorage({
-    key: "tripDesc",
-    defaultValue: tripData.tripDesc,
-  });
+  const [tripDesc, setTripDesc] = useState(props.tripDesc || "");
   const [travelDate, setTravelDate] = useSessionStorage({
     key: "travelDate",
     defaultValue: tripData.travelDate,
@@ -99,15 +101,18 @@ export default function TripContent(props) {
     pauseOnHover: true,
   };
 
-  const slides = images.map((image, index) => (
-    <BackgroundImage
-      radius={3}
-      key={index}
-      src={image.file}
-      h={300}
-      alt={image.name}
-    />
-  ));
+  const slides =
+    images && images.length > 0
+      ? images.map((image, index) => (
+          <BackgroundImage
+            radius={3}
+            key={index}
+            src={image.file}
+            h={300}
+            alt={image.name}
+          />
+        ))
+      : null;
 
   const updatingTrip = {
     id: "updatingTrip",
@@ -256,67 +261,70 @@ export default function TripContent(props) {
     setScale(1);
   };
 
-  const imageItems = images.map((image, index) => {
-    return (
-      <Flex
-        key={index}
-        align={"center"}
-        gap={10}
-        p={10}
-        sx={{
-          borderRadius: 3,
-          cursor: "pointer",
-          ":hover": {
-            backgroundColor: dark
-              ? "rgba(255, 255, 255, 0.01)"
-              : "rgba(0, 0, 0, 0.03)",
-          },
-        }}
-      >
-        <Title
-          order={6}
-          w={25}
-          ta={"center"}
-          sx={{
-            borderRadius: 5,
-            borderRight: `1px solid ${
-              dark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"
-            }`,
-          }}
-        >
-          {index + 1}
-        </Title>
-        <Text fz={12} w={"100%"} truncate>
-          {image.name}
-        </Text>
-        <ActionIcon
-          size={"sm"}
-          maw={"10%"}
-          variant="subtle"
-          color="red.9"
-          opacity={0.3}
-          sx={{
-            ":hover": {
-              opacity: 1,
-            },
-          }}
-          onClick={() => {
-            setImages(
-              removeImageByName(
-                images,
-                image.name,
-                router.query,
-                tripData.tripId,
-                user
-              )
-            );
-          }}
-        >
-          <IconTrash size={17} />
-        </ActionIcon>
-      </Flex>
-    );
-  });
+  const imageItems =
+    images && images.length > 0
+      ? images.map((image, index) => {
+          return (
+            <Flex
+              key={index}
+              align={"center"}
+              gap={10}
+              p={10}
+              sx={{
+                borderRadius: 3,
+                cursor: "pointer",
+                ":hover": {
+                  backgroundColor: dark
+                    ? "rgba(255, 255, 255, 0.01)"
+                    : "rgba(0, 0, 0, 0.03)",
+                },
+              }}
+            >
+              <Title
+                order={6}
+                w={25}
+                ta={"center"}
+                sx={{
+                  borderRadius: 5,
+                  borderRight: `1px solid ${
+                    dark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"
+                  }`,
+                }}
+              >
+                {index + 1}
+              </Title>
+              <Text fz={12} w={"100%"} truncate>
+                {image.name}
+              </Text>
+              <ActionIcon
+                size={"sm"}
+                maw={"10%"}
+                variant="subtle"
+                color="red.9"
+                opacity={0.3}
+                sx={{
+                  ":hover": {
+                    opacity: 1,
+                  },
+                }}
+                onClick={() => {
+                  setImages(
+                    removeImageByName(
+                      images,
+                      image.name,
+                      router.query,
+                      tripData.tripId,
+                      user
+                    )
+                  );
+                }}
+              >
+                <IconTrash size={17} />
+              </ActionIcon>
+            </Flex>
+          );
+        })
+      : null;
 
   const grabImage = (file, type) => {
     const imgObj = {
@@ -331,19 +339,20 @@ export default function TripContent(props) {
   const updateTripData = async () => {
     const newDesc = updatedDesc || editor.getHTML();
     notifications.show(updatingTrip);
+    const { title } = router.query;
     try {
       const imageObjects = await updateEditedTrip(
         user.email,
+        tripData,
         tripData.tripId,
         images,
         newDesc,
-        travelDate
+        travelDate,
+        title
       );
 
       setTripDesc(newDesc);
       setImages(imageObjects);
-      await router.replace("/" + tripData.tripId);
-
       notifications.update(tripUpdated);
       setModalMode("");
     } catch (error) {

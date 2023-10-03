@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { firestore } from "./firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
-import { IconCheck } from "@tabler/icons-react";
+import { mutate } from "swr";
 import {
   ref,
   deleteObject,
@@ -9,12 +9,24 @@ import {
   uploadString,
   getDownloadURL,
 } from "firebase/storage";
+import { IconCheck } from "@tabler/icons-react";
 const moment = require("moment-timezone");
 
 const storage = getStorage();
 
 export const updateField = async (update, user) => {
-  await updateDoc(doc(firestore, "users", user.email), update);
+  const optimisticData = {
+    ...user,
+    ...update,
+  };
+  mutate(user?.email, optimisticData, false);
+  try {
+    await updateDoc(doc(firestore, "users", user.email), update);
+    mutate(user?.email);
+  } catch (error) {
+    mutate(user?.email, user);
+    console.error("Failed to update field:", error);
+  }
 };
 
 export const parseCustomDate = (dateString) => {
@@ -285,31 +297,38 @@ export const saveToDB = async (
 
 export const updateEditedTrip = async (
   user,
+  tripData,
   tripId,
   images,
   newDesc,
-  travelDate
+  travelDate,
+  title
 ) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const imageUploadPromises = handleImages(images, tripId, user);
+  const optimisticData = {
+    images,
+    tripDesc: newDesc,
+    travelDate: dateFormat(travelDate),
+  };
 
-      const imageURLs = await Promise.all(imageUploadPromises);
+  mutate(title, optimisticData, false);
 
-      const imageObjects = createImageObjects(imageURLs);
+  try {
+    const imageUploadPromises = handleImages(images, tripId, user);
+    const imageURLs = await Promise.all(imageUploadPromises);
+    const imageObjects = createImageObjects(imageURLs);
 
-      const tripRef = doc(firestore, "users", user, "trips", tripId);
-      updateDoc(tripRef, {
-        images: imageObjects,
-        travelDate: dateFormat(travelDate),
-        tripDesc: newDesc,
-      });
+    const tripRef = doc(firestore, "users", user, "trips", tripId);
+    await updateDoc(tripRef, {
+      images: imageObjects,
+      travelDate: dateFormat(travelDate),
+      tripDesc: newDesc,
+    });
 
-      resolve(imageObjects);
-    } catch (error) {
-      reject(error);
-    }
-  });
+    mutate(title);
+  } catch (error) {
+    mutate(title, tripData);
+    console.error("Failed to update trip:", error);
+  }
 };
 
 export const loggedIn = (dark, user) => {

@@ -44,6 +44,7 @@ export default function ModalsItem(props) {
     modalMode,
     setModalMode,
     tripData,
+    tripDesc,
     user,
     router,
     closeEditTripModal,
@@ -587,13 +588,15 @@ export default function ModalsItem(props) {
               }}
             >
               <Text fw={700} fz={30} w={"70%"} fs={"italic"} lineClamp={1}>
-                {tripData.tripTitle}
+                {tripData && tripData.tripTitle}
               </Text>
               <DateChanger />
             </Group>
             <TripContent
               user={user}
               images={images}
+              tripDesc={tripDesc}
+              tripData={tripData}
               setImages={setImages}
               modalMode={modalMode}
               setModalMode={setModalMode}

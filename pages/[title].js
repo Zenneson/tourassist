@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
+import useSWR, { preload } from "swr";
 import {
   useMantineColorScheme,
   Avatar,
@@ -40,31 +41,49 @@ import ModalsItem from "../comps/trip/modalsitem";
 import { formatNumber, daysBefore, sumAmounts } from "../libs/custom";
 import { useUser } from "../libs/context";
 
-export const getStaticProps = async ({ params }) => {
-  const { title } = params;
-  const query = collectionGroup(firestore, "trips");
-  try {
-    const querySnapshot = await getDocs(query);
-    const tripDoc = querySnapshot.docs.find((doc) => doc.id === title);
-    if (!tripDoc) {
-      console.log("No document found with the matching 'title'");
-      return {
-        notFound: true,
-      };
-    }
+export const getStaticPaths = async () => {
+  // Fetch all documents from the 'trips' collection group
+  const queryData = collectionGroup(firestore, "trips");
+  let paths = [];
 
-    const trip = tripDoc.data();
-    return {
-      props: {
-        trip,
-      },
-    };
+  try {
+    const querySnapshot = await getDocs(queryData);
+    paths = querySnapshot.docs.map((doc) => {
+      // The document ID is used as 'title' in the URL
+      const title = doc.id;
+      return { params: { title } };
+    });
   } catch (error) {
     console.error(error);
-    return {
-      props: {},
-    };
   }
+
+  return {
+    paths,
+    fallback: true,
+  };
+};
+
+const fireFetcher = async (url) => {
+  const query = collectionGroup(firestore, "trips");
+  const querySnapshot = await getDocs(query);
+  const tripDoc = querySnapshot.docs.find((doc) => doc.id === url);
+  if (!tripDoc) {
+    throw new Error("No document found with the matching 'title'");
+  }
+  return tripDoc.data();
+};
+
+export const getStaticProps = async ({ params }) => {
+  const { title } = params;
+
+  preload(title, fireFetcher);
+
+  return {
+    props: {
+      title,
+    },
+    revalidate: 1,
+  };
 };
 
 export default function Trippage(props) {
@@ -73,26 +92,12 @@ export default function Trippage(props) {
   const [modalMode, setModalMode] = useState("");
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
-  const [tripImages, setTripImages] = useState([]);
   const [dontaionMode, setDonationMode] = useState("donating");
+  const [images, setImages] = useState([]);
   const dark = colorScheme === "dark";
 
   const { user } = useUser();
-
-  const [tripData, setTripData] = useSessionStorage({
-    key: "tripData",
-    defaultValue: [],
-  });
-
-  const [tripDesc, setTripDesc] = useSessionStorage({
-    key: "tripDesc",
-    defaultValue: [],
-  });
-
-  const [images, setImages] = useSessionStorage({
-    key: "images",
-    defaultValue: tripData.images,
-  });
+  const { title } = router.query;
 
   const [donations, setDonations] = useSessionStorage({
     key: "donations",
@@ -106,13 +111,8 @@ export default function Trippage(props) {
   const [stayAnon, setStayAnon] = useState(false);
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
-  const [dataLoaded, setDataLoaded] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (props.trip) setDataLoaded(true);
-    }, 1000);
-  }, [props.trip]);
+  const { data: tripData, error } = useSWR(title, fireFetcher);
 
   useEffect(() => {
     if (
@@ -127,10 +127,15 @@ export default function Trippage(props) {
 
   useEffect(() => {
     const calculatePercentage = () => {
-      return (donationSum / tripData.costsSum) * 100;
+      return (donationSum / tripData?.costsSum) * 100;
     };
 
-    if (tripData && donationProgress === 0 && donations.length !== 0) {
+    if (
+      tripData &&
+      donationProgress === 0 &&
+      donations &&
+      donations.length !== 0
+    ) {
       setDonationProgress(calculatePercentage);
     }
   }, [donationProgress, donations, donationSum, tripData]);
@@ -141,21 +146,17 @@ export default function Trippage(props) {
   }, [router]);
 
   useEffect(() => {
-    if (props.trip) {
-      const dSum = Math.floor(sumAmounts(props.trip.donations));
+    if (tripData) {
+      const dSum = Math.floor(sumAmounts(tripData?.donations));
       setDonationSum(dSum);
-      setDonationProgress((dSum / props.trip.costsSum) * 100);
-      setTripData(props.trip);
-      setTripImages(props.trip.images);
-      setTripDesc(props.trip.tripDesc);
-      setUpdates(props.trip.updates);
-      setDonations(props.trip.donations);
+      setDonationProgress((dSum / tripData?.costsSum) * 100);
+      setUpdates(tripData?.updates);
+      setDonations(tripData?.donations);
     }
   }, [
     images,
-    props.trip,
-    setTripData,
-    setTripDesc,
+    tripData,
+    updates,
     setDonations,
     setDonationSum,
     setDonationProgress,
@@ -185,7 +186,7 @@ export default function Trippage(props) {
   const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
   const showEditTripModal = () => {
-    setImages(tripData.images);
+    setImages(tripData?.images);
     setModalMode("editTrip");
   };
 
@@ -209,9 +210,12 @@ export default function Trippage(props) {
     setModalMode("");
   };
 
+  if (!tripData && !error) {
+    return <LoadingOverlay visible={true} overlayOpacity={1} />;
+  }
+
   return (
     <>
-      <LoadingOverlay visible={!dataLoaded} overlayOpacity={1} />
       <Center mt={120}>
         <Flex
           gap={30}
@@ -230,22 +234,22 @@ export default function Trippage(props) {
             align={"center"}
             pos={"relative"}
           >
-            <MainCarousel tripImages={tripImages} />
+            <MainCarousel tripImages={tripData?.images} />
             <Divider
               w={"80%"}
               color="dark.4"
               size={"md"}
-              my={tripData.images?.length > 0 ? 15 : 0}
+              my={tripData?.images.length > 0 ? 15 : 0}
               label={
                 <Title
                   order={3}
                   px={5}
-                  mb={tripData.images?.length === 0 ? 15 : 0}
+                  mb={tripData?.images.length === 0 ? 15 : 0}
                   maw={"800px"}
                   color="gray.6"
                   fw={700}
                 >
-                  {tripData.tripTitle}
+                  {tripData?.tripTitle}
                 </Title>
               }
             />
@@ -379,7 +383,7 @@ export default function Trippage(props) {
               px={30}
               fz={14}
             >
-              {user && user.email === tripData.user && (
+              {user && user.email === tripData?.user && (
                 <Divider
                   labelPosition="right"
                   w={"100%"}
@@ -409,9 +413,9 @@ export default function Trippage(props) {
                   }
                 />
               )}
-              <TripDescription />
+              <TripDescription tripDesc={tripData?.tripDesc} />
             </Box>
-            {user?.email === tripData.user && (
+            {user?.email === tripData?.user && (
               <Button
                 variant="default"
                 w={"80%"}
@@ -459,7 +463,7 @@ export default function Trippage(props) {
                 }
               />
               <Box pl={10}>
-                {user?.email !== tripData.user && (
+                {user?.email !== tripData?.user && (
                   <Divider
                     mb={20}
                     w={"100%"}
@@ -484,7 +488,7 @@ export default function Trippage(props) {
                 )}
                 {commentData.length === 0 ? (
                   <Text w={"100%"} fz={12} ta={"center"}>
-                    {user && user.email !== tripData.user
+                    {user && user.email !== tripData?.user
                       ? "Donate to leave a comment!"
                       : "Donor's comments will appear here"}
                   </Text>
@@ -541,7 +545,7 @@ export default function Trippage(props) {
                             marginRight: -4,
                           }}
                         />
-                        {formatNumber(tripData.costsSum)}
+                        {formatNumber(tripData?.costsSum)}
                       </Flex>
                     </Title>
                     <Text fz={11} span>
@@ -574,7 +578,7 @@ export default function Trippage(props) {
                 mt={10}
                 mb={12}
               />
-              {user && user.email === tripData.user && (
+              {user && user.email === tripData?.user && (
                 <Button
                   w={"100%"}
                   radius={25}
@@ -587,7 +591,7 @@ export default function Trippage(props) {
                   <Text>USE FUNDS: ${donationSum}</Text>
                 </Button>
               )}
-              {user?.email !== tripData.user && (
+              {user?.email !== tripData?.user && (
                 // Main Donate Button
                 <Button
                   fullWidth
@@ -619,6 +623,7 @@ export default function Trippage(props) {
         modalMode={modalMode}
         setModalMode={setModalMode}
         tripData={tripData}
+        tripDesc={tripData?.tripDesc}
         user={user}
         router={router}
         closeEditTripModal={closeEditTripModal}
@@ -646,25 +651,3 @@ export default function Trippage(props) {
     </>
   );
 }
-
-export const getStaticPaths = async () => {
-  // Fetch all documents from the 'trips' collection group
-  const queryData = collectionGroup(firestore, "trips");
-  let paths = [];
-
-  try {
-    const querySnapshot = await getDocs(queryData);
-    paths = querySnapshot.docs.map((doc) => {
-      // The document ID is used as 'title' in the URL
-      const title = doc.id;
-      return { params: { title } };
-    });
-  } catch (error) {
-    console.error(error);
-  }
-
-  return {
-    paths,
-    fallback: true,
-  };
-};

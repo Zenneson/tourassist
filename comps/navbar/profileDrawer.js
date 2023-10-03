@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
+import useSWR from "swr";
 import Money from "./money";
-import { useSessionStorage } from "@mantine/hooks";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import {
@@ -111,36 +111,17 @@ export default function ProfileDrawer(props) {
 
   const { user } = useUser();
 
-  const [allTrips, setAllTrips] = useSessionStorage({
-    key: "allTrips",
-    defaultValue: [],
-  });
+  const fetchTrips = async (userEmail) => {
+    const queryData = collection(firestore, "users", userEmail, "trips");
+    const querySnapshot = await getDocs(queryData);
+    return querySnapshot.docs.map((doc) => doc.data());
+  };
 
-  useEffect(() => {
-    const grabAllTrips = async (user) => {
-      const queryData = collection(firestore, "users", user, "trips");
+  const { data: allTrips, error } = useSWR(user?.email, fetchTrips);
 
-      try {
-        const querySnapshot = await getDocs(queryData);
-        const tripsData = querySnapshot.docs.map((doc) =>
-          doc.data(
-            setAllTrips((prevTrip) => {
-              const newTrips = [...prevTrip, doc.data()];
-              return newTrips;
-            })
-          )
-        );
-
-        return tripsData;
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    if (allTrips.length === 0 && user) {
-      grabAllTrips(user.email);
-    }
-  }, [user, allTrips, setAllTrips]);
+  if (error) {
+    console.error("Error fetching trips:", error);
+  }
 
   useEffect(() => {
     router.prefetch("/");
@@ -171,7 +152,7 @@ export default function ProfileDrawer(props) {
 
   const items = links.map((item, index) => {
     // Main menu items
-    if (index === 1 && allTrips.length === 0) return;
+    if (index === 1 && allTrips?.length === 0) return;
     return (
       <NavLink
         px={25}
@@ -475,6 +456,7 @@ export default function ProfileDrawer(props) {
               </Flex>
             </Title>
             <Money
+              allTrips={allTrips}
               setMainMenuOpened={setMainMenuOpened}
               setPanelShow={setPanelShow}
               setDropDownOpened={setDropDownOpened}
