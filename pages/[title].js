@@ -94,6 +94,7 @@ export default function Trippage(props) {
   const [commentData, setCommentData] = useState([]);
   const [dontaionMode, setDonationMode] = useState("donating");
   const [images, setImages] = useState([]);
+  const [newUpdate, setNewUpdate] = useState(false);
   const dark = colorScheme === "dark";
 
   const { user } = useUser();
@@ -111,8 +112,14 @@ export default function Trippage(props) {
   const [stayAnon, setStayAnon] = useState(false);
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
+  const [isMutating, setIsMutating] = useState(false);
 
-  const { data: tripData, error } = useSWR(title, fireFetcher);
+  const {
+    data: tripData,
+    error,
+    isLoading,
+    isValidating,
+  } = useSWR(title, fireFetcher);
 
   useEffect(() => {
     if (
@@ -146,17 +153,19 @@ export default function Trippage(props) {
   }, [router]);
 
   useEffect(() => {
-    if (tripData) {
+    if (tripData || newUpdate) {
       const dSum = Math.floor(sumAmounts(tripData?.donations));
       setDonationSum(dSum);
       setDonationProgress((dSum / tripData?.costsSum) * 100);
       setUpdates(tripData?.updates);
       setDonations(tripData?.donations);
+      setNewUpdate(false);
     }
   }, [
     images,
     tripData,
     updates,
+    newUpdate,
     setDonations,
     setDonationSum,
     setDonationProgress,
@@ -210,7 +219,7 @@ export default function Trippage(props) {
     setModalMode("");
   };
 
-  if (!tripData && !error) {
+  if (isLoading || isValidating || isMutating) {
     return <LoadingOverlay visible={true} overlayOpacity={1} />;
   }
 
@@ -239,12 +248,12 @@ export default function Trippage(props) {
               w={"80%"}
               color="dark.4"
               size={"md"}
-              my={tripData?.images.length > 0 ? 15 : 0}
+              my={tripData?.images?.length > 0 ? 15 : 0}
               label={
                 <Title
                   order={3}
                   px={5}
-                  mb={tripData?.images.length === 0 ? 15 : 0}
+                  mb={tripData?.images?.length === 0 ? 15 : 0}
                   maw={"800px"}
                   color="gray.6"
                   fw={700}
@@ -437,12 +446,13 @@ export default function Trippage(props) {
             )}
             {updates && updates.length > 0 && (
               <Updates
+                user={user}
+                tripData={tripData}
                 setCurrentUpdateId={setCurrentUpdateId}
                 updates={updates}
                 setUpdates={setUpdates}
                 setModalMode={setModalMode}
-                tripData={tripData}
-                user={user}
+                setIsMutating={setIsMutating}
               />
             )}
             <Box
@@ -647,6 +657,8 @@ export default function Trippage(props) {
         setDonorName={setDonorName}
         donations={donations}
         setDonations={setDonations}
+        setNewUpdate={setNewUpdate}
+        setIsMutating={setIsMutating}
       />
     </>
   );

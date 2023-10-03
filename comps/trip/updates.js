@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useSWR, { mutate } from "swr";
 import {
   useMantineColorScheme,
   ActionIcon,
@@ -45,6 +46,7 @@ export default function Updates(props) {
     updates,
     setUpdates,
     setCurrentUpdateId,
+    setIsMutating,
   } = props;
   const [currentUpdateTitle, setCurrentUpdateTtile] = useState("");
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -52,6 +54,7 @@ export default function Updates(props) {
   const dark = colorScheme === "dark";
   const [showall, toggle] = useToggle(["hide", "show"]);
   const router = useRouter();
+  const { title } = router.query;
 
   const updateTrip = () => {
     setModalMode("editUpdate");
@@ -87,18 +90,30 @@ export default function Updates(props) {
   };
 
   const deleteUpdateByTitle = async () => {
-    const newUpdates = updates.filter(
-      (update) => update.updateTitle !== currentUpdateTitle
-    );
-    notifications.show(updateDeletedStart);
-    setDeleteModal(false);
-    setUpdates(newUpdates);
-    await updateDoc(
-      doc(firestore, "users", user.email, "trips", tripData.tripId),
-      { updates: newUpdates }
-    );
-    await router.replace(router.asPath);
-    notifications.update(updateDeletedEnd);
+    setIsMutating(true);
+    try {
+      const newUpdates = updates.filter(
+        (update) => update.updateTitle !== currentUpdateTitle
+      );
+
+      notifications.show(updateDeletedStart);
+      setDeleteModal(false);
+
+      setUpdates(newUpdates);
+      mutate(title, newUpdates, false);
+
+      await updateDoc(
+        doc(firestore, "users", user.email, "trips", tripData.tripId),
+        { updates: newUpdates }
+      );
+
+      mutate(title).then(() => {
+        setIsMutating(false); // Set mutation state back to false after mutation + revalidation
+      });
+      notifications.update(updateDeletedEnd);
+    } catch (error) {
+      console.error("Error deleting update:", error);
+    }
   };
 
   const seperateDate = (dateString) => {

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import useSWR, { mutate } from "swr";
 import {
   IconHeartHandshake,
   IconCurrencyDollar,
@@ -43,7 +44,6 @@ export default function ModalsItem(props) {
   const {
     modalMode,
     setModalMode,
-    tripData,
     tripDesc,
     user,
     router,
@@ -68,12 +68,28 @@ export default function ModalsItem(props) {
     setDonorName,
     donations,
     setDonations,
+    setNewUpdate,
+    setIsMutating,
   } = props;
   const donationRef = useRef(null);
   const donorNameRef = useRef(null);
   const [paymentToken, setPaymentToken] = useState(null);
   const [paymentId, setPaymentId] = useState(null);
   const [tokenUpdated, setTokenUpdated] = useState(false);
+
+  const { title } = router.query;
+
+  const fireFetcher = async (url) => {
+    const query = collectionGroup(firestore, "trips");
+    const querySnapshot = await getDocs(query);
+    const tripDoc = querySnapshot.docs.find((doc) => doc.id === url);
+    if (!tripDoc) {
+      throw new Error("No document found with the matching 'title'");
+    }
+    return tripDoc.data();
+  };
+
+  const { data: tripData, error } = useSWR(title, fireFetcher);
 
   const addUpdateTitle = {
     color: "orange",
@@ -253,6 +269,7 @@ export default function ModalsItem(props) {
     }, [updateEditor, updateContent]);
 
     const handleUpdate = async () => {
+      setIsMutating(true);
       try {
         if (updateTitle === "") {
           notifications.show(addUpdateTitle);
@@ -286,6 +303,7 @@ export default function ModalsItem(props) {
             return;
           }
         }
+
         if (modalMode === "postUpdate") {
           const updatesArray = Array.isArray(updates) ? updates : [];
           const updateObj = {
@@ -299,13 +317,19 @@ export default function ModalsItem(props) {
 
         setUpdates(newUpdates);
         setModalMode("");
+        setNewUpdate(true);
+        mutate(title, newUpdates, false);
+
         await updateDoc(
           doc(firestore, "users", user.email, "trips", tripData.tripId),
           { updates: newUpdates }
         );
-        await router.replace(router.asPath);
+
+        mutate(title).then(() => {
+          setIsMutating(false); // Set mutation state back to false after mutation + revalidation
+        });
+
         notifications.update(updatePosted);
-        setUpdateTitle("");
         setUpdateDataLoaded(false);
       } catch (error) {
         console.error(error);
@@ -320,7 +344,7 @@ export default function ModalsItem(props) {
           w="100%"
           placeholder="Update Title..."
           maw={800}
-          value={updateTitle}
+          value={updateTitle || ""}
           onKeyDown={(e) => {
             if (e.key === "Tab") {
               e.preventDefault();
