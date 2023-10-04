@@ -451,21 +451,26 @@ export default function ModalsItem(props) {
     );
   };
 
-  // TODO: DUFFEL FUNCS
   const updateDonations = async (data) => {
-    const dArray = Array.isArray(donations) ? donations : [];
+    const currentDonations = Array.isArray(donations) ? donations : [];
     const entry = {
       name: donorName,
       amount: donationAmount,
       time: data.created_at,
     };
-    const newDonations = [...dArray, entry];
-    setDonations(newDonations);
+    const newDonations = [...currentDonations, entry];
+    mutate(
+      title,
+      (currentData) => {
+        return { ...currentData, donations: newDonations };
+      },
+      false
+    );
     await updateDoc(
       doc(firestore, "users", tripData.user, "trips", tripData.tripId),
       { donations: newDonations }
     );
-    router.replace(router.asPath);
+    mutate(title);
   };
 
   const donationReq = () => {
@@ -548,6 +553,7 @@ export default function ModalsItem(props) {
 
   const postMessage = () => {
     closeAltModal();
+    // will add comment posting logic here
   };
 
   return (
@@ -640,7 +646,11 @@ export default function ModalsItem(props) {
           modalMode === "editUpdate" ||
           modalMode === "donating"
         }
-        onClose={closeAltModal}
+        onClose={() => {
+          setIsMutating(true);
+          setNewUpdate(true);
+          closeAltModal();
+        }}
         styles={(theme) => ({
           root: {
             "& .mantine-Modal-content": {
@@ -673,7 +683,7 @@ export default function ModalsItem(props) {
         />
         {modalMode === "donating" && (
           <Box w={modalMode === "donating" ? "auto" : 800}>
-            <Title mb={5} color={dark ? "#00E8FC" : "#fa7500"}>
+            <Title mb={5} color={dark ? "#00E8FC" : "#0D3F82"}>
               <Flex align={"center"} gap={5}>
                 {dontaionMode === "thanks" ? "THANK YOU" : "DONATE"}
                 <IconHeartHandshake size={35} />

@@ -124,25 +124,39 @@ export default function Money(props) {
     return result;
   };
 
+  const addExtraDay = (date) => {
+    const lastDateStr = date.matchFormat.slice(-1)[0];
+    const [year, month, day] = lastDateStr.split("-").map(Number);
+    const lastDate = new Date(year, month - 1, day);
+    const nextDate = new Date(lastDate);
+    nextDate.setDate(lastDate.getDate() + 1);
+    const nextDateStr = `${nextDate.getFullYear()}-${String(
+      nextDate.getMonth() + 1
+    ).padStart(2, "0")}-${String(nextDate.getDate()).padStart(2, "0")}`;
+    const nextDateDisplayStr = `${
+      nextDate.getMonth() + 1
+    }/${nextDate.getDate()}`;
+    date.matchFormat.push(nextDateStr);
+    date.displayFormat.push(nextDateDisplayStr);
+    return date;
+  };
+
   const getChartData = (n) => {
     let dateRange;
-
     if (n !== 7 && n !== 30) {
       dateRange = getDatesFromCreationToNow(n);
     } else {
       dateRange = getLastNDays(n);
     }
-
+    dateRange = addExtraDay(dateRange);
     const dSums = {};
     const donationCounts = {};
-
     dateRange.matchFormat.forEach((day) => {
       dSums[day] = 0;
       donationCounts[day] = 0;
     });
-
-    if (currentTrip && currentTrip.donations?.length !== 0) {
-      currentTrip.donations?.forEach((donation) => {
+    if (donations && donations.length > 0) {
+      donations.forEach((donation) => {
         const donationDay = donation.time.split("T")[0];
         if (dateRange.matchFormat.includes(donationDay)) {
           dSums[donationDay] += donation.amount;
@@ -150,14 +164,11 @@ export default function Money(props) {
         }
       });
     }
-
     const labels = dateRange.displayFormat;
-
     const data = dateRange.matchFormat.map((day) => ({
       total: dSums[day],
       times: donationCounts[day],
     }));
-
     return {
       data,
       labels,

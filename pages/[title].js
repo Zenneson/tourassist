@@ -160,6 +160,7 @@ export default function Trippage(props) {
       setUpdates(tripData?.updates);
       setDonations(tripData?.donations);
       setNewUpdate(false);
+      setIsMutating(false);
     }
   }, [
     images,
@@ -219,7 +220,7 @@ export default function Trippage(props) {
     setModalMode("");
   };
 
-  if (isLoading || isValidating || isMutating) {
+  if ((isLoading || isValidating || isMutating) && modalMode === "") {
     return <LoadingOverlay visible={true} overlayOpacity={1} />;
   }
 

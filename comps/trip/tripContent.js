@@ -340,6 +340,7 @@ export default function TripContent(props) {
     const newDesc = updatedDesc || editor.getHTML();
     notifications.show(updatingTrip);
     const { title } = router.query;
+    setModalMode("");
     try {
       const imageObjects = await updateEditedTrip(
         user.email,
@@ -354,7 +355,6 @@ export default function TripContent(props) {
       setTripDesc(newDesc);
       setImages(imageObjects);
       notifications.update(tripUpdated);
-      setModalMode("");
     } catch (error) {
       console.error(error);
     }
