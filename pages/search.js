@@ -10,7 +10,7 @@ import {
   Stack,
   Progress,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
+import classes from "./search.module.css";
 
 const results = [
   {
@@ -66,35 +66,25 @@ const results = [
 const searchData = results.map((result, index) => (
   <>
     <Group
+      className={classes.searchDataGroup}
       radius={5}
       bg={"rgba(0,0,0,0.05)"}
+      gap={0}
       w={"100%"}
       mt={20}
       mb={15}
       p={20}
-      spacing={0}
-      sx={{
-        "&:hover": {
-          transform: "scale(1.01)",
-          background: "rgba(0,0,0,0.5)",
-        },
-        cursor: "pointer",
-        transition: "all 0.2s ease",
-        border: "1px solid rgba(0,0,0,0.15)",
-        borderTop: "3px solid rgba(255,255,255,0.1)",
-        boxShadow: "0 7px 10px 0 rgba(0,0,0,0.05)",
-      }}
     >
       <Image src={result.image} fit="cover" height={165} width={165} alt="" />
       <Divider orientation="vertical" mx={20} />
-      <Stack w={"calc(100% - 206px)"} spacing={0}>
+      <Stack w={"calc(100% - 206px)"} gap={0}>
         <Title order={2} m={0}>
           {result.title}
         </Title>
         <Text lineClamp={3} fz={13}>
           {result.body}
         </Text>
-        <Group position="apart" mt={15} mx={20}>
+        <Group justify="space-between" mt={15} mx={20}>
           <Box>
             <Title order={2}>
               ${result.raised.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}

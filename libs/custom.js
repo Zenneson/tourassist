@@ -92,7 +92,7 @@ export const daysBefore = (dateString) => {
     .toString();
 };
 
-export const formatNumber = (num) => {
+export const addComma = (num) => {
   return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
@@ -139,18 +139,6 @@ export const addAtSymbol = (inputStr, symbol) => {
   } else {
     throw new Error("Input must be a string");
   }
-};
-
-export const calculateFontSize = (text) => {
-  const containerWidthPx = 700;
-  const stringLength = text.length;
-  let fontSizePx = containerWidthPx / stringLength;
-  let fontSizeEm = fontSizePx / 16;
-
-  fontSizeEm = Math.max(fontSizeEm, 1.7);
-  fontSizeEm = Math.min(fontSizeEm, 6);
-
-  return fontSizeEm;
 };
 
 export const useCountdown = (initialValue = 2000, interval = 100) => {
@@ -338,7 +326,8 @@ export const loggedIn = (dark, user) => {
     style: {
       backgroundColor: dark ? "#2e2e2e" : "#fff",
     },
-    title: "Welocme Back",
+    title: "Welcome Back",
+    autoClose: 2500,
     message: `${user.email} is logged in`,
   };
 };

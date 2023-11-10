@@ -5,7 +5,7 @@ import { firestore } from "../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
 import useSWR, { preload } from "swr";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   Avatar,
   Button,
   Box,
@@ -19,6 +19,7 @@ import {
   Stack,
   Tooltip,
   LoadingOverlay,
+  Grid,
 } from "@mantine/core";
 import {
   IconBrandFacebook,
@@ -38,18 +39,17 @@ import Updates from "../comps/trip/updates";
 import MainCarousel from "../comps/trip/maincarousel";
 import TripDescription from "../comps/trip/tripdescription";
 import ModalsItem from "../comps/trip/modalsitem";
-import { formatNumber, daysBefore, sumAmounts } from "../libs/custom";
+import { addComma, daysBefore, sumAmounts } from "../libs/custom";
 import { useUser } from "../libs/context";
+import classes from "./trippage.module.css";
 
 export const getStaticPaths = async () => {
-  // Fetch all documents from the 'trips' collection group
   const queryData = collectionGroup(firestore, "trips");
   let paths = [];
 
   try {
     const querySnapshot = await getDocs(queryData);
     paths = querySnapshot.docs.map((doc) => {
-      // The document ID is used as 'title' in the URL
       const title = doc.id;
       return { params: { title } };
     });
@@ -75,7 +75,6 @@ const fireFetcher = async (url) => {
 
 export const getStaticProps = async ({ params }) => {
   const { title } = params;
-
   preload(title, fireFetcher);
 
   return {
@@ -88,31 +87,45 @@ export const getStaticProps = async ({ params }) => {
 
 export default function Trippage(props) {
   const router = useRouter();
-  const { colorScheme } = useMantineColorScheme();
   const [modalMode, setModalMode] = useState("");
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
   const [dontaionMode, setDonationMode] = useState("donating");
   const [images, setImages] = useState([]);
   const [newUpdate, setNewUpdate] = useState(false);
-  const dark = colorScheme === "dark";
+
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
 
   const { user } = useUser();
   const { title } = router.query;
 
-  const [donations, setDonations] = useSessionStorage({
-    key: "donations",
-    defaultValue: [],
-  });
-
   const [donationAmount, setDonationAmount] = useState(0);
   const [donationSum, setDonationSum] = useState(0);
+  const [spentFunds, setSpentFunds] = useState(0);
   const [donationProgress, setDonationProgress] = useState(0);
   const [donorName, setDonorName] = useState("");
   const [stayAnon, setStayAnon] = useState(false);
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
   const [isMutating, setIsMutating] = useState(false);
+
+  const [funds, setFunds] = useSessionStorage({
+    key: "funds",
+    defaultValue: 0,
+  });
+
+  const [donations, setDonations] = useSessionStorage({
+    key: "donations",
+    defaultValue: [],
+  });
+
+  const [activeTrip, setActiveTrip] = useSessionStorage({
+    key: "activeTrip",
+    defaultValue: [],
+  });
 
   const {
     data: tripData,
@@ -133,6 +146,12 @@ export default function Trippage(props) {
   }, [donations, donationSum, tripData, setDonations, setDonationSum]);
 
   useEffect(() => {
+    if (funds === 0 && donationSum > 0) {
+      setFunds(donationSum - spentFunds);
+    }
+  }, [donationSum, spentFunds, funds, setFunds]);
+
+  useEffect(() => {
     const calculatePercentage = () => {
       return (donationSum / tripData?.costsSum) * 100;
     };
@@ -146,6 +165,10 @@ export default function Trippage(props) {
       setDonationProgress(calculatePercentage);
     }
   }, [donationProgress, donations, donationSum, tripData]);
+
+  useEffect(() => {
+    if (tripData?.spentFunds > 0) setSpentFunds(tripData.spentFunds);
+  }, [tripData]);
 
   useEffect(() => {
     router.prefetch("/thankyou");
@@ -180,7 +203,7 @@ export default function Trippage(props) {
         </Avatar>
         <Box>
           <Text size="sm">{comment.name}</Text>
-          <Text size="xs" color="dimmed">
+          <Text size="xs" c="dimmed">
             {comment.time}
           </Text>
         </Box>
@@ -221,7 +244,9 @@ export default function Trippage(props) {
   };
 
   if ((isLoading || isValidating || isMutating) && modalMode === "") {
-    return <LoadingOverlay visible={true} overlayOpacity={1} />;
+    return (
+      <LoadingOverlay visible={true} overlayProps={{ backgroundOpacity: 1 }} />
+    );
   }
 
   return (
@@ -234,7 +259,7 @@ export default function Trippage(props) {
           pos={"relative"}
           h={"100%"}
           align={"flex-start"}
-          sx={{
+          style={{
             overflow: "visible",
           }}
         >
@@ -247,16 +272,17 @@ export default function Trippage(props) {
             <MainCarousel tripImages={tripData?.images} />
             <Divider
               w={"80%"}
-              color="dark.4"
+              color={dark ? "gray.6" : "dark.6"}
               size={"md"}
               my={tripData?.images?.length > 0 ? 15 : 0}
+              labelPosition="left"
               label={
                 <Title
                   order={3}
                   px={5}
                   mb={tripData?.images?.length === 0 ? 15 : 0}
                   maw={"800px"}
-                  color="gray.6"
+                  color={dark ? "gray.6" : "dark.6"}
                   fw={700}
                 >
                   {tripData?.tripTitle}
@@ -265,121 +291,86 @@ export default function Trippage(props) {
             />
             <Center>
               <Button.Group
-                sx={{
+                style={{
                   borderRadius: 50,
                   overflow: "hidden",
                 }}
               >
                 <Tooltip label="Share on Facebook">
                   <Button
+                    className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
-                    sx={{
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "#A6A7AB",
-                      },
-                    }}
                   >
-                    <IconBrandFacebook size={26} />
+                    <IconBrandFacebook size={20} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share on Instagram">
                   <Button
+                    className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
-                    sx={{
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "#A6A7AB",
-                      },
-                    }}
                   >
-                    <IconBrandInstagram size={26} />
+                    <IconBrandInstagram size={20} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share on Tiktok">
                   <Button
+                    className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
-                    sx={{
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "#A6A7AB",
-                      },
-                    }}
                   >
-                    <IconBrandTiktok size={26} />
+                    <IconBrandTiktok size={20} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share on Twitter">
                   <Button
+                    className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
-                    sx={{
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "#A6A7AB",
-                      },
-                    }}
                   >
-                    <IconBrandTwitter size={26} />
+                    <IconBrandTwitter size={20} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share on Whatsapp">
                   <Button
+                    className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
-                    sx={{
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "#A6A7AB",
-                      },
-                    }}
                   >
-                    <IconBrandWhatsapp size={26} />
+                    <IconBrandWhatsapp size={20} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="HTML Embed Code">
                   <Button
+                    className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
-                    sx={{
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "#A6A7AB",
-                      },
-                    }}
                   >
-                    <IconSourceCode size={26} />
+                    <IconSourceCode size={20} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Share with QR Code">
                   <Button
+                    className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
                     bg={dark ? "dark.9" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
-                    sx={{
-                      "&:hover": {
-                        color: "#fff",
-                        backgroundColor: "#A6A7AB",
-                      },
-                    }}
                   >
-                    <IconQrcode size={26} />
+                    <IconQrcode size={20} />
                   </Button>
                 </Tooltip>
               </Button.Group>
@@ -388,7 +379,7 @@ export default function Trippage(props) {
               className="pagePanel"
               w={"85%"}
               mt={20}
-              mb={30}
+              mb={20}
               py={20}
               px={30}
               fz={14}
@@ -396,6 +387,7 @@ export default function Trippage(props) {
               {user && user.email === tripData?.user && (
                 <Divider
                   labelPosition="right"
+                  color={dark && "gray.6"}
                   w={"100%"}
                   label={
                     // Edit Trip Details
@@ -407,7 +399,7 @@ export default function Trippage(props) {
                       pr={15}
                       variant="subtle"
                       color="gray.6"
-                      leftIcon={
+                      leftSection={
                         <IconPencil
                           size={17}
                           style={{
@@ -427,20 +419,12 @@ export default function Trippage(props) {
             </Box>
             {user?.email === tripData?.user && (
               <Button
+                className={classes.updateModalButton}
                 variant="default"
-                w={"80%"}
+                w={"86%"}
                 radius={25}
-                mb={30}
-                opacity={0.3}
+                mb={20}
                 onClick={showUpdateModal}
-                sx={{
-                  "&:hover": {
-                    opacity: 1,
-                    background: dark
-                      ? "rgba(0,0,0,0.3)"
-                      : "rgba(255,255,255,0.3)",
-                  },
-                }}
               >
                 POST UPDATE
               </Button>
@@ -466,6 +450,8 @@ export default function Trippage(props) {
               <Divider
                 size={"xl"}
                 w={"100%"}
+                color={dark && "gray.6"}
+                labelPosition="left"
                 label={
                   <Flex align={"center"}>
                     <IconQuote size={40} opacity={0.2} />
@@ -526,60 +512,69 @@ export default function Trippage(props) {
               pb={20}
               mb={20}
             >
-              <Group spacing={0} w={"100%"} position="apart">
-                <Stack spacing={0} w={"70%"}>
-                  <Flex align={"flex-end"} mb={-2} gap={3}>
-                    <Title color="green.4" order={1}>
-                      <Flex align={"center"}>
-                        <IconCurrencyDollar
-                          stroke={1}
-                          size={35}
-                          style={{
-                            marginRight: -4,
-                          }}
-                        />
-                        {donationSum}
-                      </Flex>
-                    </Title>
-                    <Text fz={11} mb={8} span>
-                      RAISED
+              <Grid w={"100%"}>
+                <Grid.Col span="auto">
+                  <Stack gap={0} w={"100%"}>
+                    <Flex align={"flex-end"} mb={-2} gap={3}>
+                      <Title color="green.4" order={1}>
+                        <Flex align={"center"}>
+                          <IconCurrencyDollar
+                            stroke={1}
+                            size={35}
+                            style={{
+                              marginRight: -4,
+                            }}
+                          />
+                          {addComma(donationSum)}
+                        </Flex>
+                      </Title>
+                      <Text fz={11} mb={8} span>
+                        RAISED
+                      </Text>
+                    </Flex>
+                    <Divider
+                      w={"90%"}
+                      color={dark ? "gray.6" : "dark.6"}
+                      opacity={0.1}
+                      my={3}
+                    />
+                    <Flex align={"center"} gap={3} pl={5}>
+                      <Title order={4} opacity={0.5}>
+                        <Flex align={"center"}>
+                          <IconCurrencyDollar
+                            stroke={1}
+                            size={25}
+                            style={{
+                              marginRight: -4,
+                            }}
+                          />
+                          {addComma(tripData?.costsSum)}
+                        </Flex>
+                      </Title>
+                      <Text fz={11} span>
+                        GOAL
+                      </Text>
+                    </Flex>
+                  </Stack>
+                </Grid.Col>
+                <Grid.Col span="content">
+                  <Box
+                    w={100}
+                    pt={12}
+                    bg={dark ? "dark.6" : "gray.3"}
+                    style={{
+                      borderRadius: "3px",
+                    }}
+                  >
+                    <Text ta={"center"} fz={10} mb={-7}>
+                      DAYS LEFT
                     </Text>
-                  </Flex>
-                  <Divider w={"90%"} opacity={0.4} my={3} />
-                  <Flex align={"center"} gap={3} pl={5}>
-                    <Title order={4} opacity={0.5}>
-                      <Flex align={"center"}>
-                        <IconCurrencyDollar
-                          stroke={1}
-                          size={25}
-                          style={{
-                            marginRight: -4,
-                          }}
-                        />
-                        {formatNumber(tripData?.costsSum)}
-                      </Flex>
+                    <Title pb={5} ta={"center"} color="gray.7">
+                      {daysBefore(tripData?.travelDate).toString()}
                     </Title>
-                    <Text fz={11} span>
-                      GOAL
-                    </Text>
-                  </Flex>
-                </Stack>
-                <Box
-                  w={"30%"}
-                  pt={12}
-                  bg={dark ? "dark.6" : "gray.3"}
-                  sx={{
-                    borderRadius: "3px",
-                  }}
-                >
-                  <Text ta={"center"} fz={10} mb={-7}>
-                    DAYS LEFT
-                  </Text>
-                  <Title pb={5} ta={"center"} color="gray.7">
-                    {daysBefore(tripData?.travelDate).toString()}
-                  </Title>
-                </Box>
-              </Group>
+                  </Box>
+                </Grid.Col>
+              </Grid>
               <Progress
                 value={donationProgress}
                 color="green.7"
@@ -597,9 +592,10 @@ export default function Trippage(props) {
                   gradient={{ from: "green.3", to: "green.9", deg: 45 }}
                   onClick={() => {
                     router.push("/purchase");
+                    setActiveTrip(tripData);
                   }}
                 >
-                  <Text>USE FUNDS: ${donationSum}</Text>
+                  <Text>USE FUNDS: ${addComma(donationSum - spentFunds)}</Text>
                 </Button>
               )}
               {user?.email !== tripData?.user && (
@@ -657,7 +653,6 @@ export default function Trippage(props) {
         donorName={donorName}
         setDonorName={setDonorName}
         donations={donations}
-        setDonations={setDonations}
         setNewUpdate={setNewUpdate}
         setIsMutating={setIsMutating}
       />

@@ -1,4 +1,11 @@
-import { useMantineColorScheme, Avatar, Grid, Text } from "@mantine/core";
+import {
+  useComputedColorScheme,
+  Avatar,
+  Grid,
+  Text,
+  ActionIcon,
+} from "@mantine/core";
+import classes from "./placeListItem.module.css";
 import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { Draggable } from "react-beautiful-dnd";
 
@@ -12,8 +19,10 @@ export default function PlaceListItem(props) {
     places,
     setPlaces,
   } = props;
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
   const handleRemove = () => {
     setPlaces(places.filter((location) => location.place !== place));
     if (places.length === 1) {
@@ -35,42 +44,16 @@ export default function PlaceListItem(props) {
     <Draggable key={place} draggableId={draggableId} index={index}>
       {(provided) => (
         <Grid
+          className={classes.listGrid}
           {...provided.draggableProps}
           ref={provided.innerRef}
           align="center"
-          sx={{
-            marginTop: "2px",
-            borderRadius: "100px",
-            userSelect: "none",
-            transition: "all 200ms ease",
-            cursor: "pointer",
-            "&:hover": {
-              background: dark
-                ? "rgba(255, 255, 255, 0.05)"
-                : "rgba(0, 0, 0, 0.05)",
-            },
-            "&:active": {
-              transform: "scale(1.02)",
-              backgroundColor: dark ? "#121212" : "#fff",
-              boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
-            },
-          }}
         >
           {places.length > 1 ? (
             <Grid.Col
+              className={classes.listGridItem}
               {...provided.dragHandleProps}
               span="content"
-              sx={{
-                padding: "0 0 2px 10px",
-                opacity: 0.2,
-                cursor: "grab",
-                "&:hover": {
-                  opacity: 1,
-                },
-                "&:active": {
-                  cursor: "grabbing",
-                },
-              }}
             >
               <IconGripVertical size={15} />
             </Grid.Col>
@@ -78,18 +61,13 @@ export default function PlaceListItem(props) {
             <Grid.Col
               {...provided.dragHandleProps}
               span="content"
-              sx={{
+              style={{
                 padding: 0,
                 opacity: 0.2,
               }}
             ></Grid.Col>
           )}
-          <Grid.Col
-            span="content"
-            sx={{
-              padding: "0 0 0 5px",
-            }}
-          >
+          <Grid.Col span="content" pl={10} pr={0}>
             <Avatar
               variant="gradient"
               gradient={
@@ -111,31 +89,19 @@ export default function PlaceListItem(props) {
               {region}
             </Text>
           </Grid.Col>
-          <Grid.Col span="content">
+          <Grid.Col span="content" pr={10}>
             {/* Delete Place Button */}
-            <Avatar
+            <ActionIcon
+              className={classes.deleteItem}
+              size={"xl"}
               radius="xl"
               variant="outline"
               onClick={() => {
                 handleRemove();
               }}
-              styles={({ theme }) => ({
-                root: {
-                  cursor: "pointer",
-                  opacity: 0.35,
-                  transition: "all 200ms ease",
-                  "&:hover": {
-                    opacity: 1,
-                  },
-                },
-                placeholder: {
-                  background: "rgba(255, 0, 0, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0)",
-                },
-              })}
             >
-              <IconTrash size={17} color="rgba(255, 0, 0, 0.8)" />
-            </Avatar>
+              <IconTrash size={18} color="rgba(255, 0, 0, 0.8)" />
+            </ActionIcon>
           </Grid.Col>
         </Grid>
       )}

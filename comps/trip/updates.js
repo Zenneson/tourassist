@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   ActionIcon,
   Box,
   Button,
@@ -37,6 +37,7 @@ import { firestore } from "../../libs/firebase";
 import { useRouter } from "next/router";
 import { notifications } from "@mantine/notifications";
 import UpdateContent from "./updatecontent";
+import classes from "./updates.module.css";
 
 export default function Updates(props) {
   const {
@@ -49,12 +50,15 @@ export default function Updates(props) {
     setIsMutating,
   } = props;
   const [currentUpdateTitle, setCurrentUpdateTtile] = useState("");
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const [deleteModal, setDeleteModal] = useState(false);
-  const dark = colorScheme === "dark";
   const [showall, toggle] = useToggle(["hide", "show"]);
   const router = useRouter();
   const { title } = router.query;
+
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
 
   const updateTrip = () => {
     setModalMode("editUpdate");
@@ -181,7 +185,7 @@ export default function Updates(props) {
         <Flex direction={"column"} w={"10%"}>
           <Stack
             spacing={0}
-            sx={{
+            style={{
               borderRadius: "3px",
               overflow: "hidden",
               boxShadow: `0 2px 5px 0 rgba(0,0,0,0.1)`,
@@ -194,7 +198,7 @@ export default function Updates(props) {
               py={5}
               fw={700}
               fz={8}
-              sx={{
+              style={{
                 zIndex: 1,
                 textTransform: "uppercase",
                 boxShadow: "0 5px 5px 0 rgba(0,0,0,0.1)",
@@ -266,7 +270,7 @@ export default function Updates(props) {
             mx={"5%"}
             py={5}
             pl={20}
-            sx={{
+            style={{
               borderLeft: "2px solid rgba(255,255,255,0.15)",
             }}
           >
@@ -307,6 +311,7 @@ export default function Updates(props) {
         />
       )}
       <Modal
+        className={classes.deleteModal}
         padding={"xl"}
         size={"auto"}
         zIndex={130}
@@ -314,24 +319,12 @@ export default function Updates(props) {
         withCloseButton={false}
         opened={deleteModal}
         onClose={setDeleteModal}
-        styles={(theme) => ({
-          header: {
-            backgroundColor: "transparent",
-          },
-          content: {
-            backgroundColor: dark ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.7)",
-          },
-          overlay: {
-            backgroundColor: dark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)",
-            backdropFilter: "blur(9px)",
-          },
-        })}
       >
         <Text fz={14} ta={"center"} mb={10}>
           Are you sure you want to delete <br />
           <Text
             fw={700}
-            sx={{
+            style={{
               textTransform: "uppercase",
             }}
             span
@@ -340,17 +333,13 @@ export default function Updates(props) {
           </Text>{" "}
           ?
         </Text>
-        <Group grow spacing={10}>
+        <Group grow gap={10}>
           <Button
+            className={classes.deleteUpdate}
             variant="filled"
             size="xs"
             color="green.9"
             opacity={0.2}
-            sx={{
-              "&:hover": {
-                opacity: 1,
-              },
-            }}
             onClick={() => {
               deleteUpdateByTitle();
             }}
@@ -358,15 +347,11 @@ export default function Updates(props) {
             <IconCheck stroke={4} />
           </Button>
           <Button
+            className={classes.deleteUpdate}
             variant="filled"
             size="xs"
             color="red.9"
             opacity={0.2}
-            sx={{
-              "&:hover": {
-                opacity: 1,
-              },
-            }}
             onClick={() => setDeleteModal(false)}
           >
             <IconX stroke={4} />

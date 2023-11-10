@@ -1,26 +1,30 @@
 import { useState, useRef, useEffect } from "react";
 import {
-  useMantineTheme,
+  useComputedColorScheme,
   Avatar,
   Box,
   Center,
-  Flex,
   Divider,
   Group,
+  Stack,
   SegmentedControl,
   Text,
   Table,
   Title,
   ScrollArea,
+  Grid,
 } from "@mantine/core";
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
 import { useUser } from "../../libs/context";
 import { IconReload } from "@tabler/icons-react";
+import classes from "./donations.module.css";
 
 export default function Donations(props) {
-  const { menu, dHeight, donationSectionLimit, donations } = props;
-  const theme = useMantineTheme();
-  const dark = theme.colorScheme === "dark";
+  const { dHeight, donationSectionLimit, donations } = props;
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
   const [sorted, setSorted] = useState("time");
   const donationsRef = useRef();
   const { ref, entry } = useIntersection({
@@ -42,9 +46,8 @@ export default function Donations(props) {
     if (tripData?.donations?.length !== donationsData?.length)
       setDataLoaded(false);
     if (
-      (donationsData?.length !== tripData.donations?.length ||
-        donationsData?.length !== donations?.length) &&
-      menu
+      donationsData?.length !== tripData.donations?.length ||
+      donationsData?.length !== donations?.length
     ) {
       setDonationsData(donations);
     }
@@ -56,7 +59,6 @@ export default function Donations(props) {
       setDataLoaded(true);
     }
   }, [
-    menu,
     donations,
     tripData,
     donationsData,
@@ -75,88 +77,94 @@ export default function Donations(props) {
   const rows = donateOrder?.map((item, index) => {
     if (!item.name || !item.amount) return null;
     return (
-      <tr key={index}>
-        <td>
+      <Table.Tr key={index}>
+        <Table.Td>
           <Group>
             <Avatar
               variant={"filled"}
               radius="xl"
               color={dark ? "dark.5" : "gray.1"}
-              sx={{
+              style={{
                 boxShadow: dark
                   ? "0 2px 4px rgba(0,0,0,0.3)"
                   : "0 2px 4px rgba(0,0,0,0.1)",
               }}
             >
-              <Text color={dark ? "dark.1" : "gray.5"}>
-                {item.name.charAt(0)}
-              </Text>
+              <Text c={dark ? "dark.1" : "gray.5"}>{item.name.charAt(0)}</Text>
             </Avatar>
             <Text size="sm" weight={500}>
               {item.name}
             </Text>
           </Group>
-        </td>
-        <td>
-          <Text size="xs" fw={700} color="dimmed" ta="center">
+        </Table.Td>
+        <Table.Td>
+          <Text size="xs" fw={700} c="dimmed" ta="center">
             ${Math.floor(item.amount)}
           </Text>
-        </td>
-      </tr>
+        </Table.Td>
+      </Table.Tr>
     );
   });
 
   return (
     <Box w="100%" pos={"relative"}>
-      <Flex gap={0} pt={10} px={10}>
-        <Divider
-          w="100%"
-          label={
-            <Title order={6} opacity={0.4} mr={20}>
-              {donationsData?.length} Donation
-              {donationsData?.length !== 1 && "s"}
+      <Grid pt={17} px={10} align="flex-start">
+        <Grid.Col span="auto">
+          <Stack gap={0}>
+            <Divider
+              size={2}
+              mb={5}
+              opacity={dark ? 0.7 : 0.1}
+              color={dark ? "dark.8" : "dark.3"}
+            />
+            <Title order={6} c={"gray.5"}>
+              {donationsData?.length}{" "}
+              <Text span opacity={0.4} tt={"uppercase"} fz={12} fw={700}>
+                Donation
+                {donationsData?.length !== 1 && "s"}
+              </Text>
             </Title>
-          }
-        />
-        {donationsData?.length !== 0 && (
-          <SegmentedControl
-            value={sorted}
-            bg={!dark && "gray.3"}
-            onChange={setSorted}
-            data={[
-              { label: "Most Recent", value: "time" },
-              { label: "Amount", value: "amount" },
-            ]}
-            size="xs"
-            top={-4}
-            right={-16}
-            w={menu ? "50%" : "77%"}
-            sx={{
-              transform: "scale(0.8)",
-            }}
-          />
-        )}
-      </Flex>
+          </Stack>
+        </Grid.Col>
+        <Grid.Col span="content">
+          {donationsData?.length !== 0 && (
+            <SegmentedControl
+              classNames={classes.brightButton}
+              value={sorted}
+              bg={!dark ? "gray.3" : "dark.3"}
+              onChange={setSorted}
+              data={[
+                { label: "Recent", value: "time" },
+                { label: "Amount", value: "amount" },
+              ]}
+              size="xs"
+              top={-4}
+              w={150}
+            />
+          )}
+        </Grid.Col>
+      </Grid>
       <Box
         pos={"absolute"}
         top={0}
         left={0}
         w={"100%"}
         h={"100%"}
-        sx={{
+        style={{
           pointerEvents: "none",
           zIndex: 100,
           borderRadius: 3,
           boxShadow: `${
             entry?.isIntersecting
               ? "none"
-              : theme.colorScheme === "dark"
+              : dark
               ? "rgba(0, 0, 0, 0.7) 0px -15px 7px -5px inset"
               : "rgba(0, 0, 0, 0.25) 0px -10px 7px -5px inset"
           }`,
         }}
       />
       <Box
+        className={classes.donationsScroll}
         p={10}
         pb={20}
         m={0}
@@ -165,28 +173,24 @@ export default function Donations(props) {
         ref={donationsRef}
         component={ScrollArea}
         type="hover"
-        sx={{
+        style={{
+          overflow: "hidden",
           borderRadius: 3,
-          ".mantine-ScrollArea-scrollbar": {
-            opacity: 0.3,
-            width: 8,
-          },
         }}
       >
         <Table
-          verticalSpacing="xs"
-          highlightOnHover
           striped
-          withColumnBorders
-          sx={{
-            borderRadius: 3,
+          highlightOnHover
+          withRowBorders={false}
+          style={{
             overflow: "hidden",
+            borderRadius: 3,
           }}
         >
-          <tbody>{rows?.length !== 0 && rows}</tbody>
+          <Table.Tbody>{rows?.length !== 0 && rows}</Table.Tbody>
         </Table>
         {rows?.length === 0 && (
-          <Text color="dimmed" ta="center" fz={12}>
+          <Text c="dimmed" ta="center" fz={12}>
             {user && user.email === tripData?.user
               ? "Donations will be listed here"
               : "Be the first to donate!"}
@@ -199,7 +203,7 @@ export default function Donations(props) {
             compact
             pr={10}
             my={10}
-            leftIcon={<IconReload size={14} />}
+            leftSection={<IconReload size={14} />}
           >
             Load More
           </Button> */}

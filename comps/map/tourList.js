@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   Drawer,
   Button,
   Divider,
@@ -11,12 +11,15 @@ import {
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons-react";
 import PlaceListItem from "./placeListItem";
+import classes from "./tourList.module.css";
 
 export default function TourList(props) {
   const { listOpened, setListOpened, places, setPlaces } = props;
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
   const router = useRouter();
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
 
   useEffect(() => {
     router.prefetch("/tripplanner");
@@ -47,25 +50,21 @@ export default function TourList(props) {
         }}
       >
         <Drawer
+          classNames={{ content: classes.tourDrawer }}
           zIndex={999}
           opened={listOpened && places.length > 0}
           onClose={() => setListOpened(false)}
           withOverlay={false}
           withCloseButton={false}
           padding="xl"
-          size="xs"
+          size={400}
           opacity={0.95}
-          styles={{
-            drawer: {
-              boxShadow: "0px 0px 5px 0px rgba(0, 0, 0, 0.3)",
-            },
-          }}
         >
           <Divider
             label="Tour Locations"
-            sx={{
-              opacity: 0.4,
-              margin: "63px 0 10px 0",
+            labelPosition="left"
+            style={{
+              margin: "80px 0 15px 0",
             }}
           />
           <Droppable droppableId="places">
@@ -89,39 +88,23 @@ export default function TourList(props) {
           </Droppable>
           <Center>
             <Button
+              className={classes.readyButton}
               size="sm"
               fw={700}
-              mt={30}
+              mt={20}
               fullWidth
               onClick={submitTourList}
-              sx={(theme) => ({
-                transition: "all 200ms ease-in-out",
-                opacity: 0.7,
-                fontWeight: 400,
-                "&:hover": {
-                  opacity: 1,
-                  color: "#fff",
-                  transform: "scale(1.02)",
-                },
-              })}
             >
               READY
             </Button>
           </Center>
           <Button
+            className={classes.closeButton}
             pos={"absolute"}
-            top={77}
+            top={103}
             right={0}
             onClick={() => setListOpened(false)}
             bg={dark ? "dark.5" : "gray.1"}
-            sx={{
-              borderRadius: "3px 0 0 3px",
-              padding: "0 8px",
-              transition: "all 100ms ease-in-out",
-              "&:hover": {
-                background: dark ? "#050506" : "#bbb",
-              },
-            }}
           >
             <IconX
               size={15}

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   BackgroundImage,
   Box,
   Button,
@@ -41,23 +41,18 @@ import {
 import { notifications } from "@mantine/notifications";
 import { updateEditedTrip, removeImageByName } from "../../libs/custom";
 import AvatarEditor from "react-avatar-editor";
+import classes from "./tripContent.module.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function TripContent(props) {
-  let {
-    tripData,
-    images,
-    setImages,
-    modalMode,
-    setModalMode,
-    user,
-    titleRef,
-    setRefresh,
-  } = props;
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  let { tripData, images, setImages, modalMode, setModalMode, user, titleRef } =
+    props;
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
   const [loading, setLoading] = useState(true);
   const [imageUpload, setImageUpload] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
@@ -266,25 +261,17 @@ export default function TripContent(props) {
       ? images.map((image, index) => {
           return (
             <Flex
+              className={classes.tripContentTitle}
               key={index}
               align={"center"}
               gap={10}
               p={10}
-              sx={{
-                borderRadius: 3,
-                cursor: "pointer",
-                ":hover": {
-                  backgroundColor: dark
-                    ? "rgba(255, 255, 255, 0.01)"
-                    : "rgba(0, 0, 0, 0.03)",
-                },
-              }}
             >
               <Title
                 order={6}
                 w={25}
                 ta={"center"}
-                sx={{
+                style={{
                   borderRadius: 5,
                   borderRight: `1px solid ${
                     dark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"
@@ -293,20 +280,16 @@ export default function TripContent(props) {
               >
                 {index + 1}
               </Title>
-              <Text fz={12} w={"100%"} truncate>
+              <Text fz={12} w={"100%"} truncate="end">
                 {image.name}
               </Text>
               <ActionIcon
+                className={classes.trash}
                 size={"sm"}
                 maw={"10%"}
                 variant="subtle"
                 color="red.9"
                 opacity={0.3}
-                sx={{
-                  ":hover": {
-                    opacity: 1,
-                  },
-                }}
                 onClick={() => {
                   setImages(
                     removeImageByName(
@@ -364,13 +347,13 @@ export default function TripContent(props) {
     <>
       {(modalMode === "editTrip" || router.pathname === "/tripplanner") && (
         <>
-          <Group spacing={20} w="100%" grow>
+          <Group gap={20} w="100%" grow>
             <Box>
               {images.length > 0 ? (
                 <>
                   <Box
                     h={300}
-                    sx={{
+                    style={{
                       borderRadius: 3,
                       overflow: "hidden",
                     }}
@@ -387,7 +370,7 @@ export default function TripContent(props) {
                     </Slider>
                   </Box>
                   {images.length > 1 && (
-                    <Group spacing={15} h={40} mt={10} grow>
+                    <Group gap={15} h={40} mt={10} grow>
                       <Button variant="subtle" color="gray" onClick={previous}>
                         <IconChevronLeft size={20} />
                       </Button>
@@ -422,7 +405,7 @@ export default function TripContent(props) {
               >
                 {(props) => (
                   <Button variant="default" size="lg" fullWidth {...props}>
-                    <Group spacing={7}>
+                    <Group gap={7}>
                       <Title order={3}>
                         {images.length === 6 ? "MAX REACHED" : "UPLOAD IMAGE"}
                       </Title>
@@ -432,9 +415,9 @@ export default function TripContent(props) {
                 )}
               </FileButton>
               <Group
-                position="center"
+                justify="center"
                 opacity={0.4}
-                spacing={5}
+                gap={5}
                 fz={11}
                 fs={"italic"}
                 mt={10}
@@ -442,7 +425,7 @@ export default function TripContent(props) {
               >
                 You may drag and drop files into the browser window{" "}
               </Group>
-              <Stack spacing={2}>
+              <Stack gap={2}>
                 {imageItems}
                 {images.length < 6 && (
                   <Badge
@@ -454,7 +437,7 @@ export default function TripContent(props) {
                     ml={"20%"}
                     opacity={dark ? 0.2 : 0.5}
                     mt={5}
-                    sx={{
+                    style={{
                       cursor: "default",
                     }}
                   >
@@ -463,6 +446,7 @@ export default function TripContent(props) {
                 )}
               </Stack>
               <Dropzone.FullScreen
+                className={classes.dropzone}
                 maxFiles={1}
                 onDrop={(file) => {
                   grabImage(file, "dropzone");
@@ -471,26 +455,11 @@ export default function TripContent(props) {
                 accept={IMAGE_MIME_TYPE}
                 ta="center"
                 active={images.length < 6}
-                styles={{
-                  root: {
-                    border: `5px dashed ${
-                      dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)"
-                    } !important`,
-                    background: dark
-                      ? "rgba(0, 0, 0, 0) !important"
-                      : "rgba(255, 255, 255, 0) !important",
-                    ":hover": {
-                      backgroundColor: dark
-                        ? "rgba(0, 0, 0, 0.1) !important"
-                        : "rgba(255, 255, 255, 0.1) !important",
-                    },
-                  },
-                }}
               >
                 <Center h={"calc(100vh - 60px)"}>
                   <Group
-                    position="center"
-                    spacing={5}
+                    justify="center"
+                    gap={5}
                     style={{
                       pointerEvents: "none",
                     }}
@@ -523,40 +492,24 @@ export default function TripContent(props) {
         w={"100%"}
         scrollbarSize={8}
         scrollHideDelay={250}
-        sx={{
+        style={{
           overflow: "hidden",
           borderRadius: "3px",
         }}
       >
         <RichTextEditor
+          classNames={{
+            root: classes.textEditorRoot,
+            toolbar: classes.textEditorToolbar,
+            content: classes.textEditorContent,
+            // root: classes.textEditor,
+          }}
           editor={editor}
           position="relative"
           bg={dark ? "dark.6" : "gray.2"}
           onBlur={() => {
             if (router.pathname === "/tripplanner")
               setTripDesc(editor.getHTML());
-          }}
-          sx={{
-            transition: "border-top 0.2s ease",
-            border: "none",
-            width: "100%",
-            minWidth: "500px",
-            ".mantine-RichTextEditor-toolbar": {
-              background: dark
-                ? "rgba(0, 0, 0, 0.7)"
-                : "rgba(255, 255, 255, 0.7)",
-              borderColor: "rgba(255,255,255,0)",
-            },
-            ".mantine-RichTextEditor-content": {
-              background: "rgba(0, 0, 0, 0)",
-              color: dark ? "dark.9" : "gray.0",
-              minHeight: "250px",
-              "& .ProseMirror": {
-                paddingLeft: "21px",
-                paddingRight: "21px",
-                minHeight: "250px",
-              },
-            },
           }}
         >
           <RichTextEditor.Toolbar sticky>
@@ -579,17 +532,11 @@ export default function TripContent(props) {
               <RichTextEditor.Unlink />
             </RichTextEditor.ControlsGroup>
           </RichTextEditor.Toolbar>
-          <RichTextEditor.Content
-            sx={{
-              "& p": {
-                fontSize: ".9rem",
-              },
-            }}
-          />
+          <RichTextEditor.Content />
         </RichTextEditor>
       </ScrollArea>
       {router.pathname !== "/tripplanner" && (
-        <Group position="right" w={"100%"}>
+        <Group justify="flex-end" w={"100%"}>
           <Button
             variant="default"
             size="md"
@@ -606,7 +553,7 @@ export default function TripContent(props) {
             ref={cropperContainerRef}
             pos={"absolute"}
             top={40}
-            sx={{
+            style={{
               zIndex: 1000,
               opacity: loading ? 0 : 1,
               transition: "opacity 0.2s ease-in-out",
@@ -630,6 +577,7 @@ export default function TripContent(props) {
               }}
             />
             <MantineSlider
+              className={classes.sizeSlider}
               mt={20}
               min={1}
               max={5}
@@ -642,14 +590,6 @@ export default function TripContent(props) {
               showLabelOnHover={false}
               value={scale}
               onChange={setScale}
-              sx={{
-                zIndex: 1000,
-                width: "100%",
-                height: 5,
-                "	.mantine-Slider-thumb": {
-                  border: "none",
-                },
-              }}
             />
             <Group w={"100%"} mt={30} grow>
               {/* Selects NO Cropped Image to Image Slider  */}
@@ -676,8 +616,7 @@ export default function TripContent(props) {
           <LoadingOverlay
             overlayColor={dark ? "dark.7" : "gray.0"}
             visible={processingImage}
-            overlayBlur={0}
-            overlayOpacity={0}
+            overlayProps={{ backgroundOpacity: 0, blur: 0 }}
           />
         </>
       )}

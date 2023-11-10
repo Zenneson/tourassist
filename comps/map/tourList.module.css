@@ -1,0 +1,21 @@
+.tourDrawer {
+	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(26, 27, 30, 0.95));
+}
+
+.readyButton {
+	transition: all 200ms ease-in-out;
+	opacity: 0.7;
+	font-weight: 400;
+	&:hover {
+		opacity: 1;
+		color: #fff;
+		transform: scale(1.02);
+	}
+}
+
+.closeButton {
+	border-radius: 3px 0 0 3px;
+	padding: 0 8px;
+	transition: all 100ms ease-in-out;
+	background-color: light-dark(#bbb, #050506);
+}

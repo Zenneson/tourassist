@@ -6,7 +6,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   Anchor,
   Box,
   Button,
@@ -19,61 +19,43 @@ import {
   Stack,
   Group,
   Checkbox,
-  createStyles,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useToggle, useSessionStorage } from "@mantine/hooks";
+import { useToggle } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconX, IconCheck, IconUserCircle } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { estTimeStamp, loggedIn } from "../libs/custom";
+import { loggedIn } from "../libs/custom";
 import { useUser } from "../libs/context";
-
-const useStyles = createStyles((theme, { floating }) => ({
-  root: {
-    position: "relative",
-  },
-
-  label: {
-    position: "absolute",
-    zIndex: 2,
-    top: 7,
-    left: theme.spacing.sm,
-    pointerEvents: "none",
-    color: theme.colorScheme === "dark" ? "#fff" : "rgba(0,0,0,0.4)",
-    transition: "transform 150ms ease, color 150ms ease, font-size 150ms ease",
-    transform: floating ? `translate(0, -28px)` : "none",
-    fontSize: floating ? theme.fontSizes.xs : theme.fontSizes.sm,
-    fontWeight: floating ? 500 : 400,
-  },
-
-  required: {
-    transition: "opacity 150ms ease",
-    opacity: floating ? 1 : 0,
-  },
-
-  input: {
-    "&::placeholder": {
-      transition: "color 150ms ease",
-      color: !floating ? "transparent" : undefined,
-    },
-  },
-}));
+import classes from "./loginComp.module.css";
 
 export default function LoginComp(props) {
   const { auth, setInfoAdded, setShowLegal } = props;
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [firstNameFocus, setFirstNameFocus] = useState(false);
   const [lastNameFocus, setLastNameFocus] = useState(false);
+
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
   const [firstNameValue, setFirstNameValue] = useState("");
   const [lastNameValue, setLastNameValue] = useState("");
+
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
+
+  const emailFloating = emailFocus || emailValue.length > 0 || undefined;
+  const passFloating = passwordFocus || passValue.length > 0 || undefined;
+  const firstNameFloating =
+    firstNameFocus || firstNameValue.length > 0 || undefined;
+  const lastNameFloating =
+    lastNameFocus || lastNameValue.length > 0 || undefined;
+
   const [passPopOpened, setPassPopOpened] = useState(false);
   const [type, toggle] = useToggle(["login", "sign-up"]);
+
   const router = useRouter();
 
   const { user } = useUser();
@@ -93,7 +75,7 @@ export default function LoginComp(props) {
     return (
       <Text
         color={meets ? "#00E8FC" : "red"}
-        sx={{ display: "flex", alignItems: "center" }}
+        style={{ display: "flex", alignItems: "center" }}
         mt={7}
         size="sm"
       >
@@ -125,20 +107,6 @@ export default function LoginComp(props) {
 
   const strength = getStrength(passValue);
   const color = strength === 100 ? "#00E8FC" : strength > 50 ? "yellow" : "red";
-
-  const { classes: emailClass } = useStyles({
-    floating: emailValue.trim().length !== 0 || emailFocus,
-  });
-  const { classes: passClass } = useStyles({
-    floating: passValue.trim().length !== 0 || passwordFocus,
-  });
-
-  const { classes: firstNameClass } = useStyles({
-    floating: firstNameValue.trim().length !== 0 || firstNameFocus,
-  });
-  const { classes: lastNameClass } = useStyles({
-    floating: lastNameValue.trim().length !== 0 || lastNameFocus,
-  });
 
   const form = useForm({
     initialValues: {
@@ -289,7 +257,7 @@ export default function LoginComp(props) {
                 <Text
                   ml={5}
                   fz={10}
-                  sx={{
+                  style={{
                     textTransform: "uppercase",
                   }}
                 >
@@ -309,26 +277,49 @@ export default function LoginComp(props) {
             {type === "sign-up" && (
               <Group mt={20} grow>
                 <TextInput
-                  required
+                  required={!firstNameFloating}
                   label="First Name"
+                  labelProps={{ "data-floating": firstNameFloating }}
                   placeholder="John"
                   autoComplete="given-name"
-                  classNames={firstNameClass}
                   value={form.values.firstName}
+                  classNames={{
+                    root: classes.root,
+                    input: classes.input,
+                    label: firstNameFloating
+                      ? classes.labelFloating
+                      : classes.label,
+                  }}
                   onChange={(event) => {
                     setFirstNameValue(event.currentTarget.value);
                     form.setFieldValue("firstName", event.currentTarget.value);
                   }}
                   onFocus={() => setFirstNameFocus(true)}
                   onBlur={() => setFirstNameFocus(false)}
+                  style={{
+                    fontSize: firstNameFloating
+                      ? "var(--mantine-font-size-xs)"
+                      : "var(--mantine-font-size-sm)",
+                    fontWeight: firstNameFloating ? 500 : 400,
+                    "--dynamic-placeholder-color": firstNameFloating
+                      ? undefined
+                      : "transparent",
+                  }}
                 />
                 <TextInput
-                  required
+                  required={!lastNameFloating}
                   label="Last Name"
+                  labelProps={{ "data-floating": lastNameFloating }}
                   placeholder="Doe"
                   autoComplete="family-name"
-                  classNames={lastNameClass}
                   value={form.values.lastName}
+                  classNames={{
+                    root: classes.root,
+                    input: classes.input,
+                    label: lastNameFloating
+                      ? classes.labelFloating
+                      : classes.label,
+                  }}
                   onChange={(event) => {
                     setLastNameValue(event.currentTarget.value);
                     form.setFieldValue("lastName", event.currentTarget.value);
@@ -340,12 +331,19 @@ export default function LoginComp(props) {
             )}
             <TextInput
               mt={10}
-              required
+              required={!emailFloating}
               label="Email"
-              placeholder="johndoe@gmail.com"
+              labelProps={{ "data-floating": emailFloating }}
+              placeholder={
+                emailFocus && emailValue === "" ? "johndoe@gmail.com" : ""
+              }
               autoComplete="username"
-              classNames={emailClass}
               value={form.values.email}
+              classNames={{
+                root: classes.root,
+                input: classes.input,
+                label: emailFloating ? classes.labelFloating : classes.label,
+              }}
               onChange={(event) => {
                 setEmailValue(event.currentTarget.value);
                 form.setFieldValue("email", event.currentTarget.value);
@@ -368,12 +366,19 @@ export default function LoginComp(props) {
                   onBlurCapture={() => setPassPopOpened(false)}
                 >
                   <PasswordInput
-                    required
+                    required={!passFloating}
                     label="Password"
+                    labelProps={{ "data-floating": passFloating }}
                     name="password"
                     autoComplete="current-password"
-                    classNames={passClass}
                     value={form.values.password}
+                    classNames={{
+                      root: classes.root,
+                      input: classes.input,
+                      label: passFloating
+                        ? classes.labelFloating
+                        : classes.label,
+                    }}
                     onChange={(event) => {
                       setPassValue(event.currentTarget.value);
                       form.setFieldValue("password", event.currentTarget.value);
@@ -405,13 +410,17 @@ export default function LoginComp(props) {
               </Popover.Dropdown>
             </Popover>
             {type === "sign-up" && (
-              <Group position={"left"}>
+              <Group justify="flex-start">
                 <Checkbox
+                  classNames={{
+                    label: classes.termsCheckbox,
+                    input: classes.termsCheckbox,
+                  }}
                   label={
                     <>
                       I accept{" "}
                       <Anchor
-                        color="blue.5"
+                        c="blue.5"
                         onClick={(e) => {
                           e.preventDefault();
                           setShowLegal(true);
@@ -427,17 +436,14 @@ export default function LoginComp(props) {
                   onChange={(event) =>
                     form.setFieldValue("terms", event.currentTarget.checked)
                   }
-                  sx={{
-                    ".mantine-Checkbox-label, .mantine-Checkbox-input": {
-                      cursor: "pointer",
-                    },
-                  }}
                 />
               </Group>
             )}
           </Stack>
           <Group
-            position={router.pathname !== "/tripplanner" ? "apart" : "right"}
+            justify={
+              router.pathname !== "/tripplanner" ? "space-between" : "flex-end"
+            }
             mt={router.pathname !== "/tripplanner" ? "25px" : "-20px"}
           >
             {router.pathname !== "/tripplanner" && (
@@ -457,11 +463,13 @@ export default function LoginComp(props) {
               size={"sm"}
               mt={0}
               fw={700}
-              uppercase={true}
               variant="light"
               bg={dark ? "dark.5" : "gray.2"}
               c="gray.5"
-              sx={{ color: "rgba(255,255,255,0.3)" }}
+              style={{
+                color: "rgba(255,255,255,0.3)",
+                textTransform: "uppercase",
+              }}
               type="submit"
             >
               {type === "sign-up" ? "Sign up" : "Login"}

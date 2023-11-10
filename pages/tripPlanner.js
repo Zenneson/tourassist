@@ -16,7 +16,7 @@ import {
   IconRefreshDot,
 } from "@tabler/icons-react";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   useMantineTheme,
   Autocomplete,
   BackgroundImage,
@@ -52,12 +52,15 @@ import { dateFormat, dateId, saveToDB } from "../libs/custom";
 import { useUser } from "../libs/context";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
+import classes from "./tripplanner.module.css";
 
 export default function TripPlannerPage(props) {
   let { auth, mapLoaded } = props;
   const theme = useMantineTheme();
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const travelersHandlerRef = useRef(null);
@@ -413,10 +416,10 @@ export default function TripPlannerPage(props) {
               pos={"relative"}
               className="pagePanel"
             >
-              <Group pt={10} pl={10} position="apart">
+              <Group pt={10} pl={10} justify="space-between">
                 <Box
                   pl={10}
-                  sx={{
+                  style={{
                     borderLeft: "2px solid rgba(137, 137, 137, 0.4)",
                   }}
                 >
@@ -454,9 +457,9 @@ export default function TripPlannerPage(props) {
               </Group>
               {!place.returning &&
                 Object.keys(place.costs).map((cost, subIndex) => (
-                  <Group position="right" key={subIndex} spacing={10} p={10}>
+                  <Group justify="flex-end" key={subIndex} gap={10} p={10}>
                     <Text
-                      sx={{
+                      style={{
                         textTransform: "uppercase",
                         fontStyle: "italic",
                         fontSize: 12,
@@ -466,6 +469,7 @@ export default function TripPlannerPage(props) {
                     </Text>
                     <Divider my="xs" w={"50%"} variant="dotted" />
                     <NumberInput
+                      className={classes.costInput}
                       id="cost"
                       tabIndex={tabIndexCounter++}
                       min={0}
@@ -490,26 +494,12 @@ export default function TripPlannerPage(props) {
                           ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                           : 0
                       }
-                      sx={{
-                        ".mantine-NumberInput-input": {
-                          textAlign: "right",
-                          fontWeight: 700,
-                        },
-                      }}
                     />
                     <ActionIcon
+                      className={classes.removeCostButton}
                       py={20}
                       bg={dark ? "dark.5" : "gray.1"}
                       color={dark ? "gray.0" : "gray.5"}
-                      sx={{
-                        transition: "all 150ms ease-in-out",
-                        "&:hover": {
-                          background: dark
-                            ? "rgba(255,0,0,0.1)"
-                            : "rgba(255,0,0,0.7)",
-                          color: !dark && "white",
-                        },
-                      }}
                       onClick={() => {
                         removeCost(index, cost);
                       }}
@@ -519,9 +509,9 @@ export default function TripPlannerPage(props) {
                   </Group>
                 ))}
               {place.returning && (
-                <Group position="right" spacing={10} p={10}>
+                <Group justify="flex-end" gap={10} p={10}>
                   <Text
-                    sx={{
+                    style={{
                       textTransform: "uppercase",
                       fontStyle: "italic",
                       fontSize: 12,
@@ -531,6 +521,7 @@ export default function TripPlannerPage(props) {
                   </Text>
                   <Divider my="xs" w={"50%"} variant="dotted" />
                   <NumberInput
+                    className={classes.costInput}
                     id="cost"
                     tabIndex={tabIndexCounter++}
                     min={0}
@@ -555,19 +546,14 @@ export default function TripPlannerPage(props) {
                         ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         : 0
                     }
-                    sx={{
-                      ".mantine-NumberInput-input": {
-                        textAlign: "right",
-                        fontWeight: 700,
-                      },
-                    }}
                   />
                 </Group>
               )}
               {!place.returning && (
-                <Group position="right" spacing={10} p={10}>
+                <Group justify="flex-end" gap={10} p={10}>
                   <Divider my="xs" w={"65%"} opacity={0.3} />
                   <Popover
+                    className={classes.newCostPopover}
                     trapFocus
                     position="left"
                     withArrow={true}
@@ -575,27 +561,20 @@ export default function TripPlannerPage(props) {
                     onClose={() =>
                       setPopoverOpened({ ...popoverOpened, [index]: false })
                     }
-                    styles={{
-                      dropdown: { padding: 3 },
-                    }}
                   >
                     <Popover.Target>
                       <Button
+                        className={classes.brightenButton}
                         size="xs"
                         variant="default"
                         opacity={0.2}
-                        leftIcon={<IconRowInsertBottom size={17} />}
+                        leftSection={<IconRowInsertBottom size={17} />}
                         onClick={() =>
                           setPopoverOpened({
                             ...popoverOpened,
                             [index]: true,
                           })
                         }
-                        sx={{
-                          "&:hover": {
-                            opacity: 1,
-                          },
-                        }}
                       >
                         NEW COST
                       </Button>
@@ -631,20 +610,16 @@ export default function TripPlannerPage(props) {
                 </Group>
               )}
               {index === 0 && (
-                <Group pos={"absolute"} spacing={10} top={0} left={-50}>
+                <Group pos={"absolute"} gap={10} top={0} left={-50}>
                   <Tooltip label="Reset form fields">
                     <ActionIcon
+                      className={classes.brightenButton}
                       variant="Transparent"
                       size="xl"
                       opacity={0.4}
                       onMouseEnter={() => setResetBtnPop(true)}
                       onMouseLeave={() => setResetBtnPop(false)}
                       onClick={handleReset}
-                      sx={{
-                        "&:hover": {
-                          opacity: 1,
-                        },
-                      }}
                     >
                       <IconRefreshDot size={40} />
                     </ActionIcon>
@@ -669,6 +644,7 @@ export default function TripPlannerPage(props) {
 
     return (
       <NumberInput
+        className={classes.totalCostInput}
         ref={sumRef}
         id="totalId"
         min={0}
@@ -687,13 +663,6 @@ export default function TripPlannerPage(props) {
             ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             : 0
         }
-        sx={{
-          ".mantine-NumberInput-input": {
-            textAlign: "right",
-            fontWeight: 700,
-            paddingRight: 50,
-          },
-        }}
       />
     );
   };
@@ -810,6 +779,7 @@ export default function TripPlannerPage(props) {
           maw={1200}
           mb={20}
           opacity={0.4}
+          labelPosition="left"
           label={
             <Flex>
               <IconChevronsRight size={20} />
@@ -879,7 +849,8 @@ export default function TripPlannerPage(props) {
                       p={20}
                       gap={10}
                     >
-                      <Autocomplete
+                      {/* <Autocomplete
+                        className={classes.depatureAutoComplete}
                         size="sm"
                         w={"100%"}
                         defaultValue=""
@@ -897,19 +868,12 @@ export default function TripPlannerPage(props) {
                             setStartLocale("");
                           }
                         }}
-                        sx={{
-                          "& .mantine-Autocomplete-input": {
-                            "&::placeholder": {
-                              fontWeight: 400,
-                            },
-                          },
-                        }}
-                      />
-                      <Group my={15} grow spacing={0}>
+                      /> */}
+                      <Group my={15} grow gap={0}>
                         <Group
-                          spacing={0}
-                          position="center"
-                          sx={{
+                          gap={0}
+                          justify="center"
+                          style={{
                             borderRight: `2px solid ${
                               dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
                             }`,
@@ -927,7 +891,7 @@ export default function TripPlannerPage(props) {
                               Travelers
                             </Text>
                           </Flex>
-                          <Group spacing={5} w={"50%"} grow>
+                          <Group gap={5} w={"50%"} grow>
                             {/* Decrease Traveler Count  */}
                             <Button
                               fz={20}
@@ -943,6 +907,7 @@ export default function TripPlannerPage(props) {
                               -
                             </Button>
                             <NumberInput
+                              className={classes.travelersInput}
                               hideControls
                               variant="filled"
                               type="number"
@@ -951,14 +916,6 @@ export default function TripPlannerPage(props) {
                               handlersRef={travelersHandlerRef}
                               defaultValue={1}
                               min={1}
-                              styles={{
-                                input: {
-                                  textAlign: "center",
-                                  fontWeight: 700,
-                                  fontSize: "1.1rem",
-                                  padding: 0,
-                                },
-                              }}
                             />
                             {/* Increase Traveler Count  */}
                             <Button
@@ -975,7 +932,7 @@ export default function TripPlannerPage(props) {
                             </Button>
                           </Group>
                         </Group>
-                        <Group pos={"relative"} position="center">
+                        <Group pos={"relative"} justify="center">
                           <Switch
                             label={
                               <Flex align={"center"}>
@@ -1007,7 +964,7 @@ export default function TripPlannerPage(props) {
                       </Group>
                       <Box>
                         <Box
-                          sx={{
+                          style={{
                             borderRadius: "3px",
                           }}
                         >
@@ -1015,11 +972,11 @@ export default function TripPlannerPage(props) {
                             align="center"
                             justify="center"
                             pos={"relative"}
-                            spacing={0}
+                            gap={0}
                             p={20}
                             h={210}
                             bg={dark ? "dark.5" : "gray.1"}
-                            sx={{
+                            style={{
                               overflowX: "auto",
                               borderRadius: "3px",
                             }}
@@ -1028,7 +985,7 @@ export default function TripPlannerPage(props) {
                               pos={"absolute"}
                               w={"100%"}
                               h={"100%"}
-                              sx={{
+                              style={{
                                 zIndex: 0,
                               }}
                               opacity={
@@ -1047,12 +1004,12 @@ export default function TripPlannerPage(props) {
                               }
                             />
                             <Box
-                              sx={{
+                              style={{
                                 zIndex: 1,
                               }}
                             >
                               <Box>
-                                <Group spacing={7} mb={15}>
+                                <Group gap={7} mb={15}>
                                   <IconMapPin size={20} color="gray" />
                                   {startLocale && (
                                     <>
@@ -1067,7 +1024,7 @@ export default function TripPlannerPage(props) {
                                     </>
                                   )}
                                   {placeData.map((place, index) => (
-                                    <Group key={index} spacing={5}>
+                                    <Group key={index} gap={5}>
                                       <Badge
                                         variant="outline"
                                         color={dark ? "gray" : "dark.9"}
@@ -1102,7 +1059,7 @@ export default function TripPlannerPage(props) {
                               </Box>
                               {travelDates !== null && (
                                 <Flex align={"center"} justify={"center"}>
-                                  <Group spacing={7} fz={14} fw={700}>
+                                  <Group gap={7} fz={14} fw={700}>
                                     <IconCalendarEvent
                                       size={20}
                                       opacity={0.4}
@@ -1115,7 +1072,7 @@ export default function TripPlannerPage(props) {
                                     mr={7}
                                     opacity={0.7}
                                   />
-                                  <Group spacing={5} fz={12}>
+                                  <Group gap={5} fz={12}>
                                     <Title color={"red.9"} order={3}>
                                       •
                                     </Title>
@@ -1127,7 +1084,7 @@ export default function TripPlannerPage(props) {
                                       gap={7}
                                       mt={-4}
                                       ml={-7}
-                                      sx={{
+                                      style={{
                                         transform: "scale(0.85)",
                                       }}
                                     >
@@ -1140,8 +1097,8 @@ export default function TripPlannerPage(props) {
                                         fz={9}
                                         lh={1}
                                         ta={"center"}
-                                        color="gray.7"
-                                        sx={{
+                                        c="gray.7"
+                                        style={{
                                           textTransform: "uppercase",
                                         }}
                                       >
@@ -1164,7 +1121,7 @@ export default function TripPlannerPage(props) {
                       </Box>
                     </Flex>
                     <DatePicker
-                      className="pagePanel"
+                      className={`pagePanel ${classes.datePicker}`}
                       allowDeselect
                       firstDayOfWeek={0}
                       defaultDate={travelDates || dayjs().add(7, "day")}
@@ -1210,41 +1167,6 @@ export default function TripPlannerPage(props) {
                           </Indicator>
                         );
                       }}
-                      sx={{
-                        ".mantine-DatePicker-day[data-disabled]": {
-                          color: dark
-                            ? "rgba(36, 36, 36, 0.4)"
-                            : "rgba(233, 233, 233, 0.5)",
-                        },
-                        ".mantine-DatePicker-day[data-weekend]": {
-                          color: dark
-                            ? theme.colors.blue[9]
-                            : theme.colors.blue[4],
-                        },
-                        ".mantine-DatePicker-day[data-selected]": {
-                          textShadow: dark
-                            ? "0 2px 3px rgba(0,0,0,0.2)"
-                            : "0 2px 3px rgba(0,0,0,0.1)",
-                          border: `1px solid ${
-                            dark ? theme.colors.dark[4] : theme.colors.gray[3]
-                          }`,
-                          borderTop: `3px solid ${
-                            dark ? theme.colors.blue[9] : theme.colors.blue[4]
-                          }`,
-                          backgroundColor: dark
-                            ? theme.colors.dark[2]
-                            : theme.colors.gray[0],
-                          color: dark
-                            ? theme.colors.gray[0]
-                            : theme.colors.blue[4],
-                          transition: "all 0.15s ease-in-out",
-                          borderRadius: "0 0 3px 3px",
-                          fontSize: "1.6rem",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                          },
-                        },
-                      }}
                     />
                   </Flex>
                 </Flex>
@@ -1265,27 +1187,16 @@ export default function TripPlannerPage(props) {
                   maw={950}
                   p={30}
                   align="center"
-                  spacing={20}
+                  gap={20}
                 >
                   <Input
+                    className={classes.tripTitleInput}
                     ref={titleRef}
                     size={"xl"}
                     w="100%"
                     placeholder="Title..."
                     value={tripTitle}
                     onChange={(e) => setTripTitle(e.target.value)}
-                    sx={{
-                      ".mantine-Input-input": {
-                        background: dark ? "#101113" : "#E9ECEF",
-                        "&:focus": {
-                          background: dark ? "#383a3f" : "#f1f3f5",
-                        },
-                        "&::placeholder": {
-                          fontWeight: 700,
-                          fontStyle: "italic",
-                        },
-                      },
-                    }}
                   />
                   <TripContent
                     titleRef={titleRef}
@@ -1318,7 +1229,7 @@ export default function TripPlannerPage(props) {
                     <Center mt={user ? 20 : 0}>
                       <Button.Group w={"100%"}>
                         <Button
-                          leftIcon={
+                          leftSection={
                             <IconBuildingBank size={20} opacity={0.5} />
                           }
                           variant="filled"
@@ -1328,22 +1239,18 @@ export default function TripPlannerPage(props) {
                           <Title order={4}>ADD BANKING INFORMATION</Title>
                         </Button>
                         <Button
+                          className={classes.brightenButton}
                           variant="filled"
                           h={50}
                           w={"20%"}
                           opacity={0.8}
-                          sx={{
-                            "&:hover": {
-                              opacity: 1,
-                            },
-                          }}
                         >
                           <Title fz={10}>ADD LATER</Title>
                         </Button>
                       </Button.Group>
                     </Center>
                     <Divider w={"100%"} my={5} opacity={0.3} />
-                    <Group spacing={0}>
+                    <Group gap={0}>
                       <Box w={"80%"}>
                         <Text fw={700} fz={12}>
                           Banking Info is needed to disburse raised funds.
@@ -1378,7 +1285,7 @@ export default function TripPlannerPage(props) {
             <Stepper
               active={active}
               onStepClick={setActive}
-              iconPosition="right"
+              iconjustify="flex-end"
               orientation="vertical"
               allowNextStepsSelect={false}
               miw={205}
@@ -1412,8 +1319,9 @@ export default function TripPlannerPage(props) {
                   opacity={0.5}
                   size={"xs"}
                   variant="solid"
+                  labelPosition="left"
                   label={"Total Cost"}
-                  labelPosition="center"
+                  labeljustify="center"
                 />
                 <SumInput />
               </>

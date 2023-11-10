@@ -28,12 +28,7 @@ export function RouterTransition(props) {
 
   return (
     <>
-      <NavigationProgress
-        zIndex={9999}
-        autoReset={true}
-        size={"sm"}
-        color={"#219cee"}
-      />
+      <NavigationProgress zIndex={9999} size={"sm"} color={"#219cee"} />
     </>
   );
 }

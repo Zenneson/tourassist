@@ -73,7 +73,7 @@ export default function Contact() {
             {...form.getInputProps("message")}
           />
 
-          <Group position="right" mt="xl">
+          <Group justify="flex-end" mt="xl">
             <Button type="submit" size="sm" px={40} variant="outline">
               <Title order={3}>SEND</Title>
             </Button>

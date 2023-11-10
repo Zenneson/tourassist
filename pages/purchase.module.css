@@ -1,0 +1,24 @@
+.accordion .mantine-Accordion-item {
+	z-index: 0;
+	border-radius: 3px;
+	position: relative;
+	box-shadow: var(--mantine-shadow-xs);
+	background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
+	&:hover {
+		background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+	}
+}
+
+.accordion .mantine-Accordion-item[data-active] {
+	z-index: 1;
+	transform: scale(1.05);
+	border: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-8));
+	background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+	box-shadow: var(--mantine-shadow-sm);
+}
+
+.accordion .mantine-Accordion-panel {
+	z-index: 0;
+	border-radius: 3px;
+	background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+}

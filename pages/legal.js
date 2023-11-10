@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   useMantineTheme,
-  createStyles,
   Box,
   Button,
   Text,
@@ -14,45 +13,7 @@ import {
   SegmentedControl,
 } from "@mantine/core";
 import { IconChevronsRight } from "@tabler/icons-react";
-
-const useStyles = createStyles((theme) => ({
-  link: {
-    ...theme.fn.focusStyles(),
-    borderRadius: theme.radius.sm,
-    display: "block",
-    textDecoration: "none",
-    lineHeight: "2.4rem",
-    fontSize: theme.fontSizes.sm,
-    height: "2.4rem",
-    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-
-    "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
-    },
-  },
-
-  linkActive: {
-    fontWeight: 700,
-    color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 7 : 4],
-  },
-
-  links: {
-    position: "relative",
-  },
-
-  indicator: {
-    color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 7 : 4],
-    transition: "transform 150ms ease",
-    position: "absolute",
-    top: "11px",
-    left: "-20px",
-  },
-}));
+import classes from "./legal.module.css";
 
 export default function Legal() {
   const theme = useMantineTheme();
@@ -60,9 +21,9 @@ export default function Legal() {
   const [active, setActive] = useState(0);
   const [highlighted, setHighlighted] = useState(0);
   const [scroll, setScroll] = useState(false);
-  const { classes, cx } = useStyles();
 
   const router = useRouter();
+  const cx = (...classNames) => classNames.filter(Boolean).join(" ");
 
   useEffect(() => {
     router.prefetch("/help");
@@ -150,10 +111,10 @@ export default function Legal() {
       }}
       key={index}
       className={cx(classes.link, { [classes.linkActive]: active === index })}
-      sx={(theme) => ({
+      style={{
         cursor: "pointer",
         paddingLeft: "10px",
-      })}
+      }}
     >
       {term.label}
     </Box>
@@ -460,7 +421,7 @@ export default function Legal() {
       mb={10}
       key={index}
       ref={termsectionsRefs[index]}
-      sx={{
+      style={{
         scrollMarginTop: "188px",
       }}
     >
@@ -519,7 +480,7 @@ export default function Legal() {
               scrollToSection(e);
             }}
             ml={-60}
-            sx={{
+            style={{
               transform: "scale(.75)",
             }}
             data={[
@@ -547,7 +508,7 @@ export default function Legal() {
             Last Updated: April 30, 2023
           </Text>
           <Box className="pagePanel" w={"100%"} mt={10} p={20}>
-            <Group spacing={30}>
+            <Group gap={30}>
               <Text w={"80%"} fz={12}>
                 {linkState === "terms"
                   ? `Welcome to Tourassist, a premier crowdfunding platform
@@ -567,7 +528,7 @@ export default function Legal() {
                   {/* Go to Help Page */}
                   <Button
                     variant="default"
-                    compact
+                    size="compact-md"
                     fz={10}
                     onClick={() => {
                       router.push("/help");
@@ -578,7 +539,7 @@ export default function Legal() {
                   {/* Go to Contact Page */}
                   <Button
                     variant="default"
-                    compact
+                    size="compact-md"
                     fz={10}
                     onClick={() => {
                       router.push("/contact");

@@ -1,0 +1,10 @@
+.searchModal .mantine-Modal-overlay {
+	background-color: light-dark(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5));
+	backdrop-filter: blur(9px);
+}
+
+.textInput .mantine-TextInput-input {
+	&::placeholder {
+		font-style: italic;
+	}
+}

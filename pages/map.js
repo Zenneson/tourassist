@@ -70,7 +70,10 @@ export default function Map(props) {
         searchOpened={props.searchOpened}
         dropDownOpened={props.dropDownOpened}
         mapLoaded={props.mapLoaded}
+        mainMenuOpened={props.mainMenuOpened}
         setMainMenuOpened={props.setMainMenuOpened}
+        panelShow={props.panelShow}
+        setPanelShow={props.setPanelShow}
         setMapLoaded={props.setMapLoaded}
       />
     </>

@@ -1,0 +1,30 @@
+.link {
+	border-radius: var(--mantine-radius-sm);
+	display: block;
+	text-decoration: none;
+	line-height: 2.4rem;
+	font-size: var(--mantine-font-size-sm);
+	height: 2.4rem;
+	color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
+
+	&:hover {
+		background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+	}
+}
+
+.linkActive {
+	font-weight: 700;
+	color: light-dark(var(--mantine-color-blue-4), var(--mantine-color-blue-7));
+}
+
+.links {
+	position: relative;
+}
+
+.indicator {
+	color: light-dark(var(--mantine-color-blue-4), var(--mantine-color-blue-7));
+	transition: transform 150ms ease;
+	position: absolute;
+	top: 11px;
+	left: -20px;
+}

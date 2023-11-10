@@ -1,0 +1,18 @@
+.accountPanelInput {
+	background: light-dark(rgb(255, 255, 255), rgb(15, 17, 20));
+	box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0));
+}
+
+.toolTip {
+	background: light-dark(#fff, #141517);
+	color: light-dark(#141517, #fff);
+	border: 1px solid light-dark(#ececec, #1c1c1c);
+}
+
+.changePassPopover .mantine-Popover-dropdown {
+	border: 1px solid light-dark(#ececec, #1c1c1c);
+}
+
+.changePassButton .mantine-Button-root:hover {
+	background: light-dark(transparent, #909296);
+}

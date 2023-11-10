@@ -1,0 +1,171 @@
+.popup > div:nth-child(2) {
+	/* Popup body */
+	max-width: 20rem;
+	font-family: Montserrat;
+	cursor: pointer;
+	background-color: light-dark(rgb(247, 249, 250), rgb(10, 11, 13));
+	color: light-dark(rgb(10, 11, 13), rgb(247, 249, 250));
+	border-radius: 3px;
+	padding: 0;
+}
+
+.popup > div:nth-child(1) {
+	/* Popup tip */
+	border-top-color: light-dark(rgb(247, 249, 250), rgb(10, 11, 13));
+}
+
+.popupMenu {
+	font-size: 1rem;
+	text-transform: uppercase;
+	font-weight: 700;
+	padding-bottom: 10px;
+	margin: 0 5px;
+}
+
+.popupMenuBtn {
+	font-weight: 400;
+	color: light-dark(rgb(10, 11, 13), rgb(247, 249, 250));
+}
+
+.destinationModal {
+	background-color: transparent;
+}
+
+.destinationModalContent {
+	background-color: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.9));
+}
+
+.destinationModalOverlay {
+	background-color: light-dark(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.5));
+	backdrop-filter: blur(9px);
+}
+
+.loactionDrawer {
+	pointer-events: none;
+	box-shadow: none;
+	overflow: hidden;
+	background-color: light-dark(rgba(248, 249, 250, 0.8), rgba(26, 27, 30, 0.8));
+}
+
+.placeTitle {
+	text-transform: uppercase;
+}
+
+.countryAutoCompleteOption,
+.placeAutoCompleteOption {
+	&:hover {
+		color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));
+		font-weight: 700;
+		border-radius: 0;
+	}
+
+	&[data-combobox-selected="true"] {
+		box-shadow: 0 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+		background-color: light-dark(rgba(11, 12, 13, 0.05), rgba(248, 249, 250, 0.05));
+		color: light-dark(rgb(11, 12, 13), rgb(248, 249, 250));
+	}
+}
+
+.countryAutoCompleteDropdown {
+	border-radius: 25px;
+	background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(11, 12, 13, 0.9));
+}
+
+.countryAutoCompleteOption {
+	border-radius: 17px;
+}
+
+.placeAutoCompleteDropdown {
+	border-radius: 5px;
+	background-color: light-dark(rgba(248, 249, 250, 1), rgba(11, 12, 13, 1));
+}
+
+.placeAutoCompleteOption {
+	border-radius: 5px;
+}
+
+.topCitiesLink {
+	transition: all 200ms ease-in-out;
+	background: light-dark(rgba(248, 249, 250, 0.7), rgba(14, 15, 18, 0.8));
+	&:hover {
+		background: light-dark(rgba(248, 249, 250, 1), rgba(14, 15, 18, 1));
+		transform: scale(1.05) translateX(7px);
+	}
+}
+
+.clearListButton {
+	opacity: 0.5;
+	&:hover {
+		opacity: 1;
+	}
+}
+
+.tourListButton {
+	position: absolute;
+	top: 120px;
+	padding: 0 8px;
+	z-index: 120;
+	opacity: 1;
+	border-radius: 0 3px 3px 0;
+	transition: left 100ms ease !important;
+	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(26, 27, 30, 0.95));
+	border-top: 1px solid light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
+	border-right: 1px solid light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
+	border-bottom: 1px solid light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
+	&:hover {
+		padding-left: 12px;
+	}
+}
+
+.miniMapPin {
+	transition: all 100ms ease-in-out;
+	cursor: pointer;
+	opacity: 0.7;
+	transform: scale(1.7);
+	color: light-dark(#121d47, #99f8ff);
+	&:hover {
+		opacity: 1;
+		transform: scale(2);
+	}
+}
+
+.toolTip {
+	background: light-dark(#fff, #141517);
+	color: light-dark(#141517, #fff);
+	border: 1px solid light-dark(#ececec, #1c1c1c);
+}
+
+.select {
+	outline: none;
+	border: none;
+}
+
+.chooseLocationBox {
+	pointer-events: all;
+	border-radius: 5px;
+	border-top: 2px solid light-dark(rgba(153, 153, 153, 0.2), rgba(204, 204, 204, 0.2));
+	box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0));
+}
+
+.locationBtns {
+	font-weight: 100;
+	background: light-dark(rgba(248, 249, 250, 0.7), rgba(14, 15, 18, 0.9));
+	color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
+
+	&:hover {
+		color: light-dark(rgba(14, 15, 18, 1), rgba(248, 249, 250, 1));
+	}
+}
+
+.closeBtn {
+	background: light-dark(#00e8fc, #0d3f82);
+	transition: all 200ms ease-in-out;
+	pointer-events: all;
+	font-weight: 700;
+	opacity: 0.7;
+	&:hover {
+		opacity: 1;
+		color: #fff;
+		transform: scale(1.02);
+	}
+}

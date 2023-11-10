@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { BackgroundImage, Box, Button, Center, Group } from "@mantine/core";
+import classes from "./maincarousel.module.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -67,11 +68,12 @@ export default function MainCarousel(props) {
 
   return (
     tripImages?.length > 0 && (
-      <Group spacing={0} w={tripImages?.length > 1 ? "auto" : "650px"} h={500}>
+      <Group gap={0} w={tripImages?.length > 1 ? "auto" : "650px"} h={500}>
         <Center>
           {tripImages?.length > 1 && (
             // Previous Slider Button
             <Button
+              className={classes.prevSliderButton}
               h={490}
               mb={7}
               radius={"3px 0 0 3px"}
@@ -80,13 +82,6 @@ export default function MainCarousel(props) {
               color={"dark.4"}
               p={0}
               w={"5%"}
-              sx={{
-                border: "none",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  transform: "scale(1.2)",
-                },
-              }}
             >
               <IconChevronLeft size={50} />
             </Button>
@@ -105,6 +100,7 @@ export default function MainCarousel(props) {
           {tripImages?.length > 1 && (
             // Next Slider Button
             <Button
+              className={classes.nextSliderButton}
               h={490}
               mb={7}
               radius={"3px 0 0 3px"}
@@ -113,13 +109,6 @@ export default function MainCarousel(props) {
               color={"dark.4"}
               p={0}
               w={"5%"}
-              sx={{
-                border: "none",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  transform: "scale(1.2)",
-                },
-              }}
             >
               <IconChevronRight size={50} />
             </Button>

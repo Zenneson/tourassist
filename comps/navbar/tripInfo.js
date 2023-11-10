@@ -3,17 +3,19 @@ import { useRouter } from "next/router";
 import {
   IconAppWindow,
   IconCurrencyDollar,
+  IconChevronDown,
   IconSlash,
 } from "@tabler/icons-react";
 import { useSessionStorage } from "@mantine/hooks";
 import {
+  addComma,
   daysBefore,
   sumAmounts,
   parseCustomDate,
   formatDateFullMonth,
 } from "../../libs/custom";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   Box,
   Button,
   Center,
@@ -28,7 +30,6 @@ import {
 } from "@mantine/core";
 import { Bar } from "react-chartjs-2";
 import Donations from "../trip/donations";
-import { useUser } from "../../libs/context";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -37,27 +38,31 @@ import {
   BarElement,
   Tooltip,
 } from "chart.js";
+import classes from "./tripInfo.module.css";
 
-export default function Money(props) {
+export default function TripInfo(props) {
   const { allTrips, setMainMenuOpened, setPanelShow, setDropDownOpened } =
     props;
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
+
   const router = useRouter();
 
   const [currentTrip, setCurrentTrip] = useState(allTrips[0] || undefined);
+  const [donationSum, setDonationSum] = useState(0);
+  const [spentFunds, setSpentFunds] = useState(0);
 
   const [donations, setDonations] = useSessionStorage({
     key: "donations",
     defaultValue: [],
   });
 
-  const [donationSum, setDonationSum] = useState(0);
-
   useEffect(() => {
-    if (allTrips.length === 0) return;
     if (currentTrip === undefined) return;
-    if (currentTrip.donations?.length === 0) return;
+    if (currentTrip?.spentFunds > 0) setSpentFunds(currentTrip.spentFunds);
     setDonations(currentTrip.donations);
     const dSum = Math.floor(sumAmounts(currentTrip.donations));
     setDonationSum(dSum);
@@ -225,57 +230,59 @@ export default function Money(props) {
     <Box pos="relative">
       <LoadingOverlay
         visible={!allTrips || currentTrip === undefined}
-        overlayBlur={10}
-        overlayOpacity={1}
-        overlayColor={dark ? "#0b0c0d" : "#F8F9FA"}
+        overlayProps={{
+          backgroundOpacity: 1,
+          blur: 10,
+          color: dark ? "#0b0c0d" : "#F8F9FA",
+        }}
       />
       <Select
         w={"95%"}
         mt={7}
         variant="filled"
         placeholder={currentTrip?.tripTitle || "No Trips found..."}
-        data={allTrips.map((trip) => {
-          return { value: trip, label: trip.tripTitle, key: trip.tripTitle };
-        })}
-        sx={{
-          pointerEvents: allTrips.length > 1 ? "all" : "none",
-          ".mantine-Select-rightSection": {
-            opacity: allTrips.length > 1 ? 1 : 0,
-          },
-        }}
         onChange={(e) => changeTrip(e)}
+        data={
+          allTrips.length > 0 &&
+          allTrips.map((trip) => {
+            return {
+              value: trip.tripTitle,
+              label: trip.tripTitle,
+              key: trip.tripTitle,
+            };
+          })
+        }
+        rightSection={
+          <IconChevronDown size={17} opacity={allTrips.length >= 2 ? 1 : 0} />
+        }
+        style={{
+          pointerEvents: allTrips.length > 1 ? "all" : "none",
+        }}
       />
       <Box pr={20}>
         <Box my={20} w="100%" h={"250px"} pos={"relative"}>
           <Select
+            className={classes.graphLengthSelect}
             pos={"absolute"}
-            top={-10}
-            right={-5}
-            opacity={0.6}
+            top={10}
+            right={0}
             w={110}
             size="xs"
+            defaultValue={7}
+            onChange={(e) => setGraphSpan(e)}
             placeholder={
               graphSpan === 7 || graphSpan === 30
                 ? `Last ${graphSpan} days`
                 : "All days"
             }
-            defaultValue={7}
             data={[
-              { value: 7, label: "Last 7 days" },
-              { value: 30, label: "Last 30 days" },
+              { value: "7", label: "Last 7 days" },
+              { value: "30", label: "Last 30 days" },
               {
-                value: parseCustomDate(currentTrip?.creationTime),
+                value: String(parseCustomDate(currentTrip?.creationTime)),
                 label: "All days",
               },
             ]}
-            onChange={(e) => setGraphSpan(e)}
-            sx={{
-              transform: "scale(0.8)",
-              transition: "all 1s ease",
-              "&:hover": {
-                opacity: 1,
-              },
-            }}
           />
           <Bar
             key={colorScheme}
@@ -288,18 +295,17 @@ export default function Money(props) {
         </Box>
         <Box
           mb={10}
-          sx={{
+          style={{
             borderRadius: 3,
             border: `2px solid ${dark}`
               ? "rgba(255,255,255,0.1)"
               : "rgba(0,0,0,0.1)",
           }}
         >
-          <Group w={"100%"} grow spacing={0}>
+          <Group w={"100%"} grow gap={0}>
             <Center>
               <Box>
                 <Title order={6} ta={"center"}>
-                  {/* Feb 12, 2023 */}
                   {currentTrip && currentTrip.travelDate}
                 </Title>
                 <Text fz={10} ta={"center"}>
@@ -309,7 +315,7 @@ export default function Money(props) {
             </Center>
             <Center
               py={10}
-              sx={{
+              style={{
                 borderLeft: `2px solid ${dark}`
                   ? "rgba(255,255,255,0.1)"
                   : "rgba(0,0,0,0.1)",
@@ -327,20 +333,8 @@ export default function Money(props) {
             {/* Sends User to Trip Page */}
             <Center py={19} fw={600} fz={20}>
               <Button
+                className={classes.viewPageLink}
                 variant="subtle"
-                bg={dark ? "dark.8" : "gray.3"}
-                c={dark ? "#fff" : "#000"}
-                fz={14}
-                uppercase={true}
-                sx={{
-                  transition: "all 0.2s ease",
-                  cursor: "pointer",
-                  "&:hover": {
-                    transform: "scale(1.1)",
-                    backgroundColor: dark ? "#0D3F82" : "#2DC7F3",
-                    color: "#fff",
-                  },
-                }}
                 onClick={() => {
                   setMainMenuOpened(false);
                   setPanelShow(false);
@@ -359,26 +353,29 @@ export default function Money(props) {
               </Button>
             </Center>
           </Group>
-          <Divider size={"sm"} color={dark ? "dark.8" : "gray.3"} />
-          <Group w={"100%"} spacing={0} grow>
+          <Divider
+            size={"sm"}
+            color={dark ? "dark.6" : "#fff"}
+            className={classes.shadow}
+          />
+          <Group w={"100%"} gap={0} grow>
             <Center>
               <Box>
-                <Title order={3} ta={"center"}>
-                  $0
-                </Title>
+                <Flex align={"center"}>
+                  <IconCurrencyDollar
+                    stroke={1}
+                    style={{
+                      marginRight: -3,
+                    }}
+                  />
+                  <Title order={3} ta={"center"}>
+                    {addComma(donationSum - spentFunds)}
+                  </Title>
+                </Flex>
                 <Text fz={10}>AVAILABLE FUNDS</Text>
               </Box>
             </Center>
-            <Center
-              py={10}
-              bg={dark ? "dark.8" : "gray.3"}
-              sx={{
-                borderRadius: "0 0 3px 3px",
-                borderLeft: `2px solid ${dark}`
-                  ? "rgba(255,255,255,0.1)"
-                  : "rgba(0,0,0,0.1)",
-              }}
-            >
+            <Center className={classes.fundsTally}>
               <Box>
                 <Progress
                   color={dark ? "blue.9" : "blue.4"}
@@ -387,7 +384,7 @@ export default function Money(props) {
                   mb={5}
                   size={"sm"}
                   w={"100%"}
-                  sx={{
+                  style={{
                     boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
                   }}
                 />
@@ -399,7 +396,7 @@ export default function Money(props) {
                         marginRight: -4,
                       }}
                     />
-                    {donationSum}{" "}
+                    {addComma(donationSum)}{" "}
                     <IconSlash
                       stroke={1}
                       style={{
@@ -413,10 +410,10 @@ export default function Money(props) {
                         marginRight: -4,
                       }}
                     />
-                    {currentTrip?.costsSum}
+                    {addComma(currentTrip?.costsSum)}
                   </Flex>
                 </Title>
-                <Text ta={"right"} mr={4} fz={10}>
+                <Text ta={"right"} mr={4} mt={-4} fz={10}>
                   RAISED
                 </Text>
               </Box>
@@ -428,12 +425,11 @@ export default function Money(props) {
             // className="pagePanel"
             w={"100%"}
             position="relative"
-            sx={{
+            style={{
               overflow: "hidden",
             }}
           >
             <Donations
-              menu={true}
               donations={currentTrip?.donations || []}
               setDonations={setDonations}
               donationSectionLimit={6}

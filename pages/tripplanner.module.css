@@ -1,0 +1,70 @@
+.newCostPopover .mantine-Popover-dropdown {
+	padding: 3;
+}
+
+.travelersInput .mantine-NumberInput-input {
+	text-align: center;
+	font-weight: 700;
+	font-size: 1.1rem;
+	padding: 0;
+}
+
+.costInput .mantine-NumberInput-input {
+	text-align: right;
+	font-weight: 700;
+}
+
+.totalCostInput .mantine-NumberInput-input {
+	text-align: right;
+	font-weight: 700;
+	padding-right: 50;
+}
+
+.removeCostButton .mantine-ActionIcon-root {
+	transition: all 150ms ease-in-out;
+	&:hover {
+		color: light-dark(#fff, transparent);
+		background: light-dark(rgba(255, 0, 0, 0.7), rgba(255, 0, 0, 0.1));
+	}
+}
+
+.brightenButton .mantine-Button-root:hover {
+	opacity: 1;
+}
+
+.depatureAutoComplete .mantine-Autocomplete-input::placeholder {
+	font-weight: 400;
+}
+
+.datePicker .mantine-DatePicker-day[data-disabled] {
+	color: light-dark(rgba(233, 233, 233, 0.5), rgba(36, 36, 36, 0.4));
+}
+
+.datePicker .mantine-DatePicker-day[data-weekend] {
+	color: light-dark(var(--mantine-color-blue-9), var(--mantine-color-blue-4));
+}
+
+.datePicker .mantine-DatePicker-day[data-selected] {
+	text-shadow: light-dark("0 2px 3px rgba(0,0,0,0.1)", "0 2px 3px rgba(0,0,0,0.2)");
+	border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+	border-top: 3px solid light-dark(var(--mantine-color-blue-4), var(--mantine-color-blue-9));
+	background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-2));
+	color: light-dark(var(--mantine-color-blue-4), var(--mantine-color-gray-0));
+	transition: all 0.15s ease-in-out;
+	border-radius: 0 0 3px 3px;
+	font-size: 1.6rem;
+	&:hover {
+		transform: scale(1.05);
+	}
+}
+
+.tripTitleInput .mantine-Input-input {
+	background: light-dark(#e9ecef, #101113);
+	&:focus {
+		background: light-dark(#f1f3f5, #383a3f);
+	}
+	&::placeholder {
+		font-weight: 700;
+		font-style: italic;
+	}
+}

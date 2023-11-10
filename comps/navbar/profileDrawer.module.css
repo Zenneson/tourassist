@@ -1,0 +1,98 @@
+.navLinkIcon {
+	opacity: 0.4;
+	color: light-dark(#ccc, #333);
+}
+
+.label {
+	color: light-dark(rgb(16, 17, 19), rgb(248, 249, 250));
+}
+
+.description {
+	color: light-dark(rgba(16, 17, 19, 0.5), rgba(248, 249, 250, 0.2));
+}
+
+.navLink {
+	transition: all 150ms ease;
+	color: light-dark(rgb(16, 17, 19), rgb(248, 249, 250, 0.1));
+
+	&:hover {
+		transform: scale(1.02);
+	}
+
+	&:active {
+		transform: scale(1);
+	}
+
+	&[data-active="true"] {
+		color: light-dark(#2dc8f3, #fff);
+		background-color: light-dark(rgba(170, 170, 170, 0.1), rgba(170, 170, 170, 0.05));
+
+		&:hover {
+			background-color: light-dark(rgba(45, 200, 243, 0.1), rgba(170, 170, 170, 0.05));
+		}
+	}
+
+	&[data-active="true"] .description {
+		color: light-dark(#2dc8f3, #fff);
+	}
+
+	&[data-active="true"] .navLinkIcon {
+		color: light-dark(#2dc8f3, #0d3f82);
+		opacity: light-dark(0.5, 0.8);
+	}
+}
+
+.closeButton {
+	background: light-dark(rgb(241, 243, 245), rgba(5, 5, 5, 0.5));
+	color: light-dark(rgb(16, 17, 19), #fff);
+	border-radius: 3px 0 0 3px;
+	z-index: 1000;
+	position: absolute;
+	padding: 5px 10px;
+	top: 77px;
+	right: 0;
+	transition: all 250ms ease-in-out;
+
+	&:hover {
+		background: light-dark(rgb(206, 212, 218), rgb(20, 21, 23));
+	}
+}
+
+.mainDrawer {
+	min-height: 570px;
+	overflow: hidden;
+	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(26, 27, 30, 0.95));
+}
+
+.legalButton {
+	background-color: rgba(0, 0, 0, 0);
+	&:hover {
+		color: light-dark(rgb(20, 21, 23), rgb(248, 249, 250));
+	}
+}
+
+.bottomBox {
+	position: absolute;
+	left: 15%;
+	bottom: 0;
+	width: 70%;
+	border-top: 1px solid light-dark(rgba(var(rgb(16, 17, 19)), 0.1), rgba(248, 249, 250, 0.1));
+}
+
+.signOutButton {
+	transition: all 200ms ease;
+	color: light-dark(rgba(16, 17, 19, 0.1), rgba(248, 249, 250, 0.1));
+	background-color: light-dark(rgb(16, 17, 19, 0.05), rgba(248, 249, 250, 0.012));
+	&:hover {
+		color: light-dark(rgb(16, 17, 19), rgb(248, 249, 250));
+		background-color: light-dark(rgba(16, 17, 19 0.2), rgba(248, 249, 250, 0.2));
+	}
+}
+
+.panelDrawer {
+	background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(26, 27, 30, 0.9));
+}
+
+.panelDrawerOverlay {
+	background: light-dark(rgba(248, 249, 250, 0.2), rgba(16, 17, 19, 0.5));
+}

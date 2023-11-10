@@ -1,0 +1,8 @@
+.prevSliderButton .mantine-Button-root,
+.nextSliderButton .mantine-Button-root {
+	border: none;
+	&:hover {
+		background-color: transparent;
+		transform: scale(1.2);
+	}
+}

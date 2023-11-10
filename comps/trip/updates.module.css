@@ -1,0 +1,16 @@
+.deleteModal .mantine-Modal-header {
+	background-color: transparent;
+}
+
+.deleteModal .mantine-Modal-content {
+	background-color: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
+}
+
+.deleteModal .mantine-Modal-overlay {
+	background-color: light-dark(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5));
+	backdrop-filter: blur(9px);
+}
+
+.deleteUpdate .mantine-Button-root:hover {
+	opacity: 1;
+}

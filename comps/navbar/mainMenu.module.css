@@ -1,0 +1,11 @@
+.toolTip {
+	background: light-dark(#fff, #141517);
+	color: light-dark(#141517, #fff);
+}
+
+.logoutButton {
+	opacity: 0.35;
+	&:hover {
+		opacity: 1;
+	}
+}

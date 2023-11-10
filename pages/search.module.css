@@ -1,0 +1,11 @@
+.searchDataGroup .mantine-Group-root {
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-top: 3px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 0 7px 10px 0 rgba(0, 0, 0, 0.05);
+	&:hover {
+		transform: scale(1.01);
+		background: rgba(0, 0, 0, 0.5);
+	}
+}

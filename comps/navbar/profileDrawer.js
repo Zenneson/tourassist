@@ -3,12 +3,11 @@ import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
 import useSWR from "swr";
-import Money from "./money";
+import Money from "./tripInfo";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import {
-  useMantineColorScheme,
-  createStyles,
+  useComputedColorScheme,
   Drawer,
   Space,
   Group,
@@ -24,78 +23,25 @@ import {
   ScrollArea,
 } from "@mantine/core";
 import {
-  IconUser,
+  IconUserCircle,
   IconLogout,
   IconChevronRight,
   IconX,
-  IconWallet,
+  IconClipboardData,
   IconWorld,
   IconGavel,
   IconInfoCircle,
 } from "@tabler/icons-react";
 import { addEllipsis } from "../../libs/custom";
 import { useUser } from "../../libs/context";
-
-const useStyles = createStyles((theme) => ({
-  icon: {
-    opacity: 0.1,
-  },
-  activeIcon: {
-    opacity: 0.7,
-  },
-  root: {
-    transition: "all 150ms ease",
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[0]
-        : theme.colors.gray[9],
-    "&:hover": {
-      transform: "scale(1.02)",
-    },
-    "&:active": {
-      transform: "scale(1)",
-    },
-    "&[data-active='true']": {
-      color: theme.colorScheme === "dark" ? "#fff" : "#2dc8f3",
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? "rgba(170, 170, 170, 0.05)"
-          : "rgba(170, 170, 170, 0.1)",
-      "&:hover": {
-        backgroundColor:
-          theme.colorScheme !== "dark" && "rgba(45, 200, 243, 0.1)",
-      },
-    },
-  },
-  closeButton: {
-    background:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[5]
-        : theme.colors.gray[1],
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.gray[0]
-        : theme.colors.dark[9],
-    borderRadius: "5px 0 0 5px",
-    zIndex: 1000,
-    position: "absolute",
-    padding: "5px 10px",
-    top: 77,
-    right: 0,
-    transition: "all 250ms ease-in-out",
-    "&:hover": {
-      background:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[8]
-          : theme.colors.gray[4],
-    },
-  },
-}));
+import classes from "./profileDrawer.module.css";
+import TripInfo from "./tripInfo";
 
 export default function ProfileDrawer(props) {
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
-  const { classes, cx } = useStyles();
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
   const {
     active,
     setActive,
@@ -107,8 +53,8 @@ export default function ProfileDrawer(props) {
     signOutFunc,
     setDropDownOpened,
   } = props;
-  const router = useRouter();
 
+  const router = useRouter();
   const { user } = useUser();
 
   const fetchTrips = async (userEmail) => {
@@ -132,12 +78,12 @@ export default function ProfileDrawer(props) {
   const links = [
     {
       label: "Account Info",
-      icon: <IconUser size={30} />,
+      icon: <IconUserCircle size={30} />,
       description: "Manage Your Account",
     },
     {
       label: "Trip Info",
-      icon: <IconWallet size={30} />,
+      icon: <IconClipboardData size={30} />,
       description: "Trip and Funding Info",
     },
   ];
@@ -160,20 +106,20 @@ export default function ProfileDrawer(props) {
         active={index === active}
         description={item.description}
         rightSection={<IconChevronRight size={14} />}
-        icon={item.icon}
+        leftSection={item.icon}
         variant="subtle"
         onClick={() => menuLinkFunc(index)}
         classNames={{
-          icon: cx(classes.icon, { [classes.activeIcon]: active === index }),
-          description: classes.description,
+          section: classes.navLinkIcon,
           label: classes.label,
-          root: classes.root,
+          description: classes.description,
+          root: classes.navLink,
         }}
         label={
           <Text
             fw={700}
             fz={12}
-            sx={{
+            style={{
               textTransform: "uppercase",
             }}
           >
@@ -206,39 +152,43 @@ export default function ProfileDrawer(props) {
     <>
       <ScrollArea>
         <Drawer
+          classNames={{ content: classes.mainDrawer }}
           zIndex={500}
           pos={"relative"}
+          withinPortal={false}
           padding={0}
           opened={mainMenuOpened}
           onClose={openMenu}
-          size={305}
+          size={310}
           trapFocus={false}
           lockScroll={false}
           withOverlay={false}
           withCloseButton={false}
-          styles={(theme) => ({
-            content: {
-              minHeight: 570,
-              overflow: "hidden",
-              background: dark
-                ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-                : theme.fn.rgba(theme.colors.gray[0], 0.95),
-            },
-          })}
+          shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+          transitionProps={{
+            duration: 100,
+          }}
         >
           {/* Close Main Menu Button */}
           <Button onClick={openMenu} className={classes.closeButton}>
             <IconX size={15} />
           </Button>
           <Space h={95} />
-          <Divider mt={0} mb={20} w={"253px"} ml={"15px"} opacity={0.4} />
+          <Divider
+            mt={0}
+            mb={20}
+            w={"253px"}
+            ml={"15px"}
+            opacity={dark ? 0.6 : 0.4}
+            color={dark && "dark.6"}
+          />
           {user && (
             <>
               <Center>
                 <Badge
                   variant="dot"
                   color={dark ? "blue.9" : "blue.4"}
-                  sx={{
+                  style={{
                     cursor: "default",
                     border: "none",
                     userSelect: "none",
@@ -247,10 +197,16 @@ export default function ProfileDrawer(props) {
                   {addEllipsis(user.email, 40)}
                 </Badge>
               </Center>
-              <Divider w={"90%"} mt={20} ml={"5%"} opacity={0.2} />
+              <Divider
+                w={"90%"}
+                mt={20}
+                ml={"5%"}
+                opacity={dark ? 0.6 : 0.4}
+                color={dark && "dark.6"}
+              />
             </>
           )}
-          <Group spacing={8} mt={10}>
+          <Group gap={8} mt={10}>
             {router.pathname !== "/map" && (
               // Map Main Menu Button
               <NavLink
@@ -258,7 +214,7 @@ export default function ProfileDrawer(props) {
                   <Text
                     fw={700}
                     fz={12}
-                    sx={{
+                    style={{
                       textTransform: "uppercase",
                     }}
                   >
@@ -268,16 +224,17 @@ export default function ProfileDrawer(props) {
                 description="View the Map"
                 px={25}
                 py={8}
-                icon={<IconWorld size={30} />}
+                leftSection={<IconWorld size={30} />}
                 variant="subtle"
                 onClick={() => {
                   closeAll();
                   router.push("/map");
                 }}
                 classNames={{
+                  root: classes.navLink,
+                  section: classes.navLinkIcon,
+                  label: classes.label,
                   description: classes.description,
-                  icon: classes.icon,
-                  root: classes.root,
                 }}
               />
             )}
@@ -291,7 +248,7 @@ export default function ProfileDrawer(props) {
                     fw={700}
                     fz={12}
                     fs={"italic"}
-                    sx={{
+                    style={{
                       textTransform: "uppercase",
                     }}
                   >
@@ -301,81 +258,49 @@ export default function ProfileDrawer(props) {
                 description="About TourAssit | FAQs"
                 px={25}
                 py={8}
-                icon={<IconInfoCircle size={30} />}
+                leftSection={<IconInfoCircle size={30} />}
                 variant="subtle"
                 onClick={() => {
                   closeAll();
                   router.push("/help");
                 }}
                 classNames={{
+                  root: classes.navLink,
+                  section: classes.navLinkIcon,
+                  label: classes.label,
                   description: classes.description,
-                  icon: classes.icon,
-                  root: classes.root,
                 }}
               />
             )}
           </Group>
           {/* Legal Documents Main Menu Button */}
           <Button
+            className={classes.legalButton}
             variant="subtle"
             pos={"absolute"}
             bottom={user ? 100 : 30}
             w={"100%"}
             fz={10}
             color="gray.7"
-            leftIcon={<IconGavel size={18} />}
+            leftSection={<IconGavel size={18} />}
             hidden={router.pathname === "/legal"}
             onClick={() => {
               closeAll();
               router.push("/legal");
             }}
-            sx={{
-              "&:hover": {
-                color: dark ? "gray.0" : "dark.9",
-                backgroundColor: "rgba(0, 0, 0, 0)",
-              },
-            }}
           >
             Legal Documents
           </Button>
           {user && (
-            <Box
-              pt={10}
-              mb={30}
-              sx={(theme) => ({
-                borderTop: `1px solid ${
-                  dark
-                    ? theme.fn.rgba(theme.colors.gray[0], 0.1)
-                    : theme.fn.rgba(theme.colors.dark[9], 0.1)
-                }`,
-                position: "absolute",
-                left: "15%",
-                bottom: 0,
-                width: "70%",
-              })}
-            >
+            <Box className={classes.bottomBox} pt={10} mb={30}>
               {/* SignOut Button */}
               <Button
+                className={classes.signOutButton}
                 variant="subtle"
                 w="60%"
                 ml="20%"
                 mt={10}
-                leftIcon={<IconLogout size={18} />}
-                sx={(theme) => ({
-                  color: dark
-                    ? theme.fn.rgba(theme.colors.gray[0], 0.1)
-                    : theme.fn.rgba(theme.colors.dark[9], 0.1),
-                  backgroundColor: dark
-                    ? theme.fn.rgba(theme.colors.gray[0], 0.012)
-                    : theme.fn.rgba(theme.colors.dark[9], 0.05),
-                  transition: "all 200ms ease",
-                  "&:hover": {
-                    color: dark ? theme.colors.gray[0] : theme.colors.dark[9],
-                    backgroundColor: dark
-                      ? theme.fn.rgba(theme.colors.dark[9], 0.2)
-                      : theme.fn.rgba(theme.colors.gray[0], 0.2),
-                  },
-                })}
+                leftSection={<IconLogout size={18} />}
                 onClick={() => {
                   closeAll();
                   signOutFunc();
@@ -388,36 +313,27 @@ export default function ProfileDrawer(props) {
         </Drawer>
       </ScrollArea>
       <Drawer
+        classNames={{
+          content: classes.panelDrawer,
+          overlay: classes.panelDrawerOverlay,
+        }}
         zIndex={499}
+        withinPortal={false}
         opened={panelShow}
-        padding="24px 25px 0 330px"
+        padding="25px 25px 0 330px"
         size={900}
         onClose={closePanel}
         withCloseButton={false}
         scrollAreaComponent={ScrollArea.Autosize}
         shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+        transitionProps={{
+          duration: 100,
+        }}
         overlayProps={{
           blur: 9,
         }}
-        sx={(theme) => ({
-          ".mantine-Drawer-content": {
-            background: dark
-              ? theme.fn.rgba(theme.colors.dark[7], 0.95)
-              : theme.fn.rgba(theme.colors.gray[0], 0.95),
-          },
-          ".mantine-Drawer-overlay": {
-            background: dark
-              ? theme.fn.rgba(theme.colors.dark[9], 0.7)
-              : theme.fn.rgba(theme.colors.gray[0], 0.7),
-          },
-          "& .mantine-ScrollArea-root": {
-            "& .mantine-ScrollArea-scrollbar": {
-              opacity: 0.3,
-              width: 8,
-            },
-          },
-        })}
       >
+        <Space h={24} />
         {/* Close Panel Button */}
         <Button className={classes.closeButton} onClick={closePanel}>
           <IconX size={15} />
@@ -429,12 +345,12 @@ export default function ProfileDrawer(props) {
               opacity={0.08}
               fw={600}
               fz={40}
-              sx={{
+              style={{
                 textTransform: "uppercase",
               }}
             >
               <Flex align={"center"} gap={10}>
-                Account Info <IconUser size={40} />
+                Account Info <IconUserCircle size={40} />
               </Flex>
             </Title>
             <AccountInfo user={user} />
@@ -447,15 +363,15 @@ export default function ProfileDrawer(props) {
               opacity={0.08}
               fw={600}
               fz={40}
-              sx={{
+              style={{
                 textTransform: "uppercase",
               }}
             >
               <Flex align={"center"} gap={10}>
-                Money <IconWallet size={40} />
+                TRIP INFO <IconClipboardData size={40} />
               </Flex>
             </Title>
-            <Money
+            <TripInfo
               allTrips={allTrips}
               setMainMenuOpened={setMainMenuOpened}
               setPanelShow={setPanelShow}

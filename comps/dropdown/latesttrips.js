@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   Badge,
   Box,
   Card,
@@ -11,11 +11,14 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import classes from "./latesttrips.module.css";
 
 export default function LatestTrips() {
   const router = useRouter();
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
 
   useEffect(() => {
     router.prefetch("/trippage");
@@ -75,21 +78,13 @@ export default function LatestTrips() {
   const latestTrips = latestTripData.map((trip, index) => (
     <Grid.Col span={4} key={index}>
       <Card
+        className={classes.tripCard}
         onClick={() => router.push("/trippage")}
-        sx={{
-          cursor: "pointer",
-          transition: "all 0.2s ease",
-          backdropFilter: "blur(20px)",
-          boxShadow: "0 2px 5px  rgba(0,0,0, 0.2)",
-          "&:hover": {
-            transform: "scale(1.02)",
-          },
-        }}
       >
         <Card.Section
           pos={"relative"}
           mih={170}
-          sx={{
+          style={{
             overflow: "hidden",
           }}
         >
@@ -97,7 +92,7 @@ export default function LatestTrips() {
             pos={"absolute"}
             w={"100%"}
             h={"100%"}
-            sx={{
+            style={{
               zIndex: 1,
               transform: "scale(1.02)",
               background:
@@ -110,7 +105,7 @@ export default function LatestTrips() {
             right={10}
             variant="outline"
             size="xs"
-            sx={{
+            style={{
               zIndex: 2,
             }}
           >
@@ -124,7 +119,7 @@ export default function LatestTrips() {
             thickness={3}
             roundCaps
             sections={[{ value: trip.percent, color: "lime" }]}
-            sx={{
+            style={{
               zIndex: 2,
             }}
             label={
@@ -146,7 +141,7 @@ export default function LatestTrips() {
           fz={12}
           pl={10}
           mb={10}
-          sx={{
+          style={{
             borderLeft: `1px solid ${
               dark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)"
             }`,

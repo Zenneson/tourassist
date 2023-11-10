@@ -39,6 +39,7 @@ import TripContent from "./tripContent";
 import { dateFormat, formatDonation } from "../../libs/custom";
 import { notifications } from "@mantine/notifications";
 import { DuffelPayments } from "@duffel/components";
+import classes from "./modalsItem.module.css";
 
 export default function ModalsItem(props) {
   const {
@@ -67,7 +68,6 @@ export default function ModalsItem(props) {
     donorName,
     setDonorName,
     donations,
-    setDonations,
     setNewUpdate,
     setIsMutating,
   } = props;
@@ -198,6 +198,7 @@ export default function ModalsItem(props) {
 
     return (
       <DateInput
+        className={classes.dateInput}
         icon={<IconCalendarEvent size={20} />}
         iconWidth={50}
         variant="default"
@@ -212,11 +213,6 @@ export default function ModalsItem(props) {
           travelDate ? new Date(travelDate) : new Date(tripData.travelDate)
         }
         valueFormat="MMM DD, YYYY"
-        sx={{
-          "& .mantine-DateInput-input": {
-            cursor: "pointer",
-          },
-        }}
       />
     );
   };
@@ -339,6 +335,7 @@ export default function ModalsItem(props) {
     return (
       <>
         <Input
+          className={classes.updateInputTitle}
           tabIndex={1}
           size={"xl"}
           w="100%"
@@ -357,56 +354,25 @@ export default function ModalsItem(props) {
               borderRadius: 3,
             },
           }}
-          sx={{
-            ".mantine-Input-input": {
-              background: dark ? "#101113" : "gray.3",
-              "&::placeholder": {
-                fontWeight: 700,
-                fontStyle: "italic",
-                color: "rgba(255,255,255,0.0.08)",
-              },
-            },
-          }}
         />
         <ScrollArea
           h={300}
           w={"100%"}
           scrollbarSize={8}
           scrollHideDelay={250}
-          sx={{
+          style={{
             overflow: "hidden",
             borderRadius: "3px",
           }}
         >
           <RichTextEditor
+            className={classes.textEditor}
             editor={updateEditor}
             position="relative"
             bg={dark ? "dark.6" : "gray.2"}
             onChange={() => {
               const content = updateEditor.getHTML();
               setUpdateContent(content);
-            }}
-            sx={{
-              transition: "border-top 0.2s ease",
-              border: "none",
-              width: "100%",
-              minWidth: "500px",
-              ".mantine-RichTextEditor-toolbar": {
-                background: dark
-                  ? "rgba(0, 0, 0, 0.7)"
-                  : "rgba(255, 255, 255, 0.7)",
-                borderColor: "rgba(255,255,255,0)",
-              },
-              ".mantine-RichTextEditor-content": {
-                background: "rgba(0, 0, 0, 0)",
-                color: dark ? "dark.9" : "gray.0",
-                minHeight: "250px",
-                "& .ProseMirror": {
-                  paddingLeft: "21px",
-                  paddingRight: "21px",
-                  minHeight: "250px",
-                },
-              },
             }}
           >
             <RichTextEditor.Toolbar sticky>
@@ -429,16 +395,10 @@ export default function ModalsItem(props) {
                 <RichTextEditor.Unlink />
               </RichTextEditor.ControlsGroup>
             </RichTextEditor.Toolbar>
-            <RichTextEditor.Content
-              sx={{
-                "& p": {
-                  fontSize: ".9rem",
-                },
-              }}
-            />
+            <RichTextEditor.Content />
           </RichTextEditor>
         </ScrollArea>
-        <Group position="right" w={"100%"}>
+        <Group justify="flex-end" w={"100%"}>
           <Button variant="default" size="md" w={"25%"} onClick={handleUpdate}>
             {modalMode === "editUpdate"
               ? "SAVE UPDATE"
@@ -559,6 +519,7 @@ export default function ModalsItem(props) {
   return (
     <Box>
       <Modal
+        className={classes.editTripModal}
         centered
         withCloseButton={false}
         size={850}
@@ -570,26 +531,6 @@ export default function ModalsItem(props) {
         overlayProps={{
           blur: 9,
         }}
-        sx={{
-          "& .mantine-ScrollArea-root": {
-            "& .mantine-ScrollArea-scrollbar": {
-              opacity: 0.3,
-              width: 8,
-            },
-          },
-        }}
-        styles={(theme) => ({
-          header: {
-            backgroundColor: "transparent",
-          },
-          content: {
-            backgroundColor: dark ? "rgba(0,0,0,0.9)" : "rgba(255,255,255,0.9)",
-          },
-          overlay: {
-            backgroundColor: dark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)",
-            backdropFilter: "blur(9px)",
-          },
-        })}
       >
         {/* Close Alt Modal */}
         <Box maw={800}>
@@ -610,8 +551,8 @@ export default function ModalsItem(props) {
               pt={5}
               pb={10}
               ml={-3}
-              position="apart"
-              sx={{
+              justify="space-between"
+              style={{
                 borderLeft: `3px solid ${
                   dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"
                 }`,
@@ -636,6 +577,7 @@ export default function ModalsItem(props) {
         </Box>
       </Modal>
       <Modal
+        className={classes.altModal}
         pos={"relative"}
         withCloseButton={false}
         size={modalMode === "donating" ? "auto" : 850}
@@ -651,27 +593,10 @@ export default function ModalsItem(props) {
           setNewUpdate(true);
           closeAltModal();
         }}
-        styles={(theme) => ({
-          root: {
-            "& .mantine-Modal-content": {
-              overflow: "hidden",
-            },
-          },
-          header: {
-            backgroundColor: "transparent",
-          },
-          content: {
-            backgroundColor: dark ? "rgba(0,0,0,0.9)" : "rgba(255,255,255,0.9)",
-          },
-          overlay: {
-            backgroundColor: dark ? "rgba(0,0,0,0.3)" : "rgba(255,255,255,0.5)",
-            backdropFilter: "blur(9px)",
-          },
-        })}
       >
         <LoadingOverlay
           visible={modalMode === "editUpdate" && !updateDataLoaded}
-          overlayOpacity={1}
+          overlayProps={{ backgroundOpacity: 1 }}
         />
         {/* Close Modal */}
         <CloseButton
@@ -705,6 +630,7 @@ export default function ModalsItem(props) {
                     disabled={stayAnon}
                   />
                   <NumberInput
+                    className={classes.donationInput}
                     ref={donationRef}
                     icon={<IconCurrencyDollar size={35} />}
                     size="xl"
@@ -735,14 +661,8 @@ export default function ModalsItem(props) {
                         e.target.select();
                       }
                     }}
-                    sx={{
-                      ".mantine-NumberInput-input": {
-                        textAlign: "right",
-                        fontWeight: 700,
-                      },
-                    }}
                   />
-                  <Group position="right" w={"100%"}>
+                  <Group justify="flex-end" w={"100%"}>
                     <Checkbox
                       size={"xs"}
                       labelPosition="left"
@@ -771,7 +691,7 @@ export default function ModalsItem(props) {
             )}
             {dontaionMode === "pay" && paymentToken && (
               <>
-                <Group position="apart" px={5} mb={5}>
+                <Group justify="space-between" px={5} mb={5}>
                   <Text fz={15} fw={700} fs={"italic"}>
                     Thanks for the Assist...
                   </Text>
@@ -789,17 +709,22 @@ export default function ModalsItem(props) {
                   py={5}
                   mx={5}
                   mb={10}
-                  sx={{
+                  style={{
                     borderLeft: "3px solid rgba(255,255,255,0.1)",
                   }}
                 >
                   <Flex align={"center"} gap={10}>
-                    <Divider label="Processing fee" w={"100%"} />{" "}
+                    <Divider
+                      labelPosition="left"
+                      label="Processing fee"
+                      w={"100%"}
+                    />{" "}
                     <Text fz={12}>${processingFee()}</Text>
                   </Flex>
                   <Flex align={"center"} gap={10}>
                     <Divider
                       w={"100%"}
+                      labelPosition="left"
                       label={
                         <Text fz={15} fw={700}>
                           Total
@@ -835,7 +760,7 @@ export default function ModalsItem(props) {
                   mt={10}
                   minRows={8}
                 />
-                <Group position="right" mt={20} w={"100%"} spacing={0}>
+                <Group justify="flex-end" mt={20} w={"100%"} spacing={0}>
                   <Button
                     variant="Transparent"
                     fw={100}

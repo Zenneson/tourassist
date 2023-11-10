@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   ActionIcon,
   Box,
   Button,
@@ -35,6 +35,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import { useWindowEvent } from "@mantine/hooks";
 import { formatPhoneNumber, addAtSymbol, updateField } from "../../libs/custom";
+import classes from "./accountInfo.module.css";
 import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function AccountInfo(props) {
@@ -70,8 +71,10 @@ export default function AccountInfo(props) {
   const [twitter, setTwitter] = useState(false);
   const [twitterValue, setTwitterValue] = useState(user?.twitter || "");
 
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
 
   const refs = {
     firstName: firstNameRef,
@@ -140,7 +143,7 @@ export default function AccountInfo(props) {
           <Title
             order={6}
             pb={5}
-            sx={{
+            style={{
               textTransform: "uppercase",
             }}
           >
@@ -152,34 +155,36 @@ export default function AccountInfo(props) {
             pl={20}
             pt={10}
             pb={12}
-            sx={{
+            style={{
               borderLeft: dark
                 ? "3px solid rgba(255, 255, 255, 0.1)"
                 : "3px solid rgba(0, 0, 0, 0.1)",
             }}
           >
-            <Group grow spacing={10}>
+            <Group grow gap={10}>
               <TextInput
+                classNames={{ input: classes.accountPanelInput }}
                 ref={firstNameRef}
                 icon={<IconDeviceSim1 size={20} />}
                 value={firstNameValue || ""}
                 placeholder={"First Name"}
                 onChange={(e) => setFirstNameValue(e.target.value)}
-                sx={{
+                style={{
                   pointerEvents: !firstName ? "none" : "all",
                 }}
                 rightSection={
                   <Tooltip
+                    classNames={{ tooltip: classes.toolTip }}
+                    position="bottom"
                     label={
                       firstNameValue ? "Edit First Name" : "Add First Name"
                     }
-                    position="bottom"
                   >
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
                       color={dark ? "gray.3" : "gray.6"}
-                      sx={{
+                      style={{
                         pointerEvents: "all",
                       }}
                       onClick={() => {
@@ -202,24 +207,26 @@ export default function AccountInfo(props) {
                 }
               />
               <TextInput
+                classNames={{ input: classes.accountPanelInput }}
                 ref={lastNameRef}
                 icon={<IconDeviceSim2 size={20} />}
                 value={lastNameValue || ""}
                 placeholder={"Last Name"}
                 onChange={(e) => setLastNameValue(e.target.value)}
-                sx={{
+                style={{
                   pointerEvents: !lastName ? "none" : "all",
                 }}
                 rightSection={
                   <Tooltip
-                    label={lastNameValue ? "Edit Last Name" : "Add Last Name"}
+                    classNames={{ tooltip: classes.toolTip }}
                     position="bottom"
+                    label={lastNameValue ? "Edit Last Name" : "Add Last Name"}
                   >
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
                       color={dark ? "gray.3" : "gray.6"}
-                      sx={{
+                      style={{
                         pointerEvents: "all",
                       }}
                       onClick={() => {
@@ -242,26 +249,28 @@ export default function AccountInfo(props) {
                 }
               />
             </Group>
-            <Group grow spacing={10}>
+            <Group grow gap={10}>
               <Input
+                classNames={{ input: classes.accountPanelInput }}
                 ref={phoneRef}
                 icon={<IconPhone size={20} />}
                 value={formatPhoneNumber(phoneValue) || ""}
                 placeholder={"Phone #"}
                 onChange={(e) => setPhoneValue(e.target.value)}
-                sx={{
+                style={{
                   pointerEvents: !phone ? "none" : "all",
                 }}
                 rightSection={
                   <Tooltip
-                    label={phoneValue ? "Edit Phone #" : "Add Phone #"}
+                    classNames={{ tooltip: classes.toolTip }}
                     position="bottom"
+                    label={phoneValue ? "Edit Phone #" : "Add Phone #"}
                   >
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
                       color={dark ? "gray.3" : "gray.6"}
-                      sx={{
+                      style={{
                         pointerEvents: "all",
                       }}
                       onClick={() => {
@@ -284,24 +293,16 @@ export default function AccountInfo(props) {
                 }
               />
               <Popover
+                className={classes.changePassPopover}
                 width="target"
                 position="bottom"
                 opened={changePass}
-                styles={(theme) => ({
-                  dropdown: {
-                    border: dark ? "1px solid #1c1c1c" : "1px solid #ececec",
-                  },
-                })}
               >
                 <Popover.Target>
                   <Button
+                    className={classes.changePassButton}
                     variant="default"
                     fz={13}
-                    sx={{
-                      "&:hover": {
-                        background: dark && "#909296",
-                      },
-                    }}
                     onClick={() => setChangePass((o) => !o)}
                   >
                     CHANGE PASSWORD
@@ -322,10 +323,11 @@ export default function AccountInfo(props) {
                 </Popover.Dropdown>
               </Popover>
             </Group>
-            <Group grow spacing={10}>
+            <Group grow gap={10}>
               <Divider
                 opacity={0.5}
                 labelPosition="right"
+                color={dark && "gray.7"}
                 label={
                   <HoverCard
                     width={350}
@@ -351,7 +353,11 @@ export default function AccountInfo(props) {
                   </HoverCard>
                 }
               />
-              <Button variant="filled" fz={12}>
+              <Button
+                variant="filled"
+                fz={12}
+                color={dark ? "blue.9" : "blue.4"}
+              >
                 <IconBuildingBank
                   size={15}
                   stroke={3}
@@ -368,7 +374,7 @@ export default function AccountInfo(props) {
           <Title
             order={6}
             pb={5}
-            sx={{
+            style={{
               textTransform: "uppercase",
             }}
           >
@@ -380,36 +386,38 @@ export default function AccountInfo(props) {
             pl={20}
             pt={10}
             pb={12}
-            sx={{
+            style={{
               borderLeft: dark
                 ? "3px solid rgba(255, 255, 255, 0.1)"
                 : "3px solid rgba(0, 0, 0, 0.1)",
             }}
           >
-            <Group grow spacing={10}>
+            <Group grow gap={10}>
               <Input
+                classNames={{ input: classes.accountPanelInput }}
                 ref={faceBookRef}
                 value={addAtSymbol(faceBookValue, "/") || ""}
                 icon={<IconBrandFacebook size={20} />}
                 placeholder="/Facebook"
                 onChange={(e) => setFaceBookValue(e.target.value)}
-                sx={{
+                style={{
                   pointerEvents: !faceBook ? "none" : "all",
                 }}
                 rightSection={
                   <Tooltip
+                    classNames={{ tooltip: classes.toolTip }}
+                    position="bottom"
                     label={
                       faceBookValue
                         ? "Edit Facebook handle"
                         : "Add Facebook handle"
                     }
-                    position="bottom"
                   >
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
                       color={dark ? "gray.3" : "gray.6"}
-                      sx={{
+                      style={{
                         pointerEvents: "all",
                       }}
                       onClick={() => {
@@ -432,28 +440,30 @@ export default function AccountInfo(props) {
                 }
               />
               <Input
+                classNames={{ input: classes.accountPanelInput }}
                 ref={instagramRef}
                 value={addAtSymbol(instagramValue, "@") || ""}
                 icon={<IconBrandInstagram size={20} />}
                 placeholder="@Instagram"
                 onChange={(e) => setInstagramValue(e.target.value)}
-                sx={{
+                style={{
                   pointerEvents: !instagram ? "none" : "all",
                 }}
                 rightSection={
                   <Tooltip
+                    classNames={{ tooltip: classes.toolTip }}
+                    position="bottom"
                     label={
                       instagramValue
                         ? "Edit Instagram handle"
                         : "Add Instagram handle"
                     }
-                    position="bottom"
                   >
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
                       color={dark ? "gray.3" : "gray.6"}
-                      sx={{
+                      style={{
                         pointerEvents: "all",
                       }}
                       onClick={() => {
@@ -476,28 +486,30 @@ export default function AccountInfo(props) {
                 }
               />
             </Group>
-            <Group grow spacing={10}>
+            <Group grow gap={10}>
               <Input
+                classNames={{ input: classes.accountPanelInput }}
                 ref={tikTokRef}
                 value={addAtSymbol(tikTokValue, "@") || ""}
                 icon={<IconBrandTiktok size={20} />}
                 placeholder="@TikTok"
                 onChange={(e) => setTikTokValue(e.target.value)}
-                sx={{
+                style={{
                   pointerEvents: !tikTok ? "none" : "all",
                 }}
                 rightSection={
                   <Tooltip
+                    classNames={{ tooltip: classes.toolTip }}
+                    position="bottom"
                     label={
                       tikTokValue ? "Edit Tiktok handle" : "Add Tiktok handle"
                     }
-                    position="bottom"
                   >
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
                       color={dark ? "gray.3" : "gray.6"}
-                      sx={{
+                      style={{
                         pointerEvents: "all",
                       }}
                       onClick={() => {
@@ -520,28 +532,30 @@ export default function AccountInfo(props) {
                 }
               />
               <Input
+                classNames={{ input: classes.accountPanelInput }}
                 ref={twitterRef}
                 value={addAtSymbol(twitterValue, "@") || ""}
                 icon={<IconBrandTwitter size={20} />}
                 placeholder="@Twitter"
                 onChange={(e) => setTwitterValue(e.target.value)}
-                sx={{
+                style={{
                   pointerEvents: !twitter ? "none" : "all",
                 }}
                 rightSection={
                   <Tooltip
+                    classNames={{ tooltip: classes.toolTip }}
+                    position="bottom"
                     label={
                       twitterValue
                         ? "Edit Twitter handle"
                         : "Add Twitter handle"
                     }
-                    position="bottom"
                   >
                     <ActionIcon
                       opacity={0.5}
                       variant="subtle"
                       color={dark ? "gray.3" : "gray.6"}
-                      sx={{
+                      style={{
                         pointerEvents: "all",
                       }}
                       onClick={() => {
@@ -568,7 +582,7 @@ export default function AccountInfo(props) {
           <Title
             order={6}
             pb={5}
-            sx={{
+            style={{
               textTransform: "uppercase",
             }}
           >
@@ -580,7 +594,7 @@ export default function AccountInfo(props) {
             fw={700}
             pt={10}
             pb={12}
-            sx={{
+            style={{
               borderLeft: dark
                 ? "3px solid rgba(255, 255, 255, 0.1)"
                 : "3px solid rgba(0, 0, 0, 0.1)",

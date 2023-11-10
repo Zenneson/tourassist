@@ -1,0 +1,11 @@
+body {
+	background-color: light-dark(#f8f9fa, #1a1b1e);
+	height: 100vh;
+	overflow: hidden;
+}
+
+.pagePanel {
+	background: light-dark(rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.3));
+	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
+	border-radius: 3;
+}

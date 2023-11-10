@@ -1,15 +1,16 @@
 import { useState } from "react";
 import {
-  useMantineColorScheme,
+  useComputedColorScheme,
   BackgroundImage,
   Box,
   Group,
   Modal,
-  ScrollArea,
   Button,
+  ScrollArea,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
+import classes from "./index.module.css";
 import Intro from "../comps/intro";
 import Slider from "react-slick";
 import Legal from "./legal";
@@ -18,11 +19,14 @@ import "slick-carousel/slick/slick-theme.css";
 
 const auth = getAuth();
 
-export default function Home() {
+export default function Home(props) {
   const { height, width } = useViewportSize();
-  const { colorScheme } = useMantineColorScheme();
   const [showLegal, setShowLegal] = useState(false);
-  const dark = colorScheme === "dark";
+
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
 
   const slideSettings = {
     dots: false,
@@ -51,22 +55,15 @@ export default function Home() {
   return (
     <>
       <Modal
+        className={classes.legalModal}
         zIndex={1500}
         opened={showLegal}
         fullScreen={true}
         onClose={() => setShowLegal(false)}
         scrollAreaComponent={ScrollArea.Autosize}
         withCloseButton={false}
-        sx={{
-          "& .mantine-ScrollArea-root": {
-            "& .mantine-ScrollArea-scrollbar": {
-              opacity: 0.3,
-              width: 8,
-            },
-          },
-        }}
       >
-        <Group pos={"absolute"} right={20} w={"100%"} position="right">
+        <Group pos={"absolute"} right={20} w={"100%"} justify="flex-end">
           <Button variant="default" onClick={() => setShowLegal(false)}>
             CLOSE
           </Button>
@@ -79,7 +76,7 @@ export default function Home() {
         pos="absolute"
         w={width}
         h={height}
-        sx={{
+        style={{
           zIndex: "1000",
           filter: "brightness(123%)",
           overflow: "hidden",
@@ -92,7 +89,7 @@ export default function Home() {
               src={image}
               h={height}
               alt="intro"
-              sx={{
+              style={{
                 filter: dark
                   ? "brightness(70%) saturate(144%)"
                   : "brightness(110%) saturate(100%)",

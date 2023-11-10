@@ -1,0 +1,53 @@
+.dropzone .mantine-Dropzone-root {
+	border: 5px dashed light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.3)) !important;
+	background: light-dark(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0)) !important;
+	&:hover {
+		background-color: light-dark(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1)) !important;
+	}
+}
+
+.tripContentTitle .mantine-Flex-root {
+	border-radius: 3;
+	cursor: pointer;
+	&:hover {
+		background-color: light-dark(rgba(0, 0, 0, 0.03), rgba(255, 255, 255, 0.01));
+	}
+}
+
+.trash .mantine-ActionIcon-root:hover {
+	opacity: 1;
+}
+
+.textEditorRoot {
+	transition: border-top 0.2s ease;
+	border: none;
+	width: 100%;
+	min-width: 500px;
+}
+
+.textEditorToolbar {
+	border-color: rgba(255, 255, 255, 0);
+	background: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
+}
+
+.textEditorContent {
+	background: rgba(0, 0, 0, 0);
+	min-height: 250px;
+	color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
+}
+
+/* .textEditorContent .ProseMirror {
+	padding-left: 21px;
+	padding-right: 21px;
+	min-height: 250px;
+} */
+
+.sizeSlider .mantine-Slider-root {
+	z-index: 1000;
+	width: 100%;
+	height: 5;
+}
+
+.sizeSlider .mantine-Slider-thumb {
+	border: none;
+}
