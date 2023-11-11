@@ -13,7 +13,6 @@ export function RouterTransition(props) {
 
   useEffect(() => {
     const handleStart = (url) => {
-      url === "/map" && sessionStorage.clear();
       url !== router.asPath && nprogress.start();
     };
 

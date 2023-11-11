@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
+import useSWR from "swr";
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "../../libs/firebase";
 import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { Box } from "@mantine/core";
@@ -58,10 +61,41 @@ export default function MainMenu(props) {
 
   const { user } = useUser();
 
+  const [currentTrip, setCurrentTrip] = useSessionStorage({
+    key: "currentTrip",
+    defaultValue: [],
+  });
+
   const [active, setActive] = useSessionStorage({
     key: "active",
     defaultValue: -1,
   });
+
+  const fetchTrips = async (userEmail) => {
+    const queryData = collection(firestore, "users", userEmail, "trips");
+    const querySnapshot = await getDocs(queryData);
+    return querySnapshot.docs.map((doc) => doc.data());
+  };
+
+  const { data: allTrips, error } = useSWR(user?.email, fetchTrips);
+
+  if (error) {
+    console.error("Error fetching trips:", error);
+  }
+
+  useEffect(() => {
+    if (!currentTrip || currentTrip.length === 0) {
+      const sessionTrip = sessionStorage.getItem("currentTrip");
+      if (sessionTrip) {
+        const parsedTrip = JSON.parse(sessionTrip);
+        setCurrentTrip(parsedTrip);
+      } else if (allTrips && allTrips.length > 0) {
+        setCurrentTrip(allTrips[0]);
+      }
+    }
+  }, [currentTrip, setCurrentTrip, allTrips]);
+
+  console.log("ProfileDrawer.js: currentTrip:", currentTrip);
 
   useEffect(() => {
     router.prefetch("/");
@@ -303,8 +337,9 @@ export default function MainMenu(props) {
         mainMenuOpened={mainMenuOpened}
         setMainMenuOpened={setMainMenuOpened}
         setDropDownOpened={setDropDownOpened}
-        openMenu={openMenu}
         signOutFunc={signOutFunc}
+        openMenu={openMenu}
+        allTrips={allTrips}
       />
     </>
   );

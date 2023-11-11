@@ -453,7 +453,7 @@ export default function Trippage(props) {
             <Box
               className="pagePanel"
               w={"85%"}
-              mt={updates && updates.length === 1 ? 30 : 0}
+              mt={updates && updates.length === 1 ? 20 : 0}
               mb={50}
               p={"20px 30px"}
             >
@@ -616,11 +616,9 @@ export default function Trippage(props) {
                   gradient={{ from: "#0D3F82", to: "#2DC7F3", deg: 45 }}
                   onClick={showDonateModal}
                 >
-                  <Text fz={20}>
-                    <Flex align={"center"} gap={5}>
-                      DONATE <IconHeartHandshake size={23} />
-                    </Flex>
-                  </Text>
+                  <Flex align={"center"} fz={20} gap={5}>
+                    DONATE <IconHeartHandshake size={23} />
+                  </Flex>
                 </Button>
               )}
             </Box>

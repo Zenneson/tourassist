@@ -1,4 +1,4 @@
-import {} from "react";
+"use client";
 import { useToggle, useElementSize } from "@mantine/hooks";
 import { Box, Button, Divider, Text } from "@mantine/core";
 
@@ -9,9 +9,12 @@ export default function UpdateContent(props) {
 
   return (
     <>
-      <Text lineClamp={readmore === "closed" && 5}>
-        <Box fz={12} ref={ref} dangerouslySetInnerHTML={{ __html: content }} />
-      </Text>
+      <Text
+        fz={14}
+        ref={ref}
+        lineClamp={readmore === "closed" ? 5 : undefined}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
       {(height > 100 || readmore === "open") && (
         <Divider
           labelPosition="right"

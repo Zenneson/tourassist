@@ -42,14 +42,8 @@ import {
 import classes from "./tripInfo.module.css";
 
 export default function TripInfo(props) {
-  const {
-    currentTrip,
-    setCurrentTrip,
-    allTrips,
-    setMainMenuOpened,
-    setPanelShow,
-    setDropDownOpened,
-  } = props;
+  const { allTrips, setMainMenuOpened, setPanelShow, setDropDownOpened } =
+    props;
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -60,6 +54,10 @@ export default function TripInfo(props) {
 
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
+  const [currentTrip, setCurrentTrip] = useSessionStorage({
+    key: "currentTrip",
+    defaultValue: [],
+  });
   const [donations, setDonations] = useSessionStorage({
     key: "donations",
     defaultValue: [],
@@ -67,7 +65,6 @@ export default function TripInfo(props) {
 
   useEffect(() => {
     if (currentTrip?.spentFunds > 0) setSpentFunds(currentTrip.spentFunds);
-
     if (currentTrip && Array.isArray(currentTrip.donations)) {
       setDonations(currentTrip.donations);
       const dSum = Math.floor(sumAmounts(currentTrip.donations));
@@ -253,7 +250,7 @@ export default function TripInfo(props) {
         placeholder={currentTrip?.tripTitle || "No Trips found..."}
         onChange={(e) => changeTrip(e)}
         checkIconPosition="right"
-        defaultValue={currentTrip?.tripTitle}
+        value={currentTrip?.tripTitle}
         data={
           allTrips?.length > 0 &&
           allTrips.map((trip) => {

@@ -4,9 +4,6 @@ import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
 import TripInfo from "./tripInfo";
-import useSWR from "swr";
-import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "../../libs/firebase";
 import {
   useComputedColorScheme,
   Drawer,
@@ -23,7 +20,6 @@ import {
   Badge,
   ScrollArea,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import {
   IconUserCircle,
   IconLogout,
@@ -52,40 +48,18 @@ export default function ProfileDrawer(props) {
     setMainMenuOpened,
     openMenu,
     signOutFunc,
+    allTrips,
     setDropDownOpened,
   } = props;
 
   const router = useRouter();
   const { user } = useUser();
 
-  const fetchTrips = async (userEmail) => {
-    const queryData = collection(firestore, "users", userEmail, "trips");
-    const querySnapshot = await getDocs(queryData);
-    return querySnapshot.docs.map((doc) => doc.data());
-  };
-
-  const { data: allTrips, error } = useSWR(user?.email, fetchTrips);
-
-  const [currentTrip, setCurrentTrip] = useSessionStorage({
-    key: "currentTrip",
-    defaultValue: allTrips ? allTrips[0] : {},
-  });
-
-  if (error) {
-    console.error("Error fetching trips:", error);
-  }
-
   useEffect(() => {
     router.prefetch("/");
     router.prefetch("/help");
     router.prefetch("/legal");
   }, [router]);
-
-  useEffect(() => {
-    if (currentTrip && currentTrip.length === 0) {
-      setCurrentTrip(allTrips[0]);
-    }
-  }, [currentTrip, setCurrentTrip, allTrips]);
 
   const links = [
     {
@@ -387,8 +361,6 @@ export default function ProfileDrawer(props) {
               </Flex>
             </Title>
             <TripInfo
-              currentTrip={currentTrip}
-              setCurrentTrip={setCurrentTrip}
               allTrips={allTrips}
               setMainMenuOpened={setMainMenuOpened}
               setPanelShow={setPanelShow}

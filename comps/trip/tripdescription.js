@@ -1,4 +1,4 @@
-import {} from "react";
+"use client";
 import { useToggle, useElementSize } from "@mantine/hooks";
 import { Box, Button, Divider, Text } from "@mantine/core";
 
@@ -9,9 +9,12 @@ export default function TripDescription(props) {
 
   return (
     <>
-      <Text lineClamp={readmore === "closed" && 5}>
-        <Box ref={ref} dangerouslySetInnerHTML={{ __html: tripDesc }} />
-      </Text>
+      <Text
+        fz={14}
+        ref={ref}
+        lineClamp={readmore === "closed" ? 5 : undefined}
+        dangerouslySetInnerHTML={{ __html: tripDesc }}
+      />
       {(height > 100 || readmore === "open") && (
         <Divider
           labelPosition="right"
