@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
@@ -41,8 +42,14 @@ import {
 import classes from "./tripInfo.module.css";
 
 export default function TripInfo(props) {
-  const { allTrips, setMainMenuOpened, setPanelShow, setDropDownOpened } =
-    props;
+  const {
+    currentTrip,
+    setCurrentTrip,
+    allTrips,
+    setMainMenuOpened,
+    setPanelShow,
+    setDropDownOpened,
+  } = props;
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -51,22 +58,24 @@ export default function TripInfo(props) {
 
   const router = useRouter();
 
-  const [currentTrip, setCurrentTrip] = useState(allTrips[0] || undefined);
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
-
   const [donations, setDonations] = useSessionStorage({
     key: "donations",
     defaultValue: [],
   });
 
   useEffect(() => {
-    if (currentTrip === undefined) return;
     if (currentTrip?.spentFunds > 0) setSpentFunds(currentTrip.spentFunds);
-    setDonations(currentTrip.donations);
-    const dSum = Math.floor(sumAmounts(currentTrip.donations));
-    setDonationSum(dSum);
-  }, [currentTrip, allTrips, setDonations]);
+
+    if (currentTrip && Array.isArray(currentTrip.donations)) {
+      setDonations(currentTrip.donations);
+      const dSum = Math.floor(sumAmounts(currentTrip.donations));
+      setDonationSum(dSum);
+    } else {
+      setDonations([]);
+    }
+  }, [currentTrip, setCurrentTrip, allTrips, setDonations]);
 
   useEffect(() => {
     router.prefetch("/trippage");
@@ -216,14 +225,14 @@ export default function TripInfo(props) {
   }
 
   const changeTrip = (event) => {
-    const newTrip = allTrips.find((trip) => trip.tripTitle === event.tripTitle);
-    if (newTrip.tripId === currentTrip.tripId) return;
-    if (newTrip.donations?.length === 0) {
+    const newTrip = allTrips.find((trip) => trip.tripTitle === event);
+    if (newTrip && newTrip.tripId === currentTrip.tripId) return;
+    if (newTrip && newTrip.donations?.length === 0) {
       setDonations([]);
       return;
     }
     setCurrentTrip(newTrip);
-    setDonations(newTrip.donations);
+    if (newTrip && newTrip.donations) setDonations(newTrip.donations);
   };
 
   return (
@@ -237,13 +246,16 @@ export default function TripInfo(props) {
         }}
       />
       <Select
+        classNames={{ input: classes.tripSelect }}
         w={"95%"}
         mt={7}
         variant="filled"
         placeholder={currentTrip?.tripTitle || "No Trips found..."}
         onChange={(e) => changeTrip(e)}
+        checkIconPosition="right"
+        defaultValue={currentTrip?.tripTitle}
         data={
-          allTrips.length > 0 &&
+          allTrips?.length > 0 &&
           allTrips.map((trip) => {
             return {
               value: trip.tripTitle,
@@ -253,7 +265,10 @@ export default function TripInfo(props) {
           })
         }
         rightSection={
-          <IconChevronDown size={17} opacity={allTrips.length >= 2 ? 1 : 0} />
+          <IconChevronDown
+            size={17}
+            opacity={allTrips && allTrips.length >= 2 ? 1 : 0}
+          />
         }
         style={{
           pointerEvents: allTrips.length > 1 ? "all" : "none",

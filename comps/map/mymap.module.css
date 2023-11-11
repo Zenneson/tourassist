@@ -32,7 +32,7 @@
 }
 
 .destinationModalContent {
-	background-color: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.9));
+	background-color: light-dark(rgba(248, 249, 250, 0.95), #0b0c0d);
 }
 
 .destinationModalOverlay {
@@ -52,6 +52,7 @@
 }
 
 .placeAutoComplete {
+	border: none;
 	border-radius: 3px 3px 0 0;
 }
 
@@ -63,6 +64,12 @@
 	&::placeholder {
 		color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
 	}
+}
+
+.countryAutoComplete {
+	border: none;
+	border-top: 2px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+	box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
 }
 
 .countryAutoCompleteOption,

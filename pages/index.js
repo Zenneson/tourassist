@@ -1,3 +1,5 @@
+"use client";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import {
   useComputedColorScheme,
@@ -11,14 +13,17 @@ import {
 import { useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
 import classes from "./index.module.css";
-import Intro from "../comps/intro";
 import Slider from "react-slick";
 import Legal from "./legal";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const auth = getAuth();
+// import Intro from "../comps/intro";
+const Intro = dynamic(() => import("../comps/intro"), {
+  ssr: false,
+});
 
+const auth = getAuth();
 export default function Home(props) {
   const { height, width } = useViewportSize();
   const [showLegal, setShowLegal] = useState(false);

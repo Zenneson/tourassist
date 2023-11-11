@@ -129,6 +129,8 @@ export default function Donations(props) {
         <Grid.Col span="content">
           {donationsData?.length !== 0 && (
             <SegmentedControl
+              bg={dark ? "dark.6" : "gray.0"}
+              color={dark ? "dark.4" : "gray.3"}
               value={sorted}
               onChange={setSorted}
               data={[
@@ -138,6 +140,24 @@ export default function Donations(props) {
               size="xs"
               top={-4}
               w={150}
+              styles={{
+                root: {
+                  border: "none",
+                  outline: "none",
+                  boxShadow: dark
+                    ? "0 2px 4px rgba(0,0,0,0.2)"
+                    : "0 1px 3px rgba(0,0,0,0.05)",
+                },
+                indicator: {
+                  backgroundColor: dark ? "dark.8" : "#eee",
+                  boxShadow: dark
+                    ? "0 2px 4px rgba(0,0,0,0.2)"
+                    : "0 2px 4px rgba(0,0,0,0.15)",
+                },
+                label: {
+                  color: dark ? "dark.4" : "#999",
+                },
+              }}
             />
           )}
         </Grid.Col>
@@ -197,7 +217,7 @@ export default function Donations(props) {
         <Center>
           {/* <Button
             variant="default"
-            compact
+            size="compact-xs"
             pr={10}
             my={10}
             leftSection={<IconReload size={14} />}

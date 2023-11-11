@@ -55,7 +55,7 @@ import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
 import classes from "./tripplanner.module.css";
 
-export default function TripPlannerPage(props) {
+export default function TripPlanner(props) {
   let { auth, mapLoaded } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -70,7 +70,6 @@ export default function TripPlannerPage(props) {
   const [active, setActive] = useState(0);
   const [infoAdded, setInfoAdded] = useState(false);
   const router = useRouter();
-  const sumRef = useRef(null);
   const titleRef = useRef(null);
   const dayjs = require("dayjs");
 
@@ -305,10 +304,6 @@ export default function TripPlannerPage(props) {
   }, [form, roundTrip, bookings, initialCity, initialRegion, form.values]);
 
   const UseTickets = () => {
-    const [renderState, setRenderState] = useSessionStorage({
-      key: "renderState",
-      defaultValue: 0,
-    });
     const [places, setPlaces] = useSessionStorage({
       key: "places",
       defaultValue: form.values.places || bookings.places || [],
@@ -318,9 +313,7 @@ export default function TripPlannerPage(props) {
       defaultValue: 0,
     });
 
-    const [resetBtnPop, setResetBtnPop] = useState(false);
     let tabIndexCounter = 1;
-
     const [newCostName, setNewCostName] = useState(
       Array(places.length).fill("")
     );
@@ -560,11 +553,16 @@ export default function TripPlannerPage(props) {
                     color={dark && "gray.9"}
                   />
                   <Popover
-                    className={classes.newCostPopover}
                     trapFocus
                     position="left"
                     withArrow={true}
+                    shadow="xl"
                     opened={popoverOpened[index]}
+                    styles={{
+                      dropdown: {
+                        padding: 3,
+                      },
+                    }}
                     onClose={() =>
                       setPopoverOpened({ ...popoverOpened, [index]: false })
                     }
@@ -626,8 +624,6 @@ export default function TripPlannerPage(props) {
                       variant="transparent"
                       size="xl"
                       color="gray"
-                      onMouseEnter={() => setResetBtnPop(true)}
-                      onMouseLeave={() => setResetBtnPop(false)}
                       onClick={handleReset}
                     >
                       <IconRefreshDot size={40} />
@@ -654,7 +650,6 @@ export default function TripPlannerPage(props) {
     return (
       <NumberInput
         classNames={{ input: classes.totalCostInput }}
-        ref={sumRef}
         id="totalId"
         min={0}
         icon={<IconCurrencyDollar />}
@@ -777,6 +772,27 @@ export default function TripPlannerPage(props) {
       searchWords.every((searchWord) =>
         option.label.toLowerCase().includes(searchWord)
       )
+    );
+  };
+
+  const TripTitle = () => {
+    const [value, setValue] = useState(tripTitle);
+
+    return (
+      <Input
+        classNames={{ input: classes.tripTitleInput }}
+        ref={titleRef}
+        size={"xl"}
+        w="100%"
+        placeholder="Title..."
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
+        onBlur={(e) => {
+          setTripTitle(e.target.value);
+        }}
+      />
     );
   };
 
@@ -1209,15 +1225,7 @@ export default function TripPlannerPage(props) {
                   align="center"
                   gap={20}
                 >
-                  <Input
-                    classNames={{ input: classes.tripTitleInput }}
-                    ref={titleRef}
-                    size={"xl"}
-                    w="100%"
-                    placeholder="Title..."
-                    value={tripTitle}
-                    onChange={(e) => setTripTitle(e.target.value)}
-                  />
+                  <TripTitle />
                   <TripContent
                     titleRef={titleRef}
                     active={active}

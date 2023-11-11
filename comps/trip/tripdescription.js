@@ -20,8 +20,7 @@ export default function TripDescription(props) {
           label={
             // Read More Toggle
             <Button
-              compact
-              size="xs"
+              size="compact-xs"
               radius={25}
               px={15}
               variant="subtle"

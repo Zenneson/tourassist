@@ -38,9 +38,8 @@ import {
   IconTrash,
   IconUpload,
   IconX,
-  IconPhoto,
   IconCheck,
-  IconFrame,
+  IconPhoto,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { updateEditedTrip, removeImageByName } from "../../libs/custom";
@@ -442,11 +441,11 @@ export default function TripContent(props) {
                   <Badge
                     variant="filled"
                     size="lg"
-                    color={dark ? "dark.7" : "gray.5"}
-                    c={dark ? "gray.0" : "gray.0"}
+                    color={dark ? "dark.5" : "gray.5"}
+                    c={dark ? "gray.0" : "gray.9"}
                     w={"60%"}
                     ml={"20%"}
-                    opacity={0.5}
+                    opacity={0.2}
                     mt={5}
                     style={{
                       cursor: "default",
@@ -499,8 +498,9 @@ export default function TripContent(props) {
       )}
       {/* Text Editor */}
       <ScrollArea
-        h={300}
+        h={modalMode === "editTrip" ? 200 : 250}
         w={"100%"}
+        type="hover"
         scrollbarSize={8}
         scrollHideDelay={250}
         style={{
@@ -516,6 +516,7 @@ export default function TripContent(props) {
           }}
           editor={editor}
           position="relative"
+          mih={modalMode === "editTrip" ? 200 : 250}
           bg={dark ? "dark.6" : "gray.2"}
           onBlur={() => {
             if (router.pathname === "/tripplanner")
@@ -585,13 +586,17 @@ export default function TripContent(props) {
               }}
             />
             <MantineSlider
-              className={classes.sizeSlider}
+              classNames={{
+                root: classes.sizeSlider,
+                thumb: classes.sizeSliderThumb,
+              }}
               mt={20}
               min={1}
               max={5}
               step={0.05}
-              thumbSize={20}
-              thumbChildren={<IconFrame size={14} stroke={3} />}
+              size={"lg"}
+              thumbSize={35}
+              thumbChildren={<IconPhoto size={16} stroke={3} />}
               defaultValue={1}
               color={dark ? "blue.9" : "blue.4"}
               label={null}
@@ -628,7 +633,11 @@ export default function TripContent(props) {
           <LoadingOverlay
             overlayColor={dark ? "dark.7" : "gray.0"}
             visible={processingImage}
-            overlayProps={{ backgroundOpacity: 0, blur: 0 }}
+            overlayProps={{
+              backgroundColor: dark ? "dark.7" : "gray.0",
+              backgroundOpacity: 0,
+              blur: 0,
+            }}
           />
         </>
       )}

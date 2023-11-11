@@ -143,7 +143,7 @@ export default function Purchase(props) {
           justify="space-between"
           p={20}
         >
-          <Stack spacing={0}>
+          <Stack gap={0}>
             <Text size={12}>Available Funds</Text>
             <Title order={1}>${addComma(funds)}</Title>
           </Stack>

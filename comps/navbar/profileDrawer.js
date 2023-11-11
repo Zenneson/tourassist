@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
@@ -22,6 +23,7 @@ import {
   Badge,
   ScrollArea,
 } from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   IconUserCircle,
   IconLogout,
@@ -64,6 +66,11 @@ export default function ProfileDrawer(props) {
 
   const { data: allTrips, error } = useSWR(user?.email, fetchTrips);
 
+  const [currentTrip, setCurrentTrip] = useSessionStorage({
+    key: "currentTrip",
+    defaultValue: allTrips ? allTrips[0] : {},
+  });
+
   if (error) {
     console.error("Error fetching trips:", error);
   }
@@ -73,6 +80,12 @@ export default function ProfileDrawer(props) {
     router.prefetch("/help");
     router.prefetch("/legal");
   }, [router]);
+
+  useEffect(() => {
+    if (currentTrip && currentTrip.length === 0) {
+      setCurrentTrip(allTrips[0]);
+    }
+  }, [currentTrip, setCurrentTrip, allTrips]);
 
   const links = [
     {
@@ -178,8 +191,8 @@ export default function ProfileDrawer(props) {
             mb={20}
             w={"253px"}
             ml={"15px"}
-            opacity={dark ? 0.6 : 0.4}
-            color={dark && "dark.6"}
+            opacity={dark ? 0.7 : 0.4}
+            color={dark && "dark.7"}
           />
           {user && (
             <>
@@ -191,6 +204,9 @@ export default function ProfileDrawer(props) {
                     cursor: "default",
                     border: "none",
                     userSelect: "none",
+                    border: dark
+                      ? "1px solid rgba(255, 255, 255, 0.03)"
+                      : "1px solid rgba(0, 0, 0, 0.1)",
                   }}
                 >
                   {addEllipsis(user.email, 40)}
@@ -200,8 +216,8 @@ export default function ProfileDrawer(props) {
                 w={"90%"}
                 mt={20}
                 ml={"5%"}
-                opacity={dark ? 0.6 : 0.4}
-                color={dark && "dark.6"}
+                opacity={dark ? 0.7 : 0.4}
+                color={dark && "dark.7"}
               />
             </>
           )}
@@ -371,6 +387,8 @@ export default function ProfileDrawer(props) {
               </Flex>
             </Title>
             <TripInfo
+              currentTrip={currentTrip}
+              setCurrentTrip={setCurrentTrip}
               allTrips={allTrips}
               setMainMenuOpened={setMainMenuOpened}
               setPanelShow={setPanelShow}

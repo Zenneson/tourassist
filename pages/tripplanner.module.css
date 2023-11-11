@@ -5,10 +5,6 @@
 	}
 }
 
-.newCostPopover .mantine-Popover-dropdown {
-	padding: 3;
-}
-
 .travelersInput {
 	text-align: center;
 	font-weight: 700;
@@ -72,6 +68,8 @@
 }
 
 .tripTitleInput {
+	border: none !important;
+	outline: none !important;
 	box-shadow: 0px 2px 3px light-dark(rgba(0, 0, 0, 0.02), rgba(100, 100, 100, 0.01));
 	border: 1px solid light-dark(rgba(0, 0, 0, 0.02), rgba(255, 255, 255, 0.02));
 	background: light-dark(#e9ecef, #0b0d0d);
@@ -82,9 +80,9 @@
 }
 
 .panelBtns {
-	opacity: 0.3;
-	background: light-dark(#2dc7f3, #041c4a);
+	opacity: 0.4;
+	background: light-dark(#2dc7f3, #020202);
 	&:hover {
-		opacity: 1;
+		opacity: 0.8;
 	}
 }

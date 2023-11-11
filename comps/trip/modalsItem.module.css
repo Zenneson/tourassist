@@ -30,11 +30,11 @@
 }
 
 .updateInputTitle {
-	background: light-dark(#dee2e6, #101113);
+	background: light-dark(#f1f3f5, #0b0c0d);
 	&::placeholder {
 		font-weight: 700;
 		font-style: italic;
-		color: rgba(255, 255, 255, 0.08);
+		color: light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.2));
 	}
 }
 

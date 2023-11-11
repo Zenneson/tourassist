@@ -415,8 +415,7 @@ export default function Trippage(props) {
                   label={
                     // Edit Trip Details
                     <Button
-                      compact
-                      size="xs"
+                      size="compact-xs"
                       radius={25}
                       pl={10}
                       pr={15}

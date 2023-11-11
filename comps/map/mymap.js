@@ -189,15 +189,10 @@ const CustomAutoComplete = ({
           radius={version === "country" ? "xl" : "3px 3px 0 0"}
           pointer
           type="input"
-          leftSection={<IconWorldSearch size={18} />}
+          leftSection={<IconWorldSearch size={20} />}
           leftSectionWidth={35}
           rightSectionPointerEvents="none"
           value={version === "country" ? countrySearch : placeSearch}
-          styles={{
-            input: {
-              border: "none",
-            },
-          }}
           onBlur={() => combobox.closeDropdown()}
           onChange={(e) => {
             const search = e.target.value;
@@ -397,7 +392,9 @@ export default function Mymap(props) {
   };
 
   const goToLocation = (type, center, maxZoom, location, name) => {
-    setShowMainMarker(false);
+    if (type === "country") setShowMainMarker(false);
+    if (type !== "country" || location !== "United States")
+      setShowStates(false);
     let zoom = maxZoom;
     let pitch = 40;
     if (
@@ -767,7 +764,7 @@ export default function Mymap(props) {
         opened={showModal}
         onClose={setShowModal}
         withCloseButton={false}
-        padding={"xl"}
+        padding={"md"}
         centered
       >
         <Text fz={14} ta={"center"} mb={10}>

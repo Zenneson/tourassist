@@ -141,7 +141,7 @@ export default function Updates(props) {
         w={"85%"}
         mb={index === 0 ? 0 : 20}
         py={20}
-        px={30}
+        px={10}
         fz={14}
         gap={10}
       >
@@ -274,13 +274,12 @@ export default function Updates(props) {
 
         <Flex direction={"column"} w={"85%"}>
           <Box
-            mx={"5%"}
-            py={5}
-            pl={20}
+            pt={5}
+            pl={10}
             style={{
               borderLeft: dark
-                ? "2px solid rgba(255,255,255,0.15)"
-                : "2px solid rgba(0,0,0,0.15)",
+                ? "2px solid rgba(255,255,255,0.05)"
+                : "2px solid rgba(0,0,0,0.05)",
             }}
           >
             <Title order={5}>{update.updateTitle}</Title>
@@ -305,8 +304,7 @@ export default function Updates(props) {
           label={
             // Show all updates toggle
             <Button
-              compact
-              size="xs"
+              size="compact-xs"
               radius={25}
               px={15}
               variant="subtle"

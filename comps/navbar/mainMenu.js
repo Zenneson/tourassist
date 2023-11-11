@@ -111,13 +111,8 @@ export default function MainMenu(props) {
 
   return (
     <>
-      <Box
-        style={{
-          userSelect: "none",
-        }}
-      >
+      <Box>
         <Box
-          pb={0}
           height={1} // so that the header does not block the middele of the top
           opacity={searchOpened ? 0 : 1}
           style={{

@@ -1,7 +1,9 @@
-.prevSliderButton .mantine-Button-root,
-.nextSliderButton .mantine-Button-root {
+.prevSliderButton,
+.nextSliderButton {
 	border: none;
+	opacity: 0.1;
 	&:hover {
+		opacity: 1;
 		background-color: transparent;
 		transform: scale(1.2);
 	}

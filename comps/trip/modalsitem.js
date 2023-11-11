@@ -201,8 +201,9 @@ export default function ModalsItem(props) {
     return (
       <DateInput
         classNames={{ input: classes.dateInput }}
-        icon={<IconCalendarEvent size={20} />}
-        iconWidth={50}
+        rightSection={<IconCalendarEvent size={20} />}
+        rightSectionWidth={50}
+        rightSectionPointerEvents="none"
         variant="default"
         minDate={weekAhead}
         firstDayOfWeek={0}
@@ -530,9 +531,8 @@ export default function ModalsItem(props) {
           content: classes.editTripModalContent,
           overlay: classes.editTripModalOverlay,
         }}
-        centered
         withCloseButton={false}
-        size={850}
+        size={864}
         padding={"xl"}
         opened={modalMode === "editTrip"}
         scrollAreaComponent={ScrollArea.Autosize}
@@ -551,24 +551,24 @@ export default function ModalsItem(props) {
             size={25}
             onClick={closeEditTripModal}
           />
-          <Stack align="center" spacing={20}>
+          <Stack align="center" gap={20}>
             <Title order={6} w={"100%"} ta={"left"} fs={"italic"}>
               EDIT TRIP DETAILS:
             </Title>
             <Group
               w={"100%"}
-              pl={15}
-              pt={5}
-              pb={10}
+              pl={10}
+              pt={2}
+              pb={5}
               ml={-3}
               justify="space-between"
               style={{
-                borderLeft: `3px solid ${
+                borderLeft: `2px solid ${
                   dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"
                 }`,
               }}
             >
-              <Text fw={700} fz={30} w={"70%"} fs={"italic"} lineClamp={1}>
+              <Text fw={700} fz={15} w={"70%"} fs={"italic"} lineClamp={1}>
                 {tripData && tripData.tripTitle}
               </Text>
               <DateChanger />
@@ -596,7 +596,6 @@ export default function ModalsItem(props) {
         withCloseButton={false}
         size={modalMode === "donating" ? "auto" : 850}
         padding={"xl"}
-        centered
         opened={
           modalMode === "postUpdate" ||
           modalMode === "editUpdate" ||
@@ -774,7 +773,7 @@ export default function ModalsItem(props) {
                   mt={10}
                   minRows={8}
                 />
-                <Group justify="flex-end" mt={20} w={"100%"} spacing={0}>
+                <Group justify="flex-end" mt={20} w={"100%"} gap={0}>
                   <Button
                     variant="Transparent"
                     fw={100}
