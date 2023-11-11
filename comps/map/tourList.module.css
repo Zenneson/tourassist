@@ -1,15 +1,16 @@
 .tourDrawer {
-	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(26, 27, 30, 0.95));
+	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(12, 13, 14, 0.95));
 }
 
 .readyButton {
+	box-shadow: 0 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
 	transition: all 200ms ease-in-out;
-	opacity: 0.7;
+	opacity: 0.8;
 	font-weight: 400;
 	&:hover {
 		opacity: 1;
 		color: #fff;
-		transform: scale(1.02);
+		transform: scale(1.01);
 	}
 }
 

@@ -8,6 +8,8 @@ import {
 import classes from "./placeListItem.module.css";
 import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { Draggable } from "react-beautiful-dnd";
+import { getNewCenter } from "../../public/data/getNewCenter";
+import { get } from "http";
 
 export default function PlaceListItem(props) {
   const {
@@ -18,6 +20,11 @@ export default function PlaceListItem(props) {
     setListOpened,
     places,
     setPlaces,
+    goToLocation,
+    setShowMainMarker,
+    setLngLat,
+    setLocationDrawer,
+    setArea,
   } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -69,20 +76,40 @@ export default function PlaceListItem(props) {
           )}
           <Grid.Col span="content" pl={10} pr={0}>
             <Avatar
+              radius="xl"
               variant="gradient"
               gradient={
                 dark
                   ? { from: "#004585", to: "#00376b", deg: 180 }
-                  : { from: "#57b2cb", to: "#11a3cc", deg: 180 }
+                  : { from: "#93f3fc", to: "#00e8fc", deg: 180 }
               }
-              radius="xl"
-              color="#00E8FC"
+              onClick={() => {
+                places.map((location) => {
+                  if (location.label === place) {
+                    setArea(location);
+                    const coords =
+                      location.type === "country"
+                        ? getNewCenter(location).newCenter
+                        : location.coordinates;
+                    goToLocation(
+                      location.type,
+                      coords,
+                      getNewCenter(location).maxZoom,
+                      location.country,
+                      location.label
+                    );
+                    if (location.type !== "country") setShowMainMarker(true);
+                    setLngLat(coords);
+                    setLocationDrawer(true);
+                  }
+                });
+              }}
             >
               {firstLastLetters(place)}
             </Avatar>
           </Grid.Col>
           <Grid.Col span="auto">
-            <Text size="md" fw={700}>
+            <Text size="xs" fw={700}>
               {place}
             </Text>
             <Text size="xs" opacity={0.5}>

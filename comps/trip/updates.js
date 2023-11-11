@@ -150,7 +150,8 @@ export default function Updates(props) {
           <Menu closeOnItemClick={true}>
             <Menu.Target>
               <ActionIcon
-                variant="Transparent"
+                variant="transparent"
+                color={dark ? "#fff" : "#000"}
                 pos={"absolute"}
                 top={17}
                 right={10}
@@ -184,8 +185,9 @@ export default function Updates(props) {
         )}
         <Flex direction={"column"} w={"10%"}>
           <Stack
-            spacing={0}
+            gap={0}
             style={{
+              transform: "scale(0.9) translateY(-10px)",
               borderRadius: "3px",
               overflow: "hidden",
               boxShadow: `0 2px 5px 0 rgba(0,0,0,0.1)`,
@@ -226,13 +228,18 @@ export default function Updates(props) {
           </Stack>
           <Menu>
             <Menu.Target>
-              <Center mt={15}>
+              <Center>
                 <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
                   label={"Share Update"}
                   position="bottom"
                   openDelay={800}
                 >
-                  <ActionIcon variant="transparent" size={"md"}>
+                  <ActionIcon
+                    variant="transparent"
+                    color={dark ? "gray.0" : "gray.5"}
+                    size={"sm"}
+                  >
                     <IconShare size={30} />
                   </ActionIcon>
                 </Tooltip>
@@ -271,10 +278,12 @@ export default function Updates(props) {
             py={5}
             pl={20}
             style={{
-              borderLeft: "2px solid rgba(255,255,255,0.15)",
+              borderLeft: dark
+                ? "2px solid rgba(255,255,255,0.15)"
+                : "2px solid rgba(0,0,0,0.15)",
             }}
           >
-            <Title order={3}>{update.updateTitle}</Title>
+            <Title order={5}>{update.updateTitle}</Title>
             <UpdateContent content={update.updateContent} />
           </Box>
         </Flex>

@@ -9,8 +9,8 @@ export default function UpdateContent(props) {
 
   return (
     <>
-      <Text mt={10} lineClamp={readmore === "closed" && 5}>
-        <Box ref={ref} dangerouslySetInnerHTML={{ __html: content }} />
+      <Text lineClamp={readmore === "closed" && 5}>
+        <Box fz={12} ref={ref} dangerouslySetInnerHTML={{ __html: content }} />
       </Text>
       {(height > 100 || readmore === "open") && (
         <Divider

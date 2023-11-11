@@ -61,7 +61,7 @@
 .mainDrawer {
 	min-height: 570px;
 	overflow: hidden;
-	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(26, 27, 30, 0.95));
+	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(12, 13, 14, 0.95));
 }
 
 .legalButton {
@@ -90,7 +90,7 @@
 }
 
 .panelDrawer {
-	background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(26, 27, 30, 0.9));
+	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(12, 13, 14, 0.95));
 }
 
 .panelDrawerOverlay {

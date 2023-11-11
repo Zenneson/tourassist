@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import AccountInfo from "./accountInfo";
+import TripInfo from "./tripInfo";
 import useSWR from "swr";
-import Money from "./tripInfo";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import {
@@ -35,7 +35,6 @@ import {
 import { addEllipsis } from "../../libs/custom";
 import { useUser } from "../../libs/context";
 import classes from "./profileDrawer.module.css";
-import TripInfo from "./tripInfo";
 
 export default function ProfileDrawer(props) {
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -164,7 +163,7 @@ export default function ProfileDrawer(props) {
           lockScroll={false}
           withOverlay={false}
           withCloseButton={false}
-          shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+          shadow="rgba(0, 0, 0, 0.2) 0px 5px 15px"
           transitionProps={{
             duration: 100,
           }}
@@ -325,7 +324,7 @@ export default function ProfileDrawer(props) {
         onClose={closePanel}
         withCloseButton={false}
         scrollAreaComponent={ScrollArea.Autosize}
-        shadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+        shadow="rgba(0, 0, 0, 0.2) 0px 5px 15px"
         transitionProps={{
           duration: 100,
         }}

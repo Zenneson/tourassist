@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -53,7 +53,7 @@ export default function LoginComp(props) {
   const lastNameFloating =
     lastNameFocus || lastNameValue.length > 0 || undefined;
 
-  const [passPopOpened, setPassPopOpened] = useState(false);
+  const [shouldShowPopover, setShouldShowPopover] = useState(false);
   const [type, toggle] = useToggle(["login", "sign-up"]);
 
   const router = useRouter();
@@ -107,6 +107,19 @@ export default function LoginComp(props) {
 
   const strength = getStrength(passValue);
   const color = strength === 100 ? "#00E8FC" : strength > 50 ? "yellow" : "red";
+
+  useEffect(() => {
+    if (strength === 100) {
+      const timer = setTimeout(() => {
+        setShouldShowPopover(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    } else {
+      if (passValue.length > 0 && type === "sign-up") {
+        setShouldShowPopover(true);
+      }
+    }
+  }, [strength, passValue, type]);
 
   const form = useForm({
     initialValues: {
@@ -280,9 +293,11 @@ export default function LoginComp(props) {
                   required={!firstNameFloating}
                   label="First Name"
                   labelProps={{ "data-floating": firstNameFloating }}
-                  placeholder="John"
                   autoComplete="given-name"
                   value={form.values.firstName}
+                  placeholder={
+                    firstNameFocus && firstNameValue === "" ? "John" : ""
+                  }
                   classNames={{
                     root: classes.root,
                     input: classes.input,
@@ -310,9 +325,11 @@ export default function LoginComp(props) {
                   required={!lastNameFloating}
                   label="Last Name"
                   labelProps={{ "data-floating": lastNameFloating }}
-                  placeholder="Doe"
                   autoComplete="family-name"
                   value={form.values.lastName}
+                  placeholder={
+                    lastNameFocus && lastNameValue === "" ? "Smith" : ""
+                  }
                   classNames={{
                     root: classes.root,
                     input: classes.input,
@@ -353,47 +370,47 @@ export default function LoginComp(props) {
               error={form.errors.email && "Invalid email"}
             />
             <Popover
-              opened={passPopOpened}
+              opened={
+                shouldShowPopover && passValue.length > 0 && type === "sign-up"
+              }
               position="bottom"
               width="target"
-              transition="pop"
+              withinPortal={false}
+              transitionProps={{
+                transition: "pop",
+              }}
             >
               <Popover.Target>
-                <div
-                  onFocusCapture={() => {
-                    if (type === "sign-up") setPassPopOpened(true);
+                <PasswordInput
+                  required={!passFloating}
+                  label="Password"
+                  labelProps={{ "data-floating": passFloating }}
+                  name="password"
+                  mt="xs"
+                  autoComplete={"current-password" || "new-password"}
+                  value={form.values.password}
+                  classNames={{
+                    root: classes.root,
+                    input: classes.input,
+                    label: passFloating ? classes.labelFloating : classes.label,
                   }}
-                  onBlurCapture={() => setPassPopOpened(false)}
-                >
-                  <PasswordInput
-                    required={!passFloating}
-                    label="Password"
-                    labelProps={{ "data-floating": passFloating }}
-                    name="password"
-                    autoComplete="current-password"
-                    value={form.values.password}
-                    classNames={{
-                      root: classes.root,
-                      input: classes.input,
-                      label: passFloating
-                        ? classes.labelFloating
-                        : classes.label,
-                    }}
-                    onChange={(event) => {
-                      setPassValue(event.currentTarget.value);
-                      form.setFieldValue("password", event.currentTarget.value);
-                    }}
-                    onFocus={() => {
-                      setPasswordFocus(true);
-                    }}
-                    onBlur={() => setPasswordFocus(false)}
-                    mt="xs"
-                    error={
-                      form.errors.password &&
-                      "Password does not meet requirements"
-                    }
-                  />
-                </div>
+                  onChange={(event) => {
+                    setPassValue(event.currentTarget.value);
+                    form.setFieldValue("password", event.currentTarget.value);
+                  }}
+                  onFocus={() => {
+                    if (type === "sign-up") setShouldShowPopover(true);
+                    setPasswordFocus(true);
+                  }}
+                  onBlur={() => setPasswordFocus(false)}
+                  placeholder={
+                    passwordFocus && passValue === "" ? "**********" : ""
+                  }
+                  error={
+                    form.errors.password &&
+                    "Password does not meet requirements"
+                  }
+                />
               </Popover.Target>
               <Popover.Dropdown>
                 <Progress
@@ -416,11 +433,13 @@ export default function LoginComp(props) {
                     label: classes.termsCheckbox,
                     input: classes.termsCheckbox,
                   }}
+                  size="xs"
                   label={
-                    <>
+                    <Box>
                       I accept{" "}
                       <Anchor
-                        c="blue.5"
+                        c={dark ? "blue.3" : "blue.5"}
+                        size="xs"
                         onClick={(e) => {
                           e.preventDefault();
                           setShowLegal(true);
@@ -428,7 +447,7 @@ export default function LoginComp(props) {
                       >
                         terms and conditions
                       </Anchor>
-                    </>
+                    </Box>
                   }
                   checked={form.values.terms}
                   mt={10}

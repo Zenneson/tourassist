@@ -1,4 +1,4 @@
-.dropzone .mantine-Dropzone-root {
+.dropzone {
 	border: 5px dashed light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.3)) !important;
 	background: light-dark(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0)) !important;
 	&:hover {
@@ -6,7 +6,8 @@
 	}
 }
 
-.tripContentTitle .mantine-Flex-root {
+.tripContentTitle {
+	color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
 	border-radius: 3;
 	cursor: pointer;
 	&:hover {
@@ -14,13 +15,29 @@
 	}
 }
 
-.trash .mantine-ActionIcon-root:hover {
-	opacity: 1;
+.uploadBtn {
+	box-shadow: 0px 2px 3px light-dark(rgba(0, 0, 0, 0.02), rgba(100, 100, 100, 0.01));
+	border: 1px solid light-dark(rgba(0, 0, 0, 0.02), rgba(255, 255, 255, 0.02));
+	background: light-dark(#e9ecef, #0b0d0d);
+	color: #909296;
+	&:hover {
+		color: light-dark(#0b0d0d, #e9ecef);
+	}
+}
+
+.trash {
+	opacity: 0.3;
+	&:hover {
+		opacity: 1;
+	}
 }
 
 .textEditorRoot {
 	transition: border-top 0.2s ease;
-	border: none;
+	box-shadow: 0px 2px 3px light-dark(rgba(0, 0, 0, 0.02), rgba(100, 100, 100, 0.01));
+	border: 1px solid light-dark(rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.02));
+	border-radius: 3px;
+	overflow: hidden;
 	width: 100%;
 	min-width: 500px;
 }
@@ -36,11 +53,12 @@
 	color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
 }
 
-/* .textEditorContent .ProseMirror {
+.textEditorContent > div {
+	/* ProseMirror */
 	padding-left: 21px;
 	padding-right: 21px;
 	min-height: 250px;
-} */
+}
 
 .sizeSlider .mantine-Slider-root {
 	z-index: 1000;
@@ -50,4 +68,12 @@
 
 .sizeSlider .mantine-Slider-thumb {
 	border: none;
+}
+
+.dimBtn {
+	transition: all 150ms ease-in-out;
+	opacity: 0.3;
+	&:hover {
+		opacity: 0.85;
+	}
 }

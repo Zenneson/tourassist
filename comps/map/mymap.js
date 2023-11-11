@@ -1,3 +1,4 @@
+"use client";
 import React, {
   useState,
   useEffect,
@@ -12,12 +13,9 @@ import { useSessionStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Center,
-  ActionIcon,
   Box,
   Button,
-  Title,
   InputBase,
-  Flex,
   Text,
   Group,
   NavLink,
@@ -30,19 +28,19 @@ import {
   useCombobox,
   Stack,
   Tooltip,
-  ScrollArea,
-  Divider,
 } from "@mantine/core";
 import {
   IconList,
   IconX,
   IconMapPinFilled,
+  IconArrowBadgeRightFilled,
+  IconArrowBarRight,
   IconWorldSearch,
   IconMapPinSearch,
+  IconCaretDownFilled,
   IconPlane,
   IconAlertTriangle,
   IconCheck,
-  IconSquareX,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
@@ -87,7 +85,6 @@ const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
 const CustomAutoComplete = ({
   version,
   area,
-  dark,
   countryData,
   placeData,
   countrySearch,
@@ -169,7 +166,6 @@ const CustomAutoComplete = ({
       store={combobox}
       withinPortal={false}
       onOptionSubmit={(value, optionProps) => {
-        locationHandler(optionProps.children.props);
         if (version === "country") {
           handleChange("country");
           setCountrySearch(value);
@@ -177,26 +173,29 @@ const CustomAutoComplete = ({
           handleChange("place");
           setPlaceSearch(value);
         }
+        locationHandler(optionProps.children.props);
       }}
     >
       <Combobox.Target>
         <InputBase
-          size={version === "country" ? "lg" : "md"}
+          classNames={{
+            input:
+              version === "country"
+                ? classes.countryAutoComplete
+                : classes.placeAutoComplete,
+          }}
+          size={version === "country" ? "lg" : "sm"}
           w={version === "country" ? 350 : "auto"}
+          radius={version === "country" ? "xl" : "3px 3px 0 0"}
           pointer
-          radius={version === "country" ? "xl" : "5px 5px 0 0"}
           type="input"
-          leftSection={<IconWorldSearch />}
+          leftSection={<IconWorldSearch size={18} />}
+          leftSectionWidth={35}
           rightSectionPointerEvents="none"
           value={version === "country" ? countrySearch : placeSearch}
           styles={{
             input: {
               border: "none",
-              boxShadow:
-                version === "country" ? "var(--mantine-shadow-md)" : "none",
-              borderTop: dark
-                ? "2px solid rgba(204, 204, 204, 0.2)"
-                : "2px solid rgba(153, 153, 153, 0.2)",
             },
           }}
           onBlur={() => combobox.closeDropdown()}
@@ -218,7 +217,7 @@ const CustomAutoComplete = ({
                   `Search in${prefaceThe.includes(area.label) ? " The" : ""} ${
                     area.country === "United States" ? area.country : area.label
                   }?`,
-                  28
+                  40
                 )
           }
         />
@@ -257,7 +256,6 @@ export default function Mymap(props) {
   const [locationDrawer, setLocationDrawer] = useState(false);
   const [lngLat, setLngLat] = useState([]);
   const [showStates, setShowStates] = useState(false);
-  const [openUsSelect, setOpenUsSelect] = useState(false);
   const [popupInfo, setPopupInfo] = useState(null);
   const [showMainMarker, setShowMainMarker] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
@@ -285,11 +283,6 @@ export default function Mymap(props) {
   };
 
   const [viewState, setViewState] = useState(initialViewState);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   useEffect(() => {
     router.prefetch("/tripplanner");
@@ -322,6 +315,7 @@ export default function Mymap(props) {
   };
 
   const locationHandler = (feature) => {
+    setTopCities([]);
     setShowChoice(false);
     if (feature == null) return;
     let locationObj = {};
@@ -403,6 +397,7 @@ export default function Mymap(props) {
   };
 
   const goToLocation = (type, center, maxZoom, location, name) => {
+    setShowMainMarker(false);
     let zoom = maxZoom;
     let pitch = 40;
     if (
@@ -436,7 +431,7 @@ export default function Mymap(props) {
 
   const addPlaces = (place) => {
     let newPlace = JSON.parse(JSON.stringify(place));
-    newPlace.id = place.id;
+    // newPlace.id = place.id;
     newPlace.order = places.length + 1;
     let newPlaces = [...places, newPlace];
     setPlaces(newPlaces);
@@ -495,6 +490,7 @@ export default function Mymap(props) {
               onClick={(e) => {
                 e.originalEvent.stopPropagation();
                 setPopupInfo(city);
+                setArea(city);
               }}
             >
               <IconMapPinFilled className={classes.miniMapPin} />
@@ -651,6 +647,7 @@ export default function Mymap(props) {
       label: city[0],
       type: "city",
       country: area.country,
+      center: city[1],
       region: city[2],
     });
     setPopupInfo(null);
@@ -662,7 +659,11 @@ export default function Mymap(props) {
   const choosePlace = (choice) => {
     setMainMenuOpened(false);
     const place = {
+      label: area.label,
       place: area.label,
+      type: area.type,
+      coordinates: area.center,
+      country: area.country,
       region:
         area.type === "city" && area.country === "United States"
           ? `${area.state || area.region}, ${area.country}`
@@ -670,6 +671,7 @@ export default function Mymap(props) {
           ? ""
           : area.country,
     };
+
     setPlaceLocation([place]);
     if (choice === "tour") {
       setListOpened(true);
@@ -715,8 +717,8 @@ export default function Mymap(props) {
   };
 
   const filter = useMemo(
-    () => ["in", "name_en", area.label.toString()],
-    [area.label]
+    () => ["in", "name_en", area.label?.toString()],
+    [area]
   );
 
   const openTourList = () => {
@@ -729,470 +731,480 @@ export default function Mymap(props) {
     setShowModal(false);
   };
 
+  const renderRegion = (area) => {
+    let text;
+    switch (true) {
+      case area.country === area.region:
+      case area.country === area.state:
+      case area.country === "United States" && area.type === "region":
+        text = area.country;
+        break;
+      default:
+        text = `${area.region || area.state} | ${area.country}`;
+        break;
+    }
+    return (
+      <Text fw={100} fz={12} pl={22} c={dark ? "white" : "dark"}>
+        {text}
+      </Text>
+    );
+  };
+
   return (
-    isClient && (
-      <>
-        <LoadingOverlay
-          visible={!mapLoaded}
-          overlayProps={{ backgroundOpacity: 1 }}
-        />
-        <Modal
-          classNames={{
-            root: classes.destinationModal,
-            content: classes.destinationModalContent,
-            overlay: classes.destinationModalOverlay,
-          }}
-          size={"auto"}
-          zIndex={130}
-          opened={showModal}
-          onClose={setShowModal}
-          withCloseButton={false}
-          padding={"xl"}
-          centered
-        >
-          <Text fz={14} ta={"center"} mb={10}>
-            {places && places.length > 0 ? "Clear the Tour List and c" : "C"}
-            ontinue with{" "}
-            <Text fw={700} span>
-              {area.label}
-            </Text>{" "}
-            as your destination?
-          </Text>
-          <Group grow gap={10}>
-            <Button
-              className={classes.clearListButton}
-              variant="filled"
-              size="xs"
-              color="green.9"
-              onClick={() => {
-                placeChoosen();
-                setPlaces(placeLocation);
-                router.push("/tripplanner");
-              }}
-            >
-              <IconCheck stroke={4} />
-            </Button>
-            <Button
-              className={classes.clearListButton}
-              variant="filled"
-              size="xs"
-              color="red.9"
-              onClick={() => setShowModal(false)}
-            >
-              <IconX stroke={4} />
-            </Button>
-          </Group>
-        </Modal>
-        <Drawer
-          classNames={{ content: classes.loactionDrawer }}
-          zIndex={1}
-          pos={"relative"}
-          withinPortal={false}
-          size={420}
-          position="right"
-          opened={locationDrawer}
-          withOverlay={false}
-          withCloseButton={false}
-          onClose={reset}
-        >
-          <Box pt={100}>
-            <Group gap={5}>
-              <IconMapPinFilled size={25} opacity={0.3} />
-              <Text
-                className={classes.placeTitle}
-                fw={900}
-                c={dark ? "white" : "dark"}
-              >
-                {area.label}
-              </Text>
-            </Group>
-            {area && area.type !== "country" && (
-              <Group gap={5}>
-                {area.country === area.region ? (
-                  <Text fw={100} fz={12} pl={30} c={dark ? "white" : "dark"}>
-                    {area.country}
-                  </Text>
-                ) : area.country === "United States" &&
-                  area.type === "region" ? (
-                  <Text fw={100} fz={12} pl={30} c={dark ? "white" : "dark"}>
-                    {area.country}
-                  </Text>
-                ) : (
-                  <Text fw={100} fz={12} pl={30} c={dark ? "white" : "dark"}>
-                    {area.region} | {area.country}
-                  </Text>
-                )}
-              </Group>
-            )}
-            <Box
-              pos={"relative"}
-              top={10}
-              w={"100%"}
-              style={{
-                pointerEvents: "all",
-                boxShadow: "var(--mantine-shadow-md)",
-                borderRadius: "0 0 5px 5px",
-              }}
-            >
-              {mapLoaded &&
-                area.type !== "city" &&
-                !(
-                  area.type === "region" && area.country !== "United States"
-                ) && (
-                  <CustomAutoComplete
-                    version={"place"}
-                    area={area}
-                    dark={dark}
-                    placeData={placeData}
-                    placeSearch={placeSearch}
-                    setPlaceSearch={setPlaceSearch}
-                    handleChange={handleChange}
-                    locationHandler={locationHandler}
-                  />
-                )}
-              {area.country === "United States" && area.type === "country" ? (
-                <Select
-                  classNames={{
-                    input: classes.select,
-                  }}
-                  data={listStates}
-                  leftSection={<IconMapPinSearch size={18} />}
-                  leftSectionWidth={40}
-                  placeholder="Search for a state..."
-                  onChange={(e) => {
-                    let location = {
-                      label: e,
-                      group: "region",
-                      type: "region",
-                      state: e,
-                      region: e,
-                      center: searchForState(e),
-                      country: "United States",
-                    };
-                    setArea(location);
-                    locationHandler(location);
-                  }}
-                />
-              ) : (
-                <Box
-                  hidden={area.type === "city"}
-                  style={{
-                    borderRadius: "0 0 5px 5px",
-                    overflow: "hidden",
-                  }}
-                >
-                  {topCitiesList}
-                </Box>
-              )}
-              {/* <CustomSelect version="other" /> */}
-            </Box>
-            <Button.Group
-              className={classes.chooseLocationBox}
-              orientation="vertical"
-              mt={20}
-            >
-              <Button
-                className={classes.locationBtns}
-                justify={"left"}
-                variant="filled"
-                leftSection={<IconPlane size={18} />}
-                onClick={() => choosePlace("travel")}
-              >
-                Choose as destination
-              </Button>
-              <Button
-                className={classes.locationBtns}
-                justify={"left"}
-                variant="filled"
-                leftSection={<IconList size={18} />}
-                onClick={() => choosePlace("tour")}
-              >
-                Add to Tour List
-              </Button>
-            </Button.Group>
-            <Divider my={10} color={dark && "gray.8"} />
-            <Button
-              className={classes.closeBtn}
-              mt={10}
-              fullWidth
-              justify={"center"}
-              variant="filled"
-              onClick={reset}
-            >
-              CLOSE
-            </Button>
-          </Box>
-        </Drawer>
-        {places && places.length >= 1 && !listOpened && (
-          // Tour List Button
-          <Tooltip
-            classNames={{ tooltip: classes.toolTip }}
-            position="bottom"
-            label={"Tour List"}
-            openDelay={500}
-          >
-            <Button
-              className={classes.tourListButton}
-              onClick={openTourList}
-              left={
-                panelShow && mainMenuOpened ? 900 : mainMenuOpened ? 310 : 0
-              }
-            >
-              <IconList
-                size={15}
-                style={{
-                  color: dark ? "#fff" : "#000",
-                }}
-              />
-            </Button>
-          </Tooltip>
-        )}
-        {!searchOpened && !dropDownOpened && !locationDrawer && (
-          <Center
-            pos={"absolute"}
-            top={"30px"}
-            w={"100%"}
-            style={{
-              zIndex: 1,
+    <>
+      <LoadingOverlay
+        visible={!mapLoaded}
+        overlayProps={{ backgroundOpacity: 1 }}
+      />
+      <Modal
+        classNames={{
+          root: classes.destinationModal,
+          content: classes.destinationModalContent,
+          overlay: classes.destinationModalOverlay,
+        }}
+        size={"auto"}
+        zIndex={130}
+        opened={showModal}
+        onClose={setShowModal}
+        withCloseButton={false}
+        padding={"xl"}
+        centered
+      >
+        <Text fz={14} ta={"center"} mb={10}>
+          {places && places.length > 0 ? "Clear the Tour List and c" : "C"}
+          ontinue with{" "}
+          <Text fw={700} span>
+            {area.label}
+          </Text>{" "}
+          as your destination?
+        </Text>
+        <Group grow gap={10}>
+          <Button
+            className={classes.clearListButton}
+            variant="filled"
+            size="xs"
+            color="green.9"
+            onClick={() => {
+              placeChoosen();
+              setPlaces(placeLocation);
+              router.push("/tripplanner");
             }}
           >
-            {/* Main Place Search */}
-            <Box pos={"relative"}>
-              <CustomAutoComplete
-                version={"country"}
-                area={area}
-                dark={dark}
-                countryData={countryData}
-                countrySearch={countrySearch}
-                setCountrySearch={setCountrySearch}
-                handleChange={handleChange}
-                locationHandler={locationHandler}
-              />
-            </Box>
-          </Center>
-        )}
-        <Map
-          id="mapRef"
-          ref={mapRef}
-          {...viewState}
-          onMove={(e) => {
-            setViewState(e.viewState);
-          }}
-          initialViewState={initialViewState}
-          renderWorldCopies={true}
-          styleDiffing={false}
-          maxPitch={80}
-          onZoomEnd={onZoomEnd}
-          maxZoom={14}
-          minZoom={2}
-          reuseMaps={true}
-          onLoad={(e) => {
-            setMapLoaded(true);
-            const fogProperties = getFogProperties(dark);
-            e.target.setFog(fogProperties);
-          }}
-          touchPitch={false}
-          onClick={(e) => {
-            locationHandler(e.features[0]);
-          }}
-          projection="globe"
-          doubleClickZoom={false}
-          interactiveLayerIds={[
-            "states",
-            "country-boundaries",
-            "clicked-state",
-          ]}
-          mapStyle={"mapbox://styles/zenneson/clm07y8pz01ur01qieykmcji3"}
-          style={{ width: "100%", height: "100%" }}
-          mapboxAccessToken={mapboxAccessToken}
-        >
-          {!searchOpened && (
-            <TourList
-              listOpened={listOpened}
-              setListOpened={setListOpened}
-              places={places}
-              setPlaces={setPlaces}
-            />
-          )}
-          {computedColorScheme ? pins : {}}
-          {popupInfo && (
-            <Popup
-              className={classes.popup}
-              anchor="bottom"
-              offset={[0, -30]}
-              closeOnMove={false}
-              closeButton={false}
-              closeOnClick={false}
-              longitude={popupInfo[1][0]}
-              latitude={popupInfo[1][1]}
-            >
-              <Box py={10} px={20} onClick={() => selectTopCity(popupInfo)}>
-                {popupInfo[0]}
-              </Box>
-            </Popup>
-          )}
-          {showChoice && (
-            <Popup
-              className={classes.popup}
-              anchor="bottom"
-              offset={[0, -30]}
-              closeOnMove={false}
-              closeButton={false}
-              closeOnClick={false}
-              longitude={lngLat[0]}
-              latitude={lngLat[1]}
-            >
-              <Stack px={10} gap={0} className={classes.popupMenu}>
-                <Box pt={10} pl={0}>
-                  {area.label}
-                </Box>
-                <Button.Group
-                  orientation="vertical"
-                  mt={5}
-                  style={{
-                    borderLeft: dark
-                      ? "1px solid rgba(255, 255, 255, 0.25)"
-                      : "1px solid rgba(0, 0, 0, 0.25)",
-                  }}
-                >
-                  <Button
-                    className={classes.popupMenuBtn}
-                    justify={"left"}
-                    variant="subtle"
-                    size="xs"
-                    radius={"0 3px 3px 0"}
-                    leftSection={<IconPlane size={15} />}
-                    onClick={() => choosePlace("travel")}
-                  >
-                    Choose as destination
-                  </Button>
-                  <Button
-                    className={classes.popupMenuBtn}
-                    justify={"left"}
-                    variant="subtle"
-                    size="xs"
-                    radius={"0 3px 3px 0"}
-                    leftSection={<IconList size={15} />}
-                    onClick={() => choosePlace("tour")}
-                  >
-                    Add to Tour List
-                  </Button>
-                </Button.Group>
-              </Stack>
-            </Popup>
-          )}
-          <Transition
-            mounted={showMainMarker}
-            transition="fade"
-            duration={300}
-            timingFunction="ease"
+            <IconCheck stroke={4} />
+          </Button>
+          <Button
+            className={classes.clearListButton}
+            variant="filled"
+            size="xs"
+            color="red.9"
+            onClick={() => setShowModal(false)}
           >
-            {(styles) => (
-              <Marker
-                style={styles}
-                longitude={lngLat[0]}
-                latitude={lngLat[1]}
-                onClick={(e) => {
-                  e.originalEvent.stopPropagation();
-                  setShowChoice(true);
+            <IconX stroke={4} />
+          </Button>
+        </Group>
+      </Modal>
+      <Drawer
+        classNames={{ content: classes.loactionDrawer }}
+        zIndex={1}
+        pos={"relative"}
+        withinPortal={false}
+        size={390}
+        position="right"
+        opened={locationDrawer}
+        withOverlay={false}
+        withCloseButton={false}
+        onClose={reset}
+      >
+        <Box pt={80}>
+          <Group gap={2} ml={-5}>
+            <IconArrowBadgeRightFilled
+              size={25}
+              style={{ color: dark ? "#0d3f82" : "#00e8fc" }}
+            />
+            <Text
+              className={classes.placeTitle}
+              c={dark ? "white" : "dark"}
+              fw={900}
+            >
+              {addEllipsis(area.label, 44)}
+            </Text>
+          </Group>
+          {area && area.type !== "country" && (
+            <Group gap={5}>{renderRegion(area)}</Group>
+          )}
+          <Box
+            className={classes.placeBtns}
+            pos={"relative"}
+            w={"100%"}
+            mt={10}
+            style={{
+              pointerEvents: "all",
+              boxShadow: "var(--mantine-shadow-md)",
+              borderRadius: "0 0 3px 3px",
+            }}
+          >
+            {mapLoaded &&
+              area.type !== "city" &&
+              !(area.type === "region" && area.country !== "United States") && (
+                <CustomAutoComplete
+                  version={"place"}
+                  area={area}
+                  dark={dark}
+                  placeData={placeData}
+                  placeSearch={placeSearch}
+                  setPlaceSearch={setPlaceSearch}
+                  handleChange={handleChange}
+                  locationHandler={locationHandler}
+                />
+              )}
+            {area.country === "United States" && area.type === "country" ? (
+              <Select
+                classNames={{
+                  input: classes.select,
+                }}
+                data={listStates}
+                leftSection={<IconMapPinSearch size={17} />}
+                leftSectionWidth={40}
+                rightSection={<IconCaretDownFilled size={17} />}
+                rightSectionWidth={40}
+                placeholder="Search for a state..."
+                onChange={(e) => {
+                  let location = {
+                    label: e,
+                    group: "region",
+                    type: "region",
+                    state: e,
+                    region: e,
+                    center: searchForState(e),
+                    country: "United States",
+                  };
+                  setArea(location);
+                  locationHandler(location);
+                }}
+              />
+            ) : (
+              <Box
+                hidden={area.type === "city"}
+                style={{
+                  borderRadius: "0 0 3px 3px",
+                  overflow: "hidden",
                 }}
               >
-                <IconMapPinFilled
-                  style={{
-                    cursor: "pointer",
-                    transform: "scale(5)",
-                    color: dark ? "#00e8fa" : "#0D3F82",
-                  }}
-                />
-              </Marker>
+                {topCitiesList}
+              </Box>
             )}
-          </Transition>
-          <Source
+          </Box>
+          <Button.Group
+            className={classes.chooseLocationBox}
+            orientation="vertical"
+            mt={10}
+          >
+            <Button
+              className={classes.locationBtns}
+              justify={"left"}
+              variant="filled"
+              leftSection={<IconPlane size={18} />}
+              onClick={() => choosePlace("travel")}
+            >
+              Choose as destination
+            </Button>
+            <Button
+              className={classes.locationBtns}
+              justify={"left"}
+              variant="filled"
+              leftSection={<IconList size={18} />}
+              onClick={() => choosePlace("tour")}
+            >
+              Add to Tour List
+            </Button>
+          </Button.Group>
+          <Button
+            className={classes.closeBtn}
+            mt={10}
+            fullWidth
+            radius={"xl"}
+            leftSection={<IconArrowBarRight size={18} />}
+            onClick={reset}
+            justify={"center"}
+            variant="gradient"
+            gradient={
+              dark
+                ? { from: "#004585", to: "#00376b", deg: 180 }
+                : { from: "#93f3fc", to: "#00e8fc", deg: 180 }
+            }
+          >
+            CLOSE
+          </Button>
+        </Box>
+      </Drawer>
+      {places && places.length >= 1 && !listOpened && (
+        // Tour List Button
+        <Tooltip
+          classNames={{ tooltip: classes.toolTip }}
+          position="bottom"
+          label={"Tour List"}
+          openDelay={500}
+        >
+          <Button
+            className={classes.tourListButton}
+            onClick={openTourList}
+            left={panelShow && mainMenuOpened ? 900 : mainMenuOpened ? 310 : 0}
+          >
+            <IconList
+              size={15}
+              style={{
+                color: dark ? "#fff" : "#000",
+              }}
+            />
+          </Button>
+        </Tooltip>
+      )}
+      {!searchOpened && !dropDownOpened && !locationDrawer && (
+        <Center
+          pos={"absolute"}
+          top={"30px"}
+          w={"100%"}
+          style={{
+            zIndex: 1,
+          }}
+        >
+          {/* Main Place Search */}
+          <Box pos={"relative"}>
+            <CustomAutoComplete
+              version={"country"}
+              area={area}
+              dark={dark}
+              countryData={countryData}
+              countrySearch={countrySearch}
+              setCountrySearch={setCountrySearch}
+              handleChange={handleChange}
+              locationHandler={locationHandler}
+            />
+          </Box>
+        </Center>
+      )}
+      <Map
+        id="mapRef"
+        ref={mapRef}
+        {...viewState}
+        onMove={(e) => {
+          setViewState(e.viewState);
+        }}
+        initialViewState={initialViewState}
+        renderWorldCopies={true}
+        styleDiffing={false}
+        maxPitch={80}
+        onZoomEnd={onZoomEnd}
+        maxZoom={14}
+        minZoom={2}
+        reuseMaps={true}
+        onLoad={(e) => {
+          setMapLoaded(true);
+          const fogProperties = getFogProperties(dark);
+          e.target.setFog(fogProperties);
+        }}
+        touchPitch={false}
+        onClick={(e) => {
+          locationHandler(e.features[0]);
+        }}
+        projection="globe"
+        doubleClickZoom={false}
+        interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
+        mapStyle={"mapbox://styles/zenneson/clm07y8pz01ur01qieykmcji3"}
+        style={{ width: "100%", height: "100%" }}
+        mapboxAccessToken={mapboxAccessToken}
+      >
+        {!searchOpened && (
+          <TourList
+            listOpened={listOpened}
+            setListOpened={setListOpened}
+            setShowMainMarker={setShowMainMarker}
+            places={places}
+            setPlaces={setPlaces}
+            goToLocation={goToLocation}
+            setLngLat={setLngLat}
+            setLocationDrawer={setLocationDrawer}
+            setArea={setArea}
+          />
+        )}
+        {computedColorScheme ? pins : {}}
+        {popupInfo && (
+          <Popup
+            className={classes.popup}
+            anchor="bottom"
+            offset={[0, -30]}
+            closeOnMove={false}
+            closeButton={false}
+            closeOnClick={false}
+            longitude={popupInfo[1][0]}
+            latitude={popupInfo[1][1]}
+          >
+            <Box py={10} px={20} onClick={() => selectTopCity(popupInfo)}>
+              {popupInfo[0]}
+            </Box>
+          </Popup>
+        )}
+        {showChoice && (
+          <Popup
+            className={classes.popup}
+            anchor="bottom"
+            offset={[0, -30]}
+            closeOnMove={false}
+            closeButton={false}
+            closeOnClick={false}
+            longitude={lngLat[0]}
+            latitude={lngLat[1]}
+          >
+            <Stack px={10} gap={0} className={classes.popupMenu}>
+              <Box pt={10} pl={0}>
+                {area.label}
+              </Box>
+              <Button.Group
+                orientation="vertical"
+                mt={5}
+                style={{
+                  borderLeft: dark
+                    ? "1px solid rgba(255, 255, 255, 0.25)"
+                    : "1px solid rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <Button
+                  className={classes.popupMenuBtn}
+                  justify={"left"}
+                  variant="subtle"
+                  size="xs"
+                  radius={"0 3px 3px 0"}
+                  leftSection={<IconPlane size={15} />}
+                  onClick={() => choosePlace("travel")}
+                >
+                  Choose as destination
+                </Button>
+                <Button
+                  className={classes.popupMenuBtn}
+                  justify={"left"}
+                  variant="subtle"
+                  size="xs"
+                  radius={"0 3px 3px 0"}
+                  leftSection={<IconList size={15} />}
+                  onClick={() => choosePlace("tour")}
+                >
+                  Add to Tour List
+                </Button>
+              </Button.Group>
+            </Stack>
+          </Popup>
+        )}
+        <Transition
+          mounted={showMainMarker}
+          transition="fade"
+          duration={300}
+          timingFunction="ease"
+        >
+          {(styles) => (
+            <Marker
+              style={styles}
+              longitude={lngLat[0]}
+              latitude={lngLat[1]}
+              onClick={(e) => {
+                e.originalEvent.stopPropagation();
+                setShowChoice(true);
+              }}
+            >
+              <IconMapPinFilled
+                style={{
+                  cursor: "pointer",
+                  transform: "scale(5)",
+                  color: dark ? "#0D3F82" : "#00e8fa",
+                }}
+              />
+            </Marker>
+          )}
+        </Transition>
+        <Source
+          id="country-boundaries"
+          type="vector"
+          url="mapbox://mapbox.country-boundaries-v1"
+        >
+          <Layer
             id="country-boundaries"
-            type="vector"
-            url="mapbox://mapbox.country-boundaries-v1"
-          >
-            <Layer
-              id="country-boundaries"
-              source="country-boundaries"
-              source-layer="country_boundaries"
-              type="fill"
-              paint={{
-                "fill-color": "rgba(0,0,0,0)",
-              }}
-            />
-            <Layer
-              id="country-boundaries-fill"
-              source="country-boundaries"
-              source-layer="country_boundaries"
-              type="fill"
-              filter={!showStates ? filter : ["in", "name", "United States"]}
-              paint={{
-                "fill-color": `${
-                  dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
-                }`,
-              }}
-            />
-            <Layer
-              id="country-boundaries-lines"
-              source="country-boundaries"
-              source-layer="country_boundaries"
-              type="line"
-              filter={filter}
-              paint={{
-                "line-color": "rgba(255, 255, 255, 1)",
-                "line-width": 4,
-              }}
-            />
-          </Source>
-          <Source
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="fill"
+            paint={{
+              "fill-color": "rgba(0,0,0,0)",
+            }}
+          />
+          <Layer
+            id="country-boundaries-fill"
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="fill"
+            filter={!showStates ? filter : ["in", "name", "United States"]}
+            paint={{
+              "fill-color": `${
+                dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
+              }`,
+            }}
+          />
+          <Layer
+            id="country-boundaries-lines"
+            source="country-boundaries"
+            source-layer="country_boundaries"
+            type="line"
+            filter={filter}
+            paint={{
+              "line-color": "rgba(255, 255, 255, 1)",
+              "line-width": 4,
+            }}
+          />
+        </Source>
+        <Source
+          id="states-boundaries"
+          type="geojson"
+          data="data/states.geojson"
+        >
+          <Layer
+            id="states"
+            type="fill"
+            source="states-boundaries"
+            paint={{
+              "fill-color": "rgba(0,0,0,0)",
+            }}
+            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+          />
+          <Layer
             id="states-boundaries"
-            type="geojson"
-            data="data/states.geojson"
-          >
-            <Layer
-              id="states"
-              type="fill"
-              source="states-boundaries"
-              paint={{
-                "fill-color": "rgba(0,0,0,0)",
-              }}
-              filter={!showStates ? filter : ["!", ["in", "name", ""]]}
-            />
-            <Layer
-              id="states-boundaries"
-              type="line"
-              source="states-boundaries"
-              paint={{
-                "line-color": "rgba(255, 255, 255, 1)",
-                "line-width": 4,
-              }}
-              filter={!showStates ? filter : ["!", ["in", "name", ""]]}
-            />
-          </Source>
-          <Source id="clicked-state" type="geojson" data="data/states.geojson">
-            <Layer
-              id="clicked-state"
-              type="fill"
-              paint={{
-                "fill-color": `${
-                  dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
-                }`,
-              }}
-              filter={["==", "NAME", area.label]}
-            />
-            <Layer
-              id="state-borders"
-              type="line"
-              paint={{
-                "line-color": "rgba(255, 255, 255, 1)",
-                "line-width": 4,
-              }}
-              filter={["==", "NAME", area.label]}
-            />
-          </Source>
-        </Map>
-      </>
-    )
+            type="line"
+            source="states-boundaries"
+            paint={{
+              "line-color": "rgba(255, 255, 255, 1)",
+              "line-width": 4,
+            }}
+            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+          />
+        </Source>
+        <Source id="clicked-state" type="geojson" data="data/states.geojson">
+          <Layer
+            id="clicked-state"
+            type="fill"
+            paint={{
+              "fill-color": `${
+                dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
+              }`,
+            }}
+            filter={["==", "NAME", area.label]}
+          />
+          <Layer
+            id="state-borders"
+            type="line"
+            paint={{
+              "line-color": "rgba(255, 255, 255, 1)",
+              "line-width": 4,
+            }}
+            filter={["==", "NAME", area.label]}
+          />
+        </Source>
+      </Map>
+    </>
   );
 }

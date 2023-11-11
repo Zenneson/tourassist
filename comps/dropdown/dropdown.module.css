@@ -13,7 +13,7 @@
 }
 
 .indicator {
-	color: light-dark(rgb(20, 93, 153), rgb(54, 218, 247));
+	color: light-dark(rgb(54, 218, 247), rgb(20, 93, 153));
 	transition: transform 150ms ease;
 	position: absolute;
 	top: 10px;
@@ -46,7 +46,7 @@
 }
 
 .dropdownBtn {
-	color: light-dark(rgb(11, 12, 13), rgb(248, 248, 248));
+	color: light-dark(rgb(54, 218, 247), rgb(20, 93, 153));
 	transition: opacity 150ms ease;
 	position: absolute;
 	right: -70px;

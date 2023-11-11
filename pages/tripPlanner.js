@@ -1,3 +1,5 @@
+"use client";
+import "@mantine/dates/styles.css";
 import { useState, useRef, useEffect } from "react";
 import {
   IconCurrencyDollar,
@@ -17,7 +19,6 @@ import {
 } from "@tabler/icons-react";
 import {
   useComputedColorScheme,
-  useMantineTheme,
   Autocomplete,
   BackgroundImage,
   Space,
@@ -56,7 +57,6 @@ import classes from "./tripplanner.module.css";
 
 export default function TripPlannerPage(props) {
   let { auth, mapLoaded } = props;
-  const theme = useMantineTheme();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -260,6 +260,7 @@ export default function TripPlannerPage(props) {
         setStartLocale("");
         setStartLocaleSearch("");
         setStartLocaleData([]);
+        return true;
       }
     });
   };
@@ -435,6 +436,7 @@ export default function TripPlannerPage(props) {
                   justify={"flex-end"}
                 >
                   <Divider
+                    color={dark && "gray.9"}
                     size={"xs"}
                     w={
                       place.returning || (roundTrip && places.length === 1)
@@ -467,9 +469,14 @@ export default function TripPlannerPage(props) {
                     >
                       {cost}
                     </Text>
-                    <Divider my="xs" w={"50%"} variant="dotted" />
+                    <Divider
+                      my="xs"
+                      w={"50%"}
+                      variant="dotted"
+                      color={dark && "gray.9"}
+                    />
                     <NumberInput
-                      className={classes.costInput}
+                      classNames={{ input: classes.costInput }}
                       id="cost"
                       tabIndex={tabIndexCounter++}
                       min={0}
@@ -488,23 +495,19 @@ export default function TripPlannerPage(props) {
                       }}
                       hideControls={true}
                       icon={<IconCurrencyDollar />}
-                      parser={(value) => value.replace(/[\$\s,a-zA-Z]/g, "")}
-                      formatter={(value) =>
-                        !Number.isNaN(parseFloat(value))
-                          ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                          : 0
-                      }
                     />
                     <ActionIcon
                       className={classes.removeCostButton}
                       py={20}
-                      bg={dark ? "dark.5" : "gray.1"}
-                      color={dark ? "gray.0" : "gray.5"}
+                      variant={dark ? "default" : "light"}
                       onClick={() => {
                         removeCost(index, cost);
                       }}
                     >
-                      <IconTrash size={15} />
+                      <IconTrash
+                        size={15}
+                        color={dark ? "rgba(255, 0, 0, 0.4)" : "red"}
+                      />
                     </ActionIcon>
                   </Group>
                 ))}
@@ -519,7 +522,12 @@ export default function TripPlannerPage(props) {
                   >
                     FLIGHT
                   </Text>
-                  <Divider my="xs" w={"50%"} variant="dotted" />
+                  <Divider
+                    my="xs"
+                    w={"50%"}
+                    variant="dotted"
+                    color={dark && "gray.9"}
+                  />
                   <NumberInput
                     className={classes.costInput}
                     id="cost"
@@ -540,18 +548,17 @@ export default function TripPlannerPage(props) {
                     }}
                     hideControls={true}
                     icon={<IconCurrencyDollar />}
-                    parser={(value) => value.replace(/[\$\s,a-zA-Z]/g, "")}
-                    formatter={(value) =>
-                      !Number.isNaN(parseFloat(value))
-                        ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        : 0
-                    }
                   />
                 </Group>
               )}
               {!place.returning && (
                 <Group justify="flex-end" gap={10} p={10}>
-                  <Divider my="xs" w={"65%"} opacity={0.3} />
+                  <Divider
+                    my="xs"
+                    w={"65%"}
+                    opacity={0.3}
+                    color={dark && "gray.9"}
+                  />
                   <Popover
                     className={classes.newCostPopover}
                     trapFocus
@@ -593,6 +600,8 @@ export default function TripPlannerPage(props) {
                         }
                         rightSection={
                           <ActionIcon
+                            variant="transparent"
+                            c={dark ? "gray.0" : "dark.8"}
                             onClick={() => {
                               addCost(index, newCostName[index]);
                               setPopoverOpened({
@@ -614,9 +623,9 @@ export default function TripPlannerPage(props) {
                   <Tooltip label="Reset form fields">
                     <ActionIcon
                       className={classes.brightenButton}
-                      variant="Transparent"
+                      variant="transparent"
                       size="xl"
-                      opacity={0.4}
+                      color="gray"
                       onMouseEnter={() => setResetBtnPop(true)}
                       onMouseLeave={() => setResetBtnPop(false)}
                       onClick={handleReset}
@@ -644,7 +653,7 @@ export default function TripPlannerPage(props) {
 
     return (
       <NumberInput
-        className={classes.totalCostInput}
+        classNames={{ input: classes.totalCostInput }}
         ref={sumRef}
         id="totalId"
         min={0}
@@ -655,14 +664,6 @@ export default function TripPlannerPage(props) {
         onChange={(e) => {
           handleChange(e);
         }}
-        stepHoldDelay={600}
-        stepHoldInterval={400}
-        parser={(value) => value.replace(/[\$\s,a-zA-Z]/g, "")}
-        formatter={(value) =>
-          !Number.isNaN(parseFloat(value))
-            ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            : 0
-        }
       />
     );
   };
@@ -697,11 +698,11 @@ export default function TripPlannerPage(props) {
         notifications.show(titleIsShort);
         return;
       }
-      if (tripDesc === "") {
+      if (tripDesc && tripDesc.length === 0) {
         notifications.show(noDesc);
         return;
       }
-      if (tripDesc.length < 11) {
+      if (tripDesc && tripDesc.length < 11) {
         notifications.show(descIsShort);
         return;
       }
@@ -747,12 +748,12 @@ export default function TripPlannerPage(props) {
   const handleChange = async () => {
     const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`;
 
-    if (startLocaleSearch.length > 1) {
+    if (startLocaleSearch?.length > 0) {
       try {
         const response = await fetch(endpoint);
         const results = await response.json();
         const data = results.features.map((feature) => ({
-          label: feature.label,
+          label: feature.place_name,
           value: feature.place_name,
           place_name: feature.place_name,
           place_type: feature.place_type,
@@ -770,6 +771,15 @@ export default function TripPlannerPage(props) {
     }
   };
 
+  const optionsFilter = ({ options, search }) => {
+    const searchWords = search.toLowerCase().trim().split(/\s+/);
+    return options.filter((option) =>
+      searchWords.every((searchWord) =>
+        option.label.toLowerCase().includes(searchWord)
+      )
+    );
+  };
+
   return (
     <Box px={20} pb={50}>
       <Space h={110} />
@@ -780,6 +790,7 @@ export default function TripPlannerPage(props) {
           mb={20}
           opacity={0.4}
           labelPosition="left"
+          color={dark ? "gray.7" : "dark.1"}
           label={
             <Flex>
               <IconChevronsRight size={20} />
@@ -849,26 +860,29 @@ export default function TripPlannerPage(props) {
                       p={20}
                       gap={10}
                     >
-                      {/* <Autocomplete
-                        className={classes.depatureAutoComplete}
+                      <Autocomplete
+                        classNames={{ option: classes.startLocaleOption }}
+                        placeholder="Add Departure City..."
+                        selectFirstOptionOnChange
+                        ref={startLocaleRef}
                         size="sm"
                         w={"100%"}
-                        defaultValue=""
                         value={startLocaleSearch}
-                        placeholder="Add Departure City..."
-                        onItemSubmit={(e) => setStartLocale(e.value)}
-                        ref={startLocaleRef}
+                        limit={5}
                         data={startLocaleData}
-                        filter={(value, item) => item}
-                        onSelect={() => placeCheck()}
-                        onChange={function (e) {
+                        onChange={(e) => {
                           setStartLocaleSearch(e);
                           handleChange(e);
                           if (startLocaleRef.current.value === "") {
                             setStartLocale("");
                           }
                         }}
-                      /> */}
+                        onOptionSubmit={(e) => {
+                          if (placeCheck() === true) return;
+                          setStartLocale(e);
+                        }}
+                        filter={optionsFilter}
+                      />
                       <Group my={15} grow gap={0}>
                         <Group
                           gap={0}
@@ -907,10 +921,12 @@ export default function TripPlannerPage(props) {
                               -
                             </Button>
                             <NumberInput
-                              className={classes.travelersInput}
+                              classNames={{ input: classes.travelersInput }}
                               hideControls
                               variant="filled"
                               type="number"
+                              ta={"center"}
+                              w={20}
                               value={travelers}
                               onChange={(e) => setTravelers(e)}
                               handlersRef={travelersHandlerRef}
@@ -954,6 +970,7 @@ export default function TripPlannerPage(props) {
                             onLabel="YES"
                             offLabel="NO"
                             size="md"
+                            color={!dark && "#2dc7f3"}
                             checked={roundTrip}
                             onChange={() => {
                               setRoundTrip(!roundTrip);
@@ -1068,12 +1085,13 @@ export default function TripPlannerPage(props) {
                                   </Group>
                                   <Divider
                                     orientation="vertical"
+                                    color={dark && "gray.9"}
                                     ml={10}
                                     mr={7}
                                     opacity={0.7}
                                   />
                                   <Group gap={5} fz={12}>
-                                    <Title color={"red.9"} order={3}>
+                                    <Title c={"red.9"} order={3}>
                                       •
                                     </Title>
                                     {dayjs(travelDates)
@@ -1120,54 +1138,56 @@ export default function TripPlannerPage(props) {
                         </Box>
                       </Box>
                     </Flex>
-                    <DatePicker
-                      className={`pagePanel ${classes.datePicker}`}
-                      allowDeselect
-                      firstDayOfWeek={0}
-                      defaultDate={travelDates || dayjs().add(7, "day")}
-                      minDate={weekAhead}
-                      value={travelDates}
-                      size={"md"}
-                      mah={380}
-                      ml={30}
-                      p={20}
-                      onChange={(e) => {
-                        setTravelDates(e);
-                      }}
-                      getDayProps={() => {
-                        return {
-                          style: {
-                            fontWeight: "bold",
-                          },
-                        };
-                      }}
-                      renderDay={(date) => {
-                        const day = date.getDate();
-                        const month = date.getMonth();
-                        const year = date.getFullYear();
+                    <Box className="pagePanel" ml={30} p={20}>
+                      <DatePicker
+                        classNames={{
+                          day: classes.datePicker,
+                        }}
+                        allowDeselect
+                        firstDayOfWeek={0}
+                        defaultDate={travelDates || dayjs().add(7, "day")}
+                        minDate={weekAhead}
+                        value={travelDates}
+                        size={"md"}
+                        mah={380}
+                        onChange={(e) => {
+                          setTravelDates(e);
+                        }}
+                        getDayProps={() => {
+                          return {
+                            style: {
+                              fontWeight: "bold",
+                            },
+                          };
+                        }}
+                        renderDay={(date) => {
+                          const day = date.getDate();
+                          const month = date.getMonth();
+                          const year = date.getFullYear();
 
-                        let isSpecificDay;
-                        if (travelDates) {
-                          const travelDate = dayjs(travelDates);
-                          const prevDate = travelDate.subtract(1, "day");
+                          let isSpecificDay;
+                          if (travelDates) {
+                            const travelDate = dayjs(travelDates);
+                            const prevDate = travelDate.subtract(1, "day");
 
-                          isSpecificDay =
-                            day === prevDate.date() &&
-                            month === prevDate.month() &&
-                            year === prevDate.year();
-                        }
-                        return (
-                          <Indicator
-                            size={5}
-                            color={"red.9"}
-                            offset={-3}
-                            disabled={!isSpecificDay}
-                          >
-                            <div>{day}</div>
-                          </Indicator>
-                        );
-                      }}
-                    />
+                            isSpecificDay =
+                              day === prevDate.date() &&
+                              month === prevDate.month() &&
+                              year === prevDate.year();
+                          }
+                          return (
+                            <Indicator
+                              size={5}
+                              color={"red.9"}
+                              offset={-3}
+                              disabled={!isSpecificDay}
+                            >
+                              <div>{day}</div>
+                            </Indicator>
+                          );
+                        }}
+                      />
+                    </Box>
                   </Flex>
                 </Flex>
               </motion.div>
@@ -1190,7 +1210,7 @@ export default function TripPlannerPage(props) {
                   gap={20}
                 >
                   <Input
-                    className={classes.tripTitleInput}
+                    classNames={{ input: classes.tripTitleInput }}
                     ref={titleRef}
                     size={"xl"}
                     w="100%"
@@ -1249,7 +1269,12 @@ export default function TripPlannerPage(props) {
                         </Button>
                       </Button.Group>
                     </Center>
-                    <Divider w={"100%"} my={5} opacity={0.3} />
+                    <Divider
+                      w={"100%"}
+                      my={5}
+                      opacity={0.3}
+                      color={dark && "gray.9"}
+                    />
                     <Group gap={0}>
                       <Box w={"80%"}>
                         <Text fw={700} fz={12}>
@@ -1288,6 +1313,7 @@ export default function TripPlannerPage(props) {
               iconjustify="flex-end"
               orientation="vertical"
               allowNextStepsSelect={false}
+              color={dark ? "blue.9" : "blue.4"}
               miw={205}
               mt={20}
               mb={-20}
@@ -1316,7 +1342,8 @@ export default function TripPlannerPage(props) {
               <>
                 <Divider
                   mb={5}
-                  opacity={0.5}
+                  opacity={dark ? 0.3 : 0.7}
+                  color={dark && "gray.5"}
                   size={"xs"}
                   variant="solid"
                   labelPosition="left"
@@ -1327,17 +1354,33 @@ export default function TripPlannerPage(props) {
               </>
             )}
             {startLocale && travelDates && (
-              <Divider w={"100%"} my={15} opacity={0.5} />
+              <Divider
+                w={"100%"}
+                my={15}
+                opacity={dark ? 0.1 : 0.5}
+                color={dark && "gray.5"}
+              />
             )}
             {active !== 0 && (
               // Move Up Sections Button
-              <Button fullWidth variant={"default"} mb={10} onClick={prevStep}>
+              <Button
+                className={classes.panelBtns}
+                fullWidth
+                variant={"filled"}
+                mb={10}
+                onClick={prevStep}
+              >
                 <IconChevronUp />
               </Button>
             )}
             {startLocale && travelDates && (
               // Move Down Sections Button
-              <Button fullWidth variant={"default"} onClick={changeNextStep}>
+              <Button
+                className={classes.panelBtns}
+                fullWidth
+                variant={"filled"}
+                onClick={changeNextStep}
+              >
                 {active === 3 ? "DONE" : <IconChevronDown />}
               </Button>
             )}

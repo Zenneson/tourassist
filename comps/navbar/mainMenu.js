@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
@@ -42,12 +43,6 @@ export default function MainMenu(props) {
     setPanelShow,
   } = props;
 
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -55,9 +50,7 @@ export default function MainMenu(props) {
   const dark = computedColorScheme === "dark";
 
   const toggleColorScheme = () => {
-    if (isClient) {
-      setColorScheme(dark ? "light" : "dark");
-    }
+    setColorScheme(dark ? "light" : "dark");
   };
 
   const router = useRouter();
@@ -117,213 +110,207 @@ export default function MainMenu(props) {
   }
 
   return (
-    isClient && (
-      <>
+    <>
+      <Box
+        style={{
+          userSelect: "none",
+        }}
+      >
         <Box
+          pb={0}
+          height={1} // so that the header does not block the middele of the top
+          opacity={searchOpened ? 0 : 1}
           style={{
-            userSelect: "none",
+            position: "fixed",
+            zIndex: 1600,
+            width: "100%",
+            display: "flex",
+            padding: "15px 25px",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            pointerEvents: "none",
           }}
         >
-          <Box
-            pb={0}
-            height={1} // so that the header does not block the middele of the top
-            opacity={searchOpened ? 0 : 1}
+          {/* Main Menu Button  */}
+          <Flex
+            direction={"row"}
+            align="center"
+            gap={10}
+            mt={5}
+            ml={-10}
             style={{
-              position: "fixed",
-              zIndex: 1600,
-              width: "100%",
-              display: "flex",
-              padding: "15px 25px",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-              pointerEvents: "none",
+              cursor: "pointer",
+              pointerEvents: "all",
+            }}
+            onClick={openMenu}
+          >
+            <Image
+              ml={5}
+              width={"auto"}
+              height={"60px"}
+              src={"img/TA_GlobeLogo.png"}
+              alt="TouraSSist_logo"
+            />
+            <Title fw={900} color={dark ? "gray.0" : "dark.0"} fz={30}>
+              <Text fw={500} c={dark ? "gray.5" : "dark.3"} inherit span>
+                TOUR
+              </Text>
+              ASSIST
+            </Title>
+          </Flex>
+          <Flex
+            align={"center"}
+            gap={10}
+            px={0}
+            py={10}
+            mt={10}
+            mr={10}
+            style={{
+              pointerEvents: "all",
             }}
           >
-            {/* Main Menu Button  */}
-            <Flex
-              direction={"row"}
-              align="center"
-              gap={10}
-              mt={5}
-              ml={-10}
-              style={{
-                cursor: "pointer",
-                pointerEvents: "all",
-              }}
-              onClick={openMenu}
-            >
-              <Image
-                ml={5}
-                width={"auto"}
-                height={"60px"}
-                src={"img/TA_GlobeLogo.png"}
-                alt="TouraSSist_logo"
-              />
-              <Title fw={900} color={dark ? "gray.0" : "dark.0"} fz={30}>
-                <Text fw={500} c={dark ? "gray.5" : "dark.3"} inherit span>
-                  TOUR
+            {user && (
+              //  Main Menu Button
+              <Button
+                className={classes.openMenuButton}
+                variant="subtle"
+                size="sm"
+                onClick={openMenu}
+                radius={"xl"}
+                mr={-5}
+              >
+                <Text fz={12} c={dark ? "gray.0" : "dark.9"}>
+                  {user.email}
                 </Text>
-                ASSIST
-              </Title>
-            </Flex>
-            <Flex
-              align={"center"}
-              gap={10}
-              px={0}
-              py={10}
-              mt={10}
-              mr={10}
-              style={{
-                pointerEvents: "all",
-              }}
+              </Button>
+            )}
+            <Tooltip
+              label="Toggle Color Scheme"
+              position="bottom"
+              classNames={{ tooltip: classes.toolTip }}
             >
-              {user && (
-                //  Main Menu Button
-                <Button
-                  className={classes.openMenuButton}
-                  variant="subtle"
-                  size="sm"
-                  onClick={openMenu}
-                  radius={"xl"}
-                  mr={-5}
-                >
-                  <Text fz={12} c={dark ? "gray.0" : "dark.9"}>
-                    {user.email}
-                  </Text>
-                </Button>
-              )}
+              <Button
+                className={classes.toggleColorButton}
+                variant="subtle"
+                onClick={() => toggleColorScheme()}
+                radius={"xl"}
+                p={10}
+                c={dark ? "gray.0" : "dark.9"}
+              >
+                {dark ? <IconBrightnessUp size={17} /> : <IconMoon size={17} />}
+              </Button>
+            </Tooltip>
+            <Group gap={0}>
               <Tooltip
-                label="Toggle Color Scheme"
+                label="Search Trips"
                 position="bottom"
                 classNames={{ tooltip: classes.toolTip }}
               >
+                {/* Search button */}
                 <Button
-                  className={classes.toggleColorButton}
+                  className={classes.openSearchButton}
+                  onClick={openSearch}
                   variant="subtle"
-                  onClick={() => toggleColorScheme()}
-                  radius={"xl"}
+                  radius="xl"
+                  mr={5}
                   p={10}
                   c={dark ? "gray.0" : "dark.9"}
                 >
-                  {dark ? (
-                    <IconBrightnessUp size={17} />
-                  ) : (
-                    <IconMoon size={17} />
-                  )}
+                  <IconSearch size={17} />
                 </Button>
               </Tooltip>
-              <Group gap={0}>
+              <Popover
+                withArrow
+                arrowOffset={15}
+                width="auto"
+                position="bottom"
+                shadow="md"
+                opened={logoutOpened}
+              >
                 <Tooltip
-                  label="Search Trips"
+                  label={user ? "Logout" : "Login"}
                   position="bottom"
                   classNames={{ tooltip: classes.toolTip }}
                 >
-                  {/* Search button */}
-                  <Button
-                    className={classes.openSearchButton}
-                    onClick={openSearch}
-                    variant="subtle"
-                    radius="xl"
-                    mr={5}
-                    p={10}
-                    c={dark ? "gray.0" : "dark.9"}
-                  >
-                    <IconSearch size={17} />
-                  </Button>
-                </Tooltip>
-                <Popover
-                  withArrow
-                  arrowOffset={15}
-                  width="auto"
-                  position="bottom"
-                  shadow="md"
-                  opened={logoutOpened}
-                >
-                  <Tooltip
-                    label={user ? "Logout" : "Login"}
-                    position="bottom"
-                    classNames={{ tooltip: classes.toolTip }}
-                  >
-                    <Popover.Target>
-                      {/* Logout Dropdown */}
-                      <Button
-                        className={classes.logoutDropdownButton}
-                        p={10}
-                        radius="xl"
-                        variant="subtle"
-                        c={dark ? "gray.0" : "dark.9"}
-                        onClick={() => {
-                          setLogoutOpened((o) => !o);
-                        }}
-                      >
-                        {user ? (
-                          <IconDoorExit size={17} />
-                        ) : (
-                          <IconLogin size={17} />
-                        )}
-                      </Button>
-                    </Popover.Target>
-                  </Tooltip>
-                  <Popover.Dropdown p={0}>
-                    {/* Logout Button  */}
+                  <Popover.Target>
+                    {/* Logout Dropdown */}
                     <Button
-                      className={classes.logoutButton}
-                      size="xs"
-                      fw={700}
-                      px={15}
-                      variant="default"
+                      className={classes.logoutDropdownButton}
+                      p={10}
+                      radius="xl"
+                      variant="subtle"
+                      c={dark ? "gray.0" : "dark.9"}
                       onClick={() => {
-                        signOutFunc();
+                        setLogoutOpened((o) => !o);
                       }}
                     >
-                      {user ? "LOGOUT" : "LOGIN"}
+                      {user ? (
+                        <IconDoorExit size={17} />
+                      ) : (
+                        <IconLogin size={17} />
+                      )}
                     </Button>
-                  </Popover.Dropdown>
-                </Popover>
-              </Group>
-              <motion.div
-                animate={{
-                  opacity: [
-                    1, 1, 1, 0.3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.3, 1, 1, 1,
-                    1, 1, 1, 1, 1, 1, 1, 1, 0.3, 1, 0.3, 1,
-                  ],
-                }}
-                transition={{ duration: 7, repeat: Infinity }}
-              >
-                {/* DropDown Button */}
-                <Tooltip
-                  label={"TourAssist?"}
-                  position="bottom"
-                  classNames={{ tooltip: classes.toolTip }}
-                >
-                  <IconInfoCircleFilled
-                    stroke={1}
-                    size={30}
-                    style={{
-                      color: dark ? "blue.6" : "blue.9",
-                      paddingTop: "3px",
-                      cursor: "pointer",
-                      transform: "scale(1.5)",
-                    }}
-                    onClick={openDropDown}
-                  />
+                  </Popover.Target>
                 </Tooltip>
-              </motion.div>
-            </Flex>
-          </Box>
+                <Popover.Dropdown p={0}>
+                  {/* Logout Button  */}
+                  <Button
+                    className={classes.logoutButton}
+                    size="xs"
+                    fw={700}
+                    px={15}
+                    variant="default"
+                    onClick={() => {
+                      signOutFunc();
+                    }}
+                  >
+                    {user ? "LOGOUT" : "LOGIN"}
+                  </Button>
+                </Popover.Dropdown>
+              </Popover>
+            </Group>
+            <motion.div
+              animate={{
+                opacity: [
+                  1, 1, 1, 0.3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.3, 1, 1, 1,
+                  1, 1, 1, 1, 1, 1, 1, 1, 0.3, 1, 0.3, 1,
+                ],
+              }}
+              transition={{ duration: 7, repeat: Infinity }}
+            >
+              {/* DropDown Button */}
+              <Tooltip
+                label={"TourAssist?"}
+                position="bottom"
+                classNames={{ tooltip: classes.toolTip }}
+              >
+                <IconInfoCircleFilled
+                  stroke={1}
+                  size={30}
+                  style={{
+                    color: dark ? "blue.6" : "blue.9",
+                    paddingTop: "3px",
+                    cursor: "pointer",
+                    transform: "scale(1.5)",
+                  }}
+                  onClick={openDropDown}
+                />
+              </Tooltip>
+            </motion.div>
+          </Flex>
         </Box>
-        <ProfileDrawer
-          active={active}
-          setActive={setActive}
-          panelShow={panelShow}
-          setPanelShow={setPanelShow}
-          mainMenuOpened={mainMenuOpened}
-          setMainMenuOpened={setMainMenuOpened}
-          setDropDownOpened={setDropDownOpened}
-          openMenu={openMenu}
-          signOutFunc={signOutFunc}
-        />
-      </>
-    )
+      </Box>
+      <ProfileDrawer
+        active={active}
+        setActive={setActive}
+        panelShow={panelShow}
+        setPanelShow={setPanelShow}
+        mainMenuOpened={mainMenuOpened}
+        setMainMenuOpened={setMainMenuOpened}
+        setDropDownOpened={setDropDownOpened}
+        openMenu={openMenu}
+        signOutFunc={signOutFunc}
+      />
+    </>
   );
 }

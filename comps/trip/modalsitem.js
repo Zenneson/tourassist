@@ -1,3 +1,5 @@
+import "@mantine/tiptap/styles.css";
+import "@mantine/dates/styles.css";
 import { useState, useEffect, useRef } from "react";
 import useSWR, { mutate } from "swr";
 import {
@@ -198,7 +200,7 @@ export default function ModalsItem(props) {
 
     return (
       <DateInput
-        className={classes.dateInput}
+        classNames={{ input: classes.dateInput }}
         icon={<IconCalendarEvent size={20} />}
         iconWidth={50}
         variant="default"
@@ -335,7 +337,7 @@ export default function ModalsItem(props) {
     return (
       <>
         <Input
-          className={classes.updateInputTitle}
+          classNames={{ input: classes.updateInputTitle }}
           tabIndex={1}
           size={"xl"}
           w="100%"
@@ -366,7 +368,11 @@ export default function ModalsItem(props) {
           }}
         >
           <RichTextEditor
-            className={classes.textEditor}
+            classNames={{
+              root: classes.textEditor,
+              toolbar: classes.textEditorToolbar,
+              content: classes.textEditorContent,
+            }}
             editor={updateEditor}
             position="relative"
             bg={dark ? "dark.6" : "gray.2"}
@@ -519,7 +525,11 @@ export default function ModalsItem(props) {
   return (
     <Box>
       <Modal
-        className={classes.editTripModal}
+        classNames={{
+          header: classes.editTripModalHeader,
+          content: classes.editTripModalContent,
+          overlay: classes.editTripModalOverlay,
+        }}
         centered
         withCloseButton={false}
         size={850}
@@ -577,7 +587,11 @@ export default function ModalsItem(props) {
         </Box>
       </Modal>
       <Modal
-        className={classes.altModal}
+        classNames={{
+          header: classes.altModalModalHeader,
+          content: classes.altModalModalContent,
+          overlay: classes.altModalModalOverlay,
+        }}
         pos={"relative"}
         withCloseButton={false}
         size={modalMode === "donating" ? "auto" : 850}

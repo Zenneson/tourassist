@@ -14,7 +14,17 @@ import PlaceListItem from "./placeListItem";
 import classes from "./tourList.module.css";
 
 export default function TourList(props) {
-  const { listOpened, setListOpened, places, setPlaces } = props;
+  const {
+    listOpened,
+    setListOpened,
+    places,
+    setPlaces,
+    goToLocation,
+    setShowMainMarker,
+    setLngLat,
+    setLocationDrawer,
+    setArea,
+  } = props;
   const router = useRouter();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -51,14 +61,13 @@ export default function TourList(props) {
       >
         <Drawer
           classNames={{ content: classes.tourDrawer }}
-          zIndex={999}
+          zIndex={10}
           opened={listOpened && places.length > 0}
           onClose={() => setListOpened(false)}
           withOverlay={false}
           withCloseButton={false}
           padding="xl"
-          size={400}
-          opacity={0.95}
+          size={350}
         >
           <Divider
             label="Tour Locations"
@@ -78,8 +87,13 @@ export default function TourList(props) {
                     place={place.place}
                     region={place.region}
                     setListOpened={setListOpened}
+                    setShowMainMarker={setShowMainMarker}
                     places={places}
                     setPlaces={setPlaces}
+                    goToLocation={goToLocation}
+                    setLngLat={setLngLat}
+                    setLocationDrawer={setLocationDrawer}
+                    setArea={setArea}
                   />
                 ))}
                 {provided.placeholder}
@@ -93,7 +107,14 @@ export default function TourList(props) {
               fw={700}
               mt={20}
               fullWidth
+              radius={"xl"}
               onClick={submitTourList}
+              variant="gradient"
+              gradient={
+                dark
+                  ? { from: "#004585", to: "#00376b", deg: 180 }
+                  : { from: "#93f3fc", to: "#00e8fc", deg: 180 }
+              }
             >
               READY
             </Button>

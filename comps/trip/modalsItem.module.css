@@ -1,41 +1,36 @@
-.editTripModal .mantine-Modal-header {
+.editTripModalHeader {
 	background-color: transparent;
 }
 
-.editTripModal .mantine-Modal-content {
+.editTripModalContent {
 	background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
 }
 
-.editTripModal .mantine-Modal-overlay {
+.editTripModalOverlay {
 	background-color: light-dark(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5));
 	backdrop-filter: blur(9px);
 }
 
-.editTripModal .mantine-ScrollArea-root .mantine-ScrollArea-scrollbar {
-	opacity: 0.3;
-	width: 8;
-}
-
-.altModal .mantine-Modal-header {
+.altModalHeader {
 	background-color: transparent;
 }
 
-.altModal .mantine-Modal-content {
+.altModalContent {
 	overflow: hidden;
 	background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
 }
 
-.altModal .mantine-Modal-overlay {
+.altModalOverlay {
 	background-color: light-dark(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.3));
 	backdrop-filter: blur(9px);
 }
 
-.dateInput .mantine-DateInput-input {
+.dateInput {
 	cursor: pointer;
 }
 
-.updateInputTitle .mantine-Input-input {
-	background: light-dark(var(--mantine-color-gray-3), #101113);
+.updateInputTitle {
+	background: light-dark(#dee2e6, #101113);
 	&::placeholder {
 		font-weight: 700;
 		font-style: italic;
@@ -43,32 +38,29 @@
 	}
 }
 
-.textEditor .mantine-RichTextEditor-root {
+.textEditor {
 	transition: border-top 0.2s ease;
 	border: none;
 	width: 100%;
 	min-width: 500px;
 }
 
-.textEditor .mantine-RichTextEditor-toolbar {
+.textEditorToolbar {
 	border-color: rgba(255, 255, 255, 0);
 	background: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
 }
 
-.textEditor .mantine-RichTextEditor-content {
+.textEditorContent {
 	background: rgba(0, 0, 0, 0);
 	min-height: 250px;
-	color: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
+	color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
 }
 
-.textEditor .mantine-RichTextEditor-content .ProseMirror {
+.textEditorContent > div {
+	/* ProseMirror */
 	padding-left: 21px;
 	padding-right: 21px;
 	min-height: 250px;
-}
-
-.textEditor .mantine-RichTextEditor-content p {
-	font-size: 9rem;
 }
 
 .donationInput .mantine-NumberInput-input {

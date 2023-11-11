@@ -1,3 +1,7 @@
+"use client";
+import "@mantine/tiptap/styles.css";
+import "@mantine/dates/styles.css";
+import "@mantine/dropzone/styles.css";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
@@ -58,10 +62,12 @@ export default function TripContent(props) {
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
-  const [tripDesc, setTripDesc] = useState(props.tripDesc || "");
+  const [tripDesc, setTripDesc] = useSessionStorage({
+    key: "tripDesc",
+  });
   const [travelDate, setTravelDate] = useSessionStorage({
     key: "travelDate",
-    defaultValue: tripData.travelDate,
+    defaultValue: tripData?.travelDate,
   });
   const [updatedDesc, setUpdatedDesc] = useSessionStorage({
     key: "updatedDesc",
@@ -156,7 +162,7 @@ export default function TripContent(props) {
     parseOptions: {
       preserveWhitespace: "full",
     },
-    content: content,
+    content: tripDesc || content,
   });
 
   useWindowEvent("keydown", (e) => {
@@ -173,7 +179,7 @@ export default function TripContent(props) {
       editor.commands.setContent(
         updatedDesc.toString() ||
           tripDesc?.toString() ||
-          tripData.tripDesc?.toString()
+          tripData?.tripDesc?.toString()
       );
     }
   }, [editor, tripDesc, tripData, updatedDesc]);
@@ -289,14 +295,13 @@ export default function TripContent(props) {
                 maw={"10%"}
                 variant="subtle"
                 color="red.9"
-                opacity={0.3}
                 onClick={() => {
                   setImages(
                     removeImageByName(
                       images,
                       image.name,
                       router.query,
-                      tripData.tripId,
+                      tripData?.tripId,
                       user
                     )
                   );
@@ -404,7 +409,13 @@ export default function TripContent(props) {
                 }}
               >
                 {(props) => (
-                  <Button variant="default" size="lg" fullWidth {...props}>
+                  <Button
+                    className={classes.uploadBtn}
+                    variant="light"
+                    size="lg"
+                    fullWidth
+                    {...props}
+                  >
                     <Group gap={7}>
                       <Title order={3}>
                         {images.length === 6 ? "MAX REACHED" : "UPLOAD IMAGE"}
@@ -431,11 +442,11 @@ export default function TripContent(props) {
                   <Badge
                     variant="filled"
                     size="lg"
-                    color={dark ? "dark.4" : "gray.5"}
-                    c={dark ? "dark.9" : "gray.0"}
+                    color={dark ? "dark.7" : "gray.5"}
+                    c={dark ? "gray.0" : "gray.0"}
                     w={"60%"}
                     ml={"20%"}
-                    opacity={dark ? 0.2 : 0.5}
+                    opacity={0.5}
                     mt={5}
                     style={{
                       cursor: "default",
@@ -502,7 +513,6 @@ export default function TripContent(props) {
             root: classes.textEditorRoot,
             toolbar: classes.textEditorToolbar,
             content: classes.textEditorContent,
-            // root: classes.textEditor,
           }}
           editor={editor}
           position="relative"
@@ -566,14 +576,12 @@ export default function TripContent(props) {
               border={50}
               color={dark ? [0, 0, 0, 0.7] : [100, 100, 100, 0.4]} // RGBA
               image={imageUpload.file}
-              borderRadius={3}
               scale={scale}
               onWheel={handleScroll}
               onLoadSuccess={() => setLoading(false)}
               style={{
-                borderTop: dark
-                  ? "2px solid rgba(255,255,255,0.1)"
-                  : "2px solid rgba(0,0,0,0.1)",
+                borderRadius: 3,
+                overflow: "hidden",
               }}
             />
             <MantineSlider
@@ -585,7 +593,7 @@ export default function TripContent(props) {
               thumbSize={20}
               thumbChildren={<IconFrame size={14} stroke={3} />}
               defaultValue={1}
-              color="blue.4"
+              color={dark ? "blue.9" : "blue.4"}
               label={null}
               showLabelOnHover={false}
               value={scale}
@@ -594,18 +602,22 @@ export default function TripContent(props) {
             <Group w={"100%"} mt={30} grow>
               {/* Selects NO Cropped Image to Image Slider  */}
               <Button
+                className={classes.dimBtn}
                 size="xl"
-                variant="default"
-                opacity={0.3}
+                variant="filled"
+                color={dark ? "dark.7" : "gray.0"}
+                c={dark ? "gray.0" : "dark.8"}
                 onClick={dontAddImage}
               >
                 <IconX stroke={5} size={35} />
               </Button>
               {/* Selects YES Cropped Image to Image Slider  */}
               <Button
+                className={classes.dimBtn}
                 size="xl"
-                variant="default"
-                opacity={0.3}
+                variant="filled"
+                color={dark ? "dark.7" : "gray.0"}
+                c={dark ? "gray.0" : "dark.8"}
                 onClick={addImage}
               >
                 <IconCheck stroke={5} size={35} />

@@ -30,10 +30,6 @@
 	transition: opacity 150ms ease;
 }
 
-.input::placeholder {
-	transition: color 150ms ease;
-}
-
 .dynamic-placeholder::placeholder {
 	transition: color 150ms ease;
 	color: var(--dynamic-placeholder-color, undefined);

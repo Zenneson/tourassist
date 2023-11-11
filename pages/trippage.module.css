@@ -1,3 +1,9 @@
+.toolTip {
+	background: light-dark(#fff, #141517);
+	color: light-dark(#141517, #fff);
+	border: 1px solid light-dark(#ececec, #1c1c1c);
+}
+
 .brightButton {
 	opacity: 0.5;
 	&:hover {
@@ -6,8 +12,8 @@
 }
 
 .updateModalButton {
-	opacity: 0.5;
-	background: light-dark(rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.3));
+	opacity: 0.7;
+	border: none;
 	&:hover {
 		opacity: 1;
 	}

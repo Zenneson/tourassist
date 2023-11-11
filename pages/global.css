@@ -1,7 +1,14 @@
 body {
-	background-color: light-dark(#f8f9fa, #1a1b1e);
+	background-color: light-dark(#f8f9fa, #0b0c0d);
 	height: 100vh;
 	overflow: hidden;
+}
+
+input {
+	&:focus {
+		outline: none;
+		border: none;
+	}
 }
 
 .pagePanel {

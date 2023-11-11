@@ -41,14 +41,28 @@
 }
 
 .loactionDrawer {
-	pointer-events: none;
 	box-shadow: none;
 	overflow: hidden;
-	background-color: light-dark(rgba(248, 249, 250, 0.8), rgba(26, 27, 30, 0.8));
+	background-color: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 0.8));
 }
 
 .placeTitle {
+	font-size: 0.8rem;
 	text-transform: uppercase;
+}
+
+.placeAutoComplete {
+	border-radius: 3px 3px 0 0;
+}
+
+.select,
+.placeAutoComplete {
+	background: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 1));
+	color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
+
+	&::placeholder {
+		color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
+	}
 }
 
 .countryAutoCompleteOption,
@@ -76,17 +90,18 @@
 }
 
 .placeAutoCompleteDropdown {
-	border-radius: 5px;
+	border-radius: 3px;
 	background-color: light-dark(rgba(248, 249, 250, 1), rgba(11, 12, 13, 1));
 }
 
 .placeAutoCompleteOption {
-	border-radius: 5px;
+	border-radius: 3px;
 }
 
 .topCitiesLink {
 	transition: all 200ms ease-in-out;
-	background: light-dark(rgba(248, 249, 250, 0.7), rgba(14, 15, 18, 0.8));
+	background: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 1));
+
 	&:hover {
 		background: light-dark(rgba(248, 249, 250, 1), rgba(14, 15, 18, 1));
 		transform: scale(1.05) translateX(7px);
@@ -108,7 +123,7 @@
 	opacity: 1;
 	border-radius: 0 3px 3px 0;
 	transition: left 100ms ease !important;
-	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(26, 27, 30, 0.95));
+	background-color: light-dark(rgba(248, 249, 250, 0.95), rgba(12, 13, 14, 0.95));
 	border-top: 1px solid light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
 	border-right: 1px solid light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
 	border-bottom: 1px solid light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
@@ -122,7 +137,7 @@
 	cursor: pointer;
 	opacity: 0.7;
 	transform: scale(1.7);
-	color: light-dark(#121d47, #99f8ff);
+	color: #fff;
 	&:hover {
 		opacity: 1;
 		transform: scale(2);
@@ -136,36 +151,40 @@
 }
 
 .select {
+	border-radius: 0 0 3px 3px;
 	outline: none;
 	border: none;
 }
 
+.placeBtns {
+	box-shadow: 0px 2px 3px light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.01));
+	border-radius: 3px;
+}
+
 .chooseLocationBox {
-	pointer-events: all;
-	border-radius: 5px;
-	border-top: 2px solid light-dark(rgba(153, 153, 153, 0.2), rgba(204, 204, 204, 0.2));
-	box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0));
+	border-radius: 3px;
+	box-shadow: 0px 2px 3px light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.01));
 }
 
 .locationBtns {
 	font-weight: 100;
-	background: light-dark(rgba(248, 249, 250, 0.7), rgba(14, 15, 18, 0.9));
+	background: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 0.95));
 	color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
 
 	&:hover {
+		background: light-dark(rgba(248, 249, 250, 1), rgba(14, 15, 18, 1));
 		color: light-dark(rgba(14, 15, 18, 1), rgba(248, 249, 250, 1));
 	}
 }
 
 .closeBtn {
-	background: light-dark(#00e8fc, #0d3f82);
-	transition: all 200ms ease-in-out;
-	pointer-events: all;
+	box-shadow: 0 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+	transition: all 300ms ease;
 	font-weight: 700;
-	opacity: 0.7;
+	opacity: 0.8;
 	&:hover {
 		opacity: 1;
 		color: #fff;
-		transform: scale(1.02);
+		transform: scale(1.01);
 	}
 }

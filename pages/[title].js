@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
@@ -296,78 +297,99 @@ export default function Trippage(props) {
                   overflow: "hidden",
                 }}
               >
-                <Tooltip label="Share on Facebook">
+                <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
+                  label="Share on Facebook"
+                >
                   <Button
                     className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
-                    bg={dark ? "dark.9" : "gray.3"}
+                    bg={dark ? "dark.8" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
                   >
                     <IconBrandFacebook size={20} />
                   </Button>
                 </Tooltip>
-                <Tooltip label="Share on Instagram">
+                <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
+                  label="Share on Instagram"
+                >
                   <Button
                     className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
-                    bg={dark ? "dark.9" : "gray.3"}
+                    bg={dark ? "dark.8" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
                   >
                     <IconBrandInstagram size={20} />
                   </Button>
                 </Tooltip>
-                <Tooltip label="Share on Tiktok">
+                <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
+                  label="Share on Tiktok"
+                >
                   <Button
                     className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
-                    bg={dark ? "dark.9" : "gray.3"}
+                    bg={dark ? "dark.8" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
                   >
                     <IconBrandTiktok size={20} />
                   </Button>
                 </Tooltip>
-                <Tooltip label="Share on Twitter">
+                <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
+                  label="Share on Twitter"
+                >
                   <Button
                     className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
-                    bg={dark ? "dark.9" : "gray.3"}
+                    bg={dark ? "dark.8" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
                   >
                     <IconBrandTwitter size={20} />
                   </Button>
                 </Tooltip>
-                <Tooltip label="Share on Whatsapp">
+                <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
+                  label="Share on Whatsapp"
+                >
                   <Button
                     className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
-                    bg={dark ? "dark.9" : "gray.3"}
+                    bg={dark ? "dark.8" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
                   >
                     <IconBrandWhatsapp size={20} />
                   </Button>
                 </Tooltip>
-                <Tooltip label="HTML Embed Code">
+                <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
+                  label="HTML Embed Code"
+                >
                   <Button
                     className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
-                    bg={dark ? "dark.9" : "gray.3"}
+                    bg={dark ? "dark.8" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
                   >
                     <IconSourceCode size={20} />
                   </Button>
                 </Tooltip>
-                <Tooltip label="Share with QR Code">
+                <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
+                  label="Share with QR Code"
+                >
                   <Button
                     className={classes.brightButton}
                     size={"xl"}
                     variant="filled"
-                    bg={dark ? "dark.9" : "gray.3"}
+                    bg={dark ? "dark.8" : "gray.3"}
                     c={dark ? "gray.0" : "dark.2"}
                   >
                     <IconQrcode size={20} />
@@ -387,8 +409,9 @@ export default function Trippage(props) {
               {user && user.email === tripData?.user && (
                 <Divider
                   labelPosition="right"
-                  color={dark && "gray.6"}
+                  color={dark && "gray.8"}
                   w={"100%"}
+                  opacity={dark && 0.2}
                   label={
                     // Edit Trip Details
                     <Button
@@ -417,18 +440,6 @@ export default function Trippage(props) {
               )}
               <TripDescription tripDesc={tripData?.tripDesc} />
             </Box>
-            {user?.email === tripData?.user && (
-              <Button
-                className={classes.updateModalButton}
-                variant="default"
-                w={"86%"}
-                radius={25}
-                mb={20}
-                onClick={showUpdateModal}
-              >
-                POST UPDATE
-              </Button>
-            )}
             {updates && updates.length > 0 && (
               <Updates
                 user={user}
@@ -448,9 +459,8 @@ export default function Trippage(props) {
               p={"20px 30px"}
             >
               <Divider
-                size={"xl"}
+                size={"md"}
                 w={"100%"}
-                color={dark && "gray.6"}
                 labelPosition="left"
                 label={
                   <Flex align={"center"}>
@@ -623,6 +633,18 @@ export default function Trippage(props) {
                 dHeight={"calc(100vh - 405px)"}
               />
             </Box>
+            {user?.email === tripData?.user && (
+              <Button
+                className={classes.updateModalButton}
+                variant="default"
+                radius={"xl"}
+                mt={20}
+                bg={dark ? "dark.7" : "gray.3"}
+                onClick={showUpdateModal}
+              >
+                POST UPDATE
+              </Button>
+            )}
           </Flex>
         </Flex>
       </Center>

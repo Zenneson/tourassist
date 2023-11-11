@@ -1,6 +1,6 @@
 .accountPanelInput {
-	background: light-dark(rgb(255, 255, 255), rgb(15, 17, 20));
-	box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0));
+	background: light-dark(rgb(255, 255, 255), rgb(10, 11, 12));
+	box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
 }
 
 .toolTip {

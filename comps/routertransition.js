@@ -1,8 +1,14 @@
+import "@mantine/nprogress/styles.css";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { useComputedColorScheme } from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 
 export function RouterTransition(props) {
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +34,11 @@ export function RouterTransition(props) {
 
   return (
     <>
-      <NavigationProgress zIndex={9999} size={"sm"} color={"#219cee"} />
+      <NavigationProgress
+        zIndex={9999}
+        size={"sm"}
+        color={dark ? "#0d3f82" : "#00e8fc"}
+      />
     </>
   );
 }

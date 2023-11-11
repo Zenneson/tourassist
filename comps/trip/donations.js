@@ -1,3 +1,4 @@
+"use client";
 import { useState, useRef, useEffect } from "react";
 import {
   useComputedColorScheme,
@@ -17,7 +18,6 @@ import {
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
 import { useUser } from "../../libs/context";
 import { IconReload } from "@tabler/icons-react";
-import classes from "./donations.module.css";
 
 export default function Donations(props) {
   const { dHeight, donationSectionLimit, donations } = props;
@@ -107,15 +107,15 @@ export default function Donations(props) {
   });
 
   return (
-    <Box w="100%" pos={"relative"}>
+    <Box w="100%" pos={"relative"} pl={10}>
       <Grid pt={17} px={10} align="flex-start">
         <Grid.Col span="auto">
           <Stack gap={0}>
             <Divider
               size={2}
               mb={5}
-              opacity={dark ? 0.7 : 0.1}
-              color={dark ? "dark.8" : "dark.3"}
+              opacity={dark ? 0.3 : 0.1}
+              color={dark ? "gray.8" : "dark.3"}
             />
             <Title order={6} c={"gray.5"}>
               {donationsData?.length}{" "}
@@ -129,9 +129,7 @@ export default function Donations(props) {
         <Grid.Col span="content">
           {donationsData?.length !== 0 && (
             <SegmentedControl
-              classNames={classes.brightButton}
               value={sorted}
-              bg={!dark ? "gray.3" : "dark.3"}
               onChange={setSorted}
               data={[
                 { label: "Recent", value: "time" },
@@ -164,7 +162,6 @@ export default function Donations(props) {
         }}
       />
       <Box
-        className={classes.donationsScroll}
         p={10}
         pb={20}
         m={0}
