@@ -1,6 +1,6 @@
 "use client";
 import { useToggle, useElementSize } from "@mantine/hooks";
-import { Box, Button, Divider, Text } from "@mantine/core";
+import { Button, Divider, Text } from "@mantine/core";
 
 export default function UpdateContent(props) {
   const { content } = props;

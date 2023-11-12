@@ -63,7 +63,7 @@
 	min-height: 250px;
 }
 
-.donationInput .mantine-NumberInput-input {
+.donationInput {
 	text-align: right;
 	font-weight: 700;
 }

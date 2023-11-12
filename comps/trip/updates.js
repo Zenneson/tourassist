@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import {
   useComputedColorScheme,
   ActionIcon,
@@ -147,7 +147,7 @@ export default function Updates(props) {
       >
         {/* Show Update Modal Button  */}
         {user?.email === tripData.user && (
-          <Menu closeOnItemClick={true}>
+          <Menu closeOnItemClick={true} withArrow arrowSize={12} offset={3}>
             <Menu.Target>
               <ActionIcon
                 variant="transparent"
@@ -162,7 +162,7 @@ export default function Updates(props) {
             <Menu.Dropdown>
               <Menu.Item
                 fz={12}
-                icon={<IconPencil size={14} />}
+                leftSection={<IconPencil size={14} />}
                 onClick={() => {
                   setCurrentUpdateId(update.updateId);
                   updateTrip();
@@ -172,7 +172,7 @@ export default function Updates(props) {
               </Menu.Item>
               <Menu.Item
                 fz={12}
-                icon={<IconTrash size={14} />}
+                leftSection={<IconTrash size={14} />}
                 onClick={() => {
                   setCurrentUpdateTtile(update.updateTitle);
                   deleteUpdate();

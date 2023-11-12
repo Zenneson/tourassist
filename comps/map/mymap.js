@@ -111,6 +111,8 @@ const CustomAutoComplete = ({
     "Central African Republic",
   ];
 
+  const autoRef = useRef();
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: (eventSource) => {
@@ -134,21 +136,25 @@ const CustomAutoComplete = ({
 
   useEffect(() => {
     combobox.selectFirstOption();
+    const isInputFocused = autoRef.current === document.activeElement;
+    if (!isInputFocused) combobox.closeDropdown();
     if (
       countrySearch &&
       countrySearch.length === 0 &&
       placeSearch &&
       placeSearch.length === 0
     ) {
-      return combobox.closeDropdown();
+      combobox.closeDropdown();
+    } else if (isInputFocused) {
+      if (
+        (countrySearch && countrySearch.length > 2) ||
+        (placeSearch && placeSearch.length > 2 && options.length > 0)
+      ) {
+        combobox.openDropdown();
+      }
+    } else if (options.length === 0) {
+      combobox.closeDropdown();
     }
-    if (
-      ((countrySearch && countrySearch.length > 1) ||
-        (placeSearch && placeSearch.length > 1)) &&
-      options.length > 0
-    )
-      combobox.openDropdown();
-    if (options.length === 0) combobox.closeDropdown();
   }, [options, combobox, countrySearch, placeSearch, countryData, placeData]);
 
   return (
@@ -163,8 +169,13 @@ const CustomAutoComplete = ({
             ? classes.countryAutoCompleteOption
             : classes.placeAutoCompleteOption,
       }}
+      transitionProps={{
+        transition: "fade",
+        duration: 100,
+        timingFunction: "ease",
+      }}
       store={combobox}
-      withinPortal={false}
+      offset={3}
       onOptionSubmit={(value, optionProps) => {
         if (version === "country") {
           handleChange("country");
@@ -178,6 +189,7 @@ const CustomAutoComplete = ({
     >
       <Combobox.Target>
         <InputBase
+          ref={autoRef}
           classNames={{
             input:
               version === "country"
@@ -188,7 +200,6 @@ const CustomAutoComplete = ({
           w={version === "country" ? 350 : "auto"}
           radius={version === "country" ? "xl" : "3px 3px 0 0"}
           pointer
-          type="input"
           leftSection={<IconWorldSearch size={20} />}
           leftSectionWidth={35}
           rightSectionPointerEvents="none"

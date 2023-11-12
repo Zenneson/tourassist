@@ -6,7 +6,7 @@
 }
 
 .travelersInput {
-	text-align: center;
+	text-align: center !important;
 	font-weight: 700;
 	font-size: 1.1rem;
 	padding: 0;

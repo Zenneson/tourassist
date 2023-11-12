@@ -6,6 +6,7 @@ export default function TripDescription(props) {
   const { tripDesc } = props;
   const [readmore, toggle] = useToggle(["closed", "open"]);
   const { ref, width, height } = useElementSize();
+  const dark = props.dark;
 
   return (
     <>
@@ -20,6 +21,7 @@ export default function TripDescription(props) {
           labelPosition="right"
           w={"100%"}
           mt={20}
+          opacity={dark && 0.4}
           label={
             // Read More Toggle
             <Button

@@ -563,7 +563,7 @@ export default function TripContent(props) {
           <Box
             ref={cropperContainerRef}
             pos={"absolute"}
-            top={40}
+            top={30}
             style={{
               zIndex: 1000,
               opacity: loading ? 0 : 1,
@@ -575,7 +575,7 @@ export default function TripContent(props) {
               width={585}
               height={450}
               border={50}
-              color={dark ? [0, 0, 0, 0.7] : [100, 100, 100, 0.4]} // RGBA
+              color={dark ? [0, 0, 0, 0.8] : [100, 100, 100, 0.4]} // RGBA
               image={imageUpload.file}
               scale={scale}
               onWheel={handleScroll}
@@ -589,18 +589,17 @@ export default function TripContent(props) {
               classNames={{
                 root: classes.sizeSlider,
                 thumb: classes.sizeSliderThumb,
+                bar: classes.sizeSliderBar,
               }}
               mt={20}
               min={1}
               max={5}
               step={0.05}
               size={"lg"}
-              thumbSize={35}
-              thumbChildren={<IconPhoto size={16} stroke={3} />}
+              thumbSize={38}
+              thumbChildren={<IconPhoto size={17} stroke={2} />}
               defaultValue={1}
-              color={dark ? "blue.9" : "blue.4"}
               label={null}
-              showLabelOnHover={false}
               value={scale}
               onChange={setScale}
             />
@@ -629,12 +628,17 @@ export default function TripContent(props) {
               </Button>
             </Group>
           </Box>
-          <Overlay color={dark ? "dark.7" : "gray.0"} opacity={0.3} blur={7} />
+          <Overlay
+            color={dark ? "dark.7" : "gray.0"}
+            backgroundOpacity={dark ? 0.9 : 0.2}
+            blur={7}
+          />
           <LoadingOverlay
             overlayColor={dark ? "dark.7" : "gray.0"}
             visible={processingImage}
+            loaderProps={{ type: "oval", color: dark ? "blue.9" : "blue.3" }}
             overlayProps={{
-              backgroundColor: dark ? "dark.7" : "gray.0",
+              color: dark ? "dark.7" : "gray.0",
               backgroundOpacity: 0,
               blur: 0,
             }}

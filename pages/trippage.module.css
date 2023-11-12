@@ -4,15 +4,22 @@
 	border: 1px solid light-dark(#ececec, #1c1c1c);
 }
 
-.brightButton {
+.shareButton {
 	opacity: 0.5;
 	&:hover {
 		opacity: 1;
 	}
 }
 
+.shareButtonGroup {
+	width: 688px;
+	overflow: hidden;
+	border-radius: 50;
+	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
+}
+
 .updateModalButton {
-	opacity: 0.7;
+	opacity: 0.4;
 	border: none;
 	&:hover {
 		opacity: 1;

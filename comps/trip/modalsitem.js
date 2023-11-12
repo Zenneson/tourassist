@@ -645,26 +645,13 @@ export default function ModalsItem(props) {
                   <NumberInput
                     className={classes.donationInput}
                     ref={donationRef}
-                    icon={<IconCurrencyDollar size={35} />}
+                    leftSection={<IconCurrencyDollar size={35} />}
                     size="xl"
                     hideControls
-                    precision={2}
                     variant="filled"
                     defaultValue={0}
                     value={donationAmount}
                     onChange={(e) => setDonationAmount(e)}
-                    parser={(value) =>
-                      Math.ceil(
-                        parseFloat(value.replace(/[\$\s,a-zA-Z]/g, ""))
-                      ).toFixed(2)
-                    }
-                    formatter={(value) =>
-                      !Number.isNaN(parseFloat(value))
-                        ? Math.ceil(parseFloat(value))
-                            .toFixed(2)
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        : "0.00"
-                    }
                     onClick={(e) => {
                       if (
                         e.target.value === 0 ||
@@ -770,12 +757,15 @@ export default function ModalsItem(props) {
                 <Textarea
                   placeholder="Bon voyage!"
                   variant="filled"
+                  autosize
                   mt={10}
+                  size="sm"
                   minRows={8}
                 />
                 <Group justify="flex-end" mt={20} w={"100%"} gap={0}>
                   <Button
-                    variant="Transparent"
+                    variant="transparent"
+                    c={dark ? "#fff" : "#000"}
                     fw={100}
                     fz={10}
                     onClick={closeAltModal}

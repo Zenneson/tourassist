@@ -91,10 +91,15 @@ const tourTheme = createTheme({
     NumberInput: {
       defaultProps: {
         variant: "filled",
+        suffix: ".00",
+        thousandSeparator: ",",
       },
       styles: {
         root: {
           transition: "all 200ms ease",
+        },
+        input: {
+          textAlign: "right",
         },
       },
     },
@@ -147,6 +152,7 @@ const tourTheme = createTheme({
       defaultProps: {
         withArrow: true,
         arrowSize: 10,
+        openDelay: 750,
         events: { hover: true, focus: true, touch: false },
       },
       styles: {

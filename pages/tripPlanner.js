@@ -494,7 +494,7 @@ export default function TripPlanner(props) {
                         setPlaces(newPlaces);
                       }}
                       hideControls={true}
-                      icon={<IconCurrencyDollar />}
+                      leftSection={<IconCurrencyDollar />}
                     />
                     <ActionIcon
                       className={classes.removeCostButton}
@@ -547,7 +547,7 @@ export default function TripPlanner(props) {
                       setPlaces(newPlaces);
                     }}
                     hideControls={true}
-                    icon={<IconCurrencyDollar />}
+                    leftSection={<IconCurrencyDollar />}
                   />
                 </Group>
               )}
@@ -659,7 +659,7 @@ export default function TripPlanner(props) {
         classNames={{ input: classes.totalCostInput }}
         id="totalId"
         min={0}
-        icon={<IconCurrencyDollar />}
+        leftSection={<IconCurrencyDollar />}
         size="xl"
         w={225}
         value={totalCost}
@@ -948,8 +948,8 @@ export default function TripPlanner(props) {
                               hideControls
                               variant="filled"
                               type="number"
-                              ta={"center"}
                               w={20}
+                              suffix={""}
                               value={travelers}
                               onChange={(e) => setTravelers(e)}
                               handlersRef={travelersHandlerRef}
@@ -1338,7 +1338,11 @@ export default function TripPlanner(props) {
               w="20%"
               styles={{
                 stepIcon: {
+                  overflow: "hidden",
                   backgroundColor: dark && "#050506",
+                },
+                stepCompletedIcon: {
+                  backgroundColor: dark && "#0D3F82",
                 },
               }}
             >

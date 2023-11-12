@@ -198,13 +198,18 @@ export default function Donations(props) {
         <Table
           striped
           stripedColor={
-            dark ? "rgba(5, 5, 5, 0.75)" : "rgba(200, 200, 200, 0.15)"
+            dark ? "rgba(255, 255, 255, 0.01)" : "rgba(200, 200, 200, 0.15)"
           }
           highlightOnHover
           withRowBorders={false}
-          style={{
-            overflow: "hidden",
-            borderRadius: 3,
+          styles={{
+            table: {
+              overflow: "hidden",
+              borderRadius: 3,
+            },
+            tr: {
+              borderRadius: 25,
+            },
           }}
         >
           <Table.Tbody>{rows?.length !== 0 && rows}</Table.Tbody>

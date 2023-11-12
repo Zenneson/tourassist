@@ -77,7 +77,6 @@
 	&:hover {
 		color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));
 		font-weight: 700;
-		border-radius: 0;
 	}
 
 	&[data-combobox-selected="true"] {
@@ -89,6 +88,7 @@
 
 .countryAutoCompleteDropdown {
 	border-radius: 25px;
+	box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
 	background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(11, 12, 13, 0.9));
 }
 
