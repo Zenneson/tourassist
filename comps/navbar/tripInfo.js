@@ -434,11 +434,12 @@ export default function TripInfo(props) {
         </Box>
         <Flex my={10} pos={"relative"}>
           <Box
-            // className="pagePanel"
+            bg={dark ? "rgba(5, 5, 5, 0.5)" : "rgba(255, 255, 255, 0.9)"}
             w={"100%"}
             position="relative"
             style={{
               overflow: "hidden",
+              borderRadius: 3,
             }}
           >
             <Donations

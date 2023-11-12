@@ -5,16 +5,11 @@
 	line-height: 2.4rem;
 	font-size: var(--mantine-font-size-sm);
 	height: 2.4rem;
-	color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
+	color: light-dark(#000, #c1c2c5);
 
 	&:hover {
-		background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+		background-color: light-dark(#f8f9fa, #0b0c0d);
 	}
-}
-
-.linkActive {
-	font-weight: 700;
-	color: light-dark(var(--mantine-color-blue-4), var(--mantine-color-blue-7));
 }
 
 .links {
@@ -22,9 +17,9 @@
 }
 
 .indicator {
-	color: light-dark(var(--mantine-color-blue-4), var(--mantine-color-blue-7));
+	color: light-dark(#33d9f8, #0d3f82);
 	transition: transform 150ms ease;
 	position: absolute;
-	top: 11px;
+	top: 10px;
 	left: -20px;
 }

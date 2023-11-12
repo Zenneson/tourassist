@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import {
-  useMantineTheme,
+  useComputedColorScheme,
   Box,
   Button,
   Text,
@@ -16,19 +17,23 @@ import { IconChevronsRight } from "@tabler/icons-react";
 import classes from "./legal.module.css";
 
 export default function Legal() {
-  const theme = useMantineTheme();
-  const [linkState, setLinkState] = useState("terms");
-  const [active, setActive] = useState(0);
-  const [highlighted, setHighlighted] = useState(0);
-  const [scroll, setScroll] = useState(false);
-
+  const [isClient, setIsClient] = useState(false);
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
   const router = useRouter();
-  const cx = (...classNames) => classNames.filter(Boolean).join(" ");
+  const [linkState, setLinkState] = useState("terms");
+  const [active, setActive] = useState(-1);
 
   useEffect(() => {
     router.prefetch("/help");
     router.prefetch("/contact");
   }, [router]);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const terms = [
     {
@@ -104,13 +109,13 @@ export default function Legal() {
   const items = links.map((term, index) => (
     // Menu Items
     <Box
-      component="a"
-      href={term.link}
       onClick={(event) => {
         menuItems(event, index);
       }}
       key={index}
-      className={cx(classes.link, { [classes.linkActive]: active === index })}
+      className={classes.link}
+      fw={active === index && 700}
+      c={active === index ? (dark ? "#0d3f82" : "#33d9f8") : "inherit"}
       style={{
         cursor: "pointer",
         paddingLeft: "10px",
@@ -263,8 +268,6 @@ export default function Legal() {
     },
   ];
 
-  const termsectionsRefs = termsections.map(() => React.createRef());
-
   const privsections = [
     {
       title: "Information We Collect",
@@ -414,104 +417,93 @@ export default function Legal() {
   ];
 
   const sections = linkState === "terms" ? termsections : privsections;
+  const sectionRefs = useRef([]);
 
+  const highlighted = dark ? "#0D3F82" : "#33D9F8";
   const content = sections.map((section, index) => (
     <Box
       pt={20}
       mb={10}
       key={index}
-      ref={termsectionsRefs[index]}
-      style={{
-        scrollMarginTop: "188px",
-      }}
+      ref={(el) => (sectionRefs.current[index] = el)}
+      style={{ scrollMargin: "188px" }}
     >
       <Title
         order={4}
-        color={
-          highlighted === index
-            ? theme.colorScheme === "dark"
-              ? "blue.7"
-              : "blue.4"
-            : "inherit"
-        }
+        style={{
+          color: active === index ? highlighted : "inherit",
+        }}
       >
         {section.title}
       </Title>
-      <Text fz={14} mt={10}>
+      <Box fz={14} mt={10}>
         {section.text}
-      </Text>
+      </Box>
     </Box>
   ));
-
-  const scrollToSection = (event) => {
-    setActive(0);
-    setHighlighted(0);
-    setScroll(true);
-  };
-
-  useEffect(() => {
-    if (scroll) {
-      termsectionsRefs[0].current.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-      });
-      setScroll(false);
-    }
-  }, [active, highlighted, scroll, termsectionsRefs]);
 
   const menuItems = (event, index) => {
     event.preventDefault();
     setActive(index);
-    setHighlighted(index);
-    termsectionsRefs[index].current.scrollIntoView({
+    sectionRefs.current[index]?.scrollIntoView({
       behavior: "smooth",
+      block: "nearest",
     });
   };
 
+  const contentWrapperRef = useRef(null);
+  const scrollToTop = () => {
+    setActive(-1);
+    contentWrapperRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <Center mt={120} mb={50}>
-      <Flex w={"80%"} maw={1200}>
-        <Flex direction={"column"} miw={"300px"} pos={"fixed"} top={205}>
-          {/* Toggle between Terms of Use and Privacy Policy */}
-          <SegmentedControl
-            value={linkState}
-            onChange={setLinkState}
-            onClick={(e) => {
-              scrollToSection(e);
-            }}
-            ml={-60}
-            style={{
-              transform: "scale(.75)",
-            }}
-            data={[
-              { label: "Terms of Use", value: "terms" },
-              { label: "Privacy Policy", value: "privacy" },
-            ]}
-          />
-          <Box className={classes.links}>
-            <IconChevronsRight
-              className={classes.indicator}
-              size={17}
-              style={{
-                transform: `translateY(calc(${active} * 2.4rem))`,
-              }}
+    isClient && (
+      <Center mt={120} mb={50}>
+        <Flex w={"80%"} maw={1200}>
+          <Flex direction={"column"} miw={"300px"} pos={"fixed"} top={205}>
+            {/* Toggle between Terms of Use and Privacy Policy */}
+            <SegmentedControl
+              value={linkState}
+              size="xs"
+              onChange={setLinkState}
+              onClick={scrollToTop}
+              data={[
+                { label: "Terms of Use", value: "terms" },
+                { label: "Privacy Policy", value: "privacy" },
+              ]}
             />
-            {items}
-          </Box>
-        </Flex>
-        <Space w={"30%"} />
-        <Flex direction={"column"} w={"70%"}>
-          <Title fz={50}>
-            {linkState === "terms" ? "Terms of Use" : "Privacy Policy"}
-          </Title>
-          <Text fz={10} w={"100%"} ta={"right"}>
-            Last Updated: April 30, 2023
-          </Text>
-          <Box className="pagePanel" w={"100%"} mt={10} p={20}>
-            <Group gap={30}>
-              <Text w={"80%"} fz={12}>
-                {linkState === "terms"
-                  ? `Welcome to Tourassist, a premier crowdfunding platform
+            <Box className={classes.links}>
+              {active > -1 && (
+                <IconChevronsRight
+                  className={classes.indicator}
+                  size={17}
+                  style={{
+                    transform: `translateY(calc(${active} * 2.4rem))`,
+                  }}
+                />
+              )}
+              {items}
+            </Box>
+          </Flex>
+          <Space w={"30%"} />
+          <Flex
+            direction={"column"}
+            w={"70%"}
+            ref={contentWrapperRef}
+            style={{ scrollMargin: "200px" }}
+          >
+            <Title fz={50}>
+              {linkState === "terms" ? "Terms of Use" : "Privacy Policy"}
+            </Title>
+            <Text fz={10} w={"100%"} ta={"right"}>
+              Last Updated: April 30, 2023
+            </Text>
+            <Box className="pagePanel" w={"100%"} mt={10} p={20}>
+              <Group gap={30}>
+                <Text w={"80%"} fz={12}>
+                  {linkState === "terms"
+                    ? `Welcome to Tourassist, a premier crowdfunding platform
                   dedicated to travel-related projects. These Terms of Use
                   ("Terms") govern your access to and use of our
                   website, applications, products, and services (collectively
@@ -520,40 +512,41 @@ export default function Legal() {
                   Services, you agree to be bound by these Terms and our Privacy
                   Policy. If you do not agree to these Terms, please do not use
                   our Services.`
-                  : `At Tourassist, we are committed to protecting the privacy and security of our users. This Privacy Policy ("Policy") explains how we collect, use, and disclose your personal information when you access or use our website, products, and services (collectively referred to as "Services"). By using our Services, you acknowledge your acceptance of this Policy.`}
-              </Text>
-              <Box w={"calc(20% - 30px)"}>
-                {" "}
-                <Button.Group orientation="vertical">
-                  {/* Go to Help Page */}
-                  <Button
-                    variant="default"
-                    size="compact-md"
-                    fz={10}
-                    onClick={() => {
-                      router.push("/help");
-                    }}
-                  >
-                    About Tourassist
-                  </Button>
-                  {/* Go to Contact Page */}
-                  <Button
-                    variant="default"
-                    size="compact-md"
-                    fz={10}
-                    onClick={() => {
-                      router.push("/contact");
-                    }}
-                  >
-                    Contact Us
-                  </Button>
-                </Button.Group>
-              </Box>
-            </Group>
-          </Box>
-          <Box px={20}>{content}</Box>
+                    : `At Tourassist, we are committed to protecting the privacy and security of our users. This Privacy Policy ("Policy") explains how we collect, use, and disclose your personal information when you access or use our website, products, and services (collectively referred to as "Services"). By using our Services, you acknowledge your acceptance of this Policy.`}
+                </Text>
+                <Box w={"calc(20% - 30px)"}>
+                  {" "}
+                  <Button.Group orientation="vertical">
+                    {/* Go to Help Page */}
+                    <Button
+                      variant="default"
+                      size="compact-md"
+                      fz={10}
+                      onClick={() => {
+                        router.push("/help");
+                      }}
+                    >
+                      About Tourassist
+                    </Button>
+                    {/* Go to Contact Page */}
+                    <Button
+                      variant="default"
+                      size="compact-md"
+                      fz={10}
+                      onClick={() => {
+                        router.push("/contact");
+                      }}
+                    >
+                      Contact Us
+                    </Button>
+                  </Button.Group>
+                </Box>
+              </Group>
+            </Box>
+            <Box px={20}>{content}</Box>
+          </Flex>
         </Flex>
-      </Flex>
-    </Center>
+      </Center>
+    )
   );
 }

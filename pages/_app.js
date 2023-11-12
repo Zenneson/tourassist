@@ -206,7 +206,7 @@ export default function App(props) {
             padding="none"
             header={{ height: 1 }}
             component={router.pathname !== "/map" && ScrollArea}
-            style={{ height: "100vh", overflow: "hidden" }}
+            style={{ height: "100vh", width: "100vw", overflow: "hidden" }}
           >
             <AppShell.Header>
               <RouterTransition />

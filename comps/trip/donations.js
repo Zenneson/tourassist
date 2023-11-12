@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import {
   useComputedColorScheme,
   Avatar,
@@ -107,8 +107,8 @@ export default function Donations(props) {
   });
 
   return (
-    <Box w="100%" pos={"relative"} pl={10}>
-      <Grid pt={17} px={10} align="flex-start">
+    <Box w="100%" pos={"relative"}>
+      <Grid pt={20} px={15} align="flex-start">
         <Grid.Col span="auto">
           <Stack gap={0}>
             <Divider
@@ -126,8 +126,8 @@ export default function Donations(props) {
             </Title>
           </Stack>
         </Grid.Col>
-        <Grid.Col span="content">
-          {donationsData?.length !== 0 && (
+        {donationsData?.length !== 0 && (
+          <Grid.Col span="content">
             <SegmentedControl
               bg={dark ? "dark.6" : "gray.0"}
               color={dark ? "dark.4" : "gray.3"}
@@ -149,7 +149,7 @@ export default function Donations(props) {
                     : "0 1px 3px rgba(0,0,0,0.05)",
                 },
                 indicator: {
-                  backgroundColor: dark ? "dark.8" : "#eee",
+                  backgroundColor: dark ? "dark.8" : "gray.0",
                   boxShadow: dark
                     ? "0 2px 4px rgba(0,0,0,0.2)"
                     : "0 2px 4px rgba(0,0,0,0.15)",
@@ -159,8 +159,8 @@ export default function Donations(props) {
                 },
               }}
             />
-          )}
-        </Grid.Col>
+          </Grid.Col>
+        )}
       </Grid>
       <Box
         pos={"absolute"}
@@ -197,6 +197,9 @@ export default function Donations(props) {
       >
         <Table
           striped
+          stripedColor={
+            dark ? "rgba(5, 5, 5, 0.75)" : "rgba(200, 200, 200, 0.15)"
+          }
           highlightOnHover
           withRowBorders={false}
           style={{

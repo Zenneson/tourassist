@@ -76,7 +76,7 @@
 	left: 15%;
 	bottom: 0;
 	width: 70%;
-	border-top: 1px solid light-dark(rgba(var(rgb(16, 17, 19)), 0.1), rgba(248, 249, 250, 0.1));
+	border-top: 1px solid light-dark(rgba(16, 17, 19, 0.1), rgba(248, 249, 250, 0.1));
 }
 
 .signOutButton {

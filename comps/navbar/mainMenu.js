@@ -95,8 +95,6 @@ export default function MainMenu(props) {
     }
   }, [currentTrip, setCurrentTrip, allTrips]);
 
-  console.log("ProfileDrawer.js: currentTrip:", currentTrip);
-
   useEffect(() => {
     router.prefetch("/");
   }, [router]);

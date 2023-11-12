@@ -627,7 +627,7 @@ export default function Trippage(props) {
                 donations={donations}
                 setDonations={setDonations}
                 donationSectionLimit={10}
-                dHeight={"calc(100vh - 405px)"}
+                dHeight={"calc(100vh - 440px)"}
               />
             </Box>
             {user?.email === tripData?.user && (
