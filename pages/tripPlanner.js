@@ -60,7 +60,6 @@ export default function TripPlanner(props) {
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
-  const dark = computedColorScheme === "dark";
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const travelersHandlerRef = useRef(null);
@@ -72,6 +71,9 @@ export default function TripPlanner(props) {
   const router = useRouter();
   const titleRef = useRef(null);
   const dayjs = require("dayjs");
+
+  const [dark, setDark] = useState(false); // Assuming light theme is default
+  const [isThemeLoaded, setIsThemeLoaded] = useState(false);
 
   const { user } = useUser();
 
@@ -302,6 +304,11 @@ export default function TripPlanner(props) {
       form.values = bookings;
     }
   }, [form, roundTrip, bookings, initialCity, initialRegion, form.values]);
+
+  useEffect(() => {
+    setDark(computedColorScheme === "dark");
+    setIsThemeLoaded(true);
+  }, [computedColorScheme]);
 
   const UseTickets = () => {
     const [places, setPlaces] = useSessionStorage({
@@ -799,7 +806,7 @@ export default function TripPlanner(props) {
   return (
     <Box px={20} pb={50}>
       <Space h={110} />
-      <Center pr={20}>
+      <Center ml={-40}>
         <Divider
           w={"100%"}
           maw={1200}
@@ -1014,28 +1021,30 @@ export default function TripPlanner(props) {
                               borderRadius: "3px",
                             }}
                           >
-                            <BackgroundImage
-                              pos={"absolute"}
-                              w={"100%"}
-                              h={"100%"}
-                              style={{
-                                zIndex: 0,
-                              }}
-                              opacity={
-                                dark
-                                  ? startLocale || travelDates
-                                    ? 0.02
-                                    : 0.1
-                                  : startLocale || travelDates
-                                  ? 0.08
-                                  : 0.2
-                              }
-                              src={
-                                dark
-                                  ? "img/placeholder/boardingpass_blk.jpg"
-                                  : "img/placeholder/boardingpass_wht.jpg"
-                              }
-                            />
+                            {isThemeLoaded && (
+                              <BackgroundImage
+                                pos={"absolute"}
+                                w={"100%"}
+                                h={"100%"}
+                                style={{
+                                  zIndex: 0,
+                                }}
+                                opacity={
+                                  dark
+                                    ? startLocale || travelDates
+                                      ? 0.02
+                                      : 0.1
+                                    : startLocale || travelDates
+                                    ? 0.08
+                                    : 0.2
+                                }
+                                src={
+                                  dark
+                                    ? "img/placeholder/boardingpass_blk.jpg"
+                                    : "img/placeholder/boardingpass_wht.jpg"
+                                }
+                              />
+                            )}
                             <Box
                               style={{
                                 zIndex: 1,
@@ -1323,11 +1332,15 @@ export default function TripPlanner(props) {
               allowNextStepsSelect={false}
               color={dark ? "blue.9" : "blue.4"}
               miw={205}
-              mt={20}
               mb={-20}
               mr={20}
               size="xs"
               w="20%"
+              styles={{
+                stepIcon: {
+                  backgroundColor: dark && "#050506",
+                },
+              }}
             >
               <Stepper.Step
                 label="Travel Starting Info"

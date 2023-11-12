@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { firestore } from "./firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { mutate } from "swr";
@@ -330,4 +330,15 @@ export const loggedIn = (dark, user) => {
     autoClose: 2500,
     message: `${user.email} is logged in`,
   };
+};
+
+export const useIsMounted = () => {
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => (isMounted.current = false);
+  }, []);
+
+  return isMounted;
 };

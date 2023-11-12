@@ -113,6 +113,10 @@ export default function Trippage(props) {
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
   const [isMutating, setIsMutating] = useState(false);
 
+  const [carouselLoaded, setCarouselLoaded] = useSessionStorage({
+    key: "carouselLoaded",
+  });
+
   const [funds, setFunds] = useSessionStorage({
     key: "funds",
     defaultValue: 0,
@@ -244,7 +248,10 @@ export default function Trippage(props) {
     setModalMode("");
   };
 
-  if ((isLoading || isValidating || isMutating) && modalMode === "") {
+  const isFinalLoading =
+    isLoading || isValidating || isMutating || !carouselLoaded;
+
+  if (isFinalLoading && modalMode === "") {
     return (
       <LoadingOverlay visible={true} overlayProps={{ backgroundOpacity: 1 }} />
     );

@@ -1,14 +1,30 @@
-import { useRef } from "react";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { BackgroundImage, Box, Button, Center, Group } from "@mantine/core";
-import classes from "./maincarousel.module.css";
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useEffect, useRef } from "react";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { BackgroundImage, Box, Button, Center, Group } from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
+import { useIsMounted } from "../../libs/custom";
+import classes from "./maincarousel.module.css";
+import Slider from "react-slick";
 
 export default function MainCarousel(props) {
   const { tripImages } = props;
   const sliderRef = useRef();
+  const isMounted = useIsMounted();
+  const [carouselLoaded, setCarouselLoaded] = useSessionStorage({
+    key: "carouselLoaded",
+    defaultValue: false,
+  });
+
+  useEffect(() => {
+    if (carouselLoaded) return;
+    if (isMounted.current) {
+      setCarouselLoaded(true);
+    } else {
+      setCarouselLoaded(false);
+    }
+  }, [isMounted, carouselLoaded, setCarouselLoaded]);
 
   const slideSettings = {
     dots: false,
