@@ -133,7 +133,14 @@ export default function LatestTrips() {
           />
           <Image src={trip.image} alt="Trip Image" fit="cover" height={170} />
         </Card.Section>
-        <Title order={6} mt={20} mb={10} lineClamp={2}>
+        <Title
+          order={6}
+          mt={20}
+          mb={10}
+          style={{
+            lineClamp: 2,
+          }}
+        >
           {trip.title}
         </Title>
         <Text

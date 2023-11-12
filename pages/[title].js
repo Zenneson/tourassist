@@ -251,14 +251,12 @@ export default function Trippage(props) {
   const isFinalLoading =
     isLoading || isValidating || isMutating || !carouselLoaded;
 
-  if (isFinalLoading && modalMode === "") {
-    return (
-      <LoadingOverlay visible={true} overlayProps={{ backgroundOpacity: 1 }} />
-    );
-  }
-
   return (
     <>
+      <LoadingOverlay
+        visible={isFinalLoading && modalMode === ""}
+        overlayProps={{ backgroundOpacity: 1 }}
+      />
       <Center mt={120}>
         <Flex
           gap={30}
