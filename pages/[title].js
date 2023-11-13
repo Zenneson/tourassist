@@ -493,7 +493,7 @@ export default function Trippage(props) {
                 className="pagePanel"
                 w={"85%"}
                 mt={updates && updates.length === 1 ? 20 : 0}
-                mb={50}
+                mb={25}
                 p={"20px 30px"}
               >
                 <Divider
@@ -581,7 +581,7 @@ export default function Trippage(props) {
                         </Text>
                       </Flex>
                       <Divider
-                        w={"90%"}
+                        w={"100%"}
                         color={dark ? "gray.7" : "dark.6"}
                         opacity={0.1}
                         my={3}

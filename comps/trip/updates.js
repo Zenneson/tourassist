@@ -25,7 +25,7 @@ import {
   IconSourceCode,
   IconBrandWhatsapp,
   IconShare,
-  IconDotsVertical,
+  IconMenu2,
   IconPencil,
   IconTrash,
   IconCheck,
@@ -147,16 +147,17 @@ export default function Updates(props) {
       >
         {/* Show Update Modal Button  */}
         {user?.email === tripData.user && (
-          <Menu closeOnItemClick={true} withArrow arrowSize={12} offset={3}>
+          <Menu closeOnItemClick={true} withArrow arrowSize={12} offset={0}>
             <Menu.Target>
               <ActionIcon
+                className={classes.updateMenu}
                 variant="transparent"
                 color={dark ? "#fff" : "#000"}
                 pos={"absolute"}
-                top={17}
-                right={10}
+                top={10}
+                right={8}
               >
-                <IconDotsVertical size={18} />
+                <IconMenu2 size={18} />
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
@@ -274,8 +275,8 @@ export default function Updates(props) {
 
         <Flex direction={"column"} w={"85%"}>
           <Box
-            pt={5}
             pl={10}
+            pb={0}
             style={{
               borderLeft: dark
                 ? "2px solid rgba(255,255,255,0.05)"

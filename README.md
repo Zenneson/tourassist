@@ -6,5 +6,5 @@ Stack:
 - [Firebase](https://firebase.google.com/docs)
 - [Google Maps Api](https://developers.google.com/maps/documentation)
 - [Stripe](https://stripe.com/docs)
-- [Skyscanner Travel Api](https://developers.skyscanner.net/docs/intro)
+- [Duffel](https://duffel.com/docs)
 - [Mantine UI](https://mantine.dev/guides/next/)
