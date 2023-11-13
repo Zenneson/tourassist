@@ -34,21 +34,21 @@
 
 .textEditorRoot {
 	transition: border-top 0.2s ease;
-	box-shadow: 0px 2px 3px light-dark(rgba(0, 0, 0, 0.02), rgba(100, 100, 100, 0.01));
-	border: 1px solid light-dark(rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.02));
-	border-radius: 3px;
-	overflow: hidden;
+	border-radius: 0;
+	border: none;
 	width: 100%;
 	min-width: 500px;
 }
 
 .textEditorToolbar {
+	border-radius: 0;
 	border-color: rgba(255, 255, 255, 0);
-	background: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
+	background: light-dark(rgba(255, 255, 255, 0.7), rgba(100, 100, 100, 0.08));
 }
 
 .textEditorContent {
 	background: rgba(0, 0, 0, 0);
+	border-radius: 0;
 	color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
 }
 

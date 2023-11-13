@@ -78,6 +78,7 @@ export default function ModalsItem(props) {
   const [paymentToken, setPaymentToken] = useState(null);
   const [paymentId, setPaymentId] = useState(null);
   const [tokenUpdated, setTokenUpdated] = useState(false);
+  const [paid, setPaid] = useState(false);
 
   const { title } = router.query;
 
@@ -483,6 +484,7 @@ export default function ModalsItem(props) {
   };
 
   const successfulPayment = () => {
+    setPaid(true);
     fetch("/api/confirm", {
       method: "POST",
       headers: {
@@ -495,6 +497,7 @@ export default function ModalsItem(props) {
     })
       .then((response) => response.json())
       .then((data) => {
+        setPaid(false);
         setDonationMode("thanks");
         updateDonations(data.data);
       })
@@ -539,6 +542,8 @@ export default function ModalsItem(props) {
         onClose={closeEditTripModal}
         lockScroll={false}
         overlayProps={{
+          color: dark ? "rgb(0,0,0)" : "rgb(255,255,255)",
+          backgroundOpacity: dark ? 0.5 : 0.2,
           blur: 9,
         }}
       >
@@ -601,204 +606,218 @@ export default function ModalsItem(props) {
           modalMode === "editUpdate" ||
           modalMode === "donating"
         }
+        overlayProps={{
+          color: dark ? "rgb(0,0,0)" : "rgb(255,255,255)",
+          backgroundOpacity: dark ? 0.5 : 0.2,
+          blur: 9,
+        }}
         onClose={() => {
           setIsMutating(true);
           setNewUpdate(true);
           closeAltModal();
         }}
       >
-        <LoadingOverlay
-          visible={modalMode === "editUpdate" && !updateDataLoaded}
-          overlayProps={{ backgroundOpacity: 1 }}
-        />
-        {/* Close Modal */}
-        <CloseButton
-          pos={"absolute"}
-          top={21}
-          right={21}
-          size={25}
-          onClick={closeAltModal}
-        />
-        {modalMode === "donating" && (
-          <Box w={modalMode === "donating" ? "auto" : 800}>
-            <Title mb={5} color={dark ? "#00E8FC" : "#0D3F82"}>
-              <Flex align={"center"} gap={5}>
-                {dontaionMode === "thanks" ? "THANK YOU" : "DONATE"}
-                <IconHeartHandshake size={35} />
-              </Flex>
-            </Title>
-            <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
-            {dontaionMode === "donating" && (
-              <Group mb={15} grow>
-                <Stack>
-                  {/* TODO: Duffel */}
-                  <Input
-                    ref={donorNameRef}
-                    placeholder={stayAnon ? "Anonymous" : "Name..."}
-                    size="md"
-                    maxLength={20}
-                    w={"100%"}
-                    value={!stayAnon ? donorName : "Anonymous"}
-                    onChange={(e) => setDonorName(e.currentTarget.value)}
-                    disabled={stayAnon}
-                  />
-                  <NumberInput
-                    className={classes.donationInput}
-                    ref={donationRef}
-                    leftSection={<IconCurrencyDollar size={35} />}
-                    size="xl"
-                    hideControls
-                    variant="filled"
-                    defaultValue={0}
-                    value={donationAmount}
-                    onChange={(e) => setDonationAmount(e)}
-                    onClick={(e) => {
-                      if (
-                        e.target.value === 0 ||
-                        e.target.value === "0" ||
-                        e.target.value === "0.00"
-                      ) {
-                        e.target.select();
-                      }
-                    }}
-                  />
-                  <Group justify="flex-end" w={"100%"}>
-                    <Checkbox
-                      size={"xs"}
-                      labelPosition="left"
-                      label="Stay Anonymous"
-                      checked={stayAnon}
-                      onChange={(e) => {
-                        setStayAnon(e.currentTarget.checked);
-                        if (e.currentTarget.checked) {
-                          setDonorName("Anonymous");
-                        } else {
-                          setDonorName("");
+        <ScrollArea.Autosize pos={"relative"} type="never">
+          <LoadingOverlay
+            visible={(modalMode === "editUpdate" && !updateDataLoaded) || paid}
+            overlayProps={{ backgroundOpacity: 1 }}
+          />
+          {/* Close Modal */}
+          <CloseButton
+            pos={"absolute"}
+            top={-11}
+            right={-11}
+            size={25}
+            onClick={closeAltModal}
+          />
+          {modalMode === "donating" && (
+            <Box w={modalMode === "donating" ? "auto" : 800}>
+              <Title mb={5} color={dark ? "#00E8FC" : "#0D3F82"}>
+                <Flex align={"center"} gap={5}>
+                  {dontaionMode === "thanks" ? "THANK YOU" : "DONATE"}
+                  <IconHeartHandshake size={35} />
+                </Flex>
+              </Title>
+              <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
+              {dontaionMode === "donating" && (
+                <Group mb={15} grow>
+                  <Stack>
+                    {/* TODO: Duffel */}
+                    <Input
+                      ref={donorNameRef}
+                      placeholder={stayAnon ? "Anonymous" : "Name..."}
+                      size="md"
+                      maxLength={20}
+                      w={"100%"}
+                      value={!stayAnon ? donorName : "Anonymous"}
+                      onChange={(e) => setDonorName(e.currentTarget.value)}
+                      disabled={stayAnon}
+                    />
+                    <NumberInput
+                      classNames={{ input: classes.donationInput }}
+                      ref={donationRef}
+                      leftSection={<IconCurrencyDollar size={35} />}
+                      size="xl"
+                      hideControls
+                      variant="filled"
+                      defaultValue={0}
+                      value={donationAmount}
+                      onChange={(e) => setDonationAmount(e)}
+                      onClick={(e) => {
+                        if (
+                          e.target.value === 0 ||
+                          e.target.value === "0" ||
+                          e.target.value === "0.00"
+                        ) {
+                          e.target.select();
                         }
                       }}
                     />
+                    <Group justify="flex-end" w={"100%"}>
+                      <Checkbox
+                        classNames={{ input: classes.donationCheck }}
+                        size={"xs"}
+                        labelPosition="left"
+                        label="Stay Anonymous"
+                        checked={stayAnon}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            setStayAnon(!stayAnon);
+                          }
+                        }}
+                        onChange={(e) => {
+                          setStayAnon(e.currentTarget.checked);
+                          if (e.currentTarget.checked) {
+                            setDonorName("Anonymous");
+                          } else {
+                            setDonorName("");
+                          }
+                        }}
+                      />
+                    </Group>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      w={"100%"}
+                      onClick={donationReq}
+                    >
+                      Continue...
+                    </Button>
+                  </Stack>
+                </Group>
+              )}
+              {dontaionMode === "pay" && paymentToken && (
+                <>
+                  <Group justify="space-between" px={5} mb={5}>
+                    <Text fz={15} fw={700} fs={"italic"}>
+                      Thanks for the Assist...
+                    </Text>
+                    <Flex align={"flex-start"} gap={7}>
+                      <Text fz={11} mt={5} fs={"italic"} fw={100} opacity={0.2}>
+                        Donation
+                      </Text>
+                      <Text fz={20} fw={700} opacity={0.5}>
+                        ${formatDonation(donationAmount)}
+                      </Text>
+                    </Flex>
                   </Group>
-                  <Button
-                    variant="default"
-                    size="sm"
-                    w={"100%"}
-                    onClick={donationReq}
+                  <Box
+                    pl={20}
+                    py={5}
+                    mx={5}
+                    mb={10}
+                    style={{
+                      borderLeft: "3px solid rgba(255,255,255,0.1)",
+                    }}
                   >
-                    Continue...
-                  </Button>
-                </Stack>
-              </Group>
-            )}
-            {dontaionMode === "pay" && paymentToken && (
-              <>
-                <Group justify="space-between" px={5} mb={5}>
-                  <Text fz={15} fw={700} fs={"italic"}>
-                    Thanks for the Assist...
+                    <Flex align={"center"} gap={10}>
+                      <Divider
+                        labelPosition="left"
+                        label="Processing fee"
+                        w={"100%"}
+                      />{" "}
+                      <Text fz={12}>${processingFee()}</Text>
+                    </Flex>
+                    <Flex align={"center"} gap={10}>
+                      <Divider
+                        w={"100%"}
+                        labelPosition="left"
+                        label={
+                          <Text fz={15} fw={700}>
+                            Total
+                          </Text>
+                        }
+                      />
+                      <Text fz={14} fw={700}>
+                        ${totalDonation()}
+                      </Text>
+                    </Flex>
+                  </Box>
+                  <DuffelPayments
+                    paymentIntentClientToken={paymentToken}
+                    onSuccessfulPayment={successfulPayment}
+                    onFailedPayment={errorPayment}
+                    debug={true}
+                    styles={{
+                      buttonCornerRadius: "3px",
+                      fontFamily: "inherit",
+                    }}
+                  />
+                </>
+              )}
+              {dontaionMode === "thanks" && (
+                <>
+                  <Text w={"100%"} ta={"center"} c={"#777"}>
+                    Thank you for your donation, please leave a message of
+                    suppport{" "}
                   </Text>
-                  <Flex align={"flex-start"} gap={7}>
-                    <Text fz={11} mt={5} fs={"italic"} fw={100} opacity={0.2}>
-                      Donation
-                    </Text>
-                    <Text fz={20} fw={700} opacity={0.5}>
-                      ${formatDonation(donationAmount)}
-                    </Text>
-                  </Flex>
-                </Group>
-                <Box
-                  pl={20}
-                  py={5}
-                  mx={5}
-                  mb={10}
-                  style={{
-                    borderLeft: "3px solid rgba(255,255,255,0.1)",
-                  }}
-                >
-                  <Flex align={"center"} gap={10}>
-                    <Divider
-                      labelPosition="left"
-                      label="Processing fee"
-                      w={"100%"}
-                    />{" "}
-                    <Text fz={12}>${processingFee()}</Text>
-                  </Flex>
-                  <Flex align={"center"} gap={10}>
-                    <Divider
-                      w={"100%"}
-                      labelPosition="left"
-                      label={
-                        <Text fz={15} fw={700}>
-                          Total
-                        </Text>
-                      }
-                    />
-                    <Text fz={14} fw={700}>
-                      ${totalDonation()}
-                    </Text>
-                  </Flex>
-                </Box>
-                <DuffelPayments
-                  paymentIntentClientToken={paymentToken}
-                  onSuccessfulPayment={successfulPayment}
-                  onFailedPayment={errorPayment}
-                  debug={true}
-                  styles={{
-                    buttonCornerRadius: "3px",
-                    fontFamily: "inherit",
-                  }}
-                />
-              </>
-            )}
-            {dontaionMode === "thanks" && (
-              <>
-                <Text w={"100%"} ta={"center"} c={"#777"}>
-                  Thank you for your donation, please leave a message of
-                  suppport{" "}
-                </Text>
-                <Textarea
-                  placeholder="Bon voyage!"
-                  variant="filled"
-                  autosize
-                  mt={10}
-                  size="sm"
-                  minRows={8}
-                />
-                <Group justify="flex-end" mt={20} w={"100%"} gap={0}>
-                  <Button
-                    variant="transparent"
-                    c={dark ? "#fff" : "#000"}
-                    fw={100}
-                    fz={10}
-                    onClick={closeAltModal}
-                  >
-                    No Thanks
-                  </Button>
-                  <Button
-                    variant="default"
-                    size="md"
-                    w={"25%"}
-                    onClick={postMessage}
-                  >
-                    POST
-                  </Button>
-                </Group>
-              </>
-            )}
-          </Box>
-        )}
-        {(modalMode === "editUpdate" || modalMode === "postUpdate") && (
-          <>
-            <Title order={6} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
-              {modalMode === "editUpdate"
-                ? "EDIT UPDATE:"
-                : modalMode === "postUpdate"
-                ? "POST UPDATE:"
-                : ""}
-            </Title>
-            <Stack align="center">
-              <UpdateForm />
-            </Stack>
-          </>
-        )}
+                  <Textarea
+                    placeholder="Bon voyage!"
+                    variant="filled"
+                    autosize
+                    mt={10}
+                    size="sm"
+                    minRows={8}
+                  />
+                  <Group justify="flex-end" mt={20} w={"100%"} gap={0}>
+                    <Button
+                      variant="transparent"
+                      c={dark ? "#fff" : "#000"}
+                      fw={100}
+                      fz={10}
+                      onClick={closeAltModal}
+                    >
+                      No Thanks
+                    </Button>
+                    <Button
+                      variant="default"
+                      size="md"
+                      w={"25%"}
+                      onClick={postMessage}
+                    >
+                      POST
+                    </Button>
+                  </Group>
+                </>
+              )}
+            </Box>
+          )}
+          {(modalMode === "editUpdate" || modalMode === "postUpdate") && (
+            <>
+              <Title order={6} w={"100%"} ta={"left"} mb={15} fs={"italic"}>
+                {modalMode === "editUpdate"
+                  ? "EDIT UPDATE:"
+                  : modalMode === "postUpdate"
+                  ? "POST UPDATE:"
+                  : ""}
+              </Title>
+              <Stack align="center">
+                <UpdateForm />
+              </Stack>
+            </>
+          )}
+        </ScrollArea.Autosize>
       </Modal>
     </Box>
   );

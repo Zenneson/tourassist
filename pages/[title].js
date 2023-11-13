@@ -253,8 +253,7 @@ export default function Trippage(props) {
     setModalMode("");
   };
 
-  const isFinalLoading =
-    isLoading || isValidating || isMutating || !carouselLoaded;
+  const isFinalLoading = isLoading || isMutating || !carouselLoaded;
 
   return (
     isClient && (
@@ -564,11 +563,11 @@ export default function Trippage(props) {
                 <Grid w={"100%"}>
                   <Grid.Col span="auto">
                     <Stack gap={0} w={"100%"}>
-                      <Flex align={"flex-end"} mb={-2} gap={3}>
+                      <Flex align={"flex-end"} mb={-2} gap={2}>
                         <Title order={1} fz={25}>
-                          <Flex align={"center"} c={dark ? "blue.9" : "blue.4"}>
+                          <Flex align={"center"} c={dark ? "blue.8" : "blue.4"}>
                             <IconCurrencyDollar
-                              stroke={1}
+                              stroke={2}
                               size={30}
                               style={{
                                 marginRight: -4,
@@ -585,8 +584,7 @@ export default function Trippage(props) {
                         w={"90%"}
                         color={dark ? "gray.7" : "dark.6"}
                         opacity={0.1}
-                        mt={7}
-                        mb={3}
+                        my={3}
                       />
                       <Flex align={"center"} gap={3} pl={5}>
                         <Title order={4} opacity={0.5}>
@@ -612,8 +610,8 @@ export default function Trippage(props) {
                   </Grid.Col>
                   <Grid.Col span="content">
                     <Box
-                      w={100}
-                      pt={12}
+                      w={90}
+                      pt={8}
                       bg={dark ? "rgba(150, 150, 150, 0.01)" : "gray.1"}
                       style={{ borderRadius: "3px" }}
                     >
@@ -625,7 +623,7 @@ export default function Trippage(props) {
                       >
                         {daysBefore(tripData?.travelDate).toString()}
                       </Title>
-                      <Text ta={"center"} fz={10} mt={-5} pb={10}>
+                      <Text ta={"center"} fz={10} mt={-5} pb={5}>
                         DAYS LEFT
                       </Text>
                     </Box>
@@ -638,7 +636,6 @@ export default function Trippage(props) {
                   size={"md"}
                   mt={10}
                   mb={12}
-                  striped
                 />
                 {user && user.email === tripData?.user && (
                   <Button
@@ -682,7 +679,7 @@ export default function Trippage(props) {
                   donations={donations}
                   setDonations={setDonations}
                   donationSectionLimit={10}
-                  dHeight={"calc(100vh - 440px)"}
+                  dHeight={"calc(100vh - 455px)"}
                 />
               </Box>
               {user?.email === tripData?.user && (

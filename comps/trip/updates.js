@@ -187,7 +187,7 @@ export default function Updates(props) {
           <Stack
             gap={0}
             style={{
-              transform: "scale(0.9) translateY(-10px)",
+              transform: "scale(0.9) translateY(-12px)",
               borderRadius: "3px",
               overflow: "hidden",
               boxShadow: `0 2px 5px 0 rgba(0,0,0,0.1)`,

@@ -2,7 +2,6 @@ import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "./global.css";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useState } from "react";
 import {
@@ -19,15 +18,11 @@ import { getAuth } from "firebase/auth";
 import { UserProvider } from "../libs/context";
 import colorSchemeManager from "../libs/colorSchemeManager";
 import SearchModal from "../comps/navbar/searchModal";
+import MainMenu from "../comps/navbar/mainMenu";
 import DropDown from "../comps/dropdown/dropdown";
 require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
-
-// import MainMenu from "../comps/navbar/mainMenu";
-const MainMenu = dynamic(() => import("../comps/navbar/mainMenu"), {
-  ssr: false,
-});
 
 const localColorScheme = colorSchemeManager({ key: "mantine-color-scheme" });
 
@@ -58,6 +53,7 @@ const tourTheme = createTheme({
       "#0D3F82",
     ],
   },
+  cursorType: "pointer",
   primaryColor: "blue",
   primaryShade: { light: 5, dark: 9 },
   components: {
@@ -113,28 +109,13 @@ const tourTheme = createTheme({
         },
       },
     },
-    Input: {
+    ScrollArea: {
       defaultProps: {
-        variant: "filled",
-      },
-      styles: {
-        root: {
-          transition: "all 200ms ease",
-        },
+        scrollbarSize: 8,
+        type: "hover",
       },
     },
     Switch: {
-      styles: {
-        thumb: {
-          cursor: "pointer",
-        },
-        track: {
-          cursor: "pointer",
-        },
-        label: {
-          cursor: "pointer",
-        },
-      },
       styles: {
         root: {
           transition: "all 200ms ease",

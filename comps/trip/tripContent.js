@@ -506,6 +506,9 @@ export default function TripContent(props) {
         style={{
           overflow: "hidden",
           borderRadius: "3px",
+          border: dark
+            ? "1px solid rgba(100, 100, 100, 0.25)"
+            : "1px solid rgba(0, 0, 0, 0.1)",
         }}
       >
         <RichTextEditor
@@ -634,7 +637,6 @@ export default function TripContent(props) {
             blur={7}
           />
           <LoadingOverlay
-            overlayColor={dark ? "dark.7" : "gray.0"}
             visible={processingImage}
             loaderProps={{ type: "oval", color: dark ? "blue.9" : "blue.3" }}
             overlayProps={{

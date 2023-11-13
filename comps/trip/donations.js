@@ -17,6 +17,7 @@ import {
 } from "@mantine/core";
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
 import { useUser } from "../../libs/context";
+import { timeSince } from "../../libs/custom";
 import { IconReload } from "@tabler/icons-react";
 
 export default function Donations(props) {
@@ -79,7 +80,7 @@ export default function Donations(props) {
     return (
       <Table.Tr key={index}>
         <Table.Td>
-          <Group>
+          <Group py={5}>
             <Avatar
               variant={"filled"}
               radius="xl"
@@ -92,9 +93,14 @@ export default function Donations(props) {
             >
               <Text c={dark ? "dark.1" : "gray.5"}>{item.name.charAt(0)}</Text>
             </Avatar>
-            <Text size="sm" weight={500}>
-              {item.name}
-            </Text>
+            <Stack gap={0}>
+              <Text size="sm" fw={400}>
+                {item.name}
+              </Text>
+              <Text fz={10} opacity={0.5}>
+                {timeSince(item.time)}
+              </Text>
+            </Stack>
           </Group>
         </Table.Td>
         <Table.Td>
@@ -176,21 +182,25 @@ export default function Donations(props) {
             entry?.isIntersecting
               ? "none"
               : dark
-              ? "rgba(0, 0, 0, 0.7) 0px -15px 7px -5px inset"
+              ? "rgba(0, 0, 0, 0.5) 0px -15px 7px -5px inset"
               : "rgba(0, 0, 0, 0.25) 0px -10px 7px -5px inset"
           }`,
         }}
       />
       <Box
-        p={10}
-        pb={20}
+        pb={0}
         m={0}
+        mt={10}
+        mx={10}
         h={donationsData?.length > donationSectionLimit ? dHeight : "auto"}
         mih={donationsData?.length === 0 ? "0px" : "200px"}
         ref={donationsRef}
         component={ScrollArea}
         type="hover"
         style={{
+          border: dark
+            ? "1px solid rgba(25,25,25,0.3)"
+            : "1px solid rgba(0,0,0,0.05)",
           overflow: "hidden",
           borderRadius: 3,
         }}
@@ -200,7 +210,6 @@ export default function Donations(props) {
           stripedColor={
             dark ? "rgba(255, 255, 255, 0.01)" : "rgba(200, 200, 200, 0.15)"
           }
-          highlightOnHover
           withRowBorders={false}
           styles={{
             table: {

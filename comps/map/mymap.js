@@ -7,6 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import { useRouter } from "next/router";
+import { motion } from "framer-motion";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
 import { useSessionStorage } from "@mantine/hooks";
@@ -236,6 +237,8 @@ const CustomAutoComplete = ({
   );
 };
 
+const fadeOut = { opacity: 0 };
+const fadeIn = { opacity: 1 };
 export default function Mymap(props) {
   const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
   const {
@@ -729,6 +732,22 @@ export default function Mymap(props) {
     [area]
   );
 
+  const [buttonAnimation, setButtonAnimation] = useState(fadeIn);
+  const [buttonPosition, setButtonPosition] = useState(0);
+
+  useEffect(() => {
+    setButtonAnimation(fadeOut);
+
+    const timeout = setTimeout(() => {
+      setButtonPosition(
+        panelShow && mainMenuOpened ? 920 : mainMenuOpened ? 310 : 0
+      );
+      setButtonAnimation(fadeIn);
+    }, 10);
+
+    return () => clearTimeout(timeout);
+  }, [panelShow, mainMenuOpened]);
+
   const openTourList = () => {
     setListOpened(true);
     setMainMenuOpened(false);
@@ -946,26 +965,35 @@ export default function Mymap(props) {
         </Box>
       </Drawer>
       {places && places.length >= 1 && !listOpened && (
-        // Tour List Button
-        <Tooltip
-          classNames={{ tooltip: classes.toolTip }}
-          position="bottom"
-          label={"Tour List"}
-          openDelay={500}
+        <motion.div
+          animate={buttonAnimation}
+          initial={fadeIn}
+          transition={{ duration: 0.01 }}
         >
-          <Button
-            className={classes.tourListButton}
-            onClick={openTourList}
-            left={panelShow && mainMenuOpened ? 900 : mainMenuOpened ? 310 : 0}
+          {/* Tour List Button */}
+          <Tooltip
+            classNames={{ tooltip: classes.toolTip }}
+            position="bottom"
+            label={"Tour List"}
+            openDelay={500}
           >
-            <IconList
-              size={15}
+            <Button
+              className={classes.tourListButton}
+              onClick={openTourList}
               style={{
+                left: buttonPosition,
                 color: dark ? "#fff" : "#000",
               }}
-            />
-          </Button>
-        </Tooltip>
+            >
+              <IconList
+                size={15}
+                style={{
+                  color: dark ? "#fff" : "#000",
+                }}
+              />
+            </Button>
+          </Tooltip>
+        </motion.div>
       )}
       {!searchOpened && !dropDownOpened && !locationDrawer && (
         <Center

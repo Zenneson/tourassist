@@ -29,6 +29,10 @@ export const updateField = async (update, user) => {
   }
 };
 
+export const dateRangeFunc = (n) => {
+  return moment().subtract(n, "days").format("MMMM Do YYYY, h:mm:ss A [EST]");
+};
+
 export const parseCustomDate = (dateString) => {
   if (!dateString) return null;
   const formatString = "MMMM D YYYY hh:mm A Z";
@@ -99,7 +103,7 @@ export const addComma = (num) => {
 export const formatDonation = (num) => {
   if (num === null || num === undefined) return;
 
-  let [integerPart, fractionalPart] = num.toFixed(2).toString().split(".");
+  let [integerPart, fractionalPart] = num?.toFixed(2).toString().split(".");
   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   if (!fractionalPart) {
@@ -341,4 +345,22 @@ export const useIsMounted = () => {
   }, []);
 
   return isMounted;
+};
+
+export const timeSince = (timeString) => {
+  const then = new Date(timeString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - then) / 1000);
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} seconds`;
+  } else if (diffInSeconds < 3600) {
+    return `${Math.floor(diffInSeconds / 60)} minutes`;
+  } else if (diffInSeconds < 86400) {
+    return `${Math.floor(diffInSeconds / 3600)} hours`;
+  } else if (diffInSeconds < 2592000) {
+    return `${Math.floor(diffInSeconds / 86400)} days`;
+  } else {
+    return `${Math.floor(diffInSeconds / 2592000)} months`;
+  }
 };

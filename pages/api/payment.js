@@ -3,6 +3,7 @@ import { Duffel } from "@duffel/api";
 export default async function CreatePayment(req, res) {
   const duffel = new Duffel({
     token: process.env.NEXT_PUBLIC_DUFFEL_AC,
+    debug: { verbose: true },
   });
 
   const formatDonation = (amount) => {

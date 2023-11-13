@@ -14,6 +14,7 @@ import {
   sumAmounts,
   parseCustomDate,
   formatDateFullMonth,
+  dateRangeFunc,
 } from "../../libs/custom";
 import {
   useComputedColorScheme,
@@ -50,6 +51,7 @@ export default function TripInfo(props) {
   });
   const dark = computedColorScheme === "dark";
 
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
   const [donationSum, setDonationSum] = useState(0);
@@ -62,6 +64,10 @@ export default function TripInfo(props) {
     key: "donations",
     defaultValue: [],
   });
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     if (currentTrip?.spentFunds > 0) setSpentFunds(currentTrip.spentFunds);
@@ -86,35 +92,13 @@ export default function TripInfo(props) {
     Tooltip
   );
 
-  const getLastNDays = (n) => {
+  const getDates = (n) => {
     const result = {
       matchFormat: [],
       displayFormat: [],
     };
 
-    for (let i = 0; i < n; i++) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-
-      const matchString = `${d.getFullYear()}-${String(
-        d.getMonth() + 1
-      ).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      const displayString = `${d.getMonth() + 1}/${d.getDate()}`;
-
-      result.matchFormat.unshift(matchString);
-      result.displayFormat.unshift(displayString);
-    }
-
-    return result;
-  };
-
-  const getDatesFromCreationToNow = (creationTime) => {
-    const result = {
-      matchFormat: [],
-      displayFormat: [],
-    };
-
-    const startDate = new Date(creationTime);
+    const startDate = new Date(n);
     const endDate = new Date();
     let currentDate = startDate;
 
@@ -136,7 +120,7 @@ export default function TripInfo(props) {
   };
 
   const addExtraDay = (date) => {
-    const lastDateStr = date.matchFormat.slice(-1)[0];
+    const lastDateStr = date.matchFormat[date.matchFormat.length - 1]; // Correctly fetch the last date
     const [year, month, day] = lastDateStr.split("-").map(Number);
     const lastDate = new Date(year, month - 1, day);
     const nextDate = new Date(lastDate);
@@ -153,12 +137,7 @@ export default function TripInfo(props) {
   };
 
   const getChartData = (n) => {
-    let dateRange;
-    if (n !== 7 && n !== 30) {
-      dateRange = getDatesFromCreationToNow(n);
-    } else {
-      dateRange = getLastNDays(n);
-    }
+    let dateRange = getDates(n);
     dateRange = addExtraDay(dateRange);
     const dSums = {};
     const donationCounts = {};
@@ -197,7 +176,12 @@ export default function TripInfo(props) {
     };
   };
 
-  const [graphSpan, setGraphSpan] = useState(7);
+  const weekRange = dateRangeFunc(7);
+  const monthRange = dateRangeFunc(30);
+
+  const [graphSpan, setGraphSpan] = useState(
+    String(parseCustomDate(weekRange))
+  );
   const graphData = getChartData(graphSpan);
 
   ChartJS.defaults.borderColor = dark
@@ -233,224 +217,241 @@ export default function TripInfo(props) {
   };
 
   return (
-    <Box pos="relative">
-      <LoadingOverlay
-        visible={!allTrips || currentTrip === undefined}
-        overlayProps={{
-          backgroundOpacity: 1,
-          blur: 10,
-          color: dark ? "#0b0c0d" : "#F8F9FA",
-        }}
-      />
-      <Select
-        classNames={{ input: classes.tripSelect }}
-        w={"95%"}
-        mt={7}
-        variant="filled"
-        placeholder={currentTrip?.tripTitle || "No Trips found..."}
-        onChange={(e) => changeTrip(e)}
-        checkIconPosition="right"
-        value={currentTrip?.tripTitle}
-        data={
-          allTrips?.length > 0 &&
-          allTrips.map((trip) => {
-            return {
-              value: trip.tripTitle,
-              label: trip.tripTitle,
-              key: trip.tripTitle,
-            };
-          })
-        }
-        rightSection={
-          <IconChevronDown
-            size={17}
-            opacity={allTrips && allTrips.length >= 2 ? 1 : 0}
-          />
-        }
-        style={{
-          pointerEvents: allTrips.length > 1 ? "all" : "none",
-        }}
-      />
-      <Box pr={20}>
-        <Box my={20} w="100%" h={"250px"} pos={"relative"}>
-          <Select
-            className={classes.graphLengthSelect}
-            pos={"absolute"}
-            top={10}
-            right={0}
-            w={110}
-            size="xs"
-            defaultValue={7}
-            onChange={(e) => setGraphSpan(e)}
-            placeholder={
-              graphSpan === 7 || graphSpan === 30
-                ? `Last ${graphSpan} days`
-                : "All days"
-            }
-            data={[
-              { value: "7", label: "Last 7 days" },
-              { value: "30", label: "Last 30 days" },
-              {
-                value: String(parseCustomDate(currentTrip?.creationTime)),
-                label: "All days",
-              },
-            ]}
-          />
-          <Bar
-            key={colorScheme}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-            }}
-            data={graphData}
-          />
-        </Box>
-        <Box
-          mb={10}
-          style={{
-            borderRadius: 3,
-            border: `2px solid ${dark}`
-              ? "rgba(255,255,255,0.1)"
-              : "rgba(0,0,0,0.1)",
+    isClient && (
+      <Box pos="relative">
+        <LoadingOverlay
+          visible={!allTrips || currentTrip === undefined}
+          overlayProps={{
+            backgroundOpacity: 1,
+            blur: 10,
+            color: dark ? "#0b0c0d" : "#F8F9FA",
           }}
-        >
-          <Group w={"100%"} grow gap={0}>
-            <Center>
-              <Box>
-                <Title order={6} ta={"center"}>
-                  {currentTrip && currentTrip.travelDate}
-                </Title>
-                <Text fz={10} ta={"center"}>
-                  TRAVEL DATE
-                </Text>
-              </Box>
-            </Center>
-            <Center
-              py={10}
-              style={{
-                borderLeft: `2px solid ${dark}`
-                  ? "rgba(255,255,255,0.1)"
-                  : "rgba(0,0,0,0.1)",
+        />
+        <Select
+          classNames={{ input: classes.tripSelect }}
+          w={"95%"}
+          mt={7}
+          variant="filled"
+          placeholder={currentTrip?.tripTitle || "No Trips found..."}
+          onChange={(e) => changeTrip(e)}
+          checkIconPosition="right"
+          value={currentTrip?.tripTitle}
+          data={
+            allTrips?.length > 0 &&
+            allTrips.map((trip) => {
+              return {
+                value: trip.tripTitle,
+                label: trip.tripTitle,
+                key: trip.tripTitle,
+              };
+            })
+          }
+          rightSection={
+            <IconChevronDown
+              size={17}
+              opacity={allTrips && allTrips.length >= 2 ? 1 : 0}
+            />
+          }
+          style={{
+            pointerEvents: allTrips.length > 1 ? "all" : "none",
+          }}
+        />
+        <Box pr={20}>
+          <Box my={20} w="100%" h={"250px"} pos={"relative"}>
+            <Select
+              classNames={{ input: classes.graphLengthSelect }}
+              checkIconPosition="right"
+              pos={"absolute"}
+              top={10}
+              right={0}
+              w={120}
+              size="xs"
+              defaultValue={String(parseCustomDate(weekRange))}
+              onChange={(e) => setGraphSpan(e)}
+              placeholder={
+                graphSpan === 7 || graphSpan === 30
+                  ? `Last ${graphSpan} days`
+                  : "All days"
+              }
+              rightSection={
+                <IconChevronDown
+                  size={12}
+                  opacity={allTrips && allTrips.length >= 2 ? 1 : 0}
+                />
+              }
+              data={[
+                {
+                  value: String(parseCustomDate(weekRange)),
+                  label: "Last 7 days",
+                },
+                {
+                  value: String(parseCustomDate(monthRange)),
+                  label: "Last 30 days",
+                },
+                {
+                  value: String(parseCustomDate(currentTrip?.creationTime)),
+                  label: "All days",
+                },
+              ]}
+            />
+            <Bar
+              key={colorScheme}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
               }}
-            >
-              <Box>
-                <Title order={4} ta={"center"}>
-                  {currentTrip && daysBefore(currentTrip.travelDate)}
-                </Title>
-                <Text ta={"center"} mr={4} fz={10}>
-                  DAYS LEFT
-                </Text>
-              </Box>
-            </Center>
-            {/* Sends User to Trip Page */}
-            <Center py={19} fw={600} fz={20}>
-              <Button
-                className={classes.viewPageLink}
-                variant="subtle"
-                onClick={() => {
-                  setMainMenuOpened(false);
-                  setPanelShow(false);
-                  setDropDownOpened(false);
-                  router.push("/" + currentTrip?.tripId);
+              data={graphData}
+            />
+          </Box>
+          <Box
+            mb={10}
+            style={{
+              borderRadius: 3,
+              border: `2px solid ${dark}`
+                ? "rgba(255,255,255,0.1)"
+                : "rgba(0,0,0,0.1)",
+            }}
+          >
+            <Group w={"100%"} grow gap={0}>
+              <Center>
+                <Box>
+                  <Title order={6} ta={"center"}>
+                    {currentTrip && currentTrip.travelDate}
+                  </Title>
+                  <Text fz={10} ta={"center"}>
+                    TRAVEL DATE
+                  </Text>
+                </Box>
+              </Center>
+              <Center
+                py={10}
+                style={{
+                  borderLeft: `2px solid ${dark}`
+                    ? "rgba(255,255,255,0.1)"
+                    : "rgba(0,0,0,0.1)",
                 }}
               >
-                View Page{" "}
-                <IconAppWindow
-                  size={20}
-                  stroke={1}
-                  style={{
-                    marginLeft: 4,
+                <Box>
+                  <Title order={4} ta={"center"}>
+                    {currentTrip && daysBefore(currentTrip.travelDate)}
+                  </Title>
+                  <Text ta={"center"} mr={4} fz={10}>
+                    DAYS LEFT
+                  </Text>
+                </Box>
+              </Center>
+              {/* Sends User to Trip Page */}
+              <Center py={19} fw={600} fz={20}>
+                <Button
+                  className={classes.viewPageLink}
+                  variant="subtle"
+                  onClick={() => {
+                    setMainMenuOpened(false);
+                    setPanelShow(false);
+                    setDropDownOpened(false);
+                    router.push("/" + currentTrip?.tripId);
                   }}
-                />
-              </Button>
-            </Center>
-          </Group>
-          <Divider
-            size={"sm"}
-            color={dark ? "dark.6" : "#fff"}
-            className={classes.shadow}
-          />
-          <Group w={"100%"} gap={0} grow>
-            <Center>
-              <Box>
-                <Flex align={"center"}>
-                  <IconCurrencyDollar
+                >
+                  View Page{" "}
+                  <IconAppWindow
+                    size={20}
                     stroke={1}
                     style={{
-                      marginRight: -3,
+                      marginLeft: 4,
                     }}
                   />
-                  <Title order={3} ta={"center"}>
-                    {addComma(donationSum - spentFunds)}
-                  </Title>
-                </Flex>
-                <Text fz={10}>AVAILABLE FUNDS</Text>
-              </Box>
-            </Center>
-            <Center className={classes.fundsTally}>
-              <Box>
-                <Progress
-                  color={dark ? "blue.9" : "blue.4"}
-                  bg={dark ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,1)"}
-                  value={(donationSum / currentTrip?.costsSum) * 100}
-                  mb={5}
-                  size={"sm"}
-                  w={"100%"}
-                  style={{
-                    boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
-                  }}
-                />
-                <Title order={3} ta={"center"}>
+                </Button>
+              </Center>
+            </Group>
+            <Divider
+              size={"sm"}
+              color={dark ? "dark.7" : "#fff"}
+              opacity={dark && 0.6}
+              className={classes.shadow}
+            />
+            <Group w={"100%"} gap={0} grow>
+              <Center>
+                <Box>
                   <Flex align={"center"}>
                     <IconCurrencyDollar
                       stroke={1}
                       style={{
-                        marginRight: -4,
+                        marginRight: -3,
                       }}
                     />
-                    {addComma(donationSum)}{" "}
-                    <IconSlash
-                      stroke={1}
-                      style={{
-                        transform: "rotate(-20deg) scale(1.4)",
-                        marginRight: -6,
-                      }}
-                    />
-                    <IconCurrencyDollar
-                      stroke={1}
-                      style={{
-                        marginRight: -4,
-                      }}
-                    />
-                    {addComma(currentTrip?.costsSum)}
+                    <Title order={3} ta={"center"}>
+                      {addComma(donationSum - spentFunds)}
+                    </Title>
                   </Flex>
-                </Title>
-                <Text ta={"right"} mr={4} mt={-4} fz={10}>
-                  RAISED
-                </Text>
-              </Box>
-            </Center>
-          </Group>
-        </Box>
-        <Flex my={10} pos={"relative"}>
-          <Box
-            bg={dark ? "rgba(5, 5, 5, 0.5)" : "rgba(255, 255, 255, 0.9)"}
-            w={"100%"}
-            position="relative"
-            style={{
-              overflow: "hidden",
-              borderRadius: 3,
-            }}
-          >
-            <Donations
-              donations={currentTrip?.donations || []}
-              setDonations={setDonations}
-              donationSectionLimit={6}
-              dHeight={"calc(100vh - 635px)"}
-            />
+                  <Text fz={10}>AVAILABLE FUNDS</Text>
+                </Box>
+              </Center>
+              <Center className={classes.fundsTally}>
+                <Box>
+                  <Progress
+                    color={dark ? "blue.9" : "blue.4"}
+                    bg={dark ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,1)"}
+                    value={(donationSum / currentTrip?.costsSum) * 100}
+                    mb={5}
+                    size={"sm"}
+                    w={"100%"}
+                    style={{
+                      boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
+                    }}
+                  />
+                  <Title order={3} ta={"center"}>
+                    <Flex align={"center"}>
+                      <IconCurrencyDollar
+                        stroke={1}
+                        style={{
+                          marginRight: -4,
+                        }}
+                      />
+                      {addComma(donationSum)}{" "}
+                      <IconSlash
+                        stroke={1}
+                        style={{
+                          transform: "rotate(-20deg) scale(1.4)",
+                          marginRight: -6,
+                        }}
+                      />
+                      <IconCurrencyDollar
+                        stroke={1}
+                        style={{
+                          marginRight: -4,
+                        }}
+                      />
+                      {addComma(currentTrip?.costsSum)}
+                    </Flex>
+                  </Title>
+                  <Text ta={"right"} mr={4} mt={-4} fz={10}>
+                    RAISED
+                  </Text>
+                </Box>
+              </Center>
+            </Group>
           </Box>
-        </Flex>
+          <Flex my={10} pos={"relative"}>
+            <Box
+              bg={dark ? "rgba(5, 5, 5, 0.5)" : "rgba(255, 255, 255, 0.9)"}
+              w={"100%"}
+              position="relative"
+              mt={10}
+              style={{
+                overflow: "hidden",
+                borderRadius: 3,
+              }}
+            >
+              <Donations
+                donations={currentTrip?.donations || []}
+                setDonations={setDonations}
+                donationSectionLimit={6}
+                dHeight={"calc(100vh - 660px)"}
+              />
+            </Box>
+          </Flex>
+        </Box>
       </Box>
-    </Box>
+    )
   );
 }

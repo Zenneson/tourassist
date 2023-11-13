@@ -60,6 +60,7 @@ export default function TripPlanner(props) {
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
+  const [isClient, setIsClient] = useState(false);
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const travelersHandlerRef = useRef(null);
@@ -109,6 +110,10 @@ export default function TripPlanner(props) {
     key: "renderState",
     defaultValue: 0,
   });
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
@@ -804,614 +809,622 @@ export default function TripPlanner(props) {
   };
 
   return (
-    <Box px={20} pb={50}>
-      <Space h={110} />
-      <Center ml={-40}>
-        <Divider
-          w={"100%"}
-          maw={1200}
-          mb={20}
-          opacity={0.4}
-          labelPosition="left"
-          color={dark ? "gray.7" : "dark.1"}
-          label={
-            <Flex>
-              <IconChevronsRight size={20} />
-              <Text>
-                {active === 0
-                  ? "Travel Starting Info"
-                  : active === 1
-                  ? "Cost Calculator"
-                  : active === 2
-                  ? "Travel Details"
-                  : "Account Information"}
-              </Text>
-            </Flex>
-          }
-        />
-      </Center>
-      <Center>
-        <Flex
-          w="100%"
-          maw={1200}
-          justify="flex-start"
-          align="flex-start"
-          gap={10}
-        >
-          <Box w="100%" miw={500}>
-            {active === 0 && (
-              <motion.div {...animation}>
-                <Flex
-                  pt={25}
-                  pb={30}
-                  px={30}
-                  maw={950}
-                  direction={"column"}
-                  className="pagePanel"
-                >
-                  <Title order={5} fw={400} h={20} mb={20}>
-                    {startLocale && travelDates ? (
-                      "Continue..."
-                    ) : (
-                      <Text opacity={0.7}>
-                        Provide the{" "}
-                        <Text inherit span hidden={startLocale}>
-                          Departure City{" "}
-                        </Text>
-                        <Text inherit span hidden={startLocale || travelDates}>
-                          and
-                        </Text>{" "}
-                        <Text inherit span hidden={travelDates}>
-                          Travel Start Date
-                          {startLocale && ":"}
-                        </Text>
-                      </Text>
-                    )}
-                  </Title>
+    isClient && (
+      <Box px={20} pb={50}>
+        <Space h={110} />
+        <Center ml={-40}>
+          <Divider
+            w={"100%"}
+            maw={1200}
+            mb={20}
+            opacity={0.4}
+            labelPosition="left"
+            color={dark ? "gray.7" : "dark.1"}
+            label={
+              <Flex>
+                <IconChevronsRight size={20} />
+                <Text>
+                  {active === 0
+                    ? "Travel Starting Info"
+                    : active === 1
+                    ? "Cost Calculator"
+                    : active === 2
+                    ? "Travel Details"
+                    : "Account Information"}
+                </Text>
+              </Flex>
+            }
+          />
+        </Center>
+        <Center>
+          <Flex
+            w="100%"
+            maw={1200}
+            justify="flex-start"
+            align="flex-start"
+            gap={10}
+          >
+            <Box w="100%" miw={500}>
+              {active === 0 && (
+                <motion.div {...animation}>
                   <Flex
-                    w={"100%"}
-                    justify={"flex-start"}
-                    align={"flex-start"}
-                    gap={0}
+                    pt={25}
+                    pb={30}
+                    px={30}
+                    maw={950}
+                    direction={"column"}
+                    className="pagePanel"
                   >
+                    <Title order={5} fw={400} h={20} mb={20}>
+                      {startLocale && travelDates ? (
+                        "Continue..."
+                      ) : (
+                        <Text opacity={0.7}>
+                          Provide the{" "}
+                          <Text inherit span hidden={startLocale}>
+                            Departure City{" "}
+                          </Text>
+                          <Text
+                            inherit
+                            span
+                            hidden={startLocale || travelDates}
+                          >
+                            and
+                          </Text>{" "}
+                          <Text inherit span hidden={travelDates}>
+                            Travel Start Date
+                            {startLocale && ":"}
+                          </Text>
+                        </Text>
+                      )}
+                    </Title>
                     <Flex
-                      className="pagePanel"
-                      direction={"column"}
-                      justify={"center"}
-                      w={"58%"}
-                      h={380}
-                      p={20}
-                      gap={10}
+                      w={"100%"}
+                      justify={"flex-start"}
+                      align={"flex-start"}
+                      gap={0}
                     >
-                      <Autocomplete
-                        classNames={{ option: classes.startLocaleOption }}
-                        placeholder="Add Departure City..."
-                        selectFirstOptionOnChange
-                        ref={startLocaleRef}
-                        size="sm"
-                        w={"100%"}
-                        value={startLocaleSearch}
-                        limit={5}
-                        data={startLocaleData}
-                        onChange={(e) => {
-                          setStartLocaleSearch(e);
-                          handleChange(e);
-                          if (startLocaleRef.current.value === "") {
-                            setStartLocale("");
-                          }
-                        }}
-                        onOptionSubmit={(e) => {
-                          if (placeCheck() === true) return;
-                          setStartLocale(e);
-                        }}
-                        filter={optionsFilter}
-                      />
-                      <Group my={15} grow gap={0}>
-                        <Group
-                          gap={0}
-                          justify="center"
-                          style={{
-                            borderRight: `2px solid ${
-                              dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
-                            }`,
+                      <Flex
+                        className="pagePanel"
+                        direction={"column"}
+                        justify={"center"}
+                        w={"58%"}
+                        h={380}
+                        p={20}
+                        gap={10}
+                      >
+                        <Autocomplete
+                          classNames={{ option: classes.startLocaleOption }}
+                          placeholder="Add Departure City..."
+                          selectFirstOptionOnChange
+                          ref={startLocaleRef}
+                          size="sm"
+                          w={"100%"}
+                          value={startLocaleSearch}
+                          limit={5}
+                          data={startLocaleData}
+                          onChange={(e) => {
+                            setStartLocaleSearch(e);
+                            handleChange(e);
+                            if (startLocaleRef.current.value === "") {
+                              setStartLocale("");
+                            }
                           }}
-                        >
-                          <Flex align={"center"}>
-                            <Text
-                              fz={15}
-                              c={
+                          onOptionSubmit={(e) => {
+                            if (placeCheck() === true) return;
+                            setStartLocale(e);
+                          }}
+                          filter={optionsFilter}
+                        />
+                        <Group my={15} grow gap={0}>
+                          <Group
+                            gap={0}
+                            justify="center"
+                            style={{
+                              borderRight: `2px solid ${
                                 dark
-                                  ? "rgba(255, 255, 255, 1)"
-                                  : "rgba(0, 0, 0, 1)"
+                                  ? "rgba(255,255,255,0.1)"
+                                  : "rgba(0,0,0,0.1)"
+                              }`,
+                            }}
+                          >
+                            <Flex align={"center"}>
+                              <Text
+                                fz={15}
+                                c={
+                                  dark
+                                    ? "rgba(255, 255, 255, 1)"
+                                    : "rgba(0, 0, 0, 1)"
+                                }
+                              >
+                                Travelers
+                              </Text>
+                            </Flex>
+                            <Group gap={5} w={"50%"} grow>
+                              {/* Decrease Traveler Count  */}
+                              <Button
+                                fz={20}
+                                p={0}
+                                pb={5}
+                                variant="subtle"
+                                color={dark ? "dark.5" : "gray.1"}
+                                c={dark ? "gray.0" : "dark.9"}
+                                onClick={() =>
+                                  travelersHandlerRef.current.decrement()
+                                }
+                              >
+                                -
+                              </Button>
+                              <NumberInput
+                                classNames={{ input: classes.travelersInput }}
+                                hideControls
+                                variant="filled"
+                                type="number"
+                                w={20}
+                                suffix={""}
+                                value={travelers}
+                                onChange={(e) => setTravelers(e)}
+                                handlersRef={travelersHandlerRef}
+                                defaultValue={1}
+                                min={1}
+                              />
+                              {/* Increase Traveler Count  */}
+                              <Button
+                                fz={20}
+                                p={0}
+                                variant="subtle"
+                                color={dark ? "dark.5" : "gray.1"}
+                                c={dark ? "gray.0" : "dark.9"}
+                                onClick={() =>
+                                  travelersHandlerRef.current.increment()
+                                }
+                              >
+                                +
+                              </Button>
+                            </Group>
+                          </Group>
+                          <Group pos={"relative"} justify="center">
+                            <Switch
+                              label={
+                                <Flex align={"center"}>
+                                  <Text
+                                    ta={"right"}
+                                    ml={5}
+                                    fz={14}
+                                    c={
+                                      dark
+                                        ? "rgba(255, 255, 255, 1)"
+                                        : "rgba(0, 0, 0, 1)"
+                                    }
+                                  >
+                                    Round Trip?
+                                  </Text>
+                                </Flex>
                               }
-                            >
-                              Travelers
-                            </Text>
-                          </Flex>
-                          <Group gap={5} w={"50%"} grow>
-                            {/* Decrease Traveler Count  */}
-                            <Button
-                              fz={20}
-                              p={0}
-                              pb={5}
-                              variant="subtle"
-                              color={dark ? "dark.5" : "gray.1"}
-                              c={dark ? "gray.0" : "dark.9"}
-                              onClick={() =>
-                                travelersHandlerRef.current.decrement()
-                              }
-                            >
-                              -
-                            </Button>
-                            <NumberInput
-                              classNames={{ input: classes.travelersInput }}
-                              hideControls
-                              variant="filled"
-                              type="number"
-                              w={20}
-                              suffix={""}
-                              value={travelers}
-                              onChange={(e) => setTravelers(e)}
-                              handlersRef={travelersHandlerRef}
-                              defaultValue={1}
-                              min={1}
+                              labelPosition="left"
+                              onLabel="YES"
+                              offLabel="NO"
+                              size="md"
+                              color={!dark && "#2dc7f3"}
+                              checked={roundTrip}
+                              onChange={() => {
+                                setRoundTrip(!roundTrip);
+                                setRenderState(renderState + 1);
+                              }}
                             />
-                            {/* Increase Traveler Count  */}
-                            <Button
-                              fz={20}
-                              p={0}
-                              variant="subtle"
-                              color={dark ? "dark.5" : "gray.1"}
-                              c={dark ? "gray.0" : "dark.9"}
-                              onClick={() =>
-                                travelersHandlerRef.current.increment()
-                              }
-                            >
-                              +
-                            </Button>
                           </Group>
                         </Group>
-                        <Group pos={"relative"} justify="center">
-                          <Switch
-                            label={
-                              <Flex align={"center"}>
-                                <Text
-                                  ta={"right"}
-                                  ml={5}
-                                  fz={14}
-                                  c={
-                                    dark
-                                      ? "rgba(255, 255, 255, 1)"
-                                      : "rgba(0, 0, 0, 1)"
-                                  }
-                                >
-                                  Round Trip?
-                                </Text>
-                              </Flex>
-                            }
-                            labelPosition="left"
-                            onLabel="YES"
-                            offLabel="NO"
-                            size="md"
-                            color={!dark && "#2dc7f3"}
-                            checked={roundTrip}
-                            onChange={() => {
-                              setRoundTrip(!roundTrip);
-                              setRenderState(renderState + 1);
-                            }}
-                          />
-                        </Group>
-                      </Group>
-                      <Box>
-                        <Box
-                          style={{
-                            borderRadius: "3px",
-                          }}
-                        >
-                          <Stack
-                            align="center"
-                            justify="center"
-                            pos={"relative"}
-                            gap={0}
-                            p={20}
-                            h={210}
-                            bg={dark ? "dark.5" : "gray.1"}
+                        <Box>
+                          <Box
                             style={{
-                              overflowX: "auto",
                               borderRadius: "3px",
                             }}
                           >
-                            {isThemeLoaded && (
-                              <BackgroundImage
-                                pos={"absolute"}
-                                w={"100%"}
-                                h={"100%"}
-                                style={{
-                                  zIndex: 0,
-                                }}
-                                opacity={
-                                  dark
-                                    ? startLocale || travelDates
-                                      ? 0.02
-                                      : 0.1
-                                    : startLocale || travelDates
-                                    ? 0.08
-                                    : 0.2
-                                }
-                                src={
-                                  dark
-                                    ? "img/placeholder/boardingpass_blk.jpg"
-                                    : "img/placeholder/boardingpass_wht.jpg"
-                                }
-                              />
-                            )}
-                            <Box
+                            <Stack
+                              align="center"
+                              justify="center"
+                              pos={"relative"}
+                              gap={0}
+                              p={20}
+                              h={210}
+                              bg={dark ? "dark.5" : "gray.1"}
                               style={{
-                                zIndex: 1,
+                                overflow: "hidden",
+                                borderRadius: "3px",
                               }}
                             >
-                              <Box>
-                                <Group gap={7} mb={15}>
-                                  <IconMapPin size={20} color="gray" />
-                                  {startLocale && (
-                                    <>
-                                      <Badge
-                                        variant="outline"
-                                        color={dark ? "gray" : "dark.9"}
-                                        size="xs"
-                                      >
-                                        {startCity}
-                                      </Badge>
-                                      <IconArrowRightTail size={18} />
-                                    </>
-                                  )}
-                                  {placeData.map((place, index) => (
-                                    <Group key={index} gap={5}>
-                                      <Badge
-                                        variant="outline"
-                                        color={dark ? "gray" : "dark.9"}
-                                        size="xs"
-                                      >
-                                        {place.place}
-                                      </Badge>
-                                      {placeData.length - 1 !== index && (
+                              {isThemeLoaded && (
+                                <BackgroundImage
+                                  pos={"absolute"}
+                                  w={"100%"}
+                                  h={"100%"}
+                                  style={{
+                                    zIndex: 0,
+                                  }}
+                                  opacity={
+                                    dark
+                                      ? startLocale || travelDates
+                                        ? 0.02
+                                        : 0.1
+                                      : startLocale || travelDates
+                                      ? 0.08
+                                      : 0.2
+                                  }
+                                  src={
+                                    dark
+                                      ? "img/placeholder/boardingpass_blk.jpg"
+                                      : "img/placeholder/boardingpass_wht.jpg"
+                                  }
+                                />
+                              )}
+                              <Box
+                                style={{
+                                  zIndex: 1,
+                                }}
+                              >
+                                <Box>
+                                  <Group gap={7} mb={15}>
+                                    <IconMapPin size={20} color="gray" />
+                                    {startLocale && (
+                                      <>
+                                        <Badge
+                                          variant="outline"
+                                          color={dark ? "gray" : "dark.9"}
+                                          size="xs"
+                                        >
+                                          {startCity}
+                                        </Badge>
+                                        <IconArrowRightTail size={18} />
+                                      </>
+                                    )}
+                                    {placeData.map((place, index) => (
+                                      <Group key={index} gap={5}>
+                                        <Badge
+                                          variant="outline"
+                                          color={dark ? "gray" : "dark.9"}
+                                          size="xs"
+                                        >
+                                          {place.place}
+                                        </Badge>
+                                        {placeData.length - 1 !== index && (
+                                          <IconArrowRightTail
+                                            size={18}
+                                            opacity={0.4}
+                                          />
+                                        )}
+                                      </Group>
+                                    ))}
+                                    {roundTrip && startLocale && (
+                                      <>
                                         <IconArrowRightTail
                                           size={18}
                                           opacity={0.4}
                                         />
-                                      )}
-                                    </Group>
-                                  ))}
-                                  {roundTrip && startLocale && (
-                                    <>
-                                      <IconArrowRightTail
-                                        size={18}
+                                        <Badge
+                                          variant="outline"
+                                          color={dark ? "gray" : "dark.9"}
+                                          size="xs"
+                                        >
+                                          {startCity}
+                                        </Badge>
+                                      </>
+                                    )}
+                                  </Group>
+                                </Box>
+                                {travelDates !== null && (
+                                  <Flex align={"center"} justify={"center"}>
+                                    <Group gap={7} fz={14} fw={700}>
+                                      <IconCalendarEvent
+                                        size={20}
                                         opacity={0.4}
                                       />
-                                      <Badge
-                                        variant="outline"
-                                        color={dark ? "gray" : "dark.9"}
-                                        size="xs"
-                                      >
-                                        {startCity}
-                                      </Badge>
-                                    </>
-                                  )}
-                                </Group>
-                              </Box>
-                              {travelDates !== null && (
-                                <Flex align={"center"} justify={"center"}>
-                                  <Group gap={7} fz={14} fw={700}>
-                                    <IconCalendarEvent
-                                      size={20}
-                                      opacity={0.4}
+                                      {dayjs(travelDates).format("LL")}
+                                    </Group>
+                                    <Divider
+                                      orientation="vertical"
+                                      color={dark && "gray.9"}
+                                      ml={10}
+                                      mr={7}
+                                      opacity={0.7}
                                     />
-                                    {dayjs(travelDates).format("LL")}
-                                  </Group>
-                                  <Divider
-                                    orientation="vertical"
-                                    color={dark && "gray.9"}
-                                    ml={10}
-                                    mr={7}
-                                    opacity={0.7}
-                                  />
-                                  <Group gap={5} fz={12}>
-                                    <Title c={"red.9"} order={3}>
-                                      •
-                                    </Title>
-                                    {dayjs(travelDates)
-                                      .subtract(1, "day")
-                                      .format("LL")}
-                                    <Flex
-                                      align={"center"}
-                                      gap={7}
-                                      mt={-4}
-                                      ml={-7}
-                                      style={{
-                                        transform: "scale(0.85)",
-                                      }}
-                                    >
-                                      <Text fz={25} opacity={0.2}>
-                                        (
-                                      </Text>
-                                      <Text
-                                        mt={4}
-                                        fw={700}
-                                        fz={9}
-                                        lh={1}
-                                        ta={"center"}
-                                        c="gray.7"
+                                    <Group gap={5} fz={12}>
+                                      <Title c={"red.9"} order={3}>
+                                        •
+                                      </Title>
+                                      {dayjs(travelDates)
+                                        .subtract(1, "day")
+                                        .format("LL")}
+                                      <Flex
+                                        align={"center"}
+                                        gap={7}
+                                        mt={-4}
+                                        ml={-7}
                                         style={{
-                                          textTransform: "uppercase",
+                                          transform: "scale(0.85)",
                                         }}
                                       >
-                                        <Text fz={".68rem"} span>
-                                          Campgain Ends
+                                        <Text fz={25} opacity={0.2}>
+                                          (
                                         </Text>
-                                        <br />
-                                        Day Before Travel
-                                      </Text>
-                                      <Text fz={25} opacity={0.2}>
-                                        )
-                                      </Text>
-                                    </Flex>
-                                  </Group>
-                                </Flex>
-                              )}
-                            </Box>
-                          </Stack>
+                                        <Text
+                                          mt={4}
+                                          fw={700}
+                                          fz={9}
+                                          lh={1}
+                                          ta={"center"}
+                                          c="gray.7"
+                                          style={{
+                                            textTransform: "uppercase",
+                                          }}
+                                        >
+                                          <Text fz={".68rem"} span>
+                                            Campgain Ends
+                                          </Text>
+                                          <br />
+                                          Day Before Travel
+                                        </Text>
+                                        <Text fz={25} opacity={0.2}>
+                                          )
+                                        </Text>
+                                      </Flex>
+                                    </Group>
+                                  </Flex>
+                                )}
+                              </Box>
+                            </Stack>
+                          </Box>
                         </Box>
+                      </Flex>
+                      <Box className="pagePanel" ml={30} p={20}>
+                        <DatePicker
+                          classNames={{
+                            day: classes.datePicker,
+                          }}
+                          allowDeselect
+                          firstDayOfWeek={0}
+                          defaultDate={travelDates || dayjs().add(7, "day")}
+                          minDate={weekAhead}
+                          value={travelDates}
+                          size={"md"}
+                          mah={380}
+                          onChange={(e) => {
+                            setTravelDates(e);
+                          }}
+                          getDayProps={() => {
+                            return {
+                              style: {
+                                fontWeight: "bold",
+                              },
+                            };
+                          }}
+                          renderDay={(date) => {
+                            const day = date.getDate();
+                            const month = date.getMonth();
+                            const year = date.getFullYear();
+
+                            let isSpecificDay;
+                            if (travelDates) {
+                              const travelDate = dayjs(travelDates);
+                              const prevDate = travelDate.subtract(1, "day");
+
+                              isSpecificDay =
+                                day === prevDate.date() &&
+                                month === prevDate.month() &&
+                                year === prevDate.year();
+                            }
+                            return (
+                              <Indicator
+                                size={5}
+                                color={"red.9"}
+                                offset={-3}
+                                disabled={!isSpecificDay}
+                              >
+                                <div>{day}</div>
+                              </Indicator>
+                            );
+                          }}
+                        />
                       </Box>
                     </Flex>
-                    <Box className="pagePanel" ml={30} p={20}>
-                      <DatePicker
-                        classNames={{
-                          day: classes.datePicker,
-                        }}
-                        allowDeselect
-                        firstDayOfWeek={0}
-                        defaultDate={travelDates || dayjs().add(7, "day")}
-                        minDate={weekAhead}
-                        value={travelDates}
-                        size={"md"}
-                        mah={380}
-                        onChange={(e) => {
-                          setTravelDates(e);
-                        }}
-                        getDayProps={() => {
-                          return {
-                            style: {
-                              fontWeight: "bold",
-                            },
-                          };
-                        }}
-                        renderDay={(date) => {
-                          const day = date.getDate();
-                          const month = date.getMonth();
-                          const year = date.getFullYear();
-
-                          let isSpecificDay;
-                          if (travelDates) {
-                            const travelDate = dayjs(travelDates);
-                            const prevDate = travelDate.subtract(1, "day");
-
-                            isSpecificDay =
-                              day === prevDate.date() &&
-                              month === prevDate.month() &&
-                              year === prevDate.year();
-                          }
-                          return (
-                            <Indicator
-                              size={5}
-                              color={"red.9"}
-                              offset={-3}
-                              disabled={!isSpecificDay}
-                            >
-                              <div>{day}</div>
-                            </Indicator>
-                          );
-                        }}
-                      />
-                    </Box>
                   </Flex>
-                </Flex>
-              </motion.div>
-            )}
-            {active === 1 && (
-              <motion.div {...animation}>
-                <Box maw={950}>
-                  <UseTickets />
-                </Box>
-              </motion.div>
-            )}
-            {active === 2 && (
-              <motion.div {...animation}>
-                <Stack
-                  className="pagePanel"
-                  pos={"relative"}
-                  maw={950}
-                  p={30}
-                  align="center"
-                  gap={20}
-                >
-                  <TripTitle />
-                  <TripContent
-                    titleRef={titleRef}
-                    active={active}
-                    images={images}
-                    setImages={setImages}
-                  />
-                </Stack>
-              </motion.div>
-            )}
-            {active === 3 && (
-              <motion.div {...animation}>
-                <Center h={"50vh"}>
+                </motion.div>
+              )}
+              {active === 1 && (
+                <motion.div {...animation}>
+                  <Box maw={950}>
+                    <UseTickets />
+                  </Box>
+                </motion.div>
+              )}
+              {active === 2 && (
+                <motion.div {...animation}>
                   <Stack
                     className="pagePanel"
-                    pt={10}
-                    pb={30}
-                    px={30}
-                    maw={700}
-                    h={user ? 205 : "auto"}
-                    w={"100%"}
+                    pos={"relative"}
+                    maw={950}
+                    p={30}
+                    align="center"
+                    gap={20}
                   >
-                    {!user && (
-                      <Box w={"100%"} mb={5}>
-                        <Box>
-                          <LoginComp mapLoaded={mapLoaded} auth={auth} />
-                        </Box>
-                      </Box>
-                    )}
-                    <Center mt={user ? 20 : 0}>
-                      <Button.Group w={"100%"}>
-                        <Button
-                          leftSection={
-                            <IconBuildingBank size={20} opacity={0.5} />
-                          }
-                          variant="filled"
-                          h={50}
-                          w={"80%"}
-                        >
-                          <Title order={4}>ADD BANKING INFORMATION</Title>
-                        </Button>
-                        <Button
-                          className={classes.brightenButton}
-                          variant="filled"
-                          h={50}
-                          w={"20%"}
-                          opacity={0.8}
-                        >
-                          <Title fz={10}>ADD LATER</Title>
-                        </Button>
-                      </Button.Group>
-                    </Center>
-                    <Divider
-                      w={"100%"}
-                      my={5}
-                      opacity={0.3}
-                      color={dark && "gray.9"}
+                    <TripTitle />
+                    <TripContent
+                      titleRef={titleRef}
+                      active={active}
+                      images={images}
+                      setImages={setImages}
                     />
-                    <Group gap={0}>
-                      <Box w={"80%"}>
-                        <Text fw={700} fz={12}>
-                          Banking Info is needed to disburse raised funds.
-                          Stripe securely handles this process.
-                        </Text>
-                        <Text fz={11}>
-                          Note that you can still use raised funds for flight
-                          and hotel bookings on our platform before adding your
-                          banking info.
-                        </Text>
-                      </Box>
-                      <Image
-                        src="img/stripe.svg"
-                        fit="contain"
-                        display={"block"}
-                        opacity={0.3}
-                        pl={20}
-                        alt="Stripe Logo"
-                        style={{
-                          filter: dark && "invert(50%)",
-                          width: "20%",
-                          borderRadius: "3px",
-                        }}
-                      />
-                    </Group>
                   </Stack>
-                </Center>
-              </motion.div>
-            )}
-          </Box>
-          <Box>
-            <Stepper
-              active={active}
-              onStepClick={setActive}
-              iconjustify="flex-end"
-              orientation="vertical"
-              allowNextStepsSelect={false}
-              color={dark ? "blue.9" : "blue.4"}
-              miw={205}
-              mb={-20}
-              mr={20}
-              size="xs"
-              w="20%"
-              styles={{
-                stepIcon: {
-                  overflow: "hidden",
-                  backgroundColor: dark && "#050506",
-                },
-                stepCompletedIcon: {
-                  backgroundColor: dark && "#0D3F82",
-                },
-              }}
-            >
-              <Stepper.Step
-                label="Travel Starting Info"
-                description="Travel date and starting location"
-              />
-              <Stepper.Step
-                label="Cost Calculator"
-                description="Calculate all your travel costs"
-              />
-              <Stepper.Step
-                label="Travel Details"
-                description="Information for your supporters"
-              />
-              <Stepper.Step
-                label="Account Info"
-                description="Provide account details"
-              />
-            </Stepper>
-            {active > 0 && (
-              <>
-                <Divider
-                  mb={5}
-                  opacity={dark ? 0.3 : 0.7}
-                  color={dark && "gray.5"}
-                  size={"xs"}
-                  variant="solid"
-                  labelPosition="left"
-                  label={"Total Cost"}
-                  labeljustify="center"
+                </motion.div>
+              )}
+              {active === 3 && (
+                <motion.div {...animation}>
+                  <Center h={"50vh"}>
+                    <Stack
+                      className="pagePanel"
+                      pt={10}
+                      pb={30}
+                      px={30}
+                      maw={700}
+                      h={user ? 205 : "auto"}
+                      w={"100%"}
+                    >
+                      {!user && (
+                        <Box w={"100%"} mb={5}>
+                          <Box>
+                            <LoginComp mapLoaded={mapLoaded} auth={auth} />
+                          </Box>
+                        </Box>
+                      )}
+                      <Center mt={user ? 20 : 0}>
+                        <Button.Group w={"100%"}>
+                          <Button
+                            leftSection={
+                              <IconBuildingBank size={20} opacity={0.5} />
+                            }
+                            variant="filled"
+                            h={50}
+                            w={"80%"}
+                          >
+                            <Title order={4}>ADD BANKING INFORMATION</Title>
+                          </Button>
+                          <Button
+                            className={classes.brightenButton}
+                            variant="filled"
+                            h={50}
+                            w={"20%"}
+                            opacity={0.8}
+                          >
+                            <Title fz={10}>ADD LATER</Title>
+                          </Button>
+                        </Button.Group>
+                      </Center>
+                      <Divider
+                        w={"100%"}
+                        my={5}
+                        opacity={0.3}
+                        color={dark && "gray.9"}
+                      />
+                      <Group gap={0}>
+                        <Box w={"80%"}>
+                          <Text fw={700} fz={12}>
+                            Banking Info is needed to disburse raised funds.
+                            Stripe securely handles this process.
+                          </Text>
+                          <Text fz={11}>
+                            Note that you can still use raised funds for flight
+                            and hotel bookings on our platform before adding
+                            your banking info.
+                          </Text>
+                        </Box>
+                        <Image
+                          src="img/stripe.svg"
+                          fit="contain"
+                          display={"block"}
+                          opacity={0.3}
+                          pl={20}
+                          alt="Stripe Logo"
+                          style={{
+                            filter: dark && "invert(50%)",
+                            width: "20%",
+                            borderRadius: "3px",
+                          }}
+                        />
+                      </Group>
+                    </Stack>
+                  </Center>
+                </motion.div>
+              )}
+            </Box>
+            <Box>
+              <Stepper
+                active={active}
+                onStepClick={setActive}
+                iconjustify="flex-end"
+                orientation="vertical"
+                allowNextStepsSelect={false}
+                color={dark ? "blue.9" : "blue.4"}
+                miw={205}
+                mb={-20}
+                mr={20}
+                size="xs"
+                w="20%"
+                styles={{
+                  stepIcon: {
+                    overflow: "hidden",
+                    backgroundColor: dark && "#050506",
+                  },
+                  stepCompletedIcon: {
+                    backgroundColor: dark && "#0D3F82",
+                  },
+                }}
+              >
+                <Stepper.Step
+                  label="Travel Starting Info"
+                  description="Travel date and starting location"
                 />
-                <SumInput />
-              </>
-            )}
-            {startLocale && travelDates && (
-              <Divider
-                w={"100%"}
-                my={15}
-                opacity={dark ? 0.1 : 0.5}
-                color={dark && "gray.5"}
-              />
-            )}
-            {active !== 0 && (
-              // Move Up Sections Button
-              <Button
-                className={classes.panelBtns}
-                fullWidth
-                variant={"filled"}
-                mb={10}
-                onClick={prevStep}
-              >
-                <IconChevronUp />
-              </Button>
-            )}
-            {startLocale && travelDates && (
-              // Move Down Sections Button
-              <Button
-                className={classes.panelBtns}
-                fullWidth
-                variant={"filled"}
-                onClick={changeNextStep}
-              >
-                {active === 3 ? "DONE" : <IconChevronDown />}
-              </Button>
-            )}
-          </Box>
-        </Flex>
-      </Center>
-    </Box>
+                <Stepper.Step
+                  label="Cost Calculator"
+                  description="Calculate all your travel costs"
+                />
+                <Stepper.Step
+                  label="Travel Details"
+                  description="Information for your supporters"
+                />
+                <Stepper.Step
+                  label="Account Info"
+                  description="Provide account details"
+                />
+              </Stepper>
+              {active > 0 && (
+                <>
+                  <Divider
+                    mb={5}
+                    opacity={dark ? 0.3 : 0.7}
+                    color={dark && "gray.5"}
+                    size={"xs"}
+                    variant="solid"
+                    labelPosition="left"
+                    label={"Total Cost"}
+                    labeljustify="center"
+                  />
+                  <SumInput />
+                </>
+              )}
+              {startLocale && travelDates && (
+                <Divider
+                  w={"100%"}
+                  my={15}
+                  opacity={dark ? 0.1 : 0.5}
+                  color={dark && "gray.5"}
+                />
+              )}
+              {active !== 0 && (
+                // Move Up Sections Button
+                <Button
+                  className={classes.panelBtns}
+                  fullWidth
+                  variant={"filled"}
+                  mb={10}
+                  onClick={prevStep}
+                >
+                  <IconChevronUp />
+                </Button>
+              )}
+              {startLocale && travelDates && (
+                // Move Down Sections Button
+                <Button
+                  className={classes.panelBtns}
+                  fullWidth
+                  variant={"filled"}
+                  onClick={changeNextStep}
+                >
+                  {active === 3 ? "DONE" : <IconChevronDown />}
+                </Button>
+              )}
+            </Box>
+          </Flex>
+        </Center>
+      </Box>
+    )
   );
 }

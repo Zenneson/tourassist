@@ -6,23 +6,12 @@
 	background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
 }
 
-.editTripModalOverlay {
-	background-color: light-dark(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5));
-	backdrop-filter: blur(9px);
-}
-
 .altModalHeader {
 	background-color: transparent;
 }
 
 .altModalContent {
-	overflow: hidden;
 	background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
-}
-
-.altModalOverlay {
-	background-color: light-dark(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.3));
-	backdrop-filter: blur(9px);
 }
 
 .dateInput {
@@ -64,6 +53,15 @@
 }
 
 .donationInput {
+	border: none;
+	outline: none;
 	text-align: right;
 	font-weight: 700;
+}
+
+.donationCheck {
+	&:focus {
+		border: 1px solid light-dark(rgba(12, 13, 14, 0.2), rgba(234, 237, 240, 0.2));
+		background-color: light-dark(rgba(12, 13, 14, 0.1), rgba(234, 237, 240, 0.1));
+	}
 }

@@ -158,7 +158,7 @@ export default function AccountInfo(props) {
             pb={12}
             style={{
               borderLeft: dark
-                ? "3px solid rgba(255, 255, 255, 0.1)"
+                ? "3px solid rgba(255, 255, 255, 0.03)"
                 : "3px solid rgba(0, 0, 0, 0.1)",
             }}
           >
@@ -389,7 +389,7 @@ export default function AccountInfo(props) {
             pb={12}
             style={{
               borderLeft: dark
-                ? "3px solid rgba(255, 255, 255, 0.1)"
+                ? "3px solid rgba(255, 255, 255, 0.03)"
                 : "3px solid rgba(0, 0, 0, 0.1)",
             }}
           >
@@ -597,7 +597,7 @@ export default function AccountInfo(props) {
             pb={12}
             style={{
               borderLeft: dark
-                ? "3px solid rgba(255, 255, 255, 0.1)"
+                ? "3px solid rgba(255, 255, 255, 0.03)"
                 : "3px solid rgba(0, 0, 0, 0.1)",
             }}
           >

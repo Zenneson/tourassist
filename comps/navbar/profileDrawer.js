@@ -309,8 +309,8 @@ export default function ProfileDrawer(props) {
         zIndex={499}
         withinPortal={false}
         opened={panelShow}
-        padding="25px 25px 0 330px"
-        size={900}
+        padding="25px 25px 0 350px"
+        size={920}
         onClose={closePanel}
         withCloseButton={false}
         scrollAreaComponent={ScrollArea.Autosize}
