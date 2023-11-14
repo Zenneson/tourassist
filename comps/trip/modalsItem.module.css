@@ -1,67 +1,71 @@
 .editTripModalHeader {
-	background-color: transparent;
+  background-color: transparent;
 }
 
 .editTripModalContent {
-	background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
+  background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
 }
 
 .altModalHeader {
-	background-color: transparent;
+  background-color: transparent;
 }
 
 .altModalContent {
-	background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
+  background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
 }
 
 .dateInput {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .updateInputTitle {
-	background: light-dark(#f1f3f5, #0b0c0d);
-	&::placeholder {
-		font-weight: 700;
-		font-style: italic;
-		color: light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.2));
-	}
+  background: light-dark(#f1f3f5, #0b0c0d);
+  &::placeholder {
+    font-weight: 700;
+    font-style: italic;
+    color: light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.2));
+  }
 }
 
 .textEditor {
-	transition: border-top 0.2s ease;
-	border: none;
-	width: 100%;
-	min-width: 500px;
+  transition: border-top 0.2s ease;
+  border: none;
+  width: 100%;
+  min-width: 500px;
 }
 
 .textEditorToolbar {
-	border-color: rgba(255, 255, 255, 0);
-	background: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
+  border-color: rgba(255, 255, 255, 0);
+  background: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
 }
 
 .textEditorContent {
-	background: rgba(0, 0, 0, 0);
-	min-height: 250px;
-	color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
+  background: rgba(0, 0, 0, 0);
+  min-height: 250px;
+  color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
 }
 
 .textEditorContent > div {
-	/* ProseMirror */
-	padding-left: 21px;
-	padding-right: 21px;
-	min-height: 250px;
+  /* ProseMirror */
+  padding-left: 21px;
+  padding-right: 21px;
+  min-height: 250px;
 }
 
 .donationInput {
-	border: none;
-	outline: none;
-	text-align: right;
-	font-weight: 700;
+  border: none;
+  outline: none;
+  text-align: right;
+  font-weight: 700;
 }
 
 .donationCheck {
-	&:focus {
-		border: 1px solid light-dark(rgba(12, 13, 14, 0.2), rgba(234, 237, 240, 0.2));
-		background-color: light-dark(rgba(12, 13, 14, 0.1), rgba(234, 237, 240, 0.1));
-	}
+  &:focus {
+    border: 1px solid
+      light-dark(rgba(12, 13, 14, 0.2), rgba(234, 237, 240, 0.2));
+    background-color: light-dark(
+      rgba(12, 13, 14, 0.1),
+      rgba(234, 237, 240, 0.1)
+    );
+  }
 }

@@ -1,31 +1,35 @@
 body {
-	background-color: light-dark(#f8f9fa, #0b0c0d);
-	height: 100vh;
-	overflow: hidden;
+  background-color: light-dark(#f8f9fa, #0b0c0d);
+  height: 100vh;
+  overflow: hidden;
 }
 
 input {
-	&:focus {
-		outline: none;
-		border: none;
-	}
+  outline: none;
+  border: none;
+  &:focus {
+    outline: none;
+    border: none;
+  }
 }
 
 .pagePanel {
-	background: light-dark(rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.3));
-	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
-	border-radius: 3;
+  background: light-dark(rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.3));
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 3;
 }
 
 .duffel-components .card-details {
-	background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(100, 100, 100, 0.02));
-	border: 1px solid light-dark(rgba(100, 100, 100, 0.1), rgba(204, 204, 204, 0.07));
-	border-radius: 3px;
-	outline: none;
+  background-color: light-dark(rgba(248, 249, 250, 0.9), #c2c3c6);
+  border: 1px solid
+    light-dark(rgba(100, 100, 100, 0.1), rgba(204, 204, 204, 0.07));
+  border-radius: 3px;
+  outline: none;
 }
+
 .duffel-components button {
-	margin: 0;
-	text-transform: uppercase;
-	font-weight: 700;
-	background: light-dark(#2dc7f3, #0d3f82);
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: light-dark(#2dc7f3, #0d3f82);
 }

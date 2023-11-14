@@ -16,13 +16,13 @@ import {
   ScrollArea,
   Grid,
 } from "@mantine/core";
-import { useIntersection, useSessionStorage } from "@mantine/hooks";
+import { useIntersection } from "@mantine/hooks";
 import { useUser } from "../../libs/context";
 import { timeSince } from "../../libs/custom";
 import { IconReload } from "@tabler/icons-react";
 
 export default function Donations(props) {
-  const { dHeight, donationSectionLimit } = props;
+  const { dHeight, donationSectionLimit, donations = [] } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -39,43 +39,21 @@ export default function Donations(props) {
   const [isClient, setIsClient] = useState(false);
   const [tripData, setTripData] = useState([]);
 
-  const [donations, setDonations] = useSessionStorage({
-    key: "donations",
-    defaultValue: [],
-  });
-
   const [displayCount, setDisplayCount] = useState(20);
-  const [donationsData, setDonationsData] = useState(donations || []);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [donationsData, setDonationsData] = useState([]);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (tripData?.donations?.length !== donationsData?.length)
-      setDataLoaded(false);
     if (
-      donationsData?.length !== tripData?.donations?.length ||
+      (donations && donationsData?.length === 0) ||
       donationsData?.length !== donations?.length
     ) {
       setDonationsData(donations);
     }
-    if (
-      (donationsData?.length === 0 && tripData?.donations?.length !== 0) ||
-      (donationsData?.length !== donations?.length && !dataLoaded)
-    ) {
-      setDonationsData(donations);
-      setDataLoaded(true);
-    }
-  }, [
-    donations,
-    tripData,
-    donationsData,
-    setDonationsData,
-    dataLoaded,
-    setDataLoaded,
-  ]);
+  }, [donations, tripData, donationsData, setDonationsData]);
 
   const donateOrder = useMemo(() => {
     if (!donationsData) return;

@@ -62,7 +62,7 @@
 }
 
 .progress {
-  background: light-dark(#94d82d, #74b816);
+  background: light-dark(#94d82d, #2b8a3e);
 }
 
 .infoPanel .useFundsBtn {
@@ -73,10 +73,26 @@
   );
 }
 
+.startTripBtn,
 .infoPanel .donateBtn {
   color: #f8f9fa;
   background: light-dark(
     linear-gradient(0deg, #82c91e 0%, #a9e34b 100%),
-    linear-gradient(0deg, #5c940d 0%, #74b816 100%)
+    linear-gradient(0deg, #40c057 0%, #2b8a3e 100%)
   );
+}
+
+.startTripBtn {
+  opacity: 0.3;
+  background: light-dark(
+    linear-gradient(0deg, #33d9f8 0%, #2dc7f3 100%),
+    linear-gradient(0deg, #145d9a 0%, #0d3f82 100%)
+  );
+  &:hover {
+    opacity: 1;
+    background: light-dark(
+      linear-gradient(0deg, #82c91e 0%, #a9e34b 100%),
+      linear-gradient(0deg, #40c057 0%, #2b8a3e 100%)
+    );
+  }
 }

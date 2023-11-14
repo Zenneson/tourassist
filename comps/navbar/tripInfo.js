@@ -237,6 +237,7 @@ export default function TripInfo(props) {
           onChange={(e) => changeTrip(e)}
           checkIconPosition="right"
           value={currentTrip?.tripTitle}
+          allowDeselect={false}
           data={
             allTrips?.length > 0 &&
             allTrips.map((trip) => {
@@ -444,6 +445,8 @@ export default function TripInfo(props) {
               }}
             >
               <Donations
+                donations={currentTrip.donations ? currentTrip.donations : []}
+                setDonations={setDonations}
                 donationSectionLimit={6}
                 dHeight={"calc(100vh - 660px)"}
               />

@@ -644,11 +644,13 @@ export default function Trippage(props) {
             </Box>
             <Box className="pagePanel">
               <Donations
+                donations={tripData?.donations}
+                setDonations={setDonations}
                 donationSectionLimit={10}
                 dHeight={"calc(100vh - 455px)"}
               />
             </Box>
-            {user?.email === tripData?.user && (
+            {user?.email === tripData?.user ? (
               <Button
                 className={classes.updateModalButton}
                 mt={20}
@@ -656,6 +658,15 @@ export default function Trippage(props) {
                 variant="transparent"
               >
                 POST UPDATE
+              </Button>
+            ) : (
+              <Button
+                className={classes.startTripBtn}
+                mt={20}
+                onClick={() => router.push("/map")}
+                variant="transparent"
+              >
+                PLAN YOUR TRIP
               </Button>
             )}
           </Flex>

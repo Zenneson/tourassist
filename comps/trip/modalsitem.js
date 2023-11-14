@@ -536,6 +536,7 @@ export default function ModalsItem(props) {
         {/* Close Alt Modal */}
         <Box maw={800}>
           <CloseButton
+            zIndex={100}
             pos={"absolute"}
             top={21}
             right={21}
@@ -602,18 +603,18 @@ export default function ModalsItem(props) {
           closeAltModal();
         }}
       >
+        {/* Close Modal */}
+        <CloseButton
+          pos={"absolute"}
+          top={20}
+          right={18}
+          size={25}
+          onClick={closeAltModal}
+        />
         <ScrollArea.Autosize pos={"relative"} type="never">
           <LoadingOverlay
             visible={(modalMode === "editUpdate" && !updateDataLoaded) || paid}
             overlayProps={{ backgroundOpacity: 1 }}
-          />
-          {/* Close Modal */}
-          <CloseButton
-            pos={"absolute"}
-            top={-11}
-            right={-11}
-            size={25}
-            onClick={closeAltModal}
           />
           {modalMode === "donating" && (
             <Box w={modalMode === "donating" ? "auto" : 800}>
@@ -693,7 +694,7 @@ export default function ModalsItem(props) {
                 </Group>
               )}
               {dontaionMode === "pay" && paymentToken && (
-                <>
+                <Box color="#fff">
                   <Group justify="space-between" px={5} mb={5}>
                     <Text fz={15} fw={700} fs={"italic"}>
                       Thanks for the Assist...
@@ -747,9 +748,10 @@ export default function ModalsItem(props) {
                     styles={{
                       buttonCornerRadius: "3px",
                       fontFamily: "inherit",
+                      accentColor: "#fff",
                     }}
                   />
-                </>
+                </Box>
               )}
               {dontaionMode === "thanks" && (
                 <>
