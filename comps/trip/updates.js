@@ -15,6 +15,7 @@ import {
   Modal,
   Stack,
   Tooltip,
+  Popover,
 } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
 import {
@@ -36,8 +37,13 @@ import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import { useRouter } from "next/router";
 import { notifications } from "@mantine/notifications";
-import UpdateContent from "./updatecontent";
 import classes from "./updates.module.css";
+
+// import UpdateContent from "./updatecontent";
+import dynamic from "next/dynamic";
+const UpdateContent = dynamic(() => import("./updatecontent"), {
+  ssr: false,
+});
 
 export default function Updates(props) {
   const {
@@ -47,7 +53,6 @@ export default function Updates(props) {
     updates,
     setUpdates,
     setCurrentUpdateId,
-    setIsMutating,
   } = props;
   const [currentUpdateTitle, setCurrentUpdateTtile] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
@@ -94,7 +99,6 @@ export default function Updates(props) {
   };
 
   const deleteUpdateByTitle = async () => {
-    setIsMutating(true);
     try {
       const newUpdates = updates.filter(
         (update) => update.updateTitle !== currentUpdateTitle
@@ -111,9 +115,7 @@ export default function Updates(props) {
         { updates: newUpdates }
       );
 
-      mutate(title).then(() => {
-        setIsMutating(false); // Set mutation state back to false after mutation + revalidation
-      });
+      mutate(title);
       notifications.update(updateDeletedEnd);
     } catch (error) {
       console.error("Error deleting update:", error);
@@ -140,55 +142,155 @@ export default function Updates(props) {
         radius={3}
         w={"85%"}
         mb={index === 0 ? 0 : 20}
-        py={20}
-        px={10}
+        p={10}
         fz={14}
         gap={10}
       >
         {/* Show Update Modal Button  */}
-        {user?.email === tripData.user && (
-          <Menu closeOnItemClick={true} withArrow arrowSize={12} offset={0}>
-            <Menu.Target>
-              <ActionIcon
-                className={classes.updateMenu}
-                variant="transparent"
-                color={dark ? "#fff" : "#000"}
-                pos={"absolute"}
-                top={10}
-                right={8}
-              >
-                <IconMenu2 size={18} />
-              </ActionIcon>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Item
-                fz={12}
-                leftSection={<IconPencil size={14} />}
-                onClick={() => {
-                  setCurrentUpdateId(update.updateId);
-                  updateTrip();
-                }}
-              >
-                Edit
-              </Menu.Item>
-              <Menu.Item
-                fz={12}
-                leftSection={<IconTrash size={14} />}
-                onClick={() => {
-                  setCurrentUpdateTtile(update.updateTitle);
-                  deleteUpdate();
-                }}
-              >
-                Delete
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
-        )}
+        <Stack pos={"absolute"} top={10} right={8} gap={3}>
+          <Popover
+            position={"left"}
+            offset={0}
+            shadow="md"
+            classNames={{
+              dropdown: classes.updateShare,
+            }}
+          >
+            <Popover.Target>
+              <Center>
+                <Tooltip
+                  classNames={{ tooltip: classes.toolTip }}
+                  label={"Share Update"}
+                  position="top"
+                  openDelay={800}
+                >
+                  <ActionIcon
+                    className={classes.updateMenu}
+                    variant="transparent"
+                    color={dark ? "gray.0" : "dark.3"}
+                    size={"sm"}
+                  >
+                    <IconShare size={18} />
+                  </ActionIcon>
+                </Tooltip>
+              </Center>
+            </Popover.Target>
+
+            <Popover.Dropdown>
+              <Button.Group classNames={{ root: classes.updateButtonGroup }}>
+                <Button
+                  variant="transparent"
+                  classNames={{
+                    root: classes.updateShareWrapper,
+                    inner: classes.updateShareBtn,
+                  }}
+                >
+                  <IconBrandFacebook size={15} />
+                </Button>
+                <Button
+                  variant="transparent"
+                  classNames={{
+                    root: classes.updateShareWrapper,
+                    inner: classes.updateShareBtn,
+                  }}
+                >
+                  <IconBrandInstagram size={15} />
+                </Button>
+                <Button
+                  variant="transparent"
+                  classNames={{
+                    root: classes.updateShareWrapper,
+                    inner: classes.updateShareBtn,
+                  }}
+                >
+                  <IconBrandTiktok size={15} />
+                </Button>
+                <Button
+                  variant="transparent"
+                  classNames={{
+                    root: classes.updateShareWrapper,
+                    inner: classes.updateShareBtn,
+                  }}
+                >
+                  <IconBrandTwitter size={15} />
+                </Button>
+                <Button
+                  variant="transparent"
+                  classNames={{
+                    root: classes.updateShareWrapper,
+                    inner: classes.updateShareBtn,
+                  }}
+                >
+                  <IconBrandWhatsapp size={15} />
+                </Button>
+                <Button
+                  variant="transparent"
+                  classNames={{
+                    root: classes.updateShareWrapper,
+                    inner: classes.updateShareBtn,
+                  }}
+                >
+                  <IconSourceCode size={15} />
+                </Button>
+                <Button
+                  variant="transparent"
+                  classNames={{
+                    root: classes.updateShareWrapper,
+                    inner: classes.updateShareBtn,
+                  }}
+                >
+                  <IconQrcode size={15} />
+                </Button>
+              </Button.Group>
+            </Popover.Dropdown>
+          </Popover>
+          {user?.email === tripData?.user && (
+            <Menu
+              closeOnItemClick={true}
+              position="left"
+              withArrow
+              arrowSize={12}
+              offset={0}
+            >
+              <Menu.Target>
+                <ActionIcon
+                  className={classes.updateMenu}
+                  variant="transparent"
+                  color={dark ? "#fff" : "#000"}
+                >
+                  <IconMenu2 size={18} />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item
+                  fz={12}
+                  leftSection={<IconPencil size={14} />}
+                  onClick={() => {
+                    setCurrentUpdateId(update.updateId);
+                    updateTrip();
+                  }}
+                >
+                  Edit
+                </Menu.Item>
+                <Menu.Item
+                  fz={12}
+                  leftSection={<IconTrash size={14} />}
+                  onClick={() => {
+                    setCurrentUpdateTtile(update.updateTitle);
+                    deleteUpdate();
+                  }}
+                >
+                  Delete
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          )}
+        </Stack>
         <Flex direction={"column"} w={"10%"}>
           <Stack
             gap={0}
             style={{
-              transform: "scale(0.9) translateY(-12px)",
+              transform: "scale(0.9) translateY(-0px)",
               borderRadius: "3px",
               overflow: "hidden",
               boxShadow: `0 2px 5px 0 rgba(0,0,0,0.1)`,
@@ -227,50 +329,6 @@ export default function Updates(props) {
               {year}
             </Text>
           </Stack>
-          <Menu>
-            <Menu.Target>
-              <Center>
-                <Tooltip
-                  classNames={{ tooltip: classes.toolTip }}
-                  label={"Share Update"}
-                  position="bottom"
-                  openDelay={800}
-                >
-                  <ActionIcon
-                    variant="transparent"
-                    color={dark ? "gray.0" : "gray.5"}
-                    size={"sm"}
-                  >
-                    <IconShare size={30} />
-                  </ActionIcon>
-                </Tooltip>
-              </Center>
-            </Menu.Target>
-
-            <Menu.Dropdown>
-              <Menu.Item>
-                <IconBrandFacebook size={20} />
-              </Menu.Item>
-              <Menu.Item>
-                <IconBrandInstagram size={20} />
-              </Menu.Item>
-              <Menu.Item>
-                <IconBrandTiktok size={20} />
-              </Menu.Item>
-              <Menu.Item>
-                <IconBrandTwitter size={20} />
-              </Menu.Item>
-              <Menu.Item>
-                <IconBrandWhatsapp size={20} />
-              </Menu.Item>
-              <Menu.Item>
-                <IconSourceCode size={20} />
-              </Menu.Item>
-              <Menu.Item>
-                <IconQrcode size={20} />
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
         </Flex>
 
         <Flex direction={"column"} w={"85%"}>

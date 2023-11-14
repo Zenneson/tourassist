@@ -20,6 +20,7 @@ import colorSchemeManager from "../libs/colorSchemeManager";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
 import DropDown from "../comps/dropdown/dropdown";
+import { SWRDevTools } from "swr-devtools";
 require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
@@ -39,6 +40,7 @@ const tourTheme = createTheme({
       "#0b0c0d",
       "#050506",
       "#020202",
+      "#010101",
     ],
     blue: [
       "#4DFFFF",

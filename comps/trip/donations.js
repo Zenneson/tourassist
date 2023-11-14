@@ -22,7 +22,7 @@ import { timeSince } from "../../libs/custom";
 import { IconReload } from "@tabler/icons-react";
 
 export default function Donations(props) {
-  const { dHeight, donationSectionLimit, donations } = props;
+  const { dHeight, donationSectionLimit } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -37,8 +37,10 @@ export default function Donations(props) {
   const { user } = useUser();
 
   const [isClient, setIsClient] = useState(false);
-  const [tripData, setTripData] = useSessionStorage({
-    key: "tripData",
+  const [tripData, setTripData] = useState([]);
+
+  const [donations, setDonations] = useSessionStorage({
+    key: "donations",
     defaultValue: [],
   });
 
@@ -54,13 +56,13 @@ export default function Donations(props) {
     if (tripData?.donations?.length !== donationsData?.length)
       setDataLoaded(false);
     if (
-      donationsData?.length !== tripData.donations?.length ||
+      donationsData?.length !== tripData?.donations?.length ||
       donationsData?.length !== donations?.length
     ) {
       setDonationsData(donations);
     }
     if (
-      (donationsData?.length === 0 && tripData.donations?.length !== 0) ||
+      (donationsData?.length === 0 && tripData?.donations?.length !== 0) ||
       (donationsData?.length !== donations?.length && !dataLoaded)
     ) {
       setDonationsData(donations);
@@ -76,13 +78,15 @@ export default function Donations(props) {
   ]);
 
   const donateOrder = useMemo(() => {
+    if (!donationsData) return;
     let sortedDonations = [];
+    let newData = JSON.parse(JSON.stringify(donationsData));
     if (sorted === "time") {
-      sortedDonations = [...donationsData].sort(
+      sortedDonations = newData.sort(
         (a, b) => new Date(b.time) - new Date(a.time)
       );
     } else {
-      sortedDonations = [...donationsData].sort((a, b) => b.amount - a.amount);
+      sortedDonations = newData.sort((a, b) => b.amount - a.amount);
     }
     const slicedDonations = sortedDonations.slice(0, displayCount);
     return slicedDonations;
@@ -95,6 +99,7 @@ export default function Donations(props) {
   const rows = donateOrder?.map((item, index) => {
     if (!item.time || !item.amount) return null;
     if (item.name === "") item.name = "Anonymous";
+
     return (
       <Table.Tr key={index}>
         <Table.Td pos={"relative"}>
@@ -259,7 +264,7 @@ export default function Donations(props) {
             <Table.Tbody>{rows?.length !== 0 && rows}</Table.Tbody>
           </Table>
           {rows?.length === 0 && (
-            <Text c="dimmed" ta="center" fz={12}>
+            <Text pt={10} c="dimmed" ta="center" fz={12}>
               {user && user.email === tripData?.user
                 ? "Donations will be listed here"
                 : "Be the first to donate!"}
@@ -267,7 +272,7 @@ export default function Donations(props) {
           )}
           <Box ref={ref} />
           <Center>
-            {displayCount < donationsData.length && (
+            {displayCount < donationsData?.length && (
               <Button
                 onClick={loadMoreDonations}
                 variant="default"

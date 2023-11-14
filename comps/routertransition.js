@@ -35,7 +35,7 @@ export function RouterTransition(props) {
     <>
       <NavigationProgress
         zIndex={9999}
-        size={"sm"}
+        size={"md"}
         color={dark ? "#0d3f82" : "#00e8fc"}
       />
     </>

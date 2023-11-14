@@ -336,17 +336,6 @@ export const loggedIn = (dark, user) => {
   };
 };
 
-export const useIsMounted = () => {
-  const isMounted = useRef(false);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => (isMounted.current = false);
-  }, []);
-
-  return isMounted;
-};
-
 export const timeSince = (timeString) => {
   const then = new Date(timeString);
   const now = new Date();

@@ -77,7 +77,18 @@ export default function MainMenu(props) {
     return querySnapshot.docs.map((doc) => doc.data());
   };
 
-  const { data: allTrips, error } = useSWR(user?.email, fetchTrips);
+  const {
+    data: allTrips,
+    mutate,
+    error,
+    isLoading,
+  } = useSWR(user?.email, fetchTrips);
+
+  useEffect(() => {
+    if (!allTrips && !error) {
+      mutate();
+    }
+  }, [allTrips, error, mutate]);
 
   if (error) {
     console.error("Error fetching trips:", error);

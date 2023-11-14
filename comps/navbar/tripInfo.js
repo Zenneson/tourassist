@@ -81,8 +81,8 @@ export default function TripInfo(props) {
   }, [currentTrip, setCurrentTrip, allTrips, setDonations]);
 
   useEffect(() => {
-    router.prefetch("/trippage");
-  }, [router]);
+    router.prefetch("/" + currentTrip?.tripId);
+  }, [currentTrip?.tripId, router]);
 
   ChartJS.register(
     CategoryScale,
@@ -137,6 +137,7 @@ export default function TripInfo(props) {
   };
 
   const getChartData = (n) => {
+    const donations = currentTrip?.donations;
     let dateRange = getDates(n);
     dateRange = addExtraDay(dateRange);
     const dSums = {};
@@ -349,7 +350,7 @@ export default function TripInfo(props) {
                     setMainMenuOpened(false);
                     setPanelShow(false);
                     setDropDownOpened(false);
-                    router.push("/" + currentTrip?.tripId);
+                    window.open("/" + currentTrip?.tripId, "_blank");
                   }}
                 >
                   View Page{" "}
@@ -390,7 +391,7 @@ export default function TripInfo(props) {
                 <Box>
                   <Progress
                     color={dark ? "blue.9" : "blue.4"}
-                    bg={dark ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,1)"}
+                    bg={dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.1)"}
                     value={(donationSum / currentTrip?.costsSum) * 100}
                     mb={5}
                     size={"sm"}
@@ -443,8 +444,6 @@ export default function TripInfo(props) {
               }}
             >
               <Donations
-                donations={currentTrip?.donations || []}
-                setDonations={setDonations}
                 donationSectionLimit={6}
                 dHeight={"calc(100vh - 660px)"}
               />

@@ -1,30 +1,15 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { BackgroundImage, Box, Button, Center, Group } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
-import { useIsMounted } from "../../libs/custom";
+import { Box, Button, Center, Group } from "@mantine/core";
+import Image from "next/image";
 import classes from "./maincarousel.module.css";
 import Slider from "react-slick";
 
 export default function MainCarousel(props) {
-  const { tripImages } = props;
+  const { tripImages, setImagesLoaded } = props;
   const sliderRef = useRef();
-  const isMounted = useIsMounted();
-  const [carouselLoaded, setCarouselLoaded] = useSessionStorage({
-    key: "carouselLoaded",
-    defaultValue: false,
-  });
-
-  useEffect(() => {
-    if (carouselLoaded) return;
-    if (isMounted.current) {
-      setCarouselLoaded(true);
-    } else {
-      setCarouselLoaded(false);
-    }
-  }, [isMounted, carouselLoaded, setCarouselLoaded]);
 
   const slideSettings = {
     dots: false,
@@ -58,40 +43,65 @@ export default function MainCarousel(props) {
           boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
           borderRadius: "3px",
           overflow: "hidden",
+          height: "500px",
+          width: "650px",
         }}
       >
-        <BackgroundImage
+        <Image
+          priority="true"
+          loading="eager"
+          onLoad={() => {
+            setImagesLoaded(true);
+          }}
           src={tripImages[0].file}
-          h={500}
-          w={650}
+          height={500}
+          width={650}
           alt="Main Image"
+          style={{
+            transition: "none",
+          }}
         />
       </Box>
     );
   }
 
   const slides = tripImages?.map((image, index) => (
-    <Box key={index} h={500} pos={"relative"}>
-      <BackgroundImage
+    <Box key={index} pos={"relative"}>
+      <Image
+        priority="true"
+        loading="eager"
+        onLoad={() => {
+          setImagesLoaded(true);
+        }}
         src={image.file}
-        h={500}
-        maw={650}
-        radius={3}
+        height={500}
+        width={650}
         alt="Image Slideshow"
+        style={{
+          transition: "none",
+          borderRadius: "3px",
+          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
+        }}
       />
     </Box>
   ));
 
   return (
     tripImages?.length > 0 && (
-      <Group gap={0} w={tripImages?.length > 1 ? "auto" : "650px"} h={500}>
+      <Group
+        gap={0}
+        w={tripImages?.length > 1 ? "auto" : "650px"}
+        h={500}
+        style={{
+          overflow: "hidden",
+        }}
+      >
         <Center>
           {tripImages?.length > 1 && (
             // Previous Slider Button
             <Button
               className={classes.prevSliderButton}
-              h={490}
-              mb={7}
+              h={500}
               radius={"3px 0 0 3px"}
               onClick={previous}
               variant="outline"
@@ -117,8 +127,7 @@ export default function MainCarousel(props) {
             // Next Slider Button
             <Button
               className={classes.nextSliderButton}
-              h={490}
-              mb={7}
+              h={500}
               radius={"3px 0 0 3px"}
               onClick={next}
               variant="outline"

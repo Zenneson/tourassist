@@ -1,27 +1,82 @@
 .toolTip {
-	background: light-dark(#fff, #141517);
-	color: light-dark(#141517, #fff);
-	border: 1px solid light-dark(#ececec, #1c1c1c);
+  background: light-dark(#fff, #141517);
+  color: light-dark(#141517, #fff);
+  border: 1px solid light-dark(#ececec, #1c1c1c);
 }
 
 .shareButton {
-	opacity: 0.5;
-	&:hover {
-		opacity: 1;
-	}
+  color: light-dark(#5c5f66, #f8f9fa);
+  background: rgba(0, 0, 0, 0);
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .shareButtonGroup {
-	width: 688px;
-	overflow: hidden;
-	border-radius: 50;
-	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
+  width: 688px;
+  overflow: hidden;
+  border-radius: 50;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
+  background: light-dark(
+    linear-gradient(0deg, #e9ecef 0%, #fff 100%),
+    linear-gradient(0deg, #050506 0%, #000 100%)
+  );
 }
 
 .updateModalButton {
-	opacity: 0.4;
-	border: none;
-	&:hover {
-		opacity: 1;
-	}
+  background: light-dark(
+    linear-gradient(0deg, #fff 0%, #e9ecef 100%),
+    linear-gradient(0deg, #020202 0%, #000 100%)
+  );
+  color: light-dark(#5c5f66, #f8f9fa);
+  opacity: 0.4;
+  border: none;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.infoPanel .funds {
+  color: light-dark(#2dc7f3, #104e8e);
+}
+
+.infoPanel .divider {
+  color: light-dark(#0b0c0d, #495057);
+}
+
+.infoPanel .costsSum {
+  color: light-dark(#868e96, #fff);
+}
+
+.infoPanel .dollarSign {
+  opacity: light-dark(0.8, 0.2);
+}
+
+.infoPanel .daysLeftWrapper {
+  background: light-dark(#f1f3f5, rgba(150, 150, 150, 0.01));
+}
+
+.infoPanel .daysLeft {
+  color: light-dark(#ced4da, #373a40);
+}
+
+.progress {
+  background: light-dark(#94d82d, #74b816);
+}
+
+.infoPanel .useFundsBtn {
+  color: #f8f9fa;
+  background: light-dark(
+    linear-gradient(0deg, #33d9f8 0%, #2dc7f3 100%),
+    linear-gradient(0deg, #145d9a 0%, #0d3f82 100%)
+  );
+}
+
+.infoPanel .donateBtn {
+  color: #f8f9fa;
+  background: light-dark(
+    linear-gradient(0deg, #82c91e 0%, #a9e34b 100%),
+    linear-gradient(0deg, #5c940d 0%, #74b816 100%)
+  );
 }

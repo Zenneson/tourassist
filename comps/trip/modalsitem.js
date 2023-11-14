@@ -1,7 +1,8 @@
+"use client";
 import "@mantine/tiptap/styles.css";
 import "@mantine/dates/styles.css";
 import { useState, useEffect, useRef } from "react";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import {
   IconHeartHandshake,
   IconCurrencyDollar,
@@ -45,6 +46,7 @@ import classes from "./modalsItem.module.css";
 
 export default function ModalsItem(props) {
   const {
+    tripData,
     modalMode,
     setModalMode,
     tripDesc,
@@ -71,7 +73,6 @@ export default function ModalsItem(props) {
     setDonorName,
     donations,
     setNewUpdate,
-    setIsMutating,
   } = props;
   const donationRef = useRef(null);
   const donorNameRef = useRef(null);
@@ -81,18 +82,6 @@ export default function ModalsItem(props) {
   const [paid, setPaid] = useState(false);
 
   const { title } = router.query;
-
-  const fireFetcher = async (url) => {
-    const query = collectionGroup(firestore, "trips");
-    const querySnapshot = await getDocs(query);
-    const tripDoc = querySnapshot.docs.find((doc) => doc.id === url);
-    if (!tripDoc) {
-      throw new Error("No document found with the matching 'title'");
-    }
-    return tripDoc.data();
-  };
-
-  const { data: tripData, error } = useSWR(title, fireFetcher);
 
   const addUpdateTitle = {
     color: "orange",
@@ -196,7 +185,7 @@ export default function ModalsItem(props) {
   const DateChanger = () => {
     const [travelDate, setTravelDate] = useSessionStorage({
       key: "travelDate",
-      defaultValue: tripData.travelDate,
+      defaultValue: tripData?.travelDate,
     });
 
     return (
@@ -213,9 +202,7 @@ export default function ModalsItem(props) {
         w={"100%"}
         maw={150}
         onChange={(e) => setTravelDate(new Date(e))}
-        value={
-          travelDate ? new Date(travelDate) : new Date(tripData.travelDate)
-        }
+        value={new Date(travelDate)}
         valueFormat="MMM DD, YYYY"
       />
     );
@@ -269,7 +256,6 @@ export default function ModalsItem(props) {
     }, [updateEditor, updateContent]);
 
     const handleUpdate = async () => {
-      setIsMutating(true);
       try {
         if (updateTitle === "") {
           notifications.show(addUpdateTitle);
@@ -285,6 +271,8 @@ export default function ModalsItem(props) {
           console.error("Update Content is empty");
           return;
         }
+
+        setNewUpdate(true);
         notifications.show(postingUpdate);
 
         let newUpdates;
@@ -317,7 +305,6 @@ export default function ModalsItem(props) {
 
         setUpdates(newUpdates);
         setModalMode("");
-        setNewUpdate(true);
         mutate(title, newUpdates, false);
 
         await updateDoc(
@@ -325,10 +312,9 @@ export default function ModalsItem(props) {
           { updates: newUpdates }
         );
 
-        mutate(title).then(() => {
-          setIsMutating(false); // Set mutation state back to false after mutation + revalidation
-        });
+        mutate(title);
 
+        setNewUpdate(false);
         notifications.update(updatePosted);
         setUpdateDataLoaded(false);
       } catch (error) {
@@ -587,6 +573,7 @@ export default function ModalsItem(props) {
               modalMode={modalMode}
               setModalMode={setModalMode}
               weekAhead={weekAhead}
+              setNewUpdate={setNewUpdate}
             />
           </Stack>
         </Box>
@@ -612,8 +599,6 @@ export default function ModalsItem(props) {
           blur: 9,
         }}
         onClose={() => {
-          setIsMutating(true);
-          setNewUpdate(true);
           closeAltModal();
         }}
       >
