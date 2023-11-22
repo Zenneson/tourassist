@@ -814,16 +814,11 @@ export default function Mymap(props) {
 
   const [prevArea, setPrevArea] = useState({ label: "" });
   const oldArea = usePrevious(area);
-  useDidUpdate(() => {
-    const hasAreaChanged =
-      area.label !== prevArea.label ||
-      area.type !== prevArea.type ||
-      area.country !== prevArea.country;
-
-    if (hasAreaChanged) {
+  useEffect(() => {
+    if (JSON.stringify(area) !== JSON.stringify(oldArea)) {
       setPrevArea(oldArea);
     }
-  }, [area]);
+  }, [area, oldArea]);
 
   const closeLocationDrawer = () => {
     if (prevArea.label === "") {
