@@ -1,20 +1,11 @@
-.miniPopUp {
-  cursor: pointer;
-  border-radius: 3px;
-  transition: all 100ms ease-in-out;
-
-  &:hover {
-    transform: scale(1.3);
-  }
-}
-
 .miniPopUp > div:nth-child(2),
 .popup > div:nth-child(2) {
   /* Popup body */
+  transition: all 200ms ease-in-out;
   max-width: 20rem;
   font-family: Montserrat;
   cursor: pointer;
-  background: light-dark(rgba(248, 249, 250, 1), rgba(12, 13, 14, 1));
+  background: light-dark(rgba(248, 249, 250, 1), rgba(26, 28, 32, 1));
   color: light-dark(rgb(10, 11, 13), rgb(247, 249, 250));
   border-radius: 3px;
   padding: 2px;
@@ -23,17 +14,50 @@
 .miniPopUp > div:nth-child(1),
 .popup > div:nth-child(1) {
   /* Popup tip */
-  border-top-color: light-dark(rgba(248, 249, 250, 1), rgba(12, 13, 14, 1));
+  border-top-color: light-dark(rgba(248, 249, 250, 1), rgba(26, 28, 32, 1));
 }
 
 .miniPopUp > div:nth-child(2) {
   font-weight: 700;
   padding: 0px;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.miniPopUp > * {
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+@keyframes popupAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.miniPopUp {
+  animation: popupAnimation 250ms ease;
+}
+
+.popup {
+  animation: popupAnimation 500ms ease;
 }
 
 .miniPopUpColor {
   color: #fff;
   opacity: 0.5;
+}
+
+.markerIconColor {
+  color: light-dark(#49d8ff, #0d3f82);
 }
 
 .popupMenu {
@@ -45,11 +69,12 @@
 }
 
 .popupMenuBtn {
-  font-weight: 400;
   color: light-dark(rgb(10, 11, 13), rgb(247, 249, 250));
+  opacity: 0.5;
 
   &:hover {
-    font-style: italic;
+    background-color: inherit;
+    opacity: 1;
   }
 }
 
@@ -102,6 +127,7 @@
   box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
 }
 
+.selectOption,
 .countryAutoCompleteOption,
 .placeAutoCompleteOption {
   &:hover {
@@ -137,7 +163,7 @@
 
 .topCitiesLink {
   transition: all 200ms ease-in-out;
-  background: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 1));
+  background: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 0.7));
 
   &:hover {
     background: light-dark(rgba(248, 249, 250, 1), rgba(14, 15, 18, 1));

@@ -44,6 +44,7 @@ import {
   IconCheck,
   IconTextPlus,
   IconCircleDotFilled,
+  IconCurrentLocation,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
@@ -324,10 +325,60 @@ export default function Mymap(props) {
     };
   };
 
+  const animateLayerOpacity = (
+    map,
+    layerId,
+    layerType,
+    startOpacity,
+    endOpacity,
+    duration
+  ) => {
+    const startTime = performance.now();
+    const opacityProperty =
+      layerType === "line" ? "line-opacity" : "fill-opacity";
+    const animate = (time) => {
+      const elapsed = time - startTime;
+      const progress = elapsed / duration;
+      const opacity = Math.max(
+        0,
+        Math.min(1, progress * (endOpacity - startOpacity) + startOpacity)
+      );
+      map.setPaintProperty(layerId, opacityProperty, opacity);
+      if (elapsed < duration) {
+        requestAnimationFrame(animate);
+      }
+    };
+    requestAnimationFrame(animate);
+  };
+
   useEffect(() => {
     if (fullMapRef && mapLoaded) {
       const fogProperties = getFogProperties(dark);
       fullMapRef.setFog(fogProperties);
+
+      // Animate Fill layer
+      animateLayerOpacity(
+        fullMapRef,
+        "country-boundaries-fill",
+        "fill",
+        0,
+        1,
+        500
+      );
+      animateLayerOpacity(fullMapRef, "states", "fill", 0, 1, 500);
+      animateLayerOpacity(fullMapRef, "clicked-state", "fill", 0, 1, 500);
+
+      // Animate Line layer
+      animateLayerOpacity(
+        fullMapRef,
+        "country-boundaries-lines",
+        "line",
+        0,
+        1,
+        500
+      );
+      animateLayerOpacity(fullMapRef, "states-boundaries", "line", 0, 1, 500);
+      animateLayerOpacity(fullMapRef, "state-borders", "line", 0, 1, 500);
     }
   }, [fullMapRef, mapLoaded, dark]);
 
@@ -715,7 +766,7 @@ export default function Mymap(props) {
         return;
       }
       addPlaces(place);
-      closeLocationDrawer();
+      resetGlobe();
     }
     if (choice === "travel") {
       setShowModal(true);
@@ -956,6 +1007,7 @@ export default function Mymap(props) {
             {area.country === "United States" && area.type === "country" ? (
               <Select
                 classNames={{
+                  option: classes.selectOption,
                   input: classes.select,
                 }}
                 data={listStates}
@@ -964,6 +1016,7 @@ export default function Mymap(props) {
                 rightSection={<IconCaretDownFilled size={17} />}
                 rightSectionWidth={40}
                 placeholder="Search for a state..."
+                searchable
                 onChange={(e) => {
                   let location = {
                     label: e,
@@ -1006,11 +1059,12 @@ export default function Mymap(props) {
             <Button
               className={classes.locationBtns}
               justify={"left"}
+              fs={"italic"}
               variant="filled"
               leftSection={<IconTextPlus size={18} />}
               onClick={() => choosePlace("tour")}
             >
-              Add to Tour List
+              TOUR LIST
             </Button>
           </Button.Group>
           <Button
@@ -1131,43 +1185,59 @@ export default function Mymap(props) {
         )}
         {computedColorScheme ? pins : {}}
         {showMainMarker && (
-          <Popup
-            className={classes.popup}
-            anchor="bottom"
-            offset={[0, 100]}
-            closeOnMove={false}
-            closeButton={false}
-            closeOnClick={false}
+          <Marker
             longitude={lngLat[0]}
             latitude={lngLat[1]}
+            offset={[0, 0]}
+            rotation={40}
+            rotationAlignment="map"
+            pitchAlignment="map"
           >
-            <Stack px={10} gap={0} className={classes.popupMenu}>
-              <Box pt={10} pl={0}>
-                {area.label}
-              </Box>
-              <Button.Group orientation="vertical" mt={5}>
-                <Button
-                  className={classes.popupMenuBtn}
-                  variant="subtle"
-                  size="xs"
-                  radius={"0 3px 3px 0"}
-                  onClick={() => choosePlace("travel")}
-                >
-                  Travel to {area.label}
-                </Button>
-                <Button
-                  className={classes.popupMenuBtn}
-                  variant="subtle"
-                  size="sm"
-                  onClick={() => choosePlace("tour")}
-                >
-                  <IconTextPlus size={15} />
-                  <Space w={5} />
-                  TOUR LIST
-                </Button>
-              </Button.Group>
-            </Stack>
-          </Popup>
+            <Popup
+              className={classes.popup}
+              anchor="bottom"
+              offset={[0, 0]}
+              closeOnMove={false}
+              closeButton={false}
+              closeOnClick={false}
+              longitude={lngLat[0]}
+              latitude={lngLat[1]}
+            >
+              <Stack px={10} gap={0} className={classes.popupMenu}>
+                <Box pt={10} pl={0}>
+                  {area.label}
+                </Box>
+                <Button.Group orientation="vertical" mt={5}>
+                  <Button
+                    className={classes.popupMenuBtn}
+                    variant="subtle"
+                    size="xs"
+                    justify="left"
+                    leftSection={<IconPlane size={15} />}
+                    onClick={() => choosePlace("travel")}
+                  >
+                    Travel to {area.label}
+                  </Button>
+                  <Button
+                    className={classes.popupMenuBtn}
+                    variant="subtle"
+                    size="xs"
+                    justify="left"
+                    fs={"italic"}
+                    leftSection={<IconTextPlus size={15} />}
+                    onClick={() => choosePlace("tour")}
+                  >
+                    <Space w={5} />
+                    TOUR LIST
+                  </Button>
+                </Button.Group>
+              </Stack>
+            </Popup>
+            <IconCurrentLocation
+              size={150}
+              className={classes.markerIconColor}
+            />
+          </Marker>
         )}
         <Source
           id="country-boundaries"
@@ -1197,6 +1267,7 @@ export default function Mymap(props) {
               "fill-color": `${
                 dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
               }`,
+              "fill-opacity": 0,
             }}
           />
           <Layer
@@ -1208,6 +1279,7 @@ export default function Mymap(props) {
             paint={{
               "line-color": "rgba(255, 255, 255, 1)",
               "line-width": 4,
+              "line-opacity": 0,
             }}
           />
         </Source>
@@ -1222,6 +1294,7 @@ export default function Mymap(props) {
             source="states-boundaries"
             paint={{
               "fill-color": "rgba(0,0,0,0)",
+              "fill-opacity": 0,
             }}
             filter={
               !showStates
@@ -1236,6 +1309,7 @@ export default function Mymap(props) {
             paint={{
               "line-color": "rgba(255, 255, 255, 1)",
               "line-width": 4,
+              "line-opacity": 0,
             }}
             filter={
               !showStates
@@ -1253,6 +1327,7 @@ export default function Mymap(props) {
               "fill-color": `${
                 dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
               }`,
+              "fill-opacity": 0,
             }}
             filter={["==", "NAME", area.label]}
           />
@@ -1262,7 +1337,8 @@ export default function Mymap(props) {
             source="clicked-state"
             paint={{
               "line-color": "rgba(255, 255, 255, 1)",
-              "line-width": 4,
+              "line-width": 6,
+              "line-opacity": 0,
             }}
             filter={["==", "NAME", area.label]}
           />
