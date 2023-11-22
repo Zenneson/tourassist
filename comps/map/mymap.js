@@ -1,16 +1,10 @@
 "use client";
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
-import { useDidUpdate, usePrevious, useSessionStorage } from "@mantine/hooks";
+import { usePrevious, useSessionStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Center,
@@ -116,7 +110,6 @@ const CustomAutoComplete = ({
   ];
 
   const autoRef = useRef();
-
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: (eventSource) => {
@@ -159,14 +152,7 @@ const CustomAutoComplete = ({
     } else if (options.length === 0) {
       combobox.closeDropdown();
     }
-  }, [
-    options,
-    combobox,
-    countrySearch,
-    placeSearch,
-    countrySearchData,
-    placeSearchData,
-  ]);
+  }, [options, combobox, countrySearch, placeSearch]);
 
   return (
     <Combobox
@@ -365,8 +351,8 @@ export default function Mymap(props) {
         1,
         500
       );
-      animateLayerOpacity(fullMapRef, "states", "fill", 0, 1, 500);
-      animateLayerOpacity(fullMapRef, "clicked-state", "fill", 0, 1, 500);
+      animateLayerOpacity(fullMapRef, "states", "fill", 0, 1, 250);
+      animateLayerOpacity(fullMapRef, "clicked-state", "fill", 0, 1, 250);
 
       // Animate Line layer
       animateLayerOpacity(
@@ -377,8 +363,8 @@ export default function Mymap(props) {
         1,
         500
       );
-      animateLayerOpacity(fullMapRef, "states-boundaries", "line", 0, 1, 500);
-      animateLayerOpacity(fullMapRef, "state-borders", "line", 0, 1, 500);
+      animateLayerOpacity(fullMapRef, "states-boundaries", "line", 0, 1, 250);
+      animateLayerOpacity(fullMapRef, "state-borders", "line", 0, 1, 250);
     }
   }, [fullMapRef, mapLoaded, dark]);
 
