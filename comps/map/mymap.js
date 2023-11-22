@@ -747,6 +747,11 @@ export default function Mymap(props) {
     setShowMainMarker(false);
   };
 
+  const resetGlobe = () => {
+    resetMap();
+    setTimeout(clearData, 200);
+  };
+
   const usaArea = {
     type: "country",
     label: "United States",
@@ -755,6 +760,7 @@ export default function Mymap(props) {
     center: [-134.60444672669328, 43.26345898357005],
     shortcode: "us",
   };
+
   const [prevArea, setPrevArea] = useState({ label: "" });
   const oldArea = usePrevious(area);
   useDidUpdate(() => {
@@ -768,12 +774,11 @@ export default function Mymap(props) {
     }
   }, [area]);
 
-  const resetGlobe = () => {
-    resetMap();
-    setTimeout(clearData, 200);
-  };
-
   const closeLocationDrawer = () => {
+    if (prevArea.label === "") {
+      resetGlobe();
+      return;
+    }
     if (area.type === "region" && area.country === "United States") {
       goToLocation(usaArea);
       return;
@@ -785,7 +790,6 @@ export default function Mymap(props) {
     const shouldResetGlobe =
       area.type === "country" ||
       area.label === "" ||
-      prevArea.label === "" ||
       area.country !== prevArea.country ||
       area.country !== oldArea.country;
     if (shouldResetGlobe) {
@@ -822,20 +826,6 @@ export default function Mymap(props) {
         {text}
       </Text>
     );
-  };
-
-  const popupVariants = {
-    hidden: {
-      scale: 0.95,
-      opacity: 0,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-    exit: { scale: 0.95, opacity: 0, transition: { duration: 0 } },
   };
 
   const [buttonAnimation, setButtonAnimation] = useState(fadeIn);
@@ -1141,50 +1131,43 @@ export default function Mymap(props) {
         )}
         {computedColorScheme ? pins : {}}
         {showMainMarker && (
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={popupVariants}
+          <Popup
+            className={classes.popup}
+            anchor="bottom"
+            offset={[0, 100]}
+            closeOnMove={false}
+            closeButton={false}
+            closeOnClick={false}
+            longitude={lngLat[0]}
+            latitude={lngLat[1]}
           >
-            <Popup
-              className={classes.popup}
-              anchor="bottom"
-              offset={[0, 100]}
-              closeOnMove={false}
-              closeButton={false}
-              closeOnClick={false}
-              longitude={lngLat[0]}
-              latitude={lngLat[1]}
-            >
-              <Stack px={10} gap={0} className={classes.popupMenu}>
-                <Box pt={10} pl={0}>
-                  {area.label}
-                </Box>
-                <Button.Group orientation="vertical" mt={5}>
-                  <Button
-                    className={classes.popupMenuBtn}
-                    variant="subtle"
-                    size="xs"
-                    radius={"0 3px 3px 0"}
-                    onClick={() => choosePlace("travel")}
-                  >
-                    Travel to {area.label}
-                  </Button>
-                  <Button
-                    className={classes.popupMenuBtn}
-                    variant="subtle"
-                    size="sm"
-                    onClick={() => choosePlace("tour")}
-                  >
-                    <IconTextPlus size={15} />
-                    <Space w={5} />
-                    TOUR LIST
-                  </Button>
-                </Button.Group>
-              </Stack>
-            </Popup>
-          </motion.div>
+            <Stack px={10} gap={0} className={classes.popupMenu}>
+              <Box pt={10} pl={0}>
+                {area.label}
+              </Box>
+              <Button.Group orientation="vertical" mt={5}>
+                <Button
+                  className={classes.popupMenuBtn}
+                  variant="subtle"
+                  size="xs"
+                  radius={"0 3px 3px 0"}
+                  onClick={() => choosePlace("travel")}
+                >
+                  Travel to {area.label}
+                </Button>
+                <Button
+                  className={classes.popupMenuBtn}
+                  variant="subtle"
+                  size="sm"
+                  onClick={() => choosePlace("tour")}
+                >
+                  <IconTextPlus size={15} />
+                  <Space w={5} />
+                  TOUR LIST
+                </Button>
+              </Button.Group>
+            </Stack>
+          </Popup>
         )}
         <Source
           id="country-boundaries"
