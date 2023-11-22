@@ -1,40 +1,40 @@
 .root {
-	position: relative;
+  position: relative;
+  border-radius: 3px;
+  background: light-dark(rgb(255, 255, 255), rgb(10, 11, 12));
+  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
 }
 
 .label {
-	position: absolute;
-	z-index: 2;
-	top: 7px;
-	left: var(--mantine-spacing-sm);
-	pointer-events: none;
-	color: light-dark("rgba(0,0,0,0.4)", "#fff");
-	transform: none;
-	font-size: var(--mantine-font-size-sm);
-	font-weight: 400;
-	transition:
-		transform 150ms ease,
-		color 150ms ease,
-		font-size 150ms ease;
+  position: absolute;
+  z-index: 2;
+  top: 7px;
+  left: var(--mantine-spacing-sm);
+  pointer-events: none;
+  color: light-dark("rgba(0,0,0,0.4)", "#fff");
+  transform: none;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 400;
+  transition: transform 150ms ease, color 150ms ease, font-size 150ms ease;
 }
 
 .labelFloating {
-	position: absolute;
-	top: -20px;
-	transform: translate(0, -0px);
-	font-size: var(--mantine-font-size-xs);
-	font-weight: 500;
+  position: absolute;
+  top: -20px;
+  transform: translate(0, -0px);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
 }
 
 .required {
-	transition: opacity 150ms ease;
+  transition: opacity 150ms ease;
 }
 
 .dynamic-placeholder::placeholder {
-	transition: color 150ms ease;
-	color: var(--dynamic-placeholder-color, undefined);
+  transition: color 150ms ease;
+  color: var(--dynamic-placeholder-color, undefined);
 }
 
 .termsCheckbox {
-	cursor: pointer;
+  cursor: pointer;
 }

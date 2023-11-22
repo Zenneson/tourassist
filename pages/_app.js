@@ -76,6 +76,16 @@ const tourTheme = createTheme({
         },
       },
     },
+    Input: {
+      defaultProps: {
+        variant: "filled",
+      },
+      styles: {
+        root: {
+          transition: "all 200ms ease",
+        },
+      },
+    },
     TextInput: {
       defaultProps: {
         variant: "filled",
@@ -98,16 +108,6 @@ const tourTheme = createTheme({
         },
         input: {
           textAlign: "right",
-        },
-      },
-    },
-    Input: {
-      defaultProps: {
-        variant: "filled",
-      },
-      styles: {
-        root: {
-          transition: "all 200ms ease",
         },
       },
     },

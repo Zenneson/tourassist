@@ -448,7 +448,7 @@ export default function TripInfo(props) {
                 donations={currentTrip.donations ? currentTrip.donations : []}
                 setDonations={setDonations}
                 donationSectionLimit={6}
-                dHeight={"calc(100vh - 660px)"}
+                dHeight={"calc(100vh - 670px)"}
               />
             </Box>
           </Flex>

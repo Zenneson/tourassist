@@ -375,6 +375,7 @@ export default function LoginComp(props) {
               }
               position="bottom"
               width="target"
+              shadow="md"
               withinPortal={false}
               transitionProps={{
                 transition: "pop",

@@ -53,6 +53,7 @@ export default function Updates(props) {
     updates,
     setUpdates,
     setCurrentUpdateId,
+    setNewUpdate,
   } = props;
   const [currentUpdateTitle, setCurrentUpdateTtile] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
@@ -99,6 +100,7 @@ export default function Updates(props) {
   };
 
   const deleteUpdateByTitle = async () => {
+    setNewUpdate(true);
     try {
       const newUpdates = updates.filter(
         (update) => update.updateTitle !== currentUpdateTitle
@@ -117,6 +119,7 @@ export default function Updates(props) {
 
       mutate(title);
       notifications.update(updateDeletedEnd);
+      setNewUpdate(false);
     } catch (error) {
       console.error("Error deleting update:", error);
     }
@@ -141,7 +144,7 @@ export default function Updates(props) {
         pos={"relative"}
         radius={3}
         w={"85%"}
-        mb={index === 0 ? 0 : 20}
+        mb={index === 0 ? 0 : showall === "show" ? 20 : 0}
         p={10}
         fz={14}
         gap={10}
@@ -251,6 +254,7 @@ export default function Updates(props) {
               withArrow
               arrowSize={12}
               offset={0}
+              shadow="md"
             >
               <Menu.Target>
                 <ActionIcon
@@ -358,8 +362,8 @@ export default function Updates(props) {
       {updates.length > 1 && (
         <Divider
           labelPosition="right"
-          w={"80%"}
-          mt={10 && showall === "hide"}
+          w={"75%"}
+          my={10}
           label={
             // Show all updates toggle
             <Button
@@ -373,7 +377,6 @@ export default function Updates(props) {
               Show {showall === "hide" ? "All Updates" : "Last Update Only"}
             </Button>
           }
-          mb={20}
         />
       )}
       <Modal

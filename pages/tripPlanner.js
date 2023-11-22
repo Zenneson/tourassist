@@ -94,12 +94,12 @@ export default function TripPlanner(props) {
     key: "roundTrip",
     defaultValue: false,
   });
-  const [tripTitle, setTripTitle] = useSessionStorage({
-    key: "tripTitle",
+  const [plannerTripTitle, setPlannerTripTitle] = useSessionStorage({
+    key: "plannerTripTitle",
     defaultValue: "",
   });
-  const [tripDesc, setTripDesc] = useSessionStorage({
-    key: "tripDesc",
+  const [plannerTripDesc, setPlannerTripDesc] = useSessionStorage({
+    key: "plannerTripDesc",
     defaultValue: "",
   });
   const [placeData, setPlaceData] = useSessionStorage({
@@ -568,7 +568,7 @@ export default function TripPlanner(props) {
                     trapFocus
                     position="left"
                     withArrow={true}
-                    shadow="xl"
+                    shadow="md"
                     opened={popoverOpened[index]}
                     styles={{
                       dropdown: {
@@ -676,7 +676,7 @@ export default function TripPlanner(props) {
   };
 
   const generateTripId = () => {
-    const trip_title = tripTitle
+    const trip_title = plannerTripTitle
       .replace(/ /g, "")
       .replace(/[^a-z0-9]/gi, "")
       .toLowerCase();
@@ -697,19 +697,19 @@ export default function TripPlanner(props) {
       setCostsObj(sessionStorage.getItem("places"));
     }
     if (active === 2) {
-      if (tripTitle === "") {
+      if (plannerTripTitle === "") {
         notifications.show(noTitle);
         return;
       }
-      if (tripTitle.length < 11) {
+      if (plannerTripTitle.length < 11) {
         notifications.show(titleIsShort);
         return;
       }
-      if (tripDesc && tripDesc.length === 0) {
+      if (plannerTripDesc && plannerTripDesc.length === 0) {
         notifications.show(noDesc);
         return;
       }
-      if (tripDesc && tripDesc.length < 11) {
+      if (plannerTripDesc && plannerTripDesc.length < 11) {
         notifications.show(descIsShort);
         return;
       }
@@ -728,9 +728,9 @@ export default function TripPlanner(props) {
       const costsSum = sessionStorage.getItem("totalCost");
       notifications.show(createTrip);
       saveToDB(
-        tripTitle,
+        plannerTripTitle,
         images,
-        tripDesc,
+        plannerTripDesc,
         startLocale,
         travelers,
         travel_date,
@@ -788,11 +788,11 @@ export default function TripPlanner(props) {
   };
 
   const TripTitle = () => {
-    const [value, setValue] = useState(tripTitle);
+    const [value, setValue] = useState(plannerTripTitle);
 
     return (
       <Input
-        classNames={{ input: classes.tripTitleInput }}
+        classNames={{ input: classes.plannerTripTitleInput }}
         ref={titleRef}
         size={"xl"}
         w="100%"
@@ -802,7 +802,7 @@ export default function TripPlanner(props) {
           setValue(e.target.value);
         }}
         onBlur={(e) => {
-          setTripTitle(e.target.value);
+          setPlannerTripTitle(e.target.value);
         }}
       />
     );

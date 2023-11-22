@@ -133,6 +133,7 @@ export default function MainMenu(props) {
     } else {
       setDropDownOpened((o) => !o);
     }
+    setActive(-1);
     setPanelShow(false);
   };
 

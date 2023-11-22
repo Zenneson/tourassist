@@ -154,6 +154,11 @@ export default function Trippage(props) {
   });
 
   useEffect(() => {
+    router.prefetch("/thankyou");
+    router.prefetch("/purchase");
+  }, [router]);
+
+  useEffect(() => {
     if (newData) {
       setTripData(newData);
     }
@@ -196,29 +201,11 @@ export default function Trippage(props) {
   }, [tripData]);
 
   useEffect(() => {
-    router.prefetch("/thankyou");
-    router.prefetch("/purchase");
-  }, [router]);
-
-  useEffect(() => {
-    if (tripData && newUpdate) {
-      const dSum = Math.floor(sumAmounts(tripData?.donations));
-      setDonationSum(dSum);
-      setDonationProgress((dSum / tripData?.costsSum) * 100);
+    if (updates?.length === 0 && !updateDataLoaded) {
       setUpdates(tripData?.updates);
-      setDonations(tripData?.donations);
-      setActiveTrip(tripData);
+      setUpdateDataLoaded(true);
     }
-  }, [
-    images,
-    tripData,
-    updates,
-    newUpdate,
-    setActiveTrip,
-    setDonations,
-    setDonationSum,
-    setDonationProgress,
-  ]);
+  }, [updates, updateDataLoaded, tripData]);
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -465,6 +452,7 @@ export default function Trippage(props) {
                 setCurrentUpdateId={setCurrentUpdateId}
                 updates={updates}
                 setUpdates={setUpdates}
+                setNewUpdate={setNewUpdate}
                 setModalMode={setModalMode}
               />
             )}

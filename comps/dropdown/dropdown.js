@@ -18,7 +18,6 @@ export default function DropDown(props) {
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
-  const dark = computedColorScheme === "dark";
 
   const terms = [
     {
@@ -31,10 +30,6 @@ export default function DropDown(props) {
       label: "News",
     },
   ];
-
-  const menuItems = (event, index) => {
-    event.preventDefault();
-  };
 
   const animation = {
     initial: { y: -50, duration: 500 },

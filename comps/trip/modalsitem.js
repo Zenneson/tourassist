@@ -251,11 +251,11 @@ export default function ModalsItem(props) {
         setUpdateTitle(currentUpdate.updateTitle);
         setUpdateContent(currentUpdate.updateContent);
         updateEditor.commands.setContent(updateContent);
-        setUpdateDataLoaded(true);
       }
     }, [updateEditor, updateContent]);
 
     const handleUpdate = async () => {
+      setNewUpdate(true);
       try {
         if (updateTitle === "") {
           notifications.show(addUpdateTitle);
@@ -272,7 +272,6 @@ export default function ModalsItem(props) {
           return;
         }
 
-        setNewUpdate(true);
         notifications.show(postingUpdate);
 
         let newUpdates;
@@ -314,9 +313,8 @@ export default function ModalsItem(props) {
 
         mutate(title);
 
-        setNewUpdate(false);
         notifications.update(updatePosted);
-        setUpdateDataLoaded(false);
+        setNewUpdate(false);
       } catch (error) {
         console.error(error);
       }
@@ -536,7 +534,6 @@ export default function ModalsItem(props) {
         {/* Close Alt Modal */}
         <Box maw={800}>
           <CloseButton
-            zIndex={100}
             pos={"absolute"}
             top={21}
             right={21}

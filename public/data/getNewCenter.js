@@ -5,7 +5,7 @@ function getNewCenter(place) {
   switch (place.label) {
     case "United States":
       newCenter = [-98.5795, 43];
-      maxZoom = 4;
+      maxZoom = 3.7;
       break;
     case "Canada":
       newCenter = [-95.8203, 61.0447];

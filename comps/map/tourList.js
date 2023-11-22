@@ -8,6 +8,7 @@ import {
   Center,
   Stack,
 } from "@mantine/core";
+import { AnimatePresence } from "framer-motion";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconX } from "@tabler/icons-react";
 import PlaceListItem from "./placeListItem";
@@ -15,15 +16,13 @@ import classes from "./tourList.module.css";
 
 export default function TourList(props) {
   const {
-    listOpened,
-    setListOpened,
     places,
     setPlaces,
+    listOpened,
+    setListOpened,
     goToLocation,
-    setShowMainMarker,
     setLngLat,
     setLocationDrawer,
-    setArea,
   } = props;
   const router = useRouter();
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -48,17 +47,25 @@ export default function TourList(props) {
     router.push("/tripplanner");
   };
 
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+    if (
+      !destination ||
+      (source.index === destination.index &&
+        source.droppableId === destination.droppableId)
+    ) {
+      return;
+    }
+
+    const items = Array.from(places);
+    const [reorderedItem] = items.splice(source.index, 1);
+    items.splice(destination.index, 0, reorderedItem);
+    setPlaces(items);
+  };
+
   return (
     <>
-      <DragDropContext
-        onDragEnd={(result) => {
-          if (!result.destination) return;
-          const items = Array.from(places);
-          const [reorderedItem] = items.splice(result.source.index, 1);
-          items.splice(result.destination.index, 0, reorderedItem);
-          setPlaces(items);
-        }}
-      >
+      <DragDropContext onDragEnd={onDragEnd}>
         <Drawer
           classNames={{ content: classes.tourDrawer }}
           zIndex={10}
@@ -78,24 +85,28 @@ export default function TourList(props) {
           />
           <Droppable droppableId="places">
             {(provided) => (
-              <Stack ref={provided.innerRef} {...provided.droppableProps}>
-                {places.map((place, index) => (
-                  <PlaceListItem
-                    key={index}
-                    draggableId={place.place}
-                    index={index}
-                    place={place.place}
-                    region={place.region}
-                    setListOpened={setListOpened}
-                    setShowMainMarker={setShowMainMarker}
-                    places={places}
-                    setPlaces={setPlaces}
-                    goToLocation={goToLocation}
-                    setLngLat={setLngLat}
-                    setLocationDrawer={setLocationDrawer}
-                    setArea={setArea}
-                  />
-                ))}
+              <Stack
+                gap={0}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                <AnimatePresence>
+                  {places.map((place, index) => (
+                    <PlaceListItem
+                      places={places}
+                      setPlaces={setPlaces}
+                      key={place.place + "_" + place.id}
+                      draggableId={place.place}
+                      index={index}
+                      place={place.place}
+                      region={place.region}
+                      setListOpened={setListOpened}
+                      setLngLat={setLngLat}
+                      goToLocation={goToLocation}
+                      setLocationDrawer={setLocationDrawer}
+                    />
+                  ))}
+                </AnimatePresence>
                 {provided.placeholder}
               </Stack>
             )}

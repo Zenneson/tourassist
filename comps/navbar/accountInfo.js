@@ -295,6 +295,7 @@ export default function AccountInfo(props) {
               />
               <Popover
                 className={classes.changePassPopover}
+                shadow="md"
                 width="target"
                 position="bottom"
                 opened={changePass}

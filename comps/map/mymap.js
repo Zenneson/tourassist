@@ -3,14 +3,14 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useMemo,
   useCallback,
+  useMemo,
 } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import centerOfMass from "@turf/center-of-mass";
-import { useSessionStorage } from "@mantine/hooks";
+import { useDidUpdate, usePrevious, useSessionStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Center,
@@ -21,7 +21,6 @@ import {
   Group,
   NavLink,
   Drawer,
-  Transition,
   Select,
   Modal,
   LoadingOverlay,
@@ -29,19 +28,22 @@ import {
   useCombobox,
   Stack,
   Tooltip,
+  Transition,
+  Space,
 } from "@mantine/core";
 import {
   IconList,
-  IconX,
   IconMapPinFilled,
   IconArrowBadgeRightFilled,
-  IconArrowBarRight,
+  IconChevronRight,
   IconWorldSearch,
   IconMapPinSearch,
   IconCaretDownFilled,
   IconPlane,
   IconAlertTriangle,
   IconCheck,
+  IconTextPlus,
+  IconCircleDotFilled,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { getNewCenter } from "../../public/data/getNewCenter";
@@ -86,8 +88,8 @@ const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
 const CustomAutoComplete = ({
   version,
   area,
-  countryData,
-  placeData,
+  countrySearchData,
+  placeSearchData,
   countrySearch,
   setCountrySearch,
   placeSearch,
@@ -125,11 +127,11 @@ const CustomAutoComplete = ({
     },
   });
 
-  const data = version === "country" ? countryData : placeData;
+  const data = version === "country" ? countrySearchData : placeSearchData;
   let options;
   if (Array.isArray(data)) {
     options = data.map((item) => (
-      <Combobox.Option value={item.label} key={item.value}>
+      <Combobox.Option value={item.label} key={item.id}>
         <AutoCompItem locationHandler={locationHandler} {...item} />
       </Combobox.Option>
     ));
@@ -156,7 +158,14 @@ const CustomAutoComplete = ({
     } else if (options.length === 0) {
       combobox.closeDropdown();
     }
-  }, [options, combobox, countrySearch, placeSearch, countryData, placeData]);
+  }, [
+    options,
+    combobox,
+    countrySearch,
+    placeSearch,
+    countrySearchData,
+    placeSearchData,
+  ]);
 
   return (
     <Combobox
@@ -192,10 +201,14 @@ const CustomAutoComplete = ({
         <InputBase
           ref={autoRef}
           classNames={{
-            input:
+            root:
               version === "country"
                 ? classes.countryAutoComplete
                 : classes.placeAutoComplete,
+            input:
+              version === "country"
+                ? classes.countryAutoCompleteInput
+                : classes.placeAutoCompleteInput,
           }}
           size={version === "country" ? "lg" : "sm"}
           w={version === "country" ? 350 : "auto"}
@@ -263,21 +276,21 @@ export default function Mymap(props) {
   const router = useRouter();
   const [area, setArea] = useState({ label: "" });
   const [locationDrawer, setLocationDrawer] = useState(false);
-  const [lngLat, setLngLat] = useState([]);
+  const [lngLat, setLngLat] = useState([0, 0]);
   const [showStates, setShowStates] = useState(false);
   const [popupInfo, setPopupInfo] = useState(null);
   const [showMainMarker, setShowMainMarker] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
   const [placeSearch, setPlaceSearch] = useState("");
-  const [placeData, setPlaceData] = useState([]);
-  const [countryData, setCountryData] = useState([]);
+  const [placeSearchData, setPlaceSearchData] = useState([]);
+  const [countrySearchData, setCountrySearchData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [placeLocation, setPlaceLocation] = useState({});
   const [showChoice, setShowChoice] = useState(false);
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
   const [places, setPlaces] = useSessionStorage({
-    key: "placeData",
+    key: "places",
     defaultValue: [],
   });
 
@@ -296,7 +309,10 @@ export default function Mymap(props) {
   useEffect(() => {
     router.prefetch("/tripplanner");
     area.label === "United States" && setShowStates(true);
-  }, [area.label, router]);
+    (area.type === "city" ||
+      (area.type === "region" && area.country !== "United States")) &&
+      setShowMainMarker(true);
+  }, [area, router]);
 
   const getFogProperties = (dark) => {
     return {
@@ -361,88 +377,78 @@ export default function Mymap(props) {
     if (locationObj.label === "Saint Barthélemy")
       locationObj.label = "Saint-Barthélemy";
 
-    setArea(locationObj);
-    setLngLat(locationObj.center);
     setCountrySearch("");
     setPlaceSearch("");
-    setCountryData([]);
-    setPlaceData([]);
+    setCountrySearchData([]);
+    setPlaceSearchData([]);
     setLocationDrawer(true);
-    setShowMainMarker(
-      locationObj.type === "city" ||
-        (locationObj.type === "region" &&
-          locationObj.country !== "United States")
-    );
-    setShowStates(
-      locationObj.country === "United States" && locationObj.type === "country"
-    );
+    setLngLat(locationObj.center);
 
-    if (
-      (locationObj.country === "United States" &&
-        locationObj.type === "region") ||
-      locationObj.type !== "city"
-    ) {
-      fetchCities(locationObj);
-    }
-    if (
-      locationObj.country === "United States" &&
-      locationObj.type === "country"
-    ) {
-      usStates(locationObj);
-    }
-
-    const coordinates =
-      locationObj.type === "country"
-        ? getNewCenter(locationObj).newCenter
-        : locationObj.center;
-    const maxZoom = getNewCenter(locationObj).maxZoom;
-    goToLocation(
-      locationObj.type,
-      coordinates,
-      maxZoom,
-      locationObj.country,
-      locationObj.label
-    );
+    goToLocation(locationObj);
   };
 
-  const goToLocation = (type, center, maxZoom, location, name) => {
-    if (type === "country") setShowMainMarker(false);
-    if (type !== "country" || location !== "United States")
-      setShowStates(false);
-    let zoom = maxZoom;
+  const calcView = (place) => {
+    const { country, type, label } = place;
+    let zoom = getNewCenter(place).maxZoom;
     let pitch = 40;
-    if (
-      type === "city" ||
-      (location !== "United States" && type === "region")
-    ) {
+    setArea(place);
+
+    if ((country === "United States" && type === "region") || type !== "city") {
+      fetchCities(place);
+    }
+    if (country === "United States" && type === "country") {
+      usStates(place);
+      pitch = 25;
+    }
+    if (type === "city" || (country !== "United States" && type === "region")) {
       zoom = 12;
       pitch = 75;
+      if (label === "District of Columbia") {
+        zoom = 10;
+      }
     }
-    if (name === "District of Columbia") {
-      zoom = 10;
+    return { zoom, pitch };
+  };
+
+  const goToLocation = (place) => {
+    const { zoom, pitch } = calcView(place);
+    const coords =
+      place.type === "country" ? getNewCenter(place).newCenter : place.center;
+
+    setShowStates(false);
+    setShowMainMarker(false);
+
+    let newCoords = coords;
+    if (newCoords && Array.isArray(newCoords)) {
+      newCoords = { lng: newCoords[0], lat: newCoords[1] };
+    } else if (newCoords && newCoords.lon) {
+      newCoords = { lng: newCoords.lon, lat: newCoords.lat };
     }
 
-    mapRef.current.flyTo({
-      center: center,
-      zoom: 3,
-      duration: 800,
-      pitch: 0,
-    });
+    place.type === "country" &&
+      mapRef.current.flyTo({
+        center: newCoords,
+        zoom: 3,
+        duration: 800,
+        pitch: 0,
+      });
+
+    const moveTime = place.type === "country" ? 400 : 200;
+    const moveDuration = place.type === "country" ? 1500 : 2200;
 
     setTimeout(() => {
       mapRef.current?.flyTo({
-        center: center,
-        duration: 1500,
+        center: coords,
+        duration: moveDuration,
         zoom: zoom,
         pitch: pitch,
-        linear: false,
+        essential: true,
       });
-    }, 400);
+    }, moveTime);
   };
 
   const addPlaces = (place) => {
     let newPlace = JSON.parse(JSON.stringify(place));
-    // newPlace.id = place.id;
     newPlace.order = places.length + 1;
     let newPlaces = [...places, newPlace];
     setPlaces(newPlaces);
@@ -459,9 +465,9 @@ export default function Mymap(props) {
   };
 
   const placeType = (place) => {
-    if (place === "country") return "Country";
-    if (place === "region") return "Region";
-    if (place === "place") return "City";
+    if (place === "country" || place.type === "country") return "Country";
+    if (place === "region" || place.type === "region") return "Region";
+    if (place === "place" || place.type === "place") return "City";
   };
 
   const searchForState = (e) => {
@@ -476,41 +482,51 @@ export default function Mymap(props) {
   const onZoomEnd = (e) => {
     if (e.target.getZoom() < 3.5) {
       mapRef.current?.flyTo({
-        duration: 2000,
+        duration: 1000,
         pitch: 0,
+        essential: true,
       });
     }
   };
 
-  const pins = useMemo(
-    () =>
-      topCities.map((city, index) => (
-        <Transition
-          key={`marker-${index}`}
-          mounted={!showMainMarker && topCities}
-          transition="fade"
-          duration={300}
-          timingFunction="ease"
+  const pins = topCities.map((city, index) => (
+    <Transition
+      key={`marker-${index}`}
+      mounted={!showMainMarker && topCities}
+      transition="fade"
+      duration={300}
+      timingFunction="ease"
+    >
+      {(styles) => (
+        <Marker
+          style={styles}
+          longitude={city[1][0]}
+          latitude={city[1][1]}
+          offset={[0, 0]}
+          rotation={40}
+          rotationAlignment="map"
+          pitchAlignment="map"
         >
-          {(styles) => (
-            <Marker
-              style={styles}
-              longitude={city[1][0]}
-              latitude={city[1][1]}
-              anchor="bottom"
-              onClick={(e) => {
-                e.originalEvent.stopPropagation();
-                setPopupInfo(city);
-                setArea(city);
-              }}
-            >
-              <IconMapPinFilled className={classes.miniMapPin} />
-            </Marker>
-          )}
-        </Transition>
-      )),
-    [topCities, showMainMarker]
-  );
+          <Popup
+            className={classes.miniPopUp}
+            anchor="bottom"
+            offset={[1, -4]}
+            closeOnMove={false}
+            closeButton={false}
+            closeOnClick={true}
+            longitude={city[1][0]}
+            latitude={city[1][1]}
+            onClick={() => selectTopCity(city)}
+          >
+            <Box py={10} px={20} onClick={() => selectTopCity(city)}>
+              {city[0]}
+            </Box>
+          </Popup>
+          <IconCircleDotFilled size={15} className={classes.miniPopUpColor} />
+        </Marker>
+      )}
+    </Transition>
+  ));
 
   const handleChange = useCallback(
     async (field) => {
@@ -531,6 +547,7 @@ export default function Mymap(props) {
         const data = results.features.map((feature) => ({
           label: feature.text,
           value: feature.id,
+          id: feature.id,
           type: feature.place_type[0],
           group: placeType(feature.place_type[0]),
           country: feature.place_name.split(", ").pop(),
@@ -549,8 +566,8 @@ export default function Mymap(props) {
           return item;
         });
 
-        if (field === "country") setCountryData(searchData);
-        if (field === "place") setPlaceData(searchData);
+        if (field === "country") setCountrySearchData(searchData);
+        if (field === "place") setPlaceSearchData(searchData);
       } catch (error) {
         console.error("Error fetching data for Country Autocomplete: ", error);
       }
@@ -560,8 +577,8 @@ export default function Mymap(props) {
       countrySearch,
       placeSearch,
       mapboxAccessToken,
-      setCountryData,
-      setPlaceData,
+      setCountrySearchData,
+      setPlaceSearchData,
     ]
   );
 
@@ -654,17 +671,16 @@ export default function Mymap(props) {
   };
 
   const selectTopCity = (city) => {
-    setArea({
+    setTopCities([]);
+    const cityData = {
       label: city[0],
       type: "city",
       country: area.country,
       center: city[1],
       region: city[2],
-    });
-    setPopupInfo(null);
-    setShowMainMarker(true);
+    };
     setLngLat(city[1]);
-    goToLocation("city", city[1], 12, area.country, city[0]);
+    goToLocation(cityData);
   };
 
   const choosePlace = (choice) => {
@@ -693,13 +709,13 @@ export default function Mymap(props) {
           style: {
             backgroundColor: dark ? "#2e2e2e" : "#fff",
           },
-          title: "Loaction already added",
+          title: "Location already added",
           message: `${area.label} was already added to your tour`,
         });
         return;
       }
       addPlaces(place);
-      reset();
+      closeLocationDrawer();
     }
     if (choice === "travel") {
       setShowModal(true);
@@ -707,46 +723,77 @@ export default function Mymap(props) {
     setShowChoice(false);
   };
 
-  const reset = () => {
+  const resetMap = () => {
     mapRef.current.flyTo({
       zoom: 2.5,
       duration: 1000,
       pitch: 0,
+      essential: true,
     });
-    setLngLat([0, 0]);
-    setShowMainMarker(false);
+  };
+
+  const clearData = () => {
     setArea({ label: "" });
-    setShowStates(false);
     setLocationDrawer(false);
+    setLngLat([0, 0]);
     setTopCities([]);
-    setPlaceData([]);
-    setCountryData([]);
+    setPlaceSearchData([]);
+    setCountrySearchData([]);
     setPlaceSearch("");
     setCountrySearch("");
     setShowChoice(false);
     setPopupInfo(null);
+    setShowStates(false);
+    setShowMainMarker(false);
   };
 
-  const filter = useMemo(
-    () => ["in", "name_en", area.label?.toString()],
-    [area]
-  );
+  const usaArea = {
+    type: "country",
+    label: "United States",
+    country: "United States",
+    state: "",
+    center: [-134.60444672669328, 43.26345898357005],
+    shortcode: "us",
+  };
+  const [prevArea, setPrevArea] = useState({ label: "" });
+  const oldArea = usePrevious(area);
+  useDidUpdate(() => {
+    const hasAreaChanged =
+      area.label !== prevArea.label ||
+      area.type !== prevArea.type ||
+      area.country !== prevArea.country;
 
-  const [buttonAnimation, setButtonAnimation] = useState(fadeIn);
-  const [buttonPosition, setButtonPosition] = useState(0);
+    if (hasAreaChanged) {
+      setPrevArea(oldArea);
+    }
+  }, [area]);
 
-  useEffect(() => {
-    setButtonAnimation(fadeOut);
+  const resetGlobe = () => {
+    resetMap();
+    setTimeout(clearData, 200);
+  };
 
-    const timeout = setTimeout(() => {
-      setButtonPosition(
-        panelShow && mainMenuOpened ? 920 : mainMenuOpened ? 310 : 0
-      );
-      setButtonAnimation(fadeIn);
-    }, 10);
-
-    return () => clearTimeout(timeout);
-  }, [panelShow, mainMenuOpened]);
+  const closeLocationDrawer = () => {
+    if (area.type === "region" && area.country === "United States") {
+      goToLocation(usaArea);
+      return;
+    }
+    if (area.type === "city" && area.country === "United States") {
+      goToLocation(prevArea);
+      return;
+    }
+    const shouldResetGlobe =
+      area.type === "country" ||
+      area.label === "" ||
+      prevArea.label === "" ||
+      area.country !== prevArea.country ||
+      area.country !== oldArea.country;
+    if (shouldResetGlobe) {
+      resetGlobe();
+      return;
+    }
+    goToLocation(prevArea);
+  };
 
   const openTourList = () => {
     setListOpened(true);
@@ -776,6 +823,36 @@ export default function Mymap(props) {
       </Text>
     );
   };
+
+  const popupVariants = {
+    hidden: {
+      scale: 0.95,
+      opacity: 0,
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+    exit: { scale: 0.95, opacity: 0, transition: { duration: 0 } },
+  };
+
+  const [buttonAnimation, setButtonAnimation] = useState(fadeIn);
+  const [buttonPosition, setButtonPosition] = useState(0);
+
+  useEffect(() => {
+    setButtonAnimation(fadeOut);
+
+    const timeout = setTimeout(() => {
+      setButtonPosition(
+        panelShow && mainMenuOpened ? 920 : mainMenuOpened ? 310 : 0
+      );
+      setButtonAnimation(fadeIn);
+    }, 10);
+
+    return () => clearTimeout(timeout);
+  }, [panelShow, mainMenuOpened]);
 
   return (
     <>
@@ -808,30 +885,32 @@ export default function Mymap(props) {
         <Group grow gap={10}>
           <Button
             className={classes.clearListButton}
-            variant="filled"
-            size="xs"
+            size="lg"
             color="green.9"
+            variant="light"
+            leftSection={<IconCheck stroke={4} />}
             onClick={() => {
               placeChoosen();
               setPlaces(placeLocation);
               router.push("/tripplanner");
             }}
           >
-            <IconCheck stroke={4} />
+            YES
           </Button>
           <Button
             className={classes.clearListButton}
-            variant="filled"
-            size="xs"
+            size="lg"
             color="red.9"
+            variant="light"
+            leftSection={<IconCheck stroke={4} />}
             onClick={() => setShowModal(false)}
           >
-            <IconX stroke={4} />
+            NO
           </Button>
         </Group>
       </Modal>
       <Drawer
-        classNames={{ content: classes.loactionDrawer }}
+        classNames={{ content: classes.locationDrawer }}
         zIndex={1}
         pos={"relative"}
         withinPortal={false}
@@ -840,13 +919,13 @@ export default function Mymap(props) {
         opened={locationDrawer}
         withOverlay={false}
         withCloseButton={false}
-        onClose={reset}
+        onClose={() => setLocationDrawer(false)}
       >
         <Box pt={80}>
           <Group gap={2} ml={-5}>
             <IconArrowBadgeRightFilled
               size={25}
-              style={{ color: dark ? "#0d3f82" : "#00e8fc" }}
+              style={{ color: dark ? "#004585" : "#00e8fc" }}
             />
             <Text
               className={classes.placeTitle}
@@ -877,7 +956,7 @@ export default function Mymap(props) {
                   version={"place"}
                   area={area}
                   dark={dark}
-                  placeData={placeData}
+                  placeSearchData={placeSearchData}
                   placeSearch={placeSearch}
                   setPlaceSearch={setPlaceSearch}
                   handleChange={handleChange}
@@ -905,7 +984,6 @@ export default function Mymap(props) {
                     center: searchForState(e),
                     country: "United States",
                   };
-                  setArea(location);
                   locationHandler(location);
                 }}
               />
@@ -933,13 +1011,13 @@ export default function Mymap(props) {
               leftSection={<IconPlane size={18} />}
               onClick={() => choosePlace("travel")}
             >
-              Choose as destination
+              Travel to {area.label}
             </Button>
             <Button
               className={classes.locationBtns}
               justify={"left"}
               variant="filled"
-              leftSection={<IconList size={18} />}
+              leftSection={<IconTextPlus size={18} />}
               onClick={() => choosePlace("tour")}
             >
               Add to Tour List
@@ -948,26 +1026,20 @@ export default function Mymap(props) {
           <Button
             className={classes.closeBtn}
             mt={10}
-            fullWidth
-            radius={"xl"}
-            leftSection={<IconArrowBarRight size={18} />}
-            onClick={reset}
+            size="xs"
+            rightSection={<IconChevronRight stroke={4} size={18} />}
+            onClick={closeLocationDrawer}
             justify={"center"}
-            variant="gradient"
-            gradient={
-              dark
-                ? { from: "#004585", to: "#00376b", deg: 180 }
-                : { from: "#93f3fc", to: "#00e8fc", deg: 180 }
-            }
+            variant="transparent"
           >
-            CLOSE
+            BACK
           </Button>
         </Box>
       </Drawer>
       {places && places.length >= 1 && !listOpened && (
         <motion.div
-          animate={buttonAnimation}
           initial={fadeIn}
+          animate={buttonAnimation}
           transition={{ duration: 0.01 }}
         >
           {/* Tour List Button */}
@@ -995,30 +1067,36 @@ export default function Mymap(props) {
           </Tooltip>
         </motion.div>
       )}
-      {!searchOpened && !dropDownOpened && !locationDrawer && (
-        <Center
-          pos={"absolute"}
-          top={"30px"}
-          w={"100%"}
-          style={{
-            zIndex: 1,
-          }}
-        >
-          {/* Main Place Search */}
-          <Box pos={"relative"}>
-            <CustomAutoComplete
-              version={"country"}
-              area={area}
-              dark={dark}
-              countryData={countryData}
-              countrySearch={countrySearch}
-              setCountrySearch={setCountrySearch}
-              handleChange={handleChange}
-              locationHandler={locationHandler}
-            />
-          </Box>
-        </Center>
-      )}
+      <Transition
+        mounted={!searchOpened && !dropDownOpened && !locationDrawer}
+        transition="slide-down"
+        duration={400}
+        timingFunction="ease"
+      >
+        {(styles) => (
+          <Center
+            className={classes.countryAutoCompleteZIndex}
+            pos={"absolute"}
+            top={"30px"}
+            w={"100%"}
+            style={styles}
+          >
+            {/* Main Place Search */}
+            <Box pos={"relative"}>
+              <CustomAutoComplete
+                version={"country"}
+                area={area}
+                dark={dark}
+                countrySearchData={countrySearchData}
+                countrySearch={countrySearch}
+                setCountrySearch={setCountrySearch}
+                handleChange={handleChange}
+                locationHandler={locationHandler}
+              />
+            </Box>
+          </Center>
+        )}
+      </Transition>
       <Map
         id="mapRef"
         ref={mapRef}
@@ -1052,110 +1130,62 @@ export default function Mymap(props) {
       >
         {!searchOpened && (
           <TourList
-            listOpened={listOpened}
-            setListOpened={setListOpened}
-            setShowMainMarker={setShowMainMarker}
             places={places}
             setPlaces={setPlaces}
-            goToLocation={goToLocation}
+            listOpened={listOpened}
+            setListOpened={setListOpened}
             setLngLat={setLngLat}
             setLocationDrawer={setLocationDrawer}
-            setArea={setArea}
+            goToLocation={goToLocation}
           />
         )}
         {computedColorScheme ? pins : {}}
-        {popupInfo && (
-          <Popup
-            className={classes.popup}
-            anchor="bottom"
-            offset={[0, -30]}
-            closeOnMove={false}
-            closeButton={false}
-            closeOnClick={false}
-            longitude={popupInfo[1][0]}
-            latitude={popupInfo[1][1]}
+        {showMainMarker && (
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={popupVariants}
           >
-            <Box py={10} px={20} onClick={() => selectTopCity(popupInfo)}>
-              {popupInfo[0]}
-            </Box>
-          </Popup>
-        )}
-        {showChoice && (
-          <Popup
-            className={classes.popup}
-            anchor="bottom"
-            offset={[0, -30]}
-            closeOnMove={false}
-            closeButton={false}
-            closeOnClick={false}
-            longitude={lngLat[0]}
-            latitude={lngLat[1]}
-          >
-            <Stack px={10} gap={0} className={classes.popupMenu}>
-              <Box pt={10} pl={0}>
-                {area.label}
-              </Box>
-              <Button.Group
-                orientation="vertical"
-                mt={5}
-                style={{
-                  borderLeft: dark
-                    ? "1px solid rgba(255, 255, 255, 0.25)"
-                    : "1px solid rgba(0, 0, 0, 0.25)",
-                }}
-              >
-                <Button
-                  className={classes.popupMenuBtn}
-                  justify={"left"}
-                  variant="subtle"
-                  size="xs"
-                  radius={"0 3px 3px 0"}
-                  leftSection={<IconPlane size={15} />}
-                  onClick={() => choosePlace("travel")}
-                >
-                  Choose as destination
-                </Button>
-                <Button
-                  className={classes.popupMenuBtn}
-                  justify={"left"}
-                  variant="subtle"
-                  size="xs"
-                  radius={"0 3px 3px 0"}
-                  leftSection={<IconList size={15} />}
-                  onClick={() => choosePlace("tour")}
-                >
-                  Add to Tour List
-                </Button>
-              </Button.Group>
-            </Stack>
-          </Popup>
-        )}
-        <Transition
-          mounted={showMainMarker}
-          transition="fade"
-          duration={300}
-          timingFunction="ease"
-        >
-          {(styles) => (
-            <Marker
-              style={styles}
+            <Popup
+              className={classes.popup}
+              anchor="bottom"
+              offset={[0, 100]}
+              closeOnMove={false}
+              closeButton={false}
+              closeOnClick={false}
               longitude={lngLat[0]}
               latitude={lngLat[1]}
-              onClick={(e) => {
-                e.originalEvent.stopPropagation();
-                setShowChoice(true);
-              }}
             >
-              <IconMapPinFilled
-                style={{
-                  cursor: "pointer",
-                  transform: "scale(5)",
-                  color: dark ? "#0D3F82" : "#00e8fa",
-                }}
-              />
-            </Marker>
-          )}
-        </Transition>
+              <Stack px={10} gap={0} className={classes.popupMenu}>
+                <Box pt={10} pl={0}>
+                  {area.label}
+                </Box>
+                <Button.Group orientation="vertical" mt={5}>
+                  <Button
+                    className={classes.popupMenuBtn}
+                    variant="subtle"
+                    size="xs"
+                    radius={"0 3px 3px 0"}
+                    onClick={() => choosePlace("travel")}
+                  >
+                    Travel to {area.label}
+                  </Button>
+                  <Button
+                    className={classes.popupMenuBtn}
+                    variant="subtle"
+                    size="sm"
+                    onClick={() => choosePlace("tour")}
+                  >
+                    <IconTextPlus size={15} />
+                    <Space w={5} />
+                    TOUR LIST
+                  </Button>
+                </Button.Group>
+              </Stack>
+            </Popup>
+          </motion.div>
+        )}
         <Source
           id="country-boundaries"
           type="vector"
@@ -1175,7 +1205,11 @@ export default function Mymap(props) {
             source="country-boundaries"
             source-layer="country_boundaries"
             type="fill"
-            filter={!showStates ? filter : ["in", "name", "United States"]}
+            filter={
+              !showStates
+                ? ["in", "name_en", area.label]
+                : ["in", "name", "United States"]
+            }
             paint={{
               "fill-color": `${
                 dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
@@ -1187,7 +1221,7 @@ export default function Mymap(props) {
             source="country-boundaries"
             source-layer="country_boundaries"
             type="line"
-            filter={filter}
+            filter={["in", "name_en", area.label]}
             paint={{
               "line-color": "rgba(255, 255, 255, 1)",
               "line-width": 4,
@@ -1206,7 +1240,11 @@ export default function Mymap(props) {
             paint={{
               "fill-color": "rgba(0,0,0,0)",
             }}
-            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+            filter={
+              !showStates
+                ? ["in", "name_en", area.label]
+                : ["!", ["in", "name", ""]]
+            }
           />
           <Layer
             id="states-boundaries"
@@ -1216,13 +1254,18 @@ export default function Mymap(props) {
               "line-color": "rgba(255, 255, 255, 1)",
               "line-width": 4,
             }}
-            filter={!showStates ? filter : ["!", ["in", "name", ""]]}
+            filter={
+              !showStates
+                ? ["in", "name_en", area.label]
+                : ["!", ["in", "name", ""]]
+            }
           />
         </Source>
         <Source id="clicked-state" type="geojson" data="data/states.geojson">
           <Layer
             id="clicked-state"
             type="fill"
+            source="clicked-state"
             paint={{
               "fill-color": `${
                 dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
@@ -1233,6 +1276,7 @@ export default function Mymap(props) {
           <Layer
             id="state-borders"
             type="line"
+            source="clicked-state"
             paint={{
               "line-color": "rgba(255, 255, 255, 1)",
               "line-width": 4,

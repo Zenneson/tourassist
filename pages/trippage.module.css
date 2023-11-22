@@ -26,8 +26,8 @@
 
 .updateModalButton {
   background: light-dark(
-    linear-gradient(0deg, #fff 0%, #e9ecef 100%),
-    linear-gradient(0deg, #020202 0%, #000 100%)
+    linear-gradient(0deg, #e9ecef 0%, #fff 100%),
+    linear-gradient(0deg, #000 0%, #020202 100%)
   );
   color: light-dark(#5c5f66, #f8f9fa);
   opacity: 0.4;
@@ -68,8 +68,8 @@
 .infoPanel .useFundsBtn {
   color: #f8f9fa;
   background: light-dark(
-    linear-gradient(0deg, #33d9f8 0%, #2dc7f3 100%),
-    linear-gradient(0deg, #145d9a 0%, #0d3f82 100%)
+    linear-gradient(0deg, #2dc7f3 0%, #33d9f8 100%),
+    linear-gradient(0deg, #0d3f82 0%, #145d9a 100%)
   );
 }
 
