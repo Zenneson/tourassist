@@ -611,6 +611,7 @@ export default function ModalsItem(props) {
         <ScrollArea.Autosize pos={"relative"} type="never">
           <LoadingOverlay
             visible={(modalMode === "editUpdate" && !updateDataLoaded) || paid}
+            loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
             overlayProps={{ backgroundOpacity: 1 }}
           />
           {modalMode === "donating" && (

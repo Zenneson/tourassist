@@ -514,7 +514,11 @@ export default function Mymap(props) {
     <>
       <LoadingOverlay
         visible={!mapLoaded}
-        overlayProps={{ backgroundOpacity: 1 }}
+        loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
+        overlayProps={{
+          backgroundOpacity: 1,
+          color: dark ? "#0b0c0d" : "#f8f9fa",
+        }}
       />
       <Modal
         classNames={{

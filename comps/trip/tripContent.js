@@ -665,11 +665,13 @@ export default function TripContent(props) {
             />
             <LoadingOverlay
               visible={processingImage}
-              loaderProps={{ type: "oval", color: dark ? "blue.9" : "blue.3" }}
+              loaderProps={{
+                color: dark ? "#0d3f82" : "#2dc7f3",
+                type: "bars",
+              }}
               overlayProps={{
-                color: dark ? "dark.7" : "gray.0",
-                backgroundOpacity: 0,
-                blur: 0,
+                backgroundOpacity: 1,
+                color: dark ? "#0b0c0d" : "#f8f9fa",
               }}
             />
           </>

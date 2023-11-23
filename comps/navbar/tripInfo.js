@@ -222,9 +222,10 @@ export default function TripInfo(props) {
       <Box pos="relative">
         <LoadingOverlay
           visible={!allTrips || currentTrip === undefined}
+          loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
           overlayProps={{
-            backgroundOpacity: 1,
             blur: 10,
+            backgroundOpacity: 1,
             color: dark ? "#0b0c0d" : "#F8F9FA",
           }}
         />

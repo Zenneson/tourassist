@@ -143,6 +143,13 @@ const tourTheme = createTheme({
         },
       },
     },
+    LoadingOverlay: {
+      defaultProps: {
+        loaderProps: {
+          type: "bars",
+        },
+      },
+    },
   },
   defaultRadius: 3,
   headings: {
