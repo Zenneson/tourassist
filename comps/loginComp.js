@@ -60,7 +60,7 @@ export default function LoginComp(props) {
 
   const { user } = useUser();
 
-  if (!user && type === "login" && router.pathname === "/tripplanner") {
+  if (!user && type === "login" && router.pathname === "/tripPlanner") {
     toggle();
   }
 
@@ -197,7 +197,7 @@ export default function LoginComp(props) {
       uid: user.uid,
     });
     notifications.show(newAccount);
-    if (router.pathname !== "/tripplanner") {
+    if (router.pathname !== "/tripPlanner") {
       router.push("/map");
     }
   };
@@ -462,11 +462,11 @@ export default function LoginComp(props) {
           </Stack>
           <Group
             justify={
-              router.pathname !== "/tripplanner" ? "space-between" : "flex-end"
+              router.pathname !== "/tripPlanner" ? "space-between" : "flex-end"
             }
-            mt={router.pathname !== "/tripplanner" ? "25px" : "-20px"}
+            mt={router.pathname !== "/tripPlanner" ? "25px" : "-20px"}
           >
-            {router.pathname !== "/tripplanner" && (
+            {router.pathname !== "/tripPlanner" && (
               <Anchor
                 component="button"
                 type="button"

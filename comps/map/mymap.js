@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import centerOfMass from "@turf/center-of-mass";
-import { usePrevious, useSessionStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Center,
@@ -11,7 +11,6 @@ import {
   Button,
   Text,
   Group,
-  NavLink,
   Modal,
   LoadingOverlay,
   Combobox,
@@ -23,10 +22,11 @@ import { IconList, IconCheck } from "@tabler/icons-react";
 import { useAtom } from "jotai";
 import {
   IconList,
-  IconMapPinFilled,
   IconWorldSearch,
   IconCheck,
+  IconAlertTriangle,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import { addEllipsis } from "../../libs/custom";
 import { getNewCenter } from "../../public/data/getNewCenter";
 import MapComp from "./mapComp";
@@ -72,13 +72,14 @@ export default function Mymap(props) {
   const [showModal, setShowModal] = useState(false);
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
+  const [placeLocation, setPlaceLocation] = useState({});
   const [places, setPlaces] = useSessionStorage({
     key: "places",
     defaultValue: [],
   });
 
   useEffect(() => {
-    router.prefetch("/tripplanner");
+    router.prefetch("/tripPlanner");
     area.label === "United States" && setShowStates(true);
     (area.type === "city" ||
       (area.type === "region" && area.country !== "United States")) &&
@@ -152,12 +153,52 @@ export default function Mymap(props) {
     }
   }, [fullMapRef, mapLoaded, dark]);
 
+  const resetMap = () => {
+    mapRef.current.flyTo({
+      zoom: 2.5,
+      duration: 1000,
+      pitch: 0,
+      essential: true,
+    });
+  };
+
+  const clearData = () => {
+    setArea({ label: "" });
+    setLocationDrawer(false);
+    setLngLat([0, 0]);
+    setTopCities([]);
+    setPlaceSearchData([]);
+    setCountrySearchData([]);
+    setPlaceSearch("");
+    setCountrySearch("");
+    setShowStates(false);
+    setShowMainMarker(false);
+  };
+
+  const resetGlobe = () => {
+    resetMap();
+    setTimeout(clearData, 200);
+  };
+
   const getCords = (feature) => {
     let center = feature.center;
     if (feature && feature.geometry && feature.geometry.type) {
       center = centerOfMass(feature);
     }
     return center?.geometry.coordinates;
+  };
+
+  const selectTopCity = (city) => {
+    setTopCities([]);
+    const cityData = {
+      label: city[0],
+      type: "city",
+      country: area.country,
+      center: city[1],
+      region: city[2],
+    };
+    setLngLat(city[1]);
+    goToLocation(cityData);
   };
 
   const locationHandler = (feature) => {
@@ -257,7 +298,7 @@ export default function Mymap(props) {
     const moveDuration = place.type === "country" ? 1500 : 2200;
 
     setTimeout(() => {
-      mapRef.current?.flyTo({
+      mapRef.current.flyTo({
         center: coords,
         duration: moveDuration,
         zoom: zoom,
@@ -389,14 +430,6 @@ export default function Mymap(props) {
     }
   };
 
-  const [prevArea, setPrevArea] = useState({ label: "" });
-  const oldArea = usePrevious(area);
-  useEffect(() => {
-    if (JSON.stringify(area) !== JSON.stringify(oldArea)) {
-      setPrevArea(oldArea);
-    }
-  }, [area, oldArea]);
-
   const openTourList = () => {
     setListOpened(true);
     setMainMenuOpened(false);
@@ -422,6 +455,62 @@ export default function Mymap(props) {
 
     return () => clearTimeout(timeout);
   }, [panelShow, mainMenuOpened]);
+
+  const addPlaces = (place) => {
+    let newPlace = JSON.parse(JSON.stringify(place));
+    newPlace.order = places.length + 1;
+    let newPlaces = [...places, newPlace];
+    setPlaces(newPlaces);
+  };
+
+  const checkPlace = (place) => {
+    let placeExists = false;
+    places.forEach((p) => {
+      if (p.place === place.place && p.region === place.region) {
+        placeExists = true;
+      }
+    });
+    return placeExists;
+  };
+
+  const choosePlace = (choice) => {
+    setMainMenuOpened(false);
+    const place = {
+      label: area.label,
+      place: area.label,
+      type: area.type,
+      coordinates: area.center,
+      country: area.country,
+      region:
+        area.type === "city" && area.country === "United States"
+          ? `${area.state || area.region}, ${area.country}`
+          : area.country === area.label
+          ? ""
+          : area.country,
+    };
+
+    setPlaceLocation([place]);
+    if (choice === "tour") {
+      setListOpened(true);
+      if (checkPlace(place)) {
+        notifications.show({
+          color: "orange",
+          icon: <IconAlertTriangle size={20} />,
+          style: {
+            backgroundColor: dark ? "#2e2e2e" : "#fff",
+          },
+          title: "Location already added",
+          message: `${area.label} was already added to your tour`,
+        });
+        return;
+      }
+      addPlaces(place);
+      resetGlobe();
+    }
+    if (choice === "travel") {
+      setShowModal(true);
+    }
+  };
 
   return (
     <>
@@ -461,7 +550,7 @@ export default function Mymap(props) {
             onClick={() => {
               placeChoosen();
               setPlaces(placeLocation);
-              router.push("/tripplanner");
+              router.push("/tripPlanner");
             }}
           >
             YES
@@ -479,23 +568,23 @@ export default function Mymap(props) {
         </Group>
       </Modal>
       <LocationDrawer
-        places={places}
         dark={dark}
         area={area}
-        prevArea={prevArea}
         locationDrawer={locationDrawer}
         setLocationDrawer={setLocationDrawer}
-        setMainMenuOpened={setMainMenuOpened}
-        setListOpened={setListOpened}
         mapLoaded={mapLoaded}
         topCities={topCities}
         setTopCities={setTopCities}
         placeSearchData={placeSearchData}
-        setPlaceSearchData={setPlaceSearchData}
         placeSearch={placeSearch}
         setPlaceSearch={setPlaceSearch}
         handleChange={handleChange}
         locationHandler={locationHandler}
+        listStates={listStates}
+        goToLocation={goToLocation}
+        selectTopCity={selectTopCity}
+        choosePlace={choosePlace}
+        resetGlobe={resetGlobe}
       />
       {places && places.length >= 1 && !listOpened && (
         <motion.div
@@ -569,6 +658,7 @@ export default function Mymap(props) {
         setTopCities={setTopCities}
         searchOpened={searchOpened}
         country_center={country_center}
+        lngLat={lngLat}
         setLngLat={setLngLat}
         setLocationDrawer={setLocationDrawer}
         goToLocation={goToLocation}
@@ -577,6 +667,7 @@ export default function Mymap(props) {
         getFogProperties={getFogProperties}
         locationHandler={locationHandler}
         mapboxAccessToken={mapboxAccessToken}
+        choosePlace={choosePlace}
       />
     </>
   );

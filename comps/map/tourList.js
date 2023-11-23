@@ -31,7 +31,7 @@ export default function TourList(props) {
   const dark = computedColorScheme === "dark";
 
   useEffect(() => {
-    router.prefetch("/tripplanner");
+    router.prefetch("/tripPlanner");
   }, [router]);
 
   const submitTourList = () => {
@@ -44,7 +44,7 @@ export default function TourList(props) {
       };
     });
     setPlaces(newPlaceData);
-    router.push("/tripplanner");
+    router.push("/tripPlanner");
   };
 
   const onDragEnd = (result) => {

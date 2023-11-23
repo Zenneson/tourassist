@@ -1,50 +1,50 @@
-import React from "react";
+import { useState } from "react";
 import {
-  useComputedColorScheme,
   Box,
   Button,
-  Drawer,
-  NavLink,
-  Group,
-  Select,
   Text,
+  Group,
+  Drawer,
+  Select,
+  NavLink,
 } from "@mantine/core";
+import { CustomAutoComplete } from "./mymap";
 import {
   IconArrowBadgeRightFilled,
   IconChevronRight,
   IconMapPinSearch,
   IconCaretDownFilled,
-  IconMapPinFilled,
   IconPlane,
   IconTextPlus,
+  IconAlertTriangle,
+  IconMapPinFilled,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import { addEllipsis } from "../../libs/custom";
-import { locationHandler, goToLocation } from "./mapHooks";
-import CustomAutoComplete from "./customAutoComplete";
 import classes from "./locationDrawer.module.css";
 
 export default function LocationDrawer(props) {
   const {
-    mapRef,
+    places,
+    dark,
     area,
-    topCities,
     prevArea,
-    mapLoaded,
     locationDrawer,
     setLocationDrawer,
-    selectTopCity,
-    resetGlobe,
+    setMainMenuOpened,
+    setListOpened,
+    mapLoaded,
+    topCities,
+    setTopCities,
+    placeSearchData,
+    setPlaceSearchData,
     placeSearch,
     setPlaceSearch,
-    placeSearchData,
-    choosePlace,
-    listStates,
+    handleChange,
+    locationHandler,
   } = props;
 
-  const computedColorScheme = useComputedColorScheme("dark", {
-    getInitialValueInEffect: true,
-  });
-  const dark = computedColorScheme === "dark";
+  const [placeLocation, setPlaceLocation] = useState({});
 
   const topCitiesList = topCities.map((city, index) => (
     <Group
@@ -65,6 +65,33 @@ export default function LocationDrawer(props) {
     </Group>
   ));
 
+  const resetMap = () => {
+    mapRef.current.flyTo({
+      zoom: 2.5,
+      duration: 1000,
+      pitch: 0,
+      essential: true,
+    });
+  };
+
+  const clearData = () => {
+    setArea({ label: "" });
+    setLocationDrawer(false);
+    setLngLat([0, 0]);
+    setTopCities([]);
+    setPlaceSearchData([]);
+    setCountrySearchData([]);
+    setPlaceSearch("");
+    setCountrySearch("");
+    setShowStates(false);
+    setShowMainMarker(false);
+  };
+
+  const resetGlobe = () => {
+    resetMap();
+    setTimeout(clearData, 200);
+  };
+
   const usaArea = {
     type: "country",
     label: "United States",
@@ -74,6 +101,23 @@ export default function LocationDrawer(props) {
     shortcode: "us",
   };
 
+  const addPlaces = (place) => {
+    let newPlace = JSON.parse(JSON.stringify(place));
+    newPlace.order = places.length + 1;
+    let newPlaces = [...places, newPlace];
+    setPlaces(newPlaces);
+  };
+
+  const checkPlace = (place) => {
+    let placeExists = false;
+    places.forEach((p) => {
+      if (p.place === place.place && p.region === place.region) {
+        placeExists = true;
+      }
+    });
+    return placeExists;
+  };
+
   const searchForState = (e) => {
     for (let item of listStates) {
       if (item.value === e) {
@@ -81,6 +125,45 @@ export default function LocationDrawer(props) {
       }
     }
     return null;
+  };
+
+  const choosePlace = (choice) => {
+    setMainMenuOpened(false);
+    const place = {
+      label: area.label,
+      place: area.label,
+      type: area.type,
+      coordinates: area.center,
+      country: area.country,
+      region:
+        area.type === "city" && area.country === "United States"
+          ? `${area.state || area.region}, ${area.country}`
+          : area.country === area.label
+          ? ""
+          : area.country,
+    };
+
+    setPlaceLocation([place]);
+    if (choice === "tour") {
+      setListOpened(true);
+      if (checkPlace(place)) {
+        notifications.show({
+          color: "orange",
+          icon: <IconAlertTriangle size={20} />,
+          style: {
+            backgroundColor: dark ? "#2e2e2e" : "#fff",
+          },
+          title: "Location already added",
+          message: `${area.label} was already added to your tour`,
+        });
+        return;
+      }
+      addPlaces(place);
+      resetGlobe();
+    }
+    if (choice === "travel") {
+      setShowModal(true);
+    }
   };
 
   const renderRegion = (area) => {
@@ -108,11 +191,11 @@ export default function LocationDrawer(props) {
       return;
     }
     if (area.type === "region" && area.country === "United States") {
-      goToLocation(usaArea, mapRef);
+      goToLocation(usaArea);
       return;
     }
     if (area.type === "city" && area.country === "United States") {
-      goToLocation(prevArea, mapRef);
+      goToLocation(prevArea);
       return;
     }
     const shouldResetGlobe =
@@ -124,7 +207,7 @@ export default function LocationDrawer(props) {
       resetGlobe();
       return;
     }
-    goToLocation(prevArea, mapRef);
+    goToLocation(prevArea);
   };
 
   return (
@@ -173,12 +256,13 @@ export default function LocationDrawer(props) {
             !(area.type === "region" && area.country !== "United States") && (
               <CustomAutoComplete
                 version={"place"}
-                mapRef={mapRef}
                 area={area}
                 dark={dark}
                 placeSearchData={placeSearchData}
                 placeSearch={placeSearch}
                 setPlaceSearch={setPlaceSearch}
+                handleChange={handleChange}
+                locationHandler={locationHandler}
               />
             )}
           {area.country === "United States" && area.type === "country" ? (
@@ -204,7 +288,7 @@ export default function LocationDrawer(props) {
                   center: searchForState(e),
                   country: "United States",
                 };
-                locationHandler(location, mapRef);
+                locationHandler(location);
               }}
             />
           ) : (

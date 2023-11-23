@@ -29,11 +29,11 @@ export default function MapComp(props) {
     places,
     setPlaces,
     topCities,
-    setTopCities,
     country_center,
     searchOpened,
     listOpened,
     setListOpened,
+    lngLat,
     setLngLat,
     setLocationDrawer,
     goToLocation,
@@ -42,6 +42,7 @@ export default function MapComp(props) {
     getFogProperties,
     locationHandler,
     mapboxAccessToken,
+    choosePlace,
   } = props;
 
   const latitude = country_center[1];
@@ -55,19 +56,6 @@ export default function MapComp(props) {
   };
 
   const [viewState, setViewState] = useState(initialViewState);
-
-  const selectTopCity = (city) => {
-    setTopCities([]);
-    const cityData = {
-      label: city[0],
-      type: "city",
-      country: area.country,
-      center: city[1],
-      region: city[2],
-    };
-    setLngLat(city[1]);
-    goToLocation(cityData);
-  };
 
   const pins = topCities.map((city, index) => (
     <Transition

@@ -154,7 +154,7 @@ export default function TripContent(props) {
   };
 
   let content;
-  if (router.pathname === "/tripplanner") {
+  if (router.pathname === "/tripPlanner") {
     content = tripDesc !== "" ? tripDesc?.toString() : "";
   } else if (router.query.hasOwnProperty("title")) {
     content = tripData?.tripDesc;
@@ -370,7 +370,7 @@ export default function TripContent(props) {
   return (
     isClient && (
       <>
-        {(modalMode === "editTrip" || router.pathname === "/tripplanner") && (
+        {(modalMode === "editTrip" || router.pathname === "/tripPlanner") && (
           <>
             <Group gap={20} w="100%" grow>
               <Box>
@@ -548,7 +548,7 @@ export default function TripContent(props) {
             mih={modalMode === "editTrip" ? 200 : 250}
             bg={dark ? "dark.6" : "gray.2"}
             onBlur={() => {
-              if (router.pathname === "/tripplanner")
+              if (router.pathname === "/tripPlanner")
                 setTripDesc(editor.getHTML());
             }}
           >
@@ -575,7 +575,7 @@ export default function TripContent(props) {
             <RichTextEditor.Content />
           </RichTextEditor>
         </ScrollArea>
-        {router.pathname !== "/tripplanner" && (
+        {router.pathname !== "/tripPlanner" && (
           <Group justify="flex-end" w={"100%"}>
             <Button
               variant="default"

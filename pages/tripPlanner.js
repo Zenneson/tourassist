@@ -53,7 +53,7 @@ import { dateFormat, dateId, saveToDB } from "../libs/custom";
 import { useUser } from "../libs/context";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
-import classes from "./tripplanner.module.css";
+import classes from "./tripPlanner.module.css";
 
 export default function TripPlanner(props) {
   let { auth, mapLoaded } = props;
@@ -719,7 +719,7 @@ export default function TripPlanner(props) {
       nextStep();
     }
     if (active === 3) {
-      if (!user && !infoAdded && router.pathname === "/tripplanner") {
+      if (!user && !infoAdded && router.pathname === "/tripPlanner") {
         notifications.show(noAccountInfo);
         return;
       }
