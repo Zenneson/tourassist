@@ -16,7 +16,6 @@ import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
 import { getAuth } from "firebase/auth";
 import { UserProvider } from "../libs/context";
-import StateProviderComp from "../libs/stateVars";
 import colorSchemeManager from "../libs/colorSchemeManager";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
@@ -168,70 +167,68 @@ export default function App(props) {
   const router = useRouter();
 
   return (
-    <StateProviderComp>
-      <MantineProvider
-        theme={tourTheme}
-        defaultColorScheme="dark"
-        colorSchemeManager={localColorScheme}
-      >
-        <Head>
-          <title>TouraSSist</title>
-          <meta
-            name="viewport"
-            content="minimum-scale=1, initial-scale=1, width=device-width"
-          />
-        </Head>
-        <UserProvider>
-          <Notifications position="top-center" zIndex={9999} limit={1} />
-          <SearchModal
-            searchOpened={searchOpened}
-            setSearchOpened={setSearchOpened}
-          />
-          <DropDown
-            dropDownOpened={dropDownOpened}
-            setDropDownOpened={setDropDownOpened}
-          />
-          <MapProvider>
-            <AppShell
-              padding="none"
-              header={{ height: 1 }}
-              component={router.pathname !== "/map" && ScrollArea}
-              style={{ height: "100vh", width: "100vw", overflow: "hidden" }}
-            >
-              <AppShell.Header>
-                <RouterTransition />
-                <MainMenu
-                  active={active}
-                  setActive={setActive}
-                  panelShow={panelShow}
-                  setPanelShow={setPanelShow}
-                  mainMenuOpened={mainMenuOpened}
-                  setMainMenuOpened={setMainMenuOpened}
-                  setListOpened={setListOpened}
-                  searchOpened={searchOpened}
-                  setSearchOpened={setSearchOpened}
-                  setDropDownOpened={setDropDownOpened}
-                />
-              </AppShell.Header>
-              <Component
-                {...pageProps}
+    <MantineProvider
+      theme={tourTheme}
+      defaultColorScheme="dark"
+      colorSchemeManager={localColorScheme}
+    >
+      <Head>
+        <title>TouraSSist</title>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+      </Head>
+      <UserProvider>
+        <Notifications position="top-center" zIndex={9999} limit={1} />
+        <SearchModal
+          searchOpened={searchOpened}
+          setSearchOpened={setSearchOpened}
+        />
+        <DropDown
+          dropDownOpened={dropDownOpened}
+          setDropDownOpened={setDropDownOpened}
+        />
+        <MapProvider>
+          <AppShell
+            padding="none"
+            header={{ height: 1 }}
+            component={router.pathname !== "/map" && ScrollArea}
+            style={{ height: "100vh", width: "100vw", overflow: "hidden" }}
+          >
+            <AppShell.Header>
+              <RouterTransition />
+              <MainMenu
+                active={active}
+                setActive={setActive}
                 panelShow={panelShow}
                 setPanelShow={setPanelShow}
                 mainMenuOpened={mainMenuOpened}
                 setMainMenuOpened={setMainMenuOpened}
-                listOpened={listOpened}
                 setListOpened={setListOpened}
                 searchOpened={searchOpened}
-                dropDownOpened={dropDownOpened}
+                setSearchOpened={setSearchOpened}
                 setDropDownOpened={setDropDownOpened}
-                mapLoaded={mapLoaded}
-                setMapLoaded={setMapLoaded}
-                auth={auth}
               />
-            </AppShell>
-          </MapProvider>
-        </UserProvider>
-      </MantineProvider>
-    </StateProviderComp>
+            </AppShell.Header>
+            <Component
+              {...pageProps}
+              panelShow={panelShow}
+              setPanelShow={setPanelShow}
+              mainMenuOpened={mainMenuOpened}
+              setMainMenuOpened={setMainMenuOpened}
+              listOpened={listOpened}
+              setListOpened={setListOpened}
+              searchOpened={searchOpened}
+              dropDownOpened={dropDownOpened}
+              setDropDownOpened={setDropDownOpened}
+              mapLoaded={mapLoaded}
+              setMapLoaded={setMapLoaded}
+              auth={auth}
+            />
+          </AppShell>
+        </MapProvider>
+      </UserProvider>
+    </MantineProvider>
   );
 }

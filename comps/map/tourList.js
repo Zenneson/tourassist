@@ -16,13 +16,14 @@ import classes from "./tourList.module.css";
 
 export default function TourList(props) {
   const {
+    mapRef,
     places,
     setPlaces,
     listOpened,
     setListOpened,
     setLngLat,
     setLocationDrawer,
-    mapRef,
+    goToLocation,
   } = props;
   const router = useRouter();
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -104,6 +105,7 @@ export default function TourList(props) {
                       setListOpened={setListOpened}
                       setLngLat={setLngLat}
                       setLocationDrawer={setLocationDrawer}
+                      goToLocation={goToLocation}
                     />
                   ))}
                 </AnimatePresence>

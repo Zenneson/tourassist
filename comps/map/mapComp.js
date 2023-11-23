@@ -43,6 +43,7 @@ export default function MapComp(props) {
     locationHandler,
     mapboxAccessToken,
     choosePlace,
+    selectTopCity,
   } = props;
 
   const latitude = country_center[1];
@@ -129,7 +130,7 @@ export default function MapComp(props) {
       }}
       touchPitch={false}
       onClick={(e) => {
-        locationHandler(e.features[0]);
+        locationHandler(e.features[0], mapRef);
       }}
       projection="globe"
       doubleClickZoom={false}

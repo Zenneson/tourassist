@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import centerOfMass from "@turf/center-of-mass";
@@ -13,13 +13,12 @@ import {
   Group,
   Modal,
   LoadingOverlay,
+  InputBase,
   Combobox,
   useCombobox,
   Tooltip,
   Transition,
 } from "@mantine/core";
-import { IconList, IconCheck } from "@tabler/icons-react";
-import { useAtom } from "jotai";
 import {
   IconList,
   IconWorldSearch,
@@ -59,7 +58,6 @@ export default function Mymap(props) {
 
   const mapRef = useRef();
   const fullMapRef = mapRef.current?.getMap();
-  const router = useRouter();
   const [area, setArea] = useState({ label: "" });
   const [locationDrawer, setLocationDrawer] = useState(false);
   const [lngLat, setLngLat] = useState([0, 0]);
@@ -201,7 +199,7 @@ export default function Mymap(props) {
     goToLocation(cityData);
   };
 
-  const locationHandler = (feature) => {
+  const locationHandler = (feature, mapRef) => {
     setTopCities([]);
     if (feature == null) return;
     let locationObj = {};
@@ -245,7 +243,7 @@ export default function Mymap(props) {
     setLocationDrawer(true);
     setLngLat(locationObj.center);
 
-    goToLocation(locationObj);
+    goToLocation(locationObj, mapRef);
   };
 
   const calcView = (place) => {
@@ -641,6 +639,7 @@ export default function Mymap(props) {
                 countrySearch={countrySearch}
                 setCountrySearch={setCountrySearch}
                 handleChange={handleChange}
+                locationHandler={locationHandler}
               />
             </Box>
           </Center>
@@ -668,6 +667,7 @@ export default function Mymap(props) {
         locationHandler={locationHandler}
         mapboxAccessToken={mapboxAccessToken}
         choosePlace={choosePlace}
+        selectTopCity={selectTopCity}
       />
     </>
   );
@@ -675,6 +675,7 @@ export default function Mymap(props) {
 
 const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
   const {
+    mapRef,
     label,
     region,
     country,
@@ -695,7 +696,7 @@ const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
 
   return (
     <Box ref={ref} {...rest}>
-      <Box p={5} onClick={() => locationHandler(data)}>
+      <Box p={5} onClick={() => locationHandler(data, mapRef)}>
         <Text order={6} lineClamp={1} truncate="end">
           {label}
         </Text>
@@ -708,6 +709,7 @@ const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
 });
 
 export const CustomAutoComplete = ({
+  mapRef,
   version,
   area,
   countrySearchData,
@@ -753,7 +755,11 @@ export const CustomAutoComplete = ({
   if (Array.isArray(data)) {
     options = data.map((item) => (
       <Combobox.Option value={item.label} key={item.id}>
-        <AutoCompItem locationHandler={locationHandler} {...item} />
+        <AutoCompItem
+          mapRef={mapRef}
+          locationHandler={locationHandler}
+          {...item}
+        />
       </Combobox.Option>
     ));
   }
@@ -808,7 +814,7 @@ export const CustomAutoComplete = ({
           handleChange("place");
           setPlaceSearch(value);
         }
-        locationHandler(optionProps.children.props);
+        locationHandler(optionProps.children.props, mapRef);
       }}
     >
       <Combobox.Target>

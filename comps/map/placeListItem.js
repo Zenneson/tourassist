@@ -5,7 +5,6 @@ import {
   Text,
   ActionIcon,
 } from "@mantine/core";
-import { goToLocation } from "./mapHooks";
 import { motion } from "framer-motion";
 import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { Draggable } from "react-beautiful-dnd";
@@ -24,6 +23,7 @@ export default function PlaceListItem(props) {
     setListOpened,
     setLngLat,
     setLocationDrawer,
+    goToLocation,
   } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
