@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
-import Map, { Source, Layer } from "react-map-gl";
-import { usePrevious } from "@mantine/hooks";
+import centerOfMass from "@turf/center-of-mass";
+import { usePrevious, useSessionStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Center,
@@ -11,36 +11,26 @@ import {
   Button,
   Text,
   Group,
+  NavLink,
   Modal,
   LoadingOverlay,
+  Combobox,
+  useCombobox,
   Tooltip,
   Transition,
 } from "@mantine/core";
 import { IconList, IconCheck } from "@tabler/icons-react";
 import { useAtom } from "jotai";
 import {
-  placesAtom,
-  handleChange,
-  goToLocation,
-  locationHandler,
-  areaAtom,
-  topCitiesAtom,
-  lngLatAtom,
-  countrySearchAtom,
-  placeSearchAtom,
-  countrySearchDataAtom,
-  placeSearchDataAtom,
-  showMainMarkerAtom,
-  showStatesAtom,
-  locationDrawerAtom,
-  listStatesAtom,
-  showModalAtom,
-  placeLocationAtom,
-} from "./mapHooks";
-import TourList from "./tourList";
-import PopUpMarker from "./popUpMarker";
+  IconList,
+  IconMapPinFilled,
+  IconWorldSearch,
+  IconCheck,
+} from "@tabler/icons-react";
+import { addEllipsis } from "../../libs/custom";
+import { getNewCenter } from "../../public/data/getNewCenter";
+import MapComp from "./mapComp";
 import LocationDrawer from "./locationDrawer";
-import CustomAutoComplete from "./customAutoComplete";
 import classes from "./mymap.module.css";
 
 const fadeOut = { opacity: 0 };
@@ -69,32 +59,23 @@ export default function Mymap(props) {
 
   const mapRef = useRef();
   const fullMapRef = mapRef.current?.getMap();
-  const [area, setArea] = useAtom(areaAtom);
-  const [topCities, setTopCities] = useAtom(topCitiesAtom);
-  const [lngLat, setLngLat] = useAtom(lngLatAtom);
-  const [locationDrawer, setLocationDrawer] = useAtom(locationDrawerAtom);
-  const [showStates, setShowStates] = useAtom(showStatesAtom);
-  const [showMainMarker, setShowMainMarker] = useAtom(showMainMarkerAtom);
-  const [countrySearch, setCountrySearch] = useAtom(countrySearchAtom);
-  const [placeSearch, setPlaceSearch] = useAtom(placeSearchAtom);
-  const [placeSearchData, setPlaceSearchData] = useAtom(placeSearchDataAtom);
-  const [countrySearchData, setCountrySearchData] = useAtom(
-    countrySearchDataAtom
-  );
-  const [listStates] = useAtom(listStatesAtom);
-  const [places, setPlaces] = useAtom(placesAtom);
-  const [showModal, setShowModal] = useAtom(showModalAtom);
-  const [placeLocation, setPlaceLocation] = useAtom(placeLocationAtom);
-
-  const latitude = country_center[1];
-  const longitude = country_center[0];
-  const initialViewState = {
-    latitude: latitude,
-    longitude: longitude,
-    zoom: 2.5,
-    pitch: 0,
-  };
-  const [viewState, setViewState] = useState(initialViewState);
+  const router = useRouter();
+  const [area, setArea] = useState({ label: "" });
+  const [locationDrawer, setLocationDrawer] = useState(false);
+  const [lngLat, setLngLat] = useState([0, 0]);
+  const [showStates, setShowStates] = useState(false);
+  const [showMainMarker, setShowMainMarker] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
+  const [placeSearch, setPlaceSearch] = useState("");
+  const [placeSearchData, setPlaceSearchData] = useState([]);
+  const [countrySearchData, setCountrySearchData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [topCities, setTopCities] = useState([]);
+  const [listStates, setListStates] = useState([]);
+  const [places, setPlaces] = useSessionStorage({
+    key: "places",
+    defaultValue: [],
+  });
 
   useEffect(() => {
     router.prefetch("/tripplanner");
@@ -102,17 +83,7 @@ export default function Mymap(props) {
     (area.type === "city" ||
       (area.type === "region" && area.country !== "United States")) &&
       setShowMainMarker(true);
-  }, [area, router, setShowMainMarker, setShowStates]);
-
-  const getFogProperties = (dark) => {
-    return {
-      color: dark ? "#0f2e57" : "#fff",
-      "high-color": dark ? "#000" : "#245cdf",
-      "space-color": dark
-        ? ["interpolate", ["linear"], ["zoom"], 4, "#010b19", 7, "#367ab9"]
-        : ["interpolate", ["linear"], ["zoom"], 4, "#fff", 7, "#fff"],
-    };
-  };
+  }, [area, router]);
 
   const animateLayerOpacity = (
     map,
@@ -138,6 +109,16 @@ export default function Mymap(props) {
       }
     };
     requestAnimationFrame(animate);
+  };
+
+  const getFogProperties = (dark) => {
+    return {
+      color: dark ? "#0f2e57" : "#fff",
+      "high-color": dark ? "#000" : "#245cdf",
+      "space-color": dark
+        ? ["interpolate", ["linear"], ["zoom"], 4, "#010b19", 7, "#367ab9"]
+        : ["interpolate", ["linear"], ["zoom"], 4, "#fff", 7, "#fff"],
+    };
   };
 
   useEffect(() => {
@@ -171,54 +152,241 @@ export default function Mymap(props) {
     }
   }, [fullMapRef, mapLoaded, dark]);
 
-  const onZoomEnd = (e) => {
-    if (e.target.getZoom() < 3.5) {
-      mapRef.current?.flyTo({
-        duration: 1000,
+  const getCords = (feature) => {
+    let center = feature.center;
+    if (feature && feature.geometry && feature.geometry.type) {
+      center = centerOfMass(feature);
+    }
+    return center?.geometry.coordinates;
+  };
+
+  const locationHandler = (feature) => {
+    setTopCities([]);
+    if (feature == null) return;
+    let locationObj = {};
+    locationObj.type =
+      feature.group ||
+      (feature.source === "country-boundaries" ? "country" : "region") ||
+      "city";
+    locationObj.type = locationObj.type.toLowerCase();
+    locationObj.label =
+      feature.label ||
+      feature.properties?.name_en ||
+      feature.properties?.name ||
+      feature.properties?.NAME ||
+      "";
+    locationObj.country =
+      feature.country ||
+      (feature.properties?.NAME && "United States") ||
+      feature.properties?.name_en ||
+      "";
+    locationObj.state = feature.region || feature.properties?.NAME || "";
+    locationObj.center = feature.center || getCords(feature);
+    locationObj.shortcode =
+      feature.shortcode ||
+      feature.isoName ||
+      feature.properties?.iso_3166_1 ||
+      "";
+    locationObj.shortcode = locationObj.shortcode.toLowerCase();
+    if (locationObj.label === "Czech Republic") locationObj.label = "Czechia";
+    if (locationObj.label === "Aland Islands")
+      locationObj.label = "Åland Islands";
+    if (locationObj.label === "East Timor") locationObj.label = "Timor-Leste";
+    if (locationObj.label === "Myanmar") locationObj.label = "Myanmar (Burma)";
+    if (locationObj.label === "Réunion") locationObj.label = "Reunion";
+    if (locationObj.label === "Saint Barthélemy")
+      locationObj.label = "Saint-Barthélemy";
+
+    setCountrySearch("");
+    setPlaceSearch("");
+    setCountrySearchData([]);
+    setPlaceSearchData([]);
+    setLocationDrawer(true);
+    setLngLat(locationObj.center);
+
+    goToLocation(locationObj);
+  };
+
+  const calcView = (place) => {
+    const { country, type, label } = place;
+    let zoom = getNewCenter(place).maxZoom;
+    let pitch = 40;
+    setArea(place);
+
+    if ((country === "United States" && type === "region") || type !== "city") {
+      fetchCities(place);
+    }
+    if (country === "United States" && type === "country") {
+      usStates(place);
+      pitch = 25;
+    }
+    if (type === "city" || (country !== "United States" && type === "region")) {
+      zoom = 12;
+      pitch = 75;
+      if (label === "District of Columbia") {
+        zoom = 10;
+      }
+    }
+    return { zoom, pitch };
+  };
+
+  const goToLocation = (place) => {
+    const { zoom, pitch } = calcView(place);
+    const coords =
+      place.type === "country" ? getNewCenter(place).newCenter : place.center;
+
+    setShowStates(false);
+    setShowMainMarker(false);
+
+    let newCoords = coords;
+    if (newCoords && Array.isArray(newCoords)) {
+      newCoords = { lng: newCoords[0], lat: newCoords[1] };
+    } else if (newCoords && newCoords.lon) {
+      newCoords = { lng: newCoords.lon, lat: newCoords.lat };
+    }
+
+    place.type === "country" &&
+      mapRef.current.flyTo({
+        center: newCoords,
+        zoom: 3,
+        duration: 800,
         pitch: 0,
+      });
+
+    const moveTime = place.type === "country" ? 400 : 200;
+    const moveDuration = place.type === "country" ? 1500 : 2200;
+
+    setTimeout(() => {
+      mapRef.current?.flyTo({
+        center: coords,
+        duration: moveDuration,
+        zoom: zoom,
+        pitch: pitch,
         essential: true,
       });
+    }, moveTime);
+  };
+
+  const placeType = (place) => {
+    if (place === "country" || place.type === "country") return "Country";
+    if (place === "region" || place.type === "region") return "Region";
+    if (place === "place" || place.type === "place") return "City";
+  };
+
+  const handleChange = useCallback(
+    async (field) => {
+      let shortCode = area.shortcode;
+      if (field === "place" && area.country === "United States")
+        shortCode = "us";
+
+      let endpoint;
+      if (field === "country") {
+        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${countrySearch}.json?&autocomplete=true&fuzzyMatch=true&limit=5&types=country%2Cregion%2Cplace&language=en&access_token=${mapboxAccessToken}`;
+      } else {
+        endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearch}.json?country=${shortCode}&autocomplete=true&&fuzzyMatch=true&types=place%2Cregion&limit=5&language=en&access_token=${mapboxAccessToken}`;
+      }
+
+      try {
+        const response = await fetch(endpoint);
+        const results = await response.json();
+        const data = results.features.map((feature) => ({
+          label: feature.text,
+          value: feature.id,
+          id: feature.id,
+          type: feature.place_type[0],
+          group: placeType(feature.place_type[0]),
+          country: feature.place_name.split(", ").pop(),
+          region: feature.place_name.split(", ", 2)[1],
+          center: feature.center,
+          shortcode: feature.properties?.short_code,
+        }));
+
+        const searchData = data.map((item) => {
+          if (item.value === "place.345549036") {
+            return {
+              ...item,
+              label: "Washington D.C.",
+            };
+          }
+          return item;
+        });
+
+        if (field === "country") setCountrySearchData(searchData);
+        if (field === "place") setPlaceSearchData(searchData);
+      } catch (error) {
+        console.error("Error fetching data for Country Autocomplete: ", error);
+      }
+    },
+    [area, countrySearch, placeSearch, mapboxAccessToken]
+  );
+
+  const fetchCities = async (location) => {
+    try {
+      const path =
+        location.country === "United States"
+          ? "/data/uscitiesdata.json"
+          : "/data/worldcitiesdata.json";
+      const res = await fetch(path);
+      const data = await res.json();
+
+      if (!data) {
+        return {
+          notFound: true,
+        };
+      }
+
+      const filterKey =
+        location.country === "United States" && location.type === "region"
+          ? "state"
+          : "country";
+      const dataArray = data.filter((region) => {
+        if (!region[filterKey]) return;
+        const filterKeyLower = region[filterKey].toLowerCase();
+        const labelLower = location.label.toLowerCase();
+        return filterKeyLower === labelLower;
+      });
+      const regionCities = dataArray[0]?.cities;
+      let topFive = [];
+      regionCities &&
+        regionCities.map((city) => {
+          topFive.push([city.name, city.center, location.label]);
+        });
+      setTopCities(topFive);
+    } catch (error) {
+      console.error("Error:", error);
+      return {
+        notFound: true,
+      };
     }
   };
 
-  const selectTopCity = (city) => {
-    setTopCities([]);
-    const cityData = {
-      label: city[0],
-      type: "city",
-      country: area.country,
-      center: city[1],
-      region: city[2],
-    };
-    setLngLat(city[1]);
-    goToLocation(cityData, mapRef);
-  };
+  const usStates = async () => {
+    try {
+      const res = await fetch("/data/uscitiesdata.json");
+      const data = await res.json();
 
-  const resetMap = () => {
-    mapRef.current.flyTo({
-      zoom: 2.5,
-      duration: 1000,
-      pitch: 0,
-      essential: true,
-    });
-  };
+      if (!data) {
+        return {
+          notFound: true,
+        };
+      }
 
-  const clearData = () => {
-    setArea({ label: "" });
-    setLocationDrawer(false);
-    setLngLat([0, 0]);
-    setTopCities([]);
-    setPlaceSearchData([]);
-    setCountrySearchData([]);
-    setPlaceSearch("");
-    setCountrySearch("");
-    setShowStates(false);
-    setShowMainMarker(false);
-  };
-
-  const resetGlobe = () => {
-    resetMap();
-    setTimeout(clearData, 200);
+      let states = [];
+      data.map((state) => {
+        states.push({
+          value: state.state,
+          label: state.state,
+          center: state.center,
+          country: "United States",
+        });
+      });
+      setListStates(states);
+    } catch (error) {
+      console.error("Error:", error);
+      return {
+        notFound: true,
+      };
+    }
   };
 
   const [prevArea, setPrevArea] = useState({ label: "" });
@@ -311,19 +479,23 @@ export default function Mymap(props) {
         </Group>
       </Modal>
       <LocationDrawer
-        mapRef={mapRef}
+        places={places}
+        dark={dark}
         area={area}
         prevArea={prevArea}
-        topCities={topCities}
-        mapLoaded={mapLoaded}
         locationDrawer={locationDrawer}
         setLocationDrawer={setLocationDrawer}
-        selectTopCity={selectTopCity}
-        resetGlobe={resetGlobe}
+        setMainMenuOpened={setMainMenuOpened}
+        setListOpened={setListOpened}
+        mapLoaded={mapLoaded}
+        topCities={topCities}
+        setTopCities={setTopCities}
+        placeSearchData={placeSearchData}
+        setPlaceSearchData={setPlaceSearchData}
         placeSearch={placeSearch}
         setPlaceSearch={setPlaceSearch}
-        placeSearchData={placeSearchData}
-        listStates={listStates}
+        handleChange={handleChange}
+        locationHandler={locationHandler}
       />
       {places && places.length >= 1 && !listOpened && (
         <motion.div
@@ -385,160 +557,218 @@ export default function Mymap(props) {
           </Center>
         )}
       </Transition>
-      <Map
-        id="mapRef"
-        ref={mapRef}
-        {...viewState}
-        onMove={(e) => {
-          setViewState(e.viewState);
-        }}
-        initialViewState={initialViewState}
-        renderWorldCopies={true}
-        styleDiffing={false}
-        maxPitch={80}
-        onZoomEnd={onZoomEnd}
-        maxZoom={14}
-        minZoom={2}
-        reuseMaps={true}
-        onLoad={(e) => {
-          setMapLoaded(true);
-          const fogProperties = getFogProperties(dark);
-          e.target.setFog(fogProperties);
-        }}
-        touchPitch={false}
-        onClick={(e) => {
-          locationHandler(e.features[0], mapRef);
-        }}
-        projection="globe"
-        doubleClickZoom={false}
-        interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-        mapStyle={"mapbox://styles/zenneson/clm07y8pz01ur01qieykmcji3"}
-        style={{ width: "100%", height: "100%" }}
+      <MapComp
+        mapRef={mapRef}
+        setMapLoaded={setMapLoaded}
+        area={area}
+        places={places}
+        setPlaces={setPlaces}
+        listOpened={listOpened}
+        setListOpened={setListOpened}
+        topCities={topCities}
+        setTopCities={setTopCities}
+        searchOpened={searchOpened}
+        country_center={country_center}
+        setLngLat={setLngLat}
+        setLocationDrawer={setLocationDrawer}
+        goToLocation={goToLocation}
+        showMainMarker={showMainMarker}
+        showStates={showStates}
+        getFogProperties={getFogProperties}
+        locationHandler={locationHandler}
         mapboxAccessToken={mapboxAccessToken}
-      >
-        {!searchOpened && (
-          <TourList
-            mapRef={mapRef}
-            places={places}
-            setPlaces={setPlaces}
-            listOpened={listOpened}
-            setListOpened={setListOpened}
-            setLngLat={setLngLat}
-            setLocationDrawer={setLocationDrawer}
-          />
-        )}
-        <PopUpMarker
-          area={area}
-          lngLat={lngLat}
-          topCities={topCities}
-          showMainMarker={showMainMarker}
-          selectTopCity={selectTopCity}
-        />
-        <Source
-          id="country-boundaries"
-          type="vector"
-          url="mapbox://mapbox.country-boundaries-v1"
-        >
-          <Layer
-            id="country-boundaries"
-            source="country-boundaries"
-            source-layer="country_boundaries"
-            type="fill"
-            paint={{
-              "fill-color": "rgba(0,0,0,0)",
-            }}
-          />
-          <Layer
-            id="country-boundaries-fill"
-            source="country-boundaries"
-            source-layer="country_boundaries"
-            type="fill"
-            filter={
-              !showStates
-                ? ["in", "name_en", area.label]
-                : ["in", "name", "United States"]
-            }
-            paint={{
-              "fill-color": `${
-                dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
-              }`,
-              "fill-opacity": 0,
-            }}
-          />
-          <Layer
-            id="country-boundaries-lines"
-            source="country-boundaries"
-            source-layer="country_boundaries"
-            type="line"
-            filter={["in", "name_en", area.label]}
-            paint={{
-              "line-color": "rgba(255, 255, 255, 1)",
-              "line-width": 4,
-              "line-opacity": 0,
-            }}
-          />
-        </Source>
-        <Source
-          id="states-boundaries"
-          type="geojson"
-          data="data/states.geojson"
-        >
-          <Layer
-            id="states"
-            type="fill"
-            source="states-boundaries"
-            paint={{
-              "fill-color": "rgba(0,0,0,0)",
-              "fill-opacity": 0,
-            }}
-            filter={
-              !showStates
-                ? ["in", "name_en", area.label]
-                : ["!", ["in", "name", ""]]
-            }
-          />
-          <Layer
-            id="states-boundaries"
-            type="line"
-            source="states-boundaries"
-            paint={{
-              "line-color": "rgba(255, 255, 255, 1)",
-              "line-width": 4,
-              "line-opacity": 0,
-            }}
-            filter={
-              !showStates
-                ? ["in", "name_en", area.label]
-                : ["!", ["in", "name", ""]]
-            }
-          />
-        </Source>
-        <Source id="clicked-state" type="geojson" data="data/states.geojson">
-          <Layer
-            id="clicked-state"
-            type="fill"
-            source="clicked-state"
-            paint={{
-              "fill-color": `${
-                dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
-              }`,
-              "fill-opacity": 0,
-            }}
-            filter={["==", "NAME", area.label]}
-          />
-          <Layer
-            id="state-borders"
-            type="line"
-            source="clicked-state"
-            paint={{
-              "line-color": "rgba(255, 255, 255, 1)",
-              "line-width": 6,
-              "line-opacity": 0,
-            }}
-            filter={["==", "NAME", area.label]}
-          />
-        </Source>
-      </Map>
+      />
     </>
   );
 }
+
+const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {
+  const {
+    label,
+    region,
+    country,
+    group,
+    center,
+    border,
+    locationHandler,
+    ...rest
+  } = props;
+  const data = {
+    label,
+    region,
+    country,
+    group,
+    center,
+    border,
+  };
+
+  return (
+    <Box ref={ref} {...rest}>
+      <Box p={5} onClick={() => locationHandler(data)}>
+        <Text order={6} lineClamp={1} truncate="end">
+          {label}
+        </Text>
+        <Text fz={12} lineClamp={1} truncate="end">
+          {group === "City" ? `${region}, ${country}` : country}
+        </Text>
+      </Box>
+    </Box>
+  );
+});
+
+export const CustomAutoComplete = ({
+  version,
+  area,
+  countrySearchData,
+  placeSearchData,
+  countrySearch,
+  setCountrySearch,
+  placeSearch,
+  setPlaceSearch,
+  locationHandler,
+  handleChange,
+}) => {
+  const prefaceThe = [
+    "Bahamas",
+    "Cayman Islands",
+    "Falkland Islands",
+    "Netherlands",
+    "Philippines",
+    "United Arab Emirates",
+    "United Kingdom",
+    "United States",
+    "US Virgin Islands",
+    "Maldives",
+    "Democratic Republic of the Congo",
+    "Republic of the Congo",
+    "Dominican Republic",
+    "Central African Republic",
+  ];
+
+  const autoRef = useRef();
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownOpen: (eventSource) => {
+      if (eventSource === "keyboard") {
+        combobox.selectActiveOption();
+      } else {
+        combobox.updateSelectedOptionIndex("active");
+      }
+    },
+  });
+
+  const data = version === "country" ? countrySearchData : placeSearchData;
+  let options;
+  if (Array.isArray(data)) {
+    options = data.map((item) => (
+      <Combobox.Option value={item.label} key={item.id}>
+        <AutoCompItem locationHandler={locationHandler} {...item} />
+      </Combobox.Option>
+    ));
+  }
+
+  useEffect(() => {
+    combobox.selectFirstOption();
+    const isInputFocused = autoRef.current === document.activeElement;
+    if (!isInputFocused) combobox.closeDropdown();
+    if (
+      countrySearch &&
+      countrySearch.length === 0 &&
+      placeSearch &&
+      placeSearch.length === 0
+    ) {
+      combobox.closeDropdown();
+    } else if (isInputFocused) {
+      if (
+        (countrySearch && countrySearch.length > 2) ||
+        (placeSearch && placeSearch.length > 2 && options.length > 0)
+      ) {
+        combobox.openDropdown();
+      }
+    } else if (options.length === 0) {
+      combobox.closeDropdown();
+    }
+  }, [options, combobox, countrySearch, placeSearch]);
+
+  return (
+    <Combobox
+      classNames={{
+        dropdown:
+          version === "country"
+            ? classes.countryAutoCompleteDropdown
+            : classes.placeAutoCompleteDropdown,
+        option:
+          version === "country"
+            ? classes.countryAutoCompleteOption
+            : classes.placeAutoCompleteOption,
+      }}
+      transitionProps={{
+        transition: "fade",
+        duration: 100,
+        timingFunction: "ease",
+      }}
+      store={combobox}
+      offset={3}
+      onOptionSubmit={(value, optionProps) => {
+        if (version === "country") {
+          handleChange("country");
+          setCountrySearch(value);
+        } else {
+          handleChange("place");
+          setPlaceSearch(value);
+        }
+        locationHandler(optionProps.children.props);
+      }}
+    >
+      <Combobox.Target>
+        <InputBase
+          ref={autoRef}
+          classNames={{
+            root:
+              version === "country"
+                ? classes.countryAutoComplete
+                : classes.placeAutoComplete,
+            input:
+              version === "country"
+                ? classes.countryAutoCompleteInput
+                : classes.placeAutoCompleteInput,
+          }}
+          size={version === "country" ? "lg" : "sm"}
+          w={version === "country" ? 350 : "auto"}
+          radius={version === "country" ? "xl" : "3px 3px 0 0"}
+          pointer
+          leftSection={<IconWorldSearch size={20} />}
+          leftSectionWidth={35}
+          rightSectionPointerEvents="none"
+          value={version === "country" ? countrySearch : placeSearch}
+          onBlur={() => combobox.closeDropdown()}
+          onChange={(e) => {
+            const search = e.target.value;
+            if (version === "country") {
+              handleChange("country");
+              setCountrySearch(search);
+            } else {
+              handleChange("place");
+              setPlaceSearch(search);
+            }
+            combobox.updateSelectedOptionIndex();
+          }}
+          placeholder={
+            version === "country"
+              ? "Where would you like to go?"
+              : addEllipsis(
+                  `Search in${prefaceThe.includes(area.label) ? " The" : ""} ${
+                    area.country === "United States" ? area.country : area.label
+                  }?`,
+                  40
+                )
+          }
+        />
+      </Combobox.Target>
+
+      <Combobox.Dropdown>
+        <Combobox.Options>{options}</Combobox.Options>
+      </Combobox.Dropdown>
+    </Combobox>
+  );
+};
