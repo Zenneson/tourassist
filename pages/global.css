@@ -19,6 +19,12 @@ input {
   border-radius: 3;
 }
 
+.toolTip {
+  background: light-dark(#fff, #141517);
+  color: light-dark(#141517, #fff);
+  border: 1px solid light-dark(#ececec, #1c1c1c);
+}
+
 .duffel-components .card-details {
   background-color: light-dark(rgba(248, 249, 250, 0.9), #c2c3c6);
   border: 1px solid

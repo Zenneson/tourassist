@@ -20,9 +20,9 @@ export default function TourList(props) {
     setPlaces,
     listOpened,
     setListOpened,
-    goToLocation,
     setLngLat,
     setLocationDrawer,
+    mapRef,
   } = props;
   const router = useRouter();
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -93,6 +93,7 @@ export default function TourList(props) {
                 <AnimatePresence>
                   {places.map((place, index) => (
                     <PlaceListItem
+                      mapRef={mapRef}
                       places={places}
                       setPlaces={setPlaces}
                       key={place.place + "_" + place.id}
@@ -102,7 +103,6 @@ export default function TourList(props) {
                       region={place.region}
                       setListOpened={setListOpened}
                       setLngLat={setLngLat}
-                      goToLocation={goToLocation}
                       setLocationDrawer={setLocationDrawer}
                     />
                   ))}

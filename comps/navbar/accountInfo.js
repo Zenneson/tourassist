@@ -175,7 +175,7 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    classNames={{ tooltip: classes.toolTip }}
+                    classNames={{ tooltip: "toolTip" }}
                     position="bottom"
                     label={
                       firstNameValue ? "Edit First Name" : "Add First Name"
@@ -219,7 +219,7 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    classNames={{ tooltip: classes.toolTip }}
+                    classNames={{ tooltip: "toolTip" }}
                     position="bottom"
                     label={lastNameValue ? "Edit Last Name" : "Add Last Name"}
                   >
@@ -263,7 +263,7 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    classNames={{ tooltip: classes.toolTip }}
+                    classNames={{ tooltip: "toolTip" }}
                     position="bottom"
                     label={phoneValue ? "Edit Phone #" : "Add Phone #"}
                   >
@@ -407,7 +407,7 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    classNames={{ tooltip: classes.toolTip }}
+                    classNames={{ tooltip: "toolTip" }}
                     position="bottom"
                     label={
                       faceBookValue
@@ -453,7 +453,7 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    classNames={{ tooltip: classes.toolTip }}
+                    classNames={{ tooltip: "toolTip" }}
                     position="bottom"
                     label={
                       instagramValue
@@ -501,7 +501,7 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    classNames={{ tooltip: classes.toolTip }}
+                    classNames={{ tooltip: "toolTip" }}
                     position="bottom"
                     label={
                       tikTokValue ? "Edit Tiktok handle" : "Add Tiktok handle"
@@ -545,7 +545,7 @@ export default function AccountInfo(props) {
                 }}
                 rightSection={
                   <Tooltip
-                    classNames={{ tooltip: classes.toolTip }}
+                    classNames={{ tooltip: "toolTip" }}
                     position="bottom"
                     label={
                       twitterValue

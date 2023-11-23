@@ -103,7 +103,7 @@ export default function TripPlanner(props) {
     defaultValue: "",
   });
   const [placeData, setPlaceData] = useSessionStorage({
-    key: "placeData",
+    key: "places",
     defaultValue: [],
   });
   const [renderState, setRenderState] = useSessionStorage({

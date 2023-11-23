@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { firestore } from "./firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { mutate } from "swr";
@@ -273,7 +273,7 @@ export const saveToDB = async (
         tripId: createdId,
         user: user,
       });
-      sessionStorage.removeItem("placeDataState");
+      sessionStorage.removeItem("placeData");
       sessionStorage.removeItem("places");
       sessionStorage.removeItem("images");
       sessionStorage.removeItem("tripDesc");

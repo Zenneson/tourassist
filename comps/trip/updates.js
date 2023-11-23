@@ -162,7 +162,7 @@ export default function Updates(props) {
             <Popover.Target>
               <Center>
                 <Tooltip
-                  classNames={{ tooltip: classes.toolTip }}
+                  classNames={{ tooltip: "toolTip" }}
                   label={"Share Update"}
                   position="top"
                   openDelay={800}

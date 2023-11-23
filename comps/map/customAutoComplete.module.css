@@ -1,0 +1,57 @@
+.countryAutoComplete {
+  transition: all 500ms ease;
+}
+
+.placeAutoCompleteInput {
+  border: none;
+  border-radius: 3px 3px 0 0;
+}
+
+.placeAutoCompleteInput {
+  background: light-dark(rgba(248, 249, 250, 1), rgba(12, 13, 14, 1));
+  color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
+
+  &::placeholder {
+    color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
+  }
+}
+
+.countryAutoCompleteInput,
+.countryAutoCompleteInput:focus {
+  border: none;
+  border-top: 2px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+  box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+}
+
+.countryAutoCompleteOption,
+.placeAutoCompleteOption {
+  &:hover {
+    color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));
+    font-weight: 700;
+  }
+
+  &[data-combobox-selected="true"] {
+    box-shadow: 0 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+    background-color: light-dark(rgba(255, 255, 255, 1), rgba(0, 0, 0, 0.5));
+    color: light-dark(rgb(11, 12, 13), rgb(248, 249, 250));
+  }
+}
+
+.countryAutoCompleteDropdown {
+  border-radius: 25px;
+  box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+  background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(11, 12, 13, 0.9));
+}
+
+.countryAutoCompleteOption {
+  border-radius: 17px;
+}
+
+.placeAutoCompleteDropdown {
+  border-radius: 3px;
+  background-color: light-dark(rgba(248, 249, 250, 1), rgba(11, 12, 13, 1));
+}
+
+.placeAutoCompleteOption {
+  border-radius: 3px;
+}

@@ -231,7 +231,7 @@ export default function MainMenu(props) {
               <Tooltip
                 label="Toggle Color Scheme"
                 position="bottom"
-                classNames={{ tooltip: classes.toolTip }}
+                classNames={{ tooltip: "toolTip" }}
               >
                 <Button
                   className={classes.toggleColorButton}
@@ -252,7 +252,7 @@ export default function MainMenu(props) {
                 <Tooltip
                   label="Search Trips"
                   position="bottom"
-                  classNames={{ tooltip: classes.toolTip }}
+                  classNames={{ tooltip: "toolTip" }}
                 >
                   {/* Search button */}
                   <Button
@@ -278,7 +278,7 @@ export default function MainMenu(props) {
                   <Tooltip
                     label={user ? "Logout" : "Login"}
                     position="bottom"
-                    classNames={{ tooltip: classes.toolTip }}
+                    classNames={{ tooltip: "toolTip" }}
                   >
                     <Popover.Target>
                       {/* Logout Dropdown */}
@@ -330,7 +330,7 @@ export default function MainMenu(props) {
                 <Tooltip
                   label={"TourAssist?"}
                   position="bottom"
-                  classNames={{ tooltip: classes.toolTip }}
+                  classNames={{ tooltip: "toolTip" }}
                 >
                   <IconInfoCircleFilled
                     stroke={1}

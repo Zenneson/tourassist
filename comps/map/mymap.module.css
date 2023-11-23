@@ -1,81 +1,5 @@
-.miniPopUp > div:nth-child(2),
-.popup > div:nth-child(2) {
-  /* Popup body */
-  transition: all 200ms ease-in-out;
-  max-width: 20rem;
-  font-family: Montserrat;
-  cursor: pointer;
-  background: light-dark(rgba(248, 249, 250, 1), rgba(26, 28, 32, 1));
-  color: light-dark(rgb(10, 11, 13), rgb(247, 249, 250));
-  border-radius: 3px;
-  padding: 2px;
-}
-
-.miniPopUp > div:nth-child(1),
-.popup > div:nth-child(1) {
-  /* Popup tip */
-  border-top-color: light-dark(rgba(248, 249, 250, 1), rgba(26, 28, 32, 1));
-}
-
-.miniPopUp > div:nth-child(2) {
-  font-weight: 700;
-  padding: 0px;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-}
-
-.miniPopUp > * {
-  opacity: 0.7;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
-@keyframes popupAnimation {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.miniPopUp {
-  animation: popupAnimation 250ms ease;
-}
-
-.popup {
-  animation: popupAnimation 500ms ease;
-}
-
-.miniPopUpColor {
-  color: #fff;
-  opacity: 0.5;
-}
-
-.markerIconColor {
-  color: light-dark(#49d8ff, #0d3f82);
-}
-
-.popupMenu {
-  font-size: 1rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  padding-bottom: 10px;
-  margin: 0 5px;
-}
-
-.popupMenuBtn {
-  color: light-dark(rgb(10, 11, 13), rgb(247, 249, 250));
-  opacity: 0.5;
-
-  &:hover {
-    background-color: inherit;
-    opacity: 1;
-  }
+.countryAutoCompleteZIndex {
+  z-index: 1;
 }
 
 .destinationModal {
@@ -91,86 +15,6 @@
   backdrop-filter: blur(9px);
 }
 
-.placeTitle {
-  font-size: 0.8rem;
-  text-shadow: 0 4px 7px light-dark(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.4));
-  text-transform: uppercase;
-}
-
-.countryAutoCompleteZIndex {
-  z-index: 1;
-}
-
-.countryAutoComplete {
-  transition: all 500ms ease;
-}
-
-.placeAutoCompleteInput {
-  border: none;
-  border-radius: 3px 3px 0 0;
-}
-
-.select,
-.placeAutoCompleteInput {
-  background: light-dark(rgba(248, 249, 250, 1), rgba(12, 13, 14, 1));
-  color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
-
-  &::placeholder {
-    color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
-  }
-}
-
-.countryAutoCompleteInput,
-.countryAutoCompleteInput:focus {
-  border: none;
-  border-top: 2px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
-  box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
-}
-
-.selectOption,
-.countryAutoCompleteOption,
-.placeAutoCompleteOption {
-  &:hover {
-    color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));
-    font-weight: 700;
-  }
-
-  &[data-combobox-selected="true"] {
-    box-shadow: 0 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
-    background-color: light-dark(rgba(255, 255, 255, 1), rgba(0, 0, 0, 0.5));
-    color: light-dark(rgb(11, 12, 13), rgb(248, 249, 250));
-  }
-}
-
-.countryAutoCompleteDropdown {
-  border-radius: 25px;
-  box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
-  background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(11, 12, 13, 0.9));
-}
-
-.countryAutoCompleteOption {
-  border-radius: 17px;
-}
-
-.placeAutoCompleteDropdown {
-  border-radius: 3px;
-  background-color: light-dark(rgba(248, 249, 250, 1), rgba(11, 12, 13, 1));
-}
-
-.placeAutoCompleteOption {
-  border-radius: 3px;
-}
-
-.topCitiesLink {
-  transition: all 200ms ease-in-out;
-  background: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 0.7));
-
-  &:hover {
-    background: light-dark(rgba(248, 249, 250, 1), rgba(14, 15, 18, 1));
-    transform: scale(1.05) translateX(7px);
-  }
-}
-
 .clearListButton {
   opacity: 0.5;
   &:hover {
@@ -178,7 +22,12 @@
   }
 }
 
-.locationBtn,
+.toolTip {
+  background: light-dark(#fff, #141517);
+  color: light-dark(#141517, #fff);
+  border: 1px solid light-dark(#ececec, #1c1c1c);
+}
+
 .tourListButton {
   position: absolute;
   top: 120px;
@@ -198,88 +47,5 @@
     light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
   &:hover {
     padding-left: 12px;
-  }
-}
-
-.locationBtn {
-  top: 92px;
-  right: 390px;
-  border-left: 1px solid
-    light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
-  border-right: none;
-  border-radius: 3px 0 0 3px;
-
-  &:hover {
-    padding-left: 8px;
-    padding-right: 12px;
-  }
-}
-
-.locationDrawer {
-  pointer-events: none;
-  box-shadow: none;
-  min-height: 570px;
-  overflow: hidden;
-  background-color: light-dark(rgba(248, 249, 250, 0), rgba(12, 13, 14, 0));
-}
-
-.locationDrawer > * {
-  pointer-events: all;
-}
-
-.toolTip {
-  background: light-dark(#fff, #141517);
-  color: light-dark(#141517, #fff);
-  border: 1px solid light-dark(#ececec, #1c1c1c);
-}
-
-.select {
-  border-radius: 0 0 3px 3px;
-  outline: none;
-  border: none;
-}
-
-.placeBtns {
-  box-shadow: 0px 2px 3px
-    light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.01));
-  border-radius: 3px;
-}
-
-.chooseLocationBox {
-  border-radius: 3px;
-  box-shadow: 0px 2px 3px
-    light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.01));
-}
-
-.locationBtns {
-  font-weight: 100;
-  background: light-dark(rgba(248, 249, 250, 1), rgba(12, 13, 14, 1));
-  color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
-
-  &:hover {
-    background: light-dark(rgba(248, 249, 250, 1), rgba(14, 15, 18, 1));
-    color: light-dark(rgba(14, 15, 18, 1), rgba(248, 249, 250, 1));
-  }
-}
-
-.closeBtn {
-  box-shadow: 0 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  transition: all 300ms ease;
-  font-weight: 700;
-  opacity: 0.9;
-  color: #fff;
-  background: light-dark(
-    linear-gradient(0deg, #00e8fc 0%, #93f3fc 100%),
-    linear-gradient(0deg, #00376b 0%, #004585 100%)
-  );
-
-  &:hover {
-    opacity: 1;
-    color: #fff;
-    transform: scale(1.01);
-    background: light-dark(
-      linear-gradient(0deg, #02a3b2 0%, #4fc0ca 100%),
-      linear-gradient(0deg, #012445 0%, #013260 100%)
-    );
   }
 }

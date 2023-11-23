@@ -258,10 +258,7 @@ export default function Trippage(props) {
   const ShareButtons = () => (
     <Center>
       <Button.Group className={classes.shareButtonGroup}>
-        <Tooltip
-          classNames={{ tooltip: classes.toolTip }}
-          label="Share on Facebook"
-        >
+        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Facebook">
           <Button
             className={classes.shareButton}
             size="lg"
@@ -271,10 +268,7 @@ export default function Trippage(props) {
             <IconBrandFacebook size={20} />
           </Button>
         </Tooltip>
-        <Tooltip
-          classNames={{ tooltip: classes.toolTip }}
-          label="Share on Instagram"
-        >
+        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Instagram">
           <Button
             className={classes.shareButton}
             size="lg"
@@ -284,10 +278,7 @@ export default function Trippage(props) {
             <IconBrandInstagram size={20} />
           </Button>
         </Tooltip>
-        <Tooltip
-          classNames={{ tooltip: classes.toolTip }}
-          label="Share on Tiktok"
-        >
+        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Tiktok">
           <Button
             className={classes.shareButton}
             size="lg"
@@ -297,10 +288,7 @@ export default function Trippage(props) {
             <IconBrandTiktok size={20} />
           </Button>
         </Tooltip>
-        <Tooltip
-          classNames={{ tooltip: classes.toolTip }}
-          label="Share on Twitter"
-        >
+        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Twitter">
           <Button
             className={classes.shareButton}
             size="lg"
@@ -310,10 +298,7 @@ export default function Trippage(props) {
             <IconBrandTwitter size={20} />
           </Button>
         </Tooltip>
-        <Tooltip
-          classNames={{ tooltip: classes.toolTip }}
-          label="Share on Whatsapp"
-        >
+        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Whatsapp">
           <Button
             className={classes.shareButton}
             size="lg"
@@ -323,10 +308,7 @@ export default function Trippage(props) {
             <IconBrandWhatsapp size={20} />
           </Button>
         </Tooltip>
-        <Tooltip
-          classNames={{ tooltip: classes.toolTip }}
-          label="HTML Embed Code"
-        >
+        <Tooltip classNames={{ tooltip: "toolTip" }} label="HTML Embed Code">
           <Button
             className={classes.shareButton}
             size="lg"
@@ -336,10 +318,7 @@ export default function Trippage(props) {
             <IconSourceCode size={20} />
           </Button>
         </Tooltip>
-        <Tooltip
-          classNames={{ tooltip: classes.toolTip }}
-          label="Share with QR Code"
-        >
+        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share with QR Code">
           <Button
             className={classes.shareButton}
             size="lg"
