@@ -25,6 +25,7 @@ import classes from "./locationDrawer.module.css";
 
 export default function LocationDrawer(props) {
   const {
+    mapRef,
     dark,
     area,
     locationDrawer,

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
-import { useSessionStorage } from "@mantine/hooks";
+import { useDidUpdate, useSessionStorage } from "@mantine/hooks";
 import useSWR from "swr";
 import {
   useComputedColorScheme,
@@ -109,9 +109,15 @@ export default function Trippage(props) {
   const {
     data: newData,
     error,
+    mutate,
     isLoading,
     isValidating,
   } = useSWR(title, fireFetcher);
+
+  const [tripData, setTripData] = useSessionStorage({
+    key: "tripData",
+    defaultValue: props.trip,
+  });
 
   const [modalMode, setModalMode] = useState("");
   const [updates, setUpdates] = useState([]);
@@ -127,16 +133,15 @@ export default function Trippage(props) {
 
   const { user, loading } = useUser();
 
-  const [tripData, setTripData] = useState(props.trip);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [donationAmount, setDonationAmount] = useState(0);
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
-  const [donationProgress, setDonationProgress] = useState(0);
   const [donorName, setDonorName] = useState("");
   const [stayAnon, setStayAnon] = useState(false);
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
+  const [isClient, setIsClient] = useState(false);
 
   const [funds, setFunds] = useSessionStorage({
     key: "funds",
@@ -154,15 +159,13 @@ export default function Trippage(props) {
   });
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
     router.prefetch("/thankyou");
     router.prefetch("/purchase");
   }, [router]);
-
-  useEffect(() => {
-    if (newData) {
-      setTripData(newData);
-    }
-  }, [newData]);
 
   useEffect(() => {
     if (
@@ -180,21 +183,6 @@ export default function Trippage(props) {
       setFunds(donationSum - spentFunds);
     }
   }, [donationSum, spentFunds, funds, setFunds]);
-
-  useEffect(() => {
-    const calculatePercentage = () => {
-      return (donationSum / tripData?.costsSum) * 100;
-    };
-
-    if (
-      tripData &&
-      donationProgress === 0 &&
-      donations &&
-      donations.length !== 0
-    ) {
-      setDonationProgress(calculatePercentage);
-    }
-  }, [donationProgress, donations, donationSum, tripData]);
 
   useEffect(() => {
     if (tripData?.spentFunds > 0) setSpentFunds(tripData.spentFunds);
@@ -337,14 +325,18 @@ export default function Trippage(props) {
 
   return (
     <>
-      <LoadingOverlay
-        visible={isFinalLoading && modalMode === ""}
-        loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
-        overlayProps={{
-          backgroundOpacity: 1,
-          color: dark ? "#0b0c0d" : "#f8f9fa",
-        }}
-      />
+      {isClient && (
+        <LoadingOverlay
+          visible={isFinalLoading && modalMode === ""}
+          transitionProps={{
+            duration: 0.3,
+          }}
+          loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
+          overlayProps={{
+            backgroundOpacity: 1,
+          }}
+        />
+      )}
       <Center mt={120}>
         <Flex
           gap={30}
@@ -576,7 +568,7 @@ export default function Trippage(props) {
                   </Grid.Col>
                 </Grid>
                 <Progress
-                  value={donationProgress}
+                  value={(donationSum / tripData?.costsSum) * 100}
                   classNames={{ section: classes.progress }}
                   bg={"gray.6"}
                   size={"md"}

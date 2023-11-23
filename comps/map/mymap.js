@@ -570,6 +570,7 @@ export default function Mymap(props) {
         </Group>
       </Modal>
       <LocationDrawer
+        mapRef={mapRef}
         dark={dark}
         area={area}
         locationDrawer={locationDrawer}

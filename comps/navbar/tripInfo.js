@@ -56,6 +56,10 @@ export default function TripInfo(props) {
 
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
+  const [tripData, setTripData] = useSessionStorage({
+    key: "tripData",
+    defaultValue: [],
+  });
   const [currentTrip, setCurrentTrip] = useSessionStorage({
     key: "currentTrip",
     defaultValue: [],
@@ -208,12 +212,14 @@ export default function TripInfo(props) {
 
   const changeTrip = (event) => {
     const newTrip = allTrips.find((trip) => trip.tripTitle === event);
+    if (newTrip) {
+      setCurrentTrip(newTrip);
+    }
     if (newTrip && newTrip.tripId === currentTrip.tripId) return;
     if (newTrip && newTrip.donations?.length === 0) {
       setDonations([]);
       return;
     }
-    setCurrentTrip(newTrip);
     if (newTrip && newTrip.donations) setDonations(newTrip.donations);
   };
 
@@ -352,7 +358,8 @@ export default function TripInfo(props) {
                     setMainMenuOpened(false);
                     setPanelShow(false);
                     setDropDownOpened(false);
-                    window.open("/" + currentTrip?.tripId, "_blank");
+                    setTripData(currentTrip);
+                    router.push("/" + currentTrip.tripId);
                   }}
                 >
                   View Page{" "}

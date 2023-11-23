@@ -16,7 +16,7 @@ import {
   ScrollArea,
   Grid,
 } from "@mantine/core";
-import { useIntersection } from "@mantine/hooks";
+import { useIntersection, useSessionStorage } from "@mantine/hooks";
 import { useUser } from "../../libs/context";
 import { timeSince } from "../../libs/custom";
 import { IconReload } from "@tabler/icons-react";
@@ -36,11 +36,14 @@ export default function Donations(props) {
 
   const { user } = useUser();
 
-  const [isClient, setIsClient] = useState(false);
-  const [tripData, setTripData] = useState([]);
-
   const [displayCount, setDisplayCount] = useState(20);
   const [donationsData, setDonationsData] = useState([]);
+
+  const [isClient, setIsClient] = useState(false);
+  const [tripData, setTripData] = useSessionStorage({
+    key: "tripData",
+    defaultValue: [],
+  });
 
   useEffect(() => {
     setIsClient(true);
