@@ -60,6 +60,7 @@
 		"embla-carousel-autoplay": "^7.1.0",
 		"embla-carousel-react": "^7.1.0",
 		"firebase": "^10.5.1",
+		"focus-visible": "^5.2.0",
 		"framer-motion": "^10.16.4",
 		"js-cookie": "^3.0.5",
 		"json-stringify-safe": "^5.0.1",

@@ -2,6 +2,7 @@ import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "./global.css";
+import "node_modules/focus-visible/dist/focus-visible.min.js";
 import Head from "next/head";
 import { useState } from "react";
 import {
@@ -27,7 +28,7 @@ import "@fontsource/open-sans/700.css";
 const localColorScheme = colorSchemeManager({ key: "mantine-color-scheme" });
 
 const tourTheme = createTheme({
-  focusRing: "never",
+  focusRing: "auto",
   colors: {
     dark: [
       "#C1C2C5",
@@ -134,7 +135,8 @@ const tourTheme = createTheme({
       defaultProps: {
         withArrow: true,
         arrowSize: 10,
-        openDelay: 750,
+        openDelay: 1500,
+        closeDelay: 0,
         events: { hover: true, focus: true, touch: false },
       },
       styles: {
@@ -188,10 +190,7 @@ export default function App(props) {
       </Head>
       <UserProvider>
         <Notifications position="top-center" zIndex={9999} limit={1} />
-        <SearchModal
-          searchOpened={searchOpened}
-          setSearchOpened={setSearchOpened}
-        />
+        <SearchModal setSearchOpened={setSearchOpened} />
         <DropDown
           dropDownOpened={dropDownOpened}
           setDropDownOpened={setDropDownOpened}

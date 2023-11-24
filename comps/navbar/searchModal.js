@@ -1,28 +1,43 @@
-import { Modal, TextInput } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
+import "@mantine/spotlight/styles.css";
+import { useComputedColorScheme } from "@mantine/core";
+import { Spotlight } from "@mantine/spotlight";
+import { IconSearch, IconSlashes } from "@tabler/icons-react";
 import classes from "./searchModal.module.css";
 
 export default function SearchModal(props) {
-  const { searchOpened, setSearchOpened } = props;
+  const { setSearchOpened } = props;
+  const computedColorScheme = useComputedColorScheme("dark", {
+    getInitialValueInEffect: true,
+  });
+  const dark = computedColorScheme === "dark";
 
   return (
-    <Modal
-      className={classes.searchModal}
-      zIndex={9999}
-      opened={searchOpened}
-      onClose={() => setSearchOpened(false)}
-      withCloseButton={false}
-      padding={0}
-      radius="xl"
-    >
-      <TextInput
-        className={classes.textInput}
-        radius="xl"
-        size="xl"
-        variant={"filled"}
-        icon={<IconSearch />}
-        placeholder="Search Trips..."
-      />
-    </Modal>
+    <Spotlight
+      classNames={{ content: classes.searchRoot, search: classes.textInput }}
+      actions={[]}
+      radius={"xl"}
+      onSpotlightClose={() => setSearchOpened(false)}
+      transitionProps={{
+        transition: "slide-down",
+      }}
+      overlayProps={{
+        blur: 10,
+        backgroundOpacity: 0.3,
+        color: dark ? "rgb(0,0,0)" : "rgb(255,255,255)",
+      }}
+      searchProps={{
+        leftSection: (
+          <IconSlashes
+            opacity={0.2}
+            style={{
+              marginLeft: 10,
+            }}
+          />
+        ),
+        rightSection: <IconSearch />,
+        rightSectionWidth: 70,
+        placeholder: "Search Trips...",
+      }}
+    />
   );
 }

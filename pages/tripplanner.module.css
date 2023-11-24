@@ -1,4 +1,32 @@
+.labelSize {
+  font-size: 12px;
+}
+
+.clearAutoCompleteBtn {
+  opacity: 0.5;
+  color: light-dark(#000, #fff);
+
+  &:hover {
+    opacity: 1;
+    background: inherit;
+  }
+}
+
+.switchTrack {
+  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.07), rgba(0, 0, 0, 0.2)) !important;
+}
+
+.startLocaleInput {
+  font-size: 15px;
+
+  &::placeholder {
+    font-size: 15px;
+  }
+}
+
 .startLocaleOption {
+  font-size: 15px;
+
   &[aria-selected="true"] {
     background: light-dark(rgba(100, 100, 100, 0.1), rgba(3, 3, 3, 0.4));
     color: light-dark(#000, #fff);
@@ -6,10 +34,18 @@
 }
 
 .travelersInput {
-  text-align: center !important;
   font-weight: 700;
   font-size: 1.1rem;
-  padding: 0;
+  padding-right: 40px;
+}
+
+.timelineItem {
+  transition: all 2000ms ease-in-out;
+}
+
+.timelineTitle {
+  text-transform: uppercase;
+  font-size: 12px;
 }
 
 .costInput {
@@ -53,7 +89,7 @@
 
 .datePicker {
   &[data-disabled="true"] {
-    color: light-dark(rgba(233, 233, 233, 0.5), rgba(36, 36, 36, 0.25));
+    color: light-dark(rgba(219, 216, 216, 0.5), rgba(36, 36, 36, 0.5));
   }
   &[data-weekend="true"] {
     color: light-dark(#2dc7f3, #0d3f82);
@@ -63,12 +99,12 @@
       light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));
     text-shadow: light-dark(
       "0 2px 3px rgba(0,0,0,0.1)",
-      "0 2px 3px rgba(0,0,0,0.2)"
+      "0 2px 3px rgba(0,0,0,1)"
     );
     border: 1px solid light-dark(#dee2e6, rgba(20, 20, 21, 0.3));
     border-top: 3px solid light-dark(#2dc7f3, #0d3f82);
-    background-color: light-dark(#f8f9fa, #aaabae);
-    color: light-dark(#2dc7f3, #000000);
+    background-color: light-dark(#f8f9fa, #25252c);
+    color: light-dark(#2dc7f3, #fff);
     transition: all 0.15s ease-in-out;
     border-radius: 0 0 3px 3px;
     font-size: 1.3rem;
@@ -93,8 +129,25 @@
 
 .panelBtns {
   opacity: 0.4;
-  background: light-dark(#2dc7f3, #020202);
+  background: light-dark(#a5a5a5, #020202);
+
   &:hover {
     opacity: 0.8;
   }
+}
+
+.tripInformationBtn {
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.badge {
+  border: none;
+}
+
+.labelSize {
+  font-size: 12px;
 }

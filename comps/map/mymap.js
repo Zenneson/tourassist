@@ -435,7 +435,8 @@ export default function Mymap(props) {
   };
 
   const placeChoosen = () => {
-    setShowModal(false);
+    setPlaces(placeLocation);
+    router.push("/tripPlanner");
   };
 
   const [buttonAnimation, setButtonAnimation] = useState(fadeIn);
@@ -456,6 +457,7 @@ export default function Mymap(props) {
 
   const addPlaces = (place) => {
     let newPlace = JSON.parse(JSON.stringify(place));
+    newPlace.id = place.id;
     newPlace.order = places.length + 1;
     let newPlaces = [...places, newPlace];
     setPlaces(newPlaces);
@@ -474,6 +476,7 @@ export default function Mymap(props) {
   const choosePlace = (choice) => {
     setMainMenuOpened(false);
     const place = {
+      costs: ["FLIGHT", "HOTEL"],
       label: area.label,
       place: area.label,
       type: area.type,
@@ -550,9 +553,10 @@ export default function Mymap(props) {
             variant="light"
             leftSection={<IconCheck stroke={4} />}
             onClick={() => {
-              placeChoosen();
-              setPlaces(placeLocation);
-              router.push("/tripPlanner");
+              setShowModal(false);
+              setTimeout(() => {
+                placeChoosen();
+              }, 200);
             }}
           >
             YES
@@ -745,6 +749,7 @@ export const CustomAutoComplete = ({
 
   const autoRef = useRef();
   const combobox = useCombobox({
+    opened: placeSearchData?.length !== 0 && countrySearchData?.length !== 0,
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: (eventSource) => {
       if (eventSource === "keyboard") {
@@ -812,11 +817,10 @@ export const CustomAutoComplete = ({
       store={combobox}
       offset={3}
       onOptionSubmit={(value, optionProps) => {
+        handleChange(version);
         if (version === "country") {
-          handleChange("country");
           setCountrySearch(value);
         } else {
-          handleChange("place");
           setPlaceSearch(value);
         }
         locationHandler(optionProps.children.props, mapRef);
@@ -846,11 +850,10 @@ export const CustomAutoComplete = ({
           onBlur={() => combobox.closeDropdown()}
           onChange={(e) => {
             const search = e.target.value;
+            handleChange(version);
             if (version === "country") {
-              handleChange("country");
               setCountrySearch(search);
             } else {
-              handleChange("place");
               setPlaceSearch(search);
             }
             combobox.updateSelectedOptionIndex();

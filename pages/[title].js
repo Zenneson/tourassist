@@ -30,7 +30,7 @@ import {
   IconBrandWhatsapp,
   IconPencil,
   IconHeartHandshake,
-  IconQuote,
+  IconBlockquote,
   IconQrcode,
   IconCurrencyDollar,
 } from "@tabler/icons-react";
@@ -444,8 +444,10 @@ export default function Trippage(props) {
                 labelPosition="left"
                 label={
                   <Flex align={"center"}>
-                    <IconQuote size={40} opacity={0.2} />
-                    <Title order={4}>DONOR MESSAGES</Title>
+                    <IconBlockquote size={50} opacity={0.2} />
+                    <Title ml={8} order={4}>
+                      DONOR MESSAGES
+                    </Title>
                   </Flex>
                 }
               />
@@ -523,12 +525,7 @@ export default function Trippage(props) {
                           RAISED
                         </Text>
                       </Flex>
-                      <Divider
-                        w={"100%"}
-                        className={classes.divider}
-                        opacity={0.5}
-                        my={3}
-                      />
+                      <Divider w={"100%"} className={classes.divider} my={3} />
                       <Flex align={"center"} gap={3} pl={5}>
                         <Title order={4} opacity={0.5}>
                           <Flex

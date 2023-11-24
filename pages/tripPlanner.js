@@ -10,17 +10,16 @@ import {
   IconBuildingBank,
   IconTrash,
   IconMapPin,
-  IconCalendarEvent,
   IconChevronsRight,
-  IconArrowRightTail,
   IconAlertTriangle,
   IconCheck,
   IconRefreshDot,
+  IconFileInfo,
+  IconX,
 } from "@tabler/icons-react";
 import {
   useComputedColorScheme,
   Autocomplete,
-  BackgroundImage,
   Space,
   Stepper,
   Title,
@@ -42,8 +41,14 @@ import {
   Popover,
   TextInput,
   Tooltip,
+  Timeline,
+  HoverCard,
 } from "@mantine/core";
-import { useSessionStorage, useShallowEffect } from "@mantine/hooks";
+import {
+  useSessionStorage,
+  useShallowEffect,
+  useElementSize,
+} from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -51,30 +56,32 @@ import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
 import { dateFormat, dateId, saveToDB } from "../libs/custom";
 import { useUser } from "../libs/context";
+import { MultiSelect } from "../comps/trip/multiSelect";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
-import classes from "./tripPlanner.module.css";
+import classes from "./tripplanner.module.css";
 
 export default function TripPlanner(props) {
   let { auth, mapLoaded } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
+  const dark = computedColorScheme === "dark";
   const [isClient, setIsClient] = useState(false);
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
-  const travelersHandlerRef = useRef(null);
   const [travelDates, setTravelDates] = useState(null);
   const startLocaleRef = useRef(null);
   const [destinations, setDestinations] = useState([]);
   const [active, setActive] = useState(0);
   const [infoAdded, setInfoAdded] = useState(false);
+  const [startCity, setStartCity] = useState("");
+  const [startRegion, setStartRegion] = useState("");
+  const [showTripInfo, setShowTripInfo] = useState(false);
   const router = useRouter();
   const titleRef = useRef(null);
+  const { ref, width, height } = useElementSize();
   const dayjs = require("dayjs");
-
-  const [dark, setDark] = useState(false); // Assuming light theme is default
-  const [isThemeLoaded, setIsThemeLoaded] = useState(false);
 
   const { user } = useUser();
 
@@ -125,8 +132,6 @@ export default function TripPlanner(props) {
     transition: { type: "ease-in-out" },
   };
 
-  const index = startLocale?.indexOf(",");
-  const startCity = startLocale.substring(0, index);
   const [costsObj, setCostsObj] = useState([]);
 
   const today = new Date();
@@ -293,8 +298,14 @@ export default function TripPlanner(props) {
     const afterComma = inputString.substring(indexOfComma + 1).trim();
     return [beforeComma, afterComma];
   };
-
   const [initialCity, initialRegion] = splitAtComma(startLocale);
+
+  useEffect(() => {
+    if (!startLocaleRef.current?.value) {
+      setStartLocaleSearch("");
+      setStartLocale("");
+    }
+  }, [setStartLocale, setStartLocaleSearch]);
 
   useEffect(() => {
     if (roundTrip && bookings.places.length > 1) {
@@ -309,11 +320,6 @@ export default function TripPlanner(props) {
       form.values = bookings;
     }
   }, [form, roundTrip, bookings, initialCity, initialRegion, form.values]);
-
-  useEffect(() => {
-    setDark(computedColorScheme === "dark");
-    setIsThemeLoaded(true);
-  }, [computedColorScheme]);
 
   const UseTickets = () => {
     const [places, setPlaces] = useSessionStorage({
@@ -778,6 +784,17 @@ export default function TripPlanner(props) {
     }
   };
 
+  const handleSubmit = (e) => {
+    const index = e.indexOf(",");
+    const subCity = e.substring(0, index);
+    const subRegion = e.substring(index + 1, e.length);
+
+    if (placeCheck() === true) return;
+    setStartLocale(e);
+    setStartCity(subCity);
+    setStartRegion(subRegion);
+  };
+
   const optionsFilter = ({ options, search }) => {
     const searchWords = search.toLowerCase().trim().split(/\s+/);
     return options.filter((option) =>
@@ -806,6 +823,12 @@ export default function TripPlanner(props) {
         }}
       />
     );
+  };
+
+  const clearAutoComplete = () => {
+    setStartLocale("");
+    setStartLocaleSearch("");
+    setStartLocaleData([]);
   };
 
   return (
@@ -844,22 +867,15 @@ export default function TripPlanner(props) {
             align="flex-start"
             gap={10}
           >
-            <Box w="100%" miw={500}>
+            <Box w="100%">
               {active === 0 && (
                 <motion.div {...animation}>
-                  <Flex
-                    pt={25}
-                    pb={30}
-                    px={30}
-                    maw={950}
-                    direction={"column"}
-                    className="pagePanel"
-                  >
+                  <Flex pb={30} px={30} maw={950} direction={"column"}>
                     <Title order={5} fw={400} h={20} mb={20}>
                       {startLocale && travelDates ? (
                         "Continue..."
                       ) : (
-                        <Text opacity={0.7}>
+                        <Text fw={700} opacity={1}>
                           Provide the{" "}
                           <Text inherit span hidden={startLocale}>
                             Departure City{" "}
@@ -882,300 +898,114 @@ export default function TripPlanner(props) {
                       w={"100%"}
                       justify={"flex-start"}
                       align={"flex-start"}
-                      gap={0}
+                      gap={30}
                     >
                       <Flex
                         className="pagePanel"
                         direction={"column"}
                         justify={"center"}
-                        w={"58%"}
-                        h={380}
-                        p={20}
-                        gap={10}
+                        gap={20}
+                        p={"xl"}
+                        w="100%"
+                        miw={"470px"}
+                        mih={height + 64}
                       >
                         <Autocomplete
-                          classNames={{ option: classes.startLocaleOption }}
+                          classNames={{
+                            label: classes.labelSize,
+                            input: classes.startLocaleInput,
+                            option: classes.startLocaleOption,
+                          }}
+                          label="Departure City"
                           placeholder="Add Departure City..."
                           selectFirstOptionOnChange
                           ref={startLocaleRef}
-                          size="sm"
+                          limit={5}
+                          size="xl"
                           w={"100%"}
                           value={startLocaleSearch}
-                          limit={5}
                           data={startLocaleData}
+                          filter={optionsFilter}
+                          rightSection={
+                            startLocaleSearch.length > 0 && (
+                              <ActionIcon
+                                variant="subtle"
+                                className={classes.clearAutoCompleteBtn}
+                                onClick={clearAutoComplete}
+                              >
+                                <IconX />
+                              </ActionIcon>
+                            )
+                          }
                           onChange={(e) => {
                             setStartLocaleSearch(e);
                             handleChange(e);
                             if (startLocaleRef.current.value === "") {
+                              setStartLocaleSearch("");
                               setStartLocale("");
                             }
                           }}
-                          onOptionSubmit={(e) => {
-                            if (placeCheck() === true) return;
-                            setStartLocale(e);
-                          }}
-                          filter={optionsFilter}
+                          onOptionSubmit={(e) => handleSubmit(e)}
                         />
-                        <Group my={15} grow gap={0}>
-                          <Group
-                            gap={0}
-                            justify="center"
-                            style={{
-                              borderRight: `2px solid ${
-                                dark
-                                  ? "rgba(255,255,255,0.1)"
-                                  : "rgba(0,0,0,0.1)"
-                              }`,
-                            }}
-                          >
-                            <Flex align={"center"}>
-                              <Text
-                                fz={15}
-                                c={
-                                  dark
-                                    ? "rgba(255, 255, 255, 1)"
-                                    : "rgba(0, 0, 0, 1)"
-                                }
-                              >
-                                Travelers
-                              </Text>
-                            </Flex>
-                            <Group gap={5} w={"50%"} grow>
-                              {/* Decrease Traveler Count  */}
-                              <Button
-                                fz={20}
-                                p={0}
-                                pb={5}
-                                variant="subtle"
-                                color={dark ? "dark.5" : "gray.1"}
-                                c={dark ? "gray.0" : "dark.9"}
-                                onClick={() =>
-                                  travelersHandlerRef.current.decrement()
-                                }
-                              >
-                                -
-                              </Button>
-                              <NumberInput
-                                classNames={{ input: classes.travelersInput }}
-                                hideControls
-                                variant="filled"
-                                type="number"
-                                w={20}
-                                suffix={""}
-                                value={travelers}
-                                onChange={(e) => setTravelers(e)}
-                                handlersRef={travelersHandlerRef}
-                                defaultValue={1}
-                                min={1}
-                              />
-                              {/* Increase Traveler Count  */}
-                              <Button
-                                fz={20}
-                                p={0}
-                                variant="subtle"
-                                color={dark ? "dark.5" : "gray.1"}
-                                c={dark ? "gray.0" : "dark.9"}
-                                onClick={() =>
-                                  travelersHandlerRef.current.increment()
-                                }
-                              >
-                                +
-                              </Button>
-                            </Group>
-                          </Group>
-                          <Group pos={"relative"} justify="center">
-                            <Switch
-                              label={
-                                <Flex align={"center"}>
-                                  <Text
-                                    ta={"right"}
-                                    ml={5}
-                                    fz={14}
-                                    c={
-                                      dark
-                                        ? "rgba(255, 255, 255, 1)"
-                                        : "rgba(0, 0, 0, 1)"
-                                    }
-                                  >
-                                    Round Trip?
-                                  </Text>
-                                </Flex>
-                              }
-                              labelPosition="left"
-                              onLabel="YES"
-                              offLabel="NO"
-                              size="md"
-                              color={!dark && "#2dc7f3"}
-                              checked={roundTrip}
-                              onChange={() => {
-                                setRoundTrip(!roundTrip);
-                                setRenderState(renderState + 1);
+                        <MultiSelect />
+                        <Group
+                          justify="space-around"
+                          pb={20}
+                          style={{
+                            borderBottom: "2px solid rgba(84, 84, 84, 0.1)",
+                          }}
+                        >
+                          <Group py={10}>
+                            <Text fz={12}>Travelers: </Text>
+                            {/* Traveler Count  */}
+                            <NumberInput
+                              classNames={{
+                                label: classes.labelSize,
+                                input: classes.travelersInput,
                               }}
+                              size="md"
+                              w={"77px"}
+                              radius={"25px 3px 3px 25px"}
+                              type="number"
+                              suffix={""}
+                              value={travelers}
+                              onChange={(e) => setTravelers(e)}
+                              defaultValue={1}
+                              min={1}
                             />
                           </Group>
-                        </Group>
-                        <Box>
-                          <Box
-                            style={{
-                              borderRadius: "3px",
+                          <Switch
+                            classNames={{
+                              track: classes.switchTrack,
+                              label: classes.labelSize,
                             }}
-                          >
-                            <Stack
-                              align="center"
-                              justify="center"
-                              pos={"relative"}
-                              gap={0}
-                              p={20}
-                              h={210}
-                              bg={dark ? "dark.5" : "gray.1"}
-                              style={{
-                                overflow: "hidden",
-                                borderRadius: "3px",
-                              }}
-                            >
-                              {isThemeLoaded && (
-                                <BackgroundImage
-                                  pos={"absolute"}
-                                  w={"100%"}
-                                  h={"100%"}
-                                  style={{
-                                    zIndex: 0,
-                                  }}
-                                  opacity={
-                                    dark
-                                      ? startLocale || travelDates
-                                        ? 0.02
-                                        : 0.1
-                                      : startLocale || travelDates
-                                      ? 0.08
-                                      : 0.2
-                                  }
-                                  src={
-                                    dark
-                                      ? "img/placeholder/boardingpass_blk.jpg"
-                                      : "img/placeholder/boardingpass_wht.jpg"
-                                  }
-                                />
-                              )}
-                              <Box
-                                style={{
-                                  zIndex: 1,
-                                }}
-                              >
-                                <Box>
-                                  <Group gap={7} mb={15}>
-                                    <IconMapPin size={20} color="gray" />
-                                    {startLocale && (
-                                      <>
-                                        <Badge
-                                          variant="outline"
-                                          color={dark ? "gray" : "dark.9"}
-                                          size="xs"
-                                        >
-                                          {startCity}
-                                        </Badge>
-                                        <IconArrowRightTail size={18} />
-                                      </>
-                                    )}
-                                    {placeData.map((place, index) => (
-                                      <Group key={index} gap={5}>
-                                        <Badge
-                                          variant="outline"
-                                          color={dark ? "gray" : "dark.9"}
-                                          size="xs"
-                                        >
-                                          {place.place}
-                                        </Badge>
-                                        {placeData.length - 1 !== index && (
-                                          <IconArrowRightTail
-                                            size={18}
-                                            opacity={0.4}
-                                          />
-                                        )}
-                                      </Group>
-                                    ))}
-                                    {roundTrip && startLocale && (
-                                      <>
-                                        <IconArrowRightTail
-                                          size={18}
-                                          opacity={0.4}
-                                        />
-                                        <Badge
-                                          variant="outline"
-                                          color={dark ? "gray" : "dark.9"}
-                                          size="xs"
-                                        >
-                                          {startCity}
-                                        </Badge>
-                                      </>
-                                    )}
-                                  </Group>
-                                </Box>
-                                {travelDates !== null && (
-                                  <Flex align={"center"} justify={"center"}>
-                                    <Group gap={7} fz={14} fw={700}>
-                                      <IconCalendarEvent
-                                        size={20}
-                                        opacity={0.4}
-                                      />
-                                      {dayjs(travelDates).format("LL")}
-                                    </Group>
-                                    <Divider
-                                      orientation="vertical"
-                                      color={dark && "gray.9"}
-                                      ml={10}
-                                      mr={7}
-                                      opacity={0.7}
-                                    />
-                                    <Group gap={5} fz={12}>
-                                      <Title c={"red.9"} order={3}>
-                                        •
-                                      </Title>
-                                      {dayjs(travelDates)
-                                        .subtract(1, "day")
-                                        .format("LL")}
-                                      <Flex
-                                        align={"center"}
-                                        gap={7}
-                                        mt={-4}
-                                        ml={-7}
-                                        style={{
-                                          transform: "scale(0.85)",
-                                        }}
-                                      >
-                                        <Text fz={25} opacity={0.2}>
-                                          (
-                                        </Text>
-                                        <Text
-                                          mt={4}
-                                          fw={700}
-                                          fz={9}
-                                          lh={1}
-                                          ta={"center"}
-                                          c="gray.7"
-                                          style={{
-                                            textTransform: "uppercase",
-                                          }}
-                                        >
-                                          <Text fz={".68rem"} span>
-                                            Campgain Ends
-                                          </Text>
-                                          <br />
-                                          Day Before Travel
-                                        </Text>
-                                        <Text fz={25} opacity={0.2}>
-                                          )
-                                        </Text>
-                                      </Flex>
-                                    </Group>
-                                  </Flex>
-                                )}
-                              </Box>
-                            </Stack>
-                          </Box>
-                        </Box>
+                            styles={{
+                              thumb: {
+                                borderColor: dark ? "#262626" : "#d7d7d7",
+                                background: dark ? "#282a2d" : "#fff",
+                              },
+                            }}
+                            label="Round Trip?"
+                            labelPosition="left"
+                            onLabel="YES"
+                            offLabel="NO"
+                            size="xl"
+                            color={dark ? "#0d3f82" : "#2dc7f3"}
+                            checked={roundTrip}
+                            onChange={() => {
+                              setRoundTrip(!roundTrip);
+                              setRenderState(renderState + 1);
+                            }}
+                          />
+                        </Group>
                       </Flex>
-                      <Box className="pagePanel" ml={30} p={20}>
+                      <Center
+                        className="pagePanel"
+                        p={"xl"}
+                        w="100%"
+                        miw={365}
+                        ref={ref}
+                      >
                         <DatePicker
                           classNames={{
                             day: classes.datePicker,
@@ -1186,7 +1016,6 @@ export default function TripPlanner(props) {
                           minDate={weekAhead}
                           value={travelDates}
                           size={"md"}
-                          mah={380}
                           onChange={(e) => {
                             setTravelDates(e);
                           }}
@@ -1213,18 +1042,42 @@ export default function TripPlanner(props) {
                                 year === prevDate.year();
                             }
                             return (
-                              <Indicator
-                                size={5}
-                                color={"red.9"}
-                                offset={-3}
+                              <HoverCard
+                                shadow="md"
+                                position="top"
+                                withArrow="true"
+                                offset={7}
+                                arrowSize={15}
                                 disabled={!isSpecificDay}
+                                transitionProps={{ duration: 0 }}
+                                styles={{
+                                  dropdown: {
+                                    marginLeft: 9,
+                                  },
+                                }}
                               >
-                                <div>{day}</div>
-                              </Indicator>
+                                <HoverCard.Target>
+                                  <Indicator
+                                    size={7}
+                                    color={"red.7"}
+                                    offset={-4}
+                                    disabled={!isSpecificDay}
+                                  >
+                                    <div>{day}</div>
+                                  </Indicator>
+                                </HoverCard.Target>
+                                <HoverCard.Dropdown>
+                                  <Text fz={12} ta={"center"}>
+                                    Fundraiser Ends
+                                    <br />
+                                    Day Before Travel
+                                  </Text>
+                                </HoverCard.Dropdown>
+                              </HoverCard>
                             );
                           }}
                         />
-                      </Box>
+                      </Center>
                     </Flex>
                   </Flex>
                 </motion.div>
@@ -1335,7 +1188,7 @@ export default function TripPlanner(props) {
                 </motion.div>
               )}
             </Box>
-            <Box>
+            <Box pos={"relative"}>
               <Stepper
                 active={active}
                 onStepClick={setActive}
@@ -1344,6 +1197,7 @@ export default function TripPlanner(props) {
                 allowNextStepsSelect={false}
                 color={dark ? "blue.9" : "blue.4"}
                 miw={205}
+                mt={30}
                 mb={-20}
                 mr={20}
                 size="xs"
@@ -1421,6 +1275,85 @@ export default function TripPlanner(props) {
                   {active === 3 ? "DONE" : <IconChevronDown />}
                 </Button>
               )}
+
+              <Popover
+                withArrow
+                arrowSize={15}
+                offset={-5}
+                position="top-end"
+                shadow="xl"
+              >
+                <Popover.Target>
+                  <Group justify="right">
+                    {(travelDates || startLocale) && (
+                      <Button
+                        className={classes.tripInformationBtn}
+                        hidden={true}
+                        mt={10}
+                        pl={7}
+                        fw={100}
+                        size="xs"
+                        fullWidth
+                        variant="default"
+                        color={dark ? "#fff" : "#000"}
+                        rightSection={
+                          <IconFileInfo
+                            style={{ marginLeft: -5 }}
+                            size={16}
+                            opacity={0.2}
+                          />
+                        }
+                        onClick={() => setShowTripInfo(true)}
+                      >
+                        Trip Information
+                      </Button>
+                    )}
+                  </Group>
+                </Popover.Target>
+                <Popover.Dropdown p={"xl"} py={20}>
+                  {startLocale && (
+                    <Divider
+                      label="Trip Information"
+                      labelPosition="left"
+                      mb={20}
+                    />
+                  )}
+                  <Stack gap={20}>
+                    {startLocale && (
+                      <PlaceTimeline
+                        dark={dark}
+                        placeData={placeData}
+                        roundTrip={roundTrip}
+                        startCity={startCity}
+                        startRegion={startRegion}
+                        startLocale={startLocale}
+                      />
+                    )}
+                    {travelDates && (
+                      <>
+                        {startLocale && travelDates && <Divider />}
+                        <Badge
+                          variant="dot"
+                          size="xs"
+                          mb={-10}
+                          color="green"
+                          classNames={{ root: classes.badge }}
+                        >
+                          {dayjs(travelDates).format("LL")}
+                        </Badge>
+                        <Badge
+                          variant="dot"
+                          size="xs"
+                          color="green"
+                          classNames={{ root: classes.badge }}
+                        >
+                          {roundTrip ? "Round Trip" : "One Way"}
+                        </Badge>
+                      </>
+                    )}
+                  </Stack>
+                </Popover.Dropdown>
+              </Popover>
             </Box>
           </Flex>
         </Center>
@@ -1428,3 +1361,113 @@ export default function TripPlanner(props) {
     )
   );
 }
+
+const PlaceTimeline = (props) => {
+  const { dark, placeData, roundTrip, startCity, startRegion, startLocale } =
+    props;
+
+  if (!roundTrip && !startLocale) {
+    return (
+      <Timeline
+        lineWidth={3}
+        bulletSize={20}
+        classNames={{
+          item: classes.timelineItem,
+          itemTitle: classes.timelineTitle,
+        }}
+      >
+        {placeData.map((place, index) => (
+          <Timeline.Item
+            title={place.place}
+            lineVariant="dashed"
+            key={place.place + index}
+            bullet={<IconMapPin />}
+          >
+            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
+              {place.region}
+            </Text>
+          </Timeline.Item>
+        ))}
+      </Timeline>
+    );
+  }
+
+  if (!roundTrip && startCity) {
+    return (
+      <Timeline
+        lineWidth={3}
+        bulletSize={20}
+        classNames={{
+          item: classes.timelineItem,
+          itemTitle: classes.timelineTitle,
+        }}
+      >
+        <Timeline.Item
+          title={startCity}
+          lineVariant="dashed"
+          bullet={<IconMapPin />}
+        >
+          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
+            {startRegion}
+          </Text>
+        </Timeline.Item>
+        {placeData.map((place, index) => (
+          <Timeline.Item
+            title={place.place}
+            key={place.place + index}
+            lineVariant="dashed"
+            bullet={<IconMapPin />}
+          >
+            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
+              {place.region}
+            </Text>
+          </Timeline.Item>
+        ))}
+      </Timeline>
+    );
+  }
+
+  if (roundTrip && startCity) {
+    return (
+      <Timeline
+        lineWidth={3}
+        bulletSize={20}
+        classNames={{
+          item: classes.timelineItem,
+          itemTitle: classes.timelineTitle,
+        }}
+      >
+        <Timeline.Item
+          title={startCity}
+          lineVariant="dashed"
+          bullet={<IconMapPin />}
+        >
+          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
+            {startRegion}
+          </Text>
+        </Timeline.Item>
+        {placeData.map((place, index) => (
+          <Timeline.Item
+            title={place.place}
+            key={place.place + index}
+            lineVariant="dashed"
+            bullet={<IconMapPin />}
+          >
+            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
+              {place.region}
+            </Text>
+          </Timeline.Item>
+        ))}
+        <Timeline.Item
+          title={startCity}
+          lineVariant="dashed"
+          bullet={<IconMapPin />}
+        >
+          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
+            {startRegion}
+          </Text>
+        </Timeline.Item>
+      </Timeline>
+    );
+  }
+};

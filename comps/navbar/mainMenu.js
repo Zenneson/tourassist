@@ -5,12 +5,11 @@ import { signOut } from "firebase/auth";
 import useSWR from "swr";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
-import { useSessionStorage } from "@mantine/hooks";
-import { motion } from "framer-motion";
-import { Box } from "@mantine/core";
+import { useSessionStorage, useFullscreen } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   useMantineColorScheme,
+  Box,
   Button,
   Image,
   Group,
@@ -19,20 +18,29 @@ import {
   Text,
   Flex,
   Title,
+  Modal,
+  ActionIcon,
+  Center,
 } from "@mantine/core";
 import {
   IconLogin,
   IconSearch,
   IconDoorExit,
-  IconInfoCircleFilled,
+  IconInfoCircle,
   IconBrightnessUp,
   IconMoon,
+  IconArrowsMaximize,
+  IconArrowsMinimize,
+  IconDualScreen,
+  IconPasswordUser,
 } from "@tabler/icons-react";
+import { spotlight } from "@mantine/spotlight";
 import ProfileDrawer from "./profileDrawer";
 import { auth } from "../../libs/firebase";
 import { useUser } from "../../libs/context";
 import Cookies from "js-cookie";
 import classes from "./mainMenu.module.css";
+import LoginComp from "../loginComp";
 
 export default function MainMenu(props) {
   const {
@@ -57,9 +65,10 @@ export default function MainMenu(props) {
   };
 
   const router = useRouter();
-  const [logoutOpened, setLogoutOpened] = useState(false);
-
+  const { toggle, fullscreen } = useFullscreen();
   const { user } = useUser();
+  const [loginModal, setLoginModal] = useState(false);
+  const [popoverOpened, setPopoverOpened] = useState(false);
 
   const [currentTrip, setCurrentTrip] = useSessionStorage({
     key: "currentTrip",
@@ -122,6 +131,7 @@ export default function MainMenu(props) {
   };
 
   const openSearch = () => {
+    spotlight.open();
     setSearchOpened(true);
     setMainMenuOpened(false);
     setPanelShow(false);
@@ -138,7 +148,6 @@ export default function MainMenu(props) {
   };
 
   const signOutFunc = async () => {
-    setLogoutOpened(false);
     if (auth.currentUser) {
       try {
         await signOut(auth);
@@ -150,7 +159,17 @@ export default function MainMenu(props) {
     Cookies.remove("tripData");
     Cookies.remove("user");
     setMainMenuOpened(false);
-    router.push("/", undefined, { shallow: false });
+    router.push("/", undefined);
+  };
+
+  const logoutHandler = () => {
+    if (user) {
+      signOutFunc();
+      return;
+    } else {
+      setLoginModal(true);
+      setPopoverOpened(false);
+    }
   };
 
   if (router.pathname === "/") {
@@ -164,16 +183,7 @@ export default function MainMenu(props) {
           <Box
             height={1} // so that the header does not block the middele of the top
             opacity={searchOpened ? 0 : 1}
-            style={{
-              position: "fixed",
-              zIndex: 1600,
-              width: "100%",
-              display: "flex",
-              padding: "15px 25px",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-              pointerEvents: "none",
-            }}
+            className={classes.mainMenu}
           >
             {/* Main Menu Button  */}
             <Flex
@@ -248,6 +258,29 @@ export default function MainMenu(props) {
                   )}
                 </Button>
               </Tooltip>
+              {/* TOGGLE FULLSCREEN  */}
+              {router.pathname === "/map" && (
+                <Tooltip
+                  label={fullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                  position="bottom"
+                  classNames={{ tooltip: "toolTip" }}
+                >
+                  <Button
+                    className={classes.toggleColorButton}
+                    variant="subtle"
+                    onClick={toggle}
+                    radius={"xl"}
+                    p={10}
+                    c={dark ? "gray.0" : "dark.9"}
+                  >
+                    {fullscreen ? (
+                      <IconArrowsMinimize size={17} />
+                    ) : (
+                      <IconArrowsMaximize size={17} />
+                    )}
+                  </Button>
+                </Tooltip>
+              )}
               <Group gap={0}>
                 <Tooltip
                   label="Search Trips"
@@ -269,11 +302,13 @@ export default function MainMenu(props) {
                 </Tooltip>
                 <Popover
                   withArrow
-                  arrowOffset={15}
                   width="auto"
                   position="bottom"
                   shadow="md"
-                  opened={logoutOpened}
+                  offset={-2}
+                  closeOnClickOutside={true}
+                  onClose={() => setPopoverOpened(false)}
+                  opened={!loginModal && popoverOpened}
                 >
                   <Tooltip
                     label={user ? "Logout" : "Login"}
@@ -285,11 +320,11 @@ export default function MainMenu(props) {
                       <Button
                         className={classes.logoutDropdownButton}
                         p={10}
-                        radius="xl"
+                        radius={"xl"}
                         variant="subtle"
                         c={dark ? "gray.0" : "dark.9"}
                         onClick={() => {
-                          setLogoutOpened((o) => !o);
+                          setPopoverOpened((o) => !o);
                         }}
                       >
                         {user ? (
@@ -304,50 +339,84 @@ export default function MainMenu(props) {
                     {/* Logout Button  */}
                     <Button
                       className={classes.logoutButton}
-                      size="xs"
+                      color={dark ? "#fff" : "#000"}
+                      size="md"
                       fw={700}
                       px={15}
-                      variant="default"
-                      onClick={() => {
-                        signOutFunc();
-                      }}
+                      variant="subtle"
+                      leftSection={
+                        user ? (
+                          <IconDualScreen size={18} />
+                        ) : (
+                          <IconPasswordUser size={18} />
+                        )
+                      }
+                      onClick={logoutHandler}
                     >
                       {user ? "LOGOUT" : "LOGIN"}
                     </Button>
                   </Popover.Dropdown>
                 </Popover>
               </Group>
-              <motion.div
-                animate={{
-                  opacity: [
-                    1, 1, 1, 0.3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.3, 1, 1, 1,
-                    1, 1, 1, 1, 1, 1, 1, 1, 0.3, 1, 0.3, 1,
-                  ],
-                }}
-                transition={{ duration: 7, repeat: Infinity }}
+              {/* DropDown Button */}
+              <Tooltip
+                label={"TourAssist?"}
+                position="bottom"
+                classNames={{ tooltip: "toolTip" }}
               >
-                {/* DropDown Button */}
-                <Tooltip
-                  label={"TourAssist?"}
-                  position="bottom"
-                  classNames={{ tooltip: "toolTip" }}
+                <ActionIcon
+                  className={classes.infoButton}
+                  size={"xl"}
+                  radius={"xl"}
+                  variant="gradient"
+                  gradient={
+                    dark
+                      ? { from: "blue.7", to: "blue.9", deg: 180 }
+                      : { from: "blue.1", to: "blue.3", deg: 180 }
+                  }
                 >
-                  <IconInfoCircleFilled
-                    stroke={1}
-                    size={30}
-                    style={{
-                      color: dark ? "blue.6" : "blue.9",
-                      paddingTop: "3px",
-                      cursor: "pointer",
-                      transform: "scale(1.5)",
-                    }}
-                    onClick={openDropDown}
-                  />
-                </Tooltip>
-              </motion.div>
+                  <IconInfoCircle stroke={1} size={40} onClick={openDropDown} />
+                </ActionIcon>
+              </Tooltip>
             </Flex>
           </Box>
         </Box>
+        <Modal
+          opened={loginModal}
+          padding={"xl"}
+          withCloseButton={false}
+          onClose={() => setLoginModal(false)}
+          overlayProps={{
+            blur: 10,
+            backgroundOpacity: 0.3,
+            color: dark ? "rgb(0,0,0)" : "rgb(255,255,255)",
+          }}
+        >
+          <Center>
+            <Image
+              mb={25}
+              style={{ width: "100%", maxWidth: "250px" }}
+              src={"img/TA_GlobeLogo.png"}
+              alt="TouraSSist_logo"
+            />
+          </Center>
+          <Title
+            fw={900}
+            ta={"center"}
+            color="#fff"
+            fz={"2.2rem"}
+            mb={10}
+            style={{
+              textShadow: "0 2px 5px rgba(0,0,0,0.15)",
+            }}
+          >
+            <Text fw={500} c={dark ? "#adadad" : "#7e7e7e"} inherit span>
+              TOUR
+            </Text>
+            ASSIST
+          </Title>
+          <LoginComp />
+        </Modal>
         <ProfileDrawer
           active={active}
           setActive={setActive}

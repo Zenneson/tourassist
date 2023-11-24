@@ -41,6 +41,7 @@ export default function LocationDrawer(props) {
     selectTopCity,
     choosePlace,
     resetGlobe,
+    handleChange,
   } = props;
 
   const topCitiesList = topCities.map((city, index) => (
@@ -181,6 +182,7 @@ export default function LocationDrawer(props) {
                 mapRef={mapRef}
                 area={area}
                 dark={dark}
+                handleChange={handleChange}
                 locationHandler={locationHandler}
                 placeSearchData={placeSearchData}
                 placeSearch={placeSearch}

@@ -97,7 +97,7 @@ export default function Intro(props) {
               fw={900}
               color="#fff"
               fz={"2.2rem"}
-              s={{
+              style={{
                 textShadow: "0 2px 5px rgba(0,0,0,0.15)",
               }}
             >
