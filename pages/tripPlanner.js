@@ -2,18 +2,13 @@
 import "@mantine/dates/styles.css";
 import { useState, useRef, useEffect } from "react";
 import {
-  IconCurrencyDollar,
-  IconCirclePlus,
-  IconRowInsertBottom,
   IconChevronUp,
   IconChevronDown,
   IconBuildingBank,
-  IconTrash,
   IconMapPin,
   IconChevronsRight,
   IconAlertTriangle,
   IconCheck,
-  IconRefreshDot,
   IconFileInfo,
   IconX,
 } from "@tabler/icons-react";
@@ -39,18 +34,11 @@ import {
   Indicator,
   ActionIcon,
   Popover,
-  TextInput,
-  Tooltip,
   Timeline,
   HoverCard,
 } from "@mantine/core";
-import {
-  useSessionStorage,
-  useShallowEffect,
-  useElementSize,
-} from "@mantine/hooks";
+import { useSessionStorage, useElementSize } from "@mantine/hooks";
 import { motion } from "framer-motion";
-import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { DatePicker } from "@mantine/dates";
@@ -59,6 +47,8 @@ import { useUser } from "../libs/context";
 import { MultiSelect } from "../comps/trip/multiSelect";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
+import UseTickets from "../comps/trip/useTickets";
+import SumInput from "../comps/trip/sumInput";
 import classes from "./tripplanner.module.css";
 
 export default function TripPlanner(props) {
@@ -70,20 +60,25 @@ export default function TripPlanner(props) {
   const [isClient, setIsClient] = useState(false);
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
-  const [travelDates, setTravelDates] = useState(null);
-  const startLocaleRef = useRef(null);
-  const [destinations, setDestinations] = useState([]);
-  const [active, setActive] = useState(0);
-  const [infoAdded, setInfoAdded] = useState(false);
   const [startCity, setStartCity] = useState("");
   const [startRegion, setStartRegion] = useState("");
-  const [showTripInfo, setShowTripInfo] = useState(false);
+  const [travelDates, setTravelDates] = useState(null);
+  const [active, setActive] = useState(0);
   const router = useRouter();
-  const titleRef = useRef(null);
   const { ref, width, height } = useElementSize();
   const dayjs = require("dayjs");
-
   const { user } = useUser();
+
+  const [placeData, setPlaceData] = useSessionStorage({
+    key: "places",
+    defaultValue: [],
+  });
+
+  const [destinations, setDestinations] = useState([]);
+  const [infoAdded, setInfoAdded] = useState(false);
+  const [showTripInfo, setShowTripInfo] = useState(false);
+  const startLocaleRef = useRef(null);
+  const titleRef = useRef(null);
 
   const [images, setImages] = useSessionStorage({
     key: "images",
@@ -109,14 +104,22 @@ export default function TripPlanner(props) {
     key: "plannerTripDesc",
     defaultValue: "",
   });
-  const [placeData, setPlaceData] = useSessionStorage({
-    key: "places",
-    defaultValue: [],
-  });
-  const [renderState, setRenderState] = useSessionStorage({
-    key: "renderState",
-    defaultValue: 0,
-  });
+
+  const setCostsToZero = (trips) => {
+    return trips.map((trip) => ({
+      ...trip,
+      costs: {
+        flight: 0,
+        hotel: 0,
+      },
+    }));
+  };
+
+  const handleReset = () => {
+    const newData = [...placeData];
+    const resetVals = setCostsToZero(newData);
+    setPlaceData(resetVals);
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -276,410 +279,12 @@ export default function TripPlanner(props) {
     });
   };
 
-  const convertPlaceData = (places) => {
-    return {
-      places: places.map((place) => ({
-        place: place.place,
-        region: place.region,
-        returning: false,
-        costs: {
-          flight: 0,
-          hotel: 0,
-        },
-      })),
-    };
-  };
-  let bookings = convertPlaceData(placeData);
-  const form = useForm();
-
-  const splitAtComma = (inputString) => {
-    const indexOfComma = inputString.indexOf(",");
-    const beforeComma = inputString.substring(0, indexOfComma);
-    const afterComma = inputString.substring(indexOfComma + 1).trim();
-    return [beforeComma, afterComma];
-  };
-  const [initialCity, initialRegion] = splitAtComma(startLocale);
-
   useEffect(() => {
     if (!startLocaleRef.current?.value) {
       setStartLocaleSearch("");
       setStartLocale("");
     }
   }, [setStartLocale, setStartLocaleSearch]);
-
-  useEffect(() => {
-    if (roundTrip && bookings.places.length > 1) {
-      bookings.places.push({
-        place: initialCity,
-        region: initialRegion,
-        returning: true,
-        costs: {
-          flight: 0,
-        },
-      });
-      form.values = bookings;
-    }
-  }, [form, roundTrip, bookings, initialCity, initialRegion, form.values]);
-
-  const UseTickets = () => {
-    const [places, setPlaces] = useSessionStorage({
-      key: "places",
-      defaultValue: form.values.places || bookings.places || [],
-    });
-    const [totalCost, setTotalCost] = useSessionStorage({
-      key: "totalCost",
-      defaultValue: 0,
-    });
-
-    let tabIndexCounter = 1;
-    const [newCostName, setNewCostName] = useState(
-      Array(places.length).fill("")
-    );
-    const [popoverOpened, setPopoverOpened] = useState(
-      Array(places.length).fill(false)
-    );
-
-    useShallowEffect(() => {
-      if (places.length === 0) {
-        setPlaces(form.values.places || bookings.places || []);
-      }
-    }, [places, setPlaces]);
-
-    const removeCost = (placeIndex, costKey) => {
-      const newPlaces = [...places];
-      let removedCostValue = 0;
-      if (newPlaces[placeIndex] && newPlaces[placeIndex].costs) {
-        removedCostValue = newPlaces[placeIndex].costs[costKey] || 0;
-        delete newPlaces[placeIndex].costs[costKey];
-        if (Object.keys(newPlaces[placeIndex].costs).length === 0) {
-          newPlaces.splice(placeIndex, 1);
-        }
-      }
-      setPlaces(newPlaces);
-      setTotalCost((prevTotalCost) => prevTotalCost - Number(removedCostValue));
-    };
-
-    const handleKeyPress = (e, index) => {
-      if (e.key === "Enter") {
-        addCost(index, newCostName[index]);
-        setPopoverOpened({ ...popoverOpened, [index]: false });
-      }
-    };
-
-    const addCost = (placeIndex, costName) => {
-      const newPlaces = [...places];
-      let adjustedCostName = costName || "NEW COST";
-      if (newPlaces[placeIndex]) {
-        let count = 2;
-        while (newPlaces[placeIndex].costs.hasOwnProperty(adjustedCostName)) {
-          adjustedCostName = `${costName || "NEW COST"} #${count}`;
-          count++;
-        }
-        newPlaces[placeIndex].costs = {
-          ...newPlaces[placeIndex].costs,
-          [adjustedCostName]: 0,
-        };
-        setPlaces(newPlaces);
-        setNewCostName("");
-      }
-    };
-
-    const setCostsToZero = (trips) => {
-      return trips.map((trip) => ({
-        ...trip,
-        costs: {
-          flight: 0,
-          hotel: 0,
-        },
-      }));
-    };
-
-    useEffect(() => {
-      if (document.activeElement.id === "totalId") return;
-      const calculateTotalCost = () => {
-        return places.reduce((total, place) => {
-          if (!roundTrip && place.returning) return total;
-
-          const placeCost = Object.values(place.costs || {}).reduce(
-            (costTotal, costValue) => costTotal + Number(costValue || 0),
-            0
-          );
-          return total + placeCost;
-        }, 0);
-      };
-      setTotalCost(calculateTotalCost());
-    }, [totalCost, setTotalCost, places]);
-
-    const handleReset = () => {
-      const newData = [...places];
-      const resetVals = setCostsToZero(newData);
-      setPlaces(resetVals);
-    };
-
-    return places.length > 0
-      ? places.map((place, index) => {
-          if (place.returning && !roundTrip) return null;
-          return (
-            <Box
-              key={index}
-              p={10}
-              pb={20}
-              mb={20}
-              pos={"relative"}
-              className="pagePanel"
-            >
-              <Group pt={10} pl={10} justify="space-between">
-                <Box
-                  pl={10}
-                  style={{
-                    borderLeft: "2px solid rgba(137, 137, 137, 0.4)",
-                  }}
-                >
-                  <Title order={4}>{place.place}</Title>
-                  <Text fz={12}>{place.region}</Text>
-                </Box>
-                <Flex
-                  gap={10}
-                  mr={place.returning ? 5 : 10}
-                  w={"100%"}
-                  maw={place.returning ? 400 : 335}
-                  align={"center"}
-                  justify={"flex-end"}
-                >
-                  <Divider
-                    color={dark && "gray.9"}
-                    size={"xs"}
-                    w={
-                      place.returning || (roundTrip && places.length === 1)
-                        ? "60%"
-                        : "100%"
-                    }
-                  />
-                  {!place.returning ||
-                    (roundTrip && (
-                      <Badge mr={5} variant="dot" size="xs">
-                        Return flight
-                      </Badge>
-                    ))}
-                  {roundTrip && places.length === 1 && (
-                    <Badge mr={5} variant="dot" size="xs">
-                      Round Trip
-                    </Badge>
-                  )}
-                </Flex>
-              </Group>
-              {!place.returning &&
-                Object.keys(place.costs).map((cost, subIndex) => (
-                  <Group justify="flex-end" key={subIndex} gap={10} p={10}>
-                    <Text
-                      style={{
-                        textTransform: "uppercase",
-                        fontStyle: "italic",
-                        fontSize: 12,
-                      }}
-                    >
-                      {cost}
-                    </Text>
-                    <Divider
-                      my="xs"
-                      w={"50%"}
-                      variant="dotted"
-                      color={dark && "gray.9"}
-                    />
-                    <NumberInput
-                      classNames={{ input: classes.costInput }}
-                      id="cost"
-                      tabIndex={tabIndexCounter++}
-                      min={0}
-                      w={130}
-                      size="md"
-                      value={place.costs[cost] || 0}
-                      onClick={(e) => {
-                        if (e.target.value === 0 || e.target.value === "0") {
-                          e.target.select();
-                        }
-                      }}
-                      onChange={(value) => {
-                        const newPlaces = [...places];
-                        newPlaces[index].costs[cost] = value;
-                        setPlaces(newPlaces);
-                      }}
-                      hideControls={true}
-                      leftSection={<IconCurrencyDollar />}
-                    />
-                    <ActionIcon
-                      className={classes.removeCostButton}
-                      py={20}
-                      variant={dark ? "default" : "light"}
-                      onClick={() => {
-                        removeCost(index, cost);
-                      }}
-                    >
-                      <IconTrash
-                        size={15}
-                        color={dark ? "rgba(255, 0, 0, 0.4)" : "red"}
-                      />
-                    </ActionIcon>
-                  </Group>
-                ))}
-              {place.returning && (
-                <Group justify="flex-end" gap={10} p={10}>
-                  <Text
-                    style={{
-                      textTransform: "uppercase",
-                      fontStyle: "italic",
-                      fontSize: 12,
-                    }}
-                  >
-                    FLIGHT
-                  </Text>
-                  <Divider
-                    my="xs"
-                    w={"50%"}
-                    variant="dotted"
-                    color={dark && "gray.9"}
-                  />
-                  <NumberInput
-                    className={classes.costInput}
-                    id="cost"
-                    tabIndex={tabIndexCounter++}
-                    min={0}
-                    w={130}
-                    size="md"
-                    value={place.costs[cost] || 0}
-                    onClick={(e) => {
-                      if (e.target.value === 0 || e.target.value === "0") {
-                        e.target.select();
-                      }
-                    }}
-                    onChange={(value) => {
-                      const newPlaces = [...places];
-                      newPlaces[index].costs[cost] = value;
-                      setPlaces(newPlaces);
-                    }}
-                    hideControls={true}
-                    leftSection={<IconCurrencyDollar />}
-                  />
-                </Group>
-              )}
-              {!place.returning && (
-                <Group justify="flex-end" gap={10} p={10}>
-                  <Divider
-                    my="xs"
-                    w={"65%"}
-                    opacity={0.3}
-                    color={dark && "gray.9"}
-                  />
-                  <Popover
-                    trapFocus
-                    position="left"
-                    withArrow={true}
-                    shadow="md"
-                    opened={popoverOpened[index]}
-                    styles={{
-                      dropdown: {
-                        padding: 3,
-                      },
-                    }}
-                    onClose={() =>
-                      setPopoverOpened({ ...popoverOpened, [index]: false })
-                    }
-                  >
-                    <Popover.Target>
-                      <Button
-                        className={classes.brightenButton}
-                        size="xs"
-                        variant="default"
-                        opacity={0.2}
-                        leftSection={<IconRowInsertBottom size={17} />}
-                        onClick={() =>
-                          setPopoverOpened({
-                            ...popoverOpened,
-                            [index]: true,
-                          })
-                        }
-                      >
-                        NEW COST
-                      </Button>
-                    </Popover.Target>
-                    <Popover.Dropdown>
-                      <TextInput
-                        size="xs"
-                        placeholder="NEW COST"
-                        value={newCostName[index] || ""}
-                        onKeyDown={(e) => handleKeyPress(e, index)}
-                        onChange={(e) =>
-                          setNewCostName({
-                            ...newCostName,
-                            [index]: e.target.value,
-                          })
-                        }
-                        rightSection={
-                          <ActionIcon
-                            variant="transparent"
-                            c={dark ? "gray.0" : "dark.8"}
-                            onClick={() => {
-                              addCost(index, newCostName[index]);
-                              setPopoverOpened({
-                                ...popoverOpened,
-                                [index]: false,
-                              });
-                            }}
-                          >
-                            <IconCirclePlus size={15} />
-                          </ActionIcon>
-                        }
-                      />
-                    </Popover.Dropdown>
-                  </Popover>
-                </Group>
-              )}
-              {index === 0 && (
-                <Group pos={"absolute"} gap={10} top={0} left={-50}>
-                  <Tooltip label="Reset form fields">
-                    <ActionIcon
-                      className={classes.brightenButton}
-                      variant="transparent"
-                      size="xl"
-                      color="gray"
-                      onClick={handleReset}
-                    >
-                      <IconRefreshDot size={40} />
-                    </ActionIcon>
-                  </Tooltip>
-                </Group>
-              )}
-            </Box>
-          );
-        })
-      : null;
-  };
-
-  const SumInput = () => {
-    const [totalCost, setTotalCost] = useSessionStorage({
-      key: "totalCost",
-      defaultValue: 0,
-    });
-
-    const handleChange = (e) => {
-      setTotalCost(e);
-    };
-
-    return (
-      <NumberInput
-        classNames={{ input: classes.totalCostInput }}
-        id="totalId"
-        min={0}
-        leftSection={<IconCurrencyDollar />}
-        size="xl"
-        w={225}
-        value={totalCost}
-        onChange={(e) => {
-          handleChange(e);
-        }}
-      />
-    );
-  };
 
   const generateTripId = () => {
     const trip_title = plannerTripTitle
@@ -950,7 +555,8 @@ export default function TripPlanner(props) {
                         <MultiSelect />
                         <Group
                           justify="space-around"
-                          pb={20}
+                          pb={50}
+                          mb={5}
                           style={{
                             borderBottom: "2px solid rgba(84, 84, 84, 0.1)",
                           }}
@@ -962,10 +568,11 @@ export default function TripPlanner(props) {
                               classNames={{
                                 label: classes.labelSize,
                                 input: classes.travelersInput,
+                                controls: classes.travelersContorls,
                               }}
-                              size="md"
+                              size="sm"
                               w={"77px"}
-                              radius={"25px 3px 3px 25px"}
+                              radius={"25px"}
                               type="number"
                               suffix={""}
                               value={travelers}
@@ -994,7 +601,6 @@ export default function TripPlanner(props) {
                             checked={roundTrip}
                             onChange={() => {
                               setRoundTrip(!roundTrip);
-                              setRenderState(renderState + 1);
                             }}
                           />
                         </Group>
@@ -1084,8 +690,13 @@ export default function TripPlanner(props) {
               )}
               {active === 1 && (
                 <motion.div {...animation}>
-                  <Box maw={950}>
-                    <UseTickets />
+                  <Box mt={40} maw={950}>
+                    <UseTickets
+                      handleReset={handleReset}
+                      roundTrip={roundTrip}
+                      placeData={placeData}
+                      setPlaceData={setPlaceData}
+                    />
                   </Box>
                 </motion.div>
               )}
@@ -1197,7 +808,7 @@ export default function TripPlanner(props) {
                 allowNextStepsSelect={false}
                 color={dark ? "blue.9" : "blue.4"}
                 miw={205}
-                mt={30}
+                mt={45}
                 mb={-20}
                 mr={20}
                 size="xs"
@@ -1229,10 +840,101 @@ export default function TripPlanner(props) {
                   description="Provide account details"
                 />
               </Stepper>
+              <Popover
+                withArrow
+                arrowSize={15}
+                offset={3}
+                position="top-end"
+                shadow="xl"
+                transitionProps={{
+                  duration: 300,
+                  transition: "skew-down",
+                }}
+              >
+                <Popover.Target>
+                  <Box>
+                    {(travelDates || startLocale) && (
+                      <Button
+                        className={classes.tripInformationBtn}
+                        hidden={true}
+                        mt={10}
+                        pl={7}
+                        fw={100}
+                        size="xs"
+                        fullWidth
+                        variant="default"
+                        color={dark ? "#fff" : "#000"}
+                        rightSection={
+                          <IconFileInfo
+                            style={{ marginLeft: -5 }}
+                            size={16}
+                            opacity={0.2}
+                          />
+                        }
+                        onClick={() => setShowTripInfo(true)}
+                      >
+                        Trip Information
+                      </Button>
+                    )}
+                  </Box>
+                </Popover.Target>
+                <Popover.Dropdown p={"xl"} py={20}>
+                  {startLocale && (
+                    <Divider
+                      label="Trip Information"
+                      labelPosition="left"
+                      mb={10}
+                    />
+                  )}
+                  <Stack gap={3}>
+                    {startLocale && (
+                      <PlaceTimeline
+                        dark={dark}
+                        placeData={placeData}
+                        roundTrip={roundTrip}
+                        startCity={startCity}
+                        startRegion={startRegion}
+                        startLocale={startLocale}
+                      />
+                    )}
+                    {travelDates && (
+                      <>
+                        {startLocale && travelDates && <Divider my={10} />}
+                        <Badge
+                          variant="dot"
+                          size="xs"
+                          color="green.9"
+                          classNames={{ root: classes.badge }}
+                        >
+                          {dayjs(travelDates).format("LL")}
+                        </Badge>
+                        <Badge
+                          variant="dot"
+                          size="xs"
+                          color="green.6"
+                          classNames={{ root: classes.badge }}
+                        >
+                          {roundTrip ? "Round Trip" : "One Way"}
+                        </Badge>
+                        <Badge
+                          variant="dot"
+                          size="xs"
+                          color="green.3"
+                          classNames={{ root: classes.badge }}
+                        >
+                          {travelers === 1
+                            ? "Solo Traveler"
+                            : travelers + " Travelers"}
+                        </Badge>
+                      </>
+                    )}
+                  </Stack>
+                </Popover.Dropdown>
+              </Popover>
               {active > 0 && (
                 <>
                   <Divider
-                    mb={5}
+                    my={5}
                     opacity={dark ? 0.3 : 0.7}
                     color={dark && "gray.5"}
                     size={"xs"}
@@ -1275,85 +977,6 @@ export default function TripPlanner(props) {
                   {active === 3 ? "DONE" : <IconChevronDown />}
                 </Button>
               )}
-
-              <Popover
-                withArrow
-                arrowSize={15}
-                offset={-5}
-                position="top-end"
-                shadow="xl"
-              >
-                <Popover.Target>
-                  <Group justify="right">
-                    {(travelDates || startLocale) && (
-                      <Button
-                        className={classes.tripInformationBtn}
-                        hidden={true}
-                        mt={10}
-                        pl={7}
-                        fw={100}
-                        size="xs"
-                        fullWidth
-                        variant="default"
-                        color={dark ? "#fff" : "#000"}
-                        rightSection={
-                          <IconFileInfo
-                            style={{ marginLeft: -5 }}
-                            size={16}
-                            opacity={0.2}
-                          />
-                        }
-                        onClick={() => setShowTripInfo(true)}
-                      >
-                        Trip Information
-                      </Button>
-                    )}
-                  </Group>
-                </Popover.Target>
-                <Popover.Dropdown p={"xl"} py={20}>
-                  {startLocale && (
-                    <Divider
-                      label="Trip Information"
-                      labelPosition="left"
-                      mb={20}
-                    />
-                  )}
-                  <Stack gap={20}>
-                    {startLocale && (
-                      <PlaceTimeline
-                        dark={dark}
-                        placeData={placeData}
-                        roundTrip={roundTrip}
-                        startCity={startCity}
-                        startRegion={startRegion}
-                        startLocale={startLocale}
-                      />
-                    )}
-                    {travelDates && (
-                      <>
-                        {startLocale && travelDates && <Divider />}
-                        <Badge
-                          variant="dot"
-                          size="xs"
-                          mb={-10}
-                          color="green"
-                          classNames={{ root: classes.badge }}
-                        >
-                          {dayjs(travelDates).format("LL")}
-                        </Badge>
-                        <Badge
-                          variant="dot"
-                          size="xs"
-                          color="green"
-                          classNames={{ root: classes.badge }}
-                        >
-                          {roundTrip ? "Round Trip" : "One Way"}
-                        </Badge>
-                      </>
-                    )}
-                  </Stack>
-                </Popover.Dropdown>
-              </Popover>
             </Box>
           </Flex>
         </Center>

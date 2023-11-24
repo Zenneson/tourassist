@@ -244,7 +244,7 @@ export default function LocationDrawer(props) {
           <Button
             className={classes.locationBtns}
             justify={"left"}
-            fs={"italic"}
+            fw={700}
             variant="filled"
             leftSection={<IconTextPlus size={18} />}
             onClick={() => choosePlace("tour")}

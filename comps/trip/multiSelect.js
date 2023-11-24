@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   PillsInput,
   Pill,
@@ -20,7 +20,7 @@ const tripTypes = [
   "Vacation",
 ];
 
-const MAX_SELECTABLE_ITEMS = 10;
+const MAX_SELECTABLE_ITEMS = 5;
 const MAX_DISPLAYED_VALUES = 3;
 
 export function MultiSelect() {
@@ -78,6 +78,12 @@ export function MultiSelect() {
       </Combobox.Option>
     ));
 
+  useEffect(() => {
+    if (value.length >= MAX_SELECTABLE_ITEMS) {
+      combobox.closeDropdown();
+    }
+  }, [value.length, combobox]);
+
   return (
     <Combobox
       classNames={{
@@ -96,9 +102,13 @@ export function MultiSelect() {
           }}
           size="xl"
           label="What type of trip is this?"
-          description="Choose up to 10 types"
+          description="Choose up to 5 types"
           inputWrapperOrder={["label", "error", "input", "description"]}
-          onClick={() => combobox.openDropdown()}
+          onClick={() => {
+            if (value.length < MAX_SELECTABLE_ITEMS) {
+              combobox.openDropdown();
+            }
+          }}
         >
           <Pill.Group className={classes.singleLine}>
             {values}
@@ -112,6 +122,7 @@ export function MultiSelect() {
                 onBlur={() => combobox.closeDropdown()}
                 value={search}
                 placeholder={value.length > 0 ? "" : "Add Trip Types..."}
+                disabled={value.length >= MAX_SELECTABLE_ITEMS}
                 onChange={(event) => {
                   combobox.updateSelectedOptionIndex();
                   setSearch(event.currentTarget.value);
@@ -121,8 +132,15 @@ export function MultiSelect() {
                     event.preventDefault();
                     handleValueRemove(value[value.length - 1]);
                   }
+                  if (
+                    event.key === "Enter" &&
+                    search.trim() !== "" &&
+                    !exactOptionMatch
+                  ) {
+                    event.preventDefault();
+                    handleValueSelect("$create");
+                  }
                 }}
-                disabled={value.length >= MAX_SELECTABLE_ITEMS} // Disable input if 10 items are selected
               />
             </Combobox.EventsTarget>
           </Pill.Group>

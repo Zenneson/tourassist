@@ -476,12 +476,15 @@ export default function Mymap(props) {
   const choosePlace = (choice) => {
     setMainMenuOpened(false);
     const place = {
-      costs: ["FLIGHT", "HOTEL"],
       label: area.label,
       place: area.label,
       type: area.type,
       coordinates: area.center,
       country: area.country,
+      costs: {
+        flight: 0,
+        hotel: 0,
+      },
       region:
         area.type === "city" && area.country === "United States"
           ? `${area.state || area.region}, ${area.country}`

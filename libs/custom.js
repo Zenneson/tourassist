@@ -278,7 +278,6 @@ export const saveToDB = async (
       sessionStorage.removeItem("images");
       sessionStorage.removeItem("tripDesc");
       sessionStorage.removeItem("totalCost");
-      sessionStorage.removeItem("renderState");
 
       resolve();
     } catch (error) {
@@ -352,4 +351,21 @@ export const timeSince = (timeString) => {
   } else {
     return `${Math.floor(diffInSeconds / 2592000)} months`;
   }
+};
+
+export const isEmpty = (value) => {
+  // Check for null or undefined
+  if (value == null) return true;
+
+  // Check for empty string
+  if (typeof value === "string" && value.trim() === "") return true;
+
+  // Check for empty array
+  if (Array.isArray(value) && value.length === 0) return true;
+
+  // Check for empty object
+  if (typeof value === "object" && Object.keys(value).length === 0) return true;
+
+  // If none of the above, return false
+  return false;
 };
