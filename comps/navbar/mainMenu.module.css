@@ -9,6 +9,24 @@
   pointer-events: none;
 }
 
+.colorSchemeBtn,
+.mainMenuBtn {
+  position: relative;
+  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-0));
+}
+
+.colorSchemeBtn {
+  width: 40px;
+}
+
+.mainTitleThick {
+  color: light-dark(var(--mantine-color-dark-3), var(--mantine-color-gray-0));
+}
+
+.mainTitleThin {
+  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-5));
+}
+
 .logoutButton {
   opacity: 0.35;
 
@@ -20,12 +38,45 @@
 
 .infoButton {
   transition: all 400ms ease;
-  opacity: 0.35;
+  opacity: 0.2;
   cursor: pointer;
-  box-shadow: 0 2px 3px 2px
-    light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.05));
+  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-0));
+  box-shadow: 0 2px 3px
+    light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));
+  background: light-dark(
+    linear-gradient(
+      0deg,
+      var(--mantine-color-blue-2) 0%,
+      var(--mantine-color-blue-3) 100%
+    ),
+    linear-gradient(
+      0deg,
+      var(--mantine-color-blue-8) 0%,
+      var(--mantine-color-blue-9) 100%
+    )
+  );
 
   &:hover {
+    opacity: 1;
+  }
+}
+
+.darkIcon,
+.lightIcon {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  width: 40px;
+}
+
+.lightIcon {
+  @mixin light {
+    opacity: 1;
+  }
+}
+
+.darkIcon {
+  @mixin dark {
     opacity: 1;
   }
 }

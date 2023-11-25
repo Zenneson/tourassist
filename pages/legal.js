@@ -17,7 +17,6 @@ import { IconChevronsRight } from "@tabler/icons-react";
 import classes from "./legal.module.css";
 
 export default function Legal() {
-  const [isClient, setIsClient] = useState(false);
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -30,10 +29,6 @@ export default function Legal() {
     router.prefetch("/help");
     router.prefetch("/contact");
   }, [router]);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const terms = [
     {
@@ -458,52 +453,51 @@ export default function Legal() {
   };
 
   return (
-    isClient && (
-      <Center mt={120} mb={50}>
-        <Flex w={"80%"} maw={1200}>
-          <Flex direction={"column"} miw={"300px"} pos={"fixed"} top={205}>
-            {/* Toggle between Terms of Use and Privacy Policy */}
-            <SegmentedControl
-              value={linkState}
-              size="xs"
-              onChange={setLinkState}
-              onClick={scrollToTop}
-              data={[
-                { label: "Terms of Use", value: "terms" },
-                { label: "Privacy Policy", value: "privacy" },
-              ]}
-            />
-            <Box className={classes.links}>
-              {active > -1 && (
-                <IconChevronsRight
-                  className={classes.indicator}
-                  size={17}
-                  style={{
-                    transform: `translateY(calc(${active} * 2.4rem))`,
-                  }}
-                />
-              )}
-              {items}
-            </Box>
-          </Flex>
-          <Space w={"30%"} />
-          <Flex
-            direction={"column"}
-            w={"70%"}
-            ref={contentWrapperRef}
-            style={{ scrollMargin: "200px" }}
-          >
-            <Title fz={50}>
-              {linkState === "terms" ? "Terms of Use" : "Privacy Policy"}
-            </Title>
-            <Text fz={10} w={"100%"} ta={"right"}>
-              Last Updated: April 30, 2023
-            </Text>
-            <Box className="pagePanel" w={"100%"} mt={10} p={20}>
-              <Group gap={30}>
-                <Text w={"80%"} fz={12}>
-                  {linkState === "terms"
-                    ? `Welcome to Tourassist, a premier crowdfunding platform
+    <Center mt={120} mb={50}>
+      <Flex w={"80%"} maw={1200}>
+        <Flex direction={"column"} miw={"300px"} pos={"fixed"} top={205}>
+          {/* Toggle between Terms of Use and Privacy Policy */}
+          <SegmentedControl
+            value={linkState}
+            size="xs"
+            onChange={setLinkState}
+            onClick={scrollToTop}
+            data={[
+              { label: "Terms of Use", value: "terms" },
+              { label: "Privacy Policy", value: "privacy" },
+            ]}
+          />
+          <Box className={classes.links}>
+            {active > -1 && (
+              <IconChevronsRight
+                className={classes.indicator}
+                size={17}
+                style={{
+                  transform: `translateY(calc(${active} * 2.4rem))`,
+                }}
+              />
+            )}
+            {items}
+          </Box>
+        </Flex>
+        <Space w={"30%"} />
+        <Flex
+          direction={"column"}
+          w={"70%"}
+          ref={contentWrapperRef}
+          style={{ scrollMargin: "200px" }}
+        >
+          <Title fz={50}>
+            {linkState === "terms" ? "Terms of Use" : "Privacy Policy"}
+          </Title>
+          <Text fz={10} w={"100%"} ta={"right"}>
+            Last Updated: April 30, 2023
+          </Text>
+          <Box className="pagePanel" w={"100%"} mt={10} p={20}>
+            <Group gap={30}>
+              <Text w={"80%"} fz={12}>
+                {linkState === "terms"
+                  ? `Welcome to Tourassist, a premier crowdfunding platform
                   dedicated to travel-related projects. These Terms of Use
                   ("Terms") govern your access to and use of our
                   website, applications, products, and services (collectively
@@ -512,41 +506,40 @@ export default function Legal() {
                   Services, you agree to be bound by these Terms and our Privacy
                   Policy. If you do not agree to these Terms, please do not use
                   our Services.`
-                    : `At Tourassist, we are committed to protecting the privacy and security of our users. This Privacy Policy ("Policy") explains how we collect, use, and disclose your personal information when you access or use our website, products, and services (collectively referred to as "Services"). By using our Services, you acknowledge your acceptance of this Policy.`}
-                </Text>
-                <Box w={"calc(20% - 30px)"}>
-                  {" "}
-                  <Button.Group orientation="vertical">
-                    {/* Go to Help Page */}
-                    <Button
-                      variant="default"
-                      size="compact-md"
-                      fz={10}
-                      onClick={() => {
-                        router.push("/help");
-                      }}
-                    >
-                      About Tourassist
-                    </Button>
-                    {/* Go to Contact Page */}
-                    <Button
-                      variant="default"
-                      size="compact-md"
-                      fz={10}
-                      onClick={() => {
-                        router.push("/contact");
-                      }}
-                    >
-                      Contact Us
-                    </Button>
-                  </Button.Group>
-                </Box>
-              </Group>
-            </Box>
-            <Box px={20}>{content}</Box>
-          </Flex>
+                  : `At Tourassist, we are committed to protecting the privacy and security of our users. This Privacy Policy ("Policy") explains how we collect, use, and disclose your personal information when you access or use our website, products, and services (collectively referred to as "Services"). By using our Services, you acknowledge your acceptance of this Policy.`}
+              </Text>
+              <Box w={"calc(20% - 30px)"}>
+                {" "}
+                <Button.Group orientation="vertical">
+                  {/* Go to Help Page */}
+                  <Button
+                    variant="default"
+                    size="compact-md"
+                    fz={10}
+                    onClick={() => {
+                      router.push("/help");
+                    }}
+                  >
+                    About Tourassist
+                  </Button>
+                  {/* Go to Contact Page */}
+                  <Button
+                    variant="default"
+                    size="compact-md"
+                    fz={10}
+                    onClick={() => {
+                      router.push("/contact");
+                    }}
+                  >
+                    Contact Us
+                  </Button>
+                </Button.Group>
+              </Box>
+            </Group>
+          </Box>
+          <Box px={20}>{content}</Box>
         </Flex>
-      </Center>
-    )
+      </Flex>
+    </Center>
   );
 }

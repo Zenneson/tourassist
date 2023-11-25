@@ -10,11 +10,9 @@ import {
   IconAlertTriangle,
   IconCheck,
   IconFileInfo,
-  IconX,
 } from "@tabler/icons-react";
 import {
   useComputedColorScheme,
-  Autocomplete,
   Space,
   Stepper,
   Title,
@@ -22,7 +20,6 @@ import {
   Box,
   Text,
   Image,
-  NumberInput,
   Group,
   Divider,
   Stack,
@@ -30,34 +27,30 @@ import {
   Input,
   Flex,
   Badge,
-  Switch,
-  Indicator,
-  ActionIcon,
   Popover,
   Timeline,
-  HoverCard,
 } from "@mantine/core";
-import { useSessionStorage, useElementSize } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
-import { DatePicker } from "@mantine/dates";
 import { dateFormat, dateId, saveToDB } from "../libs/custom";
 import { useUser } from "../libs/context";
-import { MultiSelect } from "../comps/trip/multiSelect";
+import { createFormContext } from "@mantine/form";
+import FirstPanel from "../comps/trip/firstPanel";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
 import UseTickets from "../comps/trip/useTickets";
 import SumInput from "../comps/trip/sumInput";
 import classes from "./tripplanner.module.css";
 
+export const [FormProvider, useFormContext, useForm] = createFormContext();
 export default function TripPlanner(props) {
   let { auth, mapLoaded } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
-  const [isClient, setIsClient] = useState(false);
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
   const [startCity, setStartCity] = useState("");
@@ -65,7 +58,6 @@ export default function TripPlanner(props) {
   const [travelDates, setTravelDates] = useState(null);
   const [active, setActive] = useState(0);
   const router = useRouter();
-  const { ref, width, height } = useElementSize();
   const dayjs = require("dayjs");
   const { user } = useUser();
 
@@ -105,25 +97,40 @@ export default function TripPlanner(props) {
     defaultValue: "",
   });
 
-  const setCostsToZero = (trips) => {
-    return trips.map((trip) => ({
-      ...trip,
-      costs: {
-        flight: 0,
-        hotel: 0,
-      },
-    }));
-  };
+  const [savedFormValues, setSavedFormValues] = useSessionStorage({
+    key: "formValues",
+    defaultValue: {
+      places: placeData.map((place) => ({
+        place: place.place,
+        region: place.region,
+        costs: {
+          flight: 0,
+          hotel: 0,
+        },
+      })),
+    },
+  });
+
+  const form = useForm({
+    initialValues: savedFormValues,
+    transformValues: (values) => {
+      let totalCost = 0;
+
+      values.places.forEach((place) => {
+        Object.values(place.costs).forEach((cost) => {
+          totalCost += cost;
+        });
+      });
+
+      return totalCost;
+    },
+  });
 
   const handleReset = () => {
     const newData = [...placeData];
     const resetVals = setCostsToZero(newData);
     setPlaceData(resetVals);
   };
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
@@ -136,9 +143,6 @@ export default function TripPlanner(props) {
   };
 
   const [costsObj, setCostsObj] = useState([]);
-
-  const today = new Date();
-  const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
   const prevStep = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
@@ -267,18 +271,6 @@ export default function TripPlanner(props) {
     icon: <IconCheck size={17} />,
   };
 
-  const placeCheck = () => {
-    placeData.map((place) => {
-      if (`${place.place}, ${place.region}` === startLocale) {
-        notifications.show(placeExists);
-        setStartLocale("");
-        setStartLocaleSearch("");
-        setStartLocaleData([]);
-        return true;
-      }
-    });
-  };
-
   useEffect(() => {
     if (!startLocaleRef.current?.value) {
       setStartLocaleSearch("");
@@ -363,52 +355,6 @@ export default function TripPlanner(props) {
     }
   };
 
-  const handleChange = async () => {
-    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`;
-
-    if (startLocaleSearch?.length > 0) {
-      try {
-        const response = await fetch(endpoint);
-        const results = await response.json();
-        const data = results.features.map((feature) => ({
-          label: feature.place_name,
-          value: feature.place_name,
-          place_name: feature.place_name,
-          place_type: feature.place_type,
-          center: feature.center,
-          geometry: feature.geometry,
-          text: feature.text,
-          bbox: feature.bbox,
-          context: feature.context,
-          all: feature,
-        }));
-        setStartLocaleData(data);
-      } catch (error) {
-        console.error("Error fetching data for Country Autocomplete: ", error);
-      }
-    }
-  };
-
-  const handleSubmit = (e) => {
-    const index = e.indexOf(",");
-    const subCity = e.substring(0, index);
-    const subRegion = e.substring(index + 1, e.length);
-
-    if (placeCheck() === true) return;
-    setStartLocale(e);
-    setStartCity(subCity);
-    setStartRegion(subRegion);
-  };
-
-  const optionsFilter = ({ options, search }) => {
-    const searchWords = search.toLowerCase().trim().split(/\s+/);
-    return options.filter((option) =>
-      searchWords.every((searchWord) =>
-        option.label.toLowerCase().includes(searchWord)
-      )
-    );
-  };
-
   const TripTitle = () => {
     const [value, setValue] = useState(plannerTripTitle);
 
@@ -437,553 +383,360 @@ export default function TripPlanner(props) {
   };
 
   return (
-    isClient && (
-      <Box px={20} pb={50}>
-        <Space h={110} />
-        <Center ml={-40}>
-          <Divider
-            w={"100%"}
-            maw={1200}
-            mb={20}
-            opacity={0.4}
-            labelPosition="left"
-            color={dark ? "gray.7" : "dark.1"}
-            label={
-              <Flex>
-                <IconChevronsRight size={20} />
-                <Text>
-                  {active === 0
-                    ? "Travel Starting Info"
-                    : active === 1
-                    ? "Cost Calculator"
-                    : active === 2
-                    ? "Travel Details"
-                    : "Account Information"}
-                </Text>
-              </Flex>
-            }
-          />
-        </Center>
-        <Center>
-          <Flex
-            w="100%"
-            maw={1200}
-            justify="flex-start"
-            align="flex-start"
-            gap={10}
-          >
-            <Box w="100%">
-              {active === 0 && (
-                <motion.div {...animation}>
-                  <Flex pb={30} px={30} maw={950} direction={"column"}>
-                    <Title order={5} fw={400} h={20} mb={20}>
-                      {startLocale && travelDates ? (
-                        "Continue..."
-                      ) : (
-                        <Text fw={700} opacity={1}>
-                          Provide the{" "}
-                          <Text inherit span hidden={startLocale}>
-                            Departure City{" "}
-                          </Text>
-                          <Text
-                            inherit
-                            span
-                            hidden={startLocale || travelDates}
-                          >
-                            and
-                          </Text>{" "}
-                          <Text inherit span hidden={travelDates}>
-                            Travel Start Date
-                            {startLocale && ":"}
-                          </Text>
-                        </Text>
-                      )}
-                    </Title>
-                    <Flex
-                      w={"100%"}
-                      justify={"flex-start"}
-                      align={"flex-start"}
-                      gap={30}
+    <FormProvider form={form}>
+      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <Box px={20} pb={50}>
+          <Space h={110} />
+          <Center ml={-40}>
+            <Divider
+              className={classes.divider}
+              w={"100%"}
+              maw={1200}
+              mb={20}
+              opacity={0.4}
+              labelPosition="left"
+              label={
+                <Flex>
+                  <IconChevronsRight size={20} />
+                  <Text>
+                    {active === 0
+                      ? "Travel Starting Info"
+                      : active === 1
+                      ? "Cost Calculator"
+                      : active === 2
+                      ? "Travel Details"
+                      : "Account Information"}
+                  </Text>
+                </Flex>
+              }
+            />
+          </Center>
+          <Center>
+            <Flex
+              w="100%"
+              maw={1200}
+              justify="flex-start"
+              align="flex-start"
+              gap={10}
+            >
+              <Box w="100%">
+                {active === 0 && (
+                  <motion.div {...animation}>
+                    <FirstPanel
+                      dark={dark}
+                      placeData={placeData}
+                      clearAutoComplete={clearAutoComplete}
+                      startLocaleRef={startLocaleRef}
+                      startLocale={startLocale}
+                      setStartLocale={setStartLocale}
+                      setStartCity={setStartCity}
+                      setStartRegion={setStartRegion}
+                      startLocaleSearch={startLocaleSearch}
+                      setStartLocaleSearch={setStartLocaleSearch}
+                      startLocaleData={startLocaleData}
+                      setStartLocaleData={setStartLocaleData}
+                      travelDates={travelDates}
+                      setTravelDates={setTravelDates}
+                      travelers={travelers}
+                      setTravelers={setTravelers}
+                      roundTrip={roundTrip}
+                      setRoundTrip={setRoundTrip}
+                    />
+                  </motion.div>
+                )}
+                {active === 1 && (
+                  <motion.div {...animation}>
+                    <Box mt={40} maw={950}>
+                      <UseTickets
+                        handleReset={handleReset}
+                        roundTrip={roundTrip}
+                        placeData={placeData}
+                        setPlaceData={setPlaceData}
+                        setSavedFormValues={setSavedFormValues}
+                      />
+                    </Box>
+                  </motion.div>
+                )}
+                {active === 2 && (
+                  <motion.div {...animation}>
+                    <Stack
+                      className="pagePanel"
+                      pos={"relative"}
+                      maw={950}
+                      p={30}
+                      align="center"
+                      gap={20}
                     >
-                      <Flex
+                      <TripTitle />
+                      <TripContent
+                        titleRef={titleRef}
+                        active={active}
+                        images={images}
+                        setImages={setImages}
+                      />
+                    </Stack>
+                  </motion.div>
+                )}
+                {active === 3 && (
+                  <motion.div {...animation}>
+                    <Center h={"50vh"}>
+                      <Stack
                         className="pagePanel"
-                        direction={"column"}
-                        justify={"center"}
-                        gap={20}
-                        p={"xl"}
-                        w="100%"
-                        miw={"470px"}
-                        mih={height + 64}
+                        pt={10}
+                        pb={30}
+                        px={30}
+                        maw={700}
+                        h={user ? 205 : "auto"}
+                        w={"100%"}
                       >
-                        <Autocomplete
-                          classNames={{
-                            label: classes.labelSize,
-                            input: classes.startLocaleInput,
-                            option: classes.startLocaleOption,
-                          }}
-                          label="Departure City"
-                          placeholder="Add Departure City..."
-                          selectFirstOptionOnChange
-                          ref={startLocaleRef}
-                          limit={5}
-                          size="xl"
+                        {!user && (
+                          <Box w={"100%"} mb={5}>
+                            <Box>
+                              <LoginComp mapLoaded={mapLoaded} auth={auth} />
+                            </Box>
+                          </Box>
+                        )}
+                        <Center mt={user ? 20 : 0}>
+                          <Button.Group w={"100%"}>
+                            <Button
+                              leftSection={
+                                <IconBuildingBank size={20} opacity={0.5} />
+                              }
+                              variant="filled"
+                              h={50}
+                              w={"80%"}
+                            >
+                              <Title order={4}>ADD BANKING INFORMATION</Title>
+                            </Button>
+                            <Button
+                              className={classes.brightenButton}
+                              variant="filled"
+                              h={50}
+                              w={"20%"}
+                              opacity={0.8}
+                            >
+                              <Title fz={10}>ADD LATER</Title>
+                            </Button>
+                          </Button.Group>
+                        </Center>
+                        <Divider
                           w={"100%"}
-                          value={startLocaleSearch}
-                          data={startLocaleData}
-                          filter={optionsFilter}
-                          rightSection={
-                            startLocaleSearch.length > 0 && (
-                              <ActionIcon
-                                variant="subtle"
-                                className={classes.clearAutoCompleteBtn}
-                                onClick={clearAutoComplete}
-                              >
-                                <IconX />
-                              </ActionIcon>
-                            )
-                          }
-                          onChange={(e) => {
-                            setStartLocaleSearch(e);
-                            handleChange(e);
-                            if (startLocaleRef.current.value === "") {
-                              setStartLocaleSearch("");
-                              setStartLocale("");
-                            }
-                          }}
-                          onOptionSubmit={(e) => handleSubmit(e)}
+                          my={5}
+                          opacity={0.3}
+                          color={dark && "gray.9"}
                         />
-                        <MultiSelect />
-                        <Group
-                          justify="space-around"
-                          pb={50}
-                          mb={5}
-                          style={{
-                            borderBottom: "2px solid rgba(84, 84, 84, 0.1)",
-                          }}
-                        >
-                          <Group py={10}>
-                            <Text fz={12}>Travelers: </Text>
-                            {/* Traveler Count  */}
-                            <NumberInput
-                              classNames={{
-                                label: classes.labelSize,
-                                input: classes.travelersInput,
-                                controls: classes.travelersContorls,
-                              }}
-                              size="sm"
-                              w={"77px"}
-                              radius={"25px"}
-                              type="number"
-                              suffix={""}
-                              value={travelers}
-                              onChange={(e) => setTravelers(e)}
-                              defaultValue={1}
-                              min={1}
-                            />
-                          </Group>
-                          <Switch
-                            classNames={{
-                              track: classes.switchTrack,
-                              label: classes.labelSize,
-                            }}
-                            styles={{
-                              thumb: {
-                                borderColor: dark ? "#262626" : "#d7d7d7",
-                                background: dark ? "#282a2d" : "#fff",
-                              },
-                            }}
-                            label="Round Trip?"
-                            labelPosition="left"
-                            onLabel="YES"
-                            offLabel="NO"
-                            size="xl"
-                            color={dark ? "#0d3f82" : "#2dc7f3"}
-                            checked={roundTrip}
-                            onChange={() => {
-                              setRoundTrip(!roundTrip);
+                        <Group gap={0}>
+                          <Box w={"80%"}>
+                            <Text fw={700} fz={12}>
+                              Banking Info is needed to disburse raised funds.
+                              Stripe securely handles this process.
+                            </Text>
+                            <Text fz={11}>
+                              Note that you can still use raised funds for
+                              flight and hotel bookings on our platform before
+                              adding your banking info.
+                            </Text>
+                          </Box>
+                          <Image
+                            src="img/stripe.svg"
+                            fit="contain"
+                            display={"block"}
+                            opacity={0.3}
+                            pl={20}
+                            alt="Stripe Logo"
+                            style={{
+                              filter: dark && "invert(50%)",
+                              width: "20%",
+                              borderRadius: "3px",
                             }}
                           />
                         </Group>
-                      </Flex>
-                      <Center
-                        className="pagePanel"
-                        p={"xl"}
-                        w="100%"
-                        miw={365}
-                        ref={ref}
-                      >
-                        <DatePicker
-                          classNames={{
-                            day: classes.datePicker,
-                          }}
-                          allowDeselect
-                          firstDayOfWeek={0}
-                          defaultDate={travelDates || dayjs().add(7, "day")}
-                          minDate={weekAhead}
-                          value={travelDates}
-                          size={"md"}
-                          onChange={(e) => {
-                            setTravelDates(e);
-                          }}
-                          getDayProps={() => {
-                            return {
-                              style: {
-                                fontWeight: "bold",
-                              },
-                            };
-                          }}
-                          renderDay={(date) => {
-                            const day = date.getDate();
-                            const month = date.getMonth();
-                            const year = date.getFullYear();
-
-                            let isSpecificDay;
-                            if (travelDates) {
-                              const travelDate = dayjs(travelDates);
-                              const prevDate = travelDate.subtract(1, "day");
-
-                              isSpecificDay =
-                                day === prevDate.date() &&
-                                month === prevDate.month() &&
-                                year === prevDate.year();
-                            }
-                            return (
-                              <HoverCard
-                                shadow="md"
-                                position="top"
-                                withArrow="true"
-                                offset={7}
-                                arrowSize={15}
-                                disabled={!isSpecificDay}
-                                transitionProps={{ duration: 0 }}
-                                styles={{
-                                  dropdown: {
-                                    marginLeft: 9,
-                                  },
-                                }}
-                              >
-                                <HoverCard.Target>
-                                  <Indicator
-                                    size={7}
-                                    color={"red.7"}
-                                    offset={-4}
-                                    disabled={!isSpecificDay}
-                                  >
-                                    <div>{day}</div>
-                                  </Indicator>
-                                </HoverCard.Target>
-                                <HoverCard.Dropdown>
-                                  <Text fz={12} ta={"center"}>
-                                    Fundraiser Ends
-                                    <br />
-                                    Day Before Travel
-                                  </Text>
-                                </HoverCard.Dropdown>
-                              </HoverCard>
-                            );
-                          }}
-                        />
-                      </Center>
-                    </Flex>
-                  </Flex>
-                </motion.div>
-              )}
-              {active === 1 && (
-                <motion.div {...animation}>
-                  <Box mt={40} maw={950}>
-                    <UseTickets
-                      handleReset={handleReset}
-                      roundTrip={roundTrip}
-                      placeData={placeData}
-                      setPlaceData={setPlaceData}
-                    />
-                  </Box>
-                </motion.div>
-              )}
-              {active === 2 && (
-                <motion.div {...animation}>
-                  <Stack
-                    className="pagePanel"
-                    pos={"relative"}
-                    maw={950}
-                    p={30}
-                    align="center"
-                    gap={20}
-                  >
-                    <TripTitle />
-                    <TripContent
-                      titleRef={titleRef}
-                      active={active}
-                      images={images}
-                      setImages={setImages}
-                    />
-                  </Stack>
-                </motion.div>
-              )}
-              {active === 3 && (
-                <motion.div {...animation}>
-                  <Center h={"50vh"}>
-                    <Stack
-                      className="pagePanel"
-                      pt={10}
-                      pb={30}
-                      px={30}
-                      maw={700}
-                      h={user ? 205 : "auto"}
-                      w={"100%"}
-                    >
-                      {!user && (
-                        <Box w={"100%"} mb={5}>
-                          <Box>
-                            <LoginComp mapLoaded={mapLoaded} auth={auth} />
-                          </Box>
-                        </Box>
-                      )}
-                      <Center mt={user ? 20 : 0}>
-                        <Button.Group w={"100%"}>
-                          <Button
-                            leftSection={
-                              <IconBuildingBank size={20} opacity={0.5} />
-                            }
-                            variant="filled"
-                            h={50}
-                            w={"80%"}
-                          >
-                            <Title order={4}>ADD BANKING INFORMATION</Title>
-                          </Button>
-                          <Button
-                            className={classes.brightenButton}
-                            variant="filled"
-                            h={50}
-                            w={"20%"}
-                            opacity={0.8}
-                          >
-                            <Title fz={10}>ADD LATER</Title>
-                          </Button>
-                        </Button.Group>
-                      </Center>
-                      <Divider
-                        w={"100%"}
-                        my={5}
-                        opacity={0.3}
-                        color={dark && "gray.9"}
-                      />
-                      <Group gap={0}>
-                        <Box w={"80%"}>
-                          <Text fw={700} fz={12}>
-                            Banking Info is needed to disburse raised funds.
-                            Stripe securely handles this process.
-                          </Text>
-                          <Text fz={11}>
-                            Note that you can still use raised funds for flight
-                            and hotel bookings on our platform before adding
-                            your banking info.
-                          </Text>
-                        </Box>
-                        <Image
-                          src="img/stripe.svg"
-                          fit="contain"
-                          display={"block"}
-                          opacity={0.3}
-                          pl={20}
-                          alt="Stripe Logo"
-                          style={{
-                            filter: dark && "invert(50%)",
-                            width: "20%",
-                            borderRadius: "3px",
-                          }}
-                        />
-                      </Group>
-                    </Stack>
-                  </Center>
-                </motion.div>
-              )}
-            </Box>
-            <Box pos={"relative"}>
-              <Stepper
-                active={active}
-                onStepClick={setActive}
-                iconjustify="flex-end"
-                orientation="vertical"
-                allowNextStepsSelect={false}
-                color={dark ? "blue.9" : "blue.4"}
-                miw={205}
-                mt={45}
-                mb={-20}
-                mr={20}
-                size="xs"
-                w="20%"
-                styles={{
-                  stepIcon: {
-                    overflow: "hidden",
-                    backgroundColor: dark && "#050506",
-                  },
-                  stepCompletedIcon: {
-                    backgroundColor: dark && "#0D3F82",
-                  },
-                }}
-              >
-                <Stepper.Step
-                  label="Travel Starting Info"
-                  description="Travel date and starting location"
-                />
-                <Stepper.Step
-                  label="Cost Calculator"
-                  description="Calculate all your travel costs"
-                />
-                <Stepper.Step
-                  label="Travel Details"
-                  description="Information for your supporters"
-                />
-                <Stepper.Step
-                  label="Account Info"
-                  description="Provide account details"
-                />
-              </Stepper>
-              <Popover
-                withArrow
-                arrowSize={15}
-                offset={3}
-                position="top-end"
-                shadow="xl"
-                transitionProps={{
-                  duration: 300,
-                  transition: "skew-down",
-                }}
-              >
-                <Popover.Target>
-                  <Box>
-                    {(travelDates || startLocale) && (
-                      <Button
-                        className={classes.tripInformationBtn}
-                        hidden={true}
-                        mt={10}
-                        pl={7}
-                        fw={100}
-                        size="xs"
-                        fullWidth
-                        variant="default"
-                        color={dark ? "#fff" : "#000"}
-                        rightSection={
-                          <IconFileInfo
-                            style={{ marginLeft: -5 }}
-                            size={16}
-                            opacity={0.2}
-                          />
-                        }
-                        onClick={() => setShowTripInfo(true)}
-                      >
-                        Trip Information
-                      </Button>
-                    )}
-                  </Box>
-                </Popover.Target>
-                <Popover.Dropdown p={"xl"} py={20}>
-                  {startLocale && (
-                    <Divider
-                      label="Trip Information"
-                      labelPosition="left"
-                      mb={10}
-                    />
-                  )}
-                  <Stack gap={3}>
-                    {startLocale && (
-                      <PlaceTimeline
-                        dark={dark}
-                        placeData={placeData}
-                        roundTrip={roundTrip}
-                        startCity={startCity}
-                        startRegion={startRegion}
-                        startLocale={startLocale}
-                      />
-                    )}
-                    {travelDates && (
-                      <>
-                        {startLocale && travelDates && <Divider my={10} />}
-                        <Badge
-                          variant="dot"
-                          size="xs"
-                          color="green.9"
-                          classNames={{ root: classes.badge }}
-                        >
-                          {dayjs(travelDates).format("LL")}
-                        </Badge>
-                        <Badge
-                          variant="dot"
-                          size="xs"
-                          color="green.6"
-                          classNames={{ root: classes.badge }}
-                        >
-                          {roundTrip ? "Round Trip" : "One Way"}
-                        </Badge>
-                        <Badge
-                          variant="dot"
-                          size="xs"
-                          color="green.3"
-                          classNames={{ root: classes.badge }}
-                        >
-                          {travelers === 1
-                            ? "Solo Traveler"
-                            : travelers + " Travelers"}
-                        </Badge>
-                      </>
-                    )}
-                  </Stack>
-                </Popover.Dropdown>
-              </Popover>
-              {active > 0 && (
-                <>
-                  <Divider
-                    my={5}
-                    opacity={dark ? 0.3 : 0.7}
-                    color={dark && "gray.5"}
-                    size={"xs"}
-                    variant="solid"
-                    labelPosition="left"
-                    label={"Total Cost"}
-                    labeljustify="center"
+                      </Stack>
+                    </Center>
+                  </motion.div>
+                )}
+              </Box>
+              <Box pos={"relative"}>
+                <Stepper
+                  classNames={{
+                    stepIcon: classes.stepperIcon,
+                    stepCompletedIcon: classes.stepperCompleteIcon,
+                  }}
+                  active={active}
+                  onStepClick={setActive}
+                  iconjustify="flex-end"
+                  orientation="vertical"
+                  allowNextStepsSelect={false}
+                  miw={205}
+                  mt={45}
+                  mb={-20}
+                  mr={20}
+                  size="xs"
+                  w="20%"
+                >
+                  <Stepper.Step
+                    label="Travel Starting Info"
+                    description="Travel date and starting location"
                   />
-                  <SumInput />
-                </>
-              )}
-              {startLocale && travelDates && (
-                <Divider
-                  w={"100%"}
-                  my={15}
-                  opacity={dark ? 0.1 : 0.5}
-                  color={dark && "gray.5"}
-                />
-              )}
-              {active !== 0 && (
-                // Move Up Sections Button
-                <Button
-                  className={classes.panelBtns}
-                  fullWidth
-                  variant={"filled"}
-                  mb={10}
-                  onClick={prevStep}
+                  <Stepper.Step
+                    label="Cost Calculator"
+                    description="Calculate all your travel costs"
+                  />
+                  <Stepper.Step
+                    label="Travel Details"
+                    description="Information for your supporters"
+                  />
+                  <Stepper.Step
+                    label="Account Info"
+                    description="Provide account details"
+                  />
+                </Stepper>
+                <Popover
+                  withArrow
+                  arrowSize={15}
+                  offset={3}
+                  position="top-end"
+                  shadow="xl"
+                  transitionProps={{
+                    duration: 300,
+                    transition: "skew-down",
+                  }}
                 >
-                  <IconChevronUp />
-                </Button>
-              )}
-              {startLocale && travelDates && (
-                // Move Down Sections Button
-                <Button
-                  className={classes.panelBtns}
-                  fullWidth
-                  variant={"filled"}
-                  onClick={changeNextStep}
-                >
-                  {active === 3 ? "DONE" : <IconChevronDown />}
-                </Button>
-              )}
-            </Box>
-          </Flex>
-        </Center>
-      </Box>
-    )
+                  <Popover.Target>
+                    <Box>
+                      {(travelDates || startLocale) && (
+                        <Button
+                          className={classes.tripInformationBtn}
+                          hidden={true}
+                          mt={10}
+                          pl={7}
+                          fw={100}
+                          size="xs"
+                          fullWidth
+                          variant="default"
+                          color={dark ? "#fff" : "#000"}
+                          rightSection={
+                            <IconFileInfo
+                              style={{ marginLeft: -5 }}
+                              size={16}
+                              opacity={0.2}
+                            />
+                          }
+                          onClick={() => setShowTripInfo(true)}
+                        >
+                          Trip Information
+                        </Button>
+                      )}
+                    </Box>
+                  </Popover.Target>
+                  <Popover.Dropdown p={"xl"} py={20}>
+                    {startLocale && (
+                      <Divider
+                        label="Trip Information"
+                        labelPosition="left"
+                        mb={10}
+                      />
+                    )}
+                    <Stack gap={3}>
+                      {startLocale && (
+                        <PlaceTimeline
+                          dark={dark}
+                          placeData={placeData}
+                          roundTrip={roundTrip}
+                          startCity={startCity}
+                          startRegion={startRegion}
+                          startLocale={startLocale}
+                        />
+                      )}
+                      {travelDates && (
+                        <>
+                          {startLocale && travelDates && <Divider my={10} />}
+                          <Badge
+                            variant="dot"
+                            size="xs"
+                            color="green.9"
+                            classNames={{ root: classes.badge }}
+                          >
+                            {dayjs(travelDates).format("LL")}
+                          </Badge>
+                          <Badge
+                            variant="dot"
+                            size="xs"
+                            color="green.6"
+                            classNames={{ root: classes.badge }}
+                          >
+                            {roundTrip ? "Round Trip" : "One Way"}
+                          </Badge>
+                          <Badge
+                            variant="dot"
+                            size="xs"
+                            color="green.3"
+                            classNames={{ root: classes.badge }}
+                          >
+                            {travelers === 1
+                              ? "Solo Traveler"
+                              : travelers + " Travelers"}
+                          </Badge>
+                        </>
+                      )}
+                    </Stack>
+                  </Popover.Dropdown>
+                </Popover>
+                {active > 0 && (
+                  <>
+                    <Divider
+                      my={5}
+                      opacity={dark ? 0.3 : 0.7}
+                      color={dark && "gray.5"}
+                      size={"xs"}
+                      variant="solid"
+                      labelPosition="left"
+                      label={"Total Cost"}
+                      labeljustify="center"
+                    />
+                    <SumInput />
+                  </>
+                )}
+                {startLocale && travelDates && (
+                  <Divider
+                    w={"100%"}
+                    my={15}
+                    opacity={dark ? 0.1 : 0.5}
+                    color={dark && "gray.5"}
+                  />
+                )}
+                {active !== 0 && (
+                  // Move Up Sections Button
+                  <Button
+                    className={classes.panelBtns}
+                    fullWidth
+                    variant={"filled"}
+                    mb={10}
+                    onClick={prevStep}
+                  >
+                    <IconChevronUp />
+                  </Button>
+                )}
+                {startLocale && travelDates && (
+                  // Move Down Sections Button
+                  <Button
+                    className={classes.panelBtns}
+                    fullWidth
+                    variant={"filled"}
+                    onClick={changeNextStep}
+                  >
+                    {active === 3 ? "DONE" : <IconChevronDown />}
+                  </Button>
+                )}
+              </Box>
+            </Flex>
+          </Center>
+        </Box>
+      </form>
+    </FormProvider>
   );
 }
+// NOTE: END OF TRIP PLANNER COMP FUNC
 
 const PlaceTimeline = (props) => {
   const { dark, placeData, roundTrip, startCity, startRegion, startLocale } =

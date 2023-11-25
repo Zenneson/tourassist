@@ -25,7 +25,7 @@
 
 .brightenButton {
   transition: all 250ms ease-in-out;
-  opacity: light-dark(0.3, 0.1);
+  opacity: light-dark(0.7, 0.1);
   &:hover {
     opacity: 1;
   }

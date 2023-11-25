@@ -17,15 +17,12 @@ import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
 import { getAuth } from "firebase/auth";
 import { UserProvider } from "../libs/context";
-import colorSchemeManager from "../libs/colorSchemeManager";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
 import DropDown from "../comps/dropdown/dropdown";
 require("typeface-montserrat");
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
-
-const localColorScheme = colorSchemeManager({ key: "mantine-color-scheme" });
 
 const tourTheme = createTheme({
   focusRing: "auto",
@@ -176,11 +173,7 @@ export default function App(props) {
   const router = useRouter();
 
   return (
-    <MantineProvider
-      theme={tourTheme}
-      defaultColorScheme="dark"
-      colorSchemeManager={localColorScheme}
-    >
+    <MantineProvider theme={tourTheme} defaultColorScheme="dark">
       <Head>
         <title>TouraSSist</title>
         <meta

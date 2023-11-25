@@ -1,23 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { IconChevronsRight, IconChevronsUp } from "@tabler/icons-react";
-import {
-  useComputedColorScheme,
-  ActionIcon,
-  Box,
-  Drawer,
-  Center,
-  Flex,
-} from "@mantine/core";
+import { ActionIcon, Box, Drawer, Center, Flex } from "@mantine/core";
 import LatestTrips from "./latesttrips";
 import classes from "./dropdown.module.css";
 
 export default function DropDown(props) {
   const { dropDownOpened, setDropDownOpened } = props;
   const [active, setActive] = useState(0);
-  const computedColorScheme = useComputedColorScheme("dark", {
-    getInitialValueInEffect: true,
-  });
 
   const terms = [
     {

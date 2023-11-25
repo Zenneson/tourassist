@@ -89,6 +89,7 @@ export function MultiSelect() {
       classNames={{
         option: classes.comboBoxOption,
       }}
+      px={10}
       store={combobox}
       onOptionSubmit={handleValueSelect}
       withinPortal={false}
@@ -102,7 +103,6 @@ export function MultiSelect() {
           }}
           size="xl"
           label="What type of trip is this?"
-          description="Choose up to 5 types"
           inputWrapperOrder={["label", "error", "input", "description"]}
           onClick={() => {
             if (value.length < MAX_SELECTABLE_ITEMS) {

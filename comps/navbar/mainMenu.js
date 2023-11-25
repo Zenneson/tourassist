@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
+import useSWR from "swr";
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
-import useSWR from "swr";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
 import { useSessionStorage, useFullscreen } from "@mantine/hooks";
@@ -38,7 +38,6 @@ import { spotlight } from "@mantine/spotlight";
 import ProfileDrawer from "./profileDrawer";
 import { auth } from "../../libs/firebase";
 import { useUser } from "../../libs/context";
-import Cookies from "js-cookie";
 import classes from "./mainMenu.module.css";
 import LoginComp from "../loginComp";
 
@@ -104,10 +103,6 @@ export default function MainMenu(props) {
   }
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
     if (!currentTrip || currentTrip.length === 0) {
       const sessionTrip = sessionStorage.getItem("currentTrip");
       if (sessionTrip) {
@@ -156,6 +151,7 @@ export default function MainMenu(props) {
       }
     }
     sessionStorage.clear();
+    // NOTE: Is this necessary? Are these ever set?
     Cookies.remove("tripData");
     Cookies.remove("user");
     setMainMenuOpened(false);
@@ -176,260 +172,256 @@ export default function MainMenu(props) {
     return null;
   }
 
+  const ColorSchemeButtonIcon = () => {
+    if (colorScheme === "dark") {
+      return <IconBrightnessUp size={17} />;
+    } else {
+      return <IconMoon size={17} />;
+    }
+  };
+
   return (
-    isClient && (
-      <>
-        <Box>
-          <Box
-            height={1} // so that the header does not block the middele of the top
-            opacity={searchOpened ? 0 : 1}
-            className={classes.mainMenu}
-          >
-            {/* Main Menu Button  */}
-            <Flex
-              direction={"row"}
-              align="center"
-              gap={10}
-              mt={5}
-              ml={-10}
-              style={{
-                cursor: "pointer",
-                pointerEvents: "all",
-              }}
-              onClick={openMenu}
-            >
-              <Image
-                ml={5}
-                width={"auto"}
-                height={"60px"}
-                src={"img/TA_GlobeLogo.png"}
-                alt="TouraSSist_logo"
-              />
-              <Title fw={900} c={dark ? "gray.0" : "dark.3"} fz={30}>
-                <Text fw={500} c={dark ? "gray.5" : "#000"} inherit span>
-                  TOUR
-                </Text>
-                ASSIST
-              </Title>
-            </Flex>
-            <Flex
-              align={"center"}
-              gap={10}
-              px={0}
-              py={10}
-              mt={10}
-              mr={10}
-              style={{
-                pointerEvents: "all",
-              }}
-            >
-              {user && (
-                //  Main Menu Button
-                <Button
-                  className={classes.openMenuButton}
-                  variant="subtle"
-                  size="sm"
-                  onClick={openMenu}
-                  radius={"xl"}
-                  mr={-5}
-                >
-                  <Text fz={12} c={dark ? "gray.0" : "dark.9"}>
-                    {user.email}
-                  </Text>
-                </Button>
-              )}
-              <Tooltip
-                label="Toggle Color Scheme"
-                position="bottom"
-                classNames={{ tooltip: "toolTip" }}
-              >
-                <Button
-                  className={classes.toggleColorButton}
-                  variant="subtle"
-                  onClick={() => toggleColorScheme()}
-                  radius={"xl"}
-                  p={10}
-                  c={dark ? "gray.0" : "dark.9"}
-                >
-                  {dark ? (
-                    <IconBrightnessUp size={17} />
-                  ) : (
-                    <IconMoon size={17} />
-                  )}
-                </Button>
-              </Tooltip>
-              {/* TOGGLE FULLSCREEN  */}
-              {router.pathname === "/map" && (
-                <Tooltip
-                  label={fullscreen ? "Exit Fullscreen" : "Fullscreen"}
-                  position="bottom"
-                  classNames={{ tooltip: "toolTip" }}
-                >
-                  <Button
-                    className={classes.toggleColorButton}
-                    variant="subtle"
-                    onClick={toggle}
-                    radius={"xl"}
-                    p={10}
-                    c={dark ? "gray.0" : "dark.9"}
-                  >
-                    {fullscreen ? (
-                      <IconArrowsMinimize size={17} />
-                    ) : (
-                      <IconArrowsMaximize size={17} />
-                    )}
-                  </Button>
-                </Tooltip>
-              )}
-              <Group gap={0}>
-                <Tooltip
-                  label="Search Trips"
-                  position="bottom"
-                  classNames={{ tooltip: "toolTip" }}
-                >
-                  {/* Search button */}
-                  <Button
-                    className={classes.openSearchButton}
-                    onClick={openSearch}
-                    variant="subtle"
-                    radius="xl"
-                    mr={5}
-                    p={10}
-                    c={dark ? "gray.0" : "dark.9"}
-                  >
-                    <IconSearch size={17} />
-                  </Button>
-                </Tooltip>
-                <Popover
-                  withArrow
-                  width="auto"
-                  position="bottom"
-                  shadow="md"
-                  offset={-2}
-                  closeOnClickOutside={true}
-                  onClose={() => setPopoverOpened(false)}
-                  opened={!loginModal && popoverOpened}
-                >
-                  <Tooltip
-                    label={user ? "Logout" : "Login"}
-                    position="bottom"
-                    classNames={{ tooltip: "toolTip" }}
-                  >
-                    <Popover.Target>
-                      {/* Logout Dropdown */}
-                      <Button
-                        className={classes.logoutDropdownButton}
-                        p={10}
-                        radius={"xl"}
-                        variant="subtle"
-                        c={dark ? "gray.0" : "dark.9"}
-                        onClick={() => {
-                          setPopoverOpened((o) => !o);
-                        }}
-                      >
-                        {user ? (
-                          <IconDoorExit size={17} />
-                        ) : (
-                          <IconLogin size={17} />
-                        )}
-                      </Button>
-                    </Popover.Target>
-                  </Tooltip>
-                  <Popover.Dropdown p={0}>
-                    {/* Logout Button  */}
-                    <Button
-                      className={classes.logoutButton}
-                      color={dark ? "#fff" : "#000"}
-                      size="md"
-                      fw={700}
-                      px={15}
-                      variant="subtle"
-                      leftSection={
-                        user ? (
-                          <IconDualScreen size={18} />
-                        ) : (
-                          <IconPasswordUser size={18} />
-                        )
-                      }
-                      onClick={logoutHandler}
-                    >
-                      {user ? "LOGOUT" : "LOGIN"}
-                    </Button>
-                  </Popover.Dropdown>
-                </Popover>
-              </Group>
-              {/* DropDown Button */}
-              <Tooltip
-                label={"TourAssist?"}
-                position="bottom"
-                classNames={{ tooltip: "toolTip" }}
-              >
-                <ActionIcon
-                  className={classes.infoButton}
-                  size={"xl"}
-                  radius={"xl"}
-                  variant="gradient"
-                  gradient={
-                    dark
-                      ? { from: "blue.7", to: "blue.9", deg: 180 }
-                      : { from: "blue.1", to: "blue.3", deg: 180 }
-                  }
-                >
-                  <IconInfoCircle stroke={1} size={40} onClick={openDropDown} />
-                </ActionIcon>
-              </Tooltip>
-            </Flex>
-          </Box>
-        </Box>
-        <Modal
-          opened={loginModal}
-          padding={"xl"}
-          withCloseButton={false}
-          onClose={() => setLoginModal(false)}
-          overlayProps={{
-            blur: 10,
-            backgroundOpacity: 0.3,
-            color: dark ? "rgb(0,0,0)" : "rgb(255,255,255)",
-          }}
+    <>
+      <Box>
+        <Box
+          height={1} // so that the header does not block the middele of the top
+          opacity={searchOpened ? 0 : 1}
+          className={classes.mainMenu}
         >
-          <Center>
+          {/* Main Menu Button  */}
+          <Flex
+            direction={"row"}
+            align="center"
+            gap={10}
+            mt={5}
+            ml={-10}
+            style={{
+              cursor: "pointer",
+              pointerEvents: "all",
+            }}
+            onClick={openMenu}
+          >
             <Image
-              mb={25}
-              style={{ width: "100%", maxWidth: "250px" }}
+              ml={5}
+              width={"auto"}
+              height={"60px"}
               src={"img/TA_GlobeLogo.png"}
               alt="TouraSSist_logo"
             />
-          </Center>
-          <Title
-            fw={900}
-            ta={"center"}
-            color="#fff"
-            fz={"2.2rem"}
-            mb={10}
+            <Title fw={900} fz={30} className={classes.mainTitleThick}>
+              <Text fw={500} inherit span className={classes.mainTitleThin}>
+                TOUR
+              </Text>
+              ASSIST
+            </Title>
+          </Flex>
+          <Flex
+            align={"center"}
+            gap={10}
+            px={0}
+            py={10}
+            mt={10}
+            mr={10}
             style={{
-              textShadow: "0 2px 5px rgba(0,0,0,0.15)",
+              pointerEvents: "all",
             }}
           >
-            <Text fw={500} c={dark ? "#adadad" : "#7e7e7e"} inherit span>
-              TOUR
-            </Text>
-            ASSIST
-          </Title>
-          <LoginComp />
-        </Modal>
-        <ProfileDrawer
-          active={active}
-          setActive={setActive}
-          panelShow={panelShow}
-          setPanelShow={setPanelShow}
-          mainMenuOpened={mainMenuOpened}
-          setMainMenuOpened={setMainMenuOpened}
-          setDropDownOpened={setDropDownOpened}
-          signOutFunc={signOutFunc}
-          openMenu={openMenu}
-          allTrips={allTrips}
-        />
-      </>
-    )
+            {user && (
+              //  Main Menu Button
+              <Button
+                className={classes.openMenuButton}
+                variant="subtle"
+                size="sm"
+                onClick={openMenu}
+                radius={"xl"}
+                mr={-5}
+              >
+                <Text fz={12} className={classes.mainMenuBtn}>
+                  {user.email}
+                </Text>
+              </Button>
+            )}
+            <Tooltip
+              label="Toggle Color Scheme"
+              position="bottom"
+              classNames={{ tooltip: "toolTip" }}
+            >
+              <Button
+                className={classes.colorSchemeBtn}
+                variant="subtle"
+                onClick={() => toggleColorScheme()}
+                radius={"xl"}
+                p={10}
+              >
+                <>
+                  <IconBrightnessUp size={17} className={classes.lightIcon} />
+                  <IconMoon size={17} className={classes.darkIcon} />
+                </>
+              </Button>
+            </Tooltip>
+            {/* TOGGLE FULLSCREEN  */}
+            {router.pathname === "/map" && (
+              <Tooltip
+                label={fullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                position="bottom"
+                classNames={{ tooltip: "toolTip" }}
+              >
+                <Button
+                  className={classes.mainMenuBtn}
+                  variant="subtle"
+                  onClick={toggle}
+                  radius={"xl"}
+                  p={10}
+                >
+                  {fullscreen ? (
+                    <IconArrowsMinimize size={17} />
+                  ) : (
+                    <IconArrowsMaximize size={17} />
+                  )}
+                </Button>
+              </Tooltip>
+            )}
+            <Group gap={0}>
+              <Tooltip
+                label="Search Trips"
+                position="bottom"
+                classNames={{ tooltip: "toolTip" }}
+              >
+                {/* Search button */}
+                <Button
+                  className={classes.mainMenuBtn}
+                  onClick={openSearch}
+                  variant="subtle"
+                  radius="xl"
+                  mr={5}
+                  p={10}
+                >
+                  <IconSearch size={17} />
+                </Button>
+              </Tooltip>
+              <Popover
+                withArrow
+                width="auto"
+                position="bottom"
+                shadow="md"
+                offset={-2}
+                closeOnClickOutside={true}
+                onClose={() => setPopoverOpened(false)}
+                opened={!loginModal && popoverOpened}
+              >
+                <Tooltip
+                  label={user ? "Logout" : "Login"}
+                  position="bottom"
+                  classNames={{ tooltip: "toolTip" }}
+                >
+                  <Popover.Target>
+                    {/* Logout Dropdown */}
+                    <Button
+                      className={classes.mainMenuBtn}
+                      p={10}
+                      radius={"xl"}
+                      variant="subtle"
+                      onClick={() => {
+                        setPopoverOpened((o) => !o);
+                      }}
+                    >
+                      {user ? (
+                        <IconDoorExit size={17} />
+                      ) : (
+                        <IconLogin size={17} />
+                      )}
+                    </Button>
+                  </Popover.Target>
+                </Tooltip>
+                <Popover.Dropdown p={0}>
+                  {/* Logout Button  */}
+                  <Button
+                    className={classes.logoutButton}
+                    color={dark ? "#fff" : "#000"}
+                    size="md"
+                    fw={700}
+                    px={15}
+                    variant="subtle"
+                    leftSection={
+                      user ? (
+                        <IconDualScreen size={18} />
+                      ) : (
+                        <IconPasswordUser size={18} />
+                      )
+                    }
+                    onClick={logoutHandler}
+                  >
+                    {user ? "LOGOUT" : "LOGIN"}
+                  </Button>
+                </Popover.Dropdown>
+              </Popover>
+            </Group>
+            {/* DropDown Button */}
+            <Tooltip
+              label={"TourAssist?"}
+              position="bottom"
+              classNames={{ tooltip: "toolTip" }}
+            >
+              <ActionIcon
+                className={classes.infoButton}
+                size={"xl"}
+                radius={"xl"}
+                variant="transparent"
+              >
+                <IconInfoCircle stroke={1.2} size={35} onClick={openDropDown} />
+              </ActionIcon>
+            </Tooltip>
+          </Flex>
+        </Box>
+      </Box>
+      <Modal
+        opened={loginModal}
+        padding={"xl"}
+        withCloseButton={false}
+        onClose={() => setLoginModal(false)}
+        overlayProps={{
+          blur: 10,
+          backgroundOpacity: 0.3,
+          color: dark ? "rgb(0,0,0)" : "rgb(255,255,255)",
+        }}
+      >
+        <Center>
+          <Image
+            mb={25}
+            style={{ width: "100%", maxWidth: "250px" }}
+            src={"img/TA_GlobeLogo.png"}
+            alt="TouraSSist_logo"
+          />
+        </Center>
+        <Title
+          fw={900}
+          ta={"center"}
+          color="#fff"
+          fz={"2.2rem"}
+          mb={10}
+          style={{
+            textShadow: "0 2px 5px rgba(0,0,0,0.15)",
+          }}
+        >
+          <Text fw={500} c={dark ? "#adadad" : "#7e7e7e"} inherit span>
+            TOUR
+          </Text>
+          ASSIST
+        </Title>
+        <LoginComp />
+      </Modal>
+      <ProfileDrawer
+        active={active}
+        setActive={setActive}
+        panelShow={panelShow}
+        setPanelShow={setPanelShow}
+        mainMenuOpened={mainMenuOpened}
+        setMainMenuOpened={setMainMenuOpened}
+        setDropDownOpened={setDropDownOpened}
+        signOutFunc={signOutFunc}
+        openMenu={openMenu}
+        allTrips={allTrips}
+      />
+    </>
   );
 }

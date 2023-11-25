@@ -14,7 +14,9 @@
 }
 
 .labelSize {
-  font-size: 12px;
+  font-size: 10px;
+  opacity: 0.7;
+  text-transform: uppercase;
 }
 
 .multiRoot input {

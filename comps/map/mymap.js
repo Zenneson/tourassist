@@ -54,8 +54,8 @@ export default function Mymap(props) {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
-  const router = useRouter();
 
+  const router = useRouter();
   const mapRef = useRef();
   const fullMapRef = mapRef.current?.getMap();
   const [area, setArea] = useState({ label: "" });

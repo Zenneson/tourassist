@@ -64,7 +64,6 @@ export default function TripContent(props) {
   });
   const dark = computedColorScheme === "dark";
   const [loading, setLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false);
 
   const [imageUpload, setImageUpload] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
@@ -82,10 +81,6 @@ export default function TripContent(props) {
     key: "updatedDesc",
     defaultValue: "",
   });
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const router = useRouter();
   const sliderRef = useRef();
@@ -368,315 +363,308 @@ export default function TripContent(props) {
   };
 
   return (
-    isClient && (
-      <>
-        {(modalMode === "editTrip" || router.pathname === "/tripPlanner") && (
-          <>
-            <Group gap={20} w="100%" grow>
-              <Box>
-                {images.length > 0 ? (
-                  <>
-                    <Box
-                      h={300}
-                      style={{
-                        borderRadius: 3,
-                        overflow: "hidden",
-                      }}
-                    >
-                      <Slider
-                        ref={sliderRef}
-                        {...slideSettings}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      >
-                        {slides}
-                      </Slider>
-                    </Box>
-                    {images.length > 1 && (
-                      <Group gap={15} h={40} mt={10} grow>
-                        <Button
-                          variant="subtle"
-                          color="gray"
-                          onClick={previous}
-                        >
-                          <IconChevronLeft size={20} />
-                        </Button>
-                        <Button variant="subtle" color="gray" onClick={next}>
-                          <IconChevronRight size={20} />
-                        </Button>
-                      </Group>
-                    )}
-                  </>
-                ) : (
-                  <BackgroundImage
-                    radius={3}
-                    opacity={dark ? 0.1 : 0.4}
-                    src={
-                      dark
-                        ? "img/placeholder/bags_blk.jpg"
-                        : "img/placeholder/bags_wht.jpg"
-                    }
+    <>
+      {(modalMode === "editTrip" || router.pathname === "/tripPlanner") && (
+        <>
+          <Group gap={20} w="100%" grow>
+            <Box>
+              {images.length > 0 ? (
+                <>
+                  <Box
                     h={300}
-                    alt={"Placeholder Image"}
-                  />
-                )}
-              </Box>
-              <Box h={images.length > 1 ? 350 : 300}>
-                <FileButton
-                  accept={IMAGE_MIME_TYPE}
-                  disabled={images.length === 6}
-                  opacity={images.length === 6 ? 0.3 : 1}
-                  onChange={(file) => {
-                    grabImage(file, "input");
-                  }}
-                >
-                  {(props) => (
-                    <Button
-                      className={classes.uploadBtn}
-                      variant="light"
-                      size="lg"
-                      fullWidth
-                      {...props}
-                    >
-                      <Group gap={7}>
-                        <Title order={3}>
-                          {images.length === 6 ? "MAX REACHED" : "UPLOAD IMAGE"}
-                        </Title>
-                        {images.length < 6 && <IconUpload size={23} />}
-                      </Group>
-                    </Button>
-                  )}
-                </FileButton>
-                <Group
-                  justify="center"
-                  opacity={0.4}
-                  gap={5}
-                  fz={11}
-                  fs={"italic"}
-                  mt={10}
-                  mb={5}
-                >
-                  You may drag and drop files into the browser window{" "}
-                </Group>
-                <Stack gap={2}>
-                  {imageItems}
-                  {images.length < 6 && (
-                    <Badge
-                      variant="filled"
-                      size="lg"
-                      color={dark ? "dark.5" : "gray.5"}
-                      c={dark ? "gray.0" : "gray.9"}
-                      w={"60%"}
-                      ml={"20%"}
-                      opacity={0.2}
-                      mt={5}
+                    style={{
+                      borderRadius: 3,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Slider
+                      ref={sliderRef}
+                      {...slideSettings}
                       style={{
-                        cursor: "default",
+                        width: "100%",
+                        height: "100%",
                       }}
                     >
-                      {6 - images.length} space{images.length < 5 ? "s" : ""}{" "}
-                      left
-                    </Badge>
-                  )}
-                </Stack>
-                <Dropzone.FullScreen
-                  className={classes.dropzone}
-                  maxFiles={1}
-                  onDrop={(file) => {
-                    grabImage(file, "dropzone");
-                  }}
-                  onReject={(file) => console.error("rejected files", file)}
-                  accept={IMAGE_MIME_TYPE}
-                  ta="center"
-                  active={images.length < 6}
-                >
-                  <Center h={"calc(100vh - 60px)"}>
-                    <Group
-                      justify="center"
-                      gap={5}
-                      style={{
-                        pointerEvents: "none",
-                      }}
-                    >
-                      <Dropzone.Accept>
-                        <IconUpload size={50} opacity={0.3} />
-                      </Dropzone.Accept>
-                      <Dropzone.Reject>
-                        <IconX size={50} opacity={0.3} />
-                      </Dropzone.Reject>
-                      <Dropzone.Idle>
-                        <IconPhoto size={50} opacity={0.3} />
-                      </Dropzone.Idle>
-
-                      <div>
-                        <Text size="xl" fw={700} inline>
-                          DRAG IMAGES HERE
-                        </Text>
-                      </div>
+                      {slides}
+                    </Slider>
+                  </Box>
+                  {images.length > 1 && (
+                    <Group gap={15} h={40} mt={10} grow>
+                      <Button variant="subtle" color="gray" onClick={previous}>
+                        <IconChevronLeft size={20} />
+                      </Button>
+                      <Button variant="subtle" color="gray" onClick={next}>
+                        <IconChevronRight size={20} />
+                      </Button>
                     </Group>
-                  </Center>
-                </Dropzone.FullScreen>
-              </Box>
-            </Group>
-          </>
-        )}
-        {/* Text Editor */}
-        <ScrollArea
-          h={modalMode === "editTrip" ? 200 : 250}
-          w={"100%"}
-          type="hover"
-          scrollbarSize={8}
-          scrollHideDelay={250}
-          style={{
-            overflow: "hidden",
-            borderRadius: "3px",
-            border: dark
-              ? "1px solid rgba(100, 100, 100, 0.25)"
-              : "1px solid rgba(0, 0, 0, 0.1)",
+                  )}
+                </>
+              ) : (
+                <BackgroundImage
+                  radius={3}
+                  opacity={dark ? 0.1 : 0.4}
+                  src={
+                    dark
+                      ? "img/placeholder/bags_blk.jpg"
+                      : "img/placeholder/bags_wht.jpg"
+                  }
+                  h={300}
+                  alt={"Placeholder Image"}
+                />
+              )}
+            </Box>
+            <Box h={images.length > 1 ? 350 : 300}>
+              <FileButton
+                accept={IMAGE_MIME_TYPE}
+                disabled={images.length === 6}
+                opacity={images.length === 6 ? 0.3 : 1}
+                onChange={(file) => {
+                  grabImage(file, "input");
+                }}
+              >
+                {(props) => (
+                  <Button
+                    className={classes.uploadBtn}
+                    variant="light"
+                    size="lg"
+                    fullWidth
+                    {...props}
+                  >
+                    <Group gap={7}>
+                      <Title order={3}>
+                        {images.length === 6 ? "MAX REACHED" : "UPLOAD IMAGE"}
+                      </Title>
+                      {images.length < 6 && <IconUpload size={23} />}
+                    </Group>
+                  </Button>
+                )}
+              </FileButton>
+              <Group
+                justify="center"
+                opacity={0.4}
+                gap={5}
+                fz={11}
+                fs={"italic"}
+                mt={10}
+                mb={5}
+              >
+                You may drag and drop files into the browser window{" "}
+              </Group>
+              <Stack gap={2}>
+                {imageItems}
+                {images.length < 6 && (
+                  <Badge
+                    variant="filled"
+                    size="lg"
+                    color={dark ? "dark.5" : "gray.5"}
+                    c={dark ? "gray.0" : "gray.9"}
+                    w={"60%"}
+                    ml={"20%"}
+                    opacity={0.2}
+                    mt={5}
+                    style={{
+                      cursor: "default",
+                    }}
+                  >
+                    {6 - images.length} space{images.length < 5 ? "s" : ""} left
+                  </Badge>
+                )}
+              </Stack>
+              <Dropzone.FullScreen
+                className={classes.dropzone}
+                maxFiles={1}
+                onDrop={(file) => {
+                  grabImage(file, "dropzone");
+                }}
+                onReject={(file) => console.error("rejected files", file)}
+                accept={IMAGE_MIME_TYPE}
+                ta="center"
+                active={images.length < 6}
+              >
+                <Center h={"calc(100vh - 60px)"}>
+                  <Group
+                    justify="center"
+                    gap={5}
+                    style={{
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <Dropzone.Accept>
+                      <IconUpload size={50} opacity={0.3} />
+                    </Dropzone.Accept>
+                    <Dropzone.Reject>
+                      <IconX size={50} opacity={0.3} />
+                    </Dropzone.Reject>
+                    <Dropzone.Idle>
+                      <IconPhoto size={50} opacity={0.3} />
+                    </Dropzone.Idle>
+
+                    <div>
+                      <Text size="xl" fw={700} inline>
+                        DRAG IMAGES HERE
+                      </Text>
+                    </div>
+                  </Group>
+                </Center>
+              </Dropzone.FullScreen>
+            </Box>
+          </Group>
+        </>
+      )}
+      {/* Text Editor */}
+      <ScrollArea
+        h={modalMode === "editTrip" ? 200 : 250}
+        w={"100%"}
+        type="hover"
+        scrollbarSize={8}
+        scrollHideDelay={250}
+        style={{
+          overflow: "hidden",
+          borderRadius: "3px",
+          border: dark
+            ? "1px solid rgba(100, 100, 100, 0.25)"
+            : "1px solid rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <RichTextEditor
+          classNames={{
+            root: classes.textEditorRoot,
+            toolbar: classes.textEditorToolbar,
+            content: classes.textEditorContent,
+          }}
+          editor={editor}
+          position="relative"
+          mih={modalMode === "editTrip" ? 200 : 250}
+          bg={dark ? "dark.6" : "gray.2"}
+          onBlur={() => {
+            if (router.pathname === "/tripPlanner")
+              setTripDesc(editor.getHTML());
           }}
         >
-          <RichTextEditor
-            classNames={{
-              root: classes.textEditorRoot,
-              toolbar: classes.textEditorToolbar,
-              content: classes.textEditorContent,
-            }}
-            editor={editor}
-            position="relative"
-            mih={modalMode === "editTrip" ? 200 : 250}
-            bg={dark ? "dark.6" : "gray.2"}
-            onBlur={() => {
-              if (router.pathname === "/tripPlanner")
-                setTripDesc(editor.getHTML());
+          <RichTextEditor.Toolbar sticky>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.H1 />
+              <RichTextEditor.H2 />
+              <RichTextEditor.H3 />
+              <RichTextEditor.H4 />
+              <RichTextEditor.BulletList />
+              <RichTextEditor.OrderedList />
+            </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Italic />
+              <RichTextEditor.AlignLeft />
+              <RichTextEditor.AlignCenter />
+              <RichTextEditor.AlignRight />
+              <RichTextEditor.AlignJustify />
+              <RichTextEditor.Link />
+              <RichTextEditor.Unlink />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
+          <RichTextEditor.Content />
+        </RichTextEditor>
+      </ScrollArea>
+      {router.pathname !== "/tripPlanner" && (
+        <Group justify="flex-end" w={"100%"}>
+          <Button
+            variant="default"
+            size="md"
+            w={"25%"}
+            onClick={updateTripData}
+          >
+            SUBMIT EDIT
+          </Button>
+        </Group>
+      )}
+      {showCropper && imageUpload && (
+        <>
+          <Box
+            ref={cropperContainerRef}
+            pos={"absolute"}
+            top={30}
+            style={{
+              zIndex: 1000,
+              opacity: loading ? 0 : 1,
+              transition: "opacity 0.2s ease-in-out",
             }}
           >
-            <RichTextEditor.Toolbar sticky>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Bold />
-                <RichTextEditor.H1 />
-                <RichTextEditor.H2 />
-                <RichTextEditor.H3 />
-                <RichTextEditor.H4 />
-                <RichTextEditor.BulletList />
-                <RichTextEditor.OrderedList />
-              </RichTextEditor.ControlsGroup>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Italic />
-                <RichTextEditor.AlignLeft />
-                <RichTextEditor.AlignCenter />
-                <RichTextEditor.AlignRight />
-                <RichTextEditor.AlignJustify />
-                <RichTextEditor.Link />
-                <RichTextEditor.Unlink />
-              </RichTextEditor.ControlsGroup>
-            </RichTextEditor.Toolbar>
-            <RichTextEditor.Content />
-          </RichTextEditor>
-        </ScrollArea>
-        {router.pathname !== "/tripPlanner" && (
-          <Group justify="flex-end" w={"100%"}>
-            <Button
-              variant="default"
-              size="md"
-              w={"25%"}
-              onClick={updateTripData}
-            >
-              SUBMIT EDIT
-            </Button>
-          </Group>
-        )}
-        {showCropper && imageUpload && (
-          <>
-            <Box
-              ref={cropperContainerRef}
-              pos={"absolute"}
-              top={30}
+            <AvatarEditor
+              ref={cropperRef}
+              width={585}
+              height={450}
+              border={50}
+              color={dark ? [0, 0, 0, 0.8] : [100, 100, 100, 0.4]} // RGBA
+              image={imageUpload.file}
+              scale={scale}
+              onWheel={handleScroll}
+              onLoadSuccess={() => setLoading(false)}
               style={{
-                zIndex: 1000,
-                opacity: loading ? 0 : 1,
-                transition: "opacity 0.2s ease-in-out",
-              }}
-            >
-              <AvatarEditor
-                ref={cropperRef}
-                width={585}
-                height={450}
-                border={50}
-                color={dark ? [0, 0, 0, 0.8] : [100, 100, 100, 0.4]} // RGBA
-                image={imageUpload.file}
-                scale={scale}
-                onWheel={handleScroll}
-                onLoadSuccess={() => setLoading(false)}
-                style={{
-                  borderRadius: 3,
-                  overflow: "hidden",
-                }}
-              />
-              <MantineSlider
-                classNames={{
-                  root: classes.sizeSlider,
-                  thumb: classes.sizeSliderThumb,
-                  bar: classes.sizeSliderBar,
-                  track: classes.sizeSliderTracker,
-                }}
-                mt={20}
-                min={1}
-                max={5}
-                step={0.05}
-                size={"lg"}
-                thumbSize={38}
-                thumbChildren={<IconPhoto size={17} stroke={2} />}
-                defaultValue={1}
-                label={null}
-                value={scale}
-                onChange={setScale}
-              />
-              <Group w={"100%"} mt={30} grow>
-                {/* Selects NO Cropped Image to Image Slider  */}
-                <Button
-                  className={classes.dimBtn}
-                  size="xl"
-                  variant="filled"
-                  color={dark ? "dark.7" : "gray.0"}
-                  c={dark ? "gray.0" : "dark.8"}
-                  onClick={dontAddImage}
-                >
-                  <IconX stroke={5} size={35} />
-                </Button>
-                {/* Selects YES Cropped Image to Image Slider  */}
-                <Button
-                  className={classes.dimBtn}
-                  size="xl"
-                  variant="filled"
-                  color={dark ? "dark.7" : "gray.0"}
-                  c={dark ? "gray.0" : "dark.8"}
-                  onClick={addImage}
-                >
-                  <IconCheck stroke={5} size={35} />
-                </Button>
-              </Group>
-            </Box>
-            <Overlay
-              color={dark ? "dark.7" : "#fff"}
-              backgroundOpacity={dark ? 0.9 : 0.5}
-              blur={7}
-            />
-            <LoadingOverlay
-              visible={processingImage}
-              loaderProps={{
-                color: dark ? "#0d3f82" : "#2dc7f3",
-                type: "bars",
-              }}
-              overlayProps={{
-                backgroundOpacity: 1,
-                color: dark ? "#0b0c0d" : "#f8f9fa",
+                borderRadius: 3,
+                overflow: "hidden",
               }}
             />
-          </>
-        )}
-      </>
-    )
+            <MantineSlider
+              classNames={{
+                root: classes.sizeSlider,
+                thumb: classes.sizeSliderThumb,
+                bar: classes.sizeSliderBar,
+                track: classes.sizeSliderTracker,
+              }}
+              mt={20}
+              min={1}
+              max={5}
+              step={0.05}
+              size={"lg"}
+              thumbSize={38}
+              thumbChildren={<IconPhoto size={17} stroke={2} />}
+              defaultValue={1}
+              label={null}
+              value={scale}
+              onChange={setScale}
+            />
+            <Group w={"100%"} mt={30} grow>
+              {/* Selects NO Cropped Image to Image Slider  */}
+              <Button
+                className={classes.dimBtn}
+                size="xl"
+                variant="filled"
+                color={dark ? "dark.7" : "gray.0"}
+                c={dark ? "gray.0" : "dark.8"}
+                onClick={dontAddImage}
+              >
+                <IconX stroke={5} size={35} />
+              </Button>
+              {/* Selects YES Cropped Image to Image Slider  */}
+              <Button
+                className={classes.dimBtn}
+                size="xl"
+                variant="filled"
+                color={dark ? "dark.7" : "gray.0"}
+                c={dark ? "gray.0" : "dark.8"}
+                onClick={addImage}
+              >
+                <IconCheck stroke={5} size={35} />
+              </Button>
+            </Group>
+          </Box>
+          <Overlay
+            color={dark ? "dark.7" : "#fff"}
+            backgroundOpacity={dark ? 0.9 : 0.5}
+            blur={7}
+          />
+          <LoadingOverlay
+            visible={processingImage}
+            loaderProps={{
+              color: dark ? "#0d3f82" : "#2dc7f3",
+              type: "bars",
+            }}
+            overlayProps={{
+              backgroundOpacity: 1,
+              color: dark ? "#0b0c0d" : "#f8f9fa",
+            }}
+          />
+        </>
+      )}
+    </>
   );
 }
