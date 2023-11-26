@@ -127,12 +127,6 @@ export default function TripPlanner(props) {
     },
   });
 
-  const handleReset = () => {
-    const newData = [...placeData];
-    const resetVals = setCostsToZero(newData);
-    setPlaceData(resetVals);
-  };
-
   var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
 
@@ -383,6 +377,10 @@ export default function TripPlanner(props) {
     setStartLocaleData([]);
   };
 
+  const disallowEmptyField = ({ value }) => {
+    return value !== "";
+  };
+
   return (
     <FormProvider form={form}>
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
@@ -449,12 +447,12 @@ export default function TripPlanner(props) {
                   <motion.div {...animation}>
                     <Box mt={40} maw={950}>
                       <UseTickets
-                        handleReset={handleReset}
                         roundTrip={roundTrip}
                         placeData={placeData}
                         setPlaceData={setPlaceData}
                         savedFormValues={savedFormValues}
                         setSavedFormValues={setSavedFormValues}
+                        disallowEmptyField={disallowEmptyField}
                       />
                     </Box>
                   </motion.div>
@@ -697,7 +695,7 @@ export default function TripPlanner(props) {
                       label={"Total Cost"}
                       labeljustify="center"
                     />
-                    <SumInput />
+                    <SumInput disallowEmptyField={disallowEmptyField} />
                   </>
                 )}
                 {startLocale && travelDates && (

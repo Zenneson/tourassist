@@ -31,8 +31,8 @@ export default function UseTickets(props) {
     roundTrip,
     placeData,
     setPlaceData,
-    handleReset,
     setSavedFormValues,
+    disallowEmptyField,
   } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -47,7 +47,8 @@ export default function UseTickets(props) {
 
   const handleCostChange = (placeIndex, costKey, value) => {
     value = Number(value) || 0;
-    const newPlaces = [...placeData];
+    const places = form.values.places || [];
+    const newPlaces = places.length > 0 ? [...places] : [...placeData];
     newPlaces[placeIndex].costs = {
       ...newPlaces[placeIndex].costs,
       [costKey]: value,
@@ -57,12 +58,18 @@ export default function UseTickets(props) {
     };
   };
 
-  const disallowEmptyField = ({ value }) => {
-    return value !== "";
+  const handleReset = () => {
+    form.setValues({ places: placeData });
+    // setSavedFormValues([]);
   };
 
-  const removeCost = (placeIndex, costIndex) => {
-    form.removeListItem(`places.${placeIndex}.costs`, costIndex);
+  const removeCost = (placeIndex, costKey) => {
+    const places = form.values.places || [];
+    const newPlaces = places.length > 0 ? [...places] : [...placeData];
+    delete newPlaces[placeIndex].costs[costKey];
+    return {
+      places: newPlaces,
+    };
   };
 
   let tabIndexCounter = 1;
@@ -76,28 +83,45 @@ export default function UseTickets(props) {
   const handleKeyPress = (e, index) => {
     if (e.key === "Enter") {
       const update = addCost(index, newCostName[index]);
-      setPlaceData(update);
+      form.setValues(update);
       setSavedFormValues(update);
       setPopoverOpened({ ...popoverOpened, [index]: false });
     }
   };
 
   const addCost = (placeIndex, costName) => {
-    const newPlaces = [...placeData];
-    let adjustedCostName = costName || "NEW COST";
+    const places = form.values.places || [];
+    const newPlaces = places.length > 0 ? [...places] : [...placeData];
+    let tempName = "";
+    if (!costName) {
+      tempName = "NEW COST";
+    } else {
+      tempName = costName.trim() === "" ? "NEW COST" : costName;
+    }
+
+    // Adds preface to make it the last item
+    tempName = `ZZZZ_${tempName}`;
     if (newPlaces[placeIndex]) {
       let count = 2;
-      while (newPlaces[placeIndex].costs.hasOwnProperty(adjustedCostName)) {
-        adjustedCostName = `${costName || "NEW COST"} #${count}`;
+      while (newPlaces[placeIndex].costs.hasOwnProperty(tempName)) {
+        tempName = `${tempName} #${count}`;
         count++;
       }
       newPlaces[placeIndex].costs = {
         ...newPlaces[placeIndex].costs,
-        [adjustedCostName]: 0,
+        [tempName]: 0,
       };
       setNewCostName("");
-      return newPlaces;
+      return {
+        places: newPlaces,
+      };
     }
+  };
+
+  const newCostLastIndex = (value) => {
+    const index = value.indexOf("_");
+    const trueCostName = value.substring(index + 1, value.length);
+    return trueCostName;
   };
 
   return placeData.map((place, index) => {
@@ -155,7 +179,7 @@ export default function UseTickets(props) {
                   fontSize: 12,
                 }}
               >
-                {costKey}
+                {newCostLastIndex(costKey)}
               </Text>
               <Divider
                 my="xs"
@@ -164,7 +188,8 @@ export default function UseTickets(props) {
                 color={dark && "gray.9"}
               />
               <NumberInput
-                {...form.getInputProps(`places.${index}.costs.${costKey}`)}
+                {...form.getInputProps(`${place}_${costKey}`)}
+                data-autofocus
                 classNames={{ input: classes.costInput }}
                 clampBehavior="strict"
                 id="cost"
@@ -197,7 +222,10 @@ export default function UseTickets(props) {
                 className={classes.removeCostButton}
                 py={20}
                 variant={dark ? "default" : "light"}
-                onClick={() => removeCost(index, cost)}
+                onClick={() => {
+                  const update = removeCost(index, costKey);
+                  form.setValues(update);
+                }}
               >
                 <IconTrash
                   size={15}
@@ -296,7 +324,7 @@ export default function UseTickets(props) {
                       c={dark ? "gray.0" : "dark.8"}
                       onClick={() => {
                         const update = addCost(index, newCostName[index]);
-                        setPlaceData(update);
+                        form.setValues(update);
                         setSavedFormValues(update);
                         setPopoverOpened({
                           ...popoverOpened,
@@ -314,7 +342,10 @@ export default function UseTickets(props) {
         }
         {index === 0 && (
           <Group pos={"absolute"} gap={10} top={0} left={-50} mt={10}>
-            <Tooltip classNames={{ tooltip: "toolTip" }} label="Reset fields">
+            <Tooltip
+              classNames={{ tooltip: "toolTip" }}
+              label="Reset Cost Calculator"
+            >
               <ActionIcon
                 className={classes.brightenButton}
                 variant="transparent"

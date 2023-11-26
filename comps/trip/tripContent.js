@@ -512,58 +512,42 @@ export default function TripContent(props) {
         </>
       )}
       {/* Text Editor */}
-      <ScrollArea
-        h={modalMode === "editTrip" ? 200 : 250}
-        w={"100%"}
-        type="hover"
-        scrollbarSize={8}
-        scrollHideDelay={250}
-        style={{
-          overflow: "hidden",
-          borderRadius: "3px",
-          border: dark
-            ? "1px solid rgba(100, 100, 100, 0.25)"
-            : "1px solid rgba(0, 0, 0, 0.1)",
+      <RichTextEditor
+        classNames={{
+          root: classes.textEditorRoot,
+          toolbar: classes.textEditorToolbar,
+          content: classes.textEditorContent,
+        }}
+        editor={editor}
+        position="relative"
+        mih={modalMode === "editTrip" ? 200 : 250}
+        bg={dark ? "dark.6" : "gray.2"}
+        onBlur={() => {
+          if (router.pathname === "/tripPlanner") setTripDesc(editor.getHTML());
         }}
       >
-        <RichTextEditor
-          classNames={{
-            root: classes.textEditorRoot,
-            toolbar: classes.textEditorToolbar,
-            content: classes.textEditorContent,
-          }}
-          editor={editor}
-          position="relative"
-          mih={modalMode === "editTrip" ? 200 : 250}
-          bg={dark ? "dark.6" : "gray.2"}
-          onBlur={() => {
-            if (router.pathname === "/tripPlanner")
-              setTripDesc(editor.getHTML());
-          }}
-        >
-          <RichTextEditor.Toolbar sticky>
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Bold />
-              <RichTextEditor.H1 />
-              <RichTextEditor.H2 />
-              <RichTextEditor.H3 />
-              <RichTextEditor.H4 />
-              <RichTextEditor.BulletList />
-              <RichTextEditor.OrderedList />
-            </RichTextEditor.ControlsGroup>
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Italic />
-              <RichTextEditor.AlignLeft />
-              <RichTextEditor.AlignCenter />
-              <RichTextEditor.AlignRight />
-              <RichTextEditor.AlignJustify />
-              <RichTextEditor.Link />
-              <RichTextEditor.Unlink />
-            </RichTextEditor.ControlsGroup>
-          </RichTextEditor.Toolbar>
-          <RichTextEditor.Content />
-        </RichTextEditor>
-      </ScrollArea>
+        <RichTextEditor.Toolbar sticky>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Bold />
+            <RichTextEditor.H1 />
+            <RichTextEditor.H2 />
+            <RichTextEditor.H3 />
+            <RichTextEditor.H4 />
+            <RichTextEditor.BulletList />
+            <RichTextEditor.OrderedList />
+          </RichTextEditor.ControlsGroup>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Italic />
+            <RichTextEditor.AlignLeft />
+            <RichTextEditor.AlignCenter />
+            <RichTextEditor.AlignRight />
+            <RichTextEditor.AlignJustify />
+            <RichTextEditor.Link />
+            <RichTextEditor.Unlink />
+          </RichTextEditor.ControlsGroup>
+        </RichTextEditor.Toolbar>
+        <RichTextEditor.Content />
+      </RichTextEditor>
       {router.pathname !== "/tripPlanner" && (
         <Group justify="flex-end" w={"100%"}>
           <Button

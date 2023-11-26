@@ -41,7 +41,8 @@
 
 .textEditorRoot {
   transition: border-top 0.2s ease;
-  border-radius: 0;
+  border-radius: 3px;
+  overflow: hidden;
   border: none;
   width: 100%;
   min-width: 500px;
@@ -54,6 +55,7 @@
 }
 
 .textEditorContent {
+  overflow: hidden;
   background: rgba(0, 0, 0, 0);
   border-radius: 0;
   color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
@@ -63,7 +65,23 @@
   /* ProseMirror */
   padding-left: 21px;
   padding-right: 21px;
-  min-height: 250px;
+  max-height: 200px;
+  overflow: auto;
+  scrollbar-width: 8px;
+  scrollbar-color: transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 25px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 .sizeSlider {
