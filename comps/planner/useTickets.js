@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   IconCurrencyDollar,
   IconCirclePlus,
@@ -6,7 +6,7 @@ import {
   IconTrash,
   IconRefreshDot,
 } from "@tabler/icons-react";
-import { useSetState } from "@mantine/hooks";
+import { useDidUpdate } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Title,
@@ -41,29 +41,24 @@ export default function UseTickets(props) {
 
   const form = useFormContext();
 
-  const [formValues, setFormValues] = useSetState({
-    places: placeData.map((place) => ({
-      place: place.place,
-      region: place.region,
-      costs: {
-        flight: 0,
-        hotel: 0,
-      },
-    })),
-  });
+  useDidUpdate(() => {
+    setSavedFormValues(form.values);
+  }, [form.values, setSavedFormValues]);
 
   const handleCostChange = (placeIndex, costKey, value) => {
     value = Number(value) || 0;
-    setFormValues((state) => {
-      const newPlaces = [...state.places];
-      if (
-        newPlaces[placeIndex] &&
-        newPlaces[placeIndex].costs.hasOwnProperty(costKey)
-      ) {
-        newPlaces[placeIndex].costs[costKey] = value;
-      }
-      return { places: newPlaces };
-    });
+    const newPlaces = [...placeData];
+    newPlaces[placeIndex].costs = {
+      ...newPlaces[placeIndex].costs,
+      [costKey]: value,
+    };
+    return {
+      places: newPlaces,
+    };
+  };
+
+  const disallowEmptyField = ({ value }) => {
+    return value !== "";
   };
 
   const removeCost = (placeIndex, costIndex) => {
@@ -151,7 +146,7 @@ export default function UseTickets(props) {
           </Flex>
         </Group>
         {place.costs &&
-          Object.keys(place.costs).map((cost, subIndex) => (
+          Object.keys(place.costs).map((costKey, subIndex) => (
             <Group justify="flex-end" key={subIndex} gap={10} p={10}>
               <Text
                 style={{
@@ -160,7 +155,7 @@ export default function UseTickets(props) {
                   fontSize: 12,
                 }}
               >
-                {cost}
+                {costKey}
               </Text>
               <Divider
                 my="xs"
@@ -169,12 +164,12 @@ export default function UseTickets(props) {
                 color={dark && "gray.9"}
               />
               <NumberInput
+                {...form.getInputProps(`places.${index}.costs.${costKey}`)}
                 classNames={{ input: classes.costInput }}
+                clampBehavior="strict"
                 id="cost"
-                clampBehavior="blur"
                 tabIndex={tabIndexCounter++}
                 min={0}
-                defaultValue={0}
                 w={130}
                 size="md"
                 onClick={(e) => {
@@ -186,22 +181,14 @@ export default function UseTickets(props) {
                     e.target.select();
                   }
                 }}
-                value={place.costs[cost] ?? 0}
+                isAllowed={disallowEmptyField}
+                value={form.values.places[index]?.costs[costKey] || 0}
                 onChange={(value) => {
-                  handleCostChange(index, cost, value);
+                  const update = handleCostChange(index, costKey, value);
+                  form.setValues(update);
                 }}
                 onBlur={(e) => {
-                  console.log("------e:  ", e);
-                  console.log("------form.values:  ", form.values);
-                  console.log(
-                    "------form.values.places:  ",
-                    form.values.places
-                  );
-                  handleCostChange(
-                    index,
-                    cost
-                    // form.values.places[index].costs[cost] ?? 0
-                  );
+                  setSavedFormValues(form.values);
                 }}
                 hideControls={true}
                 leftSection={<IconCurrencyDollar />}

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
-import { useDidUpdate, useSessionStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import useSWR from "swr";
 import {
   useComputedColorScheme,

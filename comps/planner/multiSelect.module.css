@@ -20,11 +20,12 @@
 }
 
 .multiRoot input {
+  font-size: 13px;
   background: inherit;
   box-shadow: none;
 
   &::placeholder {
-    font-size: 15px;
+    font-size: 13px;
   }
 }
 
@@ -37,5 +38,12 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  overflow-x: hidden;
+  overflow: hidden;
+  padding-top: 7px;
+}
+
+.multiDots {
+  color: light-dark(#bababa, #000);
+  border-radius: 25px;
+  padding: 0px;
 }

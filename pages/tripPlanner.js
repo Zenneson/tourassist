@@ -10,6 +10,7 @@ import {
   IconAlertTriangle,
   IconCheck,
   IconFileInfo,
+  IconListCheck,
 } from "@tabler/icons-react";
 import {
   useComputedColorScheme,
@@ -37,11 +38,11 @@ import { useRouter } from "next/router";
 import { dateFormat, dateId, saveToDB } from "../libs/custom";
 import { useUser } from "../libs/context";
 import { createFormContext } from "@mantine/form";
-import FirstPanel from "../comps/trip/firstPanel";
+import FirstPanel from "../comps/planner/firstPanel";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
-import UseTickets from "../comps/trip/useTickets";
-import SumInput from "../comps/trip/sumInput";
+import UseTickets from "../comps/planner/useTickets";
+import SumInput from "../comps/planner/sumInput";
 import classes from "./tripplanner.module.css";
 
 export const [FormProvider, useFormContext, useForm] = createFormContext();
@@ -393,12 +394,11 @@ export default function TripPlanner(props) {
               w={"100%"}
               maw={1200}
               mb={20}
-              opacity={0.4}
               labelPosition="left"
               label={
                 <Flex>
                   <IconChevronsRight size={20} />
-                  <Text>
+                  <Text fz={14}>
                     {active === 0
                       ? "Travel Starting Info"
                       : active === 1
@@ -424,6 +424,7 @@ export default function TripPlanner(props) {
                   <motion.div {...animation}>
                     <FirstPanel
                       dark={dark}
+                      placeExists={placeExists}
                       placeData={placeData}
                       clearAutoComplete={clearAutoComplete}
                       startLocaleRef={startLocaleRef}
@@ -452,6 +453,7 @@ export default function TripPlanner(props) {
                         roundTrip={roundTrip}
                         placeData={placeData}
                         setPlaceData={setPlaceData}
+                        savedFormValues={savedFormValues}
                         setSavedFormValues={setSavedFormValues}
                       />
                     </Box>
@@ -561,10 +563,12 @@ export default function TripPlanner(props) {
                   classNames={{
                     stepIcon: classes.stepperIcon,
                     stepCompletedIcon: classes.stepperCompleteIcon,
+                    verticalSeparator: classes.verticalSeparator,
                   }}
+                  completedIcon={<IconListCheck size={22} />}
+                  iconSize={40}
                   active={active}
                   onStepClick={setActive}
-                  iconjustify="flex-end"
                   orientation="vertical"
                   allowNextStepsSelect={false}
                   miw={205}
@@ -608,7 +612,6 @@ export default function TripPlanner(props) {
                         <Button
                           className={classes.tripInformationBtn}
                           hidden={true}
-                          mt={10}
                           pl={7}
                           fw={100}
                           size="xs"

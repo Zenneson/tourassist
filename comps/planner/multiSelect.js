@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import {
+  useCombobox,
+  Text,
   PillsInput,
   Pill,
   Combobox,
   CheckIcon,
   Group,
-  useCombobox,
 } from "@mantine/core";
+import { IconCheckbox } from "@tabler/icons-react";
 import classes from "./multiSelect.module.css";
 
 const tripTypes = [
@@ -77,6 +79,18 @@ export function MultiSelect() {
         </Group>
       </Combobox.Option>
     ));
+
+  const remainingChoices = MAX_SELECTABLE_ITEMS - value.length;
+  let dynamicPlaceholder;
+  if (remainingChoices === MAX_SELECTABLE_ITEMS) {
+    dynamicPlaceholder = "Choose up to 5";
+  } else if (remainingChoices > 1) {
+    dynamicPlaceholder = `${remainingChoices} choices left`;
+  } else if (remainingChoices === 1) {
+    dynamicPlaceholder = "1 choice left";
+  } else {
+    dynamicPlaceholder = "Maximum choices reached";
+  }
 
   useEffect(() => {
     if (value.length >= MAX_SELECTABLE_ITEMS) {
@@ -160,6 +174,14 @@ export function MultiSelect() {
             options.length === 0 && (
               <Combobox.Empty>Nothing found</Combobox.Empty>
             )}
+          <Combobox.Footer>
+            <Group gap={5} justify="flex-end">
+              <Text fz="xs" c="dimmed">
+                {dynamicPlaceholder}
+              </Text>
+              <IconCheckbox stroke={1} size={18} opacity={0.3} />
+            </Group>
+          </Combobox.Footer>
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>

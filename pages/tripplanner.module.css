@@ -1,3 +1,8 @@
+.divider {
+  border-color: light-dark(#000, #fff);
+  color: light-dark(#000, #fff);
+}
+
 .labelSize {
   font-size: 12px;
 }
@@ -53,15 +58,35 @@
   border: none;
 }
 
-.divider {
-  color: light-dark(var(--mantine-color-dark-1), var(--mantine-color-gray-7));
-}
-
 .stepperIcon {
+  transition: all 500ms ease-in-out;
+  padding-top: 2px;
+  border-radius: 25px;
   overflow: hidden;
-  color: light-dark(#2dc7f3, #0d3f82);
+  border-width: 0px;
+  border-color: light-dark(#2dc7f3, rgba(13, 63, 130, 1));
+  font-size: 15px;
+  color: light-dark(#fff, #444);
+  box-shadow: 0 2px 2px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+  text-shadow: 0 2px 2px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+
+  &[data-completed="true"],
+  &[data-progress="true"] {
+    color: #fff;
+    background: light-dark(#2dc7f3, rgba(13, 63, 130, 1));
+  }
 
   &[data-progress="true"] {
+    border-width: 2px;
+    color: light-dark(#2dc7f3, rgba(13, 63, 130, 1));
+    background: light-dark(#f1f3f5, #101113);
+  }
+}
+
+.verticalSeparator {
+  border-color: light-dark(rgba(43, 199, 243, 0.2), rgb(13, 63, 130, 0.2));
+
+  &[data-active="true"] {
     border-color: light-dark(#2dc7f3, #0d3f82);
   }
 }

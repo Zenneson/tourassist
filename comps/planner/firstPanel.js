@@ -19,8 +19,8 @@ import classes from "./firstPanel.module.css";
 
 export default function FirstPanel(props) {
   const {
-    dark,
     placeData,
+    placeExists,
     clearAutoComplete,
     startLocaleRef,
     startLocale,
@@ -43,15 +43,6 @@ export default function FirstPanel(props) {
   const today = new Date();
   const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-  const optionsFilter = ({ options, search }) => {
-    const searchWords = search.toLowerCase().trim().split(/\s+/);
-    return options.filter((option) =>
-      searchWords.every((searchWord) =>
-        option.label.toLowerCase().includes(searchWord)
-      )
-    );
-  };
-
   const placeCheck = () => {
     placeData.map((place) => {
       if (`${place.place}, ${place.region}` === startLocale) {
@@ -62,6 +53,26 @@ export default function FirstPanel(props) {
         return true;
       }
     });
+  };
+
+  const handleSubmit = (e) => {
+    const index = e.indexOf(",");
+    const subCity = e.substring(0, index);
+    const subRegion = e.substring(index + 2, e.length);
+
+    if (placeCheck() === true) return;
+    setStartLocale(e);
+    setStartCity(subCity);
+    setStartRegion(subRegion);
+  };
+
+  const optionsFilter = ({ options, search }) => {
+    const searchWords = search.toLowerCase().trim().split(/\s+/);
+    return options.filter((option) =>
+      searchWords.every((searchWord) =>
+        option.label.toLowerCase().includes(searchWord)
+      )
+    );
   };
 
   const handleChange = async () => {
@@ -88,17 +99,6 @@ export default function FirstPanel(props) {
         console.error("Error fetching data for Country Autocomplete: ", error);
       }
     }
-  };
-
-  const handleSubmit = (e) => {
-    const index = e.indexOf(",");
-    const subCity = e.substring(0, index);
-    const subRegion = e.substring(index + 1, e.length);
-
-    if (placeCheck() === true) return;
-    setStartLocale(e);
-    setStartCity(subCity);
-    setStartRegion(subRegion);
   };
 
   return (
@@ -135,20 +135,17 @@ export default function FirstPanel(props) {
         >
           <Autocomplete
             classNames={{
+              root: classes.autoCompRoot,
               label: classes.labelSize,
               input: classes.startLocaleInput,
               option: classes.startLocaleOption,
-            }}
-            style={{
-              borderTop: "1px solid rgba(84, 84, 84, 0.15)",
-              borderRadius: "3px 3px 0px 0px",
             }}
             label="Departure City"
             placeholder="Add Departure City..."
             selectFirstOptionOnChange
             ref={startLocaleRef}
             limit={5}
-            pt={10}
+            pt={20}
             px={10}
             size="xl"
             w={"100%"}
@@ -158,6 +155,7 @@ export default function FirstPanel(props) {
             rightSection={
               startLocaleSearch.length > 0 && (
                 <ActionIcon
+                  size={"sm"}
                   variant="subtle"
                   className={classes.clearAutoCompleteBtn}
                   onClick={clearAutoComplete}
@@ -177,15 +175,8 @@ export default function FirstPanel(props) {
             onOptionSubmit={(e) => handleSubmit(e)}
           />
           <MultiSelect />
-          <Group
-            justify="space-around"
-            pb={50}
-            style={{
-              borderBottom: "1px solid rgba(84, 84, 84, 0.15)",
-              borderRadius: "0px 0px 3px 3px",
-            }}
-          >
-            <Group py={10}>
+          <Group justify="space-between" px={10} pt={15} pb={50}>
+            <Group>
               <Text className={classes.labelSize}>Travelers: </Text>
               {/* Traveler Count  */}
               <NumberInput
@@ -269,7 +260,7 @@ export default function FirstPanel(props) {
                   transitionProps={{ duration: 0 }}
                   styles={{
                     dropdown: {
-                      marginLeft: 9,
+                      marginLeft: 12,
                     },
                   }}
                 >
