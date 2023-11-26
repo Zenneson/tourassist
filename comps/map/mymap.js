@@ -525,6 +525,8 @@ export default function Mymap(props) {
           backgroundOpacity: 1,
           color: dark ? "#0b0c0d" : "#f8f9fa",
         }}
+        transitionProps={{ duration: 500 }}
+        zIndex={2000}
       />
       <Modal
         classNames={{

@@ -17,6 +17,7 @@ import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
 import { getAuth } from "firebase/auth";
 import { UserProvider } from "../libs/context";
+import ChatBot from "../comps/chatbot/chatBot";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
 import DropDown from "../comps/dropdown/dropdown";
@@ -210,6 +211,7 @@ export default function App(props) {
                 setDropDownOpened={setDropDownOpened}
               />
             </AppShell.Header>
+            <ChatBot />
             <Component
               {...pageProps}
               panelShow={panelShow}

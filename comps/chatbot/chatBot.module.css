@@ -1,0 +1,12 @@
+.globeCanvas {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 150px;
+  height: 150px;
+  max-width: "100%";
+  aspectratio: 1;
+  z-index: 1900;
+
+  cusrsor: pointer;
+}
