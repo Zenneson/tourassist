@@ -4,10 +4,9 @@
   border: 1px solid light-dark(#ececec, #1c1c1c);
 }
 
-.changePassPopover .mantine-Popover-dropdown {
-  border: 1px solid light-dark(#ececec, #1c1c1c);
-}
-
-.changePassButton .mantine-Button-root:hover {
-  background: light-dark(transparent, #909296);
+.changePassPopover {
+  outline: none;
+  border: none;
+  background: light-dark(rgb(255, 255, 255), rgb(10, 11, 12));
+  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
 }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { firestore } from "./firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { usePrevious } from "@mantine/hooks";
+import { useRouter } from "next/router";
 import { mutate } from "swr";
 import {
   ref,
@@ -10,7 +12,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { IconCheck } from "@tabler/icons-react";
-const moment = require("moment-timezone");
+import moment from "moment-timezone";
 
 const storage = getStorage();
 
@@ -353,19 +355,16 @@ export const timeSince = (timeString) => {
   }
 };
 
-export const isEmpty = (value) => {
-  // Check for null or undefined
-  if (value == null) return true;
+export const usePageHistory = () => {
+  const router = useRouter();
+  const [history, setHistory] = useState([]);
+  const prevPath = usePrevious(router.asPath);
 
-  // Check for empty string
-  if (typeof value === "string" && value.trim() === "") return true;
+  useEffect(() => {
+    if (prevPath && prevPath !== router.asPath) {
+      setHistory((currentHistory) => [...currentHistory, prevPath]);
+    }
+  }, [router.asPath, prevPath]);
 
-  // Check for empty array
-  if (Array.isArray(value) && value.length === 0) return true;
-
-  // Check for empty object
-  if (typeof value === "object" && Object.keys(value).length === 0) return true;
-
-  // If none of the above, return false
-  return false;
+  return history;
 };

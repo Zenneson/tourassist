@@ -52,9 +52,11 @@ export default function Intro(props) {
             onClick={() => toggleColorScheme()}
             radius={"xl"}
             p={10}
-            c={dark ? "#000" : "#fff"}
           >
-            {dark ? <IconBrightnessUp size={17} /> : <IconMoon size={17} />}
+            <>
+              <IconBrightnessUp size={17} className={classes.lightIcon} />
+              <IconMoon size={17} className={classes.darkIcon} />
+            </>
           </Button>
         </Tooltip>
       </Box>
@@ -144,16 +146,13 @@ export default function Intro(props) {
               ASSIST
             </Title> */}
             <Title
+              className={classes.introTitle}
               tt={"uppercase"}
               order={1}
               fw={400}
               transform="uppercase"
               fz={"4.3vw"}
               color={"gray.0"}
-              style={{
-                textShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                lineHeight: "1",
-              }}
             >
               <Text
                 fw={900}
@@ -225,16 +224,8 @@ export default function Intro(props) {
                   getPosition();
                   router.push("/map");
                 }}
-                style={{
-                  textTransform: "uppercase",
-                }}
                 leftSection={
-                  <IconInfoCircle
-                    size={30}
-                    style={{
-                      textShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                    }}
-                  />
+                  <IconInfoCircle className={classes.infoIcon} size={30} />
                 }
               >
                 tourassit?

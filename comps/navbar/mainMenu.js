@@ -58,7 +58,6 @@ export default function MainMenu(props) {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
-  const [isClient, setIsClient] = useState(false);
   const toggleColorScheme = () => {
     setColorScheme(dark ? "light" : "dark");
   };
@@ -132,6 +131,7 @@ export default function MainMenu(props) {
     setPanelShow(false);
   };
 
+  // Opens the Drowndown that is commented out
   const openDropDown = () => {
     if (panelShow === true) {
       setDropDownOpened(true);
@@ -152,8 +152,8 @@ export default function MainMenu(props) {
     }
     sessionStorage.clear();
     // NOTE: Is this necessary? Are these ever set?
-    Cookies.remove("tripData");
-    Cookies.remove("user");
+    // Cookies.remove("tripData");
+    // Cookies.remove("user");
     setMainMenuOpened(false);
     router.push("/", undefined);
   };
@@ -300,11 +300,13 @@ export default function MainMenu(props) {
                 </Button>
               </Tooltip>
               <Popover
+                className={classes.loginPopover}
                 withArrow
+                arrowSize={12}
+                arrowOffset={30}
                 width="auto"
-                position="bottom"
+                position="bottom-end"
                 shadow="md"
-                offset={-2}
                 closeOnClickOutside={true}
                 onClose={() => setPopoverOpened(false)}
                 opened={!loginModal && popoverOpened}
@@ -333,7 +335,7 @@ export default function MainMenu(props) {
                     </Button>
                   </Popover.Target>
                 </Tooltip>
-                <Popover.Dropdown p={0}>
+                <Popover.Dropdown p={0} mt={-4}>
                   {/* Logout Button  */}
                   <Button
                     className={classes.logoutButton}
@@ -357,7 +359,7 @@ export default function MainMenu(props) {
               </Popover>
             </Group>
             {/* DropDown Button */}
-            <Tooltip
+            {/* <Tooltip
               label={"TourAssist?"}
               position="bottom"
               classNames={{ tooltip: "toolTip" }}
@@ -370,7 +372,7 @@ export default function MainMenu(props) {
               >
                 <IconInfoCircle stroke={1.2} size={35} onClick={openDropDown} />
               </ActionIcon>
-            </Tooltip>
+            </Tooltip> */}
           </Flex>
         </Box>
       </Box>

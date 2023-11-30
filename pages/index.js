@@ -1,4 +1,6 @@
 "use client";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { useState } from "react";
 import {
   useComputedColorScheme,
@@ -15,8 +17,6 @@ import classes from "./index.module.css";
 import Slider from "react-slick";
 import Intro from "../comps/intro";
 import Legal from "./legal";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 const auth = getAuth();
 export default function Home(props) {

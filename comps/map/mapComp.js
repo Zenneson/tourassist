@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import {
   useComputedColorScheme,
@@ -24,6 +24,8 @@ export default function MapComp(props) {
   const dark = computedColorScheme === "dark";
   const {
     mapRef,
+    fullMapRef,
+    mapLoaded,
     setMapLoaded,
     area,
     places,
@@ -39,7 +41,6 @@ export default function MapComp(props) {
     goToLocation,
     showMainMarker,
     showStates,
-    getFogProperties,
     locationHandler,
     mapboxAccessToken,
     choosePlace,
@@ -107,10 +108,29 @@ export default function MapComp(props) {
     }
   };
 
+  const getFogProperties = (dark) => {
+    return {
+      color: dark ? "#0f2e57" : "#fff",
+      "high-color": dark ? "#000" : "#245cdf",
+      "space-color": dark
+        ? ["interpolate", ["linear"], ["zoom"], 4, "#010b19", 7, "#367ab9"]
+        : ["interpolate", ["linear"], ["zoom"], 4, "#fff", 7, "#fff"],
+    };
+  };
+
+  useEffect(() => {
+    if (fullMapRef && mapLoaded) {
+      const fogProperties = getFogProperties(dark);
+      fullMapRef.setFog(fogProperties);
+    }
+  }, [dark, fullMapRef, mapLoaded]);
+
   return (
     <Map
       id="mapRef"
       ref={mapRef}
+      projection="globe"
+      antialias="true"
       {...viewState}
       onMove={(e) => {
         setViewState(e.viewState);
@@ -118,9 +138,9 @@ export default function MapComp(props) {
       initialViewState={initialViewState}
       renderWorldCopies={true}
       styleDiffing={false}
-      maxPitch={80}
       onZoomEnd={onZoomEnd}
-      maxZoom={14}
+      maxPitch={80}
+      maxZoom={18}
       minZoom={2}
       reuseMaps={true}
       onLoad={(e) => {
@@ -132,10 +152,9 @@ export default function MapComp(props) {
       onClick={(e) => {
         locationHandler(e.features[0], mapRef);
       }}
-      projection="globe"
       doubleClickZoom={false}
       interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-      mapStyle={"mapbox://styles/zenneson/clm07y8pz01ur01qieykmcji3"}
+      mapStyle={"mapbox://styles/zenneson/clpg943i2007c01p70yciaxwd"}
       style={{ width: "100%", height: "100%" }}
       mapboxAccessToken={mapboxAccessToken}
     >
@@ -231,7 +250,6 @@ export default function MapComp(props) {
             "fill-color": `${
               dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
             }`,
-            "fill-opacity": 0,
           }}
         />
         <Layer
@@ -243,7 +261,6 @@ export default function MapComp(props) {
           paint={{
             "line-color": "rgba(255, 255, 255, 1)",
             "line-width": 4,
-            "line-opacity": 0,
           }}
         />
       </Source>
@@ -254,7 +271,6 @@ export default function MapComp(props) {
           source="states-boundaries"
           paint={{
             "fill-color": "rgba(0,0,0,0)",
-            "fill-opacity": 0,
           }}
           filter={
             !showStates
@@ -269,7 +285,6 @@ export default function MapComp(props) {
           paint={{
             "line-color": "rgba(255, 255, 255, 1)",
             "line-width": 4,
-            "line-opacity": 0,
           }}
           filter={
             !showStates
@@ -287,7 +302,6 @@ export default function MapComp(props) {
             "fill-color": `${
               dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
             }`,
-            "fill-opacity": 0,
           }}
           filter={["==", "NAME", area.label]}
         />
@@ -298,7 +312,6 @@ export default function MapComp(props) {
           paint={{
             "line-color": "rgba(255, 255, 255, 1)",
             "line-width": 6,
-            "line-opacity": 0,
           }}
           filter={["==", "NAME", area.label]}
         />

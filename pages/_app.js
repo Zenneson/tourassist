@@ -17,11 +17,12 @@ import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
 import { getAuth } from "firebase/auth";
 import { UserProvider } from "../libs/context";
+import { usePageHistory } from "../libs/custom";
 import ChatBot from "../comps/chatbot/chatBot";
 import SearchModal from "../comps/navbar/searchModal";
 import MainMenu from "../comps/navbar/mainMenu";
 import DropDown from "../comps/dropdown/dropdown";
-require("typeface-montserrat");
+import "typeface-montserrat";
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
 
@@ -172,6 +173,7 @@ export default function App(props) {
   const [dropDownOpened, setDropDownOpened] = useState(false);
   const [mapLoaded, setMapLoaded] = useState(false);
   const router = useRouter();
+  const pageHistory = usePageHistory();
 
   return (
     <MantineProvider theme={tourTheme} defaultColorScheme="dark">
@@ -191,10 +193,17 @@ export default function App(props) {
         />
         <MapProvider>
           <AppShell
+            transitionDuration={300}
+            transitionTimingFunction="ease"
             padding="none"
             header={{ height: 1 }}
             component={router.pathname !== "/map" && ScrollArea}
-            style={{ height: "100vh", width: "100vw", overflow: "hidden" }}
+            style={{
+              position: "absolute",
+              height: "100vh",
+              width: "100vw",
+              overflow: "hidden",
+            }}
           >
             <AppShell.Header>
               <RouterTransition />
@@ -211,7 +220,7 @@ export default function App(props) {
                 setDropDownOpened={setDropDownOpened}
               />
             </AppShell.Header>
-            <ChatBot />
+            {router.pathname !== "/" && <ChatBot pageHistory={pageHistory} />}
             <Component
               {...pageProps}
               panelShow={panelShow}

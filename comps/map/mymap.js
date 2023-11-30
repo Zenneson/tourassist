@@ -84,73 +84,6 @@ export default function Mymap(props) {
       setShowMainMarker(true);
   }, [area, router]);
 
-  const animateLayerOpacity = (
-    map,
-    layerId,
-    layerType,
-    startOpacity,
-    endOpacity,
-    duration
-  ) => {
-    const startTime = performance.now();
-    const opacityProperty =
-      layerType === "line" ? "line-opacity" : "fill-opacity";
-    const animate = (time) => {
-      const elapsed = time - startTime;
-      const progress = elapsed / duration;
-      const opacity = Math.max(
-        0,
-        Math.min(1, progress * (endOpacity - startOpacity) + startOpacity)
-      );
-      map.setPaintProperty(layerId, opacityProperty, opacity);
-      if (elapsed < duration) {
-        requestAnimationFrame(animate);
-      }
-    };
-    requestAnimationFrame(animate);
-  };
-
-  const getFogProperties = (dark) => {
-    return {
-      color: dark ? "#0f2e57" : "#fff",
-      "high-color": dark ? "#000" : "#245cdf",
-      "space-color": dark
-        ? ["interpolate", ["linear"], ["zoom"], 4, "#010b19", 7, "#367ab9"]
-        : ["interpolate", ["linear"], ["zoom"], 4, "#fff", 7, "#fff"],
-    };
-  };
-
-  useEffect(() => {
-    if (fullMapRef && mapLoaded) {
-      const fogProperties = getFogProperties(dark);
-      fullMapRef.setFog(fogProperties);
-
-      // Animate Fill layer
-      animateLayerOpacity(
-        fullMapRef,
-        "country-boundaries-fill",
-        "fill",
-        0,
-        1,
-        500
-      );
-      animateLayerOpacity(fullMapRef, "states", "fill", 0, 1, 250);
-      animateLayerOpacity(fullMapRef, "clicked-state", "fill", 0, 1, 250);
-
-      // Animate Line layer
-      animateLayerOpacity(
-        fullMapRef,
-        "country-boundaries-lines",
-        "line",
-        0,
-        1,
-        500
-      );
-      animateLayerOpacity(fullMapRef, "states-boundaries", "line", 0, 1, 250);
-      animateLayerOpacity(fullMapRef, "state-borders", "line", 0, 1, 250);
-    }
-  }, [fullMapRef, mapLoaded, dark]);
-
   const resetMap = () => {
     mapRef.current.flyTo({
       zoom: 2.5,
@@ -260,8 +193,8 @@ export default function Mymap(props) {
       pitch = 25;
     }
     if (type === "city" || (country !== "United States" && type === "region")) {
-      zoom = 12;
-      pitch = 75;
+      zoom = 16;
+      pitch = 60;
       if (label === "District of Columbia") {
         zoom = 10;
       }
@@ -661,6 +594,8 @@ export default function Mymap(props) {
       </Transition>
       <MapComp
         mapRef={mapRef}
+        fullMapRef={fullMapRef}
+        mapLoaded={mapLoaded}
         setMapLoaded={setMapLoaded}
         area={area}
         places={places}
@@ -677,7 +612,6 @@ export default function Mymap(props) {
         goToLocation={goToLocation}
         showMainMarker={showMainMarker}
         showStates={showStates}
-        getFogProperties={getFogProperties}
         locationHandler={locationHandler}
         mapboxAccessToken={mapboxAccessToken}
         choosePlace={choosePlace}

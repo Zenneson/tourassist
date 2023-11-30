@@ -39,7 +39,6 @@ export default function FirstPanel(props) {
     setRoundTrip,
   } = props;
   const { ref, width, height } = useElementSize();
-  const dayjs = require("dayjs");
   const today = new Date();
   const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
@@ -255,7 +254,7 @@ export default function FirstPanel(props) {
                   position="top"
                   withArrow="true"
                   offset={7}
-                  arrowSize={15}
+                  arrowSize={12}
                   disabled={!isSpecificDay}
                   transitionProps={{ duration: 0 }}
                   styles={{

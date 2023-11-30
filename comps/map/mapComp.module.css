@@ -34,23 +34,6 @@
   }
 }
 
-@keyframes popupAnimation {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.miniPopUp {
-  animation: popupAnimation 250ms ease;
-}
-
-.popup {
-  animation: popupAnimation 500ms ease;
-}
-
 .miniPopUpColor {
   color: #fff;
   opacity: 0.5;

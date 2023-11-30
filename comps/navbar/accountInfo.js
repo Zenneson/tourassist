@@ -334,7 +334,7 @@ export default function AccountInfo(props) {
                   <HoverCard
                     width={350}
                     withArrow={true}
-                    arrowSize={10}
+                    arrowSize={12}
                     withinPortal={true}
                     zIndex={9999}
                   >

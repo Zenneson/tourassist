@@ -2937,7 +2937,7 @@
 		]
 	},
 	{
-		"country": "Faeroe Islands",
+		"country": "Faroe Islands",
 		"shortcode": "FO",
 		"counrty_center": [
 			-7,
@@ -2982,7 +2982,7 @@
 		]
 	},
 	{
-		"country": "Falkland Islands (Islas Malvinas)",
+		"country": "Falkland Islands",
 		"shortcode": "FK",
 		"counrty_center": [
 			-59,
@@ -4023,7 +4023,7 @@
 		]
 	},
 	{
-		"country": "Hong Kong, China",
+		"country": "Hong Kong",
 		"shortcode": "HK",
 		"counrty_center": [
 			114.1095,
@@ -5449,7 +5449,7 @@
 		]
 	},
 	{
-		"country": "Macau, China",
+		"country": "Macau",
 		"shortcode": "MO",
 		"counrty_center": [
 			113.55,
@@ -7310,7 +7310,7 @@
 		]
 	},
 	{
-		"country": "Pitcairn",
+		"country": "Pitcairn Islands",
 		"shortcode": "PN",
 		"counrty_center": [
 			-130,
@@ -7704,7 +7704,7 @@
 		]
 	},
 	{
-		"country": "Saint Helena",
+		"country": "Saint Helena Ascension and Tristan da Cunha",
 		"shortcode": "SH",
 		"counrty_center": [
 			-10,
@@ -8534,7 +8534,7 @@
 		]
 	},
 	{
-		"country": "South Georgia",
+		"country": "South Georgia and the South Sandwich Islands",
 		"shortcode": "GS",
 		"counrty_center": [
 			-36.5,
@@ -10011,7 +10011,7 @@
 		]
 	},
 	{
-		"country": "Wallis and Futuna Islands",
+		"country": "Wallis and Futuna",
 		"shortcode": "WF",
 		"counrty_center": [
 			-177.348348,

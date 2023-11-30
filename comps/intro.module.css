@@ -1,11 +1,41 @@
-.toggleColorButton .mantine-Button-root {
-  background-color: light-dark(rgba(45, 200, 243, 0.5), transparent);
+.toggleColorButton {
+  background-color: light-dark(rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2));
+  color: light-dark(#fff, #000);
+  position: relative;
+  width: 38px;
+  margin: 10px;
 }
 
-.infoButton .mantine-Button-root {
+.introTitle {
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border: 1px solid light-dark(rgba(255, 255, 255, 0.07), none);
-  &:hover {
-    background-color: light-dark(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.8));
+  line-height: 1;
+}
+
+.infoButton {
+  text-transform: uppercase;
+}
+
+.infoIcon {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.darkIcon,
+.lightIcon {
+  position: absolute;
+  left: 0px;
+  margin-left: -1px;
+  opacity: 0;
+  width: 38px;
+}
+
+.lightIcon {
+  @mixin light {
+    opacity: 1;
+  }
+}
+
+.darkIcon {
+  @mixin dark {
+    opacity: 1;
   }
 }

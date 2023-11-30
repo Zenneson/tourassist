@@ -41,7 +41,7 @@ import TripDescription from "../comps/trip/tripdescription";
 import ModalsItem from "../comps/trip/modalsitem";
 import { addEllipsis, addComma, daysBefore, sumAmounts } from "../libs/custom";
 import { useUser } from "../libs/context";
-import classes from "./trippage.module.css";
+import classes from "./title.module.css";
 
 const fireFetcher = async (url) => {
   const query = collectionGroup(firestore, "trips");

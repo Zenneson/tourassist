@@ -44,6 +44,7 @@ import TripContent from "../comps/trip/tripContent";
 import UseTickets from "../comps/planner/useTickets";
 import SumInput from "../comps/planner/sumInput";
 import classes from "./tripplanner.module.css";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 
 export const [FormProvider, useFormContext, useForm] = createFormContext();
 export default function TripPlanner(props) {
@@ -59,7 +60,6 @@ export default function TripPlanner(props) {
   const [travelDates, setTravelDates] = useState(null);
   const [active, setActive] = useState(0);
   const router = useRouter();
-  const dayjs = require("dayjs");
   const { user } = useUser();
 
   const [placeData, setPlaceData] = useSessionStorage({
@@ -127,7 +127,6 @@ export default function TripPlanner(props) {
     },
   });
 
-  var localizedFormat = require("dayjs/plugin/localizedFormat");
   dayjs.extend(localizedFormat);
 
   const animation = {
@@ -594,10 +593,10 @@ export default function TripPlanner(props) {
                   />
                 </Stepper>
                 <Popover
-                  withArrow
-                  arrowSize={15}
-                  offset={3}
                   position="top-end"
+                  withArrow
+                  arrowSize={12}
+                  offset={4}
                   shadow="xl"
                   transitionProps={{
                     duration: 300,
