@@ -49,6 +49,9 @@ Tasks:
 	✔ Add sign up if user not logged in on TripPlanner @done(23-12-05 02:29)
 	✔ Make sidebar float on Trip Page @done(23-12-05 02:29)
 	✔ Changed Map Modal to include top 5 populated cities @done(23-12-05 02:31)
+	✔ New Cost gets focus on cost calculator @done(23-12-05 15:43)
+	✔ Fix Round Trip logic @done(23-12-05 15:34)
+	✔ Fix cost calculator reset @done(23-12-05 15:35)
 	☐ Password confirmation and reset
 	☐ Manage Server Side Rendering
 	☐ Add Pagination to updates
@@ -70,13 +73,9 @@ Tasks:
 	☐ Add map spin for cities: https://docs.mapbox.com/mapbox-gl-js/example/animate-camera-around-point/
 	☐ Add Google AI chatbot
 	☐ Move dropdown to the main menu
-	☐ New Cost gets focus on cost calculator
-	☐ Fix Round Trip logic
-	☐ Fix cost calculator reset
 	☐ Add top index to hovered city name popup
 	☐ All dropdowns close when input is not in focus
 	☐ Add Autocomplete filter logic for countries with different titles
-
 
 Marketing:
 	✔ 3000 Wedding Planners email list @done(23-12-05 02:32)

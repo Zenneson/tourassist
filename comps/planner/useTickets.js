@@ -43,7 +43,7 @@ export default function UseTickets(props) {
   });
   const dark = computedColorScheme === "dark";
   const form = useFormContext();
-
+  const [focusIndex, setFocusIndex] = useState(null);
   const inputRefs = useRef([]);
 
   useEffect(() => {
@@ -151,11 +151,29 @@ export default function UseTickets(props) {
         [tempName]: 0,
       };
       setNewCostName("");
+
+      // Calculate the index of the new cost for focusing and selecting
+      const newCostIndex = Object.keys(newPlaces[placeIndex].costs).length - 1;
+      setFocusIndex({ placeIndex, costIndex: newCostIndex });
+
       return {
         places: newPlaces,
       };
     }
   };
+
+  useEffect(() => {
+    // Focus on the new cost input and select its value
+    if (focusIndex !== null) {
+      const inputToFocus =
+        inputRefs.current[focusIndex.placeIndex]?.[focusIndex.costIndex];
+      if (inputToFocus) {
+        inputToFocus.focus();
+        inputToFocus.select();
+      }
+      setFocusIndex(null); // Reset the focus index
+    }
+  }, [focusIndex]);
 
   // retturns the real cost name so that the names are in the right order.
   const newCostLastIndex = (value) => {
