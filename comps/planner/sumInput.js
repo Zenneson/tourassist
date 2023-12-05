@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IconCurrencyDollar } from "@tabler/icons-react";
 import { NumberInput } from "@mantine/core";
 import { useFormContext } from "../../pages/tripPlanner";
@@ -6,16 +6,18 @@ import classes from "./sumInput.module.css";
 
 export default function SumInput(props) {
   const { disallowEmptyField } = props;
-  const handleChange = (e) => {
-    setTotalCost(e);
-  };
-
   const form = useFormContext();
   const costSum = form.getTransformedValues();
+  const [totalCost, setTotalCost] = useState(costSum);
+
+  useEffect(() => {
+    const num = parseInt(costSum);
+    setTotalCost(num);
+  }, [costSum]);
 
   return (
     <NumberInput
-      id="costSum"
+      id="costsSum"
       classNames={{ input: classes.totalCostInput }}
       clampBehavior="strict"
       isAllowed={disallowEmptyField}
@@ -23,9 +25,10 @@ export default function SumInput(props) {
       leftSection={<IconCurrencyDollar />}
       size="xl"
       w={225}
-      value={costSum || 0}
+      value={form.values.totalCost || costSum || 0}
       onChange={(e) => {
-        handleChange(e);
+        const num = parseInt(e);
+        form.setFieldValue("totalCost", num);
       }}
     />
   );

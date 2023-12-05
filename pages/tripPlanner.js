@@ -325,15 +325,15 @@ export default function TripPlanner(props) {
     sessionStorage.removeItem("places");
   };
 
+  const [costsSum, setCostsSum] = useState(form.values.totalCost || 0);
+  const tripSum = form.values.totalCost || form.getTransformedValues() || 0;
   const changeNextStep = async () => {
     if (active === 1) {
-      if (
-        sessionStorage.getItem("totalCost") === "0" ||
-        sessionStorage.getItem("totalCost") === 0
-      ) {
+      setCostsSum(form.values.totalCost || 0);
+      if (tripSum === 0 || tripSum === "0") {
         return notifications.show(noCosts);
       }
-      setCostsObj(sessionStorage.getItem("places"));
+      setCostsObj(savedFormValues);
     }
     if (active === 2) {
       if (plannerTripTitle === "") {
@@ -364,7 +364,6 @@ export default function TripPlanner(props) {
       }
       const travel_date = dateFormat(travelDates.toString());
       const createdId = generateTripId();
-      const costsSum = sessionStorage.getItem("totalCost");
       notifications.show(createTrip);
       saveToDB(
         plannerTripTitle,
