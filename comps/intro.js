@@ -37,14 +37,7 @@ export default function Intro(props) {
 
   return (
     <>
-      <Box
-        pos={"absolute"}
-        top={5}
-        right={5}
-        style={{
-          zIndex: 1400,
-        }}
-      >
+      <Box className={classes.colorBtnFrame}>
         <Tooltip label="Toggle Color Scheme" position="left" withArrow>
           <Button
             className={classes.toggleColorButton}
@@ -60,78 +53,31 @@ export default function Intro(props) {
           </Button>
         </Tooltip>
       </Box>
-      <Flex
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          zIndex: "1200",
-        }}
-      >
-        <Center
-          w={600}
-          h={"100vh"}
-          bg={dark ? "rgba(2, 2, 2, 0.75)" : "rgba(255, 255, 255, 0.6)"}
-          style={{
-            backdropFilter: "blur(5px)",
-            flexDirection: "column",
-            boxShadow: dark
-              ? "3px 0 7px rgba(0,0,0,0.5), inset 0 0 50px rgba(0, 0, 0, 0.2)"
-              : "3px 0 7px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.1)",
-          }}
-        >
+      <Flex className={classes.introLayoutFlex}>
+        <Center className={classes.introBg} w={600} h={"100vh"}>
           <Image
             mb={25}
-            style={{ width: "100%", maxWidth: "250px" }}
+            w={"100%"}
+            maw={"250px"}
             src={"img/TA_GlobeLogo.png"}
             alt="TouraSSist_logo"
           />
-          <Title
-            fw={900}
-            color="#fff"
-            fz={"2.2rem"}
-            style={{
-              textShadow: "0 2px 5px rgba(0,0,0,0.15)",
-            }}
-          >
-            <Text fw={500} c={dark ? "#adadad" : "#7e7e7e"} inherit span>
+          <Title className={classes.loginTitle}>
+            <Text className={classes.loginTitleThin} inherit span>
               TOUR
             </Text>
             ASSIST
           </Title>
-          <Box
-            mt={10}
-            pos={"relative"}
-            style={{
-              width: "80%",
-              maxWidth: "380px",
-            }}
-          >
+          <Box className={classes.loginCompFrame} mt={10}>
             <LoginComp auth={auth} setShowLegal={setShowLegal} />
           </Box>
         </Center>
         <Center w={"100%"}>
           <Flex
+            className={classes.introFrame}
             direction={"column"}
             align={"center"}
-            ta={"center"}
-            w={"80%"}
             py={60}
-            style={{
-              borderRadius: "3px",
-              backdropFilter: "blur(10px)",
-              border: dark
-                ? "1px solid rgba(0,0,0,0.2)"
-                : "1px solid rgba(255, 255, 255, 0.03)",
-              boxShadow: dark
-                ? "0 3px 7px rgba(0,0,0,0.3), inset 0 0 50px rgba(0, 0, 0, 0.2)"
-                : "0 3px 7px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.1)",
-              background: dark
-                ? "rgba(2, 2, 2, 0.35)"
-                : "rgba(255, 255, 255, 0.3)",
-            }}
           >
             {/* <Image
               mb={25}
@@ -228,7 +174,7 @@ export default function Intro(props) {
                   <IconInfoCircle className={classes.infoIcon} size={30} />
                 }
               >
-                tourassit?
+                tourassist?
               </Button>
               {/* Plan Trip Button */}
               <Button

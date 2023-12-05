@@ -1,0 +1,103 @@
+Pages / Sections:
+	✔ MAP @done(23-12-05 02:22)
+	✔ Profile Menu Drawer @done(23-12-05 02:22)
+	✔ Account Info Section @done(23-12-05 02:22)
+	✔ Money Section @done(23-12-05 02:22)
+	✔ Trip Page @done(23-12-05 02:22)
+	✔ Cost Calculator @done(23-12-05 02:23)
+	✔ Trip Details @done(23-12-05 02:23)
+	✔ Legal @done(23-12-05 02:23)
+	✔ Campaign Edits Modal + Campaign Updates Modal @done(23-12-05 02:23)
+	✔ Upate Trip Component @done(23-12-05 02:23)
+	✔ Donate Modal @done(23-12-05 02:26)
+	☐ Sign Up / Banking Info
+	☐ Search Page
+	☐ Donation Thank you Modal that allows user to comment
+	☐ Contact Page
+	☐ About Us / Info
+	☐ Purchase Tickets Page
+	☐ Referral Sign Up
+	☐ Referral Dashboard
+	☐ Admin Dashboard
+	☐ 404 Page
+	☐ Share Modal
+	☐ Big Modal for Help on Map page
+	☐ Add space to add original articles
+	☐ Create Mobile View
+	
+	
+Tasks:
+	✔ Tally Cost Total @done(23-12-05 02:27)
+	✔ "Add "United States" to "region" when selecting a US State" @done(23-12-05 02:28)
+	✔ Make map start at user location or center of US @done(23-12-05 02:28)
+	✔ Create the toolbar on Trip details text section @done(23-12-05 02:28)
+	✔ Add Carousel after pic is uploaded @done(23-12-05 02:28)
+	✔ Allow users edit to Carousel on Trip page @done(23-12-05 02:28)
+	✔ Ask for Trip Date | Campaign ends a day before Trip date @done(23-12-05 02:29)
+	✔ Create Database with all slots @done(23-12-05 02:29)
+	✔ Connect all placeholders to the Database @done(23-12-05 02:26)
+	✔ Create payment flow @done(23-12-05 02:26)
+	✔ Create Dark/Light color scheme @done(23-12-05 02:26)
+	✔ Crop Images before they are added @done(23-12-05 02:27)
+	✔ Email notification system @done(23-12-05 02:26)
+	✔ Add page loader @done(23-12-05 02:27)
+	✔ Add Edit Button to allow users to Edit Trip page content @done(23-12-05 02:29)
+	✔ Allow user to change Campaign end date @done(23-12-05 02:26)
+	✔ Change contact to press / put near Legal button @done(23-12-05 02:26)
+	✔ Change about to help / put near search button @done(23-12-05 02:26)
+	✔ "If TourList.length > 1 ...ask when click "Travel to" @done(23-12-05 02:29)
+	✔ Add sign up if user not logged in on TripPlanner @done(23-12-05 02:29)
+	✔ Make sidebar float on Trip Page @done(23-12-05 02:29)
+	✔ Changed Map Modal to include top 5 populated cities @done(23-12-05 02:31)
+	☐ Password confirmation and reset
+	☐ Manage Server Side Rendering
+	☐ Add Pagination to updates
+	☐ Change Purchase page to look more like Duffel tutorial
+	☐ Strong Performance Testing
+	☐ Review what someone who is not logged in sees
+	☐ Zip up Authentication
+	☐ Figure out rendering strategy for Nextjs
+	☐ Set up cookies
+	☐ Allow Users to share a custom remotion video
+	☐ Fix page reload issue
+	☐ Research and add censorship tool
+	☐ Research Referral React Plugin
+	☐ Get Full Name and Phone # before ticket purchase
+	☐ "Add Theme details, Default props and Global Styles to reduce code"
+	☐ Create color palete and use Mantine colors
+	☐ Edit city popup (remove buttons, improve styling of city title, remove icon underneath)
+	☐ Edit building styling 
+	☐ Add map spin for cities: https://docs.mapbox.com/mapbox-gl-js/example/animate-camera-around-point/
+	☐ Add Google AI chatbot
+	☐ Move dropdown to the main menu
+	☐ New Cost gets focus on cost calculator
+	☐ Fix Round Trip logic
+	☐ Fix cost calculator reset
+	☐ Add top index to hovered city name popup
+	☐ All dropdowns close when input is not in focus
+	☐ Add Autocomplete filter logic for countries with different titles
+
+
+Marketing:
+	✔ 3000 Wedding Planners email list @done(23-12-05 02:32)
+	✔ 3000 Music Managers email list @done(23-12-05 02:39)
+	✔ 3000 Onlyfans Managers email list @done(23-12-05 02:39)
+	☐ 200 Travel Website list
+	☐ 200 Travel Social Media Influencers
+	☐ 200 Travel Youtubers
+	☐ Research Email Campaign Methods
+	☐ "Events ( Wedding Planner, Indie Music, Expos )"
+	☐ Get 3 different promo videos made
+	☐ Wedding Planner Email Campaign
+	☐ Design / Plan Music Manager Email Campaign
+	☐ Design / Plan Onlyfans Manger Email Campaign
+	☐ Design / Plan Travel Website Drip Email Campaign
+	☐ Design / Plan Travel Youtubers Drip Email Campaign
+	☐ Design / Plan Travel Social Media Influencers Drip Email Campaign
+	☐ Use Stroybook for testing
+
+Legal:
+	✔ Draft Legal Docs @done(23-12-05 02:41)
+	☐ Create LLC
+	☐ Get Legal Docs proof read
+	☐ Create Business Bank Accountnq

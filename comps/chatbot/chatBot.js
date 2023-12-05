@@ -6,13 +6,14 @@ import {
   Box,
   Dialog,
   Textarea,
+  Text,
   Title,
   Flex,
   FocusTrap,
   Group,
   ActionIcon,
-  ScrollArea,
   Button,
+  Divider,
 } from "@mantine/core";
 import { IconMessageCircleQuestion, IconX } from "@tabler/icons-react";
 import createGlobe from "cobe";
@@ -168,7 +169,7 @@ export default function ChatBot(props) {
           <Flex align={"center"} gap={5}>
             <IconMessageCircleQuestion size={20} stroke={1} />
             <Title order={6} fz={"12px"}>
-              Tour - Assist - Ant
+              Tour - Assistant
             </Title>
           </Flex>
           <ActionIcon
@@ -180,7 +181,35 @@ export default function ChatBot(props) {
           </ActionIcon>
         </Group>
         <Flex direction={"column-reverse"} className={classes.chatBotMain}>
-          Results
+          <Group grow>
+            <Button size="xs" variant="transparent">
+              How do I pick a location?
+            </Button>
+            <Button size="xs" variant="transparent">
+              How I book travel and accommodations?
+            </Button>
+          </Group>
+          <Group grow>
+            <Button size="xs" variant="transparent">
+              What is Tour Assist?
+            </Button>
+            <Button size="xs" variant="transparent">
+              How do I start a campaign for my trip?
+            </Button>
+          </Group>
+          <Box className={classes.chatBotTextFrame}>
+            <Title order={6} fz={"12px"} className={classes.chatBotTextTitle}>
+              Tour Assistant
+            </Title>
+            <Text fz={"12px"} className={classes.chatBotText}>
+              This is your virtual travel assistant, here to guide you on an
+              exciting journey of crafting your dream trip through crowdfunding.
+              Whether you need tips on creating a compelling campaign, seeking
+              the perfect travel destination, or exploring ways to make your
+              travel dreams come true, I'm here to help. How can we start our
+              adventure today?
+            </Text>
+          </Box>
         </Flex>
       </Dialog>
       <Dialog

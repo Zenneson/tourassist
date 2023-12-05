@@ -58,7 +58,7 @@
 		"chart.js": "^4.4.0",
 		"classnames": "^2.3.2",
 		"cobe": "^0.6.3",
-		"cookies-next": "^4.0.0",
+		"cookies-next": "^4.1.0",
 		"dayjs": "^1.11.10",
 		"deck.gl": "^8.9.32",
 		"embla-carousel-autoplay": "^7.1.0",

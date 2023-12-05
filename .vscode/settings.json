@@ -1,4 +1,23 @@
 {
   "CodeGPT.organizationId": "org-rPDwH6ERWV0ONXUtHVyphHas",
-  "CodeGPT.model": "gpt-4"
+  "CodeGPT.model": "gpt-4",
+  "cSpell.customDictionaries": {},
+  "cSpell.words": [
+		"apos",
+		"Barthélemy",
+		"Choosen",
+		"dobri",
+		"Leste",
+		"lsquo",
+		"ontinue",
+		"rgba",
+		"rsquo",
+		"tourassist",
+		"uscitiesdata",
+		"zenneson"
+	],
+  "cSpell.diagnosticLevel": "Warning",
+  "cSpell.showAutocompleteSuggestions": true,
+  "cSpell.advanced.feature.useReferenceProviderWithRename": true,
+  "cSpell.allowCompoundWords": true,
 }

@@ -131,9 +131,6 @@ export default function TripContent(props) {
     loading: true,
     withCloseButton: false,
     autoClose: false,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const tripUpdated = {
@@ -143,9 +140,6 @@ export default function TripContent(props) {
     withCloseButton: true,
     color: "green",
     autoClose: 3000,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   let content;

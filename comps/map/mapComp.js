@@ -118,10 +118,20 @@ export default function MapComp(props) {
     };
   };
 
+  const setLightProperties = (dark) => {
+    return {
+      anchor: "viewport",
+      color: dark ? "rgba(255, 255, 255, 0.75)" : "rgba(255, 255, 255, 1)",
+      intensity: 0.5,
+    };
+  };
+
   useEffect(() => {
     if (fullMapRef && mapLoaded) {
-      const fogProperties = getFogProperties(dark);
-      fullMapRef.setFog(fogProperties);
+      const fogProps = getFogProperties(dark);
+      fullMapRef.setFog(fogProps);
+      const lightProps = setLightProperties(dark);
+      fullMapRef.setLight(lightProps);
     }
   }, [dark, fullMapRef, mapLoaded]);
 
@@ -154,7 +164,7 @@ export default function MapComp(props) {
       }}
       doubleClickZoom={false}
       interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-      mapStyle={"mapbox://styles/zenneson/clpg943i2007c01p70yciaxwd"}
+      mapStyle={"mapbox://styles/zenneson/clpnh3lai004f01qmhyvt4x2j"}
       style={{ width: "100%", height: "100%" }}
       mapboxAccessToken={mapboxAccessToken}
     >

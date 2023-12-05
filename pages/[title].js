@@ -122,7 +122,7 @@ export default function Trippage(props) {
   const [modalMode, setModalMode] = useState("");
   const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
-  const [dontaionMode, setDonationMode] = useState("donating");
+  const [donationMode, setDonationMode] = useState("donating");
   const [images, setImages] = useState([]);
   const [newUpdate, setNewUpdate] = useState(false);
 
@@ -648,8 +648,7 @@ export default function Trippage(props) {
         updates={updates}
         setUpdates={setUpdates}
         updateDataLoaded={updateDataLoaded}
-        setUpdateDataLoaded={setUpdateDataLoaded}
-        dontaionMode={dontaionMode}
+        donationMode={donationMode}
         setDonationMode={setDonationMode}
         currentUpdateId={currentUpdateId}
         donationAmount={donationAmount}

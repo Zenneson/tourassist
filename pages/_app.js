@@ -4,18 +4,20 @@ import "@mantine/notifications/styles.css";
 import "./global.css";
 import "node_modules/focus-visible/dist/focus-visible.min.js";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MantineProvider,
   createTheme,
   AppShell,
   ScrollArea,
 } from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { Notifications } from "@mantine/notifications";
 import { MapProvider } from "react-map-gl";
 import { RouterTransition } from "../comps/routertransition";
 import { getAuth } from "firebase/auth";
+import { setCookie, getCookie } from "cookies-next";
 import { UserProvider } from "../libs/context";
 import { usePageHistory } from "../libs/custom";
 import ChatBot from "../comps/chatbot/chatBot";
@@ -174,6 +176,49 @@ export default function App(props) {
   const [mapLoaded, setMapLoaded] = useState(false);
   const router = useRouter();
   const pageHistory = usePageHistory();
+
+  const [placeData, setPlaceData] = useSessionStorage({
+    key: "places",
+    defaultValue: [],
+  });
+  const [roundTrip, setRoundTrip] = useSessionStorage({
+    key: "roundTrip",
+    defaultValue: false,
+  });
+  const [startLocale, setStartLocale] = useSessionStorage({
+    key: "startLocale",
+    defaultValue: "",
+  });
+
+  // if the user leaves the trip planner page and is not on the title page, clear the trip data
+  const checkHistoryForTripData = (pageHistory) => {
+    const isTripPlannerLast =
+      pageHistory[pageHistory.length - 1] === "/tripPlanner";
+    const isNotTripPlanner = router.pathname !== "/tripPlanner";
+    const isNotTitlePage = router.pathname !== "/[title]";
+
+    if (isTripPlannerLast && isNotTitlePage && isNotTripPlanner) {
+      if (placeData.length > 1) {
+        let tempData = JSON.parse(JSON.stringify(placeData));
+
+        let finalPlace = tempData[tempData.length - 1];
+        let isReturnFlight = finalPlace && finalPlace.returnFlight;
+
+        if (isReturnFlight) {
+          tempData.splice(tempData.length - 1, 1);
+        }
+        setPlaceData(tempData);
+        setRoundTrip(false);
+        setStartLocale("");
+      }
+    }
+  };
+
+  useEffect(() => {
+    setCookie("history", pageHistory);
+
+    checkHistoryForTripData(pageHistory);
+  }, [pageHistory]);
 
   return (
     <MantineProvider theme={tourTheme} defaultColorScheme="dark">

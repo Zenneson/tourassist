@@ -16,6 +16,8 @@ import {
   Stack,
   Tooltip,
   Popover,
+  PopoverTarget,
+  PopoverDropdown,
 } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
 import {
@@ -81,9 +83,6 @@ export default function Updates(props) {
     autoClose: false,
     loading: true,
     withCloseButton: false,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const updateDeletedEnd = {
@@ -94,9 +93,6 @@ export default function Updates(props) {
     loading: false,
     autoClose: 3000,
     withCloseButton: true,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const deleteUpdateByTitle = async () => {
@@ -159,7 +155,7 @@ export default function Updates(props) {
               dropdown: classes.updateShare,
             }}
           >
-            <Popover.Target>
+            <PopoverTarget>
               <Center>
                 <Tooltip
                   classNames={{ tooltip: "toolTip" }}
@@ -177,9 +173,9 @@ export default function Updates(props) {
                   </ActionIcon>
                 </Tooltip>
               </Center>
-            </Popover.Target>
+            </PopoverTarget>
 
-            <Popover.Dropdown>
+            <PopoverDropdown>
               <Button.Group classNames={{ root: classes.updateButtonGroup }}>
                 <Button
                   variant="transparent"
@@ -245,7 +241,7 @@ export default function Updates(props) {
                   <IconQrcode size={15} />
                 </Button>
               </Button.Group>
-            </Popover.Dropdown>
+            </PopoverDropdown>
           </Popover>
           {user?.email === tripData?.user && (
             <Menu

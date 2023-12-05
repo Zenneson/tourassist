@@ -193,7 +193,7 @@ export default function Mymap(props) {
       pitch = 25;
     }
     if (type === "city" || (country !== "United States" && type === "region")) {
-      zoom = 16;
+      zoom = 15.5;
       pitch = 60;
       if (label === "District of Columbia") {
         zoom = 10;

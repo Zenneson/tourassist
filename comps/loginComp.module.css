@@ -11,7 +11,7 @@
   top: 7px;
   left: var(--mantine-spacing-sm);
   pointer-events: none;
-  color: light-dark("rgba(0,0,0,0.4)", "#fff");
+  color: light-dark(rgba(0, 0, 0, 0.4), #fff);
   transform: none;
   font-size: var(--mantine-font-size-sm);
   font-weight: 400;
@@ -37,4 +37,18 @@
 
 .termsCheckbox {
   cursor: pointer;
+}
+
+.termsLink {
+  color: light-dark(#4e4e4e, #fff);
+}
+
+.loginButton {
+  font-weight: 700;
+  color: var(--mantine-color-gray-5);
+  text-transform: uppercase;
+  background-color: light-dark(
+    var(--mantine-color-gray-2),
+    var(--mantine-color-dark-5)
+  );
 }

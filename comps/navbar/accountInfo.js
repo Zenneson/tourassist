@@ -13,6 +13,8 @@ import {
   Tooltip,
   TextInput,
   Popover,
+  PopoverTarget,
+  PopoverDropdown,
   Divider,
   HoverCard,
   Text,
@@ -300,7 +302,7 @@ export default function AccountInfo(props) {
                 position="bottom"
                 opened={changePass}
               >
-                <Popover.Target>
+                <PopoverTarget>
                   <Button
                     className={classes.changePassButton}
                     variant="default"
@@ -317,12 +319,12 @@ export default function AccountInfo(props) {
                       }}
                     />
                   </Button>
-                </Popover.Target>
-                <Popover.Dropdown>
+                </PopoverTarget>
+                <PopoverDropdown>
                   <Button size="xs" onClick={sendPassReset}>
                     SEND PASSWORD RESET CODE
                   </Button>
-                </Popover.Dropdown>
+                </PopoverDropdown>
               </Popover>
             </Group>
             <Group grow gap={10}>

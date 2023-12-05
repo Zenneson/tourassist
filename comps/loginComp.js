@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import {
   createUserWithEmailAndPassword,
@@ -16,6 +17,8 @@ import {
   Progress,
   Text,
   Popover,
+  PopoverTarget,
+  PopoverDropdown,
   Stack,
   Group,
   Checkbox,
@@ -74,7 +77,7 @@ export default function LoginComp(props) {
   function PasswordRequirement({ meets, label }) {
     return (
       <Text
-        color={meets ? "#00E8FC" : "red"}
+        c={meets ? "#00E8FC" : "red"}
         style={{ display: "flex", alignItems: "center" }}
         mt={7}
         size="sm"
@@ -142,9 +145,6 @@ export default function LoginComp(props) {
   const newAccount = {
     color: "green",
     icon: <IconCheck size={20} />,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     title: "Welcome",
     message: `${form.values.firstName} ${form.values.lastName}'s account has been created.`,
   };
@@ -152,9 +152,6 @@ export default function LoginComp(props) {
   const emailInvalid = {
     color: "red",
     icon: <IconX size={20} />,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     title: "Invalid Email",
     message: `${form.values.email} is not a valid email address.`,
   };
@@ -162,9 +159,6 @@ export default function LoginComp(props) {
   const alreadyExists = {
     color: "red",
     icon: <IconX size={20} />,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     title: "Email already in use",
     message: `${form.values.email} is linked to another account.`,
   };
@@ -172,9 +166,6 @@ export default function LoginComp(props) {
   const userNotFound = {
     color: "red",
     icon: <IconX size={20} />,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     title: "User not found",
     message: `An account for ${form.values.email} does not exist.`,
   };
@@ -182,9 +173,6 @@ export default function LoginComp(props) {
   const wrongPassword = {
     color: "red",
     icon: <IconX size={20} />,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     title: "Wrong password",
     message: `The password you entered is incorrect.`,
   };
@@ -381,7 +369,7 @@ export default function LoginComp(props) {
                 transition: "pop",
               }}
             >
-              <Popover.Target>
+              <PopoverTarget>
                 <PasswordInput
                   required={!passFloating}
                   label="Password"
@@ -412,8 +400,8 @@ export default function LoginComp(props) {
                     "Password does not meet requirements"
                   }
                 />
-              </Popover.Target>
-              <Popover.Dropdown>
+              </PopoverTarget>
+              <PopoverDropdown>
                 <Progress
                   color={color}
                   value={strength}
@@ -425,7 +413,7 @@ export default function LoginComp(props) {
                   meets={form.values.password.length > 5}
                 />
                 {checks}
-              </Popover.Dropdown>
+              </PopoverDropdown>
             </Popover>
             {type === "sign-up" && (
               <Group justify="flex-start">
@@ -468,9 +456,9 @@ export default function LoginComp(props) {
           >
             {router.pathname !== "/tripPlanner" && (
               <Anchor
+                className={classes.termsLink}
                 component="button"
                 type="button"
-                color={dark ? "#fff" : "#4e4e4e"}
                 size="xs"
                 onClick={toggle}
               >
@@ -480,16 +468,10 @@ export default function LoginComp(props) {
               </Anchor>
             )}
             <Button
+              className={classes.loginButton}
               size={"sm"}
               mt={0}
-              fw={700}
               variant="light"
-              bg={dark ? "dark.5" : "gray.2"}
-              c="gray.5"
-              style={{
-                color: "rgba(255,255,255,0.3)",
-                textTransform: "uppercase",
-              }}
               type="submit"
             >
               {type === "sign-up" ? "Sign up" : "Login"}

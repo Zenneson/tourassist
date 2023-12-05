@@ -29,6 +29,8 @@ import {
   Flex,
   Badge,
   Popover,
+  PopoverTarget,
+  PopoverDropdown,
   Timeline,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
@@ -44,6 +46,7 @@ import TripContent from "../comps/trip/tripContent";
 import UseTickets from "../comps/planner/useTickets";
 import SumInput from "../comps/planner/sumInput";
 import classes from "./tripplanner.module.css";
+import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
 export const [FormProvider, useFormContext, useForm] = createFormContext();
@@ -55,8 +58,6 @@ export default function TripPlanner(props) {
   const dark = computedColorScheme === "dark";
   const [startLocaleSearch, setStartLocaleSearch] = useState("");
   const [startLocaleData, setStartLocaleData] = useState([]);
-  const [startCity, setStartCity] = useState("");
-  const [startRegion, setStartRegion] = useState("");
   const [travelDates, setTravelDates] = useState(null);
   const [active, setActive] = useState(0);
   const router = useRouter();
@@ -77,10 +78,6 @@ export default function TripPlanner(props) {
     key: "images",
     defaultValue: [],
   });
-  const [startLocale, setStartLocale] = useSessionStorage({
-    key: "startLocale",
-    defaultValue: "",
-  });
   const [travelers, setTravelers] = useSessionStorage({
     key: "travelers",
     defaultValue: 1,
@@ -97,6 +94,23 @@ export default function TripPlanner(props) {
     key: "plannerTripDesc",
     defaultValue: "",
   });
+  const [startLocale, setStartLocale] = useSessionStorage({
+    key: "startLocale",
+    defaultValue: "",
+  });
+
+  const splitLocale = (e) => {
+    const index = e.indexOf(",");
+    const subCity = e.substring(0, index);
+    const subRegion = e.substring(index + 2, e.length);
+
+    return [subCity, subRegion];
+  };
+
+  const [startCity, setStartCity] = useState(splitLocale(startLocale)[0] || "");
+  const [startRegion, setStartRegion] = useState(
+    splitLocale(startLocale)[1] || ""
+  );
 
   const [savedFormValues, setSavedFormValues] = useSessionStorage({
     key: "formValues",
@@ -111,6 +125,47 @@ export default function TripPlanner(props) {
       })),
     },
   });
+
+  const handleRoundTrip = () => {
+    if (placeData.length > 1 && startLocale !== "") {
+      let tempData = JSON.parse(JSON.stringify(placeData));
+      const lastIndex = tempData.length - 1;
+      const lastPlace = tempData[lastIndex];
+      const isReturnFlight = lastPlace && lastPlace.returnFlight;
+
+      if (roundTrip) {
+        if (isReturnFlight) {
+          // Update the last place if it doesn't match startLocale
+          let lastPlaceLocale = `${lastPlace.place}, ${lastPlace.region}`;
+          if (startLocale !== lastPlaceLocale) {
+            tempData[lastIndex] = {
+              place: startCity,
+              region: startRegion || "",
+              returnFlight: true,
+              costs: { flight: 0 },
+            };
+          }
+        } else {
+          // Add a return flight if it doesn't exist
+          tempData.push({
+            place: startCity,
+            region: startRegion || "",
+            returnFlight: true,
+            costs: { flight: 0 },
+          });
+        }
+      } else if (isReturnFlight) {
+        // Remove the return flight for a one-way trip
+        tempData.splice(lastIndex, 1);
+      }
+
+      setPlaceData(tempData);
+    }
+  };
+
+  useEffect(() => {
+    handleRoundTrip();
+  }, [roundTrip]);
 
   const form = useForm({
     initialValues: savedFormValues,
@@ -158,9 +213,6 @@ export default function TripPlanner(props) {
     title: "Already set as destination",
     message: `${startLocale} is set as a destination. Please choose another location.`,
     color: "orange",
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
   };
@@ -169,9 +221,6 @@ export default function TripPlanner(props) {
     title: "Trip Cost Missing",
     message: "Add your trip costs.",
     color: "red",
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
   };
@@ -180,9 +229,6 @@ export default function TripPlanner(props) {
     title: "Missing Trip Title",
     message: "Please provide a title for your trip.",
     color: "red",
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
   };
@@ -191,9 +237,6 @@ export default function TripPlanner(props) {
     title: "Trip Title is Short",
     message: "Please provide a longer Title for your trip.",
     color: "orange",
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
   };
@@ -202,9 +245,6 @@ export default function TripPlanner(props) {
     title: "Add details about your trip",
     message: "Please provide a description of your trip below.",
     color: "red",
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
   };
@@ -213,9 +253,6 @@ export default function TripPlanner(props) {
     title: "Description is Short",
     message: "Please provide more information about your trip.",
     color: "orange",
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
   };
@@ -224,9 +261,6 @@ export default function TripPlanner(props) {
     title: "Account Information Required",
     message: "Please provide your account information below.",
     color: "orange",
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
   };
@@ -239,9 +273,6 @@ export default function TripPlanner(props) {
     loading: true,
     withCloseButton: false,
     autoClose: false,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const tripMade = {
@@ -281,6 +312,17 @@ export default function TripPlanner(props) {
     let name = user.email.match(/^(.*?)@/);
     let trip_id = `${name[1]}_${trip_title}${date_time_string}`;
     return trip_id;
+  };
+
+  const clearData = () => {
+    sessionStorage.removeItem("images");
+    sessionStorage.removeItem("startLocale");
+    sessionStorage.removeItem("travelers");
+    sessionStorage.removeItem("roundTrip");
+    sessionStorage.removeItem("plannerTripTitle");
+    sessionStorage.removeItem("plannerTripDesc");
+    sessionStorage.removeItem("formValues");
+    sessionStorage.removeItem("places");
   };
 
   const changeNextStep = async () => {
@@ -340,7 +382,8 @@ export default function TripPlanner(props) {
       )
         .then(() => {
           notifications.update(tripMade);
-          router.push("/" + generateTripId());
+          router.push("/" + createdId);
+          clearData();
         })
         .catch((error) => {
           notifications.update(tripFailed);
@@ -449,9 +492,11 @@ export default function TripPlanner(props) {
                         roundTrip={roundTrip}
                         placeData={placeData}
                         setPlaceData={setPlaceData}
+                        startLocale={startLocale}
                         savedFormValues={savedFormValues}
                         setSavedFormValues={setSavedFormValues}
                         disallowEmptyField={disallowEmptyField}
+                        handleRoundTrip={handleRoundTrip}
                       />
                     </Box>
                   </motion.div>
@@ -603,7 +648,7 @@ export default function TripPlanner(props) {
                     transition: "skew-down",
                   }}
                 >
-                  <Popover.Target>
+                  <PopoverTarget>
                     <Box>
                       {(travelDates || startLocale) && (
                         <Button
@@ -628,8 +673,8 @@ export default function TripPlanner(props) {
                         </Button>
                       )}
                     </Box>
-                  </Popover.Target>
-                  <Popover.Dropdown p={"xl"} py={20}>
+                  </PopoverTarget>
+                  <PopoverDropdown p={"xl"} py={20}>
                     {startLocale && (
                       <Divider
                         label="Trip Information"
@@ -680,7 +725,7 @@ export default function TripPlanner(props) {
                         </>
                       )}
                     </Stack>
-                  </Popover.Dropdown>
+                  </PopoverDropdown>
                 </Popover>
                 {active > 0 && (
                   <>
@@ -736,7 +781,7 @@ export default function TripPlanner(props) {
     </FormProvider>
   );
 }
-// NOTE: END OF TRIP PLANNER COMP FUNC
+// END OF TRIP PLANNER COMP FUNC
 
 const PlaceTimeline = (props) => {
   const { dark, placeData, roundTrip, startCity, startRegion, startLocale } =

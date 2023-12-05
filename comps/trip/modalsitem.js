@@ -61,8 +61,7 @@ export default function ModalsItem(props) {
     updates,
     setUpdates,
     updateDataLoaded,
-    setUpdateDataLoaded,
-    dontaionMode,
+    donationMode,
     setDonationMode,
     currentUpdateId,
     donationAmount,
@@ -88,9 +87,6 @@ export default function ModalsItem(props) {
     icon: <IconAlertTriangle size={20} />,
     title: "Please add a title",
     autoClose: 3000,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const addUpdateContent = {
@@ -98,9 +94,6 @@ export default function ModalsItem(props) {
     icon: <IconAlertTriangle size={20} />,
     title: "You have not added any text to your update",
     autoClose: 3000,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const postingUpdate = {
@@ -111,9 +104,6 @@ export default function ModalsItem(props) {
     autoClose: false,
     loading: true,
     withCloseButton: false,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const noDonation = {
@@ -121,9 +111,6 @@ export default function ModalsItem(props) {
     icon: <IconAlertTriangle size={20} />,
     title: "Please add a donation amount",
     autoClose: 3000,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const updatePosted = {
@@ -134,9 +121,6 @@ export default function ModalsItem(props) {
     autoClose: 3000,
     loading: false,
     withCloseButton: true,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const maxReached = {
@@ -144,9 +128,6 @@ export default function ModalsItem(props) {
     icon: <IconAlertTriangle size={20} />,
     title: "$5,000 is the maximum donation amount",
     autoClose: 3000,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const noDonorName = {
@@ -154,9 +135,6 @@ export default function ModalsItem(props) {
     icon: <IconAlertTriangle size={20} />,
     title: "Please add your name or choose to stay anonymous",
     autoClose: 3000,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 
   const paymentError = (error) => {
@@ -618,15 +596,14 @@ export default function ModalsItem(props) {
             <Box w={modalMode === "donating" ? "auto" : 800}>
               <Title mb={5} color={dark ? "#00E8FC" : "#0D3F82"}>
                 <Flex align={"center"} gap={5}>
-                  {dontaionMode === "thanks" ? "THANK YOU" : "DONATE"}
+                  {donationMode === "thanks" ? "THANK YOU" : "DONATE"}
                   <IconHeartHandshake size={35} />
                 </Flex>
               </Title>
               <Divider w={"100%"} size={"xl"} opacity={0.4} mb={15} />
-              {dontaionMode === "donating" && (
+              {donationMode === "donating" && (
                 <Group mb={15} grow>
                   <Stack>
-                    {/* TODO: Duffel */}
                     <Input
                       ref={donorNameRef}
                       placeholder={stayAnon ? "Anonymous" : "Name..."}
@@ -691,7 +668,7 @@ export default function ModalsItem(props) {
                   </Stack>
                 </Group>
               )}
-              {dontaionMode === "pay" && paymentToken && (
+              {donationMode === "pay" && paymentToken && (
                 <Box color="#fff">
                   <Group justify="space-between" px={5} mb={5}>
                     <Text fz={15} fw={700} fs={"italic"}>
@@ -751,7 +728,7 @@ export default function ModalsItem(props) {
                   />
                 </Box>
               )}
-              {dontaionMode === "thanks" && (
+              {donationMode === "thanks" && (
                 <>
                   <Text w={"100%"} ta={"center"} c={"#777"}>
                     Thank you for your donation, please leave a message of

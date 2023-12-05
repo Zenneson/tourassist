@@ -15,6 +15,8 @@ import {
   Group,
   Tooltip,
   Popover,
+  PopoverTarget,
+  PopoverDropdown,
   Text,
   Flex,
   Title,
@@ -316,7 +318,7 @@ export default function MainMenu(props) {
                   position="bottom"
                   classNames={{ tooltip: "toolTip" }}
                 >
-                  <Popover.Target>
+                  <PopoverTarget>
                     {/* Logout Dropdown */}
                     <Button
                       className={classes.mainMenuBtn}
@@ -333,9 +335,9 @@ export default function MainMenu(props) {
                         <IconLogin size={17} />
                       )}
                     </Button>
-                  </Popover.Target>
+                  </PopoverTarget>
                 </Tooltip>
-                <Popover.Dropdown p={0} mt={-4}>
+                <PopoverDropdown p={0} mt={-4}>
                   {/* Logout Button  */}
                   <Button
                     className={classes.logoutButton}
@@ -355,7 +357,7 @@ export default function MainMenu(props) {
                   >
                     {user ? "LOGOUT" : "LOGIN"}
                   </Button>
-                </Popover.Dropdown>
+                </PopoverDropdown>
               </Popover>
             </Group>
             {/* DropDown Button */}

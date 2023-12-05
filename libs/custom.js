@@ -328,9 +328,6 @@ export const loggedIn = (dark, user) => {
   return {
     color: "green",
     icon: <IconCheck size={20} />,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
     title: "Welcome Back",
     autoClose: 2500,
     message: `${user.email} is logged in`,
