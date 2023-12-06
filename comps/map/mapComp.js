@@ -3,17 +3,12 @@ import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import {
   useComputedColorScheme,
   Box,
-  Button,
   Transition,
-  Space,
   Stack,
+  Title,
+  Text,
 } from "@mantine/core";
-import {
-  IconPlane,
-  IconTextPlus,
-  IconCircleDotFilled,
-  IconCurrentLocation,
-} from "@tabler/icons-react";
+import { IconCircleDotFilled } from "@tabler/icons-react";
 import TourList from "./tourList";
 import classes from "./mapComp.module.css";
 
@@ -43,7 +38,6 @@ export default function MapComp(props) {
     showStates,
     locationHandler,
     mapboxAccessToken,
-    choosePlace,
     selectTopCity,
   } = props;
 
@@ -135,6 +129,10 @@ export default function MapComp(props) {
     }
   }, [dark, fullMapRef, mapLoaded]);
 
+  const isCity =
+    area.type === "city" ||
+    (area.type === "region" && area.country !== "United States");
+
   return (
     <Map
       id="mapRef"
@@ -164,9 +162,9 @@ export default function MapComp(props) {
       }}
       doubleClickZoom={false}
       interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-      mapStyle={"mapbox://styles/zenneson/clpnh3lai004f01qmhyvt4x2j"}
-      style={{ width: "100%", height: "100%" }}
+      mapStyle={"mapbox://styles/zenneson/clptl59r3000l01qmhncd6jfx"}
       mapboxAccessToken={mapboxAccessToken}
+      style={{ width: "100%", height: "100%", pointerEvents: isCity && "none" }}
     >
       {!searchOpened && (
         <TourList
@@ -192,44 +190,32 @@ export default function MapComp(props) {
           <Popup
             className={classes.popup}
             anchor="bottom"
-            offset={[0, 0]}
+            offset={[-350, -250]}
             closeOnMove={false}
             closeButton={false}
             closeOnClick={false}
             longitude={lngLat[0]}
             latitude={lngLat[1]}
           >
-            <Stack px={10} gap={0} className={classes.popupMenu}>
-              <Box pt={10} pl={0}>
+            <Stack p={10} gap={0} className={classes.popupFrame}>
+              <Text
+                fw={900}
+                fz={50}
+                mb={-15}
+                variant="gradient"
+                gradient={
+                  dark
+                    ? { from: "#0D3F82", to: "#010b18", deg: 45 }
+                    : { from: "#2DC7F3", to: "#49d8ff", deg: 45 }
+                }
+              >
                 {area.label}
-              </Box>
-              <Button.Group orientation="vertical" mt={5}>
-                <Button
-                  className={classes.popupMenuBtn}
-                  variant="subtle"
-                  size="xs"
-                  justify="left"
-                  leftSection={<IconPlane size={15} />}
-                  onClick={() => choosePlace("travel")}
-                >
-                  Travel to {area.label}
-                </Button>
-                <Button
-                  className={classes.popupMenuBtn}
-                  variant="subtle"
-                  size="xs"
-                  justify="left"
-                  fs={"italic"}
-                  leftSection={<IconTextPlus size={15} />}
-                  onClick={() => choosePlace("tour")}
-                >
-                  <Space w={5} />
-                  TOUR LIST
-                </Button>
-              </Button.Group>
+              </Text>
+              <Text fw={600} fz={30} c={dark ? "#000" : "#fff"}>
+                {area?.region} {area?.region && "|"} {area?.country}
+              </Text>
             </Stack>
           </Popup>
-          <IconCurrentLocation size={150} className={classes.markerIconColor} />
         </Marker>
       )}
       <Source

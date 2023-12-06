@@ -7,6 +7,7 @@ import {
   Button,
   Center,
   Divider,
+  Flex,
   Group,
   Stack,
   SegmentedControl,
@@ -15,11 +16,13 @@ import {
   Title,
   ScrollArea,
   Grid,
+  Anchor,
 } from "@mantine/core";
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
+import { IconReload, IconShare3 } from "@tabler/icons-react";
 import { useUser } from "../../libs/context";
 import { timeSince } from "../../libs/custom";
-import { IconReload } from "@tabler/icons-react";
+import classes from "./donations.module.css";
 
 export default function Donations(props) {
   const { dHeight, donationSectionLimit, donations = [] } = props;
@@ -245,11 +248,11 @@ export default function Donations(props) {
             <Table.Tbody>{rows?.length !== 0 && rows}</Table.Tbody>
           </Table>
           {rows?.length === 0 && (
-            <Text pt={10} c="dimmed" ta="center" fz={12}>
-              {user && user.email === tripData?.user
-                ? "Donations will be listed here"
-                : "Be the first to donate!"}
-            </Text>
+            <Anchor href="#" fz={"10px"} className={classes.emptyListShare}>
+              <Flex align="center" justify="center" mt={10} gap="3">
+                <IconShare3 size={15} stroke={1} /> Spread the word!
+              </Flex>
+            </Anchor>
           )}
           <Box ref={ref} />
           <Center>

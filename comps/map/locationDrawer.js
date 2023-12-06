@@ -146,7 +146,7 @@ export default function LocationDrawer(props) {
       withCloseButton={false}
       onClose={() => setLocationDrawer(false)}
     >
-      <Box pt={80}>
+      <Box pt={60}>
         <Group gap={2} ml={-5}>
           <IconArrowBadgeRightFilled
             size={25}

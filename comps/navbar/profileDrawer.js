@@ -144,7 +144,7 @@ export default function ProfileDrawer(props) {
           withinPortal={false}
           padding={0}
           opened={mainMenuOpened}
-          onClose={openMenu}
+          onClose={() => setMainMenuOpened(false)}
           size={310}
           trapFocus={false}
           lockScroll={false}

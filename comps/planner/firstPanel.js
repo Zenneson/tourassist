@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Autocomplete,
   Title,
@@ -150,11 +149,11 @@ export default function FirstPanel(props) {
             px={10}
             size="xl"
             w={"100%"}
-            value={startLocaleSearch}
+            value={startLocale || startLocaleSearch}
             data={startLocaleData}
             filter={optionsFilter}
             rightSection={
-              startLocaleSearch.length > 0 && (
+              startLocale && (
                 <ActionIcon
                   size={"sm"}
                   variant="subtle"

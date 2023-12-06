@@ -76,6 +76,7 @@ Tasks:
 	☐ Add top index to hovered city name popup
 	☐ All dropdowns close when input is not in focus
 	☐ Add Autocomplete filter logic for countries with different titles
+	☐ Add maxes for all inputs, max date, max places, etc
 
 Marketing:
 	✔ 3000 Wedding Planners email list @done(23-12-05 02:32)

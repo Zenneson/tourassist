@@ -65,7 +65,7 @@
   /* ProseMirror */
   padding-left: 21px;
   padding-right: 21px;
-  max-height: 200px;
+  min-height: 200px;
   overflow: auto;
   scrollbar-width: 8px;
   scrollbar-color: transparent;

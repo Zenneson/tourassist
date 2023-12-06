@@ -15,7 +15,6 @@ import {
   Group,
   Overlay,
   Stack,
-  ScrollArea,
   LoadingOverlay,
   Slider as MantineSlider,
   Title,

@@ -2,15 +2,18 @@
 import "@mantine/dates/styles.css";
 import { useState, useRef, useEffect } from "react";
 import {
-  IconChevronUp,
-  IconChevronDown,
-  IconBuildingBank,
-  IconMapPin,
-  IconChevronsRight,
-  IconAlertTriangle,
+  IconX,
+  IconId,
   IconCheck,
   IconFileInfo,
   IconListCheck,
+  IconChevronUp,
+  IconChevronDown,
+  IconBuildingBank,
+  IconChevronsRight,
+  IconAlertTriangle,
+  IconCalendarMonth,
+  IconCalculator,
 } from "@tabler/icons-react";
 import {
   useComputedColorScheme,
@@ -31,9 +34,10 @@ import {
   Popover,
   PopoverTarget,
   PopoverDropdown,
-  Timeline,
+  ScrollAreaAutosize,
+  ActionIcon,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
+import { useSessionStorage, useElementSize } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
@@ -48,6 +52,7 @@ import SumInput from "../comps/planner/sumInput";
 import classes from "./tripplanner.module.css";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import PlaceTimeline from "../comps/planner/placeTimeline";
 
 export const [FormProvider, useFormContext, useForm] = createFormContext();
 export default function TripPlanner(props) {
@@ -74,6 +79,10 @@ export default function TripPlanner(props) {
   const startLocaleRef = useRef(null);
   const titleRef = useRef(null);
 
+  const [tripTypes, setTripTypes] = useSessionStorage({
+    key: "tripTypes",
+    defaultValue: [],
+  });
   const [images, setImages] = useSessionStorage({
     key: "images",
     defaultValue: [],
@@ -296,13 +305,6 @@ export default function TripPlanner(props) {
     icon: <IconCheck size={17} />,
   };
 
-  useEffect(() => {
-    if (!startLocaleRef.current?.value) {
-      setStartLocaleSearch("");
-      setStartLocale("");
-    }
-  }, [setStartLocale, setStartLocaleSearch]);
-
   const generateTripId = () => {
     const trip_title = plannerTripTitle
       .replace(/ /g, "")
@@ -420,6 +422,15 @@ export default function TripPlanner(props) {
 
   const disallowEmptyField = ({ value }) => {
     return value !== "";
+  };
+
+  const { ref, width, height } = useElementSize();
+  const popoverOffset = () => {
+    if (height === 0) {
+      return -350;
+    } else {
+      return (height / 2) * -1;
+    }
   };
 
   return (
@@ -606,7 +617,6 @@ export default function TripPlanner(props) {
                     stepCompletedIcon: classes.stepperCompleteIcon,
                     verticalSeparator: classes.verticalSeparator,
                   }}
-                  completedIcon={<IconListCheck size={22} />}
                   iconSize={40}
                   active={active}
                   onStepClick={setActive}
@@ -620,31 +630,43 @@ export default function TripPlanner(props) {
                   w="20%"
                 >
                   <Stepper.Step
+                    withIcon={true}
+                    completedIcon={<IconCalendarMonth size={22} />}
+                    icon={<IconCalendarMonth size={18} stroke={1} />}
                     label="Travel Starting Info"
                     description="Travel date and starting location"
                   />
                   <Stepper.Step
+                    withIcon={true}
+                    completedIcon={<IconCalculator size={22} />}
+                    icon={<IconCalculator size={18} stroke={1} />}
                     label="Cost Calculator"
                     description="Calculate all your travel costs"
                   />
                   <Stepper.Step
+                    withIcon={true}
+                    completedIcon={<IconListCheck size={22} />}
+                    icon={<IconListCheck size={18} stroke={1} />}
                     label="Travel Details"
                     description="Information for your supporters"
                   />
                   <Stepper.Step
+                    withIcon={true}
+                    completedIcon={<IconId size={22} />}
+                    icon={<IconId size={18} stroke={1} />}
                     label="Account Info"
                     description="Provide account details"
                   />
                 </Stepper>
                 <Popover
+                  opened={showTripInfo}
+                  closeOnClickOutside={false}
                   position="top-end"
-                  withArrow
-                  arrowSize={12}
-                  offset={4}
+                  offset={popoverOffset}
                   shadow="xl"
                   transitionProps={{
                     duration: 300,
-                    transition: "skew-down",
+                    transition: "slide-left",
                   }}
                 >
                   <PopoverTarget>
@@ -666,7 +688,7 @@ export default function TripPlanner(props) {
                               opacity={0.2}
                             />
                           }
-                          onClick={() => setShowTripInfo(true)}
+                          onClick={() => setShowTripInfo(!showTripInfo)}
                         >
                           Trip Information
                         </Button>
@@ -681,17 +703,34 @@ export default function TripPlanner(props) {
                         mb={10}
                       />
                     )}
-                    <Stack gap={3}>
-                      {startLocale && (
+                    <Stack gap={3} ref={ref}>
+                      <ActionIcon
+                        variant="transparent"
+                        c={dark ? "#fff" : "#000"}
+                        position="absolute"
+                        top={"-40px"}
+                        right={"calc(-100% - 8px)"}
+                        size={"xs"}
+                        onClick={() => setShowTripInfo(false)}
+                      >
+                        <IconX size={15} />
+                      </ActionIcon>
+                      <ScrollAreaAutosize
+                        type="always"
+                        mah={
+                          (startLocale && travelDates) || tripTypes.length === 5
+                            ? "400px"
+                            : "550px"
+                        }
+                      >
                         <PlaceTimeline
                           dark={dark}
                           placeData={placeData}
                           roundTrip={roundTrip}
-                          startCity={startCity}
-                          startRegion={startRegion}
                           startLocale={startLocale}
+                          splitLocale={splitLocale}
                         />
-                      )}
+                      </ScrollAreaAutosize>
                       {travelDates && (
                         <>
                           {startLocale && travelDates && <Divider my={10} />}
@@ -723,6 +762,20 @@ export default function TripPlanner(props) {
                           </Badge>
                         </>
                       )}
+                      <Divider my={10} />
+                      {tripTypes.map((type, index) => {
+                        return (
+                          <Badge
+                            key={index}
+                            variant="dot"
+                            size="xs"
+                            color="blue"
+                            classNames={{ root: classes.badge }}
+                          >
+                            {type}
+                          </Badge>
+                        );
+                      })}
                     </Stack>
                   </PopoverDropdown>
                 </Popover>
@@ -780,114 +833,3 @@ export default function TripPlanner(props) {
     </FormProvider>
   );
 }
-// END OF TRIP PLANNER COMP FUNC
-
-const PlaceTimeline = (props) => {
-  const { dark, placeData, roundTrip, startCity, startRegion, startLocale } =
-    props;
-
-  if (!roundTrip && !startLocale) {
-    return (
-      <Timeline
-        lineWidth={3}
-        bulletSize={20}
-        classNames={{
-          item: classes.timelineItem,
-          itemTitle: classes.timelineTitle,
-        }}
-      >
-        {placeData.map((place, index) => (
-          <Timeline.Item
-            title={place.place}
-            lineVariant="dashed"
-            key={place.place + index}
-            bullet={<IconMapPin />}
-          >
-            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-              {place.region}
-            </Text>
-          </Timeline.Item>
-        ))}
-      </Timeline>
-    );
-  }
-
-  if (!roundTrip && startCity) {
-    return (
-      <Timeline
-        lineWidth={3}
-        bulletSize={20}
-        classNames={{
-          item: classes.timelineItem,
-          itemTitle: classes.timelineTitle,
-        }}
-      >
-        <Timeline.Item
-          title={startCity}
-          lineVariant="dashed"
-          bullet={<IconMapPin />}
-        >
-          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-            {startRegion}
-          </Text>
-        </Timeline.Item>
-        {placeData.map((place, index) => (
-          <Timeline.Item
-            title={place.place}
-            key={place.place + index}
-            lineVariant="dashed"
-            bullet={<IconMapPin />}
-          >
-            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-              {place.region}
-            </Text>
-          </Timeline.Item>
-        ))}
-      </Timeline>
-    );
-  }
-
-  if (roundTrip && startCity) {
-    return (
-      <Timeline
-        lineWidth={3}
-        bulletSize={20}
-        classNames={{
-          item: classes.timelineItem,
-          itemTitle: classes.timelineTitle,
-        }}
-      >
-        <Timeline.Item
-          title={startCity}
-          lineVariant="dashed"
-          bullet={<IconMapPin />}
-        >
-          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-            {startRegion}
-          </Text>
-        </Timeline.Item>
-        {placeData.map((place, index) => (
-          <Timeline.Item
-            title={place.place}
-            key={place.place + index}
-            lineVariant="dashed"
-            bullet={<IconMapPin />}
-          >
-            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-              {place.region}
-            </Text>
-          </Timeline.Item>
-        ))}
-        <Timeline.Item
-          title={startCity}
-          lineVariant="dashed"
-          bullet={<IconMapPin />}
-        >
-          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-            {startRegion}
-          </Text>
-        </Timeline.Item>
-      </Timeline>
-    );
-  }
-};
