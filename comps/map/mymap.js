@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import centerOfMass from "@turf/center-of-mass";
-import { useSessionStorage } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Center,
@@ -71,7 +71,7 @@ export default function Mymap(props) {
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
   const [placeLocation, setPlaceLocation] = useState({});
-  const [places, setPlaces] = useSessionStorage({
+  const [places, setPlaces] = useLocalStorage({
     key: "places",
     defaultValue: [],
   });
@@ -411,6 +411,7 @@ export default function Mymap(props) {
     const place = {
       label: area.label,
       place: area.label,
+      region: area.region || area.country,
       type: area.type,
       coordinates: area.center,
       country: area.country,
@@ -418,12 +419,6 @@ export default function Mymap(props) {
         flight: 0,
         hotel: 0,
       },
-      region:
-        area.type === "city" && area.country === "United States"
-          ? `${area.state || area.region}, ${area.country}`
-          : area.country === area.label
-          ? ""
-          : area.country,
     };
 
     setPlaceLocation([place]);

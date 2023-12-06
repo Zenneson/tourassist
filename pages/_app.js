@@ -11,7 +11,7 @@ import {
   AppShell,
   ScrollArea,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { Notifications } from "@mantine/notifications";
 import { MapProvider } from "react-map-gl";
@@ -177,15 +177,15 @@ export default function App(props) {
   const router = useRouter();
   const pageHistory = usePageHistory();
 
-  const [placeData, setPlaceData] = useSessionStorage({
+  const [placeData, setPlaceData] = useLocalStorage({
     key: "places",
     defaultValue: [],
   });
-  const [roundTrip, setRoundTrip] = useSessionStorage({
+  const [roundTrip, setRoundTrip] = useLocalStorage({
     key: "roundTrip",
     defaultValue: false,
   });
-  const [startLocale, setStartLocale] = useSessionStorage({
+  const [startLocale, setStartLocale] = useLocalStorage({
     key: "startLocale",
     defaultValue: "",
   });

@@ -3,12 +3,18 @@ import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import {
   useComputedColorScheme,
   Box,
+  Button,
   Transition,
   Stack,
-  Title,
   Text,
+  Group,
 } from "@mantine/core";
-import { IconCircleDotFilled } from "@tabler/icons-react";
+import {
+  IconCircleDotFilled,
+  IconPlane,
+  IconTextPlus,
+} from "@tabler/icons-react";
+import { AnimatePresence, motion } from "framer-motion";
 import TourList from "./tourList";
 import classes from "./mapComp.module.css";
 
@@ -39,6 +45,7 @@ export default function MapComp(props) {
     locationHandler,
     mapboxAccessToken,
     selectTopCity,
+    choosePlace,
   } = props;
 
   const latitude = country_center[1];
@@ -133,6 +140,21 @@ export default function MapComp(props) {
     area.type === "city" ||
     (area.type === "region" && area.country !== "United States");
 
+  const markerAnimation = {
+    hidden: {
+      y: -200,
+      opacity: 0,
+      scale: 0.8,
+      transition: { duration: 1 },
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 1 },
+    },
+  };
+
   return (
     <Map
       id="mapRef"
@@ -179,44 +201,86 @@ export default function MapComp(props) {
       )}
       {computedColorScheme ? pins : {}}
       {showMainMarker && (
-        <Marker
-          longitude={lngLat[0]}
-          latitude={lngLat[1]}
-          offset={[0, 0]}
-          rotation={40}
-          rotationAlignment="map"
-          pitchAlignment="map"
-        >
-          <Popup
-            className={classes.popup}
-            anchor="bottom"
-            offset={[-350, -250]}
-            closeOnMove={false}
-            closeButton={false}
-            closeOnClick={false}
-            longitude={lngLat[0]}
-            latitude={lngLat[1]}
+        <AnimatePresence>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={markerAnimation}
           >
-            <Stack p={10} gap={0} className={classes.popupFrame}>
-              <Text
-                fw={900}
-                fz={50}
-                mb={-15}
-                variant="gradient"
-                gradient={
-                  dark
-                    ? { from: "#0D3F82", to: "#010b18", deg: 45 }
-                    : { from: "#2DC7F3", to: "#49d8ff", deg: 45 }
-                }
+            <Marker longitude={lngLat[0]} latitude={lngLat[1]}>
+              <Popup
+                className={classes.popup}
+                anchor="bottom"
+                offset={[-420, 0]}
+                closeOnMove={false}
+                closeButton={false}
+                closeOnClick={false}
+                longitude={lngLat[0]}
+                latitude={lngLat[1]}
               >
-                {area.label}
-              </Text>
-              <Text fw={600} fz={30} c={dark ? "#000" : "#fff"}>
-                {area?.region} {area?.region && "|"} {area?.country}
-              </Text>
-            </Stack>
-          </Popup>
-        </Marker>
+                <Stack p={10} gap={0} className={classes.popupFrame}>
+                  <Text
+                    fw={900}
+                    fz={50}
+                    mb={-15}
+                    variant="gradient"
+                    gradient={
+                      dark
+                        ? { from: "#ffffff", to: "rgb(160, 160, 160)", deg: 45 }
+                        : { from: "#363636", to: "#000000", deg: 45 }
+                    }
+                  >
+                    {area.label}
+                  </Text>
+                  <Text fw={600} fz={30} c={dark ? "#fff" : "#000"}>
+                    {area?.region}{" "}
+                    {area.region !== area.country && area?.region && "|"}{" "}
+                    {area.region !== area.country && area?.country}
+                  </Text>
+                  <Box className={classes.placeBlurpFrame}>
+                    <Text className={classes.placeBlurp}>
+                      Silver Spring, Maryland, is a vibrant and diverse suburb
+                      located just outside Washington D.C., offering a blend of
+                      urban and suburban living. It's known for its lively
+                      downtown area, which features a variety of shops,
+                      restaurants, and entertainment options, including the AFI
+                      Silver Theatre, a historic movie theater that showcases
+                      independent films. The community is culturally rich,
+                      hosting numerous festivals and events throughout the year,
+                      such as the Silver Spring Jazz Festival. Silver Spring
+                      also boasts excellent transportation links, including the
+                      Metro Red Line, making it convenient for commuting and
+                      exploring the wider D.C. area.
+                    </Text>
+                    <Group mt={10} gap={5} justify="flex-end">
+                      <Button
+                        leftSection={<IconPlane size={20} />}
+                        className={classes.blurpBtns}
+                        variant="subtle"
+                        onClick={() => choosePlace("travel")}
+                      >
+                        Travel to {area.label}
+                      </Button>
+                      <Button
+                        leftSection={<IconTextPlus size={20} />}
+                        className={classes.blurpBtns}
+                        variant="subtle"
+                        fw={400}
+                        onClick={() => choosePlace("tour")}
+                      >
+                        Add to{" "}
+                        <Text span ml={5} fw={700}>
+                          TOUR LIST
+                        </Text>
+                      </Button>
+                    </Group>
+                  </Box>
+                </Stack>
+              </Popup>
+            </Marker>
+          </motion.div>
+        </AnimatePresence>
       )}
       <Source
         id="country-boundaries"

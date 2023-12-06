@@ -2,21 +2,24 @@
 import "@mantine/dates/styles.css";
 import { useState, useRef, useEffect } from "react";
 import {
-  IconX,
   IconId,
   IconCheck,
-  IconFileInfo,
   IconListCheck,
   IconChevronUp,
   IconChevronDown,
+  IconListNumbers,
   IconBuildingBank,
   IconChevronsRight,
   IconAlertTriangle,
   IconCalendarMonth,
   IconCalculator,
+  IconInfoCircle,
+  IconTags,
+  IconLocationPin,
 } from "@tabler/icons-react";
 import {
   useComputedColorScheme,
+  Drawer,
   Space,
   Stepper,
   Title,
@@ -31,13 +34,9 @@ import {
   Input,
   Flex,
   Badge,
-  Popover,
-  PopoverTarget,
-  PopoverDropdown,
-  ScrollAreaAutosize,
-  ActionIcon,
+  ScrollArea,
 } from "@mantine/core";
-import { useSessionStorage, useElementSize } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
@@ -68,7 +67,7 @@ export default function TripPlanner(props) {
   const router = useRouter();
   const { user } = useUser();
 
-  const [placeData, setPlaceData] = useSessionStorage({
+  const [placeData, setPlaceData] = useLocalStorage({
     key: "places",
     defaultValue: [],
   });
@@ -79,31 +78,31 @@ export default function TripPlanner(props) {
   const startLocaleRef = useRef(null);
   const titleRef = useRef(null);
 
-  const [tripTypes, setTripTypes] = useSessionStorage({
+  const [tripTypes, setTripTypes] = useLocalStorage({
     key: "tripTypes",
     defaultValue: [],
   });
-  const [images, setImages] = useSessionStorage({
+  const [images, setImages] = useLocalStorage({
     key: "images",
     defaultValue: [],
   });
-  const [travelers, setTravelers] = useSessionStorage({
+  const [travelers, setTravelers] = useLocalStorage({
     key: "travelers",
     defaultValue: 1,
   });
-  const [roundTrip, setRoundTrip] = useSessionStorage({
+  const [roundTrip, setRoundTrip] = useLocalStorage({
     key: "roundTrip",
     defaultValue: false,
   });
-  const [plannerTripTitle, setPlannerTripTitle] = useSessionStorage({
+  const [plannerTripTitle, setPlannerTripTitle] = useLocalStorage({
     key: "plannerTripTitle",
     defaultValue: "",
   });
-  const [plannerTripDesc, setPlannerTripDesc] = useSessionStorage({
+  const [plannerTripDesc, setPlannerTripDesc] = useLocalStorage({
     key: "plannerTripDesc",
     defaultValue: "",
   });
-  const [startLocale, setStartLocale] = useSessionStorage({
+  const [startLocale, setStartLocale] = useLocalStorage({
     key: "startLocale",
     defaultValue: "",
   });
@@ -121,7 +120,7 @@ export default function TripPlanner(props) {
     splitLocale(startLocale)[1] || ""
   );
 
-  const [savedFormValues, setSavedFormValues] = useSessionStorage({
+  const [savedFormValues, setSavedFormValues] = useLocalStorage({
     key: "formValues",
     defaultValue: {
       places: placeData.map((place) => ({
@@ -148,8 +147,8 @@ export default function TripPlanner(props) {
           let lastPlaceLocale = `${lastPlace.place}, ${lastPlace.region}`;
           if (startLocale !== lastPlaceLocale) {
             tempData[lastIndex] = {
-              place: startCity,
-              region: startRegion || "",
+              place: startCity || lastPlace.place || "",
+              region: startRegion || lastPlace.region || "",
               returnFlight: true,
               costs: { flight: 0 },
             };
@@ -173,7 +172,9 @@ export default function TripPlanner(props) {
   };
 
   useEffect(() => {
-    handleRoundTrip();
+    if (placeData.length !== 0) {
+      handleRoundTrip();
+    }
   }, [roundTrip]);
 
   const form = useForm({
@@ -424,15 +425,6 @@ export default function TripPlanner(props) {
     return value !== "";
   };
 
-  const { ref, width, height } = useElementSize();
-  const popoverOffset = () => {
-    if (height === 0) {
-      return -350;
-    } else {
-      return (height / 2) * -1;
-    }
-  };
-
   return (
     <FormProvider form={form}>
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
@@ -442,7 +434,7 @@ export default function TripPlanner(props) {
             <Divider
               className={classes.divider}
               w={"100%"}
-              maw={1200}
+              maw={1260}
               mb={20}
               labelPosition="left"
               label={
@@ -503,6 +495,8 @@ export default function TripPlanner(props) {
                         placeData={placeData}
                         setPlaceData={setPlaceData}
                         startLocale={startLocale}
+                        startCity={startCity}
+                        startRegion={startRegion}
                         savedFormValues={savedFormValues}
                         setSavedFormValues={setSavedFormValues}
                         disallowEmptyField={disallowEmptyField}
@@ -610,7 +604,7 @@ export default function TripPlanner(props) {
                   </motion.div>
                 )}
               </Box>
-              <Box pos={"relative"}>
+              <Box pos={"sticky"} top={155}>
                 <Stepper
                   classNames={{
                     stepIcon: classes.stepperIcon,
@@ -658,127 +652,22 @@ export default function TripPlanner(props) {
                     description="Provide account details"
                   />
                 </Stepper>
-                <Popover
-                  opened={showTripInfo}
-                  closeOnClickOutside={false}
-                  position="top-end"
-                  offset={popoverOffset}
-                  shadow="xl"
-                  transitionProps={{
-                    duration: 300,
-                    transition: "slide-left",
-                  }}
-                >
-                  <PopoverTarget>
-                    <Box>
-                      {(travelDates || startLocale) && (
-                        <Button
-                          className={classes.tripInformationBtn}
-                          hidden={true}
-                          pl={7}
-                          fw={100}
-                          size="xs"
-                          fullWidth
-                          variant="default"
-                          color={dark ? "#fff" : "#000"}
-                          rightSection={
-                            <IconFileInfo
-                              style={{ marginLeft: -5 }}
-                              size={16}
-                              opacity={0.2}
-                            />
-                          }
-                          onClick={() => setShowTripInfo(!showTripInfo)}
-                        >
-                          Trip Information
-                        </Button>
-                      )}
-                    </Box>
-                  </PopoverTarget>
-                  <PopoverDropdown p={"xl"} py={20}>
-                    {startLocale && (
-                      <Divider
-                        label="Trip Information"
-                        labelPosition="left"
-                        mb={10}
-                      />
-                    )}
-                    <Stack gap={3} ref={ref}>
-                      <ActionIcon
-                        variant="transparent"
-                        c={dark ? "#fff" : "#000"}
-                        position="absolute"
-                        top={"-40px"}
-                        right={"calc(-100% - 8px)"}
-                        size={"xs"}
-                        onClick={() => setShowTripInfo(false)}
-                      >
-                        <IconX size={15} />
-                      </ActionIcon>
-                      <ScrollAreaAutosize
-                        type="always"
-                        mah={
-                          (startLocale && travelDates) || tripTypes.length === 5
-                            ? "400px"
-                            : "550px"
-                        }
-                      >
-                        <PlaceTimeline
-                          dark={dark}
-                          placeData={placeData}
-                          roundTrip={roundTrip}
-                          startLocale={startLocale}
-                          splitLocale={splitLocale}
-                        />
-                      </ScrollAreaAutosize>
-                      {travelDates && (
-                        <>
-                          {startLocale && travelDates && <Divider my={10} />}
-                          <Badge
-                            variant="dot"
-                            size="xs"
-                            color="green.9"
-                            classNames={{ root: classes.badge }}
-                          >
-                            {dayjs(travelDates).format("LL")}
-                          </Badge>
-                          <Badge
-                            variant="dot"
-                            size="xs"
-                            color="green.6"
-                            classNames={{ root: classes.badge }}
-                          >
-                            {roundTrip ? "Round Trip" : "One Way"}
-                          </Badge>
-                          <Badge
-                            variant="dot"
-                            size="xs"
-                            color="green.3"
-                            classNames={{ root: classes.badge }}
-                          >
-                            {travelers === 1
-                              ? "Solo Traveler"
-                              : travelers + " Travelers"}
-                          </Badge>
-                        </>
-                      )}
-                      <Divider my={10} />
-                      {tripTypes.map((type, index) => {
-                        return (
-                          <Badge
-                            key={index}
-                            variant="dot"
-                            size="xs"
-                            color="blue"
-                            classNames={{ root: classes.badge }}
-                          >
-                            {type}
-                          </Badge>
-                        );
-                      })}
-                    </Stack>
-                  </PopoverDropdown>
-                </Popover>
+                {(travelDates || startLocale) && (
+                  <Button
+                    className={classes.tripInformationBtn}
+                    hidden={true}
+                    size="sm"
+                    fullWidth
+                    variant="default"
+                    color={dark ? "#fff" : "#000"}
+                    leftSection={
+                      <IconListNumbers size={18} stroke={1} opacity={0.7} />
+                    }
+                    onClick={() => setShowTripInfo(!showTripInfo)}
+                  >
+                    Trip Details
+                  </Button>
+                )}
                 {active > 0 && (
                   <>
                     <Divider
@@ -830,6 +719,106 @@ export default function TripPlanner(props) {
           </Center>
         </Box>
       </form>
+      <Drawer
+        zIndex={1}
+        position="right"
+        opened={showTripInfo}
+        withCloseButton={false}
+        withOverlay={false}
+        lockScroll={false}
+        size={350}
+        padding={50}
+        onClose={() => setShowTripInfo(false)}
+        scrollAreaComponent={ScrollArea.Autosize}
+      >
+        <Group opacity={0.05} mt={50} mb={10} gap={7}>
+          <IconListNumbers size={18} />
+          <Title order={6}>Trip Details</Title>
+        </Group>
+        <Flex align={"center"} gap={10}>
+          <IconInfoCircle size={18} opacity={0.3} />
+          <Divider label="Locations" labelPosition="left" mb={10} />
+        </Flex>
+        <Stack gap={3}>
+          <PlaceTimeline
+            dark={dark}
+            placeData={placeData}
+            roundTrip={roundTrip}
+            startLocale={startLocale}
+            splitLocale={splitLocale}
+          />
+          {travelDates && (
+            <>
+              {startLocale && travelDates && (
+                <Flex align={"center"} gap={10}>
+                  <IconLocationPin size={18} opacity={0.3} />
+                  <Divider
+                    label="Info."
+                    labelPosition="left"
+                    my={10}
+                    w={"100%"}
+                  />
+                </Flex>
+              )}
+              <Badge
+                classNames={{ root: classes.badge }}
+                variant="dot"
+                size="xs"
+                color="green.9"
+              >
+                {dayjs(travelDates).format("LL")}
+              </Badge>
+              <Badge
+                classNames={{ root: classes.badge }}
+                variant="dot"
+                size="xs"
+                color="green.6"
+              >
+                {roundTrip ? "Round Trip" : "One Way"}
+              </Badge>
+              <Badge
+                classNames={{ root: classes.badge }}
+                variant="dot"
+                size="xs"
+                color="green.3"
+              >
+                {travelers === 1 ? "Solo Traveler" : travelers + " Travelers"}
+              </Badge>
+            </>
+          )}
+          {tripTypes.length > 0 && (
+            <Flex align={"center"} gap={10}>
+              <IconTags size={18} opacity={0.3} />
+              <Divider my={10} label="Tags" labelPosition="left" />
+            </Flex>
+          )}
+          {tripTypes.map((type, index) => {
+            const colorNum = 7 - index;
+            return (
+              <Badge
+                classNames={{ root: classes.badge }}
+                key={index}
+                variant="dot"
+                size="xs"
+                color={`blue.${colorNum}`}
+              >
+                {type}
+              </Badge>
+            );
+          })}
+        </Stack>
+        <Button
+          variant="default"
+          ta={"center"}
+          fullWidth
+          mt={10}
+          c={dark ? "#fff" : "#000"}
+          size={"xs"}
+          onClick={() => setShowTripInfo(false)}
+        >
+          CLOSE
+        </Button>
+      </Drawer>
     </FormProvider>
   );
 }

@@ -7,7 +7,7 @@ import {
   IconChevronDown,
   IconSlash,
 } from "@tabler/icons-react";
-import { useSessionStorage } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import {
   addComma,
   daysBefore,
@@ -56,15 +56,15 @@ export default function TripInfo(props) {
 
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
-  const [tripData, setTripData] = useSessionStorage({
+  const [tripData, setTripData] = useLocalStorage({
     key: "tripData",
     defaultValue: [],
   });
-  const [currentTrip, setCurrentTrip] = useSessionStorage({
+  const [currentTrip, setCurrentTrip] = useLocalStorage({
     key: "currentTrip",
     defaultValue: [],
   });
-  const [donations, setDonations] = useSessionStorage({
+  const [donations, setDonations] = useLocalStorage({
     key: "donations",
     defaultValue: [],
   });

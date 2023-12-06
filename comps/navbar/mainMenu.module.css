@@ -7,6 +7,11 @@
   align-items: flex-start;
   justify-content: space-between;
   pointer-events: none;
+
+  background: light-dark(
+    linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, #f8f9fa 100%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #0b0c0d 100%)
+  );
 }
 
 .colorSchemeBtn,
@@ -41,8 +46,7 @@
   opacity: 0.2;
   cursor: pointer;
   color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-0));
-  box-shadow: 0 2px 3px
-    light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));
+  box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 255, 255, 0.05));
   background: light-dark(
     linear-gradient(
       0deg,

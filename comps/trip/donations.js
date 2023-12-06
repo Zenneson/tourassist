@@ -18,7 +18,7 @@ import {
   Grid,
   Anchor,
 } from "@mantine/core";
-import { useIntersection, useSessionStorage } from "@mantine/hooks";
+import { useIntersection, useLocalStorage } from "@mantine/hooks";
 import { IconReload, IconShare3 } from "@tabler/icons-react";
 import { useUser } from "../../libs/context";
 import { timeSince } from "../../libs/custom";
@@ -43,7 +43,7 @@ export default function Donations(props) {
   const [donationsData, setDonationsData] = useState([]);
 
   const [isClient, setIsClient] = useState(false);
-  const [tripData, setTripData] = useSessionStorage({
+  const [tripData, setTripData] = useLocalStorage({
     key: "tripData",
     defaultValue: [],
   });

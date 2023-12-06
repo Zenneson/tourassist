@@ -8,7 +8,7 @@ import {
   CheckIcon,
   Group,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import { IconCheckbox } from "@tabler/icons-react";
 import classes from "./multiSelect.module.css";
 
@@ -34,7 +34,7 @@ export function MultiSelect() {
 
   const [search, setSearch] = useState("");
   const [data, setData] = useState(tripTypes);
-  const [value, setValue] = useSessionStorage({
+  const [value, setValue] = useLocalStorage({
     key: "tripTypes",
     defaultValue: [],
   });

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { collectionGroup, getDocs } from "firebase/firestore";
 import { firestore } from "../libs/firebase";
-import { useSessionStorage } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import useSWR from "swr";
 import {
   useComputedColorScheme,
@@ -114,7 +114,7 @@ export default function Trippage(props) {
     isValidating,
   } = useSWR(title, fireFetcher);
 
-  const [tripData, setTripData] = useSessionStorage({
+  const [tripData, setTripData] = useLocalStorage({
     key: "tripData",
     defaultValue: props.trip,
   });
@@ -143,17 +143,17 @@ export default function Trippage(props) {
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
   const [isClient, setIsClient] = useState(false);
 
-  const [funds, setFunds] = useSessionStorage({
+  const [funds, setFunds] = useLocalStorage({
     key: "funds",
     defaultValue: 0,
   });
 
-  const [donations, setDonations] = useSessionStorage({
+  const [donations, setDonations] = useLocalStorage({
     key: "donations",
     defaultValue: [],
   });
 
-  const [activeTrip, setActiveTrip] = useSessionStorage({
+  const [activeTrip, setActiveTrip] = useLocalStorage({
     key: "activeTrip",
     defaultValue: [],
   });

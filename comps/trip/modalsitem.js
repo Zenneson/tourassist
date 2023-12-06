@@ -30,7 +30,7 @@ import {
 } from "@mantine/core";
 import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
-import { useSessionStorage } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -161,7 +161,7 @@ export default function ModalsItem(props) {
   };
 
   const DateChanger = () => {
-    const [travelDate, setTravelDate] = useSessionStorage({
+    const [travelDate, setTravelDate] = useLocalStorage({
       key: "travelDate",
       defaultValue: tripData?.travelDate,
     });

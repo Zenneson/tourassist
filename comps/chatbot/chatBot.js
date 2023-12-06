@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { useSpring } from "@react-spring/web";
-import { useSessionStorage, useWindowEvent, mergeRefs } from "@mantine/hooks";
+import { useLocalStorage, useWindowEvent, mergeRefs } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Box,
@@ -29,17 +29,17 @@ export default function ChatBot(props) {
   });
   const dark = computedColorScheme === "dark";
 
-  const [startAnimation, setStartAnimation] = useSessionStorage({
+  const [startAnimation, setStartAnimation] = useLocalStorage({
     key: "startAnimation",
     initialValue: false,
   });
 
-  const [visibleState, setVisibleState] = useSessionStorage({
+  const [visibleState, setVisibleState] = useLocalStorage({
     key: "visibleState",
     initialValue: false,
   });
 
-  const [chatOpened, setChatOpened] = useSessionStorage({
+  const [chatOpened, setChatOpened] = useLocalStorage({
     key: "chatOpened",
     initialValue: false,
   });

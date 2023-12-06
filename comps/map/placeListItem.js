@@ -39,7 +39,7 @@ export default function PlaceListItem(props) {
   const firstLastLetters = (str) => {
     let words = str.split(" ");
     if (words.length === 1) {
-      return words[0][0].toUpperCase();
+      return words[0][0]?.toUpperCase();
     }
     let firstLetter = words[0][0].toUpperCase();
     let lastLetter = words[words.length - 1][0].toUpperCase();

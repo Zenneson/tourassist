@@ -6,7 +6,7 @@ import {
   IconTrash,
   IconRefreshDot,
 } from "@tabler/icons-react";
-import { useDidUpdate, useSessionStorage } from "@mantine/hooks";
+import { useDidUpdate, useLocalStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Title,
@@ -34,9 +34,10 @@ export default function UseTickets(props) {
     placeData,
     setPlaceData,
     startLocale,
+    startCity,
+    startRegion,
     setSavedFormValues,
     disallowEmptyField,
-    handleRoundTrip,
   } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -201,7 +202,9 @@ export default function UseTickets(props) {
             }}
           >
             <Title order={4}>{place.place}</Title>
-            <Text fz={12}>{place.region}</Text>
+            <Text fz={12}>
+              {place.place === place.region ? "" : place.region}
+            </Text>
           </Box>
           <Flex
             gap={10}

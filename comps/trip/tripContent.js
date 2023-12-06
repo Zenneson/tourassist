@@ -21,7 +21,7 @@ import {
   ActionIcon,
   Badge,
 } from "@mantine/core";
-import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
+import { useLocalStorage, useWindowEvent } from "@mantine/hooks";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -68,15 +68,15 @@ export default function TripContent(props) {
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
-  const [tripDesc, setTripDesc] = useSessionStorage({
+  const [tripDesc, setTripDesc] = useLocalStorage({
     key: "tripDesc",
     defaultValue: tripData?.tripDesc,
   });
-  const [travelDate, setTravelDate] = useSessionStorage({
+  const [travelDate, setTravelDate] = useLocalStorage({
     key: "travelDate",
     defaultValue: tripData?.travelDate,
   });
-  const [updatedDesc, setUpdatedDesc] = useSessionStorage({
+  const [updatedDesc, setUpdatedDesc] = useLocalStorage({
     key: "updatedDesc",
     defaultValue: "",
   });

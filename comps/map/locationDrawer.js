@@ -109,7 +109,11 @@ export default function LocationDrawer(props) {
   }, [area, oldArea]);
 
   const closeLocationDrawer = () => {
-    if (prevArea.label === "") {
+    if (
+      prevArea.label === "" ||
+      prevArea.type === "city" ||
+      (prevArea.type === "region" && prevArea.country === "United States")
+    ) {
       resetGlobe();
       return;
     }
@@ -244,12 +248,15 @@ export default function LocationDrawer(props) {
           <Button
             className={classes.locationBtns}
             justify={"left"}
-            fw={700}
+            fw={400}
             variant="filled"
             leftSection={<IconTextPlus size={18} />}
             onClick={() => choosePlace("tour")}
           >
-            TOUR LIST
+            Add to
+            <Text span ml={5} fz={14} fw={700}>
+              TOUR LIST
+            </Text>
           </Button>
         </Button.Group>
         <Button

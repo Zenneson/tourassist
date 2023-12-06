@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
-import { useSessionStorage, useFullscreen } from "@mantine/hooks";
+import { useLocalStorage, useFullscreen } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   useMantineColorScheme,
@@ -21,16 +21,14 @@ import {
   Flex,
   Title,
   Modal,
-  ActionIcon,
   Center,
 } from "@mantine/core";
 import {
+  IconMoon,
   IconLogin,
   IconSearch,
   IconDoorExit,
-  IconInfoCircle,
   IconBrightnessUp,
-  IconMoon,
   IconArrowsMaximize,
   IconArrowsMinimize,
   IconDualScreen,
@@ -70,12 +68,12 @@ export default function MainMenu(props) {
   const [loginModal, setLoginModal] = useState(false);
   const [popoverOpened, setPopoverOpened] = useState(false);
 
-  const [currentTrip, setCurrentTrip] = useSessionStorage({
+  const [currentTrip, setCurrentTrip] = useLocalStorage({
     key: "currentTrip",
     defaultValue: [],
   });
 
-  const [active, setActive] = useSessionStorage({
+  const [active, setActive] = useLocalStorage({
     key: "active",
     defaultValue: -1,
   });
@@ -173,14 +171,6 @@ export default function MainMenu(props) {
   if (router.pathname === "/") {
     return null;
   }
-
-  const ColorSchemeButtonIcon = () => {
-    if (colorScheme === "dark") {
-      return <IconBrightnessUp size={17} />;
-    } else {
-      return <IconMoon size={17} />;
-    }
-  };
 
   return (
     <>
