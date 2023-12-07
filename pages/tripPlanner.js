@@ -3,19 +3,19 @@ import "@mantine/dates/styles.css";
 import { useState, useRef, useEffect } from "react";
 import {
   IconId,
-  IconCheck,
+  IconTags,
+  IconTicket,
   IconListCheck,
   IconChevronUp,
+  IconCalculator,
+  IconLocationPin,
   IconChevronDown,
+  IconChevronRight,
   IconListNumbers,
   IconBuildingBank,
   IconChevronsRight,
-  IconAlertTriangle,
   IconCalendarMonth,
-  IconCalculator,
-  IconInfoCircle,
-  IconTags,
-  IconLocationPin,
+  IconAlertTriangle,
 } from "@tabler/icons-react";
 import {
   useComputedColorScheme,
@@ -35,14 +35,27 @@ import {
   Flex,
   Badge,
   ScrollArea,
+  ActionIcon,
+  Tooltip,
 } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { dateFormat, dateId, saveToDB } from "../libs/custom";
 import { useUser } from "../libs/context";
 import { createFormContext } from "@mantine/form";
+import {
+  noCosts,
+  noTitle,
+  titleIsShort,
+  noDesc,
+  descIsShort,
+  noAccountInfo,
+  createTrip,
+  tripMade,
+  tripFailed,
+} from "../libs/notifications";
 import FirstPanel from "../comps/planner/firstPanel";
 import LoginComp from "../comps/loginComp";
 import TripContent from "../comps/trip/tripContent";
@@ -67,7 +80,7 @@ export default function TripPlanner(props) {
   const router = useRouter();
   const { user } = useUser();
 
-  const [placeData, setPlaceData] = useLocalStorage({
+  const [placeData, setPlaceData] = useSessionStorage({
     key: "places",
     defaultValue: [],
   });
@@ -78,31 +91,31 @@ export default function TripPlanner(props) {
   const startLocaleRef = useRef(null);
   const titleRef = useRef(null);
 
-  const [tripTypes, setTripTypes] = useLocalStorage({
+  const [tripTypes, setTripTypes] = useSessionStorage({
     key: "tripTypes",
     defaultValue: [],
   });
-  const [images, setImages] = useLocalStorage({
+  const [images, setImages] = useSessionStorage({
     key: "images",
     defaultValue: [],
   });
-  const [travelers, setTravelers] = useLocalStorage({
+  const [travelers, setTravelers] = useSessionStorage({
     key: "travelers",
     defaultValue: 1,
   });
-  const [roundTrip, setRoundTrip] = useLocalStorage({
+  const [roundTrip, setRoundTrip] = useSessionStorage({
     key: "roundTrip",
     defaultValue: false,
   });
-  const [plannerTripTitle, setPlannerTripTitle] = useLocalStorage({
+  const [plannerTripTitle, setPlannerTripTitle] = useSessionStorage({
     key: "plannerTripTitle",
     defaultValue: "",
   });
-  const [plannerTripDesc, setPlannerTripDesc] = useLocalStorage({
+  const [plannerTripDesc, setPlannerTripDesc] = useSessionStorage({
     key: "plannerTripDesc",
     defaultValue: "",
   });
-  const [startLocale, setStartLocale] = useLocalStorage({
+  const [startLocale, setStartLocale] = useSessionStorage({
     key: "startLocale",
     defaultValue: "",
   });
@@ -120,7 +133,7 @@ export default function TripPlanner(props) {
     splitLocale(startLocale)[1] || ""
   );
 
-  const [savedFormValues, setSavedFormValues] = useLocalStorage({
+  const [savedFormValues, setSavedFormValues] = useSessionStorage({
     key: "formValues",
     defaultValue: {
       places: placeData.map((place) => ({
@@ -135,7 +148,7 @@ export default function TripPlanner(props) {
   });
 
   const handleRoundTrip = () => {
-    if (placeData.length > 1 && startLocale !== "") {
+    if (placeData.length > 0 && startLocale !== "") {
       let tempData = JSON.parse(JSON.stringify(placeData));
       const lastIndex = tempData.length - 1;
       const lastPlace = tempData[lastIndex];
@@ -143,12 +156,12 @@ export default function TripPlanner(props) {
 
       if (roundTrip) {
         if (isReturnFlight) {
-          // Update the last place if it doesn't match startLocale
+          // Update the last place if it doesn't match startLocale or if place is empty
           let lastPlaceLocale = `${lastPlace.place}, ${lastPlace.region}`;
-          if (startLocale !== lastPlaceLocale) {
+          if (startLocale !== lastPlaceLocale || lastPlace.place === "") {
             tempData[lastIndex] = {
-              place: startCity || lastPlace.place || "",
-              region: startRegion || lastPlace.region || "",
+              place: startCity,
+              region: startRegion,
               returnFlight: true,
               costs: { flight: 0 },
             };
@@ -157,14 +170,14 @@ export default function TripPlanner(props) {
           // Add a return flight if it doesn't exist
           tempData.push({
             place: startCity,
-            region: startRegion || "",
+            region: startRegion,
             returnFlight: true,
             costs: { flight: 0 },
           });
         }
       } else if (isReturnFlight) {
         // Remove the return flight for a one-way trip
-        tempData.splice(lastIndex, 1);
+        tempData.pop();
       }
 
       setPlaceData(tempData);
@@ -172,9 +185,7 @@ export default function TripPlanner(props) {
   };
 
   useEffect(() => {
-    if (placeData.length !== 0) {
-      handleRoundTrip();
-    }
+    handleRoundTrip();
   }, [roundTrip]);
 
   const form = useForm({
@@ -217,93 +228,6 @@ export default function TripPlanner(props) {
         region: item.region,
       };
     });
-  };
-
-  const placeExists = {
-    title: "Already set as destination",
-    message: `${startLocale} is set as a destination. Please choose another location.`,
-    color: "orange",
-    icon: <IconAlertTriangle size={17} />,
-    autoClose: 2500,
-  };
-
-  const noCosts = {
-    title: "Trip Cost Missing",
-    message: "Add your trip costs.",
-    color: "red",
-    icon: <IconAlertTriangle size={17} />,
-    autoClose: 2500,
-  };
-
-  const noTitle = {
-    title: "Missing Trip Title",
-    message: "Please provide a title for your trip.",
-    color: "red",
-    icon: <IconAlertTriangle size={17} />,
-    autoClose: 2500,
-  };
-
-  const titleIsShort = {
-    title: "Trip Title is Short",
-    message: "Please provide a longer Title for your trip.",
-    color: "orange",
-    icon: <IconAlertTriangle size={17} />,
-    autoClose: 2500,
-  };
-
-  const noDesc = {
-    title: "Add details about your trip",
-    message: "Please provide a description of your trip below.",
-    color: "red",
-    icon: <IconAlertTriangle size={17} />,
-    autoClose: 2500,
-  };
-
-  const descIsShort = {
-    title: "Description is Short",
-    message: "Please provide more information about your trip.",
-    color: "orange",
-    icon: <IconAlertTriangle size={17} />,
-    autoClose: 2500,
-  };
-
-  const noAccountInfo = {
-    title: "Account Information Required",
-    message: "Please provide your account information below.",
-    color: "orange",
-    icon: <IconAlertTriangle size={17} />,
-    autoClose: 2500,
-  };
-
-  const createTrip = {
-    id: "creating-trip",
-    title: "Creating Trip Campaign...",
-    message: "Please wait while we create your trip campaign.",
-    color: "green",
-    loading: true,
-    withCloseButton: false,
-    autoClose: false,
-  };
-
-  const tripMade = {
-    id: "creating-trip",
-    title: "Trip Campaign Created!",
-    message: "Welcome to your trip Campaign!",
-    color: "green",
-    loading: false,
-    autoClose: 5000,
-    icon: <IconCheck size={17} />,
-  };
-
-  const tripFailed = {
-    id: "creating-trip",
-    title: "Failed to Create Trip Campaign",
-    message:
-      "There was an error while creating your trip campaign. Please try again later.",
-    color: "red",
-    loading: false,
-    autoClose: 5000,
-    icon: <IconCheck size={17} />,
   };
 
   const generateTripId = () => {
@@ -425,6 +349,14 @@ export default function TripPlanner(props) {
     return value !== "";
   };
 
+  const placeExists = {
+    title: "Already set as destination",
+    message: `${startLocale} is set as a destination. Please choose another location.`,
+    color: "orange",
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
+  };
+
   return (
     <FormProvider form={form}>
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
@@ -500,7 +432,6 @@ export default function TripPlanner(props) {
                         savedFormValues={savedFormValues}
                         setSavedFormValues={setSavedFormValues}
                         disallowEmptyField={disallowEmptyField}
-                        handleRoundTrip={handleRoundTrip}
                       />
                     </Box>
                   </motion.div>
@@ -700,7 +631,7 @@ export default function TripPlanner(props) {
                     mb={10}
                     onClick={prevStep}
                   >
-                    <IconChevronUp />
+                    <IconChevronUp stroke={3} />
                   </Button>
                 )}
                 {startLocale && travelDates && (
@@ -711,7 +642,7 @@ export default function TripPlanner(props) {
                     variant={"filled"}
                     onClick={changeNextStep}
                   >
-                    {active === 3 ? "DONE" : <IconChevronDown />}
+                    {active === 3 ? "DONE" : <IconChevronDown stroke={3} />}
                   </Button>
                 )}
               </Box>
@@ -728,16 +659,37 @@ export default function TripPlanner(props) {
         lockScroll={false}
         size={350}
         padding={50}
+        trapFocus={false}
         onClose={() => setShowTripInfo(false)}
         scrollAreaComponent={ScrollArea.Autosize}
       >
-        <Group opacity={0.05} mt={50} mb={10} gap={7}>
-          <IconListNumbers size={18} />
-          <Title order={6}>Trip Details</Title>
+        <Group
+          gap={7}
+          mt={50}
+          mb={20}
+          ml={-20}
+          justify="space-between"
+          style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.08)" }}
+        >
+          <Flex opacity={0.08} gap={5}>
+            <IconListNumbers size={18} />
+            <Title order={6}>Trip Details</Title>
+          </Flex>
+          <Tooltip label="Close Panel">
+            <ActionIcon
+              className={classes.tripDetailsCloseBtn}
+              variant="transparent"
+              ta={"center"}
+              c={dark ? "#fff" : "#000"}
+              onClick={() => setShowTripInfo(false)}
+            >
+              <IconChevronRight stroke={4} size={18} />
+            </ActionIcon>
+          </Tooltip>
         </Group>
-        <Flex align={"center"} gap={10}>
-          <IconInfoCircle size={18} opacity={0.3} />
-          <Divider label="Locations" labelPosition="left" mb={10} />
+        <Flex align={"center"} gap={10} mb={10}>
+          <IconLocationPin size={18} opacity={0.3} />
+          <Divider label="Trip Locations" labelPosition="left" w={"100%"} />
         </Flex>
         <Stack gap={3}>
           <PlaceTimeline
@@ -751,9 +703,9 @@ export default function TripPlanner(props) {
             <>
               {startLocale && travelDates && (
                 <Flex align={"center"} gap={10}>
-                  <IconLocationPin size={18} opacity={0.3} />
+                  <IconTicket size={18} opacity={0.3} />
                   <Divider
-                    label="Info."
+                    label="Trip Info."
                     labelPosition="left"
                     my={10}
                     w={"100%"}
@@ -789,7 +741,12 @@ export default function TripPlanner(props) {
           {tripTypes.length > 0 && (
             <Flex align={"center"} gap={10}>
               <IconTags size={18} opacity={0.3} />
-              <Divider my={10} label="Tags" labelPosition="left" />
+              <Divider
+                label="Trip Tags"
+                labelPosition="left"
+                w={"100%"}
+                my={10}
+              />
             </Flex>
           )}
           {tripTypes.map((type, index) => {
@@ -807,17 +764,6 @@ export default function TripPlanner(props) {
             );
           })}
         </Stack>
-        <Button
-          variant="default"
-          ta={"center"}
-          fullWidth
-          mt={10}
-          c={dark ? "#fff" : "#000"}
-          size={"xs"}
-          onClick={() => setShowTripInfo(false)}
-        >
-          CLOSE
-        </Button>
       </Drawer>
     </FormProvider>
   );

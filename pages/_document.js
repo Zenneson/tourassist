@@ -8,7 +8,7 @@ export default function Document() {
         <ColorSchemeScript defaultColorScheme="dark" />
         <link rel="icon" href="/favicon.ico" />
         <link
-          href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"
+          href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css"
           rel="stylesheet"
         />
       </Head>

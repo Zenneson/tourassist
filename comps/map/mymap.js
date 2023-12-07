@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import centerOfMass from "@turf/center-of-mass";
-import { useLocalStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Center,
@@ -71,7 +71,7 @@ export default function Mymap(props) {
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
   const [placeLocation, setPlaceLocation] = useState({});
-  const [places, setPlaces] = useLocalStorage({
+  const [places, setPlaces] = useSessionStorage({
     key: "places",
     defaultValue: [],
   });
@@ -193,10 +193,10 @@ export default function Mymap(props) {
       pitch = 25;
     }
     if (type === "city" || (country !== "United States" && type === "region")) {
-      zoom = 15;
-      pitch = 70;
-      if (label === "District of Columbia") {
-        zoom = 10;
+      zoom = 15.25;
+      pitch = 68;
+      if (label.includes("District of Columbia")) {
+        zoom = 12;
       }
     }
     return { zoom, pitch };
@@ -204,6 +204,7 @@ export default function Mymap(props) {
 
   const goToLocation = (place) => {
     const { zoom, pitch } = calcView(place);
+
     const coords =
       place.type === "country" ? getNewCenter(place).newCenter : place.center;
 
@@ -220,9 +221,8 @@ export default function Mymap(props) {
     place.type === "country" &&
       mapRef.current.flyTo({
         center: newCoords,
-        zoom: 3,
+        zoom: 5,
         duration: 800,
-        pitch: 0,
       });
 
     const moveTime = place.type === "country" ? 400 : 200;

@@ -7,8 +7,6 @@ import {
   IconHeartHandshake,
   IconCurrencyDollar,
   IconCalendarEvent,
-  IconAlertTriangle,
-  IconCheck,
 } from "@tabler/icons-react";
 import {
   Box,
@@ -28,9 +26,19 @@ import {
   Textarea,
   Checkbox,
 } from "@mantine/core";
+import {
+  addUpdateTitle,
+  addUpdateContent,
+  postingUpdate,
+  noDonation,
+  updatePosted,
+  maxReached,
+  noDonorName,
+  paymentError,
+} from "../../libs/notifications";
 import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
-import { useLocalStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -82,74 +90,6 @@ export default function ModalsItem(props) {
 
   const { title } = router.query;
 
-  const addUpdateTitle = {
-    color: "orange",
-    icon: <IconAlertTriangle size={20} />,
-    title: "Please add a title",
-    autoClose: 3000,
-  };
-
-  const addUpdateContent = {
-    color: "orange",
-    icon: <IconAlertTriangle size={20} />,
-    title: "You have not added any text to your update",
-    autoClose: 3000,
-  };
-
-  const postingUpdate = {
-    id: "postingUpdate",
-    color: "green",
-    icon: <IconCheck size={20} />,
-    title: "Update posted!",
-    autoClose: false,
-    loading: true,
-    withCloseButton: false,
-  };
-
-  const noDonation = {
-    color: "orange",
-    icon: <IconAlertTriangle size={20} />,
-    title: "Please add a donation amount",
-    autoClose: 3000,
-  };
-
-  const updatePosted = {
-    id: "postingUpdate",
-    color: "green",
-    icon: <IconCheck size={20} />,
-    title: "Update posted!",
-    autoClose: 3000,
-    loading: false,
-    withCloseButton: true,
-  };
-
-  const maxReached = {
-    color: "orange",
-    icon: <IconAlertTriangle size={20} />,
-    title: "$5,000 is the maximum donation amount",
-    autoClose: 3000,
-  };
-
-  const noDonorName = {
-    color: "orange",
-    icon: <IconAlertTriangle size={20} />,
-    title: "Please add your name or choose to stay anonymous",
-    autoClose: 3000,
-  };
-
-  const paymentError = (error) => {
-    return {
-      color: "orange",
-      title: "Payment Error",
-      message: "Please try again. Error: " + error.message,
-      autoClose: false,
-      icon: <IconAlertTriangle size={20} />,
-      style: {
-        backgroundColor: dark ? "#2e2e2e" : "#fff",
-      },
-    };
-  };
-
   const processingFee = () => {
     return Math.ceil(Math.min(donationAmount * 0.03, 150)).toFixed(2);
   };
@@ -161,7 +101,7 @@ export default function ModalsItem(props) {
   };
 
   const DateChanger = () => {
-    const [travelDate, setTravelDate] = useLocalStorage({
+    const [travelDate, setTravelDate] = useSessionStorage({
       key: "travelDate",
       defaultValue: tripData?.travelDate,
     });
@@ -465,14 +405,14 @@ export default function ModalsItem(props) {
       })
       .catch((error) => {
         closeAltModal();
-        notifications.show(paymentError(error));
+        notifications.show(paymentError(error, dark));
         console.error(error);
       });
   };
 
   const errorPayment = (error) => {
     closeAltModal();
-    notifications.show(paymentError(error));
+    notifications.show(paymentError(error, dark));
     console.log(error);
   };
 

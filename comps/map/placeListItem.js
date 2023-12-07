@@ -129,7 +129,7 @@ export default function PlaceListItem(props) {
                   {place}
                 </Text>
                 <Text size="xs" opacity={0.5}>
-                  {region}
+                  {place !== region && region}
                 </Text>
               </Grid.Col>
               <Grid.Col span="content" pr={10}>

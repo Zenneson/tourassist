@@ -1,3 +1,4 @@
+import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useEffect } from "react";
 import Map, { Marker, Source, Layer, Popup } from "react-map-gl";
 import {
@@ -119,20 +120,10 @@ export default function MapComp(props) {
     };
   };
 
-  const setLightProperties = (dark) => {
-    return {
-      anchor: "viewport",
-      color: dark ? "rgba(255, 255, 255, 0.75)" : "rgba(255, 255, 255, 1)",
-      intensity: 0.5,
-    };
-  };
-
   useEffect(() => {
     if (fullMapRef && mapLoaded) {
       const fogProps = getFogProperties(dark);
       fullMapRef.setFog(fogProps);
-      const lightProps = setLightProperties(dark);
-      fullMapRef.setLight(lightProps);
     }
   }, [dark, fullMapRef, mapLoaded]);
 
@@ -184,7 +175,7 @@ export default function MapComp(props) {
       }}
       doubleClickZoom={false}
       interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-      mapStyle={"mapbox://styles/zenneson/clptl59r3000l01qmhncd6jfx"}
+      mapStyle={"mapbox://styles/zenneson/clpunju1p00vk01qu24tl44en"}
       mapboxAccessToken={mapboxAccessToken}
       style={{ width: "100%", height: "100%", pointerEvents: isCity && "none" }}
     >
@@ -294,6 +285,10 @@ export default function MapComp(props) {
           type="fill"
           paint={{
             "fill-color": "rgba(0,0,0,0)",
+            "fill-opacity-transition": {
+              duration: 500,
+              delay: 0,
+            },
           }}
         />
         <Layer
@@ -310,6 +305,10 @@ export default function MapComp(props) {
             "fill-color": `${
               dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
             }`,
+            "fill-opacity-transition": {
+              duration: 500,
+              delay: 0,
+            },
           }}
         />
         <Layer
@@ -331,6 +330,10 @@ export default function MapComp(props) {
           source="states-boundaries"
           paint={{
             "fill-color": "rgba(0,0,0,0)",
+            "fill-opacity-transition": {
+              duration: 500,
+              delay: 0,
+            },
           }}
           filter={
             !showStates
@@ -345,6 +348,10 @@ export default function MapComp(props) {
           paint={{
             "line-color": "rgba(255, 255, 255, 1)",
             "line-width": 4,
+            "line-opacity-transition": {
+              duration: 500,
+              delay: 0,
+            },
           }}
           filter={
             !showStates
@@ -362,6 +369,10 @@ export default function MapComp(props) {
             "fill-color": `${
               dark ? " rgba(13, 64, 130, 0.8)" : "rgba(0, 232, 250, 0.8)"
             }`,
+            "fill-opacity-transition": {
+              duration: 500,
+              delay: 0,
+            },
           }}
           filter={["==", "NAME", area.label]}
         />
@@ -372,6 +383,10 @@ export default function MapComp(props) {
           paint={{
             "line-color": "rgba(255, 255, 255, 1)",
             "line-width": 6,
+            "line-opacity-transition": {
+              duration: 500,
+              delay: 0,
+            },
           }}
           filter={["==", "NAME", area.label]}
         />

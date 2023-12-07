@@ -6,7 +6,7 @@ import {
   IconTrash,
   IconRefreshDot,
 } from "@tabler/icons-react";
-import { useDidUpdate, useLocalStorage } from "@mantine/hooks";
+import { useDidUpdate, useSessionStorage } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Title,
@@ -33,9 +33,6 @@ export default function UseTickets(props) {
     roundTrip,
     placeData,
     setPlaceData,
-    startLocale,
-    startCity,
-    startRegion,
     setSavedFormValues,
     disallowEmptyField,
   } = props;
@@ -295,7 +292,7 @@ export default function UseTickets(props) {
                   hideControls={true}
                   leftSection={<IconCurrencyDollar />}
                 />
-                {`${place.place}, ${place.region}` !== startLocale && (
+                {!place.returnFlight && (
                   <ActionIcon
                     className={classes.removeCostButton}
                     py={20}
@@ -333,7 +330,7 @@ export default function UseTickets(props) {
           >
             <PopoverTarget>
               <Button
-                className={classes.brightenButton}
+                className={classes.newCostBtn}
                 size="xs"
                 variant="default"
                 opacity={0.2}
@@ -388,7 +385,7 @@ export default function UseTickets(props) {
               label="Reset Cost Calculator"
             >
               <ActionIcon
-                className={classes.brightenButton}
+                className={classes.resetCostCalcBtn}
                 variant="transparent"
                 size="xl"
                 color={dark ? "gray.3" : "gray.7"}

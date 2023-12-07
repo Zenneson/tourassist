@@ -30,7 +30,8 @@
 
 .panelBtns {
   opacity: 0.4;
-  background: light-dark(#2dc7f3, #020202);
+  background: light-dark(#dededf, #020202);
+  color: light-dark(#000, #fff);
 
   &:hover {
     opacity: 0.8;
@@ -88,4 +89,14 @@
 
 .stepperCompleteIcon {
   background-color: light-dark(#2dc7f3, #0d3f82);
+}
+
+.tripDetailsCloseBtn {
+  opacity: 0.2;
+  transform: scale(0.8);
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

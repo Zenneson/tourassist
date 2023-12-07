@@ -23,10 +23,23 @@
   }
 }
 
-.brightenButton {
-  transition: all 250ms ease-in-out;
-  opacity: light-dark(0.7, 0.1);
+.newCostBtn,
+.resetCostCalcBtn {
+  opacity: light-dark(0.3, 0.1);
+
   &:hover {
     opacity: 1;
+  }
+}
+
+.newCostBtn {
+  transition: all 250ms ease-in-out;
+}
+
+.resetCostCalcBtn {
+  transition: all 500ms ease-in-out;
+
+  &:hover {
+    transform: rotate(180deg);
   }
 }

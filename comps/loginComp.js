@@ -23,12 +23,19 @@ import {
   Group,
   Checkbox,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import {
+  newAccount,
+  emailInvalid,
+  alreadyExists,
+  userNotFound,
+  wrongPassword,
+} from "../libs/notifications";
+import { IconX, IconCheck, IconUserCircle } from "@tabler/icons-react";
 import { useToggle } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconX, IconCheck, IconUserCircle } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { loggedIn } from "../libs/custom";
+import { useForm } from "@mantine/form";
 import { useUser } from "../libs/context";
 import classes from "./loginComp.module.css";
 
@@ -142,41 +149,6 @@ export default function LoginComp(props) {
     },
   });
 
-  const newAccount = {
-    color: "green",
-    icon: <IconCheck size={20} />,
-    title: "Welcome",
-    message: `${form.values.firstName} ${form.values.lastName}'s account has been created.`,
-  };
-
-  const emailInvalid = {
-    color: "red",
-    icon: <IconX size={20} />,
-    title: "Invalid Email",
-    message: `${form.values.email} is not a valid email address.`,
-  };
-
-  const alreadyExists = {
-    color: "red",
-    icon: <IconX size={20} />,
-    title: "Email already in use",
-    message: `${form.values.email} is linked to another account.`,
-  };
-
-  const userNotFound = {
-    color: "red",
-    icon: <IconX size={20} />,
-    title: "User not found",
-    message: `An account for ${form.values.email} does not exist.`,
-  };
-
-  const wrongPassword = {
-    color: "red",
-    icon: <IconX size={20} />,
-    title: "Wrong password",
-    message: `The password you entered is incorrect.`,
-  };
-
   const addUser = async (user) => {
     await setDoc(doc(firestore, "users", user.email), {
       firstName: form.values.firstName,
@@ -184,7 +156,7 @@ export default function LoginComp(props) {
       email: form.values.email,
       uid: user.uid,
     });
-    notifications.show(newAccount);
+    notifications.show(newAccount(form));
     if (router.pathname !== "/tripPlanner") {
       router.push("/map");
     }
@@ -222,8 +194,8 @@ export default function LoginComp(props) {
         .catch((error) => {
           showError(
             error,
-            emailInvalid,
-            alreadyExists,
+            emailInvalid(form),
+            alreadyExists(form),
             "auth/invalid-email",
             "auth/email-already-in-use"
           );
@@ -238,7 +210,7 @@ export default function LoginComp(props) {
         .catch((error) => {
           showError(
             error,
-            userNotFound,
+            userNotFound(form),
             wrongPassword,
             "auth/user-not-found",
             "auth/wrong-password"

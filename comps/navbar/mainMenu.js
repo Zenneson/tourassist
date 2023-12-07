@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../libs/firebase";
-import { useLocalStorage, useFullscreen } from "@mantine/hooks";
+import { useSessionStorage, useFullscreen } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   useMantineColorScheme,
@@ -68,12 +68,12 @@ export default function MainMenu(props) {
   const [loginModal, setLoginModal] = useState(false);
   const [popoverOpened, setPopoverOpened] = useState(false);
 
-  const [currentTrip, setCurrentTrip] = useLocalStorage({
+  const [currentTrip, setCurrentTrip] = useSessionStorage({
     key: "currentTrip",
     defaultValue: [],
   });
 
-  const [active, setActive] = useLocalStorage({
+  const [active, setActive] = useSessionStorage({
     key: "active",
     defaultValue: -1,
   });

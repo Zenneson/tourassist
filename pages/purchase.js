@@ -13,7 +13,7 @@ import {
   Box,
   Badge,
 } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
+import { useSessionStorage } from "@mantine/hooks";
 import { addComma } from "../libs/custom";
 import { IconListDetails } from "@tabler/icons-react";
 import classes from "./purchase.module.css";
@@ -22,12 +22,12 @@ export default function Purchase(props) {
   const router = useRouter();
   const [tripLoaded, setTripLoaded] = useState(false);
 
-  const [funds, setFunds] = useLocalStorage({
+  const [funds, setFunds] = useSessionStorage({
     key: "funds",
     defaultValue: 0,
   });
 
-  const [activeTrip, setActiveTrip] = useLocalStorage({
+  const [activeTrip, setActiveTrip] = useSessionStorage({
     key: "activeTrip",
     defaultValue: [],
   });

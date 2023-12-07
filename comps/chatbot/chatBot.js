@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { useSpring } from "@react-spring/web";
-import { useLocalStorage, useWindowEvent, mergeRefs } from "@mantine/hooks";
+import { useSessionStorage, useWindowEvent, mergeRefs } from "@mantine/hooks";
 import {
   useComputedColorScheme,
   Box,
@@ -9,7 +9,6 @@ import {
   Text,
   Title,
   Flex,
-  FocusTrap,
   Group,
   ActionIcon,
   Button,
@@ -29,17 +28,17 @@ export default function ChatBot(props) {
   });
   const dark = computedColorScheme === "dark";
 
-  const [startAnimation, setStartAnimation] = useLocalStorage({
+  const [startAnimation, setStartAnimation] = useSessionStorage({
     key: "startAnimation",
     initialValue: false,
   });
 
-  const [visibleState, setVisibleState] = useLocalStorage({
+  const [visibleState, setVisibleState] = useSessionStorage({
     key: "visibleState",
     initialValue: false,
   });
 
-  const [chatOpened, setChatOpened] = useLocalStorage({
+  const [chatOpened, setChatOpened] = useSessionStorage({
     key: "chatOpened",
     initialValue: false,
   });
@@ -226,13 +225,11 @@ export default function ChatBot(props) {
           duration: 500,
         }}
       >
-        <FocusTrap active={chatOpened}>
-          <Textarea
-            classNames={{ input: classes.chatBotTextInput }}
-            minRows={3}
-            placeholder="Prompt..."
-          />
-        </FocusTrap>
+        <Textarea
+          classNames={{ input: classes.chatBotTextInput }}
+          minRows={3}
+          placeholder="Prompt..."
+        />
       </Dialog>
     </>
   );
