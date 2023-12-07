@@ -56,7 +56,7 @@ Tasks:
 	☐ Manage Server Side Rendering
 	☐ Add Pagination to updates
 	☐ Change Purchase page to look more like Duffel tutorial
-	☐ Strong Performance Testing
+	☐ Strong Performance Testing and Optimization: https://discourse.threejs.org/t/help-optimizing-my-mapbox-like-map-implementation/8131 / https://aysha.me/2020/04/tips-on-improving-the-map-rendering-performance-of-mapbox/ 
 	☐ Review what someone who is not logged in sees
 	☐ Zip up Authentication
 	☐ Figure out rendering strategy for Nextjs
