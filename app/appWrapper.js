@@ -1,12 +1,12 @@
 "use client";
+import { AreaProvider, StateProvider, UserProvider } from "@libs/context";
+import { tourTheme } from "@libs/tourTheme";
 import { AppShell, MantineProvider, ScrollArea } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { usePathname, useRouter } from "next/navigation";
 import ChatBot from "./comps/chatbot/chatBot";
 import MainMenu from "./comps/navbar/mainMenu";
 import SearchModal from "./comps/navbar/searchModal";
-import { AreaProvider, StateProvider, UserProvider } from "./libs/context";
-import { tourTheme } from "./libs/tourTheme";
 
 export default function AppWrapper({ children }) {
   const pathname = usePathname();
