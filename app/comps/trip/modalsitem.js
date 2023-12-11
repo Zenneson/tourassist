@@ -1,56 +1,56 @@
 "use client";
-import "@mantine/tiptap/styles.css";
-import "@mantine/dates/styles.css";
-import { useState, useEffect, useRef } from "react";
-import { mutate } from "swr";
+import { DuffelPayments } from "@duffel/components";
+import { dateFormat, formatDonation } from "@libs/custom";
+import { firestore } from "@libs/firebase";
 import {
-  IconHeartHandshake,
-  IconCurrencyDollar,
-  IconCalendarEvent,
-} from "@tabler/icons-react";
+  addUpdateContent,
+  addUpdateTitle,
+  maxReached,
+  noDonation,
+  noDonorName,
+  paymentError,
+  postingUpdate,
+  updatePosted,
+} from "@libs/notifications";
 import {
   Box,
   Button,
-  Modal,
-  Flex,
-  Divider,
-  CloseButton,
-  Stack,
-  Title,
-  Text,
-  LoadingOverlay,
-  Group,
-  NumberInput,
-  Input,
-  ScrollArea,
-  Textarea,
   Checkbox,
+  CloseButton,
+  Divider,
+  Flex,
+  Group,
+  Input,
+  LoadingOverlay,
+  Modal,
+  NumberInput,
+  ScrollArea,
+  Stack,
+  Text,
+  Textarea,
+  Title,
 } from "@mantine/core";
-import {
-  addUpdateTitle,
-  addUpdateContent,
-  postingUpdate,
-  noDonation,
-  updatePosted,
-  maxReached,
-  noDonorName,
-  paymentError,
-} from "../../libs/notifications";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../../libs/firebase";
+import { DateInput } from "@mantine/dates";
+import "@mantine/dates/styles.css";
 import { useSessionStorage } from "@mantine/hooks";
-import { RichTextEditor, Link } from "@mantine/tiptap";
+import { notifications } from "@mantine/notifications";
+import { Link, RichTextEditor } from "@mantine/tiptap";
+import "@mantine/tiptap/styles.css";
+import {
+  IconCalendarEvent,
+  IconCurrencyDollar,
+  IconHeartHandshake,
+} from "@tabler/icons-react";
+import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
+import TextStyle from "@tiptap/extension-text-style";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import TextStyle from "@tiptap/extension-text-style";
-import TextAlign from "@tiptap/extension-text-align";
-import Placeholder from "@tiptap/extension-placeholder";
-import { DateInput } from "@mantine/dates";
-import TripContent from "./tripContent";
-import { dateFormat, formatDonation } from "../../libs/custom";
-import { notifications } from "@mantine/notifications";
-import { DuffelPayments } from "@duffel/components";
+import { doc, updateDoc } from "firebase/firestore";
+import { useEffect, useRef, useState } from "react";
+import { mutate } from "swr";
 import classes from "./styles/modalsItem.module.css";
+import TripContent from "./tripContent";
 
 export default function ModalsItem(props) {
   const {

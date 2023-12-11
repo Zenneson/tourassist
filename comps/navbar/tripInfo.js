@@ -1,45 +1,45 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import {
-  IconAppWindow,
-  IconCurrencyDollar,
-  IconChevronDown,
-  IconSlash,
-} from "@tabler/icons-react";
-import { useSessionStorage } from "@mantine/hooks";
 import {
   addComma,
-  daysBefore,
-  sumAmounts,
-  parseCustomDate,
-  formatDateFullMonth,
   dateRangeFunc,
-} from "../../libs/custom";
+  daysBefore,
+  formatDateFullMonth,
+  parseCustomDate,
+  sumAmounts,
+} from "@libs/custom";
 import {
-  useComputedColorScheme,
   Box,
   Button,
   Center,
+  Divider,
   Flex,
   Group,
-  Title,
-  Text,
-  Divider,
+  LoadingOverlay,
   Progress,
   Select,
-  LoadingOverlay,
+  Text,
+  Title,
+  useComputedColorScheme,
 } from "@mantine/core";
-import { Bar } from "react-chartjs-2";
-import Donations from "../trip/donations";
+import { useSessionStorage } from "@mantine/hooks";
 import {
-  Chart as ChartJS,
+  IconAppWindow,
+  IconChevronDown,
+  IconCurrencyDollar,
+  IconSlash,
+} from "@tabler/icons-react";
+import {
+  BarElement,
   CategoryScale,
+  Chart as ChartJS,
   LinearScale,
   PointElement,
-  BarElement,
   Tooltip,
 } from "chart.js";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Bar } from "react-chartjs-2";
+import Donations from "../trip/donations";
 import classes from "./tripInfo.module.css";
 
 export default function TripInfo(props) {

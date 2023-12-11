@@ -1,45 +1,44 @@
 "use client";
-import { useState, useRef } from "react";
+import { addAtSymbol, formatPhoneNumber, updateField } from "@libs/custom";
 import {
-  useComputedColorScheme,
   ActionIcon,
   Box,
   Button,
-  Flex,
-  Input,
-  Group,
-  Title,
-  Switch,
-  Tooltip,
-  TextInput,
-  Popover,
-  PopoverTarget,
-  PopoverDropdown,
   Divider,
+  Flex,
+  Group,
   HoverCard,
+  Input,
+  Popover,
+  PopoverDropdown,
+  PopoverTarget,
+  Switch,
   Text,
+  TextInput,
+  Title,
+  Tooltip,
+  useComputedColorScheme,
 } from "@mantine/core";
+import { useWindowEvent } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import {
-  IconKey,
-  IconX,
-  IconCheck,
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandTwitter,
+  IconBuildingBank,
+  IconCheck,
   IconCirclePlus,
   IconDeviceSim1,
   IconDeviceSim2,
-  IconPhone,
-  IconPencil,
-  IconBuildingBank,
   IconInfoCircle,
+  IconKey,
+  IconPencil,
+  IconPhone,
+  IconX,
 } from "@tabler/icons-react";
-import { notifications } from "@mantine/notifications";
-import { useWindowEvent } from "@mantine/hooks";
-import { formatPhoneNumber, addAtSymbol, updateField } from "../../libs/custom";
+import { useRef, useState } from "react";
 import classes from "./accountInfo.module.css";
-import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function AccountInfo(props) {
   const { user } = props;

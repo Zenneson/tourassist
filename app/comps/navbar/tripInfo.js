@@ -1,5 +1,13 @@
 "use client";
 import {
+  addComma,
+  dateRangeFunc,
+  daysBefore,
+  formatDateFullMonth,
+  parseCustomDate,
+  sumAmounts,
+} from "@libs/custom";
+import {
   Box,
   Button,
   Center,
@@ -31,14 +39,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import {
-  addComma,
-  dateRangeFunc,
-  daysBefore,
-  formatDateFullMonth,
-  parseCustomDate,
-  sumAmounts,
-} from "../../libs/custom";
 import Donations from "../trip/donations";
 import classes from "./styles/tripInfo.module.css";
 

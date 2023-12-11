@@ -1,8 +1,8 @@
+import { useStateContext } from "@libs/context";
 import { useComputedColorScheme } from "@mantine/core";
 import { Spotlight } from "@mantine/spotlight";
 import "@mantine/spotlight/styles.css";
 import { IconSearch, IconSlashes } from "@tabler/icons-react";
-import { useStateContext } from "../../libs/context";
 import classes from "./styles/searchModal.module.css";
 
 export default function SearchModal() {

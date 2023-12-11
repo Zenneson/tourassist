@@ -1,9 +1,9 @@
 "use client";
+import { useAreaContext } from "@libs/context";
+import { addEllipsis } from "@libs/custom";
 import { Box, Combobox, InputBase, Text, useCombobox } from "@mantine/core";
 import { IconWorldSearch } from "@tabler/icons-react";
 import React, { useEffect, useRef, useState } from "react";
-import { useAreaContext } from "../../libs/context";
-import { addEllipsis } from "../../libs/custom";
 import classes from "../styles/mymap.module.css";
 
 const AutoCompItem = React.forwardRef(function AutoCompItem(props, ref) {

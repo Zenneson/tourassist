@@ -1,3 +1,5 @@
+import { useAreaContext } from "@libs/context";
+import { addEllipsis } from "@libs/custom";
 import {
   Box,
   Button,
@@ -18,8 +20,6 @@ import {
   IconTextPlus,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useAreaContext } from "../../libs/context";
-import { addEllipsis } from "../../libs/custom";
 import classes from "../styles/locationDrawer.module.css";
 import CustomAutoComplete from "./customAutoComplete";
 

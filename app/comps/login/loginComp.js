@@ -1,4 +1,14 @@
 "use client";
+import { useUser } from "@libs/context";
+import { firestore } from "@libs/firebase";
+import {
+  alreadyExists,
+  emailInvalid,
+  loggedIn,
+  newAccount,
+  userNotFound,
+  wrongPassword,
+} from "@libs/notifications";
 import {
   Anchor,
   Box,
@@ -27,16 +37,6 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useUser } from "../../libs/context";
-import { firestore } from "../../libs/firebase";
-import {
-  alreadyExists,
-  emailInvalid,
-  loggedIn,
-  newAccount,
-  userNotFound,
-  wrongPassword,
-} from "../../libs/notifications";
 import classes from "./styles/loginComp.module.css";
 
 export default function LoginComp(props) {

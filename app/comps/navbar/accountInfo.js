@@ -1,4 +1,5 @@
 "use client";
+import { addAtSymbol, formatPhoneNumber, updateField } from "@libs/custom";
 import {
   ActionIcon,
   Box,
@@ -37,7 +38,6 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { useRef, useState } from "react";
-import { addAtSymbol, formatPhoneNumber, updateField } from "../../libs/custom";
 import classes from "./styles/accountInfo.module.css";
 
 export default function AccountInfo(props) {

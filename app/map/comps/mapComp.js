@@ -1,4 +1,5 @@
 "use client";
+import { useAreaContext, useStateContext } from "@libs/context";
 import {
   Box,
   Button,
@@ -17,7 +18,6 @@ import {
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useState } from "react";
 import Map, { Layer, Marker, Popup, Source } from "react-map-gl";
-import { useAreaContext, useStateContext } from "../../libs/context";
 import classes from "../styles/mapComp.module.css";
 import TourList from "./tourList";
 

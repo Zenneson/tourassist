@@ -1,4 +1,6 @@
 "use client";
+import { useStateContext, useUser } from "@libs/context";
+import { auth, firestore } from "@libs/firebase";
 import {
   Box,
   Button,
@@ -34,8 +36,6 @@ import { collection, getDocs } from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useStateContext, useUser } from "../../libs/context";
-import { auth, firestore } from "../../libs/firebase";
 import LoginComp from "../login/loginComp";
 import ProfileDrawer from "./profileDrawer";
 import classes from "./styles/mainMenu.module.css";

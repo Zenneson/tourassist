@@ -4,6 +4,7 @@ import { tourTheme } from "@libs/tourTheme";
 import { AppShell, MantineProvider, ScrollArea } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import ChatBot from "./comps/chatbot/chatBot";
 import MainMenu from "./comps/navbar/mainMenu";
 import SearchModal from "./comps/navbar/searchModal";
@@ -12,16 +13,16 @@ export default function AppWrapper({ children }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const links = document.querySelectorAll("a");
-  //   links.forEach((link) => {
-  //     const href = link.getAttribute("href");
-  //     if (href && href.startsWith("/")) {
-  //       router.prefetch(href);
-  //       console.log(`Prefetching: ${href}`);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    const links = document.querySelectorAll("a");
+    links.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href && href.startsWith("/")) {
+        router.prefetch(href);
+        console.log(`Prefetching: ${href}`);
+      }
+    });
+  }, []);
 
   return (
     <MantineProvider theme={tourTheme} defaultColorScheme="dark">
@@ -30,7 +31,6 @@ export default function AppWrapper({ children }) {
           <Notifications position="top-center" zIndex={9999} limit={1} />
           <SearchModal />
           <AppShell
-            // key={historyKey}
             transitionDuration={300}
             transitionTimingFunction="ease"
             padding="none"

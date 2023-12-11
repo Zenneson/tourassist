@@ -1,49 +1,49 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/router";
+import { removeImageByName, updateEditedTrip } from "@libs/custom";
 import {
-  useComputedColorScheme,
+  ActionIcon,
   BackgroundImage,
+  Badge,
   Box,
   Button,
   Center,
-  Flex,
   FileButton,
-  Text,
+  Flex,
   Group,
-  Overlay,
-  Stack,
   LoadingOverlay,
   Slider as MantineSlider,
+  Overlay,
+  Stack,
+  Text,
   Title,
-  ActionIcon,
-  Badge,
+  useComputedColorScheme,
 } from "@mantine/core";
-import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import TextStyle from "@tiptap/extension-text-style";
-import TextAlign from "@tiptap/extension-text-align";
-import Placeholder from "@tiptap/extension-placeholder";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import imageCompression from "browser-image-compression";
+import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 import {
+  IconCheck,
   IconChevronLeft,
   IconChevronRight,
+  IconPhoto,
   IconTrash,
   IconUpload,
   IconX,
-  IconCheck,
-  IconPhoto,
 } from "@tabler/icons-react";
-import { notifications } from "@mantine/notifications";
-import { updateEditedTrip, removeImageByName } from "../../libs/custom";
+import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
+import TextStyle from "@tiptap/extension-text-style";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import imageCompression from "browser-image-compression";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import classes from "./styles/tripContent.module.css";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import classes from "./styles/tripContent.module.css";
 
 export default function TripContent(props) {
   let {

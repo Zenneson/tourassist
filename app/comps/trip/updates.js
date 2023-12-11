@@ -1,44 +1,44 @@
-import { useState } from "react";
-import { mutate } from "swr";
+import { firestore } from "@libs/firebase";
 import {
-  useComputedColorScheme,
   ActionIcon,
   Box,
   Button,
   Center,
   Divider,
   Flex,
-  Text,
-  Title,
   Group,
   Menu,
   Modal,
-  Stack,
-  Tooltip,
   Popover,
-  PopoverTarget,
   PopoverDropdown,
+  PopoverTarget,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+  useComputedColorScheme,
 } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandTwitter,
-  IconSourceCode,
   IconBrandWhatsapp,
-  IconShare,
+  IconCheck,
   IconMenu2,
   IconPencil,
-  IconTrash,
-  IconCheck,
-  IconX,
   IconQrcode,
+  IconShare,
+  IconSourceCode,
+  IconTrash,
+  IconX,
 } from "@tabler/icons-react";
 import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../../libs/firebase";
 import { useRouter } from "next/router";
-import { notifications } from "@mantine/notifications";
+import { useState } from "react";
+import { mutate } from "swr";
 import classes from "./styles/updates.module.css";
 
 // import UpdateContent from "./updatecontent";

@@ -1,27 +1,26 @@
-import { useState, useEffect } from "react";
+import { addEllipsis } from "@libs/custom";
 import {
-  useComputedColorScheme,
   Box,
   Button,
   Drawer,
-  NavLink,
   Group,
+  NavLink,
   Select,
   Text,
 } from "@mantine/core";
 import { usePrevious } from "@mantine/hooks";
-import { CustomAutoComplete } from "./mymap";
 import {
   IconArrowBadgeRightFilled,
-  IconChevronRight,
-  IconMapPinSearch,
   IconCaretDownFilled,
+  IconChevronRight,
   IconMapPinFilled,
+  IconMapPinSearch,
   IconPlane,
   IconTextPlus,
 } from "@tabler/icons-react";
-import { addEllipsis } from "../../libs/custom";
+import { useEffect, useState } from "react";
 import classes from "./locationDrawer.module.css";
+import { CustomAutoComplete } from "./mymap";
 
 export default function LocationDrawer(props) {
   const {

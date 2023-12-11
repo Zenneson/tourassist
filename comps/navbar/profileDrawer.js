@@ -1,38 +1,38 @@
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import { motion } from "framer-motion";
-import AccountInfo from "./accountInfo";
-import TripInfo from "./tripInfo";
+import { useUser } from "@libs/context";
+import { addEllipsis } from "@libs/custom";
 import {
-  useComputedColorScheme,
+  Badge,
+  Box,
+  Button,
+  Center,
+  Divider,
   Drawer,
-  Space,
-  Group,
   Flex,
+  Group,
+  NavLink,
+  ScrollArea,
+  Space,
   Text,
   Title,
-  Button,
-  Box,
-  NavLink,
-  Divider,
-  Center,
-  Badge,
-  ScrollArea,
+  useComputedColorScheme,
 } from "@mantine/core";
 import {
-  IconUserCircle,
-  IconLogout,
   IconChevronRight,
-  IconX,
   IconClipboardData,
-  IconWorld,
   IconGavel,
   IconInfoCircle,
+  IconLogout,
+  IconUserCircle,
+  IconWorld,
+  IconX,
 } from "@tabler/icons-react";
-import { addEllipsis } from "../../libs/custom";
-import { useUser } from "../../libs/context";
+import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import AccountInfo from "./accountInfo";
 import classes from "./profileDrawer.module.css";
+import TripInfo from "./tripInfo";
 
 export default function ProfileDrawer(props) {
   const computedColorScheme = useComputedColorScheme("dark", {

@@ -1,45 +1,44 @@
 "use client";
-import { useState, useEffect } from "react";
-import useSWR from "swr";
-import { useRouter } from "next/router";
-import { signOut } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "../../libs/firebase";
-import { useSessionStorage, useFullscreen } from "@mantine/hooks";
+import { useUser } from "@libs/context";
+import { auth, firestore } from "@libs/firebase";
 import {
-  useComputedColorScheme,
-  useMantineColorScheme,
   Box,
   Button,
-  Image,
-  Group,
-  Tooltip,
-  Popover,
-  PopoverTarget,
-  PopoverDropdown,
-  Text,
-  Flex,
-  Title,
-  Modal,
   Center,
+  Flex,
+  Group,
+  Image,
+  Modal,
+  Popover,
+  PopoverDropdown,
+  PopoverTarget,
+  Text,
+  Title,
+  Tooltip,
+  useComputedColorScheme,
+  useMantineColorScheme,
 } from "@mantine/core";
+import { useFullscreen, useSessionStorage } from "@mantine/hooks";
+import { spotlight } from "@mantine/spotlight";
 import {
-  IconMoon,
-  IconLogin,
-  IconSearch,
-  IconDoorExit,
-  IconBrightnessUp,
   IconArrowsMaximize,
   IconArrowsMinimize,
+  IconBrightnessUp,
+  IconDoorExit,
   IconDualScreen,
+  IconLogin,
+  IconMoon,
   IconPasswordUser,
+  IconSearch,
 } from "@tabler/icons-react";
-import { spotlight } from "@mantine/spotlight";
-import ProfileDrawer from "./profileDrawer";
-import { auth } from "../../libs/firebase";
-import { useUser } from "../../libs/context";
-import classes from "./mainMenu.module.css";
+import { signOut } from "firebase/auth";
+import { collection, getDocs } from "firebase/firestore";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 import LoginComp from "../loginComp";
+import classes from "./mainMenu.module.css";
+import ProfileDrawer from "./profileDrawer";
 
 export default function MainMenu(props) {
   const {

@@ -1,27 +1,27 @@
 "use client";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useUser } from "@libs/context";
+import { timeSince } from "@libs/custom";
 import {
-  useComputedColorScheme,
+  Anchor,
   Avatar,
   Box,
   Button,
   Center,
   Divider,
   Flex,
-  Group,
-  Stack,
-  SegmentedControl,
-  Text,
-  Table,
-  Title,
-  ScrollArea,
   Grid,
-  Anchor,
+  Group,
+  ScrollArea,
+  SegmentedControl,
+  Stack,
+  Table,
+  Text,
+  Title,
+  useComputedColorScheme,
 } from "@mantine/core";
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
 import { IconReload, IconShare3 } from "@tabler/icons-react";
-import { useUser } from "../../libs/context";
-import { timeSince } from "../../libs/custom";
+import { useEffect, useMemo, useRef, useState } from "react";
 import classes from "./donations.module.css";
 
 export default function Donations(props) {

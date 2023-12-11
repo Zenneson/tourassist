@@ -1,42 +1,42 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useUser } from "@libs/context";
+import { loggedIn } from "@libs/custom";
+import { firestore } from "@libs/firebase";
+import {
+  alreadyExists,
+  emailInvalid,
+  newAccount,
+  userNotFound,
+  wrongPassword,
+} from "@libs/notifications";
+import {
+  Anchor,
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  Group,
+  PasswordInput,
+  Popover,
+  PopoverDropdown,
+  PopoverTarget,
+  Progress,
+  Stack,
+  Text,
+  TextInput,
+  useComputedColorScheme,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useToggle } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconUserCircle, IconX } from "@tabler/icons-react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { firestore } from "../libs/firebase";
-import {
-  useComputedColorScheme,
-  Anchor,
-  Box,
-  Button,
-  Divider,
-  TextInput,
-  PasswordInput,
-  Progress,
-  Text,
-  Popover,
-  PopoverTarget,
-  PopoverDropdown,
-  Stack,
-  Group,
-  Checkbox,
-} from "@mantine/core";
-import {
-  newAccount,
-  emailInvalid,
-  alreadyExists,
-  userNotFound,
-  wrongPassword,
-} from "../libs/notifications";
-import { IconX, IconCheck, IconUserCircle } from "@tabler/icons-react";
-import { useToggle } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
-import { loggedIn } from "../libs/custom";
-import { useForm } from "@mantine/form";
-import { useUser } from "../libs/context";
+import { useEffect, useState } from "react";
 import classes from "./loginComp.module.css";
 
 export default function LoginComp(props) {

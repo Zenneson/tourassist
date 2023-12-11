@@ -1,4 +1,6 @@
 "use client";
+import { useUser } from "@libs/context";
+import { addEllipsis } from "@libs/custom";
 import {
   Badge,
   Box,
@@ -27,8 +29,6 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useUser } from "../../libs/context";
-import { addEllipsis } from "../../libs/custom";
 import AccountInfo from "./accountInfo";
 import classes from "./styles/profileDrawer.module.css";
 import TripInfo from "./tripInfo";
