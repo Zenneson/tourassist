@@ -1,0 +1,69 @@
+.deleteModal .mantine-Modal-header {
+  background-color: transparent;
+}
+
+.deleteModal .mantine-Modal-content {
+  background-color: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
+}
+
+.deleteModal .mantine-Modal-overlay {
+  background-color: light-dark(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5));
+  backdrop-filter: blur(9px);
+}
+
+.deleteUpdate .mantine-Button-root:hover {
+  opacity: 1;
+}
+
+.toolTip {
+  background: light-dark(#fff, #141517);
+  color: light-dark(#141517, #fff);
+  border: 1px solid light-dark(#ececec, #1c1c1c);
+}
+
+.updateMenu {
+  opacity: 0.4;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.updateShare {
+  overflow: hidden;
+  padding: 0px;
+}
+
+.updateButtonGroup {
+  border: none;
+}
+
+/* .updateShareWrapper {
+  background: light-dark(rgba(145, 147, 151, 0), rgba(5, 5, 5, 0));
+  opacity: 0.7;
+  &:hover {
+    background: light-dark(rgba(145, 147, 151, 1), rgba(5, 5, 5, 1));
+  }
+}
+
+.updateShareBtn {
+  color: light-dark(#141517, #fff);
+} */
+
+.updateShareWrapper {
+  background: light-dark(rgba(145, 147, 151, 0), rgba(5, 5, 5, 0));
+  opacity: 0.5;
+
+  &:hover {
+    background: light-dark(rgba(145, 147, 151, 0.5), rgba(5, 5, 5, 0.5));
+    opacity: 1;
+
+    .updateShareBtn {
+      transform: scale(1.1);
+      color: #fff;
+    }
+  }
+}
+
+.updateShareBtn {
+  color: light-dark(#141517, #fff);
+}

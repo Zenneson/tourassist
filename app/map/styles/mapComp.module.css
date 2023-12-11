@@ -1,0 +1,77 @@
+.popup > div:nth-child(2) {
+  /* Popup body */
+  transition: all 200ms ease-in-out;
+  width: 50rem;
+  font-family: Montserrat;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.popup > div:nth-child(1) {
+  /* Popup tip */
+  border-top-color: transparent;
+}
+
+.miniPopUp > div:nth-child(2) {
+  background: light-dark(rgba(248, 249, 250, 1), rgba(26, 28, 32, 1));
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0px;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.miniPopUp > div:nth-child(1) {
+  /* Popup tip */
+  border-top-color: light-dark(rgba(248, 249, 250, 1), rgba(26, 28, 32, 1));
+}
+
+.miniPopUp > * {
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.miniPopUpColor {
+  color: #fff;
+  opacity: 0.5;
+}
+
+.markerIconColor {
+  color: light-dark(#49d8ff, #0d3f82);
+}
+
+.popupFrame {
+  transition: all 750ms ease-in-out;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: none;
+  /* transform: rotate3d(-20, 20, 0, 25deg) scale(1); */
+
+  /* &:hover {
+    transform: rotate3d(0, 0, 0, 0deg) scale(1.4);
+  } */
+}
+
+.blurpBtns {
+  transition: all 400ms ease-in-out;
+  border-radius: 3px;
+  color: light-dark(#000, #fff);
+  box-shadow: 0px 5px 10px
+    light-dark(rgba(0, 0, 0, 0.1), rgb(255, 255, 255, 0.05));
+  background-color: light-dark(rgba(255, 255, 255, 0.7), rgb(0, 0, 0, 0.7));
+
+  &:hover {
+    background-color: light-dark(#f8f9fa, #0b0c0d);
+  }
+}

@@ -1,0 +1,9 @@
+.globeLoader {
+  transition: all 500ms ease-in-out;
+  cursor: pointer;
+  width: 200px;
+  height: 200px;
+  max-width: 100%;
+  z-index: 2000;
+  transform: rotate(10deg);
+}

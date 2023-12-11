@@ -13,6 +13,9 @@ const nextConfig = {
   devIndicators: {
     autoPrerender: false,
   },
+  experimental: {
+    optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
+  },
 };
 
 module.exports = nextConfig;

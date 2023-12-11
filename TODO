@@ -77,6 +77,12 @@ Tasks:
 	☐ All dropdowns close when input is not in focus
 	☐ Add Autocomplete filter logic for countries with different titles
 	☐ Add maxes for all inputs, max date, max places, etc
+	☐ Add file based meta data for SEO: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
+	☐ Use Stroybook for testing
+	☐ Use webworks to lower Map loading time
+	☐ Create onbaording app tour: https://driverjs.com/docs/installation
+	☐ REVIEW LAUNCH CHECKLIST: https://blog.hubspot.com/marketing/website-launch-checklist
+
 
 Marketing:
 	✔ 3000 Wedding Planners email list @done(23-12-05 02:32)
@@ -94,7 +100,7 @@ Marketing:
 	☐ Design / Plan Travel Website Drip Email Campaign
 	☐ Design / Plan Travel Youtubers Drip Email Campaign
 	☐ Design / Plan Travel Social Media Influencers Drip Email Campaign
-	☐ Use Stroybook for testing
+
 
 Legal:
 	✔ Draft Legal Docs @done(23-12-05 02:41)

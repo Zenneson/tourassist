@@ -1,0 +1,103 @@
+.countryAutoCompleteZIndex {
+  z-index: 1;
+}
+
+.destinationModal {
+  background-color: transparent;
+}
+
+.destinationModalContent {
+  background-color: light-dark(rgba(248, 249, 250, 0.95), #0b0c0d);
+}
+
+.destinationModalOverlay {
+  background-color: light-dark(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.5));
+  backdrop-filter: blur(9px);
+}
+
+.countryAutoCompleteZIndex {
+  z-index: 1;
+}
+
+.countryAutoComplete {
+  transition: all 500ms ease;
+}
+
+.placeAutoCompleteInput {
+  border: none;
+  border-radius: 3px 3px 0 0;
+}
+
+.placeAutoCompleteInput {
+  background: light-dark(rgba(248, 249, 250, 1), rgba(12, 13, 14, 1));
+  color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
+
+  &::placeholder {
+    color: light-dark(rgba(14, 15, 18, 0.5), rgba(248, 249, 250, 0.5));
+  }
+}
+
+.countryAutoCompleteInput,
+.countryAutoCompleteInput:focus {
+  border: none;
+  border-top: 2px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+  box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+}
+
+.countryAutoCompleteOption,
+.placeAutoCompleteOption {
+  &:hover,
+  &[data-combobox-selected="true"] {
+    box-shadow: 0 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+    background-color: light-dark(rgba(255, 255, 255, 1), rgba(0, 0, 0, 0.5));
+    color: light-dark(rgb(11, 12, 13), rgb(248, 249, 250));
+  }
+}
+
+.countryAutoCompleteDropdown {
+  border-radius: 25px;
+  box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+  background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(11, 12, 13, 0.9));
+}
+
+.countryAutoCompleteOption {
+  border-radius: 17px;
+}
+
+.placeAutoCompleteDropdown {
+  border-radius: 3px;
+  background-color: light-dark(rgba(248, 249, 250, 1), rgba(11, 12, 13, 1));
+}
+
+.placeAutoCompleteOption {
+  border-radius: 3px;
+}
+
+.clearListButton {
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.tourListButton {
+  position: absolute;
+  top: 120px;
+  padding: 0 8px;
+  z-index: 120;
+  opacity: 1;
+  border-radius: 0 3px 3px 0;
+  background-color: light-dark(
+    rgba(248, 249, 250, 0.95),
+    rgba(12, 13, 14, 0.95)
+  );
+  border-top: 1px solid
+    light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
+  border-right: 1px solid
+    light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
+  border-bottom: 1px solid
+    light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
+  &:hover {
+    padding-left: 12px;
+  }
+}
