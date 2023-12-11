@@ -156,6 +156,10 @@ export default function LatestTrips() {
     </Grid.Col>
   ));
 
+  useEffect(() => {
+    router.prefetch("/trippage");
+  }, [router]);
+
   return (
     <>
       <Grid gutter={20}>{latestTrips}</Grid>

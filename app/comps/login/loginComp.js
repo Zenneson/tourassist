@@ -220,6 +220,10 @@ export default function LoginComp(props) {
     }
   };
 
+  useEffect(() => {
+    router.prefetch("/map");
+  }, [router]);
+
   return (
     <>
       <Box w="100%">

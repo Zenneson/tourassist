@@ -29,6 +29,7 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import AccountInfo from "./accountInfo";
 import classes from "./styles/profileDrawer.module.css";
 import TripInfo from "./tripInfo";
@@ -125,6 +126,12 @@ export default function ProfileDrawer(props) {
     setPanelShow(false);
     setActive(-1);
   };
+
+  useEffect(() => {
+    router.prefetch("/map");
+    router.prefetch("/help");
+    router.prefetch("/legal");
+  }, [router]);
 
   return (
     <>

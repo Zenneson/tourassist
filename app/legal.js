@@ -447,6 +447,11 @@ export default function Legal() {
     contentWrapperRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
+  useEffect(() => {
+    router.prefetch("/help");
+    router.prefetch("/contact");
+  }, [router]);
+
   return (
     <Center mt={120} mb={50}>
       <Flex w={"80%"} maw={1200}>

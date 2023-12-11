@@ -12,6 +12,7 @@ import {
 import { useSessionStorage } from "@mantine/hooks";
 import { IconMessageCircleQuestion, IconX } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import classes from "./styles/chatBot.module.css";
 
 export default function ChatBot() {
@@ -21,6 +22,10 @@ export default function ChatBot() {
     key: "chatOpened",
     defaultValue: false,
   });
+
+  useEffect(() => {
+    router.prefetch("/admin");
+  }, [router]);
 
   return (
     <>

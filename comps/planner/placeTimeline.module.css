@@ -1,9 +1,0 @@
-.timelineItem {
-  transition: all 2000ms ease-in-out;
-}
-
-.timelineTitle {
-  text-transform: uppercase;
-  font-size: 10px;
-  font-weight: 700;
-}

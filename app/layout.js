@@ -1,6 +1,5 @@
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
-import { ColorSchemeScript } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/core/styles/global.css";
 import "@mantine/notifications/styles.css";
@@ -8,8 +7,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Script from "next/script";
 import "typeface-montserrat";
 import AppWrapper from "./appWrapper";
-import NavigationEvents from "./navEvent";
-import "./styles/global.css";
 
 export const metadata = {
   title: "Tour Assist",
@@ -20,7 +17,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript defaultColorScheme="dark" />
         <link rel="icon" href="/favicon.ico" />
         <link
           href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css"
@@ -49,7 +45,6 @@ export default function RootLayout({ children }) {
           src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"
         />
       </body>
-      <NavigationEvents />
     </html>
   );
 }

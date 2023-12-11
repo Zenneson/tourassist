@@ -35,6 +35,10 @@ export default function Intro(props) {
     setColorScheme(dark ? "light" : "dark");
   };
 
+  useEffect(() => {
+    router.prefetch("/map");
+  }, [router]);
+
   return (
     <>
       <Box className={classes.colorBtnFrame}>

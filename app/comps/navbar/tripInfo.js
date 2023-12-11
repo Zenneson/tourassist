@@ -219,6 +219,10 @@ export default function TripInfo(props) {
     if (newTrip && newTrip.donations) setDonations(newTrip.donations);
   };
 
+  useEffect(() => {
+    router.prefetch("/" + currentTrip.tripId);
+  }, [router]);
+
   return (
     isClient && (
       <Box pos="relative">

@@ -9,6 +9,7 @@ import {
 import { IconX } from "@tabler/icons-react";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import classes from "../styles/tourList.module.css";
 import PlaceListItem from "./placeListItem";
@@ -56,6 +57,10 @@ export default function TourList(props) {
     items.splice(destination.index, 0, reorderedItem);
     setPlaces(items);
   };
+
+  useEffect(() => {
+    router.prefetch("/tripPlanner");
+  }, [router]);
 
   return (
     <>

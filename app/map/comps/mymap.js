@@ -423,6 +423,10 @@ export default function Mymap(props) {
     }
   };
 
+  useEffect(() => {
+    router.prefetch("/tripPlanner");
+  }, [router]);
+
   return (
     <>
       <Modal
