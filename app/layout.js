@@ -6,7 +6,7 @@ import "@mantine/notifications/styles.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Script from "next/script";
 import "typeface-montserrat";
-import AppWrapper from "./appWrapper";
+import AppWrapper from "./pageComps/appWrapper";
 
 export const metadata = {
   title: "Tour Assist",

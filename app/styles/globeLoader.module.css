@@ -1,9 +1,33 @@
 .globeLoader {
   transition: all 500ms ease-in-out;
   cursor: pointer;
-  width: 200px;
-  height: 200px;
+  width: 125px;
+  height: 125px;
   max-width: 100%;
   z-index: 2000;
   transform: rotate(10deg);
+}
+
+.dots:after {
+  content: " .";
+  animation: dotsAnimation 1s steps(5, end) infinite;
+}
+
+@keyframes dotsAnimation {
+  0%,
+  20% {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  40% {
+    color: rgb(45, 200, 243);
+    text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  60% {
+    text-shadow: 0.25em 0 0 rgb(45, 200, 243), 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  80%,
+  100% {
+    text-shadow: 0.25em 0 0 rgb(45, 200, 243), 0.5em 0 0 rgb(45, 200, 243);
+  }
 }

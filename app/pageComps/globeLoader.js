@@ -1,7 +1,7 @@
 "use client";
 import createGlobe from "cobe";
 import { useEffect, useRef, useState } from "react";
-import classes from "./styles/globeLoader.module.css";
+import classes from "../styles/globeLoader.module.css";
 
 export default function GlobeLoader() {
   const canvasRef = useRef();
@@ -9,20 +9,12 @@ export default function GlobeLoader() {
 
   useEffect(() => {
     let phi = 0;
-    let speed = 0.1;
-    const diffuse = {
-      value: 2,
-      get() {
-        this.value += 0.001;
-        return this.value;
-      },
-    };
 
     if (canvasRef.current && !globe) {
       const theGlobe = createGlobe(canvasRef.current, {
         devicePixelRatio: 2,
-        width: 400,
-        height: 400,
+        width: 250,
+        height: 250,
         phi: 2.16,
         theta: -0.25,
         dark: 1,
@@ -37,8 +29,7 @@ export default function GlobeLoader() {
         markers: [],
         onRender: (state) => {
           state.phi = phi;
-          phi += speed;
-          state.diffuse = diffuse.get();
+          phi += 0.05;
         },
       });
       setGlobe(theGlobe);

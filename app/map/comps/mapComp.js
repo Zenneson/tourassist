@@ -18,6 +18,7 @@ import {
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useState } from "react";
 import Map, { Layer, Marker, Popup, Source } from "react-map-gl";
+import PageLoader from "../../pageComps/pageLoader";
 import classes from "../styles/mapComp.module.css";
 import TourList from "./tourList";
 
@@ -186,6 +187,7 @@ export default function MapComp(props) {
 
   return (
     <>
+      <PageLoader contentLoaded={mapLoaded} />
       <Map
         id="mapRef"
         ref={mapRef}

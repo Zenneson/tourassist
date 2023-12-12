@@ -9,10 +9,10 @@ import {
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { usePathname } from "next/navigation";
-import ChatBot from "./comps/chatbot/chatBot";
-import MainMenu from "./comps/navbar/mainMenu";
-import SearchModal from "./comps/navbar/searchModal";
-import "./styles/global.css";
+import ChatBot from "../comps/chatbot/chatBot";
+import MainMenu from "../comps/navbar/mainMenu";
+import SearchModal from "../comps/navbar/searchModal";
+import "../styles/global.css";
 
 export default function AppWrapper({ children }) {
   const pathname = usePathname();
