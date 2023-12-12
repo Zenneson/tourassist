@@ -1,13 +1,20 @@
-.globeCanvas {
+.globeImg {
+  z-index: 2100;
   transition: all 500ms ease-in-out;
   cursor: pointer;
   position: absolute;
-  bottom: 30px;
-  right: 30px;
+  bottom: 20px;
+  right: 20px;
   width: 120px;
   height: 120px;
   max-width: 100%;
-  z-index: 2000;
+  opacity: 0.75;
+  transform: scale(1);
+
+  &:hover {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 }
 
 .moveRight {
@@ -67,7 +74,7 @@
 }
 
 .chatBotMain {
-  height: 100%;
+  height: 465px;
   padding: 10px 15px;
   padding-top: 55px;
   overflow: auto;
@@ -89,44 +96,67 @@
 .chatBotTextFrame {
   margin-bottom: 10px;
   padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 25px 20px -20px light-dark(rgba(0, 0, 0, 0.2), rgba(155, 155, 155, 0.07));
+  border-radius: 3px;
+  border: 1px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.03));
+  background-color: light-dark(
+    rgba(248, 249, 250, 0.95),
+    rgba(12, 13, 14, 0.95)
+  );
 }
 
 .chatBotText {
   margin-top: 5px;
   margin-left: 5px;
-  padding: 5px 10px;
-  border-left: 1px solid
-    light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.07));
-}
-
-.chatBotModal,
-.chatBotTextDialog {
-  z-index: 2000;
-  overflow: hidden;
 }
 
 .chatBotModal {
+  position: relative;
+  overflow: hidden;
   background-color: light-dark(
-    rgba(248, 249, 250, 0.9),
-    rgba(12, 13, 14, 0.97)
+    rgba(248, 249, 250, 0.9) !important,
+    rgba(12, 13, 14, 0.97) !important
   );
-  border-bottom: 1px solid
-    light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.02));
-}
-
-.chatBotTextDialog {
-  background-color: light-dark(rgba(248, 249, 250, 0.5), rgba(12, 13, 14, 0.5));
 }
 
 .chatBotTextInput {
-  min-height: 135px;
+  height: 135px !important;
   padding: 15px;
-  width: 450px;
+  width: 400px;
   margin-right: 140px;
   background-color: light-dark(
     rgba(248, 249, 250, 0.95),
     rgba(12, 13, 14, 0.95)
   );
+  border: 1px solid
+    light-dark(
+      rgba(0, 0, 0, 0.1) !important,
+      rgba(255, 255, 255, 0.03) !important
+    );
+}
+
+.chatBotLink {
+  color: light-dark(rgb(24, 108, 166), rgb(65, 253, 255));
+  padding: 2px 0;
+  text-decoration: none;
+}
+
+.chatLinkFrame {
+  color: light-dark(rgb(24, 108, 166), rgb(65, 253, 255));
+}
+
+.chatSendBtn {
+  opacity: 1;
+  box-shadow: 0px -4px 0px 0px light-dark(rgba(233, 242, 248, 1), rgba(12, 13, 14, 1));
+  background-color: light-dark(
+    rgba(255, 255, 255) !important,
+    rgba(10, 10, 10) !important
+  );
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.chatSendIcon {
+  color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));
 }

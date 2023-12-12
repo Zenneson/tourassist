@@ -20,6 +20,7 @@ import {
   IconWorld,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import LoginComp from "../login/loginComp";
 import classes from "./styles/intro.module.css";
 

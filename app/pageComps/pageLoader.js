@@ -1,8 +1,13 @@
 import { Center, LoadingOverlay, Stack, Text } from "@mantine/core";
+import { useEffect } from "react";
 import classes from "../styles/globeLoader.module.css";
 import GlobeLoader from "./globeLoader";
 
 export default function PageLoader({ contentLoaded }) {
+  useEffect(() => {
+    <GlobeLoader />;
+  }, []);
+
   return (
     <LoadingOverlay
       visible={!contentLoaded}
