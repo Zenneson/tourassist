@@ -1,5 +1,6 @@
 "use client";
 import { DuffelPayments } from "@duffel/components";
+import { travelDateAtom } from "@libs/atoms";
 import { dateFormat, formatDonation } from "@libs/custom";
 import { firestore } from "@libs/firebase";
 import {
@@ -32,7 +33,6 @@ import {
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import "@mantine/dates/styles.css";
-import { useSessionStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import "@mantine/tiptap/styles.css";
@@ -47,19 +47,20 @@ import TextStyle from "@tiptap/extension-text-style";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { doc, updateDoc } from "firebase/firestore";
+import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { mutate } from "swr";
-import classes from "./styles/modalsItem.module.css";
+import classes from "../styles/modalsItem.module.css";
 import TripContent from "./tripContent";
 
 export default function ModalsItem(props) {
   const {
+    title,
     tripData,
     modalMode,
     setModalMode,
     tripDesc,
     user,
-    router,
     closeEditTripModal,
     dark,
     images,
@@ -88,8 +89,6 @@ export default function ModalsItem(props) {
   const [tokenUpdated, setTokenUpdated] = useState(false);
   const [paid, setPaid] = useState(false);
 
-  const { title } = router.query;
-
   const processingFee = () => {
     return Math.ceil(Math.min(donationAmount * 0.03, 150)).toFixed(2);
   };
@@ -101,10 +100,7 @@ export default function ModalsItem(props) {
   };
 
   const DateChanger = () => {
-    const [travelDate, setTravelDate] = useSessionStorage({
-      key: "travelDate",
-      defaultValue: tripData?.travelDate,
-    });
+    const [travelDate, setTravelDate] = useAtom(travelDateAtom);
 
     return (
       <DateInput

@@ -49,7 +49,6 @@ export default function ProfileDrawer(props) {
     openMenu,
     signOutFunc,
     allTrips,
-    setDropDownOpened,
   } = props;
 
   const router = useRouter();
@@ -363,7 +362,6 @@ export default function ProfileDrawer(props) {
               allTrips={allTrips}
               setMainMenuOpened={setMainMenuOpened}
               setPanelShow={setPanelShow}
-              setDropDownOpened={setDropDownOpened}
             />
           </motion.div>
         )}

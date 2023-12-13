@@ -39,7 +39,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { mutate } from "swr";
-import classes from "./styles/updates.module.css";
+import classes from "../styles/updates.module.css";
 
 // import UpdateContent from "./updatecontent";
 import dynamic from "next/dynamic";
@@ -57,7 +57,7 @@ export default function Updates(props) {
     setCurrentUpdateId,
     setNewUpdate,
   } = props;
-  const [currentUpdateTitle, setCurrentUpdateTtile] = useState("");
+  const [currentUpdateTitle, setCurrentUpdateTitle] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
   const [showall, toggle] = useToggle(["hide", "show"]);
   const router = useRouter();
@@ -276,7 +276,7 @@ export default function Updates(props) {
                   fz={12}
                   leftSection={<IconTrash size={14} />}
                   onClick={() => {
-                    setCurrentUpdateTtile(update.updateTitle);
+                    setCurrentUpdateTitle(update.updateTitle);
                     deleteUpdate();
                   }}
                 >

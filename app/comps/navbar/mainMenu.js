@@ -1,5 +1,6 @@
 "use client";
-import { useStateContext, useUser } from "@libs/context";
+import { listAtom, mainMenuAtom, panelAtom, searchAtom } from "@libs/atoms";
+import { useUser } from "@libs/context";
 import { auth, firestore } from "@libs/firebase";
 import {
   Box,
@@ -33,6 +34,7 @@ import {
 } from "@tabler/icons-react";
 import { signOut } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
+import { useAtom, useSetAtom } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -42,16 +44,11 @@ import classes from "./styles/mainMenu.module.css";
 
 export default function MainMenu() {
   const { user } = useUser();
-  const {
-    setListOpened,
-    searchOpened,
-    setSearchOpened,
-    setDropDownOpened,
-    mainMenuOpened,
-    setMainMenuOpened,
-    panelShow,
-    setPanelShow,
-  } = useStateContext();
+
+  const setListOpened = useSetAtom(listAtom);
+  const [searchOpened, setSearchOpened] = useAtom(searchAtom);
+  const [mainMenuOpened, setMainMenuOpened] = useAtom(mainMenuAtom);
+  const [panelShow, setPanelShow] = useAtom(panelAtom);
 
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -124,17 +121,6 @@ export default function MainMenu() {
     spotlight.open();
     setSearchOpened(true);
     setMainMenuOpened(false);
-    setPanelShow(false);
-  };
-
-  // Opens the Drowndown that is commented out
-  const openDropDown = () => {
-    if (panelShow === true) {
-      setDropDownOpened(true);
-    } else {
-      setDropDownOpened((o) => !o);
-    }
-    setActive(-1);
     setPanelShow(false);
   };
 
@@ -402,7 +388,6 @@ export default function MainMenu() {
         setPanelShow={setPanelShow}
         mainMenuOpened={mainMenuOpened}
         setMainMenuOpened={setMainMenuOpened}
-        setDropDownOpened={setDropDownOpened}
         signOutFunc={signOutFunc}
         openMenu={openMenu}
         allTrips={allTrips}

@@ -39,12 +39,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import Donations from "../trip/donations";
+import Donations from "../../[title]/comps/donations";
 import classes from "./styles/tripInfo.module.css";
 
 export default function TripInfo(props) {
-  const { allTrips, setMainMenuOpened, setPanelShow, setDropDownOpened } =
-    props;
+  const { allTrips, setMainMenuOpened, setPanelShow } = props;
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -298,7 +297,7 @@ export default function TripInfo(props) {
             ]}
           />
           <Bar
-            key={colorScheme}
+            key={dark}
             options={{
               responsive: true,
               maintainAspectRatio: false,
@@ -351,7 +350,6 @@ export default function TripInfo(props) {
                 onClick={() => {
                   setMainMenuOpened(false);
                   setPanelShow(false);
-                  setDropDownOpened(false);
                   setTripData(currentTrip);
                   router.push("/" + currentTrip.tripId);
                 }}

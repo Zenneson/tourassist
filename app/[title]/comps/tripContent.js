@@ -1,4 +1,5 @@
 "use client";
+import { travelDateAtom, tripDescAtom, updatedDescAtom } from "@libs/atoms";
 import { removeImageByName, updateEditedTrip } from "@libs/custom";
 import {
   ActionIcon,
@@ -19,7 +20,7 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { useSessionStorage, useWindowEvent } from "@mantine/hooks";
+import { useWindowEvent } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import {
@@ -37,13 +38,11 @@ import TextStyle from "@tiptap/extension-text-style";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import imageCompression from "browser-image-compression";
+import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
-import classes from "./styles/tripContent.module.css";
+import classes from "../styles/tripContent.module.css";
 
 export default function TripContent(props) {
   let {
@@ -66,46 +65,15 @@ export default function TripContent(props) {
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
-  const [tripDesc, setTripDesc] = useSessionStorage({
-    key: "tripDesc",
-    defaultValue: tripData?.tripDesc,
-  });
-  const [travelDate, setTravelDate] = useSessionStorage({
-    key: "travelDate",
-    defaultValue: tripData?.travelDate,
-  });
-  const [updatedDesc, setUpdatedDesc] = useSessionStorage({
-    key: "updatedDesc",
-    defaultValue: "",
-  });
+
+  const [tripDesc, setTripDesc] = useAtom(tripDescAtom);
+  const [travelDate, setTravelDate] = useAtom(travelDateAtom);
+  const updatedDesc = useAtomValue(updatedDescAtom);
 
   const router = useRouter();
   const sliderRef = useRef();
   const cropperRef = useRef(null);
   const cropperContainerRef = useRef(null);
-
-  const next = () => {
-    sliderRef.current.slickNext();
-  };
-
-  const previous = () => {
-    sliderRef.current.slickPrev();
-  };
-
-  const slideSettings = {
-    dots: false,
-    fade: true,
-    infinite: true,
-    autoplay: true,
-    swipeToSlide: true,
-    speed: 250,
-    autoplaySpeed: 4000,
-    cssEase: "linear",
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    pauseOnHover: true,
-  };
 
   const slides =
     images && images.length > 0
@@ -232,11 +200,11 @@ export default function TripContent(props) {
         });
 
         // use setTimeout to ensure that the state has been updated before calling slickGoTo
-        setTimeout(() => {
-          if (sliderRef.current) {
-            sliderRef.current.slickGoTo(images.length); // go to the last slide
-          }
-        }, 0);
+        // setTimeout(() => {
+        //   if (sliderRef.current) {
+        //     sliderRef.current.slickGoTo(images.length); // go to the last slide
+        //   }
+        // }, 0);
 
         setProcessingImage(false);
         setImageUpload(null);
@@ -368,16 +336,7 @@ export default function TripContent(props) {
                       overflow: "hidden",
                     }}
                   >
-                    <Slider
-                      ref={sliderRef}
-                      {...slideSettings}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    >
-                      {slides}
-                    </Slider>
+                    Placeholder
                   </Box>
                   {images.length > 1 && (
                     <Group gap={15} h={40} mt={10} grow>

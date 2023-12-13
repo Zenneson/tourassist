@@ -1,4 +1,4 @@
-import { useAreaContext } from "@libs/context";
+import { areaAtom } from "@libs/atoms";
 import { addEllipsis } from "@libs/custom";
 import {
   Box,
@@ -19,6 +19,7 @@ import {
   IconPlane,
   IconTextPlus,
 } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import classes from "../styles/locationDrawer.module.css";
 import CustomAutoComplete from "./customAutoComplete";
@@ -42,7 +43,7 @@ export default function LocationDrawer(props) {
     resetGlobe,
     handleChange,
   } = props;
-  const { area, setArea } = useAreaContext();
+  const area = useAtomValue(areaAtom);
 
   const topCitiesList = topCities.map((city, index) => (
     <Group
@@ -109,11 +110,7 @@ export default function LocationDrawer(props) {
   }, [area, oldArea]);
 
   const closeLocationDrawer = () => {
-    if (
-      prevArea.label === "" ||
-      prevArea.type === "city" ||
-      (prevArea.type === "region" && prevArea.country === "United States")
-    ) {
+    if (prevArea.label === "" || prevArea.type === "city") {
       resetGlobe();
       return;
     }
@@ -136,6 +133,19 @@ export default function LocationDrawer(props) {
     }
     goToLocation(prevArea, mapRef);
   };
+
+  console.log(
+    "🚀 ~ file: locationDrawer.js:138 ~ closeLocationDrawer ~ prevArea:",
+    prevArea
+  );
+  console.log(
+    "🚀 ~ file: locationDrawer.js:138 ~ closeLocationDrawer ~ oldArea:",
+    oldArea
+  );
+  console.log(
+    "🚀 ~ file: locationDrawer.js:138 ~ closeLocationDrawer ~ area:",
+    area
+  );
 
   return (
     <Drawer

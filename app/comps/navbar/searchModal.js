@@ -1,12 +1,13 @@
-import { useStateContext } from "@libs/context";
+import { searchOpenedAtom } from "@libs/atoms";
 import { useComputedColorScheme } from "@mantine/core";
 import { Spotlight } from "@mantine/spotlight";
 import "@mantine/spotlight/styles.css";
 import { IconSearch, IconSlashes } from "@tabler/icons-react";
+import { useSetAtom } from "jotai";
 import classes from "./styles/searchModal.module.css";
 
 export default function SearchModal() {
-  const { setSearchOpened } = useStateContext();
+  const setSearchOpened = useSetAtom(searchOpenedAtom);
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });

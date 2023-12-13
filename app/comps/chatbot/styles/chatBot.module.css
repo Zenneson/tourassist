@@ -1,19 +1,15 @@
 .globeImg {
   z-index: 2100;
-  transition: all 500ms ease-in-out;
+  transition: all 250ms ease-in-out;
   cursor: pointer;
   position: absolute;
   bottom: 20px;
   right: 20px;
-  width: 120px;
-  height: 120px;
   max-width: 100%;
-  opacity: 0.75;
   transform: scale(1);
 
   &:hover {
     transform: scale(1.1);
-    opacity: 1;
   }
 }
 

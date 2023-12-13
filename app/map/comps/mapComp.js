@@ -1,5 +1,5 @@
 "use client";
-import { useAreaContext, useStateContext } from "@libs/context";
+import { areaAtom, listAtom, searchAtom } from "@libs/atoms";
 import {
   Box,
   Button,
@@ -15,11 +15,12 @@ import {
   IconPlane,
   IconTextPlus,
 } from "@tabler/icons-react";
+import { useAtom, useAtomValue } from "jotai";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useState } from "react";
 import Map, { Layer, Marker, Popup, Source } from "react-map-gl";
-import PageLoader from "../../pageComps/pageLoader";
 import classes from "../styles/mapComp.module.css";
+import PageLoader from "./pageLoader";
 import TourList from "./tourList";
 
 export default function MapComp(props) {
@@ -45,8 +46,10 @@ export default function MapComp(props) {
     mapRef,
     fullMapRef,
   } = props;
-  const { listOpened, setListOpened, searchOpened } = useStateContext;
-  const { area, setArea } = useAreaContext();
+
+  const searchOpened = useAtomValue(searchAtom);
+  const [listOpened, setListOpened] = useAtom(listAtom);
+  const area = useAtomValue(areaAtom);
 
   const initialViewState = {
     latitude: latitude || 37,

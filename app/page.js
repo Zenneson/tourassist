@@ -1,6 +1,5 @@
 "use client";
 import {
-  BackgroundImage,
   Box,
   Button,
   Group,
@@ -11,7 +10,6 @@ import {
 import { useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
 import { useState } from "react";
-import Slider from "react-slick";
 import Legal from "../app/legal";
 import Intro from "./comps/intro/intro";
 import classes from "./styles/page.module.css";
@@ -26,19 +24,6 @@ export default function Home() {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
-
-  const slideSettings = {
-    dots: false,
-    fade: true,
-    infinite: true,
-    autoplay: true,
-    speed: 1500,
-    autoplaySpeed: 5000,
-    cssEase: "linear",
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-  };
 
   const images = [
     "ppl/ppl1.jpg",
@@ -81,21 +66,7 @@ export default function Home() {
           overflow: "hidden",
         }}
       >
-        <Slider {...slideSettings}>
-          {images.map((image, index) => (
-            <BackgroundImage
-              key={index}
-              src={image}
-              h={height}
-              alt="intro"
-              style={{
-                filter: dark
-                  ? "brightness(70%) saturate(144%)"
-                  : "brightness(110%) saturate(100%)",
-              }}
-            />
-          ))}
-        </Slider>
+        Placeholder
       </Box>
     </>
   );

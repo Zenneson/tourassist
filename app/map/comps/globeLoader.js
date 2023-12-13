@@ -1,4 +1,5 @@
 "use client";
+import { Center, Stack } from "@mantine/core";
 import createGlobe from "cobe";
 import { useEffect, useRef, useState } from "react";
 import classes from "../styles/globeLoader.module.css";
@@ -6,6 +7,11 @@ import classes from "../styles/globeLoader.module.css";
 export default function GlobeLoader() {
   const canvasRef = useRef();
   const [globe, setGlobe] = useState(null);
+  const [loadInAnimation, setLoadInAnimation] = useState(false);
+
+  useEffect(() => {
+    setLoadInAnimation(classes.loadInAnimation);
+  }, []);
 
   useEffect(() => {
     let phi = 0;
@@ -29,7 +35,7 @@ export default function GlobeLoader() {
         markers: [],
         onRender: (state) => {
           state.phi = phi;
-          phi += 0.05;
+          phi += 0.08;
         },
       });
       setGlobe(theGlobe);
@@ -41,10 +47,14 @@ export default function GlobeLoader() {
   }, [globe]);
 
   return (
-    <canvas
-      className={`${classes.globeLoader}`}
-      ref={canvasRef}
-      onClick={() => setChatOpened(!chatOpened)}
-    />
+    <Center w={"100vw"} h={"100vh"} className={classes.loaderBg}>
+      <Stack>
+        <canvas
+          className={`${classes.globeLoader} ${loadInAnimation}`}
+          ref={canvasRef}
+          onClick={() => setChatOpened(!chatOpened)}
+        />
+      </Stack>
+    </Center>
   );
 }

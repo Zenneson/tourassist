@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { ActionIcon, Box, Center, Drawer, Flex } from "@mantine/core";
 import { IconChevronsRight, IconChevronsUp } from "@tabler/icons-react";
-import { ActionIcon, Box, Drawer, Center, Flex } from "@mantine/core";
+import { motion } from "framer-motion";
+import { useState } from "react";
 import LatestTrips from "./latesttrips";
 import classes from "./styles/dropdown.module.css";
 
 export default function DropDown(props) {
-  const { dropDownOpened, setDropDownOpened } = props;
   const [active, setActive] = useState(0);
 
   const terms = [
@@ -56,7 +55,7 @@ export default function DropDown(props) {
         position="top"
         size={"100%"}
         withCloseButton={false}
-        onClose={() => setDropDownOpened(false)}
+        // onClose={() => setDropDownOpened(false)}
         withOverlay={false}
       >
         <Center h={"100vh"} mb={50}>
@@ -65,7 +64,7 @@ export default function DropDown(props) {
               className={classes.dropdownBtn}
               variant={"transparent"}
               size={"xl"}
-              onClick={() => setDropDownOpened(false)}
+              // onClick={() => setDropDownOpened(false)}
             >
               <IconChevronsUp size={50} />
             </ActionIcon>

@@ -1,0 +1,29 @@
+.globeLoader {
+  z-index: 3000;
+  transition: all 500ms ease-in-out;
+  cursor: pointer;
+  width: 125px;
+  height: 125px;
+  max-width: 100%;
+  transform: rotate(10deg);
+  opacity: 0;
+}
+
+.loadInAnimation {
+  animation: loadIn 250ms ease forwards;
+}
+
+@keyframes loadIn {
+  0% {
+    filter: blur(15px);
+    opacity: 0;
+  }
+  50% {
+    filter: blur(8px);
+    opacity: 0.5;
+  }
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}

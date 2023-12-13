@@ -47,12 +47,12 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import TripContent from "../../app/[title]/comps/tripContent";
 import LoginComp from "../../app/comps/login/loginComp";
 import FirstPanel from "../../app/comps/planner/firstPanel";
 import PlaceTimeline from "../../app/comps/planner/placeTimeline";
 import SumInput from "../../app/comps/planner/sumInput";
 import UseTickets from "../../app/comps/planner/useTickets";
-import TripContent from "../../app/comps/trip/tripContent";
 import {
   createTrip,
   descIsShort,

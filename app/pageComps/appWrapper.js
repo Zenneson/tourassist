@@ -1,5 +1,5 @@
 "use client";
-import { AreaProvider, StateProvider, UserProvider } from "@libs/context";
+import { UserProvider } from "@libs/context";
 import { tourTheme } from "@libs/tourTheme";
 import {
   AppShell,
@@ -22,30 +22,26 @@ export default function AppWrapper({ children }) {
       <ColorSchemeScript defaultColorScheme="dark" />
       <MantineProvider theme={tourTheme} defaultColorScheme="dark">
         <UserProvider>
-          <StateProvider>
-            <Notifications position="top-center" zIndex={9999} limit={1} />
-            <SearchModal />
-            <AppShell
-              transitionDuration={300}
-              transitionTimingFunction="ease"
-              padding="none"
-              header={{ height: 1 }}
-              component={pathname !== "/map" && ScrollArea}
-              style={{
-                position: "absolute",
-                height: "100vh",
-                width: "100vw",
-              }}
-            >
-              <AppShell.Header>
-                {pathname !== "/" && <MainMenu />}
-              </AppShell.Header>
-              <AreaProvider>
-                {pathname !== "/" && <ChatBot />}
-                {children}
-              </AreaProvider>
-            </AppShell>
-          </StateProvider>
+          <Notifications position="top-center" zIndex={9999} limit={1} />
+          <SearchModal />
+          <AppShell
+            transitionDuration={300}
+            transitionTimingFunction="ease"
+            padding="none"
+            header={{ height: 1 }}
+            component={pathname !== "/map" && ScrollArea}
+            style={{
+              position: "absolute",
+              height: "100vh",
+              width: "100vw",
+            }}
+          >
+            <AppShell.Header>
+              {pathname !== "/" && <MainMenu />}
+            </AppShell.Header>
+            {pathname !== "/" && <ChatBot />}
+            {children}
+          </AppShell>
         </UserProvider>
       </MantineProvider>
     </>

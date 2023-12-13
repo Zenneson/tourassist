@@ -1,4 +1,3 @@
-"use client";
 import { route } from "./api/route";
 import Mymap from "./comps/mymap";
 

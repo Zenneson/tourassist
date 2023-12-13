@@ -1,5 +1,4 @@
 "use client";
-import { useUser } from "@libs/context";
 import { timeSince } from "@libs/custom";
 import {
   Anchor,
@@ -22,7 +21,7 @@ import {
 import { useIntersection, useSessionStorage } from "@mantine/hooks";
 import { IconReload, IconShare3 } from "@tabler/icons-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import classes from "./styles/donations.module.css";
+import classes from "../styles/donations.module.css";
 
 export default function Donations(props) {
   const { dHeight, donationSectionLimit, donations = [] } = props;
@@ -36,8 +35,6 @@ export default function Donations(props) {
     root: donationsRef.current,
     threshold: 1,
   });
-
-  const { user } = useUser();
 
   const [displayCount, setDisplayCount] = useState(20);
   const [donationsData, setDonationsData] = useState([]);

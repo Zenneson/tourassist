@@ -77,7 +77,7 @@ export default function PlaceListItem(props) {
   const goToSelected = async () => {
     const aviLocation = await saveLocation();
     if (aviLocation) {
-      goToLocation(aviLocation, mapRef);
+      goToLocation(aviLocation);
       setLocationDrawer(true);
     }
   };

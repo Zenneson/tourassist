@@ -3,13 +3,13 @@ import { fetcher } from "@libs/custom";
 import axios from "axios";
 
 // MAP FETCHER
-export async function route() {
+export const route = async () => {
   const apiUrl = `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IP_GEO}`;
   const response = await fetcher(apiUrl);
   const { latitude, longitude } = response;
   const currentCenter = { longitude, latitude };
   return currentCenter;
-}
+};
 
 // GOOGLE PLACES API
 let city = "New York";

@@ -1,5 +1,12 @@
 "use client";
-import { useAreaContext, useStateContext } from "@libs/context";
+import {
+  areaAtom,
+  listAtom,
+  mainMenuAtom,
+  panelAtom,
+  placesAtom,
+  searchAtom,
+} from "@libs/atoms";
 import {
   Box,
   Button,
@@ -11,11 +18,11 @@ import {
   Transition,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconAlertTriangle, IconCheck, IconList } from "@tabler/icons-react";
 import centerOfMass from "@turf/center-of-mass";
 import { motion } from "framer-motion";
+import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getNewCenter } from "../../../public/data/getNewCenter";
@@ -29,16 +36,14 @@ const fadeIn = { opacity: 1 };
 
 export default function Mymap(props) {
   const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
-  const {
-    listOpened,
-    setListOpened,
-    searchOpened,
-    mainMenuOpened,
-    setMainMenuOpened,
-    panelShow,
-    setPanelShow,
-  } = useStateContext();
-  const { area, setArea } = useAreaContext();
+
+  const searchOpened = useAtomValue(searchAtom);
+  const [listOpened, setListOpened] = useAtom(listAtom);
+  const [mainMenuOpened, setMainMenuOpened] = useAtom(mainMenuAtom);
+  const [panelShow, setPanelShow] = useAtom(panelAtom);
+
+  const [area, setArea] = useAtom(areaAtom);
+  const [places, setPlaces] = useAtom(placesAtom);
   const { latitude, longitude } = props;
 
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -61,10 +66,6 @@ export default function Mymap(props) {
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
   const [placeLocation, setPlaceLocation] = useState({});
-  const [places, setPlaces] = useSessionStorage({
-    key: "places",
-    defaultValue: [],
-  });
 
   useEffect(() => {
     area.label === "United States" && setShowStates(true);
@@ -75,6 +76,7 @@ export default function Mymap(props) {
       zoom: 2.5,
       duration: 1000,
       pitch: 0,
+      bearing: 0,
       essential: true,
     });
   };
@@ -158,7 +160,7 @@ export default function Mymap(props) {
     setPlaceSearchData([]);
     setLocationDrawer(true);
 
-    goToLocation(locationObj, mapRef);
+    goToLocation(locationObj);
   };
 
   const calcView = (place) => {
@@ -175,8 +177,8 @@ export default function Mymap(props) {
       pitch = 25;
     }
     if (type === "city" || (country !== "United States" && type === "region")) {
-      zoom = 15;
-      pitch = 70;
+      zoom = 16;
+      pitch = 65;
       if (label.includes("District of Columbia")) {
         zoom = 12;
       }
@@ -201,8 +203,9 @@ export default function Mymap(props) {
       center: newCoords,
       zoom: zoom,
       pitch: pitch,
-      curve: 1.42,
-      speed: 0.75,
+      curve: 2,
+      speed: 0.5,
+      bearing: 0,
       essential: true,
     });
   };

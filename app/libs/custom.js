@@ -1,4 +1,3 @@
-import { useSessionStorage } from "@mantine/hooks";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import {
   deleteObject,
@@ -7,10 +6,12 @@ import {
   ref,
   uploadString,
 } from "firebase/storage";
+import { useAtom } from "jotai";
 import moment from "moment-timezone";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
+import { historyAtom } from "./atoms";
 import { firestore } from "./firebase";
 
 // Fetches data from a given URL using the Fetch API and custom options.
@@ -388,10 +389,7 @@ export const useHistory = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [pageAdded, setPageAdded] = useState(false);
-  const [history, setHistory] = useSessionStorage({
-    key: "history",
-    defaultValue: ["empty"],
-  });
+  const [history, setHistory] = useAtom(historyAtom);
 
   useEffect(() => {
     if (pageAdded) return;
