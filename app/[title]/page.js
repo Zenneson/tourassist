@@ -42,6 +42,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+import Donations from "./comps/donations";
 import MainCarousel from "./comps/maincarousel";
 import ModalsItem from "./comps/modalsitem";
 import TripDescription from "./comps/tripdescription";
@@ -531,14 +532,16 @@ export default function Trippage(props) {
                 )}
               </Box>
             </Box>
-            {/* <Box className="pagePanel">
-              <Donations
-                donations={tripData?.donations}
-                setDonations={setDonations}
-                donationSectionLimit={10}
-                dHeight={"calc(100vh - 455px)"}
-              />
-            </Box> */}
+            <Box className="pagePanel">
+              {tripData && tripData.length > 0 && (
+                <Donations
+                  donations={tripData?.donations}
+                  setDonations={setDonations}
+                  donationSectionLimit={10}
+                  dHeight={"calc(100vh - 455px)"}
+                />
+              )}
+            </Box>
             {user?.email === tripData?.user ? (
               <Button
                 className={classes.updateModalButton}

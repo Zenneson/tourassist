@@ -13,7 +13,7 @@ export const areaAtom = atom({ label: "" });
 export const placesAtom = atom([]);
 
 // Trip Page State
-export const tripDataAtom = atom({});
+export const tripDataAtom = atom([]);
 export const fundsAtom = atom(0);
 export const donationsAtom = atom([]);
 export const activeTripData = atom([]);
