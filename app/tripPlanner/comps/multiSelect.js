@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
 import {
-  useCombobox,
-  Text,
-  PillsInput,
-  Pill,
-  Combobox,
   CheckIcon,
+  Combobox,
   Group,
+  Pill,
+  PillsInput,
+  Text,
+  useCombobox,
 } from "@mantine/core";
 import { useSessionStorage } from "@mantine/hooks";
 import { IconCheckbox } from "@tabler/icons-react";
-import classes from "./styles/multiSelect.module.css";
+import { useEffect, useState } from "react";
+import classes from "../styles/multiSelect.module.css";
 
 const tripTypes = [
   "Adventure",
@@ -26,7 +26,7 @@ const tripTypes = [
 const MAX_SELECTABLE_ITEMS = 5;
 const MAX_DISPLAYED_VALUES = 3;
 
-export function MultiSelect() {
+export default function MultiSelect() {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex("active"),

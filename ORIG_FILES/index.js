@@ -1,22 +1,22 @@
 "use client";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useState } from "react";
 import {
-  useComputedColorScheme,
   BackgroundImage,
   Box,
+  Button,
   Group,
   Modal,
-  Button,
   ScrollArea,
+  useComputedColorScheme,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
-import classes from "./styles/index.module.css";
+import { useState } from "react";
 import Slider from "react-slick";
-import Intro from "../app/comps/intro/page";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import Intro from "../app/intro/page";
 import Legal from "../app/legal";
+import classes from "./styles/index.module.css";
 
 const auth = getAuth();
 export default function Home(props) {

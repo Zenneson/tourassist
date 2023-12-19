@@ -60,6 +60,7 @@ export default function ModalsItem(props) {
     modalMode,
     setModalMode,
     tripDesc,
+    travelDate,
     user,
     closeEditTripModal,
     dark,
@@ -80,7 +81,7 @@ export default function ModalsItem(props) {
     donorName,
     setDonorName,
     donations,
-    setNewUpdate,
+    set,
   } = props;
   const donationRef = useRef(null);
   const donorNameRef = useRef(null);
@@ -100,7 +101,12 @@ export default function ModalsItem(props) {
   };
 
   const DateChanger = () => {
-    const [travelDate, setTravelDate] = useAtom(travelDateAtom);
+    const [date, setDate] = useAtom(travelDateAtom);
+    useEffect(() => {
+      if (!date) {
+        setDate(new Date(travelDate));
+      }
+    }, [date, travelDate]);
 
     return (
       <DateInput
@@ -115,8 +121,8 @@ export default function ModalsItem(props) {
         ta={"right"}
         w={"100%"}
         maw={150}
-        onChange={(e) => setTravelDate(new Date(e))}
-        value={new Date(travelDate)}
+        onChange={(e) => setDate(new Date(e))}
+        value={date}
         valueFormat="MMM DD, YYYY"
       />
     );
@@ -169,7 +175,6 @@ export default function ModalsItem(props) {
     }, [updateEditor, updateContent]);
 
     const handleUpdate = async () => {
-      setNewUpdate(true);
       try {
         if (updateTitle === "") {
           notifications.show(addUpdateTitle);
@@ -228,7 +233,6 @@ export default function ModalsItem(props) {
         mutate(title);
 
         notifications.update(updatePosted);
-        setNewUpdate(false);
       } catch (error) {
         console.error(error);
       }
@@ -485,7 +489,6 @@ export default function ModalsItem(props) {
               modalMode={modalMode}
               setModalMode={setModalMode}
               weekAhead={weekAhead}
-              setNewUpdate={setNewUpdate}
             />
           </Stack>
         </Box>

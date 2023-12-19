@@ -38,7 +38,7 @@ import { useAtom, useSetAtom } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import LoginComp from "../login/loginComp";
+import LoginComp from "../comps/login/loginComp";
 import ProfileDrawer from "./profileDrawer";
 import classes from "./styles/mainMenu.module.css";
 
@@ -175,7 +175,7 @@ export default function MainMenu() {
               ml={5}
               width={"auto"}
               height={"60px"}
-              src={"img/TA_GlobeLogo.png"}
+              src={"/img/TA_GlobeLogo.png"}
               alt="TouraSSist_logo"
             />
             <Title fw={900} fz={30} className={classes.mainTitleThick}>
@@ -360,7 +360,7 @@ export default function MainMenu() {
           <Image
             mb={25}
             style={{ width: "100%", maxWidth: "250px" }}
-            src={"img/TA_GlobeLogo.png"}
+            src={"/img/TA_GlobeLogo.png"}
             alt="TouraSSist_logo"
           />
         </Center>

@@ -39,7 +39,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import Donations from "../../[title]/comps/donations";
+import Donations from "../trip/[title]/comps/donations";
 import classes from "./styles/tripInfo.module.css";
 
 export default function TripInfo(props) {
@@ -204,6 +204,11 @@ export default function TripInfo(props) {
     const newTrip = allTrips.find((trip) => trip.tripTitle === event);
     if (newTrip) {
       setCurrentTrip(newTrip);
+      const newDonations = newTrip.donations || [];
+      setDonations(newDonations);
+      const newDonationSum = Math.floor(sumAmounts(newDonations));
+      setDonationSum(newDonationSum);
+      if (newTrip.tripId === currentTrip.tripId) return;
     }
     if (newTrip && newTrip.tripId === currentTrip.tripId) return;
     if (newTrip && newTrip.donations?.length === 0) {
@@ -351,7 +356,7 @@ export default function TripInfo(props) {
                   setMainMenuOpened(false);
                   setPanelShow(false);
                   setTripData(currentTrip);
-                  router.push("/" + currentTrip.tripId);
+                  router.push("/trip/" + currentTrip.tripId);
                 }}
               >
                 View Page{" "}

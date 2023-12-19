@@ -43,13 +43,10 @@ export default function Donations(props) {
   const [donationsData, setDonationsData] = useState([]);
 
   useEffect(() => {
-    if (
-      (donations && donationsData?.length === 0) ||
-      donationsData?.length !== donations?.length
-    ) {
+    if (!donationsData || donationsData.length !== donations.length) {
       setDonationsData(donations);
     }
-  }, [donations, tripData, donationsData, setDonationsData]);
+  }, [donations]);
 
   const donateOrder = useMemo(() => {
     if (!donationsData) return;

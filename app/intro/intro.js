@@ -21,7 +21,7 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import LoginComp from "../login/loginComp";
+import LoginComp from "../comps/login/loginComp";
 import classes from "./styles/intro.module.css";
 
 export default function Intro(props) {

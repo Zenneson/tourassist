@@ -28,7 +28,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import AccountInfo from "./accountInfo";
 import classes from "./styles/profileDrawer.module.css";
@@ -52,6 +52,7 @@ export default function ProfileDrawer(props) {
   } = props;
 
   const router = useRouter();
+  const pathname = usePathname();
   const { user } = useUser();
 
   const links = [
@@ -194,7 +195,7 @@ export default function ProfileDrawer(props) {
             </>
           )}
           <Group gap={8} mt={10}>
-            {router.pathname !== "/map" && (
+            {pathname !== "/map" && (
               // Map Main Menu Button
               <NavLink
                 label={
@@ -227,7 +228,7 @@ export default function ProfileDrawer(props) {
             )}
 
             {user && items}
-            {router.pathname !== "/help" && (
+            {pathname !== "/help" && (
               // Help Main Menu Button
               <NavLink
                 label={
@@ -270,7 +271,7 @@ export default function ProfileDrawer(props) {
             fz={10}
             color="gray.7"
             leftSection={<IconGavel size={18} />}
-            hidden={router.pathname === "/legal"}
+            hidden={pathname === "/legal"}
             onClick={() => {
               closeAll();
               router.push("/legal");

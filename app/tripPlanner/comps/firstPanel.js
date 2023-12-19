@@ -1,22 +1,22 @@
 import {
-  Autocomplete,
-  Title,
-  Center,
-  Text,
-  NumberInput,
-  Group,
-  Flex,
-  Switch,
-  Indicator,
   ActionIcon,
+  Autocomplete,
+  Center,
+  Flex,
+  Group,
   HoverCard,
+  Indicator,
+  NumberInput,
+  Switch,
+  Text,
+  Title,
 } from "@mantine/core";
-import dayjs from "dayjs";
+import { DatePicker } from "@mantine/dates";
 import { useElementSize } from "@mantine/hooks";
 import { IconX } from "@tabler/icons-react";
-import { DatePicker } from "@mantine/dates";
-import { MultiSelect } from "./multiSelect";
-import classes from "./styles/firstPanel.module.css";
+import dayjs from "dayjs";
+import classes from "../styles/firstPanel.module.css";
+import MultiSelect from "./multiSelect";
 
 export default function FirstPanel(props) {
   const {
@@ -182,7 +182,7 @@ export default function FirstPanel(props) {
               <NumberInput
                 classNames={{
                   input: classes.travelersInput,
-                  controls: classes.travelersContorls,
+                  controls: classes.travelersControls,
                 }}
                 size="sm"
                 w={"77px"}

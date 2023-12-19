@@ -1,3 +1,14 @@
+"use client";
+import {
+  activeTripData,
+  donationsAtom,
+  fundsAtom,
+  tripDataAtom,
+  tripDescAtom,
+  updatesAtom,
+} from "@libs/atoms";
+import { useUser } from "@libs/context";
+import { addComma, addEllipsis, daysBefore } from "@libs/custom";
 import {
   Avatar,
   Box,
@@ -7,7 +18,6 @@ import {
   Flex,
   Grid,
   Group,
-  LoadingOverlay,
   Progress,
   Stack,
   Text,
@@ -15,7 +25,6 @@ import {
   Tooltip,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import {
   IconBlockquote,
   IconBrandFacebook,
@@ -29,115 +38,42 @@ import {
   IconQrcode,
   IconSourceCode,
 } from "@tabler/icons-react";
-import { collectionGroup, getDocs } from "firebase/firestore";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-import Donations from "../../app/[title]/comps/donations";
-import MainCarousel from "../../app/[title]/comps/maincarousel";
-import ModalsItem from "../../app/[title]/comps/modalsitem";
-import TripDescription from "../../app/[title]/comps/tripdescription";
-import Updates from "../../app/[title]/comps/updates";
-import { useUser } from "../../app/libs/context";
+import { useAtom, useSetAtom } from "jotai";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
-  addComma,
-  addEllipsis,
-  daysBefore,
-  sumAmounts,
-} from "../../app/libs/custom";
-import { firestore } from "../../app/libs/firebase";
-import classes from "./styles/title.module.css";
+  useCalculateFunds,
+  useLoadUpdateData,
+  useSyncDonations,
+  useUpdateSpentFunds,
+  useUpdateTripData,
+} from "../hooks/hooks";
+import classes from "../styles/title.module.css";
+import Donations from "./donations";
+import MainCarousel from "./mainCarousel";
+import ModalsItem from "./modalsItem";
+import TripDescription from "./tripDescription";
+import Updates from "./updates";
 
-const fireFetcher = async (url) => {
-  const query = collectionGroup(firestore, "trips");
-  const querySnapshot = await getDocs(query);
-  const tripDoc = querySnapshot.docs.find((doc) => doc.id === url);
-  if (!tripDoc) {
-    throw new Error("No document found with the matching 'title'");
-  }
-  return tripDoc.data();
-};
+export default function TripWrapper(props) {
+  const { dbTripData, title } = props;
 
-export const getStaticPaths = async () => {
-  const queryData = collectionGroup(firestore, "trips");
-  let paths = [];
-
-  try {
-    const querySnapshot = await getDocs(queryData);
-    paths = querySnapshot.docs.map((doc) => {
-      const title = doc.id;
-      return { params: { title } };
-    });
-  } catch (error) {
-    console.error(error);
-  }
-
-  return {
-    paths,
-    fallback: true,
-  };
-};
-
-export const getStaticProps = async ({ params }) => {
-  const { title } = params;
-  const query = collectionGroup(firestore, "trips");
-  try {
-    const querySnapshot = await getDocs(query);
-    const tripDoc = querySnapshot.docs.find((doc) => doc.id === title);
-    if (!tripDoc) {
-      console.log(
-        "No document found with the matching the path used in Firebase"
-      );
-      return {
-        notFound: true,
-      };
-    }
-
-    const trip = tripDoc.data();
-    return {
-      props: {
-        trip,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      props: {},
-    };
-  }
-};
-
-export default function Trippage(props) {
+  const { user, loading } = useUser();
   const router = useRouter();
-  const { title } = router.query;
-
-  const {
-    data: newData,
-    error,
-    mutate,
-    isLoading,
-    isValidating,
-  } = useSWR(title, fireFetcher);
-
-  const [tripData, setTripData] = useSessionStorage({
-    key: "tripData",
-    defaultValue: props.trip,
-  });
 
   const [modalMode, setModalMode] = useState("");
-  const [updates, setUpdates] = useState([]);
   const [commentData, setCommentData] = useState([]);
   const [donationMode, setDonationMode] = useState("donating");
   const [images, setImages] = useState([]);
-  const [newUpdate, setNewUpdate] = useState(false);
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
 
-  const { user, loading } = useUser();
-
+  const [updates, setUpdates] = useAtom(updatesAtom);
+  const [tripDesc, setTripDesc] = useAtom(tripDescAtom);
+  const [tripData, setTripData] = useAtom(tripDataAtom);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [donationAmount, setDonationAmount] = useState(0);
   const [donationSum, setDonationSum] = useState(0);
@@ -146,54 +82,16 @@ export default function Trippage(props) {
   const [stayAnon, setStayAnon] = useState(false);
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
-  const [isClient, setIsClient] = useState(false);
 
-  const [funds, setFunds] = useSessionStorage({
-    key: "funds",
-    defaultValue: 0,
-  });
+  const [funds, setFunds] = useAtom(fundsAtom);
+  const [donations, setDonations] = useAtom(donationsAtom);
+  const setActiveTrip = useSetAtom(activeTripData);
 
-  const [donations, setDonations] = useSessionStorage({
-    key: "donations",
-    defaultValue: [],
-  });
-
-  const [activeTrip, setActiveTrip] = useSessionStorage({
-    key: "activeTrip",
-    defaultValue: [],
-  });
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (
-      donations &&
-      tripData &&
-      donations.length !== tripData.donations?.length
-    ) {
-      setDonations(tripData?.donations);
-      setDonationSum(Math.floor(sumAmounts(tripData?.donations)));
-    }
-  }, [donations, donationSum, tripData, setDonations, setDonationSum]);
-
-  useEffect(() => {
-    if (funds === 0 && donationSum > 0) {
-      setFunds(donationSum - spentFunds);
-    }
-  }, [donationSum, spentFunds, funds, setFunds]);
-
-  useEffect(() => {
-    if (tripData?.spentFunds > 0) setSpentFunds(tripData.spentFunds);
-  }, [tripData]);
-
-  useEffect(() => {
-    if (updates?.length === 0 && !updateDataLoaded) {
-      setUpdates(tripData?.updates);
-      setUpdateDataLoaded(true);
-    }
-  }, [updates, updateDataLoaded, tripData]);
+  useUpdateTripData(dbTripData, setTripData, tripData, setTripDesc, setUpdates);
+  useSyncDonations(donations, tripData, setDonations, setDonationSum);
+  useCalculateFunds(funds, donationSum, spentFunds, setFunds);
+  useUpdateSpentFunds(tripData, setSpentFunds, spentFunds);
+  useLoadUpdateData(updates, tripData, setUpdates, setUpdateDataLoaded);
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -320,23 +218,21 @@ export default function Trippage(props) {
     </Center>
   );
 
-  const isFinalLoading =
-    isLoading || newUpdate || loading || !imagesLoaded || !tripData;
+  // const isFinalLoading =
+  //   isLoading || newUpdate || loading || !imagesLoaded || !tripData;
 
   return (
     <>
-      {isClient && (
-        <LoadingOverlay
-          visible={isFinalLoading && modalMode === ""}
-          transitionProps={{
-            duration: 0.3,
-          }}
-          loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
-          overlayProps={{
-            backgroundOpacity: 1,
-          }}
-        />
-      )}
+      {/* <LoadingOverlay
+        visible={isFinalLoading && modalMode === ""}
+        transitionProps={{
+          duration: 0.3,
+        }}
+        loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
+        overlayProps={{
+          backgroundOpacity: 1,
+        }}
+      /> */}
       <Center mt={120}>
         <Flex
           gap={30}
@@ -427,7 +323,6 @@ export default function Trippage(props) {
                 setCurrentUpdateId={setCurrentUpdateId}
                 updates={updates}
                 setUpdates={setUpdates}
-                setNewUpdate={setNewUpdate}
                 setModalMode={setModalMode}
               />
             )}
@@ -633,10 +528,12 @@ export default function Trippage(props) {
         </Flex>
       </Center>
       <ModalsItem
+        title={title}
         modalMode={modalMode}
         setModalMode={setModalMode}
         tripData={tripData}
         tripDesc={tripData?.tripDesc}
+        travelDate={tripData?.travelDate}
         user={user}
         router={router}
         closeEditTripModal={closeEditTripModal}
@@ -658,7 +555,6 @@ export default function Trippage(props) {
         donorName={donorName}
         setDonorName={setDonorName}
         donations={donations}
-        setNewUpdate={setNewUpdate}
       />
     </>
   );

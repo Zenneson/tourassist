@@ -11,7 +11,7 @@ import { useViewportSize } from "@mantine/hooks";
 import { getAuth } from "firebase/auth";
 import { useState } from "react";
 import Legal from "../app/legal";
-import Intro from "./comps/intro/intro";
+import Intro from "./intro/intro";
 import classes from "./styles/page.module.css";
 
 const auth = getAuth();

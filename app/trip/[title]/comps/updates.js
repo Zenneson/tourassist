@@ -36,16 +36,11 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { doc, updateDoc } from "firebase/firestore";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { mutate } from "swr";
 import classes from "../styles/updates.module.css";
-
-// import UpdateContent from "./updatecontent";
-import dynamic from "next/dynamic";
-const UpdateContent = dynamic(() => import("./updatecontent"), {
-  ssr: false,
-});
+import UpdateContent from "./updateContent";
 
 export default function Updates(props) {
   const {
@@ -55,13 +50,12 @@ export default function Updates(props) {
     updates,
     setUpdates,
     setCurrentUpdateId,
-    setNewUpdate,
   } = props;
   const [currentUpdateTitle, setCurrentUpdateTitle] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
   const [showall, toggle] = useToggle(["hide", "show"]);
-  const router = useRouter();
-  const { title } = router.query;
+  const params = useSearchParams();
+  const { title } = params;
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -96,7 +90,6 @@ export default function Updates(props) {
   };
 
   const deleteUpdateByTitle = async () => {
-    setNewUpdate(true);
     try {
       const newUpdates = updates.filter(
         (update) => update.updateTitle !== currentUpdateTitle

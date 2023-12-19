@@ -134,19 +134,6 @@ export default function LocationDrawer(props) {
     goToLocation(prevArea, mapRef);
   };
 
-  console.log(
-    "🚀 ~ file: locationDrawer.js:138 ~ closeLocationDrawer ~ prevArea:",
-    prevArea
-  );
-  console.log(
-    "🚀 ~ file: locationDrawer.js:138 ~ closeLocationDrawer ~ oldArea:",
-    oldArea
-  );
-  console.log(
-    "🚀 ~ file: locationDrawer.js:138 ~ closeLocationDrawer ~ area:",
-    area
-  );
-
   return (
     <Drawer
       classNames={{ content: classes.locationDrawer }}

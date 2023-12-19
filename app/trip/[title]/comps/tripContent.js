@@ -12,8 +12,8 @@ import {
   Flex,
   Group,
   LoadingOverlay,
-  Slider as MantineSlider,
   Overlay,
+  Slider,
   Stack,
   Text,
   Title,
@@ -25,8 +25,6 @@ import { notifications } from "@mantine/notifications";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import {
   IconCheck,
-  IconChevronLeft,
-  IconChevronRight,
   IconPhoto,
   IconTrash,
   IconUpload,
@@ -39,22 +37,14 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import imageCompression from "browser-image-compression";
 import { useAtom, useAtomValue } from "jotai";
-import { useRouter } from "next/router";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
 import classes from "../styles/tripContent.module.css";
 
 export default function TripContent(props) {
-  let {
-    tripData,
-    images,
-    setImages,
-    modalMode,
-    setModalMode,
-    setNewUpdate,
-    titleRef,
-    user,
-  } = props;
+  let { tripData, images, setImages, modalMode, setModalMode, titleRef, user } =
+    props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -71,7 +61,8 @@ export default function TripContent(props) {
   const updatedDesc = useAtomValue(updatedDescAtom);
 
   const router = useRouter();
-  const sliderRef = useRef();
+  const pathname = usePathname();
+  const params = useSearchParams();
   const cropperRef = useRef(null);
   const cropperContainerRef = useRef(null);
 
@@ -108,9 +99,9 @@ export default function TripContent(props) {
   };
 
   let content;
-  if (router.pathname === "/tripPlanner") {
+  if (pathname === "/tripPlanner") {
     content = tripDesc !== "" ? tripDesc?.toString() : "";
-  } else if (router.query.hasOwnProperty("title")) {
+  } else if (params.hasOwnProperty("title")) {
     content = tripData?.tripDesc;
   }
 
@@ -267,7 +258,7 @@ export default function TripContent(props) {
                     removeImageByName(
                       images,
                       image.name,
-                      router.query,
+                      params,
                       tripData?.tripId,
                       user
                     )
@@ -292,11 +283,9 @@ export default function TripContent(props) {
   };
 
   const updateTripData = async () => {
-    setNewUpdate(true);
-
     const newDesc = updatedDesc || editor.getHTML();
     notifications.show(updatingTrip);
-    const { title } = router.query;
+    const title = tripData.tripId;
 
     setModalMode("");
 
@@ -314,16 +303,16 @@ export default function TripContent(props) {
       setTravelDate(travelDate);
       setTripDesc(newDesc);
       setImages(imageObjects);
+      router.replace(`/trip/${title}`);
       notifications.update(tripUpdated);
     } catch (error) {
       console.error(error);
     }
-    setNewUpdate(false);
   };
 
   return (
     <>
-      {(modalMode === "editTrip" || router.pathname === "/tripPlanner") && (
+      {(modalMode === "editTrip" || pathname === "/tripPlanner") && (
         <>
           <Group gap={20} w="100%" grow>
             <Box>
@@ -338,16 +327,6 @@ export default function TripContent(props) {
                   >
                     Placeholder
                   </Box>
-                  {images.length > 1 && (
-                    <Group gap={15} h={40} mt={10} grow>
-                      <Button variant="subtle" color="gray" onClick={previous}>
-                        <IconChevronLeft size={20} />
-                      </Button>
-                      <Button variant="subtle" color="gray" onClick={next}>
-                        <IconChevronRight size={20} />
-                      </Button>
-                    </Group>
-                  )}
                 </>
               ) : (
                 <BackgroundImage
@@ -473,7 +452,7 @@ export default function TripContent(props) {
         mih={modalMode === "editTrip" ? 200 : 250}
         bg={dark ? "dark.6" : "gray.2"}
         onBlur={() => {
-          if (router.pathname === "/tripPlanner") setTripDesc(editor.getHTML());
+          if (pathname === "/tripPlanner") setTripDesc(editor.getHTML());
         }}
       >
         <RichTextEditor.Toolbar sticky>
@@ -498,7 +477,7 @@ export default function TripContent(props) {
         </RichTextEditor.Toolbar>
         <RichTextEditor.Content />
       </RichTextEditor>
-      {router.pathname !== "/tripPlanner" && (
+      {pathname !== "/tripPlanner" && (
         <Group justify="flex-end" w={"100%"}>
           <Button
             variant="default"
@@ -537,7 +516,7 @@ export default function TripContent(props) {
                 overflow: "hidden",
               }}
             />
-            <MantineSlider
+            <Slider
               classNames={{
                 root: classes.sizeSlider,
                 thumb: classes.sizeSliderThumb,

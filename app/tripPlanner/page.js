@@ -45,14 +45,9 @@ import {
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { motion } from "framer-motion";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import TripContent from "../../app/[title]/comps/tripContent";
-import LoginComp from "../../app/comps/login/loginComp";
-import FirstPanel from "../../app/comps/planner/firstPanel";
-import PlaceTimeline from "../../app/comps/planner/placeTimeline";
-import SumInput from "../../app/comps/planner/sumInput";
-import UseTickets from "../../app/comps/planner/useTickets";
+import LoginComp from "../comps/login/loginComp";
 import {
   createTrip,
   descIsShort,
@@ -63,8 +58,13 @@ import {
   titleIsShort,
   tripFailed,
   tripMade,
-} from "../../app/libs/notifications";
-import classes from "./styles/tripplanner.module.css";
+} from "../libs/notifications";
+import TripContent from "../trip/[title]/comps/tripContent";
+import FirstPanel from "./comps/firstPanel";
+import PlaceTimeline from "./comps/placeTimeline";
+import SumInput from "./comps/sumInput";
+import UseTickets from "./comps/useTickets";
+import classes from "./styles/tripPlanner.module.css";
 
 export const [FormProvider, useFormContext, useForm] = createFormContext();
 export default function TripPlanner(props) {
@@ -78,6 +78,7 @@ export default function TripPlanner(props) {
   const [travelDates, setTravelDates] = useState(null);
   const [active, setActive] = useState(0);
   const router = useRouter();
+  const pathname = usePathname();
   const { user } = useUser();
 
   const [placeData, setPlaceData] = useSessionStorage({
@@ -285,7 +286,7 @@ export default function TripPlanner(props) {
       nextStep();
     }
     if (active === 3) {
-      if (!user && !infoAdded && router.pathname === "/tripPlanner") {
+      if (!user && !infoAdded && pathname === "/tripPlanner") {
         notifications.show(noAccountInfo);
         return;
       }

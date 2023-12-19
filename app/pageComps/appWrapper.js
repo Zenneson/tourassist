@@ -10,8 +10,8 @@ import {
 import { Notifications } from "@mantine/notifications";
 import { usePathname } from "next/navigation";
 import ChatBot from "../comps/chatbot/chatBot";
-import MainMenu from "../comps/navbar/mainMenu";
-import SearchModal from "../comps/navbar/searchModal";
+import MainMenu from "../navbar/mainMenu";
+import SearchModal from "../navbar/searchModal";
 import "../styles/global.css";
 
 export default function AppWrapper({ children }) {

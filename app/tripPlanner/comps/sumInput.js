@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { IconCurrencyDollar } from "@tabler/icons-react";
 import { NumberInput } from "@mantine/core";
-import { useFormContext } from "../../../ORIG_FILES/pagesx/tripPlanner";
-import classes from "./styles/sumInput.module.css";
+import { IconCurrencyDollar } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { useFormContext } from "../page";
+import classes from "../styles/sumInput.module.css";
 
 export default function SumInput(props) {
   const { disallowEmptyField } = props;

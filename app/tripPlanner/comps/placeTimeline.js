@@ -1,7 +1,7 @@
 "use client";
-import { IconMapPin } from "@tabler/icons-react";
 import { Text, Timeline } from "@mantine/core";
-import classes from "./styles/placeTimeline.module.css";
+import { IconMapPin } from "@tabler/icons-react";
+import classes from "../styles/placeTimeline.module.css";
 
 export default function PlaceTimeline(props) {
   const { dark, placeData, roundTrip, startLocale, splitLocale } = props;

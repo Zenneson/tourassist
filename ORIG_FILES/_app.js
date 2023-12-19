@@ -23,8 +23,8 @@ import "typeface-montserrat";
 import ChatBot from "../app/comps/chatbot/chatBot";
 import DropDown from "../app/comps/dropdown/dropdown";
 import { RouterTransition } from "../app/comps/loading";
-import MainMenu from "../app/comps/navbar/mainMenu";
-import SearchModal from "../app/comps/navbar/searchModal";
+import MainMenu from "../app/navbar/mainMenu";
+import SearchModal from "../app/navbar/searchModal";
 import "./global.css";
 
 const tourTheme = createTheme({
