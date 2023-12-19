@@ -21,11 +21,11 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import LoginComp from "../comps/login/loginComp";
+import LoginComp from "../login/loginComp";
 import classes from "./styles/intro.module.css";
 
 export default function Intro(props) {
-  const { auth, setShowLegal } = props;
+  const { setShowLegal } = props;
   const router = useRouter();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -74,7 +74,7 @@ export default function Intro(props) {
             ASSIST
           </Title>
           <Box className={classes.loginCompFrame} mt={10}>
-            <LoginComp auth={auth} setShowLegal={setShowLegal} />
+            <LoginComp setShowLegal={setShowLegal} />
           </Box>
         </Center>
         <Center w={"100%"}>

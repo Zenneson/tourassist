@@ -19,8 +19,8 @@ import { useAtom, useAtomValue } from "jotai";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useState } from "react";
 import Map, { Layer, Marker, Popup, Source } from "react-map-gl";
+import PageLoader from "../../comps/pageLoader/pageLoader";
 import classes from "../styles/mapComp.module.css";
-import PageLoader from "./pageLoader";
 import TourList from "./tourList";
 
 export default function MapComp(props) {

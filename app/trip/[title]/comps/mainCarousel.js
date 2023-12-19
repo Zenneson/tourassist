@@ -1,6 +1,13 @@
 "use client";
-import { Box, Group } from "@mantine/core";
+import { Carousel } from "@mantine/carousel";
+import "@mantine/carousel/styles.css";
+import { Box } from "@mantine/core";
+import {
+  IconChevronCompactLeft,
+  IconChevronCompactRight,
+} from "@tabler/icons-react";
 import Image from "next/image";
+import classes from "../styles/mainCarousel.module.css";
 
 export default function MainCarousel(props) {
   const { tripImages, setImagesLoaded } = props;
@@ -36,7 +43,7 @@ export default function MainCarousel(props) {
   }
 
   const slides = tripImages?.map((image, index) => (
-    <Box key={index} pos={"relative"}>
+    <Carousel.Slide key={index} pos={"relative"}>
       <Image
         priority="true"
         loading="eager"
@@ -53,21 +60,31 @@ export default function MainCarousel(props) {
           boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
         }}
       />
-    </Box>
+    </Carousel.Slide>
   ));
 
   return (
     tripImages?.length > 0 && (
-      <Group
-        gap={0}
-        w={tripImages?.length > 1 ? "auto" : "650px"}
+      <Carousel
         h={500}
-        style={{
-          overflow: "hidden",
+        w={"650px"}
+        withIndicators
+        controlsOffset={-50}
+        controlSize={60}
+        nextControlIcon={
+          <IconChevronCompactRight className={classes.carouselIcon} size={60} />
+        }
+        previousControlIcon={
+          <IconChevronCompactLeft className={classes.carouselIcon} size={60} />
+        }
+        classNames={{
+          controls: classes.controls,
+          control: classes.control,
+          root: classes.root,
         }}
       >
-        Placeholder
-      </Group>
+        {slides}
+      </Carousel>
     )
   );
 }

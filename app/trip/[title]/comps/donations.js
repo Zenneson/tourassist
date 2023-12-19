@@ -75,6 +75,7 @@ export default function Donations(props) {
       <Table.Tr key={index}>
         <Table.Td pos={"relative"}>
           <Avatar
+            className={classes.avi}
             pos={"absolute"}
             top={2}
             left={2}
@@ -82,24 +83,13 @@ export default function Donations(props) {
             variant={"transparent"}
             radius="xl"
             size={"xs"}
-            color={dark ? "dark.5" : "gray.1"}
           >
             <Text c={dark ? "dark.1" : "gray.5"} fz={8}>
               {index + 1}
             </Text>
           </Avatar>
           <Group py={5} gap={0}>
-            <Avatar
-              variant={"outlined"}
-              radius="xl"
-              mx={10}
-              color={dark ? "dark.5" : "gray.1"}
-              style={{
-                boxShadow: dark
-                  ? "0 2px 4px rgba(0,0,0,0.3)"
-                  : "0 2px 4px rgba(0,0,0,0.1)",
-              }}
-            >
+            <Avatar variant={"outlined"} radius="xl" mx={10}>
               <Text c={dark ? "dark.1" : "gray.5"}>{item.name.charAt(0)}</Text>
             </Avatar>
             <Stack gap={0}>
@@ -126,12 +116,7 @@ export default function Donations(props) {
       <Grid pt={20} px={15} align="flex-start">
         <Grid.Col span="auto">
           <Stack gap={0}>
-            <Divider
-              size={2}
-              mb={5}
-              opacity={dark ? 0.3 : 0.1}
-              color={dark ? "gray.8" : "dark.3"}
-            />
+            <Divider size={2} mb={5} />
             <Title order={6} c={"gray.5"}>
               {donationsData?.length}{" "}
               <Text span opacity={0.4} tt={"uppercase"} fz={12} fw={700}>
@@ -178,6 +163,7 @@ export default function Donations(props) {
         )}
       </Grid>
       <Box
+        className={classes.donationsShadow}
         pos={"absolute"}
         top={0}
         left={10}
@@ -188,15 +174,12 @@ export default function Donations(props) {
           zIndex: 100,
           borderRadius: 3,
           boxShadow: `${
-            entry?.isIntersecting
-              ? "none"
-              : dark
-              ? "rgba(0, 0, 0, 0.4) 0px -15px 7px -5px inset"
-              : "rgba(0, 0, 0, 0.25) 0px -10px 7px -5px inset"
+            entry?.isIntersecting ? "none" : "inset 0px -15px 7px -5px"
           }`,
         }}
       />
       <Box
+        classNames={{ root: classes.tableFrame }}
         pb={10}
         m={0}
         mt={10}
@@ -207,19 +190,10 @@ export default function Donations(props) {
         ref={donationsRef}
         component={ScrollArea}
         type="hover"
-        style={{
-          border: dark
-            ? "1px solid rgba(25,25,25,0.3)"
-            : "1px solid rgba(0,0,0,0.05)",
-          overflow: "hidden",
-          borderRadius: 3,
-        }}
       >
         <Table
+          className={classes.table}
           striped
-          stripedColor={
-            dark ? "rgba(255, 255, 255, 0.01)" : "rgba(200, 200, 200, 0.15)"
-          }
           withRowBorders={false}
           styles={{
             table: {

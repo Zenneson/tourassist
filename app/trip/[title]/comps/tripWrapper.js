@@ -41,6 +41,7 @@ import {
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PageLoader from "../../../comps/pageLoader/pageLoader";
 import {
   useCalculateFunds,
   useLoadUpdateData,
@@ -218,21 +219,9 @@ export default function TripWrapper(props) {
     </Center>
   );
 
-  // const isFinalLoading =
-  //   isLoading || newUpdate || loading || !imagesLoaded || !tripData;
-
   return (
     <>
-      {/* <LoadingOverlay
-        visible={isFinalLoading && modalMode === ""}
-        transitionProps={{
-          duration: 0.3,
-        }}
-        loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
-        overlayProps={{
-          backgroundOpacity: 1,
-        }}
-      /> */}
+      <PageLoader contentLoaded={imagesLoaded && tripData.length !== 0} />
       <Center mt={120}>
         <Flex
           gap={30}

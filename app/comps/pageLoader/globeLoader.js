@@ -2,7 +2,7 @@
 import { Center, Stack } from "@mantine/core";
 import createGlobe from "cobe";
 import { useEffect, useRef, useState } from "react";
-import classes from "../styles/globeLoader.module.css";
+import classes from "./styles/globeLoader.module.css";
 
 export default function GlobeLoader() {
   const canvasRef = useRef();

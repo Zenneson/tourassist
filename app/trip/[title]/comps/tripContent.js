@@ -1,6 +1,8 @@
 "use client";
 import { travelDateAtom, tripDescAtom, updatedDescAtom } from "@libs/atoms";
 import { removeImageByName, updateEditedTrip } from "@libs/custom";
+import { Carousel, useAnimationOffsetEffect } from "@mantine/carousel";
+import "@mantine/carousel/styles.css";
 import {
   ActionIcon,
   BackgroundImage,
@@ -25,6 +27,8 @@ import { notifications } from "@mantine/notifications";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import {
   IconCheck,
+  IconChevronCompactLeft,
+  IconChevronCompactRight,
   IconPhoto,
   IconTrash,
   IconUpload,
@@ -66,16 +70,24 @@ export default function TripContent(props) {
   const cropperRef = useRef(null);
   const cropperContainerRef = useRef(null);
 
+  const TRANSITION_DURATION = 200;
+  const [embla, setEmbla] = useState(null);
+  useAnimationOffsetEffect(embla, TRANSITION_DURATION);
+
   const slides =
     images && images.length > 0
       ? images.map((image, index) => (
-          <BackgroundImage
-            radius={3}
-            key={index}
-            src={image.file}
-            h={300}
-            alt={image.name}
-          />
+          <Carousel.Slide key={index}>
+            <BackgroundImage
+              radius={3}
+              src={image.file}
+              h={300}
+              w={390}
+              priority="true"
+              loading="eager"
+              alt={image.name}
+            />
+          </Carousel.Slide>
         ))
       : null;
 
@@ -315,23 +327,44 @@ export default function TripContent(props) {
       {(modalMode === "editTrip" || pathname === "/tripPlanner") && (
         <>
           <Group gap={20} w="100%" grow>
-            <Box>
+            <Box mb={45}>
               {images.length > 0 ? (
-                <>
-                  <Box
-                    h={300}
-                    style={{
-                      borderRadius: 3,
-                      overflow: "hidden",
-                    }}
-                  >
-                    Placeholder
-                  </Box>
-                </>
+                <Carousel
+                  getEmblaApi={setEmbla}
+                  align={1}
+                  inViewThreshold={1}
+                  skipSnaps={true}
+                  withIndicators
+                  includeGapInSize={false}
+                  containScroll={"trimSnaps"}
+                  slideSize={"100%"}
+                  controlSize={60}
+                  controlsOffset={-50}
+                  nextControlIcon={
+                    <IconChevronCompactRight
+                      className={classes.carouselIcon}
+                      size={60}
+                    />
+                  }
+                  previousControlIcon={
+                    <IconChevronCompactLeft
+                      className={classes.carouselIcon}
+                      size={60}
+                    />
+                  }
+                  classNames={{
+                    control: classes.control,
+                    root: classes.root,
+                  }}
+                >
+                  {slides}
+                </Carousel>
               ) : (
                 <BackgroundImage
                   radius={3}
                   opacity={dark ? 0.1 : 0.4}
+                  priority="true"
+                  loading="eager"
                   src={
                     dark
                       ? "img/placeholder/bags_blk.jpg"
@@ -446,6 +479,7 @@ export default function TripContent(props) {
           root: classes.textEditorRoot,
           toolbar: classes.textEditorToolbar,
           content: classes.textEditorContent,
+          typographyStylesProvider: classes.textEditorTypographyStylesProvider,
         }}
         editor={editor}
         position="relative"

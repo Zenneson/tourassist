@@ -6,7 +6,7 @@ import "@mantine/notifications/styles.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { cache } from "react";
 import "typeface-montserrat";
-import GlobeLoader from "./map/comps/globeLoader";
+import GlobeLoader from "./comps/pageLoader/globeLoader";
 import AppWrapper from "./pageComps/appWrapper";
 
 export const metadata = {

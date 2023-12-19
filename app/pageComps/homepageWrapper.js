@@ -9,48 +9,63 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
-import { getAuth } from "firebase/auth";
-import { useState } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
-import Intro from "../app/comps/intro/page";
-import Legal from "../app/legal";
-import classes from "./styles/index.module.css";
+import { useEffect, useState } from "react";
+import Intro from "../comps/intro/intro";
+import PageLoader from "../comps/pageLoader/pageLoader";
+import Legal from "../legal";
+import classes from "../styles/page.module.css";
 
-const auth = getAuth();
-export default function Home(props) {
+const Carousel = ({ children, interval = 5000 }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const tick = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % children.length);
+    }, interval);
+
+    return () => clearInterval(tick);
+  }, [children.length, interval]);
+
+  return (
+    <div>
+      {children.map((child, index) => (
+        <div
+          key={index}
+          className={`${classes.carouselItem} ${
+            index === activeIndex ? classes.carouselItemVisible : ""
+          }`}
+        >
+          {child}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const images = [
+  "ppl/ppl1.jpg",
+  "ppl/ppl2.jpg",
+  "ppl/ppl3.jpg",
+  "ppl/ppl4.jpg",
+  "ppl/ppl5.jpg",
+  "ppl/ppl6.jpg",
+  "ppl/ppl7.jpg",
+  "ppl/ppl8.jpg",
+];
+
+export default function HomepageWrapper() {
   const { height, width } = useViewportSize();
   const [showLegal, setShowLegal] = useState(false);
+  const [pageLoaded, setPageLoaded] = useState(false);
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
 
-  const slideSettings = {
-    dots: false,
-    fade: true,
-    infinite: true,
-    autoplay: true,
-    speed: 1500,
-    autoplaySpeed: 5000,
-    cssEase: "linear",
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-  };
-
-  const images = [
-    "ppl/ppl1.jpg",
-    "ppl/ppl2.jpg",
-    "ppl/ppl3.jpg",
-    "ppl/ppl4.jpg",
-    "ppl/ppl5.jpg",
-    "ppl/ppl6.jpg",
-    "ppl/ppl7.jpg",
-    "ppl/ppl8.jpg",
-  ];
+  useEffect(() => {
+    setPageLoaded(true);
+  }, []);
 
   return (
     <>
@@ -70,7 +85,7 @@ export default function Home(props) {
         </Group>
         <Legal />
       </Modal>
-      <Intro auth={auth} setShowLegal={setShowLegal} />
+      <Intro setShowLegal={setShowLegal} />
       <Box
         opacity={1}
         pos="absolute"
@@ -82,7 +97,8 @@ export default function Home(props) {
           overflow: "hidden",
         }}
       >
-        <Slider {...slideSettings}>
+        <PageLoader contentLoaded={pageLoaded} />
+        <Carousel>
           {images.map((image, index) => (
             <BackgroundImage
               key={index}
@@ -96,7 +112,7 @@ export default function Home(props) {
               }}
             />
           ))}
-        </Slider>
+        </Carousel>
       </Box>
     </>
   );

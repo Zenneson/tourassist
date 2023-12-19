@@ -32,6 +32,7 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconUserCircle, IconX } from "@tabler/icons-react";
 import {
   createUserWithEmailAndPassword,
+  getAuth,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -39,8 +40,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import classes from "./styles/loginComp.module.css";
 
+const auth = getAuth();
+
 export default function LoginComp(props) {
-  const { auth, setInfoAdded, setShowLegal } = props;
+  const { setInfoAdded, setShowLegal } = props;
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [firstNameFocus, setFirstNameFocus] = useState(false);
