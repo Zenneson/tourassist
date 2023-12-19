@@ -17,6 +17,7 @@ export const placesAtom = atom([]);
 export const fundsAtom = atom(0);
 export const donationsAtom = atom([]);
 export const activeTripData = atom([]);
+export const tripImagesAtom = atom([]);
 export const tripDescAtom = atom("");
 export const travelDateAtom = atom("");
 export const updatedDescAtom = atom("");

@@ -185,9 +185,6 @@ export default function MapComp(props) {
     </Dialog>
   );
 
-  // console.log(mapRef.current?.getPitch());
-  // console.log(mapRef.current?.getZoom());
-
   return (
     <>
       <PageLoader contentLoaded={mapLoaded} />

@@ -81,7 +81,6 @@ export default function ModalsItem(props) {
     donorName,
     setDonorName,
     donations,
-    set,
   } = props;
   const donationRef = useRef(null);
   const donorNameRef = useRef(null);

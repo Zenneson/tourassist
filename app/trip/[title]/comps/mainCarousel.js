@@ -1,16 +1,18 @@
 "use client";
+import { tripImagesAtom } from "@libs/atoms";
 import { Carousel } from "@mantine/carousel";
-import "@mantine/carousel/styles.css";
 import { Box } from "@mantine/core";
 import {
   IconChevronCompactLeft,
   IconChevronCompactRight,
 } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
 import Image from "next/image";
 import classes from "../styles/mainCarousel.module.css";
 
 export default function MainCarousel(props) {
-  const { tripImages, setImagesLoaded } = props;
+  const { setImagesLoaded } = props;
+  const tripImages = useAtomValue(tripImagesAtom);
 
   if (tripImages?.length === 1) {
     return (
@@ -78,6 +80,7 @@ export default function MainCarousel(props) {
           <IconChevronCompactLeft className={classes.carouselIcon} size={60} />
         }
         classNames={{
+          indicator: classes.indicator,
           controls: classes.controls,
           control: classes.control,
           root: classes.root,

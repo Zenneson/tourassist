@@ -7,13 +7,15 @@ export function useUpdateTripData(
   setTripData,
   tripData,
   setTripDesc,
-  setUpdates
+  setUpdates,
+  setTripImages
 ) {
   useEffect(() => {
     if (tripInfo && JSON.stringify(tripInfo) !== JSON.stringify(tripData)) {
       setTripData(tripInfo);
       setTripDesc(tripInfo.tripDesc);
       setUpdates(tripInfo.updates);
+      setTripImages(tripInfo.images);
     }
   }, [tripInfo, setTripData]);
 }

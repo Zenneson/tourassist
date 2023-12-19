@@ -5,6 +5,7 @@ import {
   fundsAtom,
   tripDataAtom,
   tripDescAtom,
+  tripImagesAtom,
   updatesAtom,
 } from "@libs/atoms";
 import { useUser } from "@libs/context";
@@ -25,6 +26,7 @@ import {
   Tooltip,
   useComputedColorScheme,
 } from "@mantine/core";
+import { useForceUpdate } from "@mantine/hooks";
 import {
   IconBlockquote,
   IconBrandFacebook,
@@ -41,7 +43,6 @@ import {
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import PageLoader from "../../../comps/pageLoader/pageLoader";
 import {
   useCalculateFunds,
   useLoadUpdateData,
@@ -72,6 +73,7 @@ export default function TripWrapper(props) {
   });
   const dark = computedColorScheme === "dark";
 
+  const [tripImages, setTripImages] = useAtom(tripImagesAtom);
   const [updates, setUpdates] = useAtom(updatesAtom);
   const [tripDesc, setTripDesc] = useAtom(tripDescAtom);
   const [tripData, setTripData] = useAtom(tripDataAtom);
@@ -87,12 +89,7 @@ export default function TripWrapper(props) {
   const [funds, setFunds] = useAtom(fundsAtom);
   const [donations, setDonations] = useAtom(donationsAtom);
   const setActiveTrip = useSetAtom(activeTripData);
-
-  useUpdateTripData(dbTripData, setTripData, tripData, setTripDesc, setUpdates);
-  useSyncDonations(donations, tripData, setDonations, setDonationSum);
-  useCalculateFunds(funds, donationSum, spentFunds, setFunds);
-  useUpdateSpentFunds(tripData, setSpentFunds, spentFunds);
-  useLoadUpdateData(updates, tripData, setUpdates, setUpdateDataLoaded);
+  const forceUpdate = useForceUpdate();
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -219,9 +216,22 @@ export default function TripWrapper(props) {
     </Center>
   );
 
+  useUpdateTripData(
+    dbTripData,
+    setTripData,
+    tripData,
+    setTripDesc,
+    setUpdates,
+    setTripImages
+  );
+  useSyncDonations(donations, tripData, setDonations, setDonationSum);
+  useCalculateFunds(funds, donationSum, spentFunds, setFunds);
+  useUpdateSpentFunds(tripData, setSpentFunds, spentFunds);
+  useLoadUpdateData(updates, tripData, setUpdates, setUpdateDataLoaded);
+
   return (
     <>
-      <PageLoader contentLoaded={imagesLoaded && tripData.length !== 0} />
+      {/* <PageLoader contentLoaded={imagesLoaded && tripData.length !== 0} /> */}
       <Center mt={120}>
         <Flex
           gap={30}
@@ -240,10 +250,7 @@ export default function TripWrapper(props) {
             align={"center"}
             pos={"relative"}
           >
-            <MainCarousel
-              setImagesLoaded={setImagesLoaded}
-              tripImages={tripData?.images}
-            />
+            <MainCarousel setImagesLoaded={setImagesLoaded} />
             <Divider
               w={"100%"}
               maw={688}

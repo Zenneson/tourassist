@@ -70,9 +70,8 @@ export default function TripContent(props) {
   const cropperRef = useRef(null);
   const cropperContainerRef = useRef(null);
 
-  const TRANSITION_DURATION = 200;
   const [embla, setEmbla] = useState(null);
-  useAnimationOffsetEffect(embla, TRANSITION_DURATION);
+  useAnimationOffsetEffect(embla, 500);
 
   const slides =
     images && images.length > 0
@@ -202,13 +201,6 @@ export default function TripContent(props) {
           return newImages; // return new images array to update state
         });
 
-        // use setTimeout to ensure that the state has been updated before calling slickGoTo
-        // setTimeout(() => {
-        //   if (sliderRef.current) {
-        //     sliderRef.current.slickGoTo(images.length); // go to the last slide
-        //   }
-        // }, 0);
-
         setProcessingImage(false);
         setImageUpload(null);
         setScale(1);
@@ -302,7 +294,7 @@ export default function TripContent(props) {
     setModalMode("");
 
     try {
-      const imageObjects = await updateEditedTrip(
+      await updateEditedTrip(
         user.email,
         tripData,
         tripData.tripId,
@@ -311,31 +303,27 @@ export default function TripContent(props) {
         travelDate,
         title
       );
-
-      setTravelDate(travelDate);
-      setTripDesc(newDesc);
-      setImages(imageObjects);
-      router.replace(`/trip/${title}`);
-      notifications.update(tripUpdated);
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const updateHandler = () => {
+    updateTripData();
+    notifications.update(tripUpdated);
   };
 
   return (
     <>
       {(modalMode === "editTrip" || pathname === "/tripPlanner") && (
         <>
-          <Group gap={20} w="100%" grow>
-            <Box mb={45}>
+          <Group gap={20} w="100%" align="flex-start" grow>
+            <Box>
               {images.length > 0 ? (
                 <Carousel
                   getEmblaApi={setEmbla}
-                  align={1}
-                  inViewThreshold={1}
-                  skipSnaps={true}
                   withIndicators
-                  includeGapInSize={false}
                   containScroll={"trimSnaps"}
                   slideSize={"100%"}
                   controlSize={60}
@@ -375,7 +363,7 @@ export default function TripContent(props) {
                 />
               )}
             </Box>
-            <Box h={images.length > 1 ? 350 : 300}>
+            <Box h={350}>
               <FileButton
                 accept={IMAGE_MIME_TYPE}
                 disabled={images.length === 6}
@@ -513,12 +501,7 @@ export default function TripContent(props) {
       </RichTextEditor>
       {pathname !== "/tripPlanner" && (
         <Group justify="flex-end" w={"100%"}>
-          <Button
-            variant="default"
-            size="md"
-            w={"25%"}
-            onClick={updateTripData}
-          >
+          <Button variant="default" size="md" w={"25%"} onClick={updateHandler}>
             SUBMIT EDIT
           </Button>
         </Group>
