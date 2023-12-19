@@ -62,7 +62,7 @@
 }
 
 .progress {
-  background: light-dark(#94d82d, #2b8a3e);
+  background: light-dark(#94d82d, #2b8a3e) !important;
 }
 
 .infoPanel .useFundsBtn {

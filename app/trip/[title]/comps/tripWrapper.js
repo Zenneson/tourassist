@@ -43,6 +43,7 @@ import {
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PageLoader from "../../../comps/pageLoader/pageLoader";
 import {
   useCalculateFunds,
   useLoadUpdateData,
@@ -231,7 +232,7 @@ export default function TripWrapper(props) {
 
   return (
     <>
-      {/* <PageLoader contentLoaded={imagesLoaded && tripData.length !== 0} /> */}
+      <PageLoader contentLoaded={imagesLoaded && tripData.length !== 0} />
       <Center mt={120}>
         <Flex
           gap={30}
