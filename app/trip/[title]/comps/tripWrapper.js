@@ -1,5 +1,4 @@
 "use client";
-import PageLoader from "@globalComps/pageLoader/pageLoader";
 import {
   activeTripData,
   donationsAtom,
@@ -51,9 +50,9 @@ import TripDescription from "./tripDescription";
 import Updates from "./updates";
 
 export default function TripWrapper(props) {
-  const { dbTripData, title } = props;
+  const { setImagesLoaded, dbTripData, title } = props;
 
-  const { user, loading } = useUser();
+  const { user } = useUser();
   const router = useRouter();
 
   const [modalMode, setModalMode] = useState("");
@@ -70,7 +69,6 @@ export default function TripWrapper(props) {
   const [updates, setUpdates] = useAtom(updatesAtom);
   const [tripDesc, setTripDesc] = useAtom(tripDescAtom);
   const [tripData, setTripData] = useAtom(tripDataAtom);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
   const [donationAmount, setDonationAmount] = useState(0);
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
@@ -146,7 +144,6 @@ export default function TripWrapper(props) {
 
   return (
     <>
-      <PageLoader contentLoaded={imagesLoaded && tripData.length !== 0} />
       <Center mt={120}>
         <Flex
           gap={30}

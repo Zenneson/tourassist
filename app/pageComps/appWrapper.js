@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { usePathname } from "next/navigation";
+import { SWRDevTools } from "swr-devtools";
 import "../styles/global.css";
 
 export default function AppWrapper({ children }) {
@@ -40,7 +41,7 @@ export default function AppWrapper({ children }) {
               {pathname !== "/" && <MainMenu />}
             </AppShell.Header>
             {pathname !== "/" && <ChatBot />}
-            {children}
+            <SWRDevTools>{children}</SWRDevTools>
           </AppShell>
         </UserProvider>
       </MantineProvider>

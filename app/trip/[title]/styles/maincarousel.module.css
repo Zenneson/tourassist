@@ -23,7 +23,7 @@
 }
 
 .indicator {
-  background-color: light-dark(#fff, #000);
+  background-color: light-dark(#fff, #000) !important;
 }
 
 .root {

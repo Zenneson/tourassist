@@ -1,9 +1,24 @@
+"use client";
+import PageLoader from "@globalComps/pageLoader/pageLoader";
+import { useState } from "react";
+import useSWR from "swr";
 import { getTripData } from "./api/route";
 import TripWrapper from "./comps/tripWrapper";
 
-export default async function Trippage(props) {
+export default function Trippage(props) {
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const title = props.params.title;
-  const tripData = await getTripData(title);
+  const { data: tripData, error } = useSWR(title, () => getTripData(title));
+  if (error) console.error(error);
 
-  return <TripWrapper title={title} dbTripData={tripData} />;
+  return (
+    <>
+      <PageLoader contentLoaded={imagesLoaded && tripData} />
+      <TripWrapper
+        title={title}
+        dbTripData={tripData}
+        setImagesLoaded={setImagesLoaded}
+      />
+    </>
+  );
 }

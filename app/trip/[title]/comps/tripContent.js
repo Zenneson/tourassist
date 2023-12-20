@@ -342,6 +342,7 @@ export default function TripContent(props) {
                   }
                   classNames={{
                     indicators: classes.indicators,
+                    indicator: classes.indicator,
                     control: classes.control,
                     root: classes.root,
                   }}

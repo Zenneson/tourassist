@@ -1,30 +1,27 @@
 import { useUser } from "@libs/context";
 import { LoadingOverlay } from "@mantine/core";
-import { useAtomValue } from "jotai";
-import { useState } from "react";
+import useSWR from "swr";
 import { getAllTrips } from "./api/getAllTrips";
-import TripInfoWrapper, { currentTripAtom } from "./tripInfoWrapper";
+import TripInfoWrapper from "./tripInfoWrapper";
 
 export default function TripInfo() {
-  const [tripsLoaded, setTripsLoaded] = useState(false);
   const { user } = useUser();
-  const currentTrip = useAtomValue(currentTripAtom);
-  getAllTrips(user.email).then((data) => setTripsLoaded(data));
+  const { data: trips, error } = useSWR("trips", () => getAllTrips(user.email));
 
   return (
     <>
       <LoadingOverlay
-        visible={!tripsLoaded || currentTrip === undefined}
+        visible={!trips && !error}
         ml={310}
         transitionProps={{
-          duration: 1500,
+          duration: 1000,
           timingFunction: "ease",
         }}
         overlayProps={{
           backgroundOpacity: 1,
         }}
       />
-      <TripInfoWrapper allTrips={tripsLoaded} />
+      <TripInfoWrapper trips={trips} />
     </>
   );
 }

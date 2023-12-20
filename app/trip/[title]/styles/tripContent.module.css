@@ -145,6 +145,10 @@ button.control {
   opacity: 0.5;
 }
 
+.indicator {
+  background-color: light-dark(#fff, #000) !important;
+}
+
 .root {
   transition: all 250ms ease;
   border-radius: 3px;

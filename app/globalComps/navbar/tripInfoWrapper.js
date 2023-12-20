@@ -1,4 +1,5 @@
 "use client";
+import { mainMenuAtom, panelAtom } from "@libs/atoms";
 import {
   addComma,
   dateRangeFunc,
@@ -35,7 +36,7 @@ import {
   PointElement,
   Tooltip,
 } from "chart.js";
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
@@ -45,7 +46,7 @@ import classes from "./styles/tripInfo.module.css";
 export const currentTripAtom = atom([]);
 
 export default function TripInfoWrapper(props) {
-  const { allTrips, setMainMenuOpened, setPanelShow } = props;
+  const { trips } = props;
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -54,6 +55,9 @@ export default function TripInfoWrapper(props) {
 
   const router = useRouter();
 
+  const setMainMenuOpened = useSetAtom(mainMenuAtom);
+  const setPanelShow = useSetAtom(panelAtom);
+  const [allTrips, setAllTrips] = useState(trips || []);
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
   const [currentTrip, setCurrentTrip] = useAtom(currentTripAtom);
@@ -65,6 +69,12 @@ export default function TripInfoWrapper(props) {
     key: "donations",
     defaultValue: [],
   });
+
+  useEffect(() => {
+    if (trips && trips.length > 0) {
+      setAllTrips(trips);
+    }
+  }, [trips, setAllTrips]);
 
   useEffect(() => {
     if (!currentTrip || currentTrip.length === 0) {
