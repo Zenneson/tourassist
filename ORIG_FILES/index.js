@@ -14,7 +14,7 @@ import { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import Intro from "../app/comps/intro/page";
+import Intro from "../app/globalComps/intro/page";
 import Legal from "../app/legal";
 import classes from "./styles/index.module.css";
 

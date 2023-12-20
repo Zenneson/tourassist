@@ -61,7 +61,7 @@ export default function TripContent(props) {
   const [processingImage, setProcessingImage] = useState(false);
 
   const [tripDesc, setTripDesc] = useAtom(tripDescAtom);
-  const [travelDate, setTravelDate] = useAtom(travelDateAtom);
+  const travelDate = useAtomValue(travelDateAtom);
   const updatedDesc = useAtomValue(updatedDescAtom);
 
   const router = useRouter();
@@ -341,6 +341,7 @@ export default function TripContent(props) {
                     />
                   }
                   classNames={{
+                    indicators: classes.indicators,
                     control: classes.control,
                     root: classes.root,
                   }}

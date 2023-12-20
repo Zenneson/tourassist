@@ -1,8 +1,20 @@
 "use client";
+import LoginComp from "@globalComps/login/loginComp";
+import { placesAtom } from "@libs/atoms";
 import { useUser } from "@libs/context";
 import { dateFormat, dateId, saveToDB } from "@libs/custom";
 import {
-  ActionIcon,
+  createTrip,
+  descIsShort,
+  noAccountInfo,
+  noCosts,
+  noDesc,
+  noTitle,
+  titleIsShort,
+  tripFailed,
+  tripMade,
+} from "@libs/notifications";
+import {
   Badge,
   Box,
   Button,
@@ -27,7 +39,6 @@ import { createFormContext } from "@mantine/form";
 import { useSessionStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import {
-  IconAlertTriangle,
   IconBuildingBank,
   IconCalculator,
   IconCalendarMonth,
@@ -45,20 +56,9 @@ import {
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { motion } from "framer-motion";
+import { atom, useAtom, useAtomValue } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import LoginComp from "../comps/login/loginComp";
-import {
-  createTrip,
-  descIsShort,
-  noAccountInfo,
-  noCosts,
-  noDesc,
-  noTitle,
-  titleIsShort,
-  tripFailed,
-  tripMade,
-} from "../libs/notifications";
 import TripContent from "../trip/[title]/comps/tripContent";
 import FirstPanel from "./comps/firstPanel";
 import PlaceTimeline from "./comps/placeTimeline";
@@ -67,8 +67,16 @@ import UseTickets from "./comps/useTickets";
 import classes from "./styles/tripPlanner.module.css";
 
 export const [FormProvider, useFormContext, useForm] = createFormContext();
-export default function TripPlanner(props) {
-  let { auth } = props;
+
+export const tripTypesAtom = atom([]);
+export const travelersAtom = atom(1);
+export const roundTripAtom = atom(false);
+export const plannerImagesAtom = atom([]);
+export const plannerTripTitleAtom = atom("");
+export const plannerTripDescAtom = atom("");
+export const startLocaleAtom = atom("");
+
+export default function TripPlanner() {
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -81,45 +89,20 @@ export default function TripPlanner(props) {
   const pathname = usePathname();
   const { user } = useUser();
 
-  const [placeData, setPlaceData] = useSessionStorage({
-    key: "places",
-    defaultValue: [],
-  });
-
   const [destinations, setDestinations] = useState([]);
   const [infoAdded, setInfoAdded] = useState(false);
   const [showTripInfo, setShowTripInfo] = useState(false);
   const startLocaleRef = useRef(null);
   const titleRef = useRef(null);
 
-  const [tripTypes, setTripTypes] = useSessionStorage({
-    key: "tripTypes",
-    defaultValue: [],
-  });
-  const [images, setImages] = useSessionStorage({
-    key: "images",
-    defaultValue: [],
-  });
-  const [travelers, setTravelers] = useSessionStorage({
-    key: "travelers",
-    defaultValue: 1,
-  });
-  const [roundTrip, setRoundTrip] = useSessionStorage({
-    key: "roundTrip",
-    defaultValue: false,
-  });
-  const [plannerTripTitle, setPlannerTripTitle] = useSessionStorage({
-    key: "plannerTripTitle",
-    defaultValue: "",
-  });
-  const [plannerTripDesc, setPlannerTripDesc] = useSessionStorage({
-    key: "plannerTripDesc",
-    defaultValue: "",
-  });
-  const [startLocale, setStartLocale] = useSessionStorage({
-    key: "startLocale",
-    defaultValue: "",
-  });
+  const [placeData, setPlaceData] = useAtom(placesAtom);
+  const tripTypes = useAtomValue(tripTypesAtom);
+  const [plannerImages, setPlannerImages] = useAtom(plannerImagesAtom);
+  const [travelers, setTravelers] = useAtom(travelersAtom);
+  const roundTrip = useAtomValue(roundTripAtom);
+  const [plannerTripTitle, setPlannerTripTitle] = useAtom(plannerTripTitleAtom);
+  const plannerTripDesc = useAtomValue(plannerTripDescAtom);
+  const [startLocale, setStartLocale] = useAtom(startLocaleAtom);
 
   const splitLocale = (e) => {
     const index = e.indexOf(",");
@@ -295,7 +278,7 @@ export default function TripPlanner(props) {
       notifications.show(createTrip);
       saveToDB(
         plannerTripTitle,
-        images,
+        plannerImages,
         plannerTripDesc,
         startLocale,
         travelers,
@@ -350,13 +333,14 @@ export default function TripPlanner(props) {
     return value !== "";
   };
 
-  const placeExists = {
-    title: "Already set as destination",
-    message: `${startLocale} is set as a destination. Please choose another location.`,
-    color: "orange",
-    icon: <IconAlertTriangle size={17} />,
-    autoClose: 2500,
-  };
+  const [pageLoaded, setPageLoaded] = useState(false);
+  useEffect(() => {
+    if (placeData && placeData.length > 0) return;
+    setPageLoaded(true);
+    if (pageLoaded && placeData && placeData.length === 0) {
+      router.push("/map");
+    }
+  }, [pageLoaded, placeData]);
 
   return (
     <FormProvider form={form}>
@@ -399,7 +383,6 @@ export default function TripPlanner(props) {
                   <motion.div {...animation}>
                     <FirstPanel
                       dark={dark}
-                      placeExists={placeExists}
                       placeData={placeData}
                       clearAutoComplete={clearAutoComplete}
                       startLocaleRef={startLocaleRef}
@@ -415,8 +398,6 @@ export default function TripPlanner(props) {
                       setTravelDates={setTravelDates}
                       travelers={travelers}
                       setTravelers={setTravelers}
-                      roundTrip={roundTrip}
-                      setRoundTrip={setRoundTrip}
                     />
                   </motion.div>
                 )}
@@ -424,7 +405,6 @@ export default function TripPlanner(props) {
                   <motion.div {...animation}>
                     <Box mt={40} maw={950}>
                       <UseTickets
-                        roundTrip={roundTrip}
                         placeData={placeData}
                         setPlaceData={setPlaceData}
                         startLocale={startLocale}
@@ -451,8 +431,8 @@ export default function TripPlanner(props) {
                       <TripContent
                         titleRef={titleRef}
                         active={active}
-                        images={images}
-                        setImages={setImages}
+                        images={plannerImages}
+                        setImages={setPlannerImages}
                       />
                     </Stack>
                   </motion.div>
@@ -472,7 +452,7 @@ export default function TripPlanner(props) {
                         {!user && (
                           <Box w={"100%"} mb={5}>
                             <Box>
-                              <LoginComp auth={auth} />
+                              <LoginComp />
                             </Box>
                           </Box>
                         )}
@@ -677,15 +657,16 @@ export default function TripPlanner(props) {
             <Title order={6}>Trip Details</Title>
           </Flex>
           <Tooltip label="Close Panel">
-            <ActionIcon
+            <Button
+              rightSection={<IconChevronRight stroke={4} size={18} />}
               className={classes.tripDetailsCloseBtn}
               variant="transparent"
               ta={"center"}
               c={dark ? "#fff" : "#000"}
               onClick={() => setShowTripInfo(false)}
             >
-              <IconChevronRight stroke={4} size={18} />
-            </ActionIcon>
+              CLOSE
+            </Button>
           </Tooltip>
         </Group>
         <Flex align={"center"} gap={10} mb={10}>

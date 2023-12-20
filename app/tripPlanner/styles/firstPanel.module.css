@@ -8,7 +8,8 @@
     light-darak(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.3));
 }
 
-.labelSize {
+p.labelSize,
+label.labelSize {
   font-size: 10px;
   opacity: 0.7;
   text-transform: uppercase;

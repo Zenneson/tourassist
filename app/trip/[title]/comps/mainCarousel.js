@@ -80,6 +80,7 @@ export default function MainCarousel(props) {
           <IconChevronCompactLeft className={classes.carouselIcon} size={60} />
         }
         classNames={{
+          indicators: classes.indicators,
           indicator: classes.indicator,
           controls: classes.controls,
           control: classes.control,

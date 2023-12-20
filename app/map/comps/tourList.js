@@ -72,6 +72,7 @@ export default function TourList(props) {
           onClose={() => setListOpened(false)}
           withOverlay={false}
           withCloseButton={false}
+          trapFocus={false}
           padding="xl"
           size={350}
         >
@@ -148,3 +149,11 @@ export default function TourList(props) {
     </>
   );
 }
+
+// This is a hack to prevent the following error from showing up in the console:
+// Warning: Connect(Droppable): Support for defaultProps will be removed from memo components in a future major release. Use JavaScript default parameters instead.
+const error = console.error;
+console.error = (...args) => {
+  if (/defaultProps/.test(args[0])) return;
+  error(...args);
+};

@@ -1,4 +1,5 @@
 "use client";
+import PageLoader from "@globalComps/pageLoader/pageLoader";
 import { areaAtom, listAtom, searchAtom } from "@libs/atoms";
 import {
   Box,
@@ -19,7 +20,6 @@ import { useAtom, useAtomValue } from "jotai";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useState } from "react";
 import Map, { Layer, Marker, Popup, Source } from "react-map-gl";
-import PageLoader from "../../comps/pageLoader/pageLoader";
 import classes from "../styles/mapComp.module.css";
 import TourList from "./tourList";
 

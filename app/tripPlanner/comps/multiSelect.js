@@ -7,9 +7,10 @@ import {
   Text,
   useCombobox,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import { IconCheckbox } from "@tabler/icons-react";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
+import { tripTypesAtom } from "../page";
 import classes from "../styles/multiSelect.module.css";
 
 const tripTypes = [
@@ -34,10 +35,7 @@ export default function MultiSelect() {
 
   const [search, setSearch] = useState("");
   const [data, setData] = useState(tripTypes);
-  const [value, setValue] = useSessionStorage({
-    key: "tripTypes",
-    defaultValue: [],
-  });
+  const [value, setValue] = useAtom(tripTypesAtom);
 
   const exactOptionMatch = data.some((item) => item === search);
 

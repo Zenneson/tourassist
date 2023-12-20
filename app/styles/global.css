@@ -1,3 +1,6 @@
+@import "@mantine/core/styles.css";
+@import "@mantine/notifications/styles.css";
+
 body {
   background-color: light-dark(#f8f9fa, #0b0c0d);
   height: 100%;

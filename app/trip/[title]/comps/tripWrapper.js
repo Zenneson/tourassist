@@ -1,4 +1,5 @@
 "use client";
+import PageLoader from "@globalComps/pageLoader/pageLoader";
 import {
   activeTripData,
   donationsAtom,
@@ -43,7 +44,6 @@ import {
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import PageLoader from "../../../comps/pageLoader/pageLoader";
 import {
   useCalculateFunds,
   useLoadUpdateData,

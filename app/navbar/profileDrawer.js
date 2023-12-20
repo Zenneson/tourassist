@@ -215,8 +215,8 @@ export default function ProfileDrawer(props) {
                 leftSection={<IconWorld size={30} />}
                 variant="subtle"
                 onClick={() => {
-                  closeAll();
                   router.push("/map");
+                  closeAll();
                 }}
                 classNames={{
                   root: classes.navLink,
@@ -249,8 +249,8 @@ export default function ProfileDrawer(props) {
                 leftSection={<IconInfoCircle size={30} />}
                 variant="subtle"
                 onClick={() => {
-                  closeAll();
                   router.push("/help");
+                  closeAll();
                 }}
                 classNames={{
                   root: classes.navLink,
@@ -273,8 +273,8 @@ export default function ProfileDrawer(props) {
             leftSection={<IconGavel size={18} />}
             hidden={pathname === "/legal"}
             onClick={() => {
-              closeAll();
               router.push("/legal");
+              closeAll();
             }}
           >
             Legal Documents

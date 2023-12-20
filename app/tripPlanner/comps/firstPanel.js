@@ -1,3 +1,4 @@
+import { placeExists } from "@libs/notifications";
 import {
   ActionIcon,
   Autocomplete,
@@ -13,15 +14,17 @@ import {
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useElementSize } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
+import { useAtom } from "jotai";
+import { roundTripAtom } from "../page";
 import classes from "../styles/firstPanel.module.css";
 import MultiSelect from "./multiSelect";
 
 export default function FirstPanel(props) {
   const {
     placeData,
-    placeExists,
     clearAutoComplete,
     startLocaleRef,
     startLocale,
@@ -36,9 +39,8 @@ export default function FirstPanel(props) {
     setTravelDates,
     travelers,
     setTravelers,
-    roundTrip,
-    setRoundTrip,
   } = props;
+  const [roundTrip, setRoundTrip] = useAtom(roundTripAtom);
   const { ref, width, height } = useElementSize();
   const today = new Date();
   const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -46,7 +48,8 @@ export default function FirstPanel(props) {
   const placeCheck = () => {
     placeData.map((place) => {
       if (`${place.place}, ${place.region}` === startLocale) {
-        notifications.show(placeExists);
+        const message = placeExists(startLocale);
+        notifications.show(message);
         setStartLocale("");
         setStartLocaleSearch("");
         setStartLocaleData([]);

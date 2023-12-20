@@ -1,4 +1,5 @@
 "use client";
+import ChatBot from "@globalComps/chatbot/chatBot";
 import { UserProvider } from "@libs/context";
 import { tourTheme } from "@libs/tourTheme";
 import {
@@ -9,7 +10,6 @@ import {
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { usePathname } from "next/navigation";
-import ChatBot from "../comps/chatbot/chatBot";
 import MainMenu from "../navbar/mainMenu";
 import SearchModal from "../navbar/searchModal";
 import "../styles/global.css";

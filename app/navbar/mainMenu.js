@@ -1,4 +1,5 @@
 "use client";
+import LoginComp from "@globalComps/login/loginComp";
 import { listAtom, mainMenuAtom, panelAtom, searchAtom } from "@libs/atoms";
 import { useUser } from "@libs/context";
 import { auth, firestore } from "@libs/firebase";
@@ -38,7 +39,6 @@ import { useAtom, useSetAtom } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import LoginComp from "../comps/login/loginComp";
 import ProfileDrawer from "./profileDrawer";
 import classes from "./styles/mainMenu.module.css";
 

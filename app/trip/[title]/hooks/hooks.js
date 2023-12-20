@@ -52,7 +52,7 @@ export function useCalculateFunds(funds, donationSum, spentFunds, setFunds) {
 export function useUpdateSpentFunds(tripData, setSpentFunds, spentFunds) {
   useEffect(() => {
     if (tripData?.spentFunds !== spentFunds) {
-      setSpentFunds(tripData.spentFunds);
+      if (spentFunds) setSpentFunds(tripData.spentFunds);
     }
   }, [tripData, setSpentFunds]);
 }

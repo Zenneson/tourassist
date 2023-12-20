@@ -275,6 +275,8 @@ export default function ModalsItem(props) {
               root: classes.textEditor,
               toolbar: classes.textEditorToolbar,
               content: classes.textEditorContent,
+              typographyStylesProvider:
+                classes.textEditorTypographyStylesProvider,
             }}
             editor={updateEditor}
             position="relative"
@@ -482,9 +484,9 @@ export default function ModalsItem(props) {
             <TripContent
               user={user}
               images={images}
+              setImages={setImages}
               tripDesc={tripDesc}
               tripData={tripData}
-              setImages={setImages}
               modalMode={modalMode}
               setModalMode={setModalMode}
               weekAhead={weekAhead}

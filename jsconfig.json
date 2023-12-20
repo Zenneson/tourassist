@@ -2,7 +2,8 @@
   "compilerOptions": {
     "baseUrl": "/app",
 		"paths": {
-      "@libs/*": ["libs/*"]
+      "@libs/*": ["libs/*"],
+      "@globalComps/*": ["globalComps/*"]
     },
 		"target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],

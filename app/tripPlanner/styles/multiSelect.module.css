@@ -14,7 +14,7 @@
 }
 
 .labelSize {
-  font-size: 10px;
+  font-size: 10px !important;
   opacity: 0.7;
   text-transform: uppercase;
 }

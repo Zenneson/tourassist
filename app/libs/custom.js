@@ -315,11 +315,6 @@ export const saveToDB = async (
         tripId: createdId,
         user: user,
       });
-      sessionStorage.removeItem("placeData");
-      sessionStorage.removeItem("places");
-      sessionStorage.removeItem("images");
-      sessionStorage.removeItem("tripDesc");
-      sessionStorage.removeItem("totalCost");
 
       resolve();
     } catch (error) {

@@ -1,4 +1,6 @@
 "use client";
+import Intro from "@globalComps/intro/intro";
+import PageLoader from "@globalComps/pageLoader/pageLoader";
 import {
   BackgroundImage,
   Box,
@@ -10,8 +12,6 @@ import {
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import Intro from "../comps/intro/intro";
-import PageLoader from "../comps/pageLoader/pageLoader";
 import Legal from "../legal";
 import classes from "../styles/page.module.css";
 

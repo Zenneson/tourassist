@@ -1,4 +1,4 @@
-import { IconX, IconCheck, IconAlertTriangle } from "@tabler/icons-react";
+import { IconAlertTriangle, IconCheck, IconX } from "@tabler/icons-react";
 
 export const noCosts = {
   title: "Trip Cost Missing",
@@ -198,4 +198,14 @@ export const wrongPassword = {
   icon: <IconX size={20} />,
   title: "Wrong password",
   message: `The password you entered is incorrect.`,
+};
+
+export const placeExists = (startLocale) => {
+  return {
+    title: "Already set as destination",
+    message: `${startLocale} is set as a destination. Please choose another location.`,
+    color: "orange",
+    icon: <IconAlertTriangle size={17} />,
+    autoClose: 2500,
+  };
 };

@@ -108,7 +108,6 @@ export default function Updates(props) {
 
       mutate(title);
       notifications.update(updateDeletedEnd);
-      setNewUpdate(false);
     } catch (error) {
       console.error("Error deleting update:", error);
     }
