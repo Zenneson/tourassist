@@ -47,11 +47,6 @@ export const currentTripAtom = atom([]);
 export default function TripInfoWrapper(props) {
   const { allTrips, setMainMenuOpened, setPanelShow } = props;
 
-  console.log(
-    "🚀 ~ file: tripInfoWrapper.js:49 ~ TripInfoWrapper ~ allTrips:",
-    allTrips
-  );
-
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });

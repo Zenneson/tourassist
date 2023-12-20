@@ -16,6 +16,10 @@ export default function TripInfo() {
       <LoadingOverlay
         visible={!tripsLoaded || currentTrip === undefined}
         ml={310}
+        transitionProps={{
+          duration: 1500,
+          timingFunction: "ease",
+        }}
         overlayProps={{
           backgroundOpacity: 1,
         }}
