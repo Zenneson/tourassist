@@ -7,7 +7,7 @@ import {
   searchOpenedAtom,
 } from "@libs/atoms";
 import { useUser } from "@libs/context";
-import { auth, firestore } from "@libs/firebase";
+import { auth } from "@libs/firebase";
 import {
   Box,
   Button,
@@ -39,11 +39,10 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import { signOut } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
 import { useAtom, useSetAtom } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
+import { useState } from "react";
+
 import ProfileDrawer from "./profileDrawer";
 import classes from "./styles/mainMenu.module.css";
 
@@ -70,50 +69,10 @@ export default function MainMenu() {
   const [loginModal, setLoginModal] = useState(false);
   const [popoverOpened, setPopoverOpened] = useState(false);
 
-  const [currentTrip, setCurrentTrip] = useSessionStorage({
-    key: "currentTrip",
-    defaultValue: [],
-  });
-
   const [active, setActive] = useSessionStorage({
     key: "active",
     defaultValue: -1,
   });
-
-  const fetchTrips = async (userEmail) => {
-    const queryData = collection(firestore, "users", userEmail, "trips");
-    const querySnapshot = await getDocs(queryData);
-    return querySnapshot.docs.map((doc) => doc.data());
-  };
-
-  const {
-    data: allTrips,
-    mutate,
-    error,
-    isLoading,
-  } = useSWR(user?.email, fetchTrips);
-
-  useEffect(() => {
-    if (!allTrips && !error) {
-      mutate();
-    }
-  }, [allTrips, error, mutate]);
-
-  if (error) {
-    console.error("Error fetching trips:", error);
-  }
-
-  useEffect(() => {
-    if (!currentTrip || currentTrip.length === 0) {
-      const sessionTrip = sessionStorage.getItem("currentTrip");
-      if (sessionTrip) {
-        const parsedTrip = JSON.parse(sessionTrip);
-        setCurrentTrip(parsedTrip);
-      } else if (allTrips && allTrips.length > 0) {
-        setCurrentTrip(allTrips[0]);
-      }
-    }
-  }, [currentTrip, setCurrentTrip, allTrips]);
 
   const openMenu = () => {
     setMainMenuOpened((o) => !o);
@@ -142,7 +101,7 @@ export default function MainMenu() {
     // Cookies.remove("tripData");
     // Cookies.remove("user");
     setMainMenuOpened(false);
-    router.push("/", undefined);
+    router.push("/");
   };
 
   const logoutHandler = () => {
@@ -395,7 +354,6 @@ export default function MainMenu() {
         setMainMenuOpened={setMainMenuOpened}
         signOutFunc={signOutFunc}
         openMenu={openMenu}
-        allTrips={allTrips}
       />
     </>
   );

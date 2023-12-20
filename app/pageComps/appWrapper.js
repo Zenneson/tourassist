@@ -1,5 +1,7 @@
 "use client";
 import ChatBot from "@globalComps/chatbot/chatBot";
+import MainMenu from "@globalComps/navbar/mainMenu";
+import SearchModal from "@globalComps/navbar/searchModal";
 import { UserProvider } from "@libs/context";
 import { tourTheme } from "@libs/tourTheme";
 import {
@@ -10,8 +12,6 @@ import {
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { usePathname } from "next/navigation";
-import MainMenu from "../globalComps/navbar/mainMenu";
-import SearchModal from "../globalComps/navbar/searchModal";
 import "../styles/global.css";
 
 export default function AppWrapper({ children }) {

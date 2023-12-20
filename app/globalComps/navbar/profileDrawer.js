@@ -48,7 +48,6 @@ export default function ProfileDrawer(props) {
     setMainMenuOpened,
     openMenu,
     signOutFunc,
-    allTrips,
   } = props;
 
   const router = useRouter();
@@ -78,7 +77,6 @@ export default function ProfileDrawer(props) {
 
   const items = links.map((item, index) => {
     // Main menu items
-    if (index === 1 && allTrips?.length === 0) return;
     return (
       <NavLink
         px={25}
@@ -359,7 +357,6 @@ export default function ProfileDrawer(props) {
               </Flex>
             </Title>
             <TripInfo
-              allTrips={allTrips}
               setMainMenuOpened={setMainMenuOpened}
               setPanelShow={setPanelShow}
             />
