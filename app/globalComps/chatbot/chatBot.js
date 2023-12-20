@@ -52,8 +52,8 @@ export default function ChatBot() {
         <Image
           className={classes.globeImg}
           src="/img/chatlogo.png"
-          width={75}
-          height={75}
+          width={60}
+          height={60}
           alt="Chatbot"
           priority={true}
           onClick={openChat}

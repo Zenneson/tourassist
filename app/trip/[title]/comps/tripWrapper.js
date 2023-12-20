@@ -24,22 +24,13 @@ import {
   Stack,
   Text,
   Title,
-  Tooltip,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useForceUpdate } from "@mantine/hooks";
 import {
   IconBlockquote,
-  IconBrandFacebook,
-  IconBrandInstagram,
-  IconBrandTiktok,
-  IconBrandTwitter,
-  IconBrandWhatsapp,
   IconCurrencyDollar,
   IconHeartHandshake,
   IconPencil,
-  IconQrcode,
-  IconSourceCode,
 } from "@tabler/icons-react";
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
@@ -55,6 +46,7 @@ import classes from "../styles/title.module.css";
 import Donations from "./donations";
 import MainCarousel from "./mainCarousel";
 import ModalsItem from "./modalsItem";
+import ShareButtons from "./shareButtons";
 import TripDescription from "./tripDescription";
 import Updates from "./updates";
 
@@ -90,7 +82,6 @@ export default function TripWrapper(props) {
   const [funds, setFunds] = useAtom(fundsAtom);
   const [donations, setDonations] = useAtom(donationsAtom);
   const setActiveTrip = useSetAtom(activeTripData);
-  const forceUpdate = useForceUpdate();
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>
@@ -139,83 +130,6 @@ export default function TripWrapper(props) {
   const closeEditTripModal = () => {
     setModalMode("");
   };
-
-  const ShareButtons = () => (
-    <Center>
-      <Button.Group className={classes.shareButtonGroup}>
-        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Facebook">
-          <Button
-            className={classes.shareButton}
-            size="lg"
-            w={"15%"}
-            variant="transparent"
-          >
-            <IconBrandFacebook size={20} />
-          </Button>
-        </Tooltip>
-        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Instagram">
-          <Button
-            className={classes.shareButton}
-            size="lg"
-            w={"15%"}
-            variant="transparent"
-          >
-            <IconBrandInstagram size={20} />
-          </Button>
-        </Tooltip>
-        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Tiktok">
-          <Button
-            className={classes.shareButton}
-            size="lg"
-            w={"15%"}
-            variant="transparent"
-          >
-            <IconBrandTiktok size={20} />
-          </Button>
-        </Tooltip>
-        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Twitter">
-          <Button
-            className={classes.shareButton}
-            size="lg"
-            w={"15%"}
-            variant="transparent"
-          >
-            <IconBrandTwitter size={20} />
-          </Button>
-        </Tooltip>
-        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share on Whatsapp">
-          <Button
-            className={classes.shareButton}
-            size="lg"
-            w={"15%"}
-            variant="transparent"
-          >
-            <IconBrandWhatsapp size={20} />
-          </Button>
-        </Tooltip>
-        <Tooltip classNames={{ tooltip: "toolTip" }} label="HTML Embed Code">
-          <Button
-            className={classes.shareButton}
-            size="lg"
-            w={"15%"}
-            variant="transparent"
-          >
-            <IconSourceCode size={20} />
-          </Button>
-        </Tooltip>
-        <Tooltip classNames={{ tooltip: "toolTip" }} label="Share with QR Code">
-          <Button
-            className={classes.shareButton}
-            size="lg"
-            w={"15%"}
-            variant="transparent"
-          >
-            <IconQrcode size={20} />
-          </Button>
-        </Tooltip>
-      </Button.Group>
-    </Center>
-  );
 
   useUpdateTripData(
     dbTripData,

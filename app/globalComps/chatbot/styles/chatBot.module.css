@@ -1,15 +1,46 @@
 .globeImg {
   z-index: 2100;
-  transition: all 250ms ease-in-out;
+  transition: all 150ms ease-in-out;
   cursor: pointer;
   position: absolute;
-  bottom: 30px;
-  right: 30px;
+  bottom: 40px;
+  right: 40px;
   max-width: 100%;
   transform: scale(1);
+  border-radius: 50%;
+  animation: blinkAnimation 10s 3;
+  background: rgba(0, 0, 0, 0);
 
   &:hover {
     transform: scale(1.1);
+  }
+}
+
+@keyframes blinkAnimation {
+  0%,
+  100% {
+    filter: none;
+    box-shadow: none;
+  }
+  10% {
+    filter: none;
+    box-shadow: none;
+  }
+  11% {
+    filter: blur(2px) sepia(0.5);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+  12% {
+    filter: blur(5px) sepia(1);
+    box-shadow: 0 0 10px #fff;
+  }
+  13% {
+    filter: blur(2px) sepia(0.5);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+  14% {
+    filter: none;
+    box-shadow: none;
   }
 }
 
@@ -123,7 +154,7 @@
     rgba(248, 249, 250, 0.95),
     rgba(12, 13, 14, 0.95)
   );
-  border: 1px solid
+  border-top: 1px solid
     light-dark(
       rgba(0, 0, 0, 0.1) !important,
       rgba(255, 255, 255, 0.03) !important

@@ -120,7 +120,7 @@ export default function LatestTrips() {
               zIndex: 2,
             }}
             label={
-              <Text color="lime" fw={100} align="center" size={14}>
+              <Text c="lime" fw={100} align="center" size={14}>
                 {trip.percent}
                 <Text fz={7} pos={"relative"} top={-5} span>
                   %

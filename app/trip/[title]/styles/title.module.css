@@ -4,34 +4,14 @@
   border: 1px solid light-dark(#ececec, #1c1c1c);
 }
 
-.shareButton {
-  color: light-dark(#5c5f66, #f8f9fa);
-  background: rgba(0, 0, 0, 0);
-  opacity: 0.5;
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.shareButtonGroup {
-  width: 688px;
-  overflow: hidden;
-  border-radius: 50;
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
-  background: light-dark(
-    linear-gradient(0deg, #e9ecef 0%, #fff 100%),
-    linear-gradient(0deg, #050506 0%, #000 100%)
-  );
-}
-
 .updateModalButton {
   background: light-dark(
-    linear-gradient(0deg, #e9ecef 0%, #fff 100%),
+    linear-gradient(0deg, #d7d7d8 0%, #fff 100%),
     linear-gradient(0deg, #000 0%, #020202 100%)
-  );
-  color: light-dark(#5c5f66, #f8f9fa);
-  opacity: 0.4;
-  border: none;
+  ) !important;
+  color: light-dark(#000000, #f8f9fa) !important;
+  opacity: 0.7;
+  border: none !important;
   &:hover {
     opacity: 1;
   }

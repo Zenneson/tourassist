@@ -8,11 +8,11 @@
   font-size: 12px;
   border-radius: 5px;
   box-shadow: inset 0px 2px 8px
-    light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.35));
+    light-dark(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.2));
 }
 
 .faqFrame {
   border-bottom: 2px solid
-    light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.02));
+    light-dark(rgba(0, 0, 0, 0.03), rgba(255, 255, 255, 0.01));
   padding-bottom: 10px;
 }

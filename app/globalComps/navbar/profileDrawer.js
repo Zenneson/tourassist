@@ -98,7 +98,7 @@ export default function ProfileDrawer(props) {
         label={
           <Text
             fw={700}
-            fz={12}
+            fz={10}
             style={{
               textTransform: "uppercase",
             }}
@@ -201,7 +201,7 @@ export default function ProfileDrawer(props) {
                 label={
                   <Text
                     fw={700}
-                    fz={12}
+                    fz={10}
                     style={{
                       textTransform: "uppercase",
                     }}
@@ -234,18 +234,15 @@ export default function ProfileDrawer(props) {
                 label={
                   <Text
                     fw={700}
-                    fz={12}
+                    fz={10}
                     style={{
                       textTransform: "uppercase",
                     }}
                   >
-                    <Text c={"blue.4"} fw={400} fz={12} span>
-                      Tourassist
-                    </Text>{" "}
-                    News
+                    Latest Info.
                   </Text>
                 }
-                description="News, Updates and Latest Info"
+                description="Info, Updates and Latest News"
                 px={25}
                 py={8}
                 leftSection={<IconActivityHeartbeat size={30} />}
