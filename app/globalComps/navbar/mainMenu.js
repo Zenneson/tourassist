@@ -1,6 +1,11 @@
 "use client";
 import LoginComp from "@globalComps/login/loginComp";
-import { listAtom, mainMenuAtom, panelAtom, searchAtom } from "@libs/atoms";
+import {
+  listAtom,
+  mainMenuAtom,
+  panelAtom,
+  searchOpenedAtom,
+} from "@libs/atoms";
 import { useUser } from "@libs/context";
 import { auth, firestore } from "@libs/firebase";
 import {
@@ -46,7 +51,7 @@ export default function MainMenu() {
   const { user } = useUser();
 
   const setListOpened = useSetAtom(listAtom);
-  const [searchOpened, setSearchOpened] = useAtom(searchAtom);
+  const [searchOpened, setSearchOpened] = useAtom(searchOpenedAtom);
   const [mainMenuOpened, setMainMenuOpened] = useAtom(mainMenuAtom);
   const [panelShow, setPanelShow] = useAtom(panelAtom);
 

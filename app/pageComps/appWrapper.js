@@ -10,8 +10,8 @@ import {
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { usePathname } from "next/navigation";
-import MainMenu from "../navbar/mainMenu";
-import SearchModal from "../navbar/searchModal";
+import MainMenu from "../globalComps/navbar/mainMenu";
+import SearchModal from "../globalComps/navbar/searchModal";
 import "../styles/global.css";
 
 export default function AppWrapper({ children }) {

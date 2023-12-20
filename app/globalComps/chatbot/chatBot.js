@@ -47,14 +47,13 @@ export default function ChatBot() {
       <Tooltip
         classNames={{ tooltip: "toolTip" }}
         position="bottom"
-        label={"Tour Bot"}
-        offset={-10}
+        label={"Tour Assistant"}
       >
         <Image
           className={classes.globeImg}
           src="/img/chatlogo.png"
-          width={100}
-          height={100}
+          width={75}
+          height={75}
           alt="Chatbot"
           priority={true}
           onClick={openChat}

@@ -5,7 +5,7 @@ import {
   mainMenuAtom,
   panelAtom,
   placesAtom,
-  searchAtom,
+  searchOpenedAtom,
 } from "@libs/atoms";
 import {
   Box,
@@ -37,7 +37,7 @@ const fadeIn = { opacity: 1 };
 export default function Mymap(props) {
   const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
-  const searchOpened = useAtomValue(searchAtom);
+  const searchOpened = useAtomValue(searchOpenedAtom);
   const [listOpened, setListOpened] = useAtom(listAtom);
   const [mainMenuOpened, setMainMenuOpened] = useAtom(mainMenuAtom);
   const [panelShow, setPanelShow] = useAtom(panelAtom);

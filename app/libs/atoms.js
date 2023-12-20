@@ -6,7 +6,7 @@ export const activeAtom = atom(-1);
 export const panelAtom = atom(false);
 export const mainMenuAtom = atom(false);
 export const listAtom = atom(false);
-export const searchAtom = atom(false);
+export const searchOpenedAtom = atom(false);
 export const historyAtom = atom(["empty"]);
 
 // Map State

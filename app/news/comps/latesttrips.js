@@ -9,8 +9,9 @@ import {
   Title,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useRouter } from "next/router";
-import classes from "./styles/latesttrips.module.css";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import classes from "../styles/latesttrips.module.css";
 
 export default function LatestTrips() {
   const router = useRouter();
@@ -80,6 +81,7 @@ export default function LatestTrips() {
           pos={"relative"}
           mih={170}
           style={{
+            borderRadius: "3px",
             overflow: "hidden",
           }}
         >

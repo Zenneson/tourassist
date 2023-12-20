@@ -1,6 +1,6 @@
 "use client";
 import PageLoader from "@globalComps/pageLoader/pageLoader";
-import { areaAtom, listAtom, searchAtom } from "@libs/atoms";
+import { areaAtom, listAtom, searchOpenedAtom } from "@libs/atoms";
 import {
   Box,
   Button,
@@ -47,7 +47,7 @@ export default function MapComp(props) {
     fullMapRef,
   } = props;
 
-  const searchOpened = useAtomValue(searchAtom);
+  const searchOpened = useAtomValue(searchOpenedAtom);
   const [listOpened, setListOpened] = useAtom(listAtom);
   const area = useAtomValue(areaAtom);
 

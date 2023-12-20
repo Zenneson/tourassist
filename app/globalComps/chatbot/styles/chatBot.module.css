@@ -3,8 +3,8 @@
   transition: all 250ms ease-in-out;
   cursor: pointer;
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 30px;
+  right: 30px;
   max-width: 100%;
   transform: scale(1);
 

@@ -39,7 +39,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import Donations from "../trip/[title]/comps/donations";
+import Donations from "../../trip/[title]/comps/donations";
 import classes from "./styles/tripInfo.module.css";
 
 export default function TripInfo(props) {

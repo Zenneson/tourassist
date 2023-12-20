@@ -18,10 +18,10 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import {
+  IconActivityHeartbeat,
   IconChevronRight,
   IconClipboardData,
   IconGavel,
-  IconInfoCircle,
   IconLogout,
   IconUserCircle,
   IconWorld,
@@ -228,28 +228,30 @@ export default function ProfileDrawer(props) {
             )}
 
             {user && items}
-            {pathname !== "/help" && (
-              // Help Main Menu Button
+            {pathname !== "/news" && (
+              // News Main Menu Button
               <NavLink
                 label={
                   <Text
                     fw={700}
                     fz={12}
-                    fs={"italic"}
                     style={{
                       textTransform: "uppercase",
                     }}
                   >
-                    How?
+                    <Text c={"blue.4"} fw={400} fz={12} span>
+                      Tourassist
+                    </Text>{" "}
+                    News
                   </Text>
                 }
-                description="About TourAssit | FAQs"
+                description="News, Updates and Latest Info"
                 px={25}
                 py={8}
-                leftSection={<IconInfoCircle size={30} />}
+                leftSection={<IconActivityHeartbeat size={30} />}
                 variant="subtle"
                 onClick={() => {
-                  router.push("/help");
+                  router.push("/news");
                   closeAll();
                 }}
                 classNames={{

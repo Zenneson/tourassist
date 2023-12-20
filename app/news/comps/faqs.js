@@ -1,6 +1,9 @@
-import { Accordion, Stack, Title } from "@mantine/core";
+"use client";
+import { Accordion, Group, Stack, Title } from "@mantine/core";
+import { IconListCheck } from "@tabler/icons-react";
+import classes from "../styles/faqs.module.css";
 
-export default function Help() {
+export default function Faqs() {
   const questions = [
     {
       question: "What is Tourassist?",
@@ -73,9 +76,27 @@ export default function Help() {
 
   return (
     <>
-      <Stack align="center" justify="center" w={"100%"} h={"100vh"}>
-        <Title>Frequently Asked Questions</Title>
-        <Accordion variant="contained" w={"60vw"}>
+      <Stack align="center" justify="flex-start" w={"100%"} h={"100vh"}>
+        <Group
+          w={"100%"}
+          justify="flex-start"
+          gap={10}
+          pl={10}
+          className={classes.faqFrame}
+        >
+          <IconListCheck opacity={0.1} size={40} stroke={1} />
+          <Title opacity={0.3} order={3}>
+            Frequently Asked Questions
+          </Title>
+        </Group>
+        <Accordion
+          variant="separated"
+          w={"50vw"}
+          classNames={{
+            item: classes.accordionTitle,
+            content: classes.accordionContent,
+          }}
+        >
           {faq}
         </Accordion>
       </Stack>
