@@ -50,7 +50,7 @@ import TripDescription from "./tripDescription";
 import Updates from "./updates";
 
 export default function TripWrapper(props) {
-  const { setImagesLoaded, dbTripData, title } = props;
+  const { dbTripData, title } = props;
 
   const { user } = useUser();
   const router = useRouter();
@@ -162,7 +162,7 @@ export default function TripWrapper(props) {
             align={"center"}
             pos={"relative"}
           >
-            <MainCarousel setImagesLoaded={setImagesLoaded} />
+            <MainCarousel />
             <Divider
               w={"100%"}
               maw={688}

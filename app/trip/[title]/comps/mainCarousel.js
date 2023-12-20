@@ -6,13 +6,14 @@ import {
   IconChevronCompactLeft,
   IconChevronCompactRight,
 } from "@tabler/icons-react";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import Image from "next/image";
+import { imagesLoadedAtom } from "../page";
 import classes from "../styles/mainCarousel.module.css";
 
-export default function MainCarousel(props) {
-  const { setImagesLoaded } = props;
+export default function MainCarousel() {
   const tripImages = useAtomValue(tripImagesAtom);
+  const setImagesLoaded = useSetAtom(imagesLoadedAtom);
 
   if (tripImages?.length === 1) {
     return (

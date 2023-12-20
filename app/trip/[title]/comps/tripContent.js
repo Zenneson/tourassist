@@ -1,5 +1,10 @@
 "use client";
-import { travelDateAtom, tripDescAtom, updatedDescAtom } from "@libs/atoms";
+import {
+  hideLoaderAtom,
+  travelDateAtom,
+  tripDescAtom,
+  updatedDescAtom,
+} from "@libs/atoms";
 import { removeImageByName, updateEditedTrip } from "@libs/custom";
 import { Carousel, useAnimationOffsetEffect } from "@mantine/carousel";
 import "@mantine/carousel/styles.css";
@@ -40,7 +45,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import imageCompression from "browser-image-compression";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
@@ -63,6 +68,7 @@ export default function TripContent(props) {
   const [tripDesc, setTripDesc] = useAtom(tripDescAtom);
   const travelDate = useAtomValue(travelDateAtom);
   const updatedDesc = useAtomValue(updatedDescAtom);
+  const setHideLoader = useSetAtom(hideLoaderAtom);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -229,11 +235,11 @@ export default function TripContent(props) {
       ? images.map((image, index) => {
           return (
             <Flex
-              className={classes.tripContentTitle}
+              className={classes.tripImageWrapper}
               key={index}
-              align={"center"}
               gap={10}
-              p={10}
+              align={"center"}
+              p={"7px 10px"}
             >
               <Title
                 order={6}
@@ -248,7 +254,7 @@ export default function TripContent(props) {
               >
                 {index + 1}
               </Title>
-              <Text fz={12} w={"100%"} truncate="end">
+              <Text fz={10} w={"100%"} truncate="end">
                 {image.name}
               </Text>
               <ActionIcon
@@ -292,6 +298,7 @@ export default function TripContent(props) {
     const title = tripData.tripId;
 
     setModalMode("");
+    setHideLoader(false);
 
     try {
       await updateEditedTrip(
@@ -365,7 +372,7 @@ export default function TripContent(props) {
                 />
               )}
             </Box>
-            <Box h={350}>
+            <Box h={300}>
               <FileButton
                 accept={IMAGE_MIME_TYPE}
                 disabled={images.length === 6}
@@ -376,7 +383,7 @@ export default function TripContent(props) {
               >
                 {(props) => (
                   <Button
-                    className={classes.uploadBtn}
+                    classNames={{ root: classes.uploadBtn }}
                     variant="light"
                     size="lg"
                     fullWidth
@@ -402,7 +409,7 @@ export default function TripContent(props) {
               >
                 You may drag and drop files into the browser window{" "}
               </Group>
-              <Stack gap={2}>
+              <Stack gap={0}>
                 {imageItems}
                 {images.length < 6 && (
                   <Badge

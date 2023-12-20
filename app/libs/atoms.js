@@ -9,6 +9,9 @@ export const listAtom = atom(false);
 export const searchOpenedAtom = atom(false);
 export const historyAtom = atom(["empty"]);
 
+// Hide Loader State
+export const hideLoaderAtom = atom(false);
+
 // Map State
 export const areaAtom = atom({ label: "" });
 export const placesAtom = atom([]);
