@@ -21,7 +21,12 @@ export default function PageLoader({ contentLoaded }) {
     <LoadingOverlay
       visible={!hideLoader}
       zIndex={2000}
-      transitionProps={{ duration: 0, exitDuration: 1500 }}
+      transitionProps={{
+        exitDuration: 1500,
+        duration: 50,
+        transition: "fade",
+        timingFunction: "ease",
+      }}
       loaderProps={{
         children: <Globe />,
       }}

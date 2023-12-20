@@ -59,6 +59,7 @@ import { motion } from "framer-motion";
 import { atom, useAtom, useAtomValue } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { resetLoaderState } from "../globalComps/pageLoader/resetLoaderState";
 import TripContent from "../trip/[title]/comps/tripContent";
 import FirstPanel from "./comps/firstPanel";
 import PlaceTimeline from "./comps/placeTimeline";
@@ -225,17 +226,6 @@ export default function TripPlanner() {
     return trip_id;
   };
 
-  const clearData = () => {
-    sessionStorage.removeItem("images");
-    sessionStorage.removeItem("startLocale");
-    sessionStorage.removeItem("travelers");
-    sessionStorage.removeItem("roundTrip");
-    sessionStorage.removeItem("plannerTripTitle");
-    sessionStorage.removeItem("plannerTripDesc");
-    sessionStorage.removeItem("formValues");
-    sessionStorage.removeItem("places");
-  };
-
   const [costsSum, setCostsSum] = useState(form.values.totalCost || 0);
   const tripSum = form.values.totalCost || form.getTransformedValues() || 0;
   const changeNextStep = async () => {
@@ -292,8 +282,8 @@ export default function TripPlanner() {
       )
         .then(() => {
           notifications.update(tripMade);
+          resetLoaderState();
           router.push("/" + createdId);
-          clearData();
         })
         .catch((error) => {
           notifications.update(tripFailed);

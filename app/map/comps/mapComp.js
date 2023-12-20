@@ -216,7 +216,9 @@ export default function MapComp(props) {
         }}
         doubleClickZoom={false}
         interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
-        mapStyle={"mapbox://styles/zenneson/clpulpdqh00wr01p72idm835c"}
+        mapStyle={
+          "mapbox://styles/zenneson/clpulpdqh00wr01p72idm835c?optimize=true'"
+        }
         mapboxAccessToken={mapboxAccessToken}
         style={{
           width: "100%",
