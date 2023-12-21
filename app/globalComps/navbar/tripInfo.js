@@ -13,12 +13,14 @@ export default function TripInfo() {
       <LoadingOverlay
         visible={!trips && !error}
         ml={310}
+        w={620}
         transitionProps={{
           duration: 1000,
           timingFunction: "ease",
         }}
         overlayProps={{
-          backgroundOpacity: 1,
+          backgroundOpacity: 0.5,
+          blur: 5,
         }}
       />
       <TripInfoWrapper trips={trips} />

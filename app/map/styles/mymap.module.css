@@ -1,3 +1,5 @@
+@import "mapbox-gl/dist/mapbox-gl.css";
+
 .countryAutoCompleteZIndex {
   z-index: 1;
 }

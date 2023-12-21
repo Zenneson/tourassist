@@ -41,7 +41,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import Donations from "../../trip/[title]/comps/donations";
-import { resetLoaderState } from "../pageLoader/resetLoaderState";
 import classes from "./styles/tripInfo.module.css";
 
 export const currentTripAtom = atom([]);
@@ -369,7 +368,6 @@ export default function TripInfoWrapper(props) {
                   setMainMenuOpened(false);
                   setPanelShow(false);
                   setTripData(currentTrip);
-                  resetLoaderState();
                   router.push("/trip/" + currentTrip.tripId);
                 }}
               >

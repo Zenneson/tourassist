@@ -177,8 +177,8 @@ export default function Mymap(props) {
       pitch = 25;
     }
     if (type === "city" || (country !== "United States" && type === "region")) {
-      zoom = 15.5;
-      pitch = 70;
+      zoom = 15;
+      pitch = 60;
       if (label.includes("District of Columbia")) {
         zoom = 12;
       }
@@ -428,16 +428,18 @@ export default function Mymap(props) {
 
   let rotateFrameId;
   let startTimestamp;
-  const rotationSpeed = 0.02;
+  const rotationSpeed = 0.015;
   const rotateCamera = (timestamp) => {
     if (!startTimestamp) startTimestamp = timestamp;
     const elapsedTime = timestamp - startTimestamp;
     const angle = (elapsedTime * rotationSpeed) % 360;
     mapRef.current.rotateTo(angle, { duration: 100, easing: (t) => t });
     rotateFrameId = requestAnimationFrame(rotateCamera);
+    console.log("rotateFrameId set:", rotateFrameId);
   };
 
   const endRotation = () => {
+    console.log("endRotation called");
     cancelAnimationFrame(rotateFrameId);
   };
 

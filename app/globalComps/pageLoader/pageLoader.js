@@ -1,17 +1,15 @@
-import { hideLoaderAtom } from "@libs/atoms";
 import { LoadingOverlay } from "@mantine/core";
-import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Globe } from "../../layout";
 
 export default function PageLoader({ contentLoaded }) {
-  const [hideLoader, setHideLoader] = useAtom(hideLoaderAtom);
+  const [hideLoader, setHideLoader] = useState(false);
 
   useEffect(() => {
     if (contentLoaded) {
       const timer = setTimeout(() => {
         setHideLoader(true);
-      }, 1500);
+      }, 500);
 
       return () => clearTimeout(timer);
     }

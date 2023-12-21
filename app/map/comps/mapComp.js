@@ -187,7 +187,7 @@ export default function MapComp(props) {
         essential: true,
       });
     }
-    if (isCity && e.target.getZoom() === 15.5) {
+    if (isCity && e.target.getZoom() === 15) {
       rotateCamera(0);
       setPlaceBlur(0);
     } else {

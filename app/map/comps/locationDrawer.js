@@ -263,7 +263,7 @@ export default function LocationDrawer(props) {
           rightSection={<IconChevronRight stroke={4} size={18} />}
           onClick={() => {
             endRotation();
-            closeLocationDrawer();
+            // closeLocationDrawer();
           }}
           justify={"center"}
           variant="transparent"

@@ -59,7 +59,6 @@ import { motion } from "framer-motion";
 import { atom, useAtom, useAtomValue } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { resetLoaderState } from "../globalComps/pageLoader/resetLoaderState";
 import TripContent from "../trip/[title]/comps/tripContent";
 import FirstPanel from "./comps/firstPanel";
 import PlaceTimeline from "./comps/placeTimeline";
@@ -282,7 +281,6 @@ export default function TripPlanner() {
       )
         .then(() => {
           notifications.update(tripMade);
-          resetLoaderState();
           router.push("/" + createdId);
         })
         .catch((error) => {
