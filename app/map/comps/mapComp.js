@@ -187,7 +187,7 @@ export default function MapComp(props) {
         essential: true,
       });
     }
-    if (isCity && e.target.getZoom() === 16) {
+    if (isCity && e.target.getZoom() === 15.5) {
       rotateCamera(0);
       setPlaceBlur(0);
     } else {
@@ -234,6 +234,7 @@ export default function MapComp(props) {
         touchPitch={false}
         doubleClickZoom={false}
         mapboxAccessToken={mapboxAccessToken}
+        fadeDuration={500}
         interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
         onMove={(e) => {
           setViewState(e.viewState);
@@ -246,9 +247,7 @@ export default function MapComp(props) {
         onClick={(e) => {
           locationHandler(e.features[0], mapRef);
         }}
-        mapStyle={
-          "mapbox://styles/zenneson/clpulpdqh00wr01p72idm835c?optimize=true'"
-        }
+        mapStyle={"mapbox://styles/zenneson/clpulpdqh00wr01p72idm835c"}
         style={{
           width: "100%",
           height: "100vh",
