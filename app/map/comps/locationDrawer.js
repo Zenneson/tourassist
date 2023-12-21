@@ -42,6 +42,7 @@ export default function LocationDrawer(props) {
     choosePlace,
     resetGlobe,
     handleChange,
+    endRotation,
   } = props;
   const area = useAtomValue(areaAtom);
 
@@ -137,7 +138,7 @@ export default function LocationDrawer(props) {
   return (
     <Drawer
       classNames={{ content: classes.locationDrawer }}
-      zIndex={1}
+      zIndex={2}
       pos={"relative"}
       withinPortal={false}
       size={390}
@@ -260,7 +261,10 @@ export default function LocationDrawer(props) {
           mt={10}
           size="xs"
           rightSection={<IconChevronRight stroke={4} size={18} />}
-          onClick={closeLocationDrawer}
+          onClick={() => {
+            endRotation();
+            closeLocationDrawer();
+          }}
           justify={"center"}
           variant="transparent"
         >

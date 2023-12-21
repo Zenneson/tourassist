@@ -56,11 +56,6 @@
   text-transform: uppercase;
   font-weight: 700;
   border: none;
-  /* transform: rotate3d(-20, 20, 0, 25deg) scale(1); */
-
-  /* &:hover {
-    transform: rotate3d(0, 0, 0, 0deg) scale(1.4);
-  } */
 }
 
 .blurpBtns {
@@ -74,4 +69,8 @@
   &:hover {
     background-color: light-dark(#f8f9fa, #0b0c0d);
   }
+}
+
+.smoothBlurTransition {
+  transition: backdrop-filter 0.5s ease !important;
 }

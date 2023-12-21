@@ -117,7 +117,7 @@ export default function Mymap(props) {
     goToLocation(cityData);
   };
 
-  const locationHandler = (feature, mapRef) => {
+  const locationHandler = (feature) => {
     if (feature == null) return;
     let locationObj = {};
     locationObj.type =
@@ -204,7 +204,7 @@ export default function Mymap(props) {
       zoom: zoom,
       pitch: pitch,
       curve: 2,
-      speed: 0.5,
+      speed: 0.8,
       bearing: 0,
       essential: true,
     });
@@ -426,6 +426,21 @@ export default function Mymap(props) {
     }
   };
 
+  let rotateFrameId;
+  let startTimestamp;
+  const rotationSpeed = 0.02;
+  const rotateCamera = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const elapsedTime = timestamp - startTimestamp;
+    const angle = (elapsedTime * rotationSpeed) % 360;
+    mapRef.current.rotateTo(angle, { duration: 100, easing: (t) => t });
+    rotateFrameId = requestAnimationFrame(rotateCamera);
+  };
+
+  const endRotation = () => {
+    cancelAnimationFrame(rotateFrameId);
+  };
+
   useEffect(() => {
     router.prefetch("/tripPlanner");
   }, [router]);
@@ -500,6 +515,7 @@ export default function Mymap(props) {
         selectTopCity={selectTopCity}
         choosePlace={choosePlace}
         resetGlobe={resetGlobe}
+        endRotation={endRotation}
       />
       {places && places.length >= 1 && !listOpened && (
         <motion.div
@@ -582,6 +598,7 @@ export default function Mymap(props) {
         selectTopCity={selectTopCity}
         latitude={latitude}
         longitude={longitude}
+        rotateCamera={rotateCamera}
       />
     </>
   );

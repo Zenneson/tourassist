@@ -6,6 +6,7 @@ import {
   Button,
   Dialog,
   Group,
+  Modal,
   Stack,
   Text,
   Transition,
@@ -45,6 +46,7 @@ export default function MapComp(props) {
     setMapLoaded,
     mapRef,
     fullMapRef,
+    rotateCamera,
   } = props;
 
   const searchOpened = useAtomValue(searchOpenedAtom);
@@ -98,16 +100,6 @@ export default function MapComp(props) {
       )}
     </Transition>
   ));
-
-  const onZoomEnd = (e) => {
-    if (e.target.getZoom() < 3.5) {
-      mapRef.current?.flyTo({
-        duration: 500,
-        pitch: 0,
-        essential: true,
-      });
-    }
-  };
 
   const getFogProperties = (dark) => {
     return {
@@ -185,23 +177,64 @@ export default function MapComp(props) {
     </Dialog>
   );
 
+  const [placeBlur, setPlaceBlur] = useState(10);
+  const zoomEndFunc = (e) => {
+    if (e.target.getZoom() < 3.5) {
+      mapRef.current?.flyTo({
+        duration: 500,
+        pitch: 0,
+        bearing: 0,
+        essential: true,
+      });
+    }
+    if (isCity && e.target.getZoom() === 16) {
+      rotateCamera(0);
+      setPlaceBlur(0);
+    } else {
+      setPlaceBlur(10);
+    }
+  };
+
   return (
     <>
+      <Modal
+        overlayProps={{
+          className: classes.smoothBlurTransition,
+          backgroundOpacity: 0,
+          color: dark ? "#000" : "#fff",
+          blur: placeBlur,
+          zIndex: 1,
+        }}
+        transitionProps={{
+          duration: 500,
+        }}
+        opened={isCity}
+        centered={true}
+        withCloseButton={false}
+        closeOnClickOutside={true}
+        onClose={() => {}}
+      >
+        {area.label}
+      </Modal>
       <PageLoader contentLoaded={mapLoaded} />
       <Map
         id="mapRef"
         ref={mapRef}
+        {...viewState}
         projection="globe"
         antialias="true"
-        {...viewState}
+        onZoomEnd={zoomEndFunc}
         initialViewState={initialViewState}
         renderWorldCopies={true}
         styleDiffing={false}
-        onZoomEnd={onZoomEnd}
         maxPitch={80}
         maxZoom={18}
         minZoom={2}
         reuseMaps={true}
+        touchPitch={false}
+        doubleClickZoom={false}
+        mapboxAccessToken={mapboxAccessToken}
+        interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
         onMove={(e) => {
           setViewState(e.viewState);
         }}
@@ -210,20 +243,16 @@ export default function MapComp(props) {
             setMapLoaded(true);
           }
         }}
-        touchPitch={false}
         onClick={(e) => {
           locationHandler(e.features[0], mapRef);
         }}
-        doubleClickZoom={false}
-        interactiveLayerIds={["states", "country-boundaries", "clicked-state"]}
         mapStyle={
           "mapbox://styles/zenneson/clpulpdqh00wr01p72idm835c?optimize=true'"
         }
-        mapboxAccessToken={mapboxAccessToken}
         style={{
           width: "100%",
           height: "100vh",
-          // pointerEvents: isCity && "none",
+          pointerEvents: isCity && "none",
         }}
       >
         {destinationLabel}
