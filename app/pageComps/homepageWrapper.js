@@ -69,6 +69,7 @@ export default function HomepageWrapper() {
 
   return (
     <>
+      {/* Show Legal Docs Modal  */}
       <Modal
         className={classes.legalModal}
         zIndex={1500}

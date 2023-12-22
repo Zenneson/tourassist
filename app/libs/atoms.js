@@ -14,7 +14,7 @@ export const hideLoaderAtom = atom(false);
 
 // Map State
 export const areaAtom = atom({ label: "" });
-export const placesAtom = atom([]);
+export const placesAtom = atomWithStorage("places", []);
 
 // Trip Page State
 export const fundsAtom = atom(0);
@@ -25,9 +25,4 @@ export const tripDescAtom = atom("");
 export const travelDateAtom = atom("");
 export const updatedDescAtom = atom("");
 export const updatesAtom = atom([]);
-export const tripDataAtom = atomWithStorage("tripData", [], {
-  getItem: (key) => sessionStorage.getItem(key),
-  setItem: (key, newValue) =>
-    sessionStorage.setItem(key, JSON.stringify(newValue)),
-  removeItem: (key) => sessionStorage.removeItem(key),
-});
+export const tripDataAtom = atomWithStorage("tripData", []);

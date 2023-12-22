@@ -23,7 +23,6 @@ import {
   Drawer,
   Flex,
   Group,
-  Image,
   Input,
   ScrollArea,
   Space,
@@ -57,6 +56,7 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { motion } from "framer-motion";
 import { atom, useAtom, useAtomValue } from "jotai";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import TripContent from "../trip/[title]/comps/tripContent";
@@ -486,8 +486,8 @@ export default function TripPlanner() {
                             </Text>
                           </Box>
                           <Image
-                            src="img/stripe.svg"
-                            fit="contain"
+                            src="/img/stripe.svg"
+                            fill={true}
                             display={"block"}
                             opacity={0.3}
                             pl={20}

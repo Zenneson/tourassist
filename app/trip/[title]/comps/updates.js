@@ -367,12 +367,13 @@ export default function Updates(props) {
           }
         />
       )}
+      {/* Confrim Deletion Modal  */}
       <Modal
         className={classes.deleteModal}
         padding={"xl"}
         size={"auto"}
         zIndex={130}
-        centered
+        centered={true}
         withCloseButton={false}
         opened={deleteModal}
         onClose={setDeleteModal}

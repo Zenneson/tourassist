@@ -1,7 +1,6 @@
 "use client";
 import { tripImagesAtom } from "@libs/atoms";
-import { Carousel } from "@mantine/carousel";
-import { Box } from "@mantine/core";
+import { Carousel, CarouselSlide } from "@mantine/carousel";
 import {
   IconChevronCompactLeft,
   IconChevronCompactRight,
@@ -15,39 +14,10 @@ export default function MainCarousel() {
   const tripImages = useAtomValue(tripImagesAtom);
   const setImagesLoaded = useSetAtom(imagesLoadedAtom);
 
-  if (tripImages?.length === 1) {
-    return (
-      <Box
-        style={{
-          position: "relative",
-          boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
-          borderRadius: "3px",
-          overflow: "hidden",
-          height: "500px",
-          width: "650px",
-        }}
-      >
-        <Image
-          priority="true"
-          loading="eager"
-          onLoad={() => {
-            setImagesLoaded(true);
-          }}
-          src={tripImages[0].file}
-          height={500}
-          width={650}
-          alt="Main Image"
-          style={{
-            transition: "none",
-          }}
-        />
-      </Box>
-    );
-  }
-
   const slides = tripImages?.map((image, index) => (
-    <Carousel.Slide key={index} pos={"relative"}>
+    <CarouselSlide key={index} pos={"relative"}>
       <Image
+        fetchPriority="high"
         priority="true"
         loading="eager"
         onLoad={() => {
@@ -63,33 +33,31 @@ export default function MainCarousel() {
           boxShadow: "0 7px 10px 0 rgba(0,0,0,0.07)",
         }}
       />
-    </Carousel.Slide>
+    </CarouselSlide>
   ));
 
   return (
-    tripImages?.length > 0 && (
-      <Carousel
-        h={500}
-        w={"650px"}
-        withIndicators
-        controlsOffset={-50}
-        controlSize={60}
-        nextControlIcon={
-          <IconChevronCompactRight className={classes.carouselIcon} size={60} />
-        }
-        previousControlIcon={
-          <IconChevronCompactLeft className={classes.carouselIcon} size={60} />
-        }
-        classNames={{
-          indicators: classes.indicators,
-          indicator: classes.indicator,
-          controls: classes.controls,
-          control: classes.control,
-          root: classes.root,
-        }}
-      >
-        {slides}
-      </Carousel>
-    )
+    <Carousel
+      h={500}
+      w={"650px"}
+      withIndicators
+      controlsOffset={-50}
+      controlSize={60}
+      nextControlIcon={
+        <IconChevronCompactRight className={classes.carouselIcon} size={60} />
+      }
+      previousControlIcon={
+        <IconChevronCompactLeft className={classes.carouselIcon} size={60} />
+      }
+      classNames={{
+        indicators: classes.indicators,
+        indicator: tripImages.length > 1 && classes.indicator,
+        controls: classes.controls,
+        control: classes.control,
+        root: classes.root,
+      }}
+    >
+      {slides}
+    </Carousel>
   );
 }

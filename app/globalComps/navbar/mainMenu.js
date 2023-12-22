@@ -11,11 +11,8 @@ import { auth } from "@libs/firebase";
 import {
   Box,
   Button,
-  Center,
   Flex,
   Group,
-  Image,
-  Modal,
   Popover,
   PopoverDropdown,
   PopoverTarget,
@@ -35,11 +32,11 @@ import {
   IconDualScreen,
   IconLogin,
   IconMoon,
-  IconPasswordUser,
   IconSearch,
 } from "@tabler/icons-react";
 import { signOut } from "firebase/auth";
 import { useAtom, useSetAtom } from "jotai";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -137,8 +134,8 @@ export default function MainMenu() {
           >
             <Image
               ml={5}
-              width={"auto"}
-              height={"60px"}
+              width={60}
+              height={60}
               src={"/img/TA_GlobeLogo.png"}
               alt="TouraSSist_logo"
             />
@@ -270,81 +267,30 @@ export default function MainMenu() {
                 </Tooltip>
                 <PopoverDropdown p={0} mt={-4}>
                   {/* Logout Button  */}
-                  <Button
-                    className={classes.logoutButton}
-                    color={dark ? "#fff" : "#000"}
-                    size="md"
-                    fw={700}
-                    px={15}
-                    variant="subtle"
-                    leftSection={
-                      user ? (
-                        <IconDualScreen size={18} />
-                      ) : (
-                        <IconPasswordUser size={18} />
-                      )
-                    }
-                    onClick={logoutHandler}
-                  >
-                    {user ? "LOGOUT" : "LOGIN"}
-                  </Button>
+                  {user ? (
+                    <Button
+                      className={classes.logoutButton}
+                      color={dark ? "#fff" : "#000"}
+                      size="md"
+                      fw={700}
+                      px={15}
+                      variant="subtle"
+                      leftSection={<IconDualScreen size={18} />}
+                      onClick={logoutHandler}
+                    >
+                      LOGOUT
+                    </Button>
+                  ) : (
+                    <Box p={20} pt={10} w={375}>
+                      <LoginComp />
+                    </Box>
+                  )}
                 </PopoverDropdown>
               </Popover>
             </Group>
-            {/* DropDown Button */}
-            {/* <Tooltip
-              label={"TourAssist?"}
-              position="bottom"
-              classNames={{ tooltip: "toolTip" }}
-            >
-              <ActionIcon
-                className={classes.infoButton}
-                size={"xl"}
-                radius={"xl"}
-                variant="transparent"
-              >
-                <IconInfoCircle stroke={1.2} size={35} onClick={openDropDown} />
-              </ActionIcon>
-            </Tooltip> */}
           </Flex>
         </Box>
       </Box>
-      <Modal
-        opened={loginModal}
-        padding={"xl"}
-        withCloseButton={false}
-        onClose={() => setLoginModal(false)}
-        overlayProps={{
-          blur: 10,
-          backgroundOpacity: 0.3,
-          color: dark ? "rgb(0,0,0)" : "rgb(255,255,255)",
-        }}
-      >
-        <Center>
-          <Image
-            mb={25}
-            style={{ width: "100%", maxWidth: "250px" }}
-            src={"/img/TA_GlobeLogo.png"}
-            alt="TouraSSist_logo"
-          />
-        </Center>
-        <Title
-          fw={900}
-          ta={"center"}
-          color="#fff"
-          fz={"2.2rem"}
-          mb={10}
-          style={{
-            textShadow: "0 2px 5px rgba(0,0,0,0.15)",
-          }}
-        >
-          <Text fw={500} c={dark ? "#adadad" : "#7e7e7e"} inherit span>
-            TOUR
-          </Text>
-          ASSIST
-        </Title>
-        <LoginComp />
-      </Modal>
       <ProfileDrawer
         active={active}
         setActive={setActive}

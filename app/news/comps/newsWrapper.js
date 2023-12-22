@@ -45,7 +45,7 @@ export default function NewsWrapper() {
   ));
 
   return (
-    <Center h={"100vh"} mb={50}>
+    <Center h={"100vh"}>
       <Flex w={"80%"} maw={1200} h={705} pos={"relative"}>
         <Flex direction={"column"} w={"20%"} pos={"relative"}>
           <Box maw={180}>

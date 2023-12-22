@@ -74,3 +74,27 @@
 .smoothBlurTransition {
   transition: backdrop-filter 0.5s ease !important;
 }
+
+.locationBtns {
+  transition: all 250ms ease-in-out;
+  border-radius: 3px !important;
+  color: light-dark(
+    var(--manitine-color-dark-7),
+    var(--manitine-color-gray-3)
+  ) !important;
+
+  &:hover {
+    background-color: light-dark(rgb(248, 249, 250), rgb(21, 23, 25));
+  }
+}
+
+.placesCardModal {
+  background-color: light-dark(
+    rgba(248, 249, 250, 0.9),
+    rgba(12, 13, 14, 0.95)
+  ) !important;
+}
+
+.placesCard {
+  background-color: transparent !important;
+}

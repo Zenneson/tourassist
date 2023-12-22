@@ -230,7 +230,27 @@ export default function LoginComp(props) {
   return (
     <>
       <Box w="100%">
-        {type === "sign-up" && (
+        {pathname !== "/" && (
+          <Divider
+            label={
+              type === "sign-up" ? (
+                <Text fw={100} fz={12}>
+                  SIGN UP
+                </Text>
+              ) : (
+                <Text fw={100} fz={12}>
+                  LOGIN
+                </Text>
+              )
+            }
+            opacity={0.1}
+            labelPosition="left"
+            color={dark ? "#fff" : "#000"}
+            c={dark ? "#fff" : "#000"}
+            mt={10}
+          />
+        )}
+        {type === "sign-up" && pathname === "/" && (
           <Divider
             label={
               <>

@@ -3,12 +3,12 @@ import {
   Box,
   Card,
   Grid,
-  Image,
   RingProgress,
   Text,
   Title,
   useComputedColorScheme,
 } from "@mantine/core";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import classes from "../styles/latesttrips.module.css";
@@ -24,7 +24,7 @@ export default function LatestTrips() {
     {
       destination: "Mexico",
       percent: 44,
-      image: "img/intro/bluehair.jpg",
+      image: "/img/intro/bluehair.jpg",
       title: "Help Me Get To Mexico",
       description:
         "Are you ready to join me on an adventure of a lifetime? Together, we can make my long-held dream of visiting New York City a reality! I have always been captivated by the magic of the Big Apple, and I am excited to explore its vibrant neighborhoods, iconic landmarks, and diverse cultural experiences.",
@@ -32,7 +32,7 @@ export default function LatestTrips() {
     {
       destination: "London",
       percent: 70,
-      image: "img/mother.jpg",
+      image: "/img/mother.jpg",
       title: "Going to See Family in London",
       description:
         "Are you ready to join me on an adventure of a lifetime? Together, we can make my long-held dream of visiting New York City a reality! I have always been captivated by the magic of the Big Apple, and I am excited to explore its vibrant neighborhoods, iconic landmarks, and diverse cultural experiences.",
@@ -40,7 +40,7 @@ export default function LatestTrips() {
     {
       destination: "New York",
       percent: 80,
-      image: "img/women.jpg",
+      image: "/img/women.jpg",
       title: "Going to See the Big Apple",
       description:
         "Are you ready to join me on an adventure of a lifetime? Together, we can make my long-held dream of visiting New York City a reality! I have always been captivated by the magic of the Big Apple, and I am excited to explore its vibrant neighborhoods, iconic landmarks, and diverse cultural experiences.",
@@ -48,7 +48,7 @@ export default function LatestTrips() {
     {
       destination: "Los Angeles",
       percent: 64,
-      image: "img/intro/planewindow.jpg",
+      image: "/img/intro/planewindow.jpg",
       title: "Taking a Trip to LA",
       description:
         "Are you ready to join me on an adventure of a lifetime? Together, we can make my long-held dream of visiting New York City a reality! I have always been captivated by the magic of the Big Apple, and I am excited to explore its vibrant neighborhoods, iconic landmarks, and diverse cultural experiences.",
@@ -56,7 +56,7 @@ export default function LatestTrips() {
     {
       destination: "Barcelona",
       percent: 92,
-      image: "img/intro/street.jpg",
+      image: "/img/intro/street.jpg",
       title: "Barcelona, Here I Come!",
       description:
         "Are you ready to join me on an adventure of a lifetime? Together, we can make my long-held dream of visiting New York City a reality! I have always been captivated by the magic of the Big Apple, and I am excited to explore its vibrant neighborhoods, iconic landmarks, and diverse cultural experiences.",
@@ -64,7 +64,7 @@ export default function LatestTrips() {
     {
       destination: "Las Vegas",
       percent: 77,
-      image: "img/intro/concert.jpg",
+      image: "/img/intro/concert.jpg",
       title: "Party in Vegas!",
       description:
         "Are you ready to join me on an adventure of a lifetime? Together, we can make my long-held dream of visiting New York City a reality! I have always been captivated by the magic of the Big Apple, and I am excited to explore its vibrant neighborhoods, iconic landmarks, and diverse cultural experiences.",
@@ -128,7 +128,7 @@ export default function LatestTrips() {
               </Text>
             }
           />
-          <Image src={trip.image} alt="Trip Image" fit="cover" height={170} />
+          <Image src={trip.image} alt="Trip Image" fit="cover" fill={true} />
         </Card.Section>
         <Title
           order={6}

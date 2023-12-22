@@ -1,3 +1,4 @@
+import { placesAtom } from "@libs/atoms";
 import {
   Button,
   Center,
@@ -8,6 +9,7 @@ import {
 } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import { AnimatePresence } from "framer-motion";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -15,19 +17,13 @@ import classes from "../styles/tourList.module.css";
 import PlaceListItem from "./placeListItem";
 
 export default function TourList(props) {
-  const {
-    places,
-    setPlaces,
-    listOpened,
-    setListOpened,
-    setLocationDrawer,
-    goToLocation,
-  } = props;
+  const { listOpened, setListOpened, setLocationDrawer, goToLocation } = props;
   const router = useRouter();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
+  const [places, setPlaces] = useAtom(placesAtom);
 
   const submitTourList = () => {
     const newPlaceData = places.map((location) => {

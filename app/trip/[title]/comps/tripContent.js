@@ -6,7 +6,11 @@ import {
   updatedDescAtom,
 } from "@libs/atoms";
 import { removeImageByName, updateEditedTrip } from "@libs/custom";
-import { Carousel, useAnimationOffsetEffect } from "@mantine/carousel";
+import {
+  Carousel,
+  CarouselSlide,
+  useAnimationOffsetEffect,
+} from "@mantine/carousel";
 import "@mantine/carousel/styles.css";
 import {
   ActionIcon,
@@ -46,6 +50,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import imageCompression from "browser-image-compression";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
@@ -82,17 +87,18 @@ export default function TripContent(props) {
   const slides =
     images && images.length > 0
       ? images.map((image, index) => (
-          <Carousel.Slide key={index}>
-            <BackgroundImage
+          <CarouselSlide key={index}>
+            <Image
               radius={3}
               src={image.file}
-              h={300}
-              w={390}
+              height={300}
+              width={390}
+              fetchPriority="high"
               priority="true"
               loading="eager"
               alt={image.name}
             />
-          </Carousel.Slide>
+          </CarouselSlide>
         ))
       : null;
 
@@ -349,7 +355,7 @@ export default function TripContent(props) {
                   }
                   classNames={{
                     indicators: classes.indicators,
-                    indicator: classes.indicator,
+                    indicator: images.length > 1 && classes.indicator,
                     control: classes.control,
                     root: classes.root,
                   }}

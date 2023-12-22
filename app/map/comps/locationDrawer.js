@@ -42,7 +42,7 @@ export default function LocationDrawer(props) {
     choosePlace,
     resetGlobe,
     handleChange,
-    endRotation,
+    setIsRotating,
   } = props;
   const area = useAtomValue(areaAtom);
 
@@ -111,6 +111,7 @@ export default function LocationDrawer(props) {
   }, [area, oldArea]);
 
   const closeLocationDrawer = () => {
+    setIsRotating(false);
     if (prevArea.label === "" || prevArea.type === "city") {
       resetGlobe();
       return;
@@ -146,6 +147,8 @@ export default function LocationDrawer(props) {
       opened={locationDrawer}
       withOverlay={false}
       withCloseButton={false}
+      closeOnEscape={false}
+      closeOnClickOutside={false}
       onClose={() => setLocationDrawer(false)}
     >
       <Box pt={60}>
@@ -261,10 +264,7 @@ export default function LocationDrawer(props) {
           mt={10}
           size="xs"
           rightSection={<IconChevronRight stroke={4} size={18} />}
-          onClick={() => {
-            endRotation();
-            // closeLocationDrawer();
-          }}
+          onClick={closeLocationDrawer}
           justify={"center"}
           variant="transparent"
         >

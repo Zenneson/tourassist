@@ -34,7 +34,8 @@
 }
 
 .infoPanel .daysLeftWrapper {
-  background: light-dark(#f1f3f5, rgba(150, 150, 150, 0.01));
+  box-shadow: inset 0px 2px 6px
+    light-dark(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.6));
 }
 
 .infoPanel .daysLeft {

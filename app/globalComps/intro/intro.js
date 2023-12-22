@@ -6,7 +6,6 @@ import {
   Divider,
   Flex,
   Group,
-  Image,
   Text,
   Title,
   Tooltip,
@@ -19,6 +18,7 @@ import {
   IconMoon,
   IconWorld,
 } from "@tabler/icons-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import LoginComp from "../login/loginComp";
@@ -61,13 +61,12 @@ export default function Intro(props) {
       <Flex className={classes.introLayoutFlex}>
         <Center className={classes.introBg} w={600} h={"100vh"}>
           <Image
-            mb={25}
-            w={"100%"}
-            maw={"250px"}
-            src={"img/TA_GlobeLogo.png"}
+            width={235}
+            height={235}
+            src={"/img/TA_GlobeLogo.png"}
             alt="TouraSSist_logo"
           />
-          <Title className={classes.loginTitle}>
+          <Title mt={15} className={classes.loginTitle}>
             <Text className={classes.loginTitleThin} inherit span>
               TOUR
             </Text>
@@ -86,8 +85,10 @@ export default function Intro(props) {
           >
             {/* <Image
               mb={25}
+              width={235}
+              height={235}
               style={{ maxWidth: "45vw" }}
-              src={"img/TA_GlobeLogo.png"}
+              src={"/img/TA_GlobeLogo.png"}
               alt="TouraSSist_logo"
             />
             <Title fw={900} fz={"3.5rem"}>

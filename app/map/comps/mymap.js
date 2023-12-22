@@ -66,6 +66,7 @@ export default function Mymap(props) {
   const [topCities, setTopCities] = useState([]);
   const [listStates, setListStates] = useState([]);
   const [placeLocation, setPlaceLocation] = useState({});
+  const [isRotating, setIsRotating] = useState(false);
 
   useEffect(() => {
     area.label === "United States" && setShowStates(true);
@@ -426,29 +427,13 @@ export default function Mymap(props) {
     }
   };
 
-  let rotateFrameId;
-  let startTimestamp;
-  const rotationSpeed = 0.015;
-  const rotateCamera = (timestamp) => {
-    if (!startTimestamp) startTimestamp = timestamp;
-    const elapsedTime = timestamp - startTimestamp;
-    const angle = (elapsedTime * rotationSpeed) % 360;
-    mapRef.current.rotateTo(angle, { duration: 100, easing: (t) => t });
-    rotateFrameId = requestAnimationFrame(rotateCamera);
-    console.log("rotateFrameId set:", rotateFrameId);
-  };
-
-  const endRotation = () => {
-    console.log("endRotation called");
-    cancelAnimationFrame(rotateFrameId);
-  };
-
   useEffect(() => {
     router.prefetch("/tripPlanner");
   }, [router]);
 
   return (
     <>
+      {/* Confirm Choice Modal  */}
       <Modal
         classNames={{
           root: classes.destinationModal,
@@ -461,7 +446,7 @@ export default function Mymap(props) {
         onClose={setShowModal}
         withCloseButton={false}
         padding={"md"}
-        centered
+        centered={true}
       >
         <Text fz={14} ta={"center"} mb={10}>
           {places && places.length > 0 ? "Clear the Tour List and c" : "C"}
@@ -517,7 +502,7 @@ export default function Mymap(props) {
         selectTopCity={selectTopCity}
         choosePlace={choosePlace}
         resetGlobe={resetGlobe}
-        endRotation={endRotation}
+        setIsRotating={setIsRotating}
       />
       {places && places.length >= 1 && !listOpened && (
         <motion.div
@@ -600,7 +585,8 @@ export default function Mymap(props) {
         selectTopCity={selectTopCity}
         latitude={latitude}
         longitude={longitude}
-        rotateCamera={rotateCamera}
+        isRotating={isRotating}
+        setIsRotating={setIsRotating}
       />
     </>
   );

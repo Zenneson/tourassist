@@ -22,7 +22,6 @@ import {
   Flex,
   Group,
   Input,
-  LoadingOverlay,
   Modal,
   NumberInput,
   ScrollArea,
@@ -431,12 +430,14 @@ export default function ModalsItem(props) {
 
   return (
     <Box>
+      {/* Edit Trip Info Modal  */}
       <Modal
         classNames={{
           header: classes.editTripModalHeader,
           content: classes.editTripModalContent,
           overlay: classes.editTripModalOverlay,
         }}
+        centered={true}
         withCloseButton={false}
         size={864}
         padding={"xl"}
@@ -494,12 +495,14 @@ export default function ModalsItem(props) {
           </Stack>
         </Box>
       </Modal>
+      {/* Post/Edit Update and Donation Modal  */}
       <Modal
         classNames={{
           header: classes.altModalModalHeader,
           content: classes.altModalModalContent,
           overlay: classes.altModalModalOverlay,
         }}
+        centered={true}
         pos={"relative"}
         withCloseButton={false}
         size={modalMode === "donating" ? "auto" : 850}
@@ -527,11 +530,6 @@ export default function ModalsItem(props) {
           onClick={closeAltModal}
         />
         <ScrollArea.Autosize pos={"relative"} type="never">
-          <LoadingOverlay
-            visible={(modalMode === "editUpdate" && !updateDataLoaded) || paid}
-            loaderProps={{ color: dark ? "#0d3f82" : "#2dc7f3", type: "bars" }}
-            overlayProps={{ backgroundOpacity: 1 }}
-          />
           {modalMode === "donating" && (
             <Box w={modalMode === "donating" ? "auto" : 800}>
               <Title mb={5} color={dark ? "#00E8FC" : "#0D3F82"}>
