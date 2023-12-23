@@ -1,11 +1,7 @@
 import { Client } from "@googlemaps/google-maps-services-js";
 import { fetcher } from "@libs/custom";
+import { geoAccessToken, googleApiKey } from "@libs/keys";
 import axios from "axios";
-
-const geoAccessToken =
-  "projects/tourassist-836db/secrets/NEXT_PUBLIC_IP_GEO/versions/latest" ||
-  process.env.NEXT_PUBLIC_GOOGLE_GEO_API_KEY ||
-  secrets.NEXT_PUBLIC_GOOGLE_GEO_API_KEY;
 
 // MAP FETCHER
 export const route = async () => {
@@ -76,11 +72,6 @@ export const route = async () => {
 //       });
 //   }
 // });
-
-const googleApiKey =
-  "projects/tourassist-836db/secrets/NEXT_PUBLIC_GOOGLE_PLACES_API_KEY/versions/latest" ||
-  process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ||
-  secrets.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
 
 let city = "New York";
 const textConfig = {

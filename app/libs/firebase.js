@@ -1,14 +1,10 @@
+import { fireKey } from "@libs/keys";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+
 // import { getAnalytics } from "firebase/analytics";
-
-const fireKey =
-  "projects/841923423421/secrets/NEXT_PUBLIC_FIREBASE_API_KEY/versions/latest" ||
-  process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
-  secrets.NEXT_PUBLIC_FIREBASE_API_KEY;
-
 const firebaseConfig = {
   apiKey: fireKey,
   authDomain: "tourassist-836db.firebaseapp.com",
@@ -22,7 +18,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
+export const storage = getStorage(app);
 // const firestore = getFirestore();
 // connectFirestoreEmulator(firestore, "localhost", 8451);
-export const storage = getStorage(app);
 // export const analytics = getAnalytics(app);

@@ -3,6 +3,7 @@ import { DuffelPayments } from "@duffel/components";
 import { travelDateAtom } from "@libs/atoms";
 import { dateFormat, formatDonation } from "@libs/custom";
 import { firestore } from "@libs/firebase";
+import { duffelAccessKey } from "@libs/keys";
 import {
   addUpdateContent,
   addUpdateTitle,
@@ -51,11 +52,6 @@ import { useEffect, useRef, useState } from "react";
 import { mutate } from "swr";
 import classes from "../styles/modalsItem.module.css";
 import TripContent from "./tripContent";
-
-const duffelAccessKey =
-  "projects/tourassist-836db/secrets/NEXT_PUBLIC_DUFFEL_AC/versions/latest" ||
-  process.env.NEXT_PUBLIC_DUFFEL_AC ||
-  secrets.NEXT_PUBLIC_DUFFEL_AC;
 
 export default function ModalsItem(props) {
   const {

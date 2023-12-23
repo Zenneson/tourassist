@@ -1,9 +1,5 @@
 import { Duffel } from "@duffel/api";
-
-const duffelAccessKey =
-  "projects/tourassist-836db/secrets/NEXT_PUBLIC_DUFFEL_AC/versions/latest" ||
-  process.env.NEXT_PUBLIC_DUFFEL_AC ||
-  secrets.NEXT_PUBLIC_DUFFEL_AC;
+import { duffelAccessKey } from "@libs/keys";
 
 export default async function CreatePayment(req, res) {
   const duffel = new Duffel({

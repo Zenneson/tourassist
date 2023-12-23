@@ -1,3 +1,4 @@
+import { mapboxAccessToken } from "@libs/keys";
 import { placeExists } from "@libs/notifications";
 import {
   ActionIcon,
@@ -21,11 +22,6 @@ import { useAtom } from "jotai";
 import { roundTripAtom } from "../page";
 import classes from "../styles/firstPanel.module.css";
 import MultiSelect from "./multiSelect";
-
-const mapboxAccessToken =
-  "projects/tourassist-836db/secrets/NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN/versions/latest" ||
-  process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
-  secrets.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 export default function FirstPanel(props) {
   const {
