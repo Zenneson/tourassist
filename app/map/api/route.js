@@ -12,6 +12,66 @@ export const route = async () => {
 };
 
 // GOOGLE PLACES API
+
+// const fetchPlaceData = async () => {
+//   const textQuery = "City Landmarks in Paris"; // Replace with your query
+//   const apiKey = "YOUR_API_KEY"; // Replace with your actual API key
+//   const url = "https://places.googleapis.com/v1/places:searchText";
+//   const fieldMask = "places.photos"; // Include other fields as needed
+
+//   try {
+//     const response = await fetch(url, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-Goog-Api-Key': apiKey,
+//         'X-Goog-FieldMask': fieldMask
+//       },
+//       body: JSON.stringify({ textQuery })
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok');
+//     }
+
+//     const data = await response.json();
+//     return data.places.map(place => place.photos); // Extracting photo references
+//   } catch (error) {
+//     console.error('Fetch error:', error);
+//   }
+// };
+
+// fetchPlaceData().then(photoRefs => {
+//   console.log(photoRefs); // Process photo references as needed
+// });
+
+// const fetchPlacePhoto = async (photoReference) => {
+//   const apiKey = "YOUR_API_KEY"; // Replace with your actual API key
+//   const maxHeight = 400; // Set desired max height
+//   const maxWidth = 400; // Set desired max width
+//   const url = `https://maps.googleapis.com/maps/api/place/photo?maxheight=${maxHeight}&maxwidth=${maxWidth}&photoreference=${photoReference}&key=${apiKey}`;
+
+//   try {
+//     const response = await fetch(url);
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok');
+//     }
+//     return response.url; // This is the URL of the photo
+//   } catch (error) {
+//     console.error('Fetch error:', error);
+//   }
+// };
+
+// // Example usage
+// fetchPlaceData().then(photoRefs => {
+//   if (photoRefs.length > 0) {
+//     fetchPlacePhoto(photoRefs[0][0].photoReference) // Assuming the first photo reference of the first place
+//       .then(photoUrl => {
+//         console.log(photoUrl); // Process the photo URL as needed
+//       });
+//   }
+// });
+
 let city = "New York";
 const textConfig = {
   params: {
@@ -23,16 +83,6 @@ const textConfig = {
 const textInstance = axios.create(textConfig);
 const textClient = new Client(textInstance);
 
-// textClient
-//   .textSearch()
-//   .then((response) => {
-//     const results = response.data.results;
-//     console.log("🚀 ~ file: route.js:27 ~ .then ~ results:", results);
-//   })
-//   .catch((e) => {
-//     console.log(e);
-//   });
-
 const placesConfig = {
   baseURL: "https://maps.googleapis.com/maps/api/place",
   params: {
@@ -41,12 +91,3 @@ const placesConfig = {
 };
 const placesInstance = axios.create(placesConfig);
 const placesClient = new Client(placesInstance);
-
-// placesClient
-//   .placePhoto()
-//   .then((r) => {
-//     console.log(r.data.results[0]);
-//   })
-//   .catch((e) => {
-//     console.log(e);
-//   });
