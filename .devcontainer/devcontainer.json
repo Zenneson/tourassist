@@ -8,20 +8,7 @@
     "dockerfile": "Dockerfile"
   },
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "enableNonRootDocker": "true",
-      "moby": "true"
-    },
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
-      "version": "latest",
-      "helm": "latest",
-      "minikube": "latest"
-    },
-    "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {},
-    "ghcr.io/devcontainers-contrib/features/kubectl-asdf:2": {},
-    "ghcr.io/devcontainers-contrib/features/npm-package:1": {},
-    "ghcr.io/dhoeric/features/google-cloud-cli:1": {},
-    "ghcr.io/eliises/devcontainer-features/devcontainers-cli:1": {}
+    "ghcr.io/devcontainers-contrib/features/npm-package:1": {}
   },
   "runArgs": ["--env-file", "../.env.local"],
   "customizations": {
@@ -30,8 +17,6 @@
         "alefragnani.Bookmarks",
         "AntiAntiSepticeye.vscode-color-picker",
         "ChakrounAnas.turbo-console-log",
-        "christian-kohler.npm-intellisense",
-        "christian-kohler.path-intellisense",
         "codezombiech.gitignore",
         "csstools.postcss",
         "dae.vscode-refresh-browser",
@@ -48,29 +33,21 @@
         "herrmannplatz.npm-dependency-links",
         "IBM.output-colorizer",
         "mofosyne.quickcalc",
-        "ms-azuretools.vscode-docker",
-        "ms-dotnettools.vscode-dotnet-runtime",
         "ms-kubernetes-tools.vscode-kubernetes-tools",
         "ms-vscode-remote.remote-containers",
         "ms-vscode-remote.remote-ssh",
         "ms-vscode-remote.remote-ssh-edit",
         "ms-vscode.remote-explorer",
         "ms-vscode.remote-repositories",
-        "ms-vsliveshare.vsliveshare",
         "natqe.reload",
         "oderwat.indent-rainbow",
-        "posseus.chromer-theme",
         "rangav.vscode-thunder-client",
         "redhat.vscode-yaml",
-        "ritwickdey.LiveServer",
         "royaction.color-manager",
         "SergeyEgorov.folder-color",
-        "ShayanAliJalbani.nextjs-theme",
-        "shevaua.phpcs",
         "sourcegraph.cody-ai",
         "steoates.autoimport",
         "streetsidesoftware.code-spell-checker",
-        "teabyii.ayu",
         "tgreen7.notes-vscode-extension",
         "uyiosa-enabulele.reopenclosedtab",
         "vincaslt.highlight-matching-tag",
