@@ -15,6 +15,7 @@
 		"@emotion/server": "^11.11.0",
 		"@firebase/app": "^0.9.21",
 		"@fontsource/open-sans": "^5.0.17",
+		"@google-cloud/secret-manager": "^5.0.1",
 		"@googlemaps/google-maps-services-js": "^3.3.41",
 		"@googlemaps/js-api-loader": "^1.16.2",
 		"@googlemaps/markerclusterer": "^2.5.0",
