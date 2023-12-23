@@ -2,9 +2,14 @@ import { Client } from "@googlemaps/google-maps-services-js";
 import { fetcher } from "@libs/custom";
 import axios from "axios";
 
+const geoAccessToken =
+  "projects/tourassist-836db/secrets/NEXT_PUBLIC_IP_GEO/versions/latest" ||
+  process.env.NEXT_PUBLIC_GOOGLE_GEO_API_KEY ||
+  secrets.NEXT_PUBLIC_GOOGLE_GEO_API_KEY;
+
 // MAP FETCHER
 export const route = async () => {
-  const apiUrl = `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IP_GEO}`;
+  const apiUrl = `https://api.ipgeolocation.io/ipgeo?apiKey=${geoAccessToken}`;
   const response = await fetcher(apiUrl);
   const { latitude, longitude } = response;
   const currentCenter = { longitude, latitude };
@@ -72,10 +77,15 @@ export const route = async () => {
 //   }
 // });
 
+const googleApiKey =
+  "projects/tourassist-836db/secrets/NEXT_PUBLIC_GOOGLE_PLACES_API_KEY/versions/latest" ||
+  process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ||
+  secrets.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
+
 let city = "New York";
 const textConfig = {
   params: {
-    key: process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY,
+    key: googleApiKey,
     type: "point_of_interest,establishment,tourist_attraction,park,museum,art_gallery,food,cafe,restaurant,bar,night_club,shopping_mall,stadium,amusement_park,aquarium,zoo,park,natural_feature,place_of_worship",
     query: `cityscape OR skyline OR sunset OR sunrise OR street food OR local markets OR festivals OR parks OR landmarks OR historic sites OR gardens OR rivers OR bridges OR cultural events OR public art OR architecture OR panoramic views OR crowds OR street performers OR outdoor activities OR nightlife in ${city}`,
   },
@@ -86,7 +96,7 @@ const textClient = new Client(textInstance);
 const placesConfig = {
   baseURL: "https://maps.googleapis.com/maps/api/place",
   params: {
-    key: process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY,
+    key: googleApiKey,
   },
 };
 const placesInstance = axios.create(placesConfig);
