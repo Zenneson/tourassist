@@ -1,9 +1,8 @@
 import { Duffel } from "@duffel/api";
-import { duffelAccessKey } from "@libs/keys";
 
 export default async function CreatePayment(req, res) {
   const duffel = new Duffel({
-    token: duffelAccessKey,
+    token: process.env.NEXT_PUBLIC_DUFFEL_AC,
     debug: { verbose: true },
   });
 

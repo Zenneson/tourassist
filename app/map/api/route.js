@@ -1,11 +1,10 @@
 import { Client } from "@googlemaps/google-maps-services-js";
 import { fetcher } from "@libs/custom";
-import { geoAccessToken, googleApiKey } from "@libs/keys";
 import axios from "axios";
 
 // MAP FETCHER
 export const route = async () => {
-  const apiUrl = `https://api.ipgeolocation.io/ipgeo?apiKey=${geoAccessToken}`;
+  const apiUrl = `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IP_GEO}`;
   const response = await fetcher(apiUrl);
   const { latitude, longitude } = response;
   const currentCenter = { longitude, latitude };
@@ -13,13 +12,11 @@ export const route = async () => {
 };
 
 // GOOGLE PLACES API
-
 // const fetchPlaceData = async () => {
 //   const textQuery = "City Landmarks in Paris"; // Replace with your query
 //   const apiKey = "YOUR_API_KEY"; // Replace with your actual API key
 //   const url = "https://places.googleapis.com/v1/places:searchText";
 //   const fieldMask = "places.photos"; // Include other fields as needed
-
 //   try {
 //     const response = await fetch(url, {
 //       method: 'POST',
@@ -30,11 +27,9 @@ export const route = async () => {
 //       },
 //       body: JSON.stringify({ textQuery })
 //     });
-
 //     if (!response.ok) {
 //       throw new Error('Network response was not ok');
 //     }
-
 //     const data = await response.json();
 //     return data.places.map(place => place.photos); // Extracting photo references
 //   } catch (error) {
@@ -87,7 +82,7 @@ const textClient = new Client(textInstance);
 const placesConfig = {
   baseURL: "https://maps.googleapis.com/maps/api/place",
   params: {
-    key: googleApiKey,
+    key: process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY,
   },
 };
 const placesInstance = axios.create(placesConfig);

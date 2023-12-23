@@ -7,7 +7,6 @@ import {
   placesAtom,
   searchOpenedAtom,
 } from "@libs/atoms";
-import { mapboxAccessToken } from "@libs/keys";
 import {
   Box,
   Button,
@@ -34,6 +33,7 @@ import MapComp from "./mapComp";
 
 const fadeOut = { opacity: 0 };
 const fadeIn = { opacity: 1 };
+const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 export default function Mymap(props) {
   const searchOpened = useAtomValue(searchOpenedAtom);

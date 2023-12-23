@@ -3,7 +3,6 @@ import { DuffelPayments } from "@duffel/components";
 import { travelDateAtom } from "@libs/atoms";
 import { dateFormat, formatDonation } from "@libs/custom";
 import { firestore } from "@libs/firebase";
-import { duffelAccessKey } from "@libs/keys";
 import {
   addUpdateContent,
   addUpdateTitle,
@@ -365,7 +364,7 @@ export default function ModalsItem(props) {
     fetch("/api/payment", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${duffelAccessKey}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DUFFEL_AC}`,
         Accept: "application/json",
         "Content-Type": "application/json",
         "Duffel-Version": "v1",
@@ -390,7 +389,7 @@ export default function ModalsItem(props) {
     fetch("/api/confirm", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${duffelAccessKey}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DUFFEL_AC}`,
         Accept: "application/json",
         "Accept-Encoding": "gzip",
         "Duffel-Version": "v1",

@@ -1,4 +1,3 @@
-import { fireKey } from "@libs/keys";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -6,7 +5,7 @@ import { getStorage } from "firebase/storage";
 
 // import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
-  apiKey: fireKey,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: "tourassist-836db.firebaseapp.com",
   projectId: "tourassist-836db",
   storageBucket: "tourassist-836db.appspot.com",

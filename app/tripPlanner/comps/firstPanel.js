@@ -1,4 +1,3 @@
-import { mapboxAccessToken } from "@libs/keys";
 import { placeExists } from "@libs/notifications";
 import {
   ActionIcon,
@@ -80,7 +79,7 @@ export default function FirstPanel(props) {
   };
 
   const handleChange = async () => {
-    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=${mapboxAccessToken}`;
+    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${startLocaleSearch}.json?&autocomplete=true&&fuzzyMatch=true&types=place&limit=5&access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`;
 
     if (startLocaleSearch?.length > 0) {
       try {
