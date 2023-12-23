@@ -33,10 +33,12 @@ import MapComp from "./mapComp";
 
 const fadeOut = { opacity: 0 };
 const fadeIn = { opacity: 1 };
+const mapboxAccessToken =
+  "projects/tourassist-836db/secrets/NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN/versions/latest" ||
+  process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
+  secrets.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 export default function Mymap(props) {
-  const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
-
   const searchOpened = useAtomValue(searchOpenedAtom);
   const [listOpened, setListOpened] = useAtom(listAtom);
   const [mainMenuOpened, setMainMenuOpened] = useAtom(mainMenuAtom);

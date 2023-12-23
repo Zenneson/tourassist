@@ -52,6 +52,11 @@ import { mutate } from "swr";
 import classes from "../styles/modalsItem.module.css";
 import TripContent from "./tripContent";
 
+const duffelAccessKey =
+  "projects/tourassist-836db/secrets/NEXT_PUBLIC_DUFFEL_AC/versions/latest" ||
+  process.env.NEXT_PUBLIC_DUFFEL_AC ||
+  secrets.NEXT_PUBLIC_DUFFEL_AC;
+
 export default function ModalsItem(props) {
   const {
     title,
@@ -69,7 +74,6 @@ export default function ModalsItem(props) {
     closeAltModal,
     updates,
     setUpdates,
-    updateDataLoaded,
     donationMode,
     setDonationMode,
     currentUpdateId,
@@ -365,7 +369,7 @@ export default function ModalsItem(props) {
     fetch("/api/payment", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DUFFEL_AC}`,
+        Authorization: `Bearer ${duffelAccessKey}`,
         Accept: "application/json",
         "Content-Type": "application/json",
         "Duffel-Version": "v1",
@@ -390,7 +394,7 @@ export default function ModalsItem(props) {
     fetch("/api/confirm", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DUFFEL_AC}`,
+        Authorization: `Bearer ${duffelAccessKey}`,
         Accept: "application/json",
         "Accept-Encoding": "gzip",
         "Duffel-Version": "v1",
