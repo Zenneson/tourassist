@@ -22,3 +22,11 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 export const storage = getStorage(app);
+
+import * as admin from "firebase-admin";
+import * as functions from "firebase-functions";
+admin.initializeApp();
+
+export const tourassistDev = functions.https.onRequest((req, res) => {
+  res.send("Tourassist Development Environment is Ready!");
+});

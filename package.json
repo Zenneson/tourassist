@@ -67,6 +67,7 @@
 		"embla-carousel-react": "^7.1.0",
 		"firebase": "^10.5.1",
 		"firebase-admin": "^11.11.1",
+		"firebase-functions": "^4.5.0",
 		"focus-visible": "^5.2.0",
 		"framer-motion": "^10.16.4",
 		"install": "^0.13.0",
