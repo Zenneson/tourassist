@@ -1,3 +1,5 @@
+Github URL: https://github.com/fabiospampinato/vscode-todo-plus/tree/master
+
 Pages / Sections:
 	✔ MAP @done(23-12-05 02:22)
 	✔ Profile Menu Drawer @done(23-12-05 02:22)
@@ -82,6 +84,7 @@ Tasks:
 	☐ Use webworks to lower Map loading time
 	☐ Once a tour campaign is created, the tour will show on the map
 	☐ Research using Web workers
+	☐ Use Typesense for Search component: https://typesense.org/ https://extensions.dev/extensions/typesense/firestore-typesense-search https://github.com/typesense/typesense-js 
 	☐ Current trip loaction(s) and route will be shown on the map.
 	☐ Create onbaording app tour: https://driverjs.com/docs/installation
 	☐ REVIEW LAUNCH CHECKLIST: https://blog.hubspot.com/marketing/website-launch-checklist

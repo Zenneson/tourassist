@@ -1,5 +1,8 @@
+# Files for Docker to ignore
 TODO
+.next
 node_modules
 .gitignore
 .git
 .env*
+next-env.d.ts

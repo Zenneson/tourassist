@@ -1,0 +1,68 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/kubernetes-helm-minikube
+// cspell:disable
+{
+	"name": "Tourassist Dev Container",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"runArgs": [
+		"--env-file",
+		"../.env.local"
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"alefragnani.Bookmarks", // https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks
+				"AntiAntiSepticeye.vscode-color-picker", // https://marketplace.visualstudio.com/items?itemName=AntiAntiSepticeye.vscode-color-picker
+				"ChakrounAnas.turbo-console-log", // https://marketplace.visualstudio.com/items?itemName=ChakrounAnas.turbo-console-log
+				"csstools.postcss", // https://marketplace.visualstudio.com/items?itemName=csstools.postcss
+				"dae.vscode-refresh-browser", // https://marketplace.visualstudio.com/items?itemName=dae.vscode-refresh-browser
+				"dbaeumer.vscode-eslint", // https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+				"eamodio.gitlens", // https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens
+				"ecmel.vscode-html-css", // https://marketplace.visualstudio.com/items?itemName=ecmel.vscode-html-css
+				"esbenp.prettier-vscode", // https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
+				"fabiospampinato.vscode-todo-plus", // https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus
+				"formulahendry.auto-rename-tag", // https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag
+				"GitHub.copilot", // https://marketplace.visualstudio.com/items?itemName=GitHub.copilot
+				"GitHub.copilot-chat", // https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat
+				"GitHub.remotehub", // https://marketplace.visualstudio.com/items?itemName=GitHub.remotehub
+				"herrmannplatz.npm-dependency-links", // https://marketplace.visualstudio.com/items?itemName=herrmannplatz.npm-dependency-links
+				"IBM.output-colorizer", // https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer
+				"mofosyne.quickcalc", // https://marketplace.visualstudio.com/items?itemName=mofosyne.quickcalc
+				"ms-vscode-remote.remote-containers", // https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+				"ms-vscode-remote.remote-ssh", // https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh
+				"ms-vscode-remote.remote-ssh-edit", // https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit
+				"ms-vscode.remote-explorer", // https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-explorer
+				"ms-vscode.remote-repositories", // https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-repositories
+				"natqe.reload", // https://marketplace.visualstudio.com/items?itemName=natqe.reload
+				"oderwat.indent-rainbow", // https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow
+				"rangav.vscode-thunder-client", // https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client
+				"redhat.vscode-yaml", // https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml
+				"royaction.color-manager", // https://marketplace.visualstudio.com/items?itemName=royaction.color-manager
+				"SergeyEgorov.folder-color", // https://marketplace.visualstudio.com/items?itemName=SergeyEgorov.folder-color
+				"sourcegraph.cody-ai", // https://marketplace.visualstudio.com/items?itemName=sourcegraph.cody-ai
+				"steoates.autoimport", // https://marketplace.visualstudio.com/items?itemName=steoates.autoimport
+				"streetsidesoftware.code-spell-checker", // https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker
+				"tgreen7.notes-vscode-extension", // https://marketplace.visualstudio.com/items?itemName=tgreen7.notes-vscode-extension
+				"uyiosa-enabulele.reopenclosedtab", // https://marketplace.visualstudio.com/items?itemName=uyiosa-enabulele.reopenclosedtab
+				"vincaslt.highlight-matching-tag", // https://marketplace.visualstudio.com/items?itemName=vincaslt.highlight-matching-tag
+				"vunguyentuan.vscode-css-variables", // https://marketplace.visualstudio.com/items?itemName=vunguyentuan.vscode-css-variables
+				"vunguyentuan.vscode-postcss", // https://marketplace.visualstudio.com/items?itemName=vunguyentuan.vscode-postcss
+				"wix.vscode-import-cost", // https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost
+				"Zignd.html-css-class-completion" // https://marketplace.visualstudio.com/items?itemName=Zignd.html-css-class-completion
+			]
+		}
+	}
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "kubectl version",
+	// Use 'postStartCommand' to run commands after the container is created like starting minikube.
+	// "postStartCommand": "nohup bash -c 'minikube start &' > minikube.log 2>&1",
+	// Configure tool-specific properties.
+	// "customizations": {},
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+	// cspell:enable
+}

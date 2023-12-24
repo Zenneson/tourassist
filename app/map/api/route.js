@@ -71,7 +71,7 @@ export const route = async () => {
 let city = "New York";
 const textConfig = {
   params: {
-    key: googleApiKey,
+    key: process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY,
     type: "point_of_interest,establishment,tourist_attraction,park,museum,art_gallery,food,cafe,restaurant,bar,night_club,shopping_mall,stadium,amusement_park,aquarium,zoo,park,natural_feature,place_of_worship",
     query: `cityscape OR skyline OR sunset OR sunrise OR street food OR local markets OR festivals OR parks OR landmarks OR historic sites OR gardens OR rivers OR bridges OR cultural events OR public art OR architecture OR panoramic views OR crowds OR street performers OR outdoor activities OR nightlife in ${city}`,
   },

@@ -235,6 +235,8 @@ export default function MapComp(props) {
         transitionProps={{
           duration: 1000,
         }}
+        autoFocus={false}
+        trapFocus={false}
         zIndex={120}
         opened={isCity}
         centered={true}
