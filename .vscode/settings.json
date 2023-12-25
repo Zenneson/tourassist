@@ -244,5 +244,25 @@
 	"refreshBrowser.urlPrefixes": [
 		"http://localhost:"
 	],
-	"refreshBrowser.runBuildTask": false
+	"refreshBrowser.runBuildTask": false,
+	"cSpell.words": [
+		"alefragnani",
+		"Chakroun",
+		"cirolosapio",
+		"dbaeumer",
+		"eamodio",
+		"ecmel",
+		"Egorov",
+		"enabulele",
+		"fabiospampinato",
+		"herrmannplatz",
+		"mofosyne",
+		"natqe",
+		"rangav",
+		"tgreen",
+		"uyiosa",
+		"vincaslt",
+		"vunguyentuan",
+		"Zignd"
+	]
 }

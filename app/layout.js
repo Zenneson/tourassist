@@ -18,26 +18,19 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link
+          rel="icon"
+          href="/favicon/icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
         <link
           rel="apple-touch-icon"
-          sizes="180x180"
-          href="/favicon/apple-touch-icon.png"
+          href="/favicon/apple-icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
         />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/favicon/site.webmanifest" />
-
-        <link rel="icon" href="/favicon/favicon.ico" />
         <link
           href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css"
           rel="stylesheet"
