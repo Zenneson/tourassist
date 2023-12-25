@@ -40,3 +40,6 @@ next-env.d.ts
 
 # To do file
 TODO
+
+# Terminal Settings Folder
+.terminal

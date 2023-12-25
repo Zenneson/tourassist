@@ -5,10 +5,10 @@ import SearchModal from "@globalComps/navbar/searchModal";
 import { UserProvider } from "@libs/context";
 import { tourTheme } from "@libs/tourTheme";
 import {
-  AppShell,
-  ColorSchemeScript,
-  MantineProvider,
-  ScrollArea,
+	AppShell,
+	ColorSchemeScript,
+	MantineProvider,
+	ScrollArea,
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { usePathname } from "next/navigation";
