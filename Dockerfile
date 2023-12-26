@@ -1,7 +1,7 @@
 # Tourassist Development Dockerfile
 
 # Use the official Node.js 20 Alpine image
-FROM node:20-alpine
+FROM node:latest
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --force
+RUN npm install
 
 # Copy the rest of the application code to the working directory
 COPY . .

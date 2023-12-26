@@ -1,24 +1,39 @@
 {
-  "compilerOptions": {
-    "baseUrl": "/app",
+	"compilerOptions": {
+		"baseUrl": "/app",
 		"paths": {
-      "@libs/*": ["libs/*"],
-      "@globalComps/*": ["globalComps/*"]
-    },
+			"@libs/*": [
+				"libs/*"
+			],
+			"@globalComps/*": [
+				"globalComps/*"
+			]
+		},
 		"target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-  },
-	"include": ["next-env.d.ts", "**/*.js", "**/*.jsx"],
-	"exclude": ["node_modules"]
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.js",
+		"**/*.jsx",
+		"next.config.js"
+	],
+	"exclude": [
+		"node_modules"
+	]
 }

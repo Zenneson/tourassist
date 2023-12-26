@@ -43,3 +43,6 @@ TODO
 
 # Terminal Settings Folder
 .terminal
+
+# Google Clouf SDK
+/gcloud
