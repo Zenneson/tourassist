@@ -99,6 +99,7 @@
 	},
 	"workbench.iconTheme": "ayu",
 	"workbench.colorTheme": "Sapphire (Dim)",
+	// "workbench.colorCustomizations": {},
 	"color-manager.styles": {
 		"selectionBorder": "black",
 		"background": "black",
