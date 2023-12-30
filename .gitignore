@@ -46,3 +46,7 @@ TODO
 
 # Google Clouf SDK
 /gcloud
+
+# Spell Checker
+.spellignore
+```

@@ -11,10 +11,16 @@ const nextConfig = {
     ],
   },
   devIndicators: {
-    autoPrerender: false,
+    autoPrerender: true,
   },
   experimental: {
     optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
+  },
+  webpack: (
+    config,
+    { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
+  ) => {
+    return config;
   },
 };
 

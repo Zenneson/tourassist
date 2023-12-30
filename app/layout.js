@@ -7,11 +7,6 @@ import { cache } from "react";
 import "typeface-montserrat";
 import AppWrapper from "./pageComps/appWrapper";
 
-export const metadata = {
-  title: "Tour Assist",
-  description: "Crowd Funding Travel Platform",
-};
-
 export const Globe = cache(() => <GlobeLoader />);
 
 export default function RootLayout({ children }) {

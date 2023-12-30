@@ -76,3 +76,20 @@ export const useTripState = create(
     }
   )
 );
+
+// Trip Planner State
+export const useTripPlannerState = create((set) => ({
+  tripTypes: [],
+  travelers: 1,
+  setTravelers: (travelers) => set({ travelers }),
+  roundTrip: false,
+  setRoundTrip: (roundTrip) => set({ roundTrip }),
+  plannerImages: [],
+  setPlannerImages: (plannerImages) => set({ plannerImages }),
+  plannerTripTitle: "",
+  setPlannerTripTitle: (plannerTripTitle) => set({ plannerTripTitle }),
+  plannerTripDesc: "",
+  setPlannerTripDesc: (plannerTripDesc) => set({ plannerTripDesc }),
+  startLocale: "",
+  setStartLocale: (startLocale) => set({ startLocale }),
+}));

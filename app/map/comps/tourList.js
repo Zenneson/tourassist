@@ -23,7 +23,7 @@ export default function TourList(props) {
   });
   const dark = computedColorScheme === "dark";
   const { listOpened, setListOpened } = useAppState();
-  const { setPlacesData } = useTripState();
+  const { setPlacesData = setPlaces } = useTripState();
 
   const submitTourList = () => {
     const newPlaceData = places.map((location) => {

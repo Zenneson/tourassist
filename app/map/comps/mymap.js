@@ -1,5 +1,5 @@
 "use client";
-import { alreadyAdded, goingToTripPlanner } from "@libs/notifications";
+import { alreadyAdded } from "@libs/notifications";
 import { useAppState, useMapState } from "@libs/store";
 import {
   Box,
@@ -353,7 +353,6 @@ export default function Mymap(props) {
     if (places === placeLocation) {
       setPlacesData(places);
       router.push("/tripPlanner");
-      notifications.show(goingToTripPlanner);
     }
   };
 

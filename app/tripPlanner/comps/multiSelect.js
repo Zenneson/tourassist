@@ -1,3 +1,5 @@
+"use client";
+import { useTripPlannerState } from "@libs/store";
 import {
   CheckIcon,
   Combobox,
@@ -9,10 +11,9 @@ import {
 } from "@mantine/core";
 import { IconCheckbox } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useTripTypes } from "../page";
 import classes from "../styles/multiSelect.module.css";
 
-const tripTypes = [
+const types = [
   "Adventure",
   "Business",
   "Charity",
@@ -27,14 +28,15 @@ const MAX_SELECTABLE_ITEMS = 5;
 const MAX_DISPLAYED_VALUES = 3;
 
 export default function MultiSelect() {
+  const { tripTypes } = useTripPlannerState();
+  const [value, setValue] = useState(tripTypes);
+  const [data, setData] = useState(types);
+  const [search, setSearch] = useState("");
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex("active"),
   });
-
-  const [search, setSearch] = useState("");
-  const [data, setData] = useState(tripTypes);
-  const { value, setValue } = useTripTypes();
 
   const exactOptionMatch = data.some((item) => item === search);
 
