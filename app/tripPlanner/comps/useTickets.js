@@ -24,15 +24,14 @@ import {
   IconRowInsertBottom,
   IconTrash,
 } from "@tabler/icons-react";
-import { useAtomValue } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { roundTripAtom, useFormContext } from "../page";
+import { useFormContext, useRoundTrip } from "../page";
 import classes from "../styles/useTickets.module.css";
 
 export default function UseTickets(props) {
   const { placeData, setPlaceData, setSavedFormValues, disallowEmptyField } =
     props;
-  const roundTrip = useAtomValue(roundTripAtom);
+  const { roundTrip } = useRoundTrip();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });

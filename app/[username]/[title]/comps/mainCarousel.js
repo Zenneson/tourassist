@@ -1,18 +1,17 @@
 "use client";
-import { tripImagesAtom } from "@libs/atoms";
+import { useTripState } from "@libs/store";
 import { Carousel, CarouselSlide } from "@mantine/carousel";
 import {
   IconChevronCompactLeft,
   IconChevronCompactRight,
 } from "@tabler/icons-react";
-import { useAtomValue, useSetAtom } from "jotai";
 import Image from "next/image";
-import { imagesLoadedAtom } from "../page";
+import { useImagesLoaded } from "../page";
 import classes from "../styles/mainCarousel.module.css";
 
 export default function MainCarousel() {
-  const tripImages = useAtomValue(tripImagesAtom);
-  const setImagesLoaded = useSetAtom(imagesLoadedAtom);
+  const { tripImages } = useTripState();
+  const { setImagesLoaded } = useImagesLoaded();
 
   const slides = tripImages?.map((image, index) => (
     <CarouselSlide key={index} pos={"relative"}>
@@ -40,7 +39,7 @@ export default function MainCarousel() {
     <Carousel
       h={500}
       w={"650px"}
-      withIndicators
+      withIndicators={tripImages.length > 1}
       controlsOffset={-50}
       controlSize={60}
       nextControlIcon={

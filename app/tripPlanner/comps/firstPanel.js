@@ -17,8 +17,7 @@ import { useElementSize } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { useAtom } from "jotai";
-import { roundTripAtom } from "../page";
+import { useRoundTrip } from "../page";
 import classes from "../styles/firstPanel.module.css";
 import MultiSelect from "./multiSelect";
 
@@ -40,7 +39,8 @@ export default function FirstPanel(props) {
     travelers,
     setTravelers,
   } = props;
-  const [roundTrip, setRoundTrip] = useAtom(roundTripAtom);
+
+  const { roundTrip, setRoundTrip } = useRoundTrip();
   const { ref, width, height } = useElementSize();
   const today = new Date();
   const weekAhead = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);

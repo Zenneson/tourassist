@@ -141,9 +141,6 @@ export const paymentError = (error, dark) => {
     message: "Please try again. Error: " + error.message,
     autoClose: false,
     icon: <IconAlertTriangle size={20} />,
-    style: {
-      backgroundColor: dark ? "#2e2e2e" : "#fff",
-    },
   };
 };
 
@@ -208,4 +205,42 @@ export const placeExists = (startLocale) => {
     icon: <IconAlertTriangle size={17} />,
     autoClose: 2500,
   };
+};
+
+export const lostLocation = {
+  color: "orange",
+  title: "Enter trip destination",
+  message: "Choose your trip destination using the map!",
+  autoClose: 2500,
+};
+
+export const alreadyAdded = (place) => {
+  return {
+    color: "orange",
+    icon: <IconAlertTriangle size={20} />,
+    style: {
+      backgroundColor: dark ? "#2e2e2e" : "#fff",
+    },
+    title: "Location already added",
+    message: `${place} was already added to your tour`,
+  };
+};
+
+export const goingToTripPlanner = {
+  id: "goingToTripPlanner",
+  color: "green",
+  loading: true,
+  icon: <IconCheck size={20} />,
+  title: "Tell us about your trip!",
+  autoClose: false,
+  message: "Now it's time to add the details of your trip.",
+};
+
+export const atTripPlannerPage = {
+  id: "goingToTripPlanner",
+  color: "green",
+  icon: <IconCheck size={20} />,
+  title: "Tell us about your trip!",
+  message: "Now it's time to add the details of your trip.",
+  autoClose: 3000,
 };

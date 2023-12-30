@@ -29,7 +29,7 @@ import {
 import { useForm } from "@mantine/form";
 import { useToggle } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconUserCircle, IconX } from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -43,7 +43,7 @@ import classes from "./styles/loginComp.module.css";
 const auth = getAuth();
 
 export default function LoginComp(props) {
-  const { setInfoAdded, setShowLegal } = props;
+  const { setInfoAdded, setShowLegal, setPopoverOpened } = props;
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [firstNameFocus, setFirstNameFocus] = useState(false);
@@ -190,6 +190,7 @@ export default function LoginComp(props) {
           addUser(userCredential.user)
             .then(() => {
               setInfoAdded(true);
+              setPopoverOpened(false);
             })
             .catch((error) => {
               console.error("Error adding user to database: ", error);
@@ -207,9 +208,10 @@ export default function LoginComp(props) {
     } else if (type === "login") {
       signInWithEmailAndPassword(auth, form.values.email, form.values.password)
         .then((userCredential) => {
+          if (pathname === "/") router.push("/map");
           const message = loggedIn(dark, form.values);
           notifications.show(message);
-          router.push("/map");
+          setPopoverOpened(false);
         })
         .catch((error) => {
           showError(
@@ -250,33 +252,10 @@ export default function LoginComp(props) {
             mt={10}
           />
         )}
-        {type === "sign-up" && pathname === "/" && (
-          <Divider
-            label={
-              <>
-                <IconUserCircle size={17} />
-                <Text
-                  ml={5}
-                  fz={10}
-                  style={{
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Join TourAssist
-                </Text>
-              </>
-            }
-            labelPosition="left"
-            color={dark ? "#fff" : "#000"}
-            c={dark ? "#fff" : "#000"}
-            mt={16}
-            opacity={0.2}
-          />
-        )}
         <form onSubmit={form.onSubmit(handleLogin)}>
-          <Stack>
+          <Stack gap={0}>
             {type === "sign-up" && (
-              <Group mt={20} grow>
+              <Group mt={20} mb={5} grow>
                 <TextInput
                   required={!firstNameFloating}
                   label="First Name"
@@ -335,7 +314,7 @@ export default function LoginComp(props) {
               </Group>
             )}
             <TextInput
-              mt={10}
+              mt={20}
               required={!emailFloating}
               label="Email"
               labelProps={{ "data-floating": emailFloating }}
@@ -358,6 +337,7 @@ export default function LoginComp(props) {
               error={form.errors.email && "Invalid email"}
             />
             <Popover
+              mt={25}
               opened={
                 shouldShowPopover && passValue.length > 0 && type === "sign-up"
               }

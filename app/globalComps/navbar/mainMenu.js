@@ -1,13 +1,8 @@
 "use client";
 import LoginComp from "@globalComps/login/loginComp";
-import {
-  listAtom,
-  mainMenuAtom,
-  panelAtom,
-  searchOpenedAtom,
-} from "@libs/atoms";
 import { useUser } from "@libs/context";
 import { auth } from "@libs/firebase";
+import { useAppState } from "@libs/store";
 import {
   Box,
   Button,
@@ -35,7 +30,6 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import { signOut } from "firebase/auth";
-import { useAtom, useSetAtom } from "jotai";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -46,10 +40,15 @@ import classes from "./styles/mainMenu.module.css";
 export default function MainMenu() {
   const { user } = useUser();
 
-  const setListOpened = useSetAtom(listAtom);
-  const [searchOpened, setSearchOpened] = useAtom(searchOpenedAtom);
-  const [mainMenuOpened, setMainMenuOpened] = useAtom(mainMenuAtom);
-  const [panelShow, setPanelShow] = useAtom(panelAtom);
+  const {
+    panelOpened,
+    setPanelOpened,
+    setListOpened,
+    mainMenuOpened,
+    setMainMenuOpened,
+    searchOpened,
+    setSearchOpened,
+  } = useAppState();
 
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -63,7 +62,6 @@ export default function MainMenu() {
   const router = useRouter();
   const pathname = usePathname();
   const { toggle, fullscreen } = useFullscreen();
-  const [loginModal, setLoginModal] = useState(false);
   const [popoverOpened, setPopoverOpened] = useState(false);
 
   const [active, setActive] = useSessionStorage({
@@ -72,9 +70,9 @@ export default function MainMenu() {
   });
 
   const openMenu = () => {
-    setMainMenuOpened((o) => !o);
+    setMainMenuOpened(!mainMenuOpened);
     setListOpened(false);
-    setPanelShow(false);
+    setPanelOpened(false);
     setActive(-1);
   };
 
@@ -82,7 +80,7 @@ export default function MainMenu() {
     spotlight.open();
     setSearchOpened(true);
     setMainMenuOpened(false);
-    setPanelShow(false);
+    setPanelOpened(false);
   };
 
   const signOutFunc = async () => {
@@ -102,11 +100,12 @@ export default function MainMenu() {
   };
 
   const logoutHandler = () => {
+    setPopoverOpened(false);
+
     if (user) {
       signOutFunc();
       return;
     } else {
-      setLoginModal(true);
       setPopoverOpened(false);
     }
   };
@@ -239,7 +238,7 @@ export default function MainMenu() {
                 shadow="md"
                 closeOnClickOutside={true}
                 onClose={() => setPopoverOpened(false)}
-                opened={!loginModal && popoverOpened}
+                opened={popoverOpened}
               >
                 <Tooltip
                   label={user ? "Logout" : "Login"}
@@ -254,7 +253,7 @@ export default function MainMenu() {
                       radius={"xl"}
                       variant="subtle"
                       onClick={() => {
-                        setPopoverOpened((o) => !o);
+                        setPopoverOpened(!popoverOpened);
                       }}
                     >
                       {user ? (
@@ -282,7 +281,7 @@ export default function MainMenu() {
                     </Button>
                   ) : (
                     <Box p={20} pt={10} w={375}>
-                      <LoginComp />
+                      <LoginComp setPopoverOpened={setPopoverOpened} />
                     </Box>
                   )}
                 </PopoverDropdown>
@@ -294,8 +293,8 @@ export default function MainMenu() {
       <ProfileDrawer
         active={active}
         setActive={setActive}
-        panelShow={panelShow}
-        setPanelShow={setPanelShow}
+        panelOpened={panelOpened}
+        setPanelOpened={setPanelOpened}
         mainMenuOpened={mainMenuOpened}
         setMainMenuOpened={setMainMenuOpened}
         signOutFunc={signOutFunc}

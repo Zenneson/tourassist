@@ -1,5 +1,4 @@
 "use client";
-import { tripDataAtom } from "@libs/atoms";
 import { timeSince } from "@libs/custom";
 import {
   Anchor,
@@ -21,7 +20,6 @@ import {
 } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
 import { IconReload, IconShare3 } from "@tabler/icons-react";
-import { useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import classes from "../styles/donations.module.css";
 
@@ -38,7 +36,6 @@ export default function Donations(props) {
     threshold: 1,
   });
 
-  const tripData = useAtomValue(tripDataAtom);
   const [displayCount, setDisplayCount] = useState(20);
   const [donationsData, setDonationsData] = useState([]);
 

@@ -1,11 +1,6 @@
 "use client";
-import {
-  hideLoaderAtom,
-  travelDateAtom,
-  tripDescAtom,
-  updatedDescAtom,
-} from "@libs/atoms";
 import { removeImageByName, updateEditedTrip } from "@libs/custom";
+import { useLoaderState, useTripState } from "@libs/store";
 import {
   Carousel,
   CarouselSlide,
@@ -49,12 +44,11 @@ import TextStyle from "@tiptap/extension-text-style";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import imageCompression from "browser-image-compression";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import classes from "../styles/tripContent.module.css";
+import classes from "./styles/tripContent.module.css";
 
 export default function TripContent(props) {
   let { tripData, images, setImages, modalMode, setModalMode, titleRef, user } =
@@ -70,10 +64,8 @@ export default function TripContent(props) {
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
 
-  const [tripDesc, setTripDesc] = useAtom(tripDescAtom);
-  const travelDate = useAtomValue(travelDateAtom);
-  const updatedDesc = useAtomValue(updatedDescAtom);
-  const setHideLoader = useSetAtom(hideLoaderAtom);
+  const { tripDesc, setTripDesc, travelDate, updatedDesc } = useTripState();
+  const setHideLoader = useLoaderState();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -82,7 +74,7 @@ export default function TripContent(props) {
   const cropperContainerRef = useRef(null);
 
   const [embla, setEmbla] = useState(null);
-  useAnimationOffsetEffect(embla, 500);
+  useAnimationOffsetEffect(embla, 1000);
 
   const slides =
     images && images.length > 0
@@ -336,7 +328,8 @@ export default function TripContent(props) {
               {images.length > 0 ? (
                 <Carousel
                   getEmblaApi={setEmbla}
-                  withIndicators
+                  align={"center"}
+                  withIndicators={images.length > 1}
                   containScroll={"trimSnaps"}
                   slideSize={"100%"}
                   controlSize={60}
@@ -526,7 +519,7 @@ export default function TripContent(props) {
           <Box
             ref={cropperContainerRef}
             pos={"absolute"}
-            top={30}
+            top={15}
             style={{
               zIndex: 1000,
               opacity: loading ? 0 : 1,

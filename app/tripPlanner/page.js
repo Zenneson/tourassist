@@ -1,11 +1,13 @@
 "use client";
 import LoginComp from "@globalComps/login/loginComp";
-import { placesAtom } from "@libs/atoms";
+import TripContent from "@globalComps/trip/tripContent";
 import { useUser } from "@libs/context";
 import { dateFormat, dateId, saveToDB } from "@libs/custom";
 import {
+  atTripPlannerPage,
   createTrip,
   descIsShort,
+  lostLocation,
   noAccountInfo,
   noCosts,
   noDesc,
@@ -14,23 +16,21 @@ import {
   tripFailed,
   tripMade,
 } from "@libs/notifications";
+import { useMapState } from "@libs/store";
 import {
-  Badge,
   Box,
   Button,
   Center,
   Divider,
-  Drawer,
   Flex,
   Group,
+  Image,
   Input,
-  ScrollArea,
   Space,
   Stack,
   Stepper,
   Text,
   Title,
-  Tooltip,
   useComputedColorScheme,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
@@ -42,39 +42,60 @@ import {
   IconCalculator,
   IconCalendarMonth,
   IconChevronDown,
-  IconChevronRight,
   IconChevronUp,
   IconChevronsRight,
   IconId,
   IconListCheck,
   IconListNumbers,
-  IconLocationPin,
-  IconTags,
-  IconTicket,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { motion } from "framer-motion";
-import { atom, useAtom, useAtomValue } from "jotai";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import TripContent from "../trip/[title]/comps/tripContent";
+import { create } from "zustand";
 import FirstPanel from "./comps/firstPanel";
-import PlaceTimeline from "./comps/placeTimeline";
 import SumInput from "./comps/sumInput";
+import TripDetailsDrawer from "./comps/tripDetailsDrawer";
 import UseTickets from "./comps/useTickets";
 import classes from "./styles/tripPlanner.module.css";
 
 export const [FormProvider, useFormContext, useForm] = createFormContext();
 
-export const tripTypesAtom = atom([]);
-export const travelersAtom = atom(1);
-export const roundTripAtom = atom(false);
-export const plannerImagesAtom = atom([]);
-export const plannerTripTitleAtom = atom("");
-export const plannerTripDescAtom = atom("");
-export const startLocaleAtom = atom("");
+export const useTripTypes = create((set) => ({
+  tripTypes: [],
+  setTripTypes: (tripTypes) => set({ tripTypes }),
+}));
+
+export const useTravelers = create((set) => ({
+  travelers: 1,
+  setTravelers: (travelers) => set({ travelers }),
+}));
+
+export const useRoundTrip = create((set) => ({
+  roundTrip: false,
+  setRoundTrip: (roundTrip) => set({ roundTrip }),
+}));
+
+export const usePlannerImages = create((set) => ({
+  plannerImages: [],
+  setPlannerImages: (plannerImages) => set({ plannerImages }),
+}));
+
+export const usePlannerTripTitle = create((set) => ({
+  plannerTripTitle: "",
+  setPlannerTripTitle: (plannerTripTitle) => set({ plannerTripTitle }),
+}));
+
+export const usePlannerTripDesc = create((set) => ({
+  plannerTripDesc: "",
+  setPlannerTripDesc: (plannerTripDesc) => set({ plannerTripDesc }),
+}));
+
+export const useStartLocale = create((set) => ({
+  startLocale: "",
+  setStartLocale: (startLocale) => set({ startLocale }),
+}));
 
 export default function TripPlanner() {
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -95,14 +116,15 @@ export default function TripPlanner() {
   const startLocaleRef = useRef(null);
   const titleRef = useRef(null);
 
-  const [placeData, setPlaceData] = useAtom(placesAtom);
-  const tripTypes = useAtomValue(tripTypesAtom);
-  const [plannerImages, setPlannerImages] = useAtom(plannerImagesAtom);
-  const [travelers, setTravelers] = useAtom(travelersAtom);
-  const roundTrip = useAtomValue(roundTripAtom);
-  const [plannerTripTitle, setPlannerTripTitle] = useAtom(plannerTripTitleAtom);
-  const plannerTripDesc = useAtomValue(plannerTripDescAtom);
-  const [startLocale, setStartLocale] = useAtom(startLocaleAtom);
+  const tripTypes = useTripTypes();
+  const { plannerImages, setPlannerImages } = usePlannerImages();
+  const { travelers, setTravelers } = useTravelers();
+  const { roundTrip } = useRoundTrip();
+  const { plannerTripTitle, setPlannerTripTitle } = usePlannerTripTitle();
+  const { plannerTripDesc } = usePlannerTripDesc();
+  const { startLocale, setStartLocale } = useStartLocale();
+
+  const { placeData = places, setPlaceData = setPlaces } = useMapState();
 
   const splitLocale = (e) => {
     const index = e.indexOf(",");
@@ -117,6 +139,11 @@ export default function TripPlanner() {
     splitLocale(startLocale)[1] || ""
   );
 
+  if (placeData && placeData.length === 0) {
+    notifications.show(lostLocation);
+    router.push("/map");
+  }
+
   const [savedFormValues, setSavedFormValues] = useSessionStorage({
     key: "formValues",
     defaultValue: {
@@ -130,6 +157,13 @@ export default function TripPlanner() {
       })),
     },
   });
+
+  const [tripPlannerPageLoaded, setTripPlannerPageLoaded] = useState(false);
+  useEffect(() => {
+    setTripPlannerPageLoaded(true);
+  }, []);
+
+  if (tripPlannerPageLoaded) notifications.update(atTripPlannerPage);
 
   const handleRoundTrip = () => {
     if (placeData.length > 0 && startLocale !== "") {
@@ -320,15 +354,6 @@ export default function TripPlanner() {
   const disallowEmptyField = ({ value }) => {
     return value !== "";
   };
-
-  const [pageLoaded, setPageLoaded] = useState(false);
-  useEffect(() => {
-    if (placeData && placeData.length > 0) return;
-    setPageLoaded(true);
-    if (pageLoaded && placeData && placeData.length === 0) {
-      router.push("/map");
-    }
-  }, [pageLoaded, placeData]);
 
   return (
     <FormProvider form={form}>
@@ -619,122 +644,18 @@ export default function TripPlanner() {
           </Center>
         </Box>
       </form>
-      <Drawer
-        zIndex={1}
-        position="right"
-        opened={showTripInfo}
-        withCloseButton={false}
-        withOverlay={false}
-        lockScroll={false}
-        size={350}
-        padding={50}
-        trapFocus={false}
-        onClose={() => setShowTripInfo(false)}
-        scrollAreaComponent={ScrollArea.Autosize}
-      >
-        <Group
-          gap={7}
-          mt={50}
-          mb={20}
-          ml={-20}
-          justify="space-between"
-          style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.08)" }}
-        >
-          <Flex opacity={0.08} gap={5}>
-            <IconListNumbers size={18} />
-            <Title order={6}>Trip Details</Title>
-          </Flex>
-          <Tooltip label="Close Panel">
-            <Button
-              rightSection={<IconChevronRight stroke={4} size={18} />}
-              className={classes.tripDetailsCloseBtn}
-              variant="transparent"
-              ta={"center"}
-              c={dark ? "#fff" : "#000"}
-              onClick={() => setShowTripInfo(false)}
-            >
-              CLOSE
-            </Button>
-          </Tooltip>
-        </Group>
-        <Flex align={"center"} gap={10} mb={10}>
-          <IconLocationPin size={18} opacity={0.3} />
-          <Divider label="Trip Locations" labelPosition="left" w={"100%"} />
-        </Flex>
-        <Stack gap={3}>
-          <PlaceTimeline
-            dark={dark}
-            placeData={placeData}
-            roundTrip={roundTrip}
-            startLocale={startLocale}
-            splitLocale={splitLocale}
-          />
-          {travelDates && (
-            <>
-              {startLocale && travelDates && (
-                <Flex align={"center"} gap={10}>
-                  <IconTicket size={18} opacity={0.3} />
-                  <Divider
-                    label="Trip Info."
-                    labelPosition="left"
-                    my={10}
-                    w={"100%"}
-                  />
-                </Flex>
-              )}
-              <Badge
-                classNames={{ root: classes.badge }}
-                variant="dot"
-                size="xs"
-                color="green.9"
-              >
-                {dayjs(travelDates).format("LL")}
-              </Badge>
-              <Badge
-                classNames={{ root: classes.badge }}
-                variant="dot"
-                size="xs"
-                color="green.6"
-              >
-                {roundTrip ? "Round Trip" : "One Way"}
-              </Badge>
-              <Badge
-                classNames={{ root: classes.badge }}
-                variant="dot"
-                size="xs"
-                color="green.3"
-              >
-                {travelers === 1 ? "Solo Traveler" : travelers + " Travelers"}
-              </Badge>
-            </>
-          )}
-          {tripTypes.length > 0 && (
-            <Flex align={"center"} gap={10}>
-              <IconTags size={18} opacity={0.3} />
-              <Divider
-                label="Trip Tags"
-                labelPosition="left"
-                w={"100%"}
-                my={10}
-              />
-            </Flex>
-          )}
-          {tripTypes.map((type, index) => {
-            const colorNum = 7 - index;
-            return (
-              <Badge
-                classNames={{ root: classes.badge }}
-                key={index}
-                variant="dot"
-                size="xs"
-                color={`blue.${colorNum}`}
-              >
-                {type}
-              </Badge>
-            );
-          })}
-        </Stack>
-      </Drawer>
+      <TripDetailsDrawer
+        showTripInfo={showTripInfo}
+        setShowTripInfo={setShowTripInfo}
+        dark={dark}
+        placeData={placeData}
+        roundTrip={roundTrip}
+        startLocale={startLocale}
+        splitLocale={splitLocale}
+        travelDates={travelDates}
+        travelers={travelers}
+        tripTypes={tripTypes}
+      />
     </FormProvider>
   );
 }

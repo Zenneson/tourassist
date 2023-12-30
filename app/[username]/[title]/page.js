@@ -1,17 +1,24 @@
 "use client";
 import PageLoader from "@globalComps/pageLoader/pageLoader";
-import { atom, useAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
 import useSWR from "swr";
+import { create } from "zustand";
 import { getTripData } from "./api/route";
 import TripWrapper from "./comps/tripWrapper";
 
-export const tripDataLoadedAtom = atom(false);
-export const imagesLoadedAtom = atom(false);
+export const useTripDataLoaded = create((set) => ({
+  tripDataLoaded: false,
+  setTripDataLoaded: (value) => set({ tripDataLoaded: value }),
+}));
+
+export const useImagesLoaded = create((set) => ({
+  imagesLoaded: false,
+  setImagesLoaded: (value) => set({ imagesLoaded: value }),
+}));
 
 export default function Trippage(props) {
-  const imagesLoaded = useAtomValue(imagesLoadedAtom);
-  const [tripDataLoaded, setTripDataLoaded] = useAtom(tripDataLoadedAtom);
+  const imagesLoaded = useImagesLoaded();
+  const { tripDataLoaded, setTripDataLoaded } = useTripDataLoaded();
   const title = props.params.title;
   const { data: tripData, error } = useSWR(title, () => getTripData(title));
   if (error) console.error(error);

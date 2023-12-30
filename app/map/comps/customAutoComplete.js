@@ -1,9 +1,8 @@
 "use client";
-import { areaAtom } from "@libs/atoms";
 import { addEllipsis } from "@libs/custom";
+import { useMapState } from "@libs/store";
 import { Box, Combobox, InputBase, Text, useCombobox } from "@mantine/core";
 import { IconWorldSearch } from "@tabler/icons-react";
-import { useAtomValue } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
 import classes from "../styles/mymap.module.css";
 
@@ -55,7 +54,7 @@ export default function CustomAutoComplete({
   handleChange,
   locationHandler,
 }) {
-  const area = useAtomValue(areaAtom);
+  const { area } = useMapState();
 
   const prefaceThe = [
     "Bahamas",

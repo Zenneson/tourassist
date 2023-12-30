@@ -112,6 +112,7 @@
 .chatBotModal {
   position: relative;
   overflow: hidden;
+  border-radius: 5px;
   background-color: light-dark(
     rgba(248, 249, 250, 0.9) !important,
     rgba(12, 13, 14, 0.97) !important
@@ -146,7 +147,7 @@
 
 .chatSendBtn {
   opacity: 1;
-  box-shadow: 0px -4px 0px 0px light-dark(rgba(233, 242, 248, 1), rgba(12, 13, 14, 1));
+  box-shadow: 0px -3px 10px light-dark(rgba(233, 242, 248, 0.5), rgba(12, 13, 14, 0.5));
   background-color: light-dark(
     rgba(255, 255, 255) !important,
     rgba(10, 10, 10) !important

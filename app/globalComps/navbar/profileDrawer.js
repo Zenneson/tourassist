@@ -42,8 +42,8 @@ export default function ProfileDrawer(props) {
   const {
     active,
     setActive,
-    panelShow,
-    setPanelShow,
+    panelOpened,
+    setPanelOpened,
     mainMenuOpened,
     setMainMenuOpened,
     openMenu,
@@ -70,8 +70,8 @@ export default function ProfileDrawer(props) {
   const menuLinkFunc = (index) => {
     {
       index === active
-        ? (setPanelShow(false), setActive(-1))
-        : (setPanelShow(true), setActive(index));
+        ? (setPanelOpened(false), setActive(-1))
+        : (setPanelOpened(true), setActive(index));
     }
   };
 
@@ -117,11 +117,11 @@ export default function ProfileDrawer(props) {
 
   const closeAll = () => {
     setMainMenuOpened(false);
-    setPanelShow(false);
+    setPanelOpened(false);
   };
 
   const closePanel = () => {
-    setPanelShow(false);
+    setPanelOpened(false);
     setActive(-1);
   };
 
@@ -153,7 +153,10 @@ export default function ProfileDrawer(props) {
           }}
         >
           {/* Close Main Menu Button */}
-          <Button onClick={openMenu} className={classes.closeButton}>
+          <Button
+            onClick={() => setMainMenuOpened(false)}
+            className={classes.closeButton}
+          >
             <IconX size={15} />
           </Button>
           <Space h={95} />
@@ -304,7 +307,7 @@ export default function ProfileDrawer(props) {
         }}
         zIndex={499}
         withinPortal={false}
-        opened={panelShow}
+        opened={panelOpened}
         padding="25px 25px 0 350px"
         size={920}
         onClose={closePanel}
@@ -358,7 +361,7 @@ export default function ProfileDrawer(props) {
             </Title>
             <TripInfo
               setMainMenuOpened={setMainMenuOpened}
-              setPanelShow={setPanelShow}
+              setPanelOpened={setPanelOpened}
             />
           </motion.div>
         )}

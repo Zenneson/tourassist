@@ -306,7 +306,7 @@ export default function AccountInfo(props) {
                     className={classes.changePassButton}
                     variant="default"
                     fz={13}
-                    onClick={() => setChangePass((o) => !o)}
+                    onClick={() => setChangePass(!changePass)}
                   >
                     CHANGE PASSWORD
                     <IconKey

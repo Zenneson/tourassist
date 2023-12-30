@@ -1,11 +1,10 @@
 "use client";
-import { tripDescAtom } from "@libs/atoms";
+import { useTripState } from "@libs/store";
 import { Button, Divider, Text } from "@mantine/core";
 import { useElementSize, useToggle } from "@mantine/hooks";
-import { useAtomValue } from "jotai";
 
 export default function TripDescription(props) {
-  const tripDesc = useAtomValue(tripDescAtom);
+  const { tripDesc } = useTripState();
 
   const [readmore, toggle] = useToggle(["closed", "open"]);
   const { ref, width, height } = useElementSize();

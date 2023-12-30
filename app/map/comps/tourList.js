@@ -1,4 +1,4 @@
-import { placesAtom } from "@libs/atoms";
+import { useAppState, useTripState } from "@libs/store";
 import {
   Button,
   Center,
@@ -9,7 +9,6 @@ import {
 } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import { AnimatePresence } from "framer-motion";
-import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -17,13 +16,14 @@ import classes from "../styles/tourList.module.css";
 import PlaceListItem from "./placeListItem";
 
 export default function TourList(props) {
-  const { listOpened, setListOpened, setLocationDrawer, goToLocation } = props;
+  const { places, setPlaces, setLocationDrawer, goToLocation } = props;
   const router = useRouter();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
-  const [places, setPlaces] = useAtom(placesAtom);
+  const { listOpened, setListOpened } = useAppState();
+  const { setPlacesData } = useTripState();
 
   const submitTourList = () => {
     const newPlaceData = places.map((location) => {
@@ -34,7 +34,7 @@ export default function TourList(props) {
         costs: costs,
       };
     });
-    setPlaces(newPlaceData);
+    setPlacesData(newPlaceData);
     router.push("/tripPlanner");
   };
 
@@ -65,6 +65,7 @@ export default function TourList(props) {
           classNames={{ content: classes.tourDrawer }}
           zIndex={10}
           opened={listOpened && places.length > 0}
+          // opened={true}
           onClose={() => setListOpened(false)}
           withOverlay={false}
           withCloseButton={false}

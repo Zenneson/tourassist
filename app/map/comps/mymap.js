@@ -1,12 +1,6 @@
 "use client";
-import {
-  areaAtom,
-  listAtom,
-  mainMenuAtom,
-  panelAtom,
-  placesAtom,
-  searchOpenedAtom,
-} from "@libs/atoms";
+import { alreadyAdded, goingToTripPlanner } from "@libs/notifications";
+import { useAppState, useMapState } from "@libs/store";
 import {
   Box,
   Button,
@@ -19,10 +13,9 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { IconAlertTriangle, IconCheck, IconList } from "@tabler/icons-react";
+import { IconCheck, IconList } from "@tabler/icons-react";
 import centerOfMass from "@turf/center-of-mass";
 import { motion } from "framer-motion";
-import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getNewCenter } from "../../../public/data/getNewCenter";
@@ -30,20 +23,26 @@ import classes from "../styles/mymap.module.css";
 import CustomAutoComplete from "./customAutoComplete";
 import LocationDrawer from "./locationDrawer";
 import MapComp from "./mapComp";
+import TourList from "./tourList";
 
 const fadeOut = { opacity: 0 };
 const fadeIn = { opacity: 1 };
 const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 export default function Mymap(props) {
-  const searchOpened = useAtomValue(searchOpenedAtom);
-  const [listOpened, setListOpened] = useAtom(listAtom);
-  const [mainMenuOpened, setMainMenuOpened] = useAtom(mainMenuAtom);
-  const [panelShow, setPanelShow] = useAtom(panelAtom);
+  const {
+    searchOpened,
+    listOpened,
+    setListOpened,
+    mainMenuOpened,
+    setMainMenuOpened,
+    panelOpened,
+    setPanelOpened,
+  } = useAppState();
 
-  const [area, setArea] = useAtom(areaAtom);
-  const [places, setPlaces] = useAtom(placesAtom);
   const { latitude, longitude } = props;
+  const [places, setPlaces] = useState([]);
+  const { area, setArea, setPlacesData = setPlaces } = useMapState();
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -346,12 +345,16 @@ export default function Mymap(props) {
   const openTourList = () => {
     setListOpened(true);
     setMainMenuOpened(false);
-    setPanelShow(false);
+    setPanelOpened(false);
   };
 
   const placeChoosen = () => {
     setPlaces(placeLocation);
-    router.push("/tripPlanner");
+    if (places === placeLocation) {
+      setPlacesData(places);
+      router.push("/tripPlanner");
+      notifications.show(goingToTripPlanner);
+    }
   };
 
   const [buttonAnimation, setButtonAnimation] = useState(fadeIn);
@@ -362,13 +365,13 @@ export default function Mymap(props) {
 
     const timeout = setTimeout(() => {
       setButtonPosition(
-        panelShow && mainMenuOpened ? 920 : mainMenuOpened ? 310 : 0
+        panelOpened && mainMenuOpened ? 920 : mainMenuOpened ? 310 : 0
       );
       setButtonAnimation(fadeIn);
     }, 10);
 
     return () => clearTimeout(timeout);
-  }, [panelShow, mainMenuOpened]);
+  }, [panelOpened, mainMenuOpened]);
 
   const addPlaces = (place) => {
     let newPlace = JSON.parse(JSON.stringify(place));
@@ -407,15 +410,7 @@ export default function Mymap(props) {
     if (choice === "tour") {
       setListOpened(true);
       if (checkPlace(place)) {
-        notifications.show({
-          color: "orange",
-          icon: <IconAlertTriangle size={20} />,
-          style: {
-            backgroundColor: dark ? "#2e2e2e" : "#fff",
-          },
-          title: "Location already added",
-          message: `${area.label} was already added to your tour`,
-        });
+        notifications.show(alreadyAdded(place));
         return;
       }
       addPlaces(place);
@@ -432,6 +427,15 @@ export default function Mymap(props) {
 
   return (
     <>
+      {!searchOpened && (
+        <TourList
+          places={places}
+          setPlaces={setPlaces}
+          setPlacesData={setPlacesData}
+          setLocationDrawer={setLocationDrawer}
+          goToLocation={goToLocation}
+        />
+      )}
       {/* Confirm Choice Modal  */}
       <Modal
         classNames={{

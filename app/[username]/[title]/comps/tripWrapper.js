@@ -1,15 +1,7 @@
 "use client";
-import {
-  activeTripData,
-  donationsAtom,
-  fundsAtom,
-  tripDataAtom,
-  tripDescAtom,
-  tripImagesAtom,
-  updatesAtom,
-} from "@libs/atoms";
 import { useUser } from "@libs/context";
 import { addComma, addEllipsis, daysBefore } from "@libs/custom";
+import { useTripState } from "@libs/store";
 import {
   Avatar,
   Box,
@@ -31,7 +23,6 @@ import {
   IconHeartHandshake,
   IconPencil,
 } from "@tabler/icons-react";
-import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
@@ -65,10 +56,6 @@ export default function TripWrapper(props) {
   });
   const dark = computedColorScheme === "dark";
 
-  const [tripImages, setTripImages] = useAtom(tripImagesAtom);
-  const [updates, setUpdates] = useAtom(updatesAtom);
-  const [tripDesc, setTripDesc] = useAtom(tripDescAtom);
-  const [tripData, setTripData] = useAtom(tripDataAtom);
   const [donationAmount, setDonationAmount] = useState(0);
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
@@ -77,9 +64,19 @@ export default function TripWrapper(props) {
   const [updateDataLoaded, setUpdateDataLoaded] = useState(false);
   const [currentUpdateId, setCurrentUpdateId] = useState(0);
 
-  const [funds, setFunds] = useAtom(fundsAtom);
-  const [donations, setDonations] = useAtom(donationsAtom);
-  const setActiveTrip = useSetAtom(activeTripData);
+  const {
+    setActiveTrip,
+    donations,
+    setDonations,
+    funds,
+    setFunds,
+    tripData,
+    setTripData,
+    updates,
+    setUpdates,
+    setTripDesc,
+    setTripImages,
+  } = useTripState();
 
   const comments = commentData.map((comment, index) => (
     <Box key={index}>

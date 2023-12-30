@@ -1,5 +1,4 @@
 "use client";
-import { mainMenuAtom, panelAtom } from "@libs/atoms";
 import {
   addComma,
   dateRangeFunc,
@@ -8,6 +7,7 @@ import {
   parseCustomDate,
   sumAmounts,
 } from "@libs/custom";
+import { useAppState } from "@libs/store";
 import {
   Box,
   Button,
@@ -36,14 +36,17 @@ import {
   PointElement,
   Tooltip,
 } from "chart.js";
-import { atom, useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import Donations from "../../trip/[title]/comps/donations";
+import { create } from "zustand";
+import Donations from "../../[username]/[title]/comps/donations";
 import classes from "./styles/tripInfo.module.css";
 
-export const currentTripAtom = atom([]);
+export const useCurrentTrip = create({
+  currentTrip: [],
+  setCurrentTrip: (trip) => set({ currentTrip: trip }),
+});
 
 export default function TripInfoWrapper(props) {
   const { trips } = props;
@@ -55,12 +58,11 @@ export default function TripInfoWrapper(props) {
 
   const router = useRouter();
 
-  const setMainMenuOpened = useSetAtom(mainMenuAtom);
-  const setPanelShow = useSetAtom(panelAtom);
+  const { setMainMenuOpened, setPanelOpened } = useAppState();
   const [allTrips, setAllTrips] = useState(trips || []);
   const [donationSum, setDonationSum] = useState(0);
   const [spentFunds, setSpentFunds] = useState(0);
-  const [currentTrip, setCurrentTrip] = useAtom(currentTripAtom);
+  const { currentTrip, setCurrentTrip } = useCurrentTrip();
   const [tripData, setTripData] = useSessionStorage({
     key: "tripData",
     defaultValue: [],
@@ -366,9 +368,9 @@ export default function TripInfoWrapper(props) {
                 variant="subtle"
                 onClick={() => {
                   setMainMenuOpened(false);
-                  setPanelShow(false);
+                  setPanelOpened(false);
                   setTripData(currentTrip);
-                  router.push("/trip/" + currentTrip.tripId);
+                  router.push(`/${currentTrip.username}/${currentTrip.tripId}`);
                 }}
               >
                 View Page{" "}

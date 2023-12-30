@@ -1,6 +1,6 @@
 "use client";
 import { DuffelPayments } from "@duffel/components";
-import { travelDateAtom } from "@libs/atoms";
+import TripContent from "@globalComps/trip/tripContent";
 import { dateFormat, formatDonation } from "@libs/custom";
 import { firestore } from "@libs/firebase";
 import {
@@ -13,6 +13,7 @@ import {
   postingUpdate,
   updatePosted,
 } from "@libs/notifications";
+import { useTripState } from "@libs/store";
 import {
   Box,
   Button,
@@ -46,11 +47,9 @@ import TextStyle from "@tiptap/extension-text-style";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { doc, updateDoc } from "firebase/firestore";
-import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { mutate } from "swr";
 import classes from "../styles/modalsItem.module.css";
-import TripContent from "./tripContent";
 
 export default function ModalsItem(props) {
   const {
@@ -98,10 +97,10 @@ export default function ModalsItem(props) {
   };
 
   const DateChanger = () => {
-    const [date, setDate] = useAtom(travelDateAtom);
+    const { date = travelDate, setTravelDate } = useTripState();
     useEffect(() => {
       if (!date) {
-        setDate(new Date(travelDate));
+        setTravelDate(new Date(travelDate));
       }
     }, [date, travelDate]);
 
@@ -118,7 +117,7 @@ export default function ModalsItem(props) {
         ta={"right"}
         w={"100%"}
         maw={150}
-        onChange={(e) => setDate(new Date(e))}
+        onChange={(e) => setTravelDate(new Date(e))}
         value={date}
         valueFormat="MMM DD, YYYY"
       />

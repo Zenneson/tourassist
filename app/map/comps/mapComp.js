@@ -1,12 +1,11 @@
 "use client";
 import PageLoader from "@globalComps/pageLoader/pageLoader";
-import { areaAtom, listAtom, searchOpenedAtom } from "@libs/atoms";
+import { useMapState } from "@libs/store";
 import {
   Box,
   Button,
   Card,
   CardSection,
-  Dialog,
   Group,
   Image,
   Modal,
@@ -18,12 +17,10 @@ import {
 } from "@mantine/core";
 import { IconPlane, IconTextPlus } from "@tabler/icons-react";
 import { timer } from "d3-timer";
-import { useAtom, useAtomValue } from "jotai";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useState } from "react";
 import Map, { Layer, Marker, Popup, Source } from "react-map-gl";
 import classes from "../styles/mapComp.module.css";
-import TourList from "./tourList";
 
 export default function MapComp(props) {
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -31,11 +28,7 @@ export default function MapComp(props) {
   });
   const dark = computedColorScheme === "dark";
   const {
-    places,
-    setPlaces,
     topCities,
-    setLocationDrawer,
-    goToLocation,
     showStates,
     locationHandler,
     mapboxAccessToken,
@@ -51,9 +44,7 @@ export default function MapComp(props) {
     setIsRotating,
   } = props;
 
-  const searchOpened = useAtomValue(searchOpenedAtom);
-  const [listOpened, setListOpened] = useAtom(listAtom);
-  const area = useAtomValue(areaAtom);
+  const { area } = useMapState();
 
   const initialViewState = {
     latitude: latitude || 37,
@@ -121,61 +112,6 @@ export default function MapComp(props) {
   const isCity =
     area.type === "city" ||
     (area.type === "region" && area.country !== "United States");
-
-  const destinationLabel = (
-    <Dialog
-      opened={false}
-      onClose={() => {}}
-      size={"max-content"}
-      position={{ top: 20, left: 20 }}
-    >
-      <Stack gap={0} className={classes.popupFrame}>
-        <Text
-          fw={900}
-          fz={40}
-          variant="gradient"
-          gradient={
-            dark
-              ? {
-                  from: "#ffffff",
-                  to: "rgb(160, 160, 160)",
-                  deg: 45,
-                }
-              : { from: "#363636", to: "#000000", deg: 45 }
-          }
-        >
-          {area.label}
-        </Text>
-        <Text fw={400} fz={15} c={dark ? "#fff" : "#000"}>
-          {area.region !== area.country
-            ? `${area.region} | ${area.country}`
-            : area?.country}
-        </Text>
-        <Group mt={10} gap={5}>
-          <Button
-            leftSection={<IconPlane size={20} />}
-            className={classes.blurpBtns}
-            variant="subtle"
-            onClick={() => choosePlace("travel")}
-          >
-            Travel to {area.label}
-          </Button>
-          <Button
-            leftSection={<IconTextPlus size={20} />}
-            className={classes.blurpBtns}
-            variant="subtle"
-            fw={400}
-            onClick={() => choosePlace("tour")}
-          >
-            Add to{" "}
-            <Text span ml={5} fw={700}>
-              TOUR LIST
-            </Text>
-          </Button>
-        </Group>
-      </Stack>
-    </Dialog>
-  );
 
   const [bearing, setBearing] = useState(0);
 
@@ -273,14 +209,12 @@ export default function MapComp(props) {
               }`,
             }}
           >
-            {/* cspell:disable */}
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
             aliquip ex ea commodo consequat. Duis aute irure dolor in
             reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
             pariatur.
-            {/* cspell:enable */}
           </Text>
           <Group justify="flex-end" gap={10} mt={10}>
             <Button.Group className={classes.chooseLocationBox}>
@@ -346,17 +280,6 @@ export default function MapComp(props) {
           pointerEvents: isCity && "none",
         }}
       >
-        {destinationLabel}
-        {!searchOpened && (
-          <TourList
-            places={places}
-            setPlaces={setPlaces}
-            listOpened={listOpened}
-            setListOpened={setListOpened}
-            setLocationDrawer={setLocationDrawer}
-            goToLocation={goToLocation}
-          />
-        )}
         {computedColorScheme ? pins : {}}
         <Source
           id="country-boundaries"

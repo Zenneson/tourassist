@@ -1,5 +1,5 @@
-import { areaAtom } from "@libs/atoms";
 import { addEllipsis } from "@libs/custom";
+import { useMapState } from "@libs/store";
 import {
   Box,
   Button,
@@ -19,7 +19,6 @@ import {
   IconPlane,
   IconTextPlus,
 } from "@tabler/icons-react";
-import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import classes from "../styles/locationDrawer.module.css";
 import CustomAutoComplete from "./customAutoComplete";
@@ -44,8 +43,8 @@ export default function LocationDrawer(props) {
     handleChange,
     setIsRotating,
   } = props;
-  const area = useAtomValue(areaAtom);
 
+  const { area } = useMapState();
   const topCitiesList = topCities.map((city, index) => (
     <Group
       key={index}

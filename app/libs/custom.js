@@ -6,13 +6,12 @@ import {
   ref,
   uploadString,
 } from "firebase/storage";
-import { useAtom } from "jotai";
 import moment from "moment-timezone";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
-import { historyAtom } from "./atoms";
 import { firestore } from "./firebase";
+import { useAppState } from "./store";
 
 // Fetches data from a given URL using the Fetch API and custom options.
 export const fetcher = async (url, options = {}) => {
@@ -384,7 +383,7 @@ export const useHistory = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [pageAdded, setPageAdded] = useState(false);
-  const [history, setHistory] = useAtom(historyAtom);
+  const { history, setHistory } = useAppState();
 
   useEffect(() => {
     if (pageAdded) return;
