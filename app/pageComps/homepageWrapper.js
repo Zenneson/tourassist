@@ -1,18 +1,9 @@
 "use client";
 import Intro from "@globalComps/intro/intro";
 import PageLoader from "@globalComps/pageLoader/pageLoader";
-import {
-  BackgroundImage,
-  Box,
-  Button,
-  Group,
-  Modal,
-  ScrollArea,
-  useComputedColorScheme,
-} from "@mantine/core";
+import { BackgroundImage, Box, useComputedColorScheme } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import Legal from "../legal";
 import classes from "../styles/page.module.css";
 
 const Carousel = ({ children, interval = 5000 }) => {
@@ -55,7 +46,6 @@ const images = [
 
 export default function HomepageWrapper() {
   const { height, width } = useViewportSize();
-  const [showLegal, setShowLegal] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
 
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -70,23 +60,7 @@ export default function HomepageWrapper() {
   return (
     <>
       {/* Show Legal Docs Modal  */}
-      <Modal
-        className={classes.legalModal}
-        zIndex={1500}
-        opened={showLegal}
-        fullScreen={true}
-        onClose={() => setShowLegal(false)}
-        scrollAreaComponent={ScrollArea.Autosize}
-        withCloseButton={false}
-      >
-        <Group pos={"absolute"} right={20} w={"100%"} justify="flex-end">
-          <Button variant="default" onClick={() => setShowLegal(false)}>
-            CLOSE
-          </Button>
-        </Group>
-        <Legal />
-      </Modal>
-      <Intro setShowLegal={setShowLegal} />
+      <Intro />
       <Box
         opacity={1}
         pos="absolute"

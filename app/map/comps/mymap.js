@@ -422,8 +422,9 @@ export default function Mymap(props) {
     setShowModal(false);
     router.push("/tripPlanner");
     setTimeout(() => {
+      setPlaces(placeLocation);
       setSessionPlaces(placeLocation);
-    }, 200);
+    }, 250);
   };
 
   useEffect(() => {

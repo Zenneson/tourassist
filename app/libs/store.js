@@ -19,8 +19,8 @@ export const useAppState = create((set) => ({
   setListOpened: (value) => set({ listOpened: value }),
   searchOpened: false,
   setSearchOpened: (value) => set({ searchOpened: value }),
-  history: ["empty"],
-  setHistory: (value) => set({ history: value }),
+  showLegal: false,
+  setShowLegal: (value) => set({ showLegal: value }),
 }));
 
 // Hide Loader State

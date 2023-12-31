@@ -24,6 +24,7 @@ import {
   Group,
   Image,
   Input,
+  Portal,
   Space,
   Stack,
   Stepper,
@@ -371,12 +372,14 @@ export default function TripPlannerWrapper(props) {
                 )}
                 {active === 1 && (
                   <motion.div {...animation}>
-                    <Box mt={40} maw={950}>
+                    <Box mt={35} maw={940}>
                       <UseTickets
                         form={form}
                         placeData={placeData}
                         setPlaceData={setPlaceData}
                         startLocale={startLocale}
+                        startCity={startCity}
+                        startRegion={startRegion}
                         setSavedFormValues={setSavedFormValues}
                         disallowEmptyField={disallowEmptyField}
                       />
@@ -388,7 +391,8 @@ export default function TripPlannerWrapper(props) {
                     <Stack
                       className="pagePanel"
                       pos={"relative"}
-                      maw={950}
+                      mt={35}
+                      maw={940}
                       p={30}
                       align="center"
                       gap={20}
@@ -406,22 +410,33 @@ export default function TripPlannerWrapper(props) {
                 )}
                 {active === 3 && (
                   <motion.div {...animation}>
+                    <Space h={20} />
                     <Center h={"50vh"}>
                       <Stack
                         className="pagePanel"
                         pt={10}
                         pb={30}
                         px={30}
-                        maw={700}
-                        h={user ? 205 : "auto"}
+                        maw={600}
+                        h={user ? 220 : "auto"}
                         w={"100%"}
                       >
                         {!user && (
                           <Box w={"100%"} mb={5}>
-                            <Box>
-                              <LoginComp />
+                            <Box id="container">
+                              <Portal target={"#container"}>
+                                <LoginComp />
+                              </Portal>
                             </Box>
                           </Box>
+                        )}
+                        {!user && (
+                          <Divider
+                            w={"100%"}
+                            my={5}
+                            opacity={0.3}
+                            color={dark && "gray.9"}
+                          />
                         )}
                         <Center mt={user ? 20 : 0}>
                           <Button.Group w={"100%"}>
@@ -429,6 +444,7 @@ export default function TripPlannerWrapper(props) {
                               leftSection={
                                 <IconBuildingBank size={20} opacity={0.5} />
                               }
+                              bg={dark ? "blue.7" : "blue.4"}
                               variant="filled"
                               h={50}
                               w={"80%"}
@@ -437,10 +453,11 @@ export default function TripPlannerWrapper(props) {
                             </Button>
                             <Button
                               className={classes.brightenButton}
+                              bg={dark ? "blue.8" : "blue.4"}
                               variant="filled"
                               h={50}
                               w={"20%"}
-                              opacity={0.8}
+                              opacity={0.75}
                             >
                               <Title fz={10}>ADD LATER</Title>
                             </Button>
@@ -465,8 +482,8 @@ export default function TripPlannerWrapper(props) {
                             </Text>
                           </Box>
                           <Image
-                            src="/img/stripe.svg"
-                            // fill={true}
+                            src="/img/logos/stripe.svg"
+                            fill={"contain"}
                             display={"block"}
                             opacity={0.3}
                             pl={20}
@@ -533,7 +550,7 @@ export default function TripPlannerWrapper(props) {
                 </Stepper>
                 {(travelDates || startLocale) && (
                   <Button
-                    className={classes.tripInformationBtn}
+                    className={classes.panelBtns}
                     hidden={true}
                     size="sm"
                     fullWidth

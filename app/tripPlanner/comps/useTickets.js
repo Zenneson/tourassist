@@ -34,6 +34,8 @@ export default function UseTickets(props) {
     placeData,
     setPlaceData,
     startLocale,
+    startCity,
+    startRegion,
     setSavedFormValues,
     disallowEmptyField,
   } = props;
@@ -46,13 +48,20 @@ export default function UseTickets(props) {
   const [focusIndex, setFocusIndex] = useState(null);
   const inputRefs = useRef([]);
 
+  const [destinations, setDestinations] = useState([]);
+  useEffect(() => {
+    const original = removeMatchingStartLocale(placeData, startLocale);
+    setDestinations(original);
+  }, [placeData, startLocale]);
+
   // Filter out the return flight place if roundTrip is false
-  const filteredPlaceData = roundTrip
-    ? placeData
-    : placeData.filter(
-        (place, index) =>
-          !(index === placeData.length - 1 && place.returnFlight)
-      );
+  const filteredPlaceData =
+    roundTrip && destinations.length > 1
+      ? placeData
+      : placeData.filter(
+          (place, index) =>
+            !(index === placeData.length - 1 && place.returnFlight)
+        );
 
   useEffect(() => {
     // Adjust the array size when placeData changes
@@ -190,28 +199,17 @@ export default function UseTickets(props) {
     return trueCostName;
   };
 
-  const removeStartLocaleFromPlaceData = (placeData, startLocale) => {
+  const removeMatchingStartLocale = (placeData, startLocale) => {
     // Ensure placeData is an array
     if (!Array.isArray(placeData)) {
       console.error("placeData is not an array");
       return placeData;
     }
-
-    // Check if the startLocale matches the first or last place in placeData
-    if (placeData.length > 0) {
-      if (placeData[0] === startLocale) {
-        // Remove the first element
-        return placeData.slice(1);
-      } else if (placeData[placeData.length - 1] === startLocale) {
-        // Remove the last element
-        return placeData.slice(0, -1);
-      }
-    }
-
-    // Return the original array if no match is found
-    return placeData;
+    // Filter out places that match the startLocale's place and region
+    return placeData.filter(
+      (place) => place.place !== startCity || place.region !== startRegion
+    );
   };
-  const destinations = removeStartLocaleFromPlaceData(placeData, startLocale);
 
   return filteredPlaceData.map((place, index) => {
     const costKeys = Object.keys(place.costs);
@@ -249,7 +247,7 @@ export default function UseTickets(props) {
               size={"xs"}
               w={
                 roundTrip &&
-                (placeData.length === 1 || index === placeData.length - 1)
+                (destinations.length === 1 || index === placeData.length - 1)
                   ? "60%"
                   : "100%"
               }

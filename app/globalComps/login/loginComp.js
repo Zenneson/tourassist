@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@libs/context";
+import { formatPhoneNumber } from "@libs/custom";
 import { firestore } from "@libs/firebase";
 import {
   alreadyExists,
@@ -9,6 +9,7 @@ import {
   userNotFound,
   wrongPassword,
 } from "@libs/notifications";
+import { useAppState } from "@libs/store";
 import {
   Anchor,
   Box,
@@ -16,6 +17,7 @@ import {
   Checkbox,
   Divider,
   Group,
+  Image,
   PasswordInput,
   Popover,
   PopoverDropdown,
@@ -43,16 +45,19 @@ import classes from "./styles/loginComp.module.css";
 const auth = getAuth();
 
 export default function LoginComp(props) {
-  const { setInfoAdded, setShowLegal, setPopoverOpened } = props;
+  const { setInfoAdded, setPopoverOpened } = props;
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [firstNameFocus, setFirstNameFocus] = useState(false);
   const [lastNameFocus, setLastNameFocus] = useState(false);
+  const [phoneNumberFocus, setPhoneNumberFocus] = useState(false);
 
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
   const [firstNameValue, setFirstNameValue] = useState("");
   const [lastNameValue, setLastNameValue] = useState("");
+  const [phoneNumberValue, setPhoneNumberValue] = useState("");
+  const { setShowLegal } = useAppState();
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -65,18 +70,16 @@ export default function LoginComp(props) {
     firstNameFocus || firstNameValue.length > 0 || undefined;
   const lastNameFloating =
     lastNameFocus || lastNameValue.length > 0 || undefined;
-
-  const [shouldShowPopover, setShouldShowPopover] = useState(false);
-  const [type, toggle] = useToggle(["login", "sign-up"]);
+  const phoneNumberFloating =
+    phoneNumberFocus || phoneNumberValue.length > 0 || undefined;
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const { user } = useUser();
-
-  if (!user && type === "login" && pathname === "/tripPlanner") {
-    toggle();
-  }
+  const [shouldShowPopover, setShouldShowPopover] = useState(false);
+  const startingType =
+    pathname === "/tripPlanner" ? ["sign-up", "login"] : ["login", "sign-up"];
+  const [type, toggle] = useToggle(startingType);
 
   const requirements = [
     { re: /[0-9]/, label: "Includes number" },
@@ -225,6 +228,55 @@ export default function LoginComp(props) {
     }
   };
 
+  const authProviders = [
+    {
+      name: "Google",
+      iconLink: "/img/logos/google.svg",
+      func: () => {},
+    },
+    {
+      name: "Facebook",
+      iconLink: "/img/logos/facebook.svg",
+      func: () => {},
+    },
+    {
+      name: "Twitter",
+      iconLink: "/img/logos/x.svg",
+      func: () => {},
+    },
+    {
+      name: "Apple",
+      iconLink: "/img/logos/apple.svg",
+      func: () => {},
+    },
+  ];
+
+  const authList = authProviders.map((provider, index) => {
+    return (
+      <Button
+        className={classes.authProvider}
+        key={index}
+        size="lg"
+        variant="transparent"
+        w={"25%"}
+        onClick={provider.func}
+      >
+        <Image
+          src={provider.iconLink}
+          alt={provider.name}
+          height={22}
+          width={22}
+          style={{
+            filter:
+              dark && provider.name === "Twitter"
+                ? "invert(100%) sepia(6%) saturate(7475%) hue-rotate(337deg) brightness(109%) contrast(96%)"
+                : "none",
+          }}
+        />
+      </Button>
+    );
+  });
+
   useEffect(() => {
     router.prefetch("/map");
   }, [router]);
@@ -252,66 +304,117 @@ export default function LoginComp(props) {
             mt={10}
           />
         )}
+        <Button.Group
+          classNames={{ group: classes.authBtnGroup }}
+          mt={pathname === "/" ? 0 : 15}
+        >
+          {authList}
+        </Button.Group>
         <form onSubmit={form.onSubmit(handleLogin)}>
           <Stack gap={0}>
             {type === "sign-up" && (
-              <Group mt={20} mb={5} grow>
+              <>
+                <Group mt={20} mb={5} grow>
+                  <TextInput
+                    required={!firstNameFloating}
+                    label="First Name"
+                    labelProps={{ "data-floating": firstNameFloating }}
+                    autoComplete="given-name"
+                    value={form.values.firstName}
+                    placeholder={
+                      firstNameFocus && firstNameValue === "" ? "John" : ""
+                    }
+                    classNames={{
+                      root: classes.root,
+                      input: classes.input,
+                      label: firstNameFloating
+                        ? classes.labelFloating
+                        : classes.label,
+                    }}
+                    onChange={(event) => {
+                      setFirstNameValue(event.currentTarget.value);
+                      form.setFieldValue(
+                        "firstName",
+                        event.currentTarget.value
+                      );
+                    }}
+                    onFocus={() => setFirstNameFocus(true)}
+                    onBlur={() => setFirstNameFocus(false)}
+                    style={{
+                      fontSize: firstNameFloating
+                        ? "var(--mantine-font-size-xs)"
+                        : "var(--mantine-font-size-sm)",
+                      fontWeight: firstNameFloating ? 500 : 400,
+                      "--dynamic-placeholder-color": firstNameFloating
+                        ? undefined
+                        : "transparent",
+                    }}
+                  />
+                  <TextInput
+                    required={!lastNameFloating}
+                    label="Last Name"
+                    labelProps={{ "data-floating": lastNameFloating }}
+                    autoComplete="family-name"
+                    value={form.values.lastName}
+                    placeholder={
+                      lastNameFocus && lastNameValue === "" ? "Smith" : ""
+                    }
+                    classNames={{
+                      root: classes.root,
+                      input: classes.input,
+                      label: lastNameFloating
+                        ? classes.labelFloating
+                        : classes.label,
+                    }}
+                    onChange={(event) => {
+                      setLastNameValue(event.currentTarget.value);
+                      form.setFieldValue("lastName", event.currentTarget.value);
+                    }}
+                    onFocus={() => setLastNameFocus(true)}
+                    onBlur={() => setLastNameFocus(false)}
+                  />
+                </Group>
                 <TextInput
-                  required={!firstNameFloating}
-                  label="First Name"
-                  labelProps={{ "data-floating": firstNameFloating }}
-                  autoComplete="given-name"
-                  value={form.values.firstName}
+                  required={!phoneNumberFloating}
+                  label="Phone Number"
+                  labelProps={{ "data-floating": phoneNumberFloating }}
+                  autoComplete="tel-national"
+                  mt={15}
+                  type="number"
+                  clampbehavior="strict"
+                  value={formatPhoneNumber(form.values.phoneNumber)}
                   placeholder={
-                    firstNameFocus && firstNameValue === "" ? "John" : ""
+                    phoneNumberFocus && phoneNumberValue === ""
+                      ? "123 456 7890"
+                      : ""
                   }
                   classNames={{
                     root: classes.root,
                     input: classes.input,
-                    label: firstNameFloating
+                    label: phoneNumberFloating
                       ? classes.labelFloating
                       : classes.label,
                   }}
                   onChange={(event) => {
-                    setFirstNameValue(event.currentTarget.value);
-                    form.setFieldValue("firstName", event.currentTarget.value);
+                    setPhoneNumberValue(event.currentTarget.value);
+                    form.setFieldValue(
+                      "phoneNumber",
+                      event.currentTarget.value
+                    );
                   }}
-                  onFocus={() => setFirstNameFocus(true)}
-                  onBlur={() => setFirstNameFocus(false)}
+                  onFocus={() => setPhoneNumberFocus(true)}
+                  onBlur={() => setPhoneNumberFocus(false)}
                   style={{
-                    fontSize: firstNameFloating
+                    fontSize: phoneNumberFloating
                       ? "var(--mantine-font-size-xs)"
                       : "var(--mantine-font-size-sm)",
-                    fontWeight: firstNameFloating ? 500 : 400,
-                    "--dynamic-placeholder-color": firstNameFloating
+                    fontWeight: phoneNumberFloating ? 500 : 400,
+                    "--dynamic-placeholder-color": phoneNumberFloating
                       ? undefined
                       : "transparent",
                   }}
                 />
-                <TextInput
-                  required={!lastNameFloating}
-                  label="Last Name"
-                  labelProps={{ "data-floating": lastNameFloating }}
-                  autoComplete="family-name"
-                  value={form.values.lastName}
-                  placeholder={
-                    lastNameFocus && lastNameValue === "" ? "Smith" : ""
-                  }
-                  classNames={{
-                    root: classes.root,
-                    input: classes.input,
-                    label: lastNameFloating
-                      ? classes.labelFloating
-                      : classes.label,
-                  }}
-                  onChange={(event) => {
-                    setLastNameValue(event.currentTarget.value);
-                    form.setFieldValue("lastName", event.currentTarget.value);
-                  }}
-                  onFocus={() => setLastNameFocus(true)}
-                  onBlur={() => setLastNameFocus(false)}
-                />
-              </Group>
+              </>
             )}
             <TextInput
               mt={20}
@@ -337,7 +440,7 @@ export default function LoginComp(props) {
               error={form.errors.email && "Invalid email"}
             />
             <Popover
-              mt={25}
+              mt={20}
               opened={
                 shouldShowPopover && passValue.length > 0 && type === "sign-up"
               }
@@ -395,56 +498,38 @@ export default function LoginComp(props) {
                 {checks}
               </PopoverDropdown>
             </Popover>
-            {type === "sign-up" && (
-              <Group justify="flex-start">
-                <Checkbox
-                  classNames={{
-                    label: classes.termsCheckbox,
-                    input: classes.termsCheckbox,
-                  }}
-                  size="xs"
-                  label={
-                    <Box>
-                      I accept{" "}
-                      <Anchor
-                        c={dark ? "blue.3" : "blue.5"}
-                        size="xs"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setShowLegal(true);
-                        }}
-                      >
-                        terms and conditions
-                      </Anchor>
-                    </Box>
-                  }
-                  checked={form.values.terms}
-                  mt={10}
-                  required
-                  onChange={(event) =>
-                    form.setFieldValue("terms", event.currentTarget.checked)
-                  }
-                />
-              </Group>
-            )}
           </Stack>
-          <Group
-            justify={pathname !== "/tripPlanner" ? "space-between" : "flex-end"}
-            mt={pathname !== "/tripPlanner" ? "25px" : "-20px"}
-          >
-            {pathname !== "/tripPlanner" && (
-              <Anchor
-                className={classes.termsLink}
-                component="button"
-                type="button"
-                size="xs"
-                onClick={toggle}
-              >
-                {type === "sign-up"
-                  ? "Already have an account?"
-                  : "Don't have an account?"}
-              </Anchor>
-            )}
+          <Group justify={"space-between"} mt={20}>
+            <Checkbox
+              classNames={{
+                label: classes.termsCheckbox,
+                input: classes.termsCheckbox,
+              }}
+              opacity={type === "sign-up" ? 1 : 0}
+              disabled={type === "sign-up" ? false : true}
+              pointerEvents={type === "sign-up" ? "all" : "none"}
+              size="xs"
+              label={
+                <Box>
+                  I accept{" "}
+                  <Anchor
+                    c={dark ? "blue.3" : "blue.5"}
+                    size="xs"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowLegal(true);
+                    }}
+                  >
+                    terms and conditions
+                  </Anchor>
+                </Box>
+              }
+              checked={form.values.terms}
+              required
+              onChange={(event) =>
+                form.setFieldValue("terms", event.currentTarget.checked)
+              }
+            />
             <Button
               className={classes.loginButton}
               size={"sm"}
@@ -454,6 +539,20 @@ export default function LoginComp(props) {
             >
               {type === "sign-up" ? "Sign up" : "Login"}
             </Button>
+          </Group>
+          <Group justify="flex-end">
+            <Anchor
+              className={classes.termsLink}
+              component="button"
+              type="button"
+              mt={4}
+              fz={8}
+              onClick={toggle}
+            >
+              {type === "sign-up"
+                ? "Already have an account?"
+                : "Don't have an account?"}
+            </Anchor>
           </Group>
         </form>
       </Box>

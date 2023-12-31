@@ -2,8 +2,25 @@ button.shareButton {
   color: light-dark(#313132, #f8f9fa);
   background: rgba(0, 0, 0, 0);
   opacity: 0.5;
+  background: light-dark(
+    linear-gradient(
+      0deg,
+      rgba(200, 200, 200, 0.3) 0%,
+      rgba(255, 255, 255, 0.7) 100%
+    ),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%)
+  );
+
   &:hover {
     opacity: 1;
+    background: light-dark(
+      linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(200, 200, 200, 0.3) 100%
+      ),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%)
+    );
   }
 }
 
@@ -12,8 +29,4 @@ button.shareButton {
   overflow: hidden;
   border-radius: 50;
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
-  background: light-dark(
-    linear-gradient(0deg, #d7d7d8 0%, #fff 100%),
-    linear-gradient(0deg, #050506 0%, #000 100%)
-  );
 }

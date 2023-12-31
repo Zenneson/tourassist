@@ -41,9 +41,14 @@
 
 .termsLink {
   color: light-dark(#4e4e4e, #fff);
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
-.loginButton {
+button.loginButton {
   font-weight: 700;
   color: var(--mantine-color-gray-5);
   text-transform: uppercase;
@@ -51,4 +56,23 @@
     var(--mantine-color-gray-2),
     var(--mantine-color-dark-5)
   );
+}
+
+button.authProvider {
+  border: none;
+  transition: all 250ms ease;
+  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
+  opacity: 0.85;
+  background: light-dark(
+    linear-gradient(0deg, #f4f4f4 0%, #fff 100%),
+    linear-gradient(0deg, #070708 0%, #0a0b0d 100%)
+  );
+
+  &:hover {
+    opacity: 1;
+    background: light-dark(
+      linear-gradient(0deg, #fff 0%, #f4f4f4 100%),
+      linear-gradient(0deg, #0a0b0d 0%, #070708 100%)
+    );
+  }
 }

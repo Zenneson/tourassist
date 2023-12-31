@@ -24,8 +24,7 @@ import { useEffect } from "react";
 import LoginComp from "../login/loginComp";
 import classes from "./styles/intro.module.css";
 
-export default function Intro(props) {
-  const { setShowLegal } = props;
+export default function Intro() {
   const router = useRouter();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -79,7 +78,7 @@ export default function Intro(props) {
             ASSIST
           </Title>
           <Box className={classes.loginCompFrame} mt={10}>
-            <LoginComp setShowLegal={setShowLegal} />
+            <LoginComp />
           </Box>
         </Center>
         <Center w={"100%"}>

@@ -19,7 +19,8 @@ label.labelSize {
   text-transform: uppercase;
 }
 
-.multiRoot input {
+div.multiRoot input {
+  height: 0px;
   font-size: 13px;
   background: inherit;
   box-shadow: none;

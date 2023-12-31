@@ -58,3 +58,8 @@ input {
 .loadingOverlayDefaultLoader {
   color: light-dark(#2dc7f3, #0d3f82);
 }
+
+.legalModal .mantine-ScrollArea-root .mantine-ScrollArea-scrollbar {
+  opacity: 0.3;
+  width: 8;
+}

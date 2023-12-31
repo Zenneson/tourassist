@@ -12,8 +12,8 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import { IconChevronsRight } from "@tabler/icons-react";
-import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import classes from "./styles/legal.module.css";
 
 export default function Legal() {
