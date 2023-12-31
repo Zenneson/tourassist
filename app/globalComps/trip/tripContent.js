@@ -52,14 +52,22 @@ import AvatarEditor from "react-avatar-editor";
 import classes from "./styles/tripContent.module.css";
 
 export default function TripContent(props) {
-  let { tripData, images, modalMode, setModalMode, titleRef, user } = props;
+  let {
+    user,
+    tripData,
+    images,
+    modalMode,
+    setModalMode,
+    titleRef,
+    setTripDesc,
+  } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
   const [loading, setLoading] = useState(true);
 
-  const { setPlannerImages } = useTripPlannerState();
+  const { plannerImages, setPlannerImages } = useTripPlannerState();
   const [imageUpload, setImageUpload] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
@@ -144,9 +152,11 @@ export default function TripContent(props) {
     }
   }, [editor, tripDesc, tripData, updatedDesc]);
 
+  const [imageUpdated, setImageUpdated] = useState(false);
   useEffect(() => {
-    if (activeImages && activeImages.length > 0) {
+    if (activeImages !== plannerImages && !imageUpdated) {
       setPlannerImages(activeImages);
+      setImageUpdated(true);
     }
   }, [activeImages, setPlannerImages]);
 
@@ -201,6 +211,7 @@ export default function TripContent(props) {
         setProcessingImage(false);
         setImageUpload(null);
         setScale(1);
+        setImageUpdated(false);
       };
       reader.onerror = (error) => console.error("Error: ", error);
       reader.readAsDataURL(compressedFile);

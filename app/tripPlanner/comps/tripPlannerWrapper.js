@@ -85,6 +85,7 @@ export default function TripPlannerWrapper(props) {
     setTravelers,
     plannerImages,
     setPlannerImages,
+    setPlannerTripDesc,
     plannerTripTitle,
     setPlannerTripTitle,
     plannerTripDesc,
@@ -398,6 +399,7 @@ export default function TripPlannerWrapper(props) {
                         active={active}
                         images={plannerImages}
                         setImages={setPlannerImages}
+                        setTripDesc={setPlannerTripDesc}
                       />
                     </Stack>
                   </motion.div>
@@ -464,7 +466,7 @@ export default function TripPlannerWrapper(props) {
                           </Box>
                           <Image
                             src="/img/stripe.svg"
-                            fill={true}
+                            // fill={true}
                             display={"block"}
                             opacity={0.3}
                             pl={20}

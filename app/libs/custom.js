@@ -7,11 +7,9 @@ import {
   uploadString,
 } from "firebase/storage";
 import moment from "moment-timezone";
-import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
 import { firestore } from "./firebase";
-import { useAppState } from "./store";
 
 // Fetches data from a given URL using the Fetch API and custom options.
 export const fetcher = async (url, options = {}) => {
@@ -376,27 +374,4 @@ export const timeSince = (timeString) => {
   } else {
     return `${Math.floor(diffInSeconds / 2592000)} months`;
   }
-};
-
-// Saves the visit history of a user to session storage.
-export const useHistory = () => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [pageAdded, setPageAdded] = useState(false);
-  const { history, setHistory } = useAppState();
-
-  useEffect(() => {
-    if (pageAdded) return;
-    const url = `${pathname}${searchParams && "?"}${searchParams}`;
-
-    if (history.length > 0 && history[0] === "empty") {
-      history.shift();
-    }
-    const newHistory = [...history, url];
-
-    setHistory(newHistory);
-    setPageAdded(true);
-  }, [pathname, searchParams, history]);
-
-  return history;
 };
