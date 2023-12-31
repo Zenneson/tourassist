@@ -1,4 +1,4 @@
-import { useMapState, useTripPlannerState } from "@libs/store";
+import { useTripPlannerState } from "@libs/store";
 import {
   ActionIcon,
   Badge,
@@ -17,7 +17,7 @@ import {
   Tooltip,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useDidUpdate, useSessionStorage } from "@mantine/hooks";
+import { useDidUpdate } from "@mantine/hooks";
 import {
   IconCirclePlus,
   IconCurrencyDollar,
@@ -29,13 +29,14 @@ import { useEffect, useRef, useState } from "react";
 import classes from "../styles/useTickets.module.css";
 
 export default function UseTickets(props) {
-  const { form, setSavedFormValues, disallowEmptyField } = props;
-
-  const { places } = useMapState();
-  const [placeData, setPlaceData] = useSessionStorage({
-    key: "sessionPlaces",
-    initialValue: places || [],
-  });
+  const {
+    form,
+    placeData,
+    setPlaceData,
+    startLocale,
+    setSavedFormValues,
+    disallowEmptyField,
+  } = props;
 
   const { roundTrip } = useTripPlannerState();
   const computedColorScheme = useComputedColorScheme("dark", {
@@ -45,12 +46,20 @@ export default function UseTickets(props) {
   const [focusIndex, setFocusIndex] = useState(null);
   const inputRefs = useRef([]);
 
+  // Filter out the return flight place if roundTrip is false
+  const filteredPlaceData = roundTrip
+    ? placeData
+    : placeData.filter(
+        (place, index) =>
+          !(index === placeData.length - 1 && place.returnFlight)
+      );
+
   useEffect(() => {
     // Adjust the array size when placeData changes
-    inputRefs.current = placeData.map(
+    inputRefs.current = filteredPlaceData.map(
       (place, placeIndex) => inputRefs.current[placeIndex] || []
     );
-  }, [placeData]);
+  }, [filteredPlaceData]);
 
   const [origPlaceData, setOrigPlaceData] = useState(placeData);
   useEffect(() => {
@@ -181,7 +190,30 @@ export default function UseTickets(props) {
     return trueCostName;
   };
 
-  return placeData.map((place, index) => {
+  const removeStartLocaleFromPlaceData = (placeData, startLocale) => {
+    // Ensure placeData is an array
+    if (!Array.isArray(placeData)) {
+      console.error("placeData is not an array");
+      return placeData;
+    }
+
+    // Check if the startLocale matches the first or last place in placeData
+    if (placeData.length > 0) {
+      if (placeData[0] === startLocale) {
+        // Remove the first element
+        return placeData.slice(1);
+      } else if (placeData[placeData.length - 1] === startLocale) {
+        // Remove the last element
+        return placeData.slice(0, -1);
+      }
+    }
+
+    // Return the original array if no match is found
+    return placeData;
+  };
+  const destinations = removeStartLocaleFromPlaceData(placeData, startLocale);
+
+  return filteredPlaceData.map((place, index) => {
     const costKeys = Object.keys(place.costs);
     return (
       <Box
@@ -223,14 +255,15 @@ export default function UseTickets(props) {
               }
             />
             {roundTrip &&
-              placeData.length > 1 &&
+              destinations.length > 1 &&
               place &&
-              place.returnFlight && (
+              place.returnFlight &&
+              index === placeData.length - 1 && (
                 <Badge mr={5} variant="dot" size="xs">
                   Return flight
                 </Badge>
               )}
-            {roundTrip && placeData.length === 1 && (
+            {roundTrip && destinations.length === 1 && (
               <Badge mr={5} variant="dot" size="xs">
                 Round Trip
               </Badge>

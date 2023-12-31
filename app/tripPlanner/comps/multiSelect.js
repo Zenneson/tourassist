@@ -1,5 +1,4 @@
 "use client";
-import { useTripPlannerState } from "@libs/store";
 import {
   CheckIcon,
   Combobox,
@@ -9,6 +8,7 @@ import {
   Text,
   useCombobox,
 } from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
 import { IconCheckbox } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import classes from "../styles/multiSelect.module.css";
@@ -28,10 +28,12 @@ const MAX_SELECTABLE_ITEMS = 5;
 const MAX_DISPLAYED_VALUES = 3;
 
 export default function MultiSelect() {
-  const { tripTypes } = useTripPlannerState();
-  const [value, setValue] = useState(tripTypes);
   const [data, setData] = useState(types);
   const [search, setSearch] = useState("");
+  const [tripTypes, setTripTypes] = useSessionStorage({
+    key: "tripTypes",
+    defaultValue: [],
+  });
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -42,12 +44,13 @@ export default function MultiSelect() {
 
   const handleValueSelect = (val) => {
     setSearch("");
+    if (!Array.isArray(tripTypes)) return;
 
     if (val === "$create") {
       setData((current) => [...current, search]);
-      setValue((current) => [...current, search]);
+      setTripTypes((current) => [...current, search]);
     } else {
-      setValue((current) =>
+      setTripTypes((current) =>
         current.includes(val)
           ? current.filter((v) => v !== val)
           : [...current, val]
@@ -55,11 +58,13 @@ export default function MultiSelect() {
     }
   };
 
-  const handleValueRemove = (val) =>
-    setValue((current) => current.filter((v) => v !== val));
+  const handleValueRemove = (val) => {
+    if (!Array.isArray(tripTypes)) return;
+    setTripTypes((current) => current.filter((v) => v !== val));
+  };
 
-  const displayedValues = value.slice(0, MAX_DISPLAYED_VALUES);
-  const additionalValuesCount = value.length - MAX_DISPLAYED_VALUES;
+  const displayedValues = tripTypes.slice(0, MAX_DISPLAYED_VALUES);
+  const additionalValuesCount = tripTypes.length - MAX_DISPLAYED_VALUES;
 
   const values = displayedValues.map((item) => (
     <Pill
@@ -75,31 +80,36 @@ export default function MultiSelect() {
   const options = data
     .filter((item) => item.toLowerCase().includes(search.trim().toLowerCase()))
     .map((item) => (
-      <Combobox.Option value={item} key={item} active={value.includes(item)}>
+      <Combobox.Option
+        value={item}
+        key={item}
+        active={tripTypes.includes(item)}
+      >
         <Group gap="sm" justify="space-between">
           <span>{item}</span>
-          {value.includes(item) ? <CheckIcon size={12} /> : null}
+          {tripTypes.includes(item) ? <CheckIcon size={12} /> : null}
         </Group>
       </Combobox.Option>
     ));
 
-  const remainingChoices = MAX_SELECTABLE_ITEMS - value.length;
-  let dynamicPlaceholder;
-  if (remainingChoices === MAX_SELECTABLE_ITEMS) {
-    dynamicPlaceholder = "Choose up to 5";
-  } else if (remainingChoices > 1) {
-    dynamicPlaceholder = `${remainingChoices} choices left`;
-  } else if (remainingChoices === 1) {
-    dynamicPlaceholder = "1 choice left";
-  } else {
-    dynamicPlaceholder = "Maximum choices reached";
-  }
+  const getDynamicPlaceholder = (remainingChoices) => {
+    if (remainingChoices === MAX_SELECTABLE_ITEMS) {
+      return "Choose up to 5";
+    } else if (remainingChoices > 1) {
+      return `${remainingChoices} choices left`;
+    } else if (remainingChoices === 1) {
+      return "1 choice left";
+    } else {
+      return "Maximum choices reached";
+    }
+  };
+  const dynamicPlaceholder = getDynamicPlaceholder(tripTypes.length);
 
   useEffect(() => {
-    if (value.length >= MAX_SELECTABLE_ITEMS) {
+    if (tripTypes.length >= MAX_SELECTABLE_ITEMS) {
       combobox.closeDropdown();
     }
-  }, [value.length, combobox]);
+  }, [tripTypes.length, combobox]);
 
   return (
     <Combobox
@@ -122,7 +132,7 @@ export default function MultiSelect() {
           label="What type of trip is this?"
           inputWrapperOrder={["label", "error", "input", "description"]}
           onClick={() => {
-            if (value.length < MAX_SELECTABLE_ITEMS) {
+            if (tripTypes.length < MAX_SELECTABLE_ITEMS) {
               combobox.openDropdown();
             }
           }}
@@ -138,8 +148,8 @@ export default function MultiSelect() {
                 onFocus={() => combobox.openDropdown()}
                 onBlur={() => combobox.closeDropdown()}
                 value={search}
-                placeholder={value.length > 0 ? "" : "Add Trip Types..."}
-                disabled={value.length >= MAX_SELECTABLE_ITEMS}
+                placeholder={tripTypes.length > 0 ? "" : "Add Trip Types..."}
+                disabled={tripTypes.length >= MAX_SELECTABLE_ITEMS}
                 onChange={(event) => {
                   combobox.updateSelectedOptionIndex();
                   setSearch(event.currentTarget.value);
@@ -147,7 +157,7 @@ export default function MultiSelect() {
                 onKeyDown={(event) => {
                   if (event.key === "Backspace" && search.length === 0) {
                     event.preventDefault();
-                    handleValueRemove(value[value.length - 1]);
+                    handleValueRemove(tripTypes[tripTypes.length - 1]);
                   }
                   if (
                     event.key === "Enter" &&

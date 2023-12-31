@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
 import {
   IconChevronRight,
   IconListNumbers,
@@ -32,11 +33,16 @@ export default function TripDetailsDrawer(props) {
     splitLocale,
     travelDates,
     travelers,
-    tripTypes,
   } = props;
+
+  const [tripTypes, setTripTypes] = useSessionStorage({
+    key: "tripTypes",
+    defaultValue: [],
+  });
 
   return (
     <Drawer
+      classNames={{ content: classes.tripDetailsDrawer }}
       zIndex={1}
       position="right"
       opened={showTripInfo}
@@ -136,20 +142,21 @@ export default function TripDetailsDrawer(props) {
             />
           </Flex>
         )}
-        {tripTypes.map((type, index) => {
-          const colorNum = 7 - index;
-          return (
-            <Badge
-              classNames={{ root: classes.badge }}
-              key={index}
-              variant="dot"
-              size="xs"
-              color={`blue.${colorNum}`}
-            >
-              {type}
-            </Badge>
-          );
-        })}
+        {Array.isArray(tripTypes) &&
+          tripTypes.map((type, index) => {
+            const colorNum = 7 - index;
+            return (
+              <Badge
+                classNames={{ root: classes.badge }}
+                key={index}
+                variant="dot"
+                size="xs"
+                color={`blue.${colorNum}`}
+              >
+                {type}
+              </Badge>
+            );
+          })}
       </Stack>
     </Drawer>
   );

@@ -12,7 +12,8 @@ export default function TripPlanner() {
   });
 
   useEffect(() => {
-    if (sessionPlaces.length === 0) setSessionPlaces(places);
+    if (sessionPlaces && sessionPlaces.length === 0 && places.length > 0)
+      setSessionPlaces(places);
   }, [places, sessionPlaces, setSessionPlaces]);
 
   return (

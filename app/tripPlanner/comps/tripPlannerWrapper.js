@@ -60,7 +60,7 @@ import UseTickets from "./useTickets";
 const [FormProvider, useFormContext, useForm] = createFormContext();
 
 export default function TripPlannerWrapper(props) {
-  const { placeData, setPlaceData } = props;
+  const { placeData = [], setPlaceData } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -83,7 +83,6 @@ export default function TripPlannerWrapper(props) {
     roundTrip,
     travelers,
     setTravelers,
-    tripTypes,
     plannerImages,
     setPlannerImages,
     plannerTripTitle,
@@ -374,10 +373,9 @@ export default function TripPlannerWrapper(props) {
                     <Box mt={40} maw={950}>
                       <UseTickets
                         form={form}
+                        placeData={placeData}
+                        setPlaceData={setPlaceData}
                         startLocale={startLocale}
-                        startCity={startCity}
-                        startRegion={startRegion}
-                        savedFormValues={savedFormValues}
                         setSavedFormValues={setSavedFormValues}
                         disallowEmptyField={disallowEmptyField}
                       />
@@ -611,7 +609,6 @@ export default function TripPlannerWrapper(props) {
         splitLocale={splitLocale}
         travelDates={travelDates}
         travelers={travelers}
-        tripTypes={tripTypes}
       />
     </FormProvider>
   );

@@ -48,7 +48,7 @@
   }
 }
 
-.mainDrawer {
+section.mainDrawer {
   min-height: 570px;
   overflow: hidden;
   background-color: light-dark(

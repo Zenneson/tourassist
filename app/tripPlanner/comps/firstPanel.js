@@ -1,3 +1,4 @@
+"use client";
 import { placeExists } from "@libs/notifications";
 import { useTripPlannerState } from "@libs/store";
 import {

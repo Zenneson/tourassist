@@ -54,7 +54,7 @@ input.tripTitleInput {
   background-color: transparent;
 }
 
-.stepperIcon {
+span.stepperIcon {
   transition: all 500ms ease-in-out;
   padding-top: 2px;
   border-radius: 25px;
@@ -105,5 +105,12 @@ input.tripTitleInput {
   background-color: light-dark(
     var(--mantine-color-gray-1),
     var(--mantine-color-dark-6)
+  );
+}
+
+section.tripDetailsDrawer {
+  background-color: light-dark(
+    rgba(248, 249, 250, 0.95),
+    rgba(12, 13, 14, 0.95)
   );
 }

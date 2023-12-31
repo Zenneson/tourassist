@@ -72,7 +72,6 @@ export const useTripState = create(
 export const useTripPlannerState = create(
   persist(
     (set) => ({
-      tripTypes: [],
       travelers: 1,
       setTravelers: (travelers) => set({ travelers }),
       roundTrip: false,
@@ -89,7 +88,6 @@ export const useTripPlannerState = create(
     {
       name: "plannerImages",
       storage: sessionStore,
-      partialize: (state) => ({ plannerImages: state.plannerImages }),
     }
   )
 );

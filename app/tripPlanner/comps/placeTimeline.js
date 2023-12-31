@@ -6,111 +6,48 @@ import classes from "../styles/placeTimeline.module.css";
 export default function PlaceTimeline(props) {
   const { dark, placeData, roundTrip, startLocale, splitLocale } = props;
 
-  const startCity = splitLocale(startLocale)[0];
-  const startRegion = splitLocale(startLocale)[1];
+  if (!startLocale) return null;
 
-  if (!roundTrip && !startLocale) {
-    return (
-      <Timeline
-        lineWidth={3}
-        bulletSize={20}
-        classNames={{
-          item: classes.timelineItem,
-          itemTitle: classes.timelineTitle,
-        }}
-      >
-        {placeData.map((place, index) => (
-          <Timeline.Item
-            title={place.place}
-            lineVariant="dashed"
-            key={place.place + index}
-            bullet={<IconMapPin />}
-          >
-            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-              {place.region}
-            </Text>
-          </Timeline.Item>
-        ))}
-      </Timeline>
-    );
-  }
+  const renderTimelineItem = (place, region, index) => (
+    <Timeline.Item
+      title={place}
+      key={place + index}
+      lineVariant="dashed"
+      bullet={<IconMapPin />}
+    >
+      <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
+        {region}
+      </Text>
+    </Timeline.Item>
+  );
 
-  if (!roundTrip && startCity) {
-    return (
-      <Timeline
-        lineWidth={3}
-        bulletSize={20}
-        classNames={{
-          item: classes.timelineItem,
-          itemTitle: classes.timelineTitle,
-        }}
-      >
-        <Timeline.Item
-          title={startCity}
-          lineVariant="dashed"
-          bullet={<IconMapPin />}
-        >
-          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-            {startRegion}
-          </Text>
-        </Timeline.Item>
-        {placeData.map((place, index) => (
-          <Timeline.Item
-            title={place.place}
-            key={place.place + index}
-            lineVariant="dashed"
-            bullet={<IconMapPin />}
-          >
-            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-              {place.region}
-            </Text>
-          </Timeline.Item>
-        ))}
-      </Timeline>
-    );
-  }
+  const startCity = startLocale ? splitLocale(startLocale)[0] : "";
+  const startRegion = startLocale ? splitLocale(startLocale)[1] : "";
 
-  if (roundTrip && startCity) {
-    return (
-      <Timeline
-        lineWidth={3}
-        bulletSize={20}
-        classNames={{
-          item: classes.timelineItem,
-          itemTitle: classes.timelineTitle,
-        }}
-      >
-        <Timeline.Item
-          title={startCity}
-          lineVariant="dashed"
-          bullet={<IconMapPin />}
-        >
-          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-            {startRegion}
-          </Text>
-        </Timeline.Item>
-        {placeData.map((place, index) => (
-          <Timeline.Item
-            title={place.place}
-            key={place.place + index}
-            lineVariant="dashed"
-            bullet={<IconMapPin />}
-          >
-            <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-              {place.region}
-            </Text>
-          </Timeline.Item>
-        ))}
-        <Timeline.Item
-          title={startCity}
-          lineVariant="dashed"
-          bullet={<IconMapPin />}
-        >
-          <Text c={dark ? "gray.0" : "dark.9"} fz={10}>
-            {startRegion}
-          </Text>
-        </Timeline.Item>
-      </Timeline>
-    );
-  }
+  const timelineItems = placeData.map((place, index) =>
+    renderTimelineItem(place.place, place.region, index)
+  );
+
+  // Check if the last place in placeData is the same as the start city
+  const isLastPlaceStartCity =
+    placeData.length > 0 &&
+    placeData[placeData.length - 1].place === startCity &&
+    placeData[placeData.length - 1].region === startRegion;
+
+  return (
+    <Timeline
+      lineWidth={3}
+      bulletSize={20}
+      classNames={{
+        item: classes.timelineItem,
+        itemTitle: classes.timelineTitle,
+      }}
+    >
+      {startCity && renderTimelineItem(startCity, startRegion, "start")}
+      {timelineItems}
+      {roundTrip &&
+        !isLastPlaceStartCity &&
+        renderTimelineItem(startCity, startRegion, "end")}
+    </Timeline>
+  );
 }
