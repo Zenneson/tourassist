@@ -30,21 +30,12 @@ export const useLoaderState = create((set) => ({
 }));
 
 // Map State
-export const useMapState = create(
-  persist(
-    (set) => ({
-      area: { label: "" },
-      setArea: (value) => set({ area: value }),
-      places: [],
-      setPlaces: (value) => set({ places: value }),
-    }),
-    {
-      name: "mapState",
-      storage: sessionStore,
-      partialize: (state) => ({ places: state.places }),
-    }
-  )
-);
+export const useMapState = create((set) => ({
+  area: { label: "" },
+  setArea: (value) => set({ area: value }),
+  places: [],
+  setPlaces: (value) => set({ places: value }),
+}));
 
 // Trip Page State
 export const useTripState = create(

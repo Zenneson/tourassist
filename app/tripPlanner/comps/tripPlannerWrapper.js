@@ -374,8 +374,6 @@ export default function TripPlannerWrapper(props) {
                     <Box mt={40} maw={950}>
                       <UseTickets
                         form={form}
-                        placeData={placeData}
-                        setPlaceData={setPlaceData}
                         startLocale={startLocale}
                         startCity={startCity}
                         startRegion={startRegion}

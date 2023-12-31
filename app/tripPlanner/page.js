@@ -1,12 +1,24 @@
 "use client";
 import { useMapState } from "@libs/store";
+import { useSessionStorage } from "@mantine/hooks";
+import { useEffect } from "react";
 import TripPlannerWrapper from "./comps/tripPlannerWrapper";
 
 export default function TripPlanner() {
-  const { places, setPlaces } = useMapState();
+  const { places } = useMapState();
+  const [sessionPlaces, setSessionPlaces] = useSessionStorage({
+    key: "sessionPlaces",
+    initialValue: places || [],
+  });
 
-  // if (!places || places.length === 0)
-  //   return <PageLoader contentLoaded={false} />;
+  useEffect(() => {
+    if (sessionPlaces.length === 0) setSessionPlaces(places);
+  }, [places, sessionPlaces, setSessionPlaces]);
 
-  return <TripPlannerWrapper placeData={places} setPlaceData={setPlaces} />;
+  return (
+    <TripPlannerWrapper
+      placeData={sessionPlaces}
+      setPlaceData={setSessionPlaces}
+    />
+  );
 }

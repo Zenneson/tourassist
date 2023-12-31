@@ -12,6 +12,7 @@ import {
   Transition,
   useComputedColorScheme,
 } from "@mantine/core";
+import { useSessionStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconList } from "@tabler/icons-react";
 import centerOfMass from "@turf/center-of-mass";
@@ -42,7 +43,7 @@ export default function Mymap(props) {
 
   const { latitude, longitude } = props;
   const [places, setPlaces] = useState([]);
-  const { area, setArea, setPlacesData = setPlaces } = useMapState();
+  const { area, setArea } = useMapState();
 
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -348,11 +349,6 @@ export default function Mymap(props) {
     setPanelOpened(false);
   };
 
-  const placeChoosen = () => {
-    setPlaces(placeLocation);
-    setPlacesData(places);
-  };
-
   const [buttonAnimation, setButtonAnimation] = useState(fadeIn);
   const [buttonPosition, setButtonPosition] = useState(0);
 
@@ -417,6 +413,19 @@ export default function Mymap(props) {
     }
   };
 
+  const [sessionPlaces, setSessionPlaces] = useSessionStorage({
+    key: "sessionPlaces",
+    initialValue: places,
+  });
+
+  const placeChoosen = () => {
+    setShowModal(false);
+    router.push("/tripPlanner");
+    setTimeout(() => {
+      setSessionPlaces(placeLocation);
+    }, 200);
+  };
+
   useEffect(() => {
     router.prefetch("/tripPlanner");
   }, [router]);
@@ -427,9 +436,9 @@ export default function Mymap(props) {
         <TourList
           places={places}
           setPlaces={setPlaces}
-          setPlacesData={setPlacesData}
           setLocationDrawer={setLocationDrawer}
           goToLocation={goToLocation}
+          setSessionPlaces={setSessionPlaces}
         />
       )}
       {/* Confirm Choice Modal  */}
@@ -462,13 +471,7 @@ export default function Mymap(props) {
             color="green.9"
             variant="light"
             leftSection={<IconCheck stroke={4} />}
-            onClick={() => {
-              setShowModal(false);
-              router.push("/tripPlanner");
-              setTimeout(() => {
-                placeChoosen();
-              }, 200);
-            }}
+            onClick={placeChoosen}
           >
             YES
           </Button>

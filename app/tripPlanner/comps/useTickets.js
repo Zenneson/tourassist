@@ -1,4 +1,4 @@
-import { useTripPlannerState } from "@libs/store";
+import { useMapState, useTripPlannerState } from "@libs/store";
 import {
   ActionIcon,
   Badge,
@@ -17,7 +17,7 @@ import {
   Tooltip,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useDidUpdate } from "@mantine/hooks";
+import { useDidUpdate, useSessionStorage } from "@mantine/hooks";
 import {
   IconCirclePlus,
   IconCurrencyDollar,
@@ -29,13 +29,14 @@ import { useEffect, useRef, useState } from "react";
 import classes from "../styles/useTickets.module.css";
 
 export default function UseTickets(props) {
-  const {
-    form,
-    placeData,
-    setPlaceData,
-    setSavedFormValues,
-    disallowEmptyField,
-  } = props;
+  const { form, setSavedFormValues, disallowEmptyField } = props;
+
+  const { places } = useMapState();
+  const [placeData, setPlaceData] = useSessionStorage({
+    key: "sessionPlaces",
+    initialValue: places || [],
+  });
+
   const { roundTrip } = useTripPlannerState();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,

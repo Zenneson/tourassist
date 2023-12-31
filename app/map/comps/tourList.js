@@ -1,4 +1,4 @@
-import { useAppState, useTripState } from "@libs/store";
+import { useAppState } from "@libs/store";
 import {
   Button,
   Center,
@@ -16,14 +16,19 @@ import classes from "../styles/tourList.module.css";
 import PlaceListItem from "./placeListItem";
 
 export default function TourList(props) {
-  const { places, setPlaces, setLocationDrawer, goToLocation } = props;
+  const {
+    places,
+    setPlaces,
+    setLocationDrawer,
+    goToLocation,
+    setSessionPlaces,
+  } = props;
   const router = useRouter();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
   const { listOpened, setListOpened } = useAppState();
-  const { setPlacesData = setPlaces } = useTripState();
 
   const submitTourList = () => {
     const newPlaceData = places.map((location) => {
@@ -34,7 +39,7 @@ export default function TourList(props) {
         costs: costs,
       };
     });
-    setPlacesData(newPlaceData);
+    setSessionPlaces(newPlaceData);
     router.push("/tripPlanner");
   };
 
