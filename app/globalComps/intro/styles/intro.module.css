@@ -1,16 +1,28 @@
-.colorBtnFrame {
+div.colorBtnTooltip {
+  background: light-dark(#fff, #141517);
+  color: light-dark(#141517, #fff);
+  border: 1px solid light-dark(#ececec, #1c1c1c);
+}
+
+div.colorBtnFrame {
   position: absolute;
   top: 5px;
   right: 5px;
   z-index: 1400;
 }
 
-.toggleColorButton {
-  background-color: light-dark(rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2));
-  color: light-dark(#fff, #000);
+button.toggleColorButton {
+  background-color: light-dark(#fff, #141517);
+  color: light-dark(#555, #fff);
   position: relative;
   width: 38px;
   margin: 10px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .introLayoutFlex {
@@ -64,8 +76,8 @@
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-.loginTitleThin {
-  font-weight: 500 !important;
+span.loginTitleThin {
+  font-weight: 500;
   color: light-dark(#7e7e7e, #adadad);
 }
 
@@ -113,17 +125,17 @@
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.enterSiteBtn,
-.infoButton {
+button.enterSiteBtn,
+button.infoButton {
   text-transform: uppercase;
 }
 
-.infoButton {
+button.infoButton {
   font-weight: 900;
   color: #fff;
   background-color: light-dark(rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2));
 }
 
-.enterSiteBtn {
+button.enterSiteBtn {
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }

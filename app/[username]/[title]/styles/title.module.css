@@ -1,17 +1,11 @@
-.toolTip {
-  background: light-dark(#fff, #141517);
-  color: light-dark(#141517, #fff);
-  border: 1px solid light-dark(#ececec, #1c1c1c);
-}
-
-.updateModalButton {
+button.updateModalButton {
   background: light-dark(
     linear-gradient(0deg, #d7d7d8 0%, #fff 100%),
     linear-gradient(0deg, #000 0%, #020202 100%)
-  ) !important;
-  color: light-dark(#000000, #f8f9fa) !important;
+  );
+  color: light-dark(#000000, #f8f9fa);
   opacity: 0.7;
-  border: none !important;
+  border: none;
   &:hover {
     opacity: 1;
   }
@@ -42,8 +36,8 @@
   color: light-dark(#ced4da, #373a40);
 }
 
-.progress {
-  background: light-dark(#94d82d, #2b8a3e) !important;
+div.progress {
+  background: light-dark(#94d82d, #2b8a3e);
 }
 
 .infoPanel .useFundsBtn {

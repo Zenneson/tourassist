@@ -1,12 +1,10 @@
 import { NumberInput } from "@mantine/core";
 import { IconCurrencyDollar } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useFormContext } from "../page";
 import classes from "../styles/sumInput.module.css";
 
 export default function SumInput(props) {
-  const { disallowEmptyField } = props;
-  const form = useFormContext();
+  const { form, disallowEmptyField } = props;
   const costSum = form.getTransformedValues();
   const [totalCost, setTotalCost] = useState(costSum);
 

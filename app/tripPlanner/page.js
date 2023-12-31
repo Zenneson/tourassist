@@ -1,9 +1,6 @@
 "use client";
 import { useMapState } from "@libs/store";
-import { createFormContext } from "@mantine/form";
 import TripPlannerWrapper from "./comps/tripPlannerWrapper";
-
-export const [FormProvider, useFormContext, useForm] = createFormContext();
 
 export default function TripPlanner() {
   const { places, setPlaces } = useMapState();

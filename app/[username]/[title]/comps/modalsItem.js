@@ -13,7 +13,6 @@ import {
   postingUpdate,
   updatePosted,
 } from "@libs/notifications";
-import { useTripState } from "@libs/store";
 import {
   Box,
   Button,
@@ -58,7 +57,6 @@ export default function ModalsItem(props) {
     modalMode,
     setModalMode,
     tripDesc,
-    travelDate,
     user,
     closeEditTripModal,
     dark,
@@ -96,14 +94,19 @@ export default function ModalsItem(props) {
     return formatDonation(total);
   };
 
-  const DateChanger = () => {
-    const { date = travelDate, setTravelDate } = useTripState();
-    useEffect(() => {
-      if (!date) {
-        setTravelDate(new Date(travelDate));
-      }
-    }, [date, travelDate]);
+  const [date, setDate] = useState(tripData.travelDate);
+  useEffect(() => {
+    if (date && date.length > 0) return;
+    if (
+      tripData.travelDate &&
+      tripData.travelDate !== "" &&
+      tripData.travelDate !== undefined
+    ) {
+      setDate(new Date(tripData.travelDate));
+    }
+  }, [date]);
 
+  const DateChanger = () => {
     return (
       <DateInput
         classNames={{ input: classes.dateInput }}
@@ -117,8 +120,8 @@ export default function ModalsItem(props) {
         ta={"right"}
         w={"100%"}
         maw={150}
-        onChange={(e) => setTravelDate(new Date(e))}
-        value={date}
+        onChange={(e) => setDate(new Date(e))}
+        value={date || new Date(tripData.travelDate)}
         valueFormat="MMM DD, YYYY"
       />
     );

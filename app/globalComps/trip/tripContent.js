@@ -51,8 +51,7 @@ import AvatarEditor from "react-avatar-editor";
 import classes from "./styles/tripContent.module.css";
 
 export default function TripContent(props) {
-  let { tripData, images, setImages, modalMode, setModalMode, titleRef, user } =
-    props;
+  let { tripData, images, modalMode, setModalMode, titleRef, user } = props;
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -64,7 +63,7 @@ export default function TripContent(props) {
   const [scale, setScale] = useState(1);
   const [processingImage, setProcessingImage] = useState(false);
 
-  const { tripDesc, setTripDesc, travelDate, updatedDesc } = useTripState();
+  const { tripDesc, updatedDesc } = useTripState();
   const setHideLoader = useLoaderState();
 
   const router = useRouter();
@@ -73,18 +72,23 @@ export default function TripContent(props) {
   const cropperRef = useRef(null);
   const cropperContainerRef = useRef(null);
 
+  const [activeImages, setActiveImages] = useState(images);
+  useEffect(() => {
+    if (images && images.length > 0) setActiveImages(images);
+  }, [images, activeImages]);
+
   const [embla, setEmbla] = useState(null);
-  useAnimationOffsetEffect(embla, 1000);
+  useAnimationOffsetEffect(embla, 500);
 
   const slides =
-    images && images.length > 0
-      ? images.map((image, index) => (
+    activeImages && activeImages.length > 0
+      ? activeImages.map((image, index) => (
           <CarouselSlide key={index}>
             <Image
               radius={3}
               src={image.file}
               height={300}
-              width={390}
+              width={pathname === "tripPlanner" ? 435 : 390}
               fetchPriority="high"
               priority="true"
               loading="eager"
@@ -167,7 +171,7 @@ export default function TripContent(props) {
     let counter = 0;
     const baseName = name.substring(0, name.length - 4);
     const nameExists = (imageName) => {
-      return images.some((img) => img.name === imageName);
+      return activeImages.some((img) => img.name === imageName);
     };
     while (nameExists(name)) {
       counter++;
@@ -200,7 +204,7 @@ export default function TripContent(props) {
           name: uniqueName,
           file: compressedDataUrl,
         };
-        setImages((prevImages) => {
+        setActiveImages((prevImages) => {
           const newImages = [...prevImages, imgObj]; // create new images array
           return newImages; // return new images array to update state
         });
@@ -229,8 +233,8 @@ export default function TripContent(props) {
   };
 
   const imageItems =
-    images && images.length > 0
-      ? images.map((image, index) => {
+    activeImages && activeImages.length > 0
+      ? activeImages.map((image, index) => {
           return (
             <Flex
               className={classes.tripImageWrapper}
@@ -262,9 +266,9 @@ export default function TripContent(props) {
                 variant="subtle"
                 color="red.9"
                 onClick={() => {
-                  setImages(
+                  setActiveImages(
                     removeImageByName(
-                      images,
+                      activeImages,
                       image.name,
                       params,
                       tripData?.tripId,
@@ -303,9 +307,9 @@ export default function TripContent(props) {
         user.email,
         tripData,
         tripData.tripId,
-        images,
+        activeImages,
         newDesc,
-        travelDate,
+        tripData.travelDate,
         title
       );
       router.refresh();
@@ -325,13 +329,11 @@ export default function TripContent(props) {
         <>
           <Group gap={20} w="100%" align="flex-start" grow>
             <Box>
-              {images.length > 0 ? (
+              {activeImages.length > 0 ? (
                 <Carousel
                   getEmblaApi={setEmbla}
                   align={"center"}
-                  withIndicators={images.length > 1}
-                  containScroll={"trimSnaps"}
-                  slideSize={"100%"}
+                  withIndicators={activeImages.length > 1}
                   controlSize={60}
                   controlsOffset={-50}
                   nextControlIcon={
@@ -348,7 +350,7 @@ export default function TripContent(props) {
                   }
                   classNames={{
                     indicators: classes.indicators,
-                    indicator: images.length > 1 && classes.indicator,
+                    indicator: activeImages.length > 1 && classes.indicator,
                     control: classes.control,
                     root: classes.root,
                   }}
@@ -374,8 +376,8 @@ export default function TripContent(props) {
             <Box h={300}>
               <FileButton
                 accept={IMAGE_MIME_TYPE}
-                disabled={images.length === 6}
-                opacity={images.length === 6 ? 0.3 : 1}
+                disabled={activeImages.length === 6}
+                opacity={activeImages.length === 6 ? 0.3 : 1}
                 onChange={(file) => {
                   grabImage(file, "input");
                 }}
@@ -390,9 +392,11 @@ export default function TripContent(props) {
                   >
                     <Group gap={7}>
                       <Title order={3}>
-                        {images.length === 6 ? "MAX REACHED" : "UPLOAD IMAGE"}
+                        {activeImages.length === 6
+                          ? "MAX REACHED"
+                          : "UPLOAD IMAGE"}
                       </Title>
-                      {images.length < 6 && <IconUpload size={23} />}
+                      {activeImages.length < 6 && <IconUpload size={23} />}
                     </Group>
                   </Button>
                 )}
@@ -410,7 +414,7 @@ export default function TripContent(props) {
               </Group>
               <Stack gap={0}>
                 {imageItems}
-                {images.length < 6 && (
+                {activeImages.length < 6 && (
                   <Badge
                     variant="filled"
                     size="lg"
@@ -424,7 +428,8 @@ export default function TripContent(props) {
                       cursor: "default",
                     }}
                   >
-                    {6 - images.length} space{images.length < 5 ? "s" : ""} left
+                    {6 - activeImages.length} space
+                    {activeImages.length < 5 ? "s" : ""} left
                   </Badge>
                 )}
               </Stack>
@@ -437,7 +442,7 @@ export default function TripContent(props) {
                 onReject={(file) => console.error("rejected files", file)}
                 accept={IMAGE_MIME_TYPE}
                 ta="center"
-                active={images.length < 6}
+                active={activeImages.length < 6}
               >
                 <Center h={"calc(100vh - 60px)"}>
                   <Group

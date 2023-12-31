@@ -28,10 +28,10 @@
   }
 }
 
-.deleteItem {
+button.deleteItem {
   background: none;
   opacity: 0.4;
-  border: 1px solid light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.04)) !important;
+  border: 1px solid light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.04));
   &:hover {
     opacity: 1;
   }

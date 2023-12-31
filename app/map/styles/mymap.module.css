@@ -82,10 +82,10 @@
   }
 }
 
-.tourListButton {
+button.tourListButton {
   position: absolute;
   top: 120px;
-  padding: 0 8px;
+  padding: 0 10px;
   z-index: 120;
   opacity: 1;
   border-radius: 0 3px 3px 0;
@@ -99,7 +99,8 @@
     light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
   border-bottom: 1px solid
     light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.02));
+
   &:hover {
-    padding-left: 12px;
+    padding-left: 15px;
   }
 }

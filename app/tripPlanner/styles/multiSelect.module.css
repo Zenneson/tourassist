@@ -13,8 +13,8 @@
   }
 }
 
-.labelSize {
-  font-size: 10px !important;
+label.labelSize {
+  font-size: 10px;
   opacity: 0.7;
   text-transform: uppercase;
 }

@@ -57,7 +57,7 @@ import SumInput from "./sumInput";
 import TripDetailsDrawer from "./tripDetailsDrawer";
 import UseTickets from "./useTickets";
 
-export const [FormProvider, useFormContext, useForm] = createFormContext();
+const [FormProvider, useFormContext, useForm] = createFormContext();
 
 export default function TripPlannerWrapper(props) {
   const { placeData, setPlaceData } = props;
@@ -373,6 +373,7 @@ export default function TripPlannerWrapper(props) {
                   <motion.div {...animation}>
                     <Box mt={40} maw={950}>
                       <UseTickets
+                        form={form}
                         placeData={placeData}
                         setPlaceData={setPlaceData}
                         startLocale={startLocale}
@@ -560,7 +561,10 @@ export default function TripPlannerWrapper(props) {
                       label={"Total Cost"}
                       labeljustify="center"
                     />
-                    <SumInput disallowEmptyField={disallowEmptyField} />
+                    <SumInput
+                      form={form}
+                      disallowEmptyField={disallowEmptyField}
+                    />
                   </>
                 )}
                 {startLocale && travelDates && (

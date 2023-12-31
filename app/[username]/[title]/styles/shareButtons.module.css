@@ -1,5 +1,5 @@
-.shareButton {
-  color: light-dark(#313132, #f8f9fa) !important;
+button.shareButton {
+  color: light-dark(#313132, #f8f9fa);
   background: rgba(0, 0, 0, 0);
   opacity: 0.5;
   &:hover {

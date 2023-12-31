@@ -17,7 +17,6 @@ import {
   Tooltip,
   useComputedColorScheme,
 } from "@mantine/core";
-import { createFormContext } from "@mantine/form";
 import { useDidUpdate } from "@mantine/hooks";
 import {
   IconCirclePlus,
@@ -29,17 +28,19 @@ import {
 import { useEffect, useRef, useState } from "react";
 import classes from "../styles/useTickets.module.css";
 
-export const useForm = createFormContext();
-
 export default function UseTickets(props) {
-  const { placeData, setPlaceData, setSavedFormValues, disallowEmptyField } =
-    props;
+  const {
+    form,
+    placeData,
+    setPlaceData,
+    setSavedFormValues,
+    disallowEmptyField,
+  } = props;
   const { roundTrip } = useTripPlannerState();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
-  const form = useFormContext();
   const [focusIndex, setFocusIndex] = useState(null);
   const inputRefs = useRef([]);
 

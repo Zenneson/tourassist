@@ -2,14 +2,11 @@
 @import "@mantine/tiptap/styles.css";
 @import "@mantine/notifications/styles.css";
 
-.dropzone {
-  border: 5px dashed light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.3)) !important;
-  background: light-dark(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0)) !important;
+div.dropzone {
+  border: 5px dashed light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.3));
+  background: light-dark(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0));
   &:hover {
-    background-color: light-dark(
-      rgba(255, 255, 255, 0.1),
-      rgba(0, 0, 0, 0.1)
-    ) !important;
+    background-color: light-dark(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
   }
 }
 
@@ -26,12 +23,12 @@
   }
 }
 
-.uploadBtn {
+button.uploadBtn {
   box-shadow: 0px 2px 3px
     light-dark(rgba(0, 0, 0, 0.02), rgba(100, 100, 100, 0.01));
   border: 1px solid light-dark(rgba(0, 0, 0, 0.02), rgba(255, 255, 255, 0.02));
   background: light-dark(#e9ecef, #0b0d0d);
-  color: #909296 !important;
+  color: #909296;
   &:hover {
     color: light-dark(#0b0d0d, #e9ecef);
   }
@@ -44,30 +41,30 @@
   }
 }
 
-.textEditorRoot {
+div.textEditorRoot {
   transition: border-top 0.2s ease;
   border-radius: 3px;
   overflow: hidden;
-  border: none !important;
+  border: none;
   width: 100%;
   min-width: 500px;
   box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
 }
 
-.textEditorToolbar {
+div.textEditorToolbar {
   border-radius: 0;
   border-color: rgba(255, 255, 255, 0);
   background: light-dark(rgba(255, 255, 255, 0.7), rgba(100, 100, 100, 0.08));
 }
 
-.textEditorContent {
+div.textEditorContent {
   overflow: hidden;
   background: rgba(0, 0, 0, 0);
   border-radius: 0;
   color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7));
 }
 
-.textEditorContent > div {
+div.textEditorContent > div {
   /* ProseMirror */
   padding-left: 21px;
   padding-right: 21px;
@@ -151,7 +148,7 @@ button.control {
   background-color: light-dark(#fff, #000) !important;
 }
 
-.root {
+div.root {
   transition: all 250ms ease;
   border-radius: 3px;
   overflow: hidden;
@@ -161,7 +158,7 @@ button.control {
       opacity: 1;
     }
 
-    .control {
+    button.control {
       opacity: 1;
 
       &:hover {
@@ -175,7 +172,7 @@ button.control {
   color: light-dark(white, black);
 }
 
-.textEditorTypographyStylesProvider {
-  padding: 0 !important;
-  margin: 0 !important;
+div.textEditorTypographyStylesProvider {
+  padding: 0;
+  margin: 0;
 }

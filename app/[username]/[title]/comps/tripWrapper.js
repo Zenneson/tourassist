@@ -438,7 +438,6 @@ export default function TripWrapper(props) {
         setModalMode={setModalMode}
         tripData={tripData}
         tripDesc={tripData?.tripDesc}
-        travelDate={tripData?.travelDate}
         user={user}
         router={router}
         closeEditTripModal={closeEditTripModal}

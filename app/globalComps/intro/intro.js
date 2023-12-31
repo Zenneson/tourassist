@@ -43,7 +43,13 @@ export default function Intro(props) {
   return (
     <>
       <Box className={classes.colorBtnFrame}>
-        <Tooltip label="Toggle Color Scheme" position="left" withArrow>
+        <Tooltip
+          className={classes.colorBtnTooltip}
+          label="Toggle Color Scheme"
+          position="left"
+          zIndex={9999}
+          withArrow
+        >
           <Button
             className={classes.toggleColorButton}
             variant="subtle"

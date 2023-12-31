@@ -18,16 +18,16 @@
   );
 }
 
-.mainTitleThick {
+h1.mainTitleThick {
   color: light-dark(var(--mantine-color-dark-3), var(--mantine-color-gray-0));
 }
 
-.mainTitleThin {
+span.mainTitleThin {
   color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-5));
 }
 
-.darkIcon,
-.lightIcon {
+svg.darkIcon,
+svg.lightIcon {
   position: absolute;
   left: 0;
   right: 0;
@@ -36,20 +36,21 @@
   padding-right: 4px;
 }
 
-.lightIcon {
+svg.lightIcon {
   @mixin light {
     opacity: 1;
   }
 }
 
-.darkIcon {
+svg.darkIcon {
   @mixin dark {
     opacity: 1;
   }
 }
 
-.colorSchemeBtn,
-.mainMenuBtn {
+button.colorSchemeBtn,
+button.mainMenuBtn,
+p.mainMenuBtn {
   position: relative;
   color: light-dark(var(--mantine-color-dark-8), var(--mantine-color-gray-0));
 }
@@ -59,30 +60,6 @@
 
   &:hover {
     background-color: inherit;
-    opacity: 1;
-  }
-}
-
-.infoButton {
-  transition: all 400ms ease;
-  opacity: 0.2;
-  cursor: pointer;
-  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-0));
-  box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 255, 255, 0.05));
-  background: light-dark(
-    linear-gradient(
-      0deg,
-      var(--mantine-color-blue-2) 0%,
-      var(--mantine-color-blue-3) 100%
-    ),
-    linear-gradient(
-      0deg,
-      var(--mantine-color-blue-8) 0%,
-      var(--mantine-color-blue-9) 100%
-    )
-  );
-
-  &:hover {
     opacity: 1;
   }
 }

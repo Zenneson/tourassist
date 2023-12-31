@@ -18,9 +18,9 @@
   cursor: pointer;
 }
 
-.updateInputTitle {
-  background: light-dark(#e9ecef, #0b0c0d) !important;
-  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)) !important;
+input.updateInputTitle {
+  background: light-dark(#e9ecef, #0b0c0d);
+  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
   &::placeholder {
     font-weight: 700;
     font-style: italic;
@@ -28,12 +28,12 @@
   }
 }
 
-.textEditor {
+div.textEditor {
   transition: border-top 0.2s ease;
   border: none;
   width: 100%;
   min-width: 500px;
-  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)) !important;
+  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
 }
 
 .textEditorToolbar {
@@ -72,7 +72,7 @@
   }
 }
 
-.textEditorTypographyStylesProvider {
-  padding: 0 !important;
-  margin: 0 !important;
+div.textEditorTypographyStylesProvider {
+  padding: 0;
+  margin: 0;
 }

@@ -350,10 +350,7 @@ export default function Mymap(props) {
 
   const placeChoosen = () => {
     setPlaces(placeLocation);
-    if (places === placeLocation) {
-      setPlacesData(places);
-      router.push("/tripPlanner");
-    }
+    setPlacesData(places);
   };
 
   const [buttonAnimation, setButtonAnimation] = useState(fadeIn);
@@ -461,12 +458,13 @@ export default function Mymap(props) {
         <Group grow gap={10}>
           <Button
             className={classes.clearListButton}
-            size="lg"
+            size="md"
             color="green.9"
             variant="light"
             leftSection={<IconCheck stroke={4} />}
             onClick={() => {
               setShowModal(false);
+              router.push("/tripPlanner");
               setTimeout(() => {
                 placeChoosen();
               }, 200);
@@ -476,7 +474,7 @@ export default function Mymap(props) {
           </Button>
           <Button
             className={classes.clearListButton}
-            size="lg"
+            size="md"
             color="red.9"
             variant="light"
             leftSection={<IconCheck stroke={4} />}

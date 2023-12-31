@@ -218,3 +218,22 @@ export const alreadyAdded = (place) => {
     message: `${place} was already added to your tour`,
   };
 };
+
+export const updatingTrip = {
+  id: "updatingTrip",
+  title: "Updating Trip Details...",
+  message: "Please wait while we update your trip details.",
+  color: "green",
+  loading: true,
+  withCloseButton: false,
+  autoClose: false,
+};
+
+export const tripUpdated = {
+  id: "updatingTrip",
+  title: "Trip Details Updated",
+  loading: false,
+  withCloseButton: true,
+  color: "green",
+  autoClose: 3000,
+};
