@@ -91,7 +91,7 @@ span.stepperIcon {
   background-color: light-dark(#2dc7f3, #0d3f82);
 }
 
-.tripDetailsCloseBtn {
+button.tripDetailsCloseBtn {
   opacity: 0.2;
   transform: scale(0.8);
 
@@ -101,7 +101,7 @@ span.stepperIcon {
   }
 }
 
-.plannerTripTitleInput {
+input.plannerTripTitleInput {
   background-color: light-dark(
     var(--mantine-color-gray-1),
     var(--mantine-color-dark-6)

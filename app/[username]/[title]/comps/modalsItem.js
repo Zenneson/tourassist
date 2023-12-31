@@ -486,7 +486,6 @@ export default function ModalsItem(props) {
             <TripContent
               user={user}
               images={images}
-              setImages={setImages}
               tripDesc={tripDesc}
               tripData={tripData}
               modalMode={modalMode}

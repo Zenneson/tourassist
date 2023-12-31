@@ -1,6 +1,7 @@
 "use client";
 import { removeImageByName, updateEditedTrip } from "@libs/custom";
-import { useLoaderState, useTripState } from "@libs/store";
+import { tripUpdated, updatingTrip } from "@libs/notifications";
+import { useLoaderState, useTripPlannerState, useTripState } from "@libs/store";
 import {
   Carousel,
   CarouselSlide,
@@ -58,6 +59,7 @@ export default function TripContent(props) {
   const dark = computedColorScheme === "dark";
   const [loading, setLoading] = useState(true);
 
+  const { setPlannerImages } = useTripPlannerState();
   const [imageUpload, setImageUpload] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const [scale, setScale] = useState(1);
@@ -88,7 +90,7 @@ export default function TripContent(props) {
               radius={3}
               src={image.file}
               height={300}
-              width={pathname === "tripPlanner" ? 435 : 390}
+              width={pathname === "/tripPlanner" ? 435 : 390}
               fetchPriority="high"
               priority="true"
               loading="eager"
@@ -97,25 +99,6 @@ export default function TripContent(props) {
           </CarouselSlide>
         ))
       : null;
-
-  const updatingTrip = {
-    id: "updatingTrip",
-    title: "Updating Trip Details...",
-    message: "Please wait while we update your trip details.",
-    color: "green",
-    loading: true,
-    withCloseButton: false,
-    autoClose: false,
-  };
-
-  const tripUpdated = {
-    id: "updatingTrip",
-    title: "Trip Details Updated",
-    loading: false,
-    withCloseButton: true,
-    color: "green",
-    autoClose: 3000,
-  };
 
   let content;
   if (pathname === "/tripPlanner") {
@@ -160,6 +143,12 @@ export default function TripContent(props) {
       );
     }
   }, [editor, tripDesc, tripData, updatedDesc]);
+
+  useEffect(() => {
+    if (activeImages && activeImages.length > 0) {
+      setPlannerImages(activeImages);
+    }
+  }, [activeImages, setPlannerImages]);
 
   const handleScroll = (event) => {
     let newScale = scale - event.deltaY * 0.005;
@@ -360,7 +349,7 @@ export default function TripContent(props) {
               ) : (
                 <BackgroundImage
                   radius={3}
-                  opacity={dark ? 0.1 : 0.4}
+                  opacity={dark ? 0.05 : 0.1}
                   priority="true"
                   loading="eager"
                   src={
@@ -524,7 +513,7 @@ export default function TripContent(props) {
           <Box
             ref={cropperContainerRef}
             pos={"absolute"}
-            top={15}
+            top={45}
             style={{
               zIndex: 1000,
               opacity: loading ? 0 : 1,
@@ -533,8 +522,8 @@ export default function TripContent(props) {
           >
             <AvatarEditor
               ref={cropperRef}
-              width={585}
-              height={450}
+              width={468}
+              height={360}
               border={50}
               color={dark ? [0, 0, 0, 0.8] : [100, 100, 100, 0.4]} // RGBA
               image={imageUpload.file}
@@ -566,27 +555,27 @@ export default function TripContent(props) {
               onChange={setScale}
             />
             <Group w={"100%"} mt={30} grow>
-              {/* Selects NO Cropped Image to Image Slider  */}
-              <Button
-                className={classes.dimBtn}
-                size="xl"
-                variant="filled"
-                color={dark ? "dark.7" : "gray.0"}
-                c={dark ? "gray.0" : "dark.8"}
-                onClick={dontAddImage}
-              >
-                <IconX stroke={5} size={35} />
-              </Button>
               {/* Selects YES Cropped Image to Image Slider  */}
               <Button
                 className={classes.dimBtn}
                 size="xl"
-                variant="filled"
+                variant="light"
                 color={dark ? "dark.7" : "gray.0"}
                 c={dark ? "gray.0" : "dark.8"}
                 onClick={addImage}
               >
                 <IconCheck stroke={5} size={35} />
+              </Button>
+              {/* Selects NO Cropped Image to Image Slider  */}
+              <Button
+                className={classes.dimBtn}
+                size="xl"
+                variant="light"
+                color={dark ? "dark.7" : "gray.0"}
+                c={dark ? "gray.0" : "dark.8"}
+                onClick={dontAddImage}
+              >
+                <IconX stroke={5} size={35} />
               </Button>
             </Group>
           </Box>
