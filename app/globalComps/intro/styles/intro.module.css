@@ -69,7 +69,7 @@ button.toggleColorButton {
   line-height: 1;
 }
 
-.loginTitle {
+h1.loginTitle {
   font-size: 2.2rem;
   font-weight: 900;
   color: #fff;
@@ -77,7 +77,7 @@ button.toggleColorButton {
 }
 
 span.loginTitleThin {
-  font-weight: 500;
+  font-weight: 500 !important;
   color: light-dark(#7e7e7e, #adadad);
 }
 
@@ -86,11 +86,11 @@ span.loginTitleThin {
   --divider-color: light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.1));
 }
 
-.introText {
+p.introText {
   opacity: 0.6;
-  width: 90%;
+  width: 85%;
   font-weight: 400;
-  font-size: 0.9vw;
+  font-size: 0.85rem;
   color: light-dark(#000, #fff);
 }
 

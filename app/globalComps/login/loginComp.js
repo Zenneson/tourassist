@@ -257,7 +257,7 @@ export default function LoginComp(props) {
         className={classes.authProvider}
         key={index}
         size="lg"
-        variant="transparent"
+        variant="light"
         w={"25%"}
         onClick={provider.func}
       >
@@ -500,36 +500,56 @@ export default function LoginComp(props) {
             </Popover>
           </Stack>
           <Group justify={"space-between"} mt={20}>
-            <Checkbox
-              classNames={{
-                label: classes.termsCheckbox,
-                input: classes.termsCheckbox,
-              }}
-              opacity={type === "sign-up" ? 1 : 0}
-              disabled={type === "sign-up" ? false : true}
-              pointerEvents={type === "sign-up" ? "all" : "none"}
-              size="xs"
-              label={
-                <Box>
-                  I accept{" "}
-                  <Anchor
-                    c={dark ? "blue.3" : "blue.5"}
-                    size="xs"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowLegal(true);
-                    }}
-                  >
-                    terms and conditions
-                  </Anchor>
-                </Box>
-              }
-              checked={form.values.terms}
-              required
-              onChange={(event) =>
-                form.setFieldValue("terms", event.currentTarget.checked)
-              }
-            />
+            {type === "sign-up" && (
+              <Checkbox
+                classNames={{
+                  label: classes.termsCheckbox,
+                  input: classes.termsCheckbox,
+                }}
+                size="xs"
+                label={
+                  <Box>
+                    I accept{" "}
+                    <Anchor
+                      c={dark ? "blue.3" : "blue.5"}
+                      size="xs"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowLegal(true);
+                      }}
+                    >
+                      terms and conditions
+                    </Anchor>
+                  </Box>
+                }
+                checked={form.values.terms}
+                required
+                onChange={(event) =>
+                  form.setFieldValue("terms", event.currentTarget.checked)
+                }
+              />
+            )}
+            {type === "login" && (
+              <Group
+                pos={"relative"}
+                justify={"space-between"}
+                w={"calc( 100% - 110px )"}
+              >
+                <Image
+                  className={classes.loginGlobe}
+                  alt="Traveling"
+                  src={"/img/login/planet.svg"}
+                  ml={-5}
+                  h={45}
+                  w={45}
+                />
+                <Divider
+                  className={classes.loginDivider}
+                  variant="dashed"
+                  w={"calc( 100% - 60px )"}
+                />
+              </Group>
+            )}
             <Button
               className={classes.loginButton}
               size={"sm"}
@@ -545,7 +565,7 @@ export default function LoginComp(props) {
               className={classes.termsLink}
               component="button"
               type="button"
-              mt={4}
+              mt={type === "login" ? 0 : 2}
               fz={8}
               onClick={toggle}
             >

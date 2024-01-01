@@ -39,9 +39,9 @@
   cursor: pointer;
 }
 
-.termsLink {
+button.termsLink {
   color: light-dark(#4e4e4e, #fff);
-  opacity: 0.5;
+  opacity: 0.6;
 
   &:hover {
     opacity: 1;
@@ -50,11 +50,11 @@
 
 button.loginButton {
   font-weight: 700;
-  color: var(--mantine-color-gray-5);
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-gray-0));
   text-transform: uppercase;
-  background-color: light-dark(
-    var(--mantine-color-gray-2),
-    var(--mantine-color-dark-5)
+  background: light-dark(
+    linear-gradient(0deg, #f4f4f4 0%, #fff 100%),
+    linear-gradient(0deg, #070708 0%, #0a0b0d 100%)
   );
 }
 
@@ -62,17 +62,68 @@ button.authProvider {
   border: none;
   transition: all 250ms ease;
   box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
-  opacity: 0.85;
+  filter: grayscale(100%);
   background: light-dark(
     linear-gradient(0deg, #f4f4f4 0%, #fff 100%),
     linear-gradient(0deg, #070708 0%, #0a0b0d 100%)
   );
 
   &:hover {
-    opacity: 1;
+    filter: grayscale(0%);
     background: light-dark(
       linear-gradient(0deg, #fff 0%, #f4f4f4 100%),
       linear-gradient(0deg, #0a0b0d 0%, #070708 100%)
     );
   }
+}
+
+.loginDivider {
+  opacity: 0.7;
+  --divider-color: light-dark(
+    var(--mantine-color-gray-3),
+    var(--mantine-color-dark-8)
+  );
+  box-shadow: 0px 2px 5px light-dark(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25));
+}
+
+@keyframes imageAnimation {
+  0%,
+  100% {
+    filter: grayscale(100%) blur(0px) opacity(10%);
+  }
+  50% {
+    filter: grayscale(100%) blur(0px) opacity(10%);
+  }
+  51% {
+    filter: grayscale(50%) blur(3px) opacity(10%);
+  }
+  52% {
+    filter: grayscale(0%) blur(0px) opacity(100%);
+  }
+  53% {
+    filter: grayscale(0%) blur(0px) opacity(100%);
+  }
+  54% {
+    filter: grayscale(0%) blur(0px) opacity(100%);
+  }
+  75% {
+    filter: grayscale(0%) blur(0px) opacity(100%);
+  }
+  76% {
+    filter: grayscale(50%) blur(3px) opacity(100%);
+  }
+  77% {
+    filter: grayscale(100%) blur(0px) opacity(10%);
+  }
+  78% {
+    filter: grayscale(100%) blur(0px) opacity(10%);
+  }
+  79% {
+    filter: grayscale(100%) blur(0px) opacity(10%);
+  }
+}
+
+.loginGlobe {
+  animation: imageAnimation 20s infinite;
+  filter: grayscale(100%);
 }

@@ -380,3 +380,31 @@ export const timeSince = (timeString) => {
 export const isEqual = (obj1, obj2) => {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 };
+
+// Custom Carousel Component
+export const CustomCarousel = ({ children, interval = 5000 }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const tick = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % children.length);
+    }, interval);
+
+    return () => clearInterval(tick);
+  }, [children.length, interval]);
+
+  return (
+    <div>
+      {children.map((child, index) => (
+        <div
+          key={index}
+          className={`carouselItem ${
+            index === activeIndex ? "carouselItemVisible" : ""
+          }`}
+        >
+          {child}
+        </div>
+      ))}
+    </div>
+  );
+};

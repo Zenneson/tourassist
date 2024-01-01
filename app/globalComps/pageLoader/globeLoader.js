@@ -19,8 +19,8 @@ export default function GlobeLoader() {
     if (canvasRef.current && !globe) {
       const theGlobe = createGlobe(canvasRef.current, {
         devicePixelRatio: 2,
-        width: 250,
-        height: 250,
+        width: 200,
+        height: 200,
         phi: 2.16,
         theta: -0.25,
         dark: 1,

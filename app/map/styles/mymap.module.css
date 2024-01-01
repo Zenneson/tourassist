@@ -39,15 +39,15 @@ div.destinationModalOverlay {
   }
 }
 
-.countryAutoCompleteInput,
-.countryAutoCompleteInput:focus {
+input.countryAutoCompleteInput,
+input.countryAutoCompleteInput:focus {
   border: none;
   border-top: 2px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
   box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
 }
 
-.countryAutoCompleteOption,
-.placeAutoCompleteOption {
+div.countryAutoCompleteOption,
+div.placeAutoCompleteOption {
   &:hover,
   &[data-combobox-selected="true"] {
     box-shadow: 0 2px 5px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
@@ -56,22 +56,22 @@ div.destinationModalOverlay {
   }
 }
 
-.countryAutoCompleteDropdown {
+div.countryAutoCompleteDropdown {
   border-radius: 25px;
   box-shadow: 0 2px 3px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
   background-color: light-dark(rgba(248, 249, 250, 0.9), rgba(11, 12, 13, 0.9));
 }
 
-.countryAutoCompleteOption {
+div.countryAutoCompleteOption {
   border-radius: 17px;
 }
 
-.placeAutoCompleteDropdown {
+div.placeAutoCompleteDropdown {
   border-radius: 3px;
   background-color: light-dark(rgba(248, 249, 250, 1), rgba(11, 12, 13, 1));
 }
 
-.placeAutoCompleteOption {
+div.placeAutoCompleteOption {
   border-radius: 3px;
 }
 
