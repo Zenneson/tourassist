@@ -74,6 +74,7 @@ export default function TripPlannerWrapper(props) {
   const pathname = usePathname();
   const { user } = useUser();
 
+  const [selectedTypes, setSelectedTypes] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [infoAdded, setInfoAdded] = useState(false);
   const [showTripInfo, setShowTripInfo] = useState(false);
@@ -367,6 +368,8 @@ export default function TripPlannerWrapper(props) {
                       setTravelDates={setTravelDates}
                       travelers={travelers}
                       setTravelers={setTravelers}
+                      selectedTypes={selectedTypes}
+                      setSelectedTypes={setSelectedTypes}
                     />
                   </motion.div>
                 )}
@@ -619,6 +622,7 @@ export default function TripPlannerWrapper(props) {
         </Box>
       </form>
       <TripDetailsDrawer
+        tripTypes={selectedTypes}
         showTripInfo={showTripInfo}
         setShowTripInfo={setShowTripInfo}
         dark={dark}

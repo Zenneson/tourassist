@@ -1,5 +1,5 @@
 "use client";
-import { removeImageByName, updateEditedTrip } from "@libs/custom";
+import { isEqual, removeImageByName, updateEditedTrip } from "@libs/custom";
 import { tripUpdated, updatingTrip } from "@libs/notifications";
 import { useLoaderState, useTripPlannerState, useTripState } from "@libs/store";
 import {
@@ -86,8 +86,9 @@ export default function TripContent(props) {
 
   const [activeImages, setActiveImages] = useState(images);
   useEffect(() => {
-    if (images && images.length > 0) setActiveImages(images);
-  }, [images, activeImages]);
+    if (isEqual(activeImages, images)) return;
+    setActiveImages(images);
+  }, [images]);
 
   const [newImageAdded, setNewImageAdded] = useState(false);
   const [embla, setEmbla] = useState(null);

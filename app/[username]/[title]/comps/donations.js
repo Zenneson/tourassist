@@ -1,5 +1,5 @@
 "use client";
-import { timeSince } from "@libs/custom";
+import { isEqual, timeSince } from "@libs/custom";
 import {
   Anchor,
   Avatar,
@@ -40,9 +40,8 @@ export default function Donations(props) {
   const [donationsData, setDonationsData] = useState([]);
 
   useEffect(() => {
-    if (!donationsData || donationsData.length !== donations.length) {
-      setDonationsData(donations);
-    }
+    if (isEqual(donationsData, donations)) return;
+    setDonationsData(donations);
   }, [donations]);
 
   const donateOrder = useMemo(() => {

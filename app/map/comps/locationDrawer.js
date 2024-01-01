@@ -1,4 +1,4 @@
-import { addEllipsis } from "@libs/custom";
+import { addEllipsis, isEqual } from "@libs/custom";
 import { useMapState } from "@libs/store";
 import {
   Box,
@@ -104,10 +104,9 @@ export default function LocationDrawer(props) {
   const [prevArea, setPrevArea] = useState({ label: "" });
   const oldArea = usePrevious(area);
   useEffect(() => {
-    if (JSON.stringify(area) !== JSON.stringify(oldArea)) {
-      setPrevArea(oldArea);
-    }
-  }, [area, oldArea]);
+    if (isEqual(prevArea, oldArea)) return;
+    setPrevArea(oldArea);
+  }, [oldArea]);
 
   const closeLocationDrawer = () => {
     setIsRotating(false);

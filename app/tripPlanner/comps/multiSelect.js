@@ -1,4 +1,6 @@
 "use client";
+import { isEqual } from "@libs/custom";
+import { useTripPlannerState } from "@libs/store";
 import {
   CheckIcon,
   Combobox,
@@ -8,7 +10,6 @@ import {
   Text,
   useCombobox,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import { IconCheckbox } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import classes from "../styles/multiSelect.module.css";
@@ -27,13 +28,15 @@ const types = [
 const MAX_SELECTABLE_ITEMS = 5;
 const MAX_DISPLAYED_VALUES = 3;
 
-export default function MultiSelect() {
+export default function MultiSelect(props) {
+  const { selectedTypes, setSelectedTypes } = props;
   const [data, setData] = useState(types);
   const [search, setSearch] = useState("");
-  const [tripTypes, setTripTypes] = useSessionStorage({
-    key: "tripTypes",
-    defaultValue: [],
-  });
+  const { tripTypes } = useTripPlannerState();
+  useEffect(() => {
+    if (isEqual(tripTypes, selectedTypes)) return;
+    setSelectedTypes(tripTypes);
+  }, [tripTypes]);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -44,13 +47,13 @@ export default function MultiSelect() {
 
   const handleValueSelect = (val) => {
     setSearch("");
-    if (!Array.isArray(tripTypes)) return;
+    if (!Array.isArray(selectedTypes)) return;
 
     if (val === "$create") {
       setData((current) => [...current, search]);
-      setTripTypes((current) => [...current, search]);
+      setSelectedTypes((current) => [...current, search]);
     } else {
-      setTripTypes((current) =>
+      setSelectedTypes((current) =>
         current.includes(val)
           ? current.filter((v) => v !== val)
           : [...current, val]
@@ -59,12 +62,12 @@ export default function MultiSelect() {
   };
 
   const handleValueRemove = (val) => {
-    if (!Array.isArray(tripTypes)) return;
-    setTripTypes((current) => current.filter((v) => v !== val));
+    if (!Array.isArray(selectedTypes)) return;
+    setSelectedTypes((current) => current.filter((v) => v !== val));
   };
 
-  const displayedValues = tripTypes.slice(0, MAX_DISPLAYED_VALUES);
-  const additionalValuesCount = tripTypes.length - MAX_DISPLAYED_VALUES;
+  const displayedValues = selectedTypes.slice(0, MAX_DISPLAYED_VALUES);
+  const additionalValuesCount = selectedTypes.length - MAX_DISPLAYED_VALUES;
 
   const values = displayedValues.map((item) => (
     <Pill
@@ -83,11 +86,11 @@ export default function MultiSelect() {
       <Combobox.Option
         value={item}
         key={item}
-        active={tripTypes.includes(item)}
+        active={selectedTypes.includes(item)}
       >
         <Group gap="sm" justify="space-between">
           <span>{item}</span>
-          {tripTypes.includes(item) ? <CheckIcon size={12} /> : null}
+          {selectedTypes.includes(item) ? <CheckIcon size={12} /> : null}
         </Group>
       </Combobox.Option>
     ));
@@ -103,13 +106,13 @@ export default function MultiSelect() {
       return "Maximum choices reached";
     }
   };
-  const dynamicPlaceholder = getDynamicPlaceholder(tripTypes.length);
+  const dynamicPlaceholder = getDynamicPlaceholder(selectedTypes.length);
 
   useEffect(() => {
-    if (tripTypes.length >= MAX_SELECTABLE_ITEMS) {
+    if (selectedTypes.length >= MAX_SELECTABLE_ITEMS) {
       combobox.closeDropdown();
     }
-  }, [tripTypes.length, combobox]);
+  }, [selectedTypes.length, combobox]);
 
   return (
     <Combobox
@@ -132,13 +135,19 @@ export default function MultiSelect() {
           label="What type of trip is this?"
           inputWrapperOrder={["label", "error", "input", "description"]}
           onClick={() => {
-            if (tripTypes.length < MAX_SELECTABLE_ITEMS) {
+            if (selectedTypes.length < MAX_SELECTABLE_ITEMS) {
               combobox.openDropdown();
             }
           }}
         >
           <Pill.Group className={classes.singleLine}>
-            {values}
+            {values.length > 0 ? (
+              values
+            ) : (
+              <Text opacity={0.3} fz={12.5}>
+                Add Trip Types...
+              </Text>
+            )}
             {additionalValuesCount > 0 && (
               <Pill size="sm">+{additionalValuesCount} more</Pill>
             )}
@@ -148,8 +157,7 @@ export default function MultiSelect() {
                 onFocus={() => combobox.openDropdown()}
                 onBlur={() => combobox.closeDropdown()}
                 value={search}
-                placeholder={tripTypes.length > 0 ? "" : "Add Trip Types..."}
-                disabled={tripTypes.length >= MAX_SELECTABLE_ITEMS}
+                disabled={selectedTypes.length >= MAX_SELECTABLE_ITEMS}
                 onChange={(event) => {
                   combobox.updateSelectedOptionIndex();
                   setSearch(event.currentTarget.value);
@@ -157,7 +165,7 @@ export default function MultiSelect() {
                 onKeyDown={(event) => {
                   if (event.key === "Backspace" && search.length === 0) {
                     event.preventDefault();
-                    handleValueRemove(tripTypes[tripTypes.length - 1]);
+                    handleValueRemove(selectedTypes[selectedTypes.length - 1]);
                   }
                   if (
                     event.key === "Enter" &&

@@ -1,4 +1,4 @@
-import { sumAmounts } from "@libs/custom";
+import { isEqual, sumAmounts } from "@libs/custom";
 import { useEffect } from "react";
 
 // Custom Hook for Updating Trip Data
@@ -28,10 +28,7 @@ export function useSyncDonations(
   setDonationSum
 ) {
   useEffect(() => {
-    if (
-      tripData &&
-      JSON.stringify(donations) !== JSON.stringify(tripData.donations)
-    ) {
+    if (tripData && isEqual(donations, tripData.donations)) {
       setDonations(tripData.donations);
       setDonationSum(Math.floor(sumAmounts(tripData.donations)));
     }

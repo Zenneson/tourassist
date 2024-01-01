@@ -39,6 +39,8 @@ export default function FirstPanel(props) {
     setTravelDates,
     travelers,
     setTravelers,
+    selectedTypes,
+    setSelectedTypes,
   } = props;
 
   const { roundTrip, setRoundTrip } = useTripPlannerState();
@@ -178,8 +180,11 @@ export default function FirstPanel(props) {
             }}
             onOptionSubmit={(e) => handleSubmit(e)}
           />
-          <MultiSelect />
-          <Group justify="space-between" px={10} pt={15} pb={50}>
+          <MultiSelect
+            selectedTypes={selectedTypes}
+            setSelectedTypes={setSelectedTypes}
+          />
+          <Group justify="space-between" px={10} pt={15} pb={18}>
             <Group>
               <Text className={classes.labelSize}>Travelers: </Text>
               {/* Traveler Count  */}

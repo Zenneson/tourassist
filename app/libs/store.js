@@ -59,6 +59,8 @@ export const useTripState = create(
       setUpdates: (value) => set({ updates: value }),
       tripData: [{}],
       setTripData: (value) => set({ tripData: value }),
+      currentTrip: [],
+      setCurrentTrip: (trip) => set({ currentTrip: trip }),
     }),
     {
       name: "tripState",
@@ -84,6 +86,8 @@ export const useTripPlannerState = create(
       setPlannerTripDesc: (plannerTripDesc) => set({ plannerTripDesc }),
       startLocale: "",
       setStartLocale: (startLocale) => set({ startLocale }),
+      tripTypes: [],
+      setTripTypes: (tripTypes) => set({ tripTypes }),
     }),
     {
       name: "plannerImages",

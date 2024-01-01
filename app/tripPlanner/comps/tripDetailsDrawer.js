@@ -10,7 +10,6 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import {
   IconChevronRight,
   IconListNumbers,
@@ -24,6 +23,7 @@ import PlaceTimeline from "./placeTimeline";
 
 export default function TripDetailsDrawer(props) {
   const {
+    tripTypes,
     showTripInfo,
     setShowTripInfo,
     dark,
@@ -34,11 +34,6 @@ export default function TripDetailsDrawer(props) {
     travelDates,
     travelers,
   } = props;
-
-  const [tripTypes, setTripTypes] = useSessionStorage({
-    key: "tripTypes",
-    defaultValue: [],
-  });
 
   return (
     <Drawer
@@ -80,10 +75,12 @@ export default function TripDetailsDrawer(props) {
           </Button>
         </Tooltip>
       </Group>
-      <Flex align={"center"} gap={10} mb={10}>
-        <IconLocationPin size={18} opacity={0.3} />
-        <Divider label="Trip Locations" labelPosition="left" w={"100%"} />
-      </Flex>
+      {startLocale && (
+        <Flex align={"center"} gap={10} mb={10}>
+          <IconLocationPin size={18} opacity={0.3} />
+          <Divider label="Trip Locations" labelPosition="left" w={"100%"} />
+        </Flex>
+      )}
       <Stack gap={3}>
         <PlaceTimeline
           dark={dark}
