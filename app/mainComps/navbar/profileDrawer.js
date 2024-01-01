@@ -141,7 +141,7 @@ export default function ProfileDrawer(props) {
           withinPortal={false}
           padding={0}
           opened={mainMenuOpened}
-          onClose={() => setMainMenuOpened(false)}
+          onClose={closeAll}
           size={310}
           trapFocus={false}
           lockScroll={false}
@@ -153,10 +153,7 @@ export default function ProfileDrawer(props) {
           }}
         >
           {/* Close Main Menu Button */}
-          <Button
-            onClick={() => setMainMenuOpened(false)}
-            className={classes.closeButton}
-          >
+          <Button onClick={closeAll} className={classes.closeButton}>
             <IconX size={15} />
           </Button>
           <Space h={95} />

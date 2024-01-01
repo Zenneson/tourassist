@@ -1,11 +1,11 @@
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/700.css";
-import GlobeLoader from "@globalComps/pageLoader/globeLoader";
+import GlobeLoader from "@mainComps/pageLoader/globeLoader";
 import "@mantine/core/styles/global.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { cache } from "react";
 import "typeface-montserrat";
-import AppWrapper from "./pageComps/appWrapper";
+import AppWrapper from "./homeComps/appWrapper";
 
 export const Globe = cache(() => <GlobeLoader />);
 

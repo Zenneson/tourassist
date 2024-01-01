@@ -533,20 +533,22 @@ export default function LoginComp(props) {
               <Group
                 pos={"relative"}
                 justify={"space-between"}
-                w={"calc( 100% - 110px )"}
+                w={"calc( 100% - 100px )"}
               >
                 <Image
                   className={classes.loginGlobe}
                   alt="Traveling"
-                  src={"/img/login/planet.svg"}
-                  ml={-5}
+                  src={
+                    dark
+                      ? "/img/login/planetDark.svg"
+                      : "/img/login/planetLight.svg"
+                  }
                   h={45}
                   w={45}
                 />
                 <Divider
                   className={classes.loginDivider}
-                  variant="dashed"
-                  w={"calc( 100% - 60px )"}
+                  w={"calc( 100% - 65px )"}
                 />
               </Group>
             )}

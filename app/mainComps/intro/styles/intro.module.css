@@ -115,7 +115,9 @@ p.introText {
   }
 }
 
-.darkIcon {
+svg.darkIcon {
+  position: relative;
+
   @mixin dark {
     opacity: 1;
   }

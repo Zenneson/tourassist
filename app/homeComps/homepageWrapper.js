@@ -1,6 +1,6 @@
 "use client";
-import Intro from "@globalComps/intro/intro";
-import PageLoader from "@globalComps/pageLoader/pageLoader";
+import Intro from "@mainComps/intro/intro";
+import PageLoader from "@mainComps/pageLoader/pageLoader";
 import { CustomCarousel } from "@libs/custom";
 import { BackgroundImage, Box, useComputedColorScheme } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";

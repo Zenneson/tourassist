@@ -1,6 +1,6 @@
 "use client";
 import { DuffelPayments } from "@duffel/components";
-import TripContent from "@globalComps/trip/tripContent";
+import TripContent from "@mainComps/trip/tripContent";
 import { dateFormat, formatDonation } from "@libs/custom";
 import { firestore } from "@libs/firebase";
 import {

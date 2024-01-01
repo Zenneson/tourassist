@@ -1,5 +1,5 @@
 "use client";
-import LoginComp from "@globalComps/login/loginComp";
+import LoginComp from "@mainComps/login/loginComp";
 import { useUser } from "@libs/context";
 import { auth } from "@libs/firebase";
 import { useAppState } from "@libs/store";

@@ -1,4 +1,4 @@
-import HomepageWrapper from "./pageComps/homepageWrapper";
+import HomepageWrapper from "./homeComps/homepageWrapper";
 
 export const metadata = {
   title: "Tour Assist",

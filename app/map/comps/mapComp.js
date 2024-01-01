@@ -1,5 +1,5 @@
 "use client";
-import PageLoader from "@globalComps/pageLoader/pageLoader";
+import PageLoader from "@mainComps/pageLoader/pageLoader";
 import { useMapState } from "@libs/store";
 import {
   Box,

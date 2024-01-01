@@ -1,5 +1,5 @@
 "use client";
-import PageLoader from "@globalComps/pageLoader/pageLoader";
+import PageLoader from "@mainComps/pageLoader/pageLoader";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { create } from "zustand";

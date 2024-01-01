@@ -1,6 +1,6 @@
 "use client";
-import LoginComp from "@globalComps/login/loginComp";
-import TripContent from "@globalComps/trip/tripContent";
+import LoginComp from "@mainComps/login/loginComp";
+import TripContent from "@mainComps/trip/tripContent";
 import { useUser } from "@libs/context";
 import { dateFormat, dateId, saveToDB } from "@libs/custom";
 import {

@@ -5,8 +5,8 @@
 			"@libs/*": [
 				"libs/*"
 			],
-			"@globalComps/*": [
-				"globalComps/*"
+			"@mainComps/*": [
+				"mainComps/*"
 			]
 		},
 		"target": "es6",

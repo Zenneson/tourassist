@@ -1,7 +1,7 @@
 "use client";
-import ChatBot from "@globalComps/chatbot/chatBot";
-import MainMenu from "@globalComps/navbar/mainMenu";
-import SearchModal from "@globalComps/navbar/searchModal";
+import ChatBot from "@mainComps/chatbot/chatBot";
+import MainMenu from "@mainComps/navbar/mainMenu";
+import SearchModal from "@mainComps/navbar/searchModal";
 import { UserProvider } from "@libs/context";
 import { useAppState } from "@libs/store";
 import { tourTheme } from "@libs/tourTheme";
