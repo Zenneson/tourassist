@@ -13,7 +13,6 @@ import {
   Box,
   Button,
   Center,
-  Divider,
   Flex,
   Group,
   Progress,
@@ -26,6 +25,7 @@ import { useSessionStorage } from "@mantine/hooks";
 import {
   IconAppWindow,
   IconChevronDown,
+  IconCoins,
   IconCurrencyDollar,
   IconSlash,
 } from "@tabler/icons-react";
@@ -378,27 +378,29 @@ export default function TripInfoWrapper(props) {
               </Button>
             </Center>
           </Group>
-          <Divider
-            size={"sm"}
-            color={dark ? "dark.7" : "#fff"}
-            opacity={dark && 0.6}
-            className={classes.shadow}
-          />
-          <Group w={"100%"} gap={0} grow>
+          <Group className={classes.moneyGroup} w={"100%"} gap={0} grow>
             <Center>
               <Box>
-                <Flex align={"center"}>
-                  <IconCurrencyDollar
-                    stroke={1}
-                    style={{
-                      marginRight: -3,
-                    }}
-                  />
-                  <Title order={3} ta={"center"}>
-                    {addComma(donationSum - spentFunds)}
-                  </Title>
-                </Flex>
-                <Text fz={10}>AVAILABLE FUNDS</Text>
+                <Button
+                  className={classes.viewPageLink}
+                  onClick={() => {}}
+                  variant="subtle"
+                  size="md"
+                >
+                  <Flex align={"center"} gap={3}>
+                    <IconCurrencyDollar
+                      stroke={1}
+                      style={{
+                        marginRight: -7,
+                      }}
+                    />
+                    <Title order={3} ta={"center"}>
+                      {addComma(donationSum - spentFunds)}
+                    </Title>
+                    <IconCoins stroke={1} size={21} />
+                  </Flex>
+                </Button>
+                {/* <Text fz={10}>AVAILABLE FUNDS</Text> */}
               </Box>
             </Center>
             <Center className={classes.fundsTally}>
@@ -408,6 +410,7 @@ export default function TripInfoWrapper(props) {
                   bg={dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.1)"}
                   value={(donationSum / currentTrip?.costsSum) * 100}
                   mb={5}
+                  ml={3}
                   size={"sm"}
                   w={"100%"}
                   style={{

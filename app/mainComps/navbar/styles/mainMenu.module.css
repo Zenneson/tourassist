@@ -19,11 +19,11 @@
 }
 
 h1.mainTitleThick {
-  color: light-dark(var(--mantine-color-dark-3), var(--mantine-color-gray-0));
+  color: light-dark(var(--c-dark-3), var(--c-gray-0));
 }
 
 span.mainTitleThin {
-  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-5));
+  color: light-dark(var(--c-dark-9), var(--c-gray-5));
 }
 
 svg.darkIcon,
@@ -49,13 +49,13 @@ svg.darkIcon {
 }
 
 button.colorSchemeBtn,
-button.mainMenuBtn,
-p.mainMenuBtn {
+button.mainMenuBtn {
+  font-weight: 100;
   position: relative;
-  color: light-dark(var(--mantine-color-dark-8), var(--mantine-color-gray-0));
+  color: light-dark(var(--c-dark-8), var(--c-gray-0));
 }
 
-.logoutButton {
+button.logoutButton {
   opacity: 0.35;
 
   &:hover {

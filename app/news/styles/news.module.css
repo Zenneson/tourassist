@@ -1,7 +1,7 @@
 .link {
   display: block;
   text-decoration: none;
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
+  color: light-dark(var(--c-black), var(--c-dark-) 0);
   line-height: 2.4rem;
   font-size: var(--mantine-font-size-sm);
   height: 2.4rem;

@@ -1,13 +1,14 @@
 "use client";
-import LoginComp from "@mainComps/login/loginComp";
 import { useUser } from "@libs/context";
 import { auth } from "@libs/firebase";
 import { useAppState } from "@libs/store";
+import LoginComp from "@mainComps/login/loginComp";
 import {
   Box,
   Button,
   Flex,
   Group,
+  Image,
   Popover,
   PopoverDropdown,
   PopoverTarget,
@@ -30,7 +31,6 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import { signOut } from "firebase/auth";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -133,9 +133,8 @@ export default function MainMenu() {
           >
             <Image
               ml={5}
-              width={60}
-              height={60}
-              src={"/img/TA_GlobeLogo.png"}
+              h={60}
+              src={"/img/logos/TA_GlobeLogo.png"}
               alt="TouraSSist_logo"
             />
             <Title fw={900} fz={30} className={classes.mainTitleThick}>
@@ -159,16 +158,15 @@ export default function MainMenu() {
             {user && (
               //  Main Menu Button
               <Button
-                className={classes.openMenuButton}
+                className={classes.mainMenuBtn}
                 variant="subtle"
                 size="sm"
                 onClick={openMenu}
                 radius={"xl"}
                 mr={-5}
+                fz={12}
               >
-                <Text fz={12} className={classes.mainMenuBtn}>
-                  {user.email}
-                </Text>
+                {user.email}
               </Button>
             )}
             <Tooltip

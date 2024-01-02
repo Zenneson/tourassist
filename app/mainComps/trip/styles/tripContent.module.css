@@ -72,10 +72,7 @@ div.textEditorContent > div {
   overflow: auto;
   scrollbar-width: 8px;
   scrollbar-color: transparent;
-  background-color: light-dark(
-    var(--mantine-color-gray-1),
-    var(--mantine-color-dark-6)
-  );
+  background-color: light-dark(var(--c-gray-1), var(--c-dark-6));
 
   &::-webkit-scrollbar {
     width: 5px;

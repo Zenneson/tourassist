@@ -102,10 +102,7 @@ button.tripDetailsCloseBtn {
 }
 
 input.plannerTripTitleInput {
-  background-color: light-dark(
-    var(--mantine-color-gray-1),
-    var(--mantine-color-dark-6)
-  );
+  background-color: light-dark(c-gray-1, c-dark-6);
 }
 
 section.tripDetailsDrawer {
