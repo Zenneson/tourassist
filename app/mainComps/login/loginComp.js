@@ -543,12 +543,12 @@ export default function LoginComp(props) {
                       ? "/img/login/planetDark.svg"
                       : "/img/login/planetLight.svg"
                   }
-                  h={45}
-                  w={45}
+                  h={36}
+                  w={36}
                 />
                 <Divider
                   className={classes.loginDivider}
-                  w={"calc( 100% - 65px )"}
+                  w={"calc( 100% - 60px )"}
                 />
               </Group>
             )}
@@ -567,7 +567,7 @@ export default function LoginComp(props) {
               className={classes.termsLink}
               component="button"
               type="button"
-              mt={type === "login" ? 0 : 2}
+              mt={2}
               fz={8}
               onClick={toggle}
             >

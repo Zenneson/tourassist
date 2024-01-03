@@ -12,8 +12,9 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import { IconChevronsRight } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useRef, useState } from "react";
 import classes from "./styles/legal.module.css";
 
 export default function Legal() {
@@ -21,7 +22,7 @@ export default function Legal() {
     getInitialValueInEffect: true,
   });
   const dark = computedColorScheme === "dark";
-  const router = useRouter();
+  const pathname = usePathname();
   const [linkState, setLinkState] = useState("terms");
   const [active, setActive] = useState(-1);
 
@@ -416,7 +417,7 @@ export default function Legal() {
       mb={10}
       key={index}
       ref={(el) => (sectionRefs.current[index] = el)}
-      style={{ scrollMargin: "188px" }}
+      style={{ scrollMargin: pathname === "/legal" ? "160px" : "65px" }}
     >
       <Title
         order={4}
@@ -447,21 +448,25 @@ export default function Legal() {
     contentWrapperRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    router.prefetch("/help");
-    router.prefetch("/contact");
-  }, [router]);
-
   return (
-    <Center mt={120} mb={50}>
-      <Flex w={"80%"} maw={1200}>
-        <Flex direction={"column"} miw={"300px"} pos={"fixed"} top={205}>
+    <Center mt={pathname === "/legal" ? 120 : 20} mb={50}>
+      <Flex
+        w={pathname === "/legal" ? "80%" : "100%"}
+        maw={pathname === "/legal" ? 1200 : "90%"}
+      >
+        <Flex
+          direction={"column"}
+          miw={"300px"}
+          pos={"fixed"}
+          top={pathname === "/legal" ? 140 : 50}
+        >
           {/* Toggle between Terms of Use and Privacy Policy */}
           <SegmentedControl
-            value={linkState}
             size="xs"
+            value={linkState}
             onChange={setLinkState}
             onClick={scrollToTop}
+            classNames={{ indicator: classes.indicator }}
             data={[
               { label: "Terms of Use", value: "terms" },
               { label: "Privacy Policy", value: "privacy" },
@@ -470,7 +475,7 @@ export default function Legal() {
           <Box className={classes.links}>
             {active > -1 && (
               <IconChevronsRight
-                className={classes.indicator}
+                className={classes.arrow}
                 size={17}
                 style={{
                   transform: `translateY(calc(${active} * 2.4rem))`,
@@ -485,7 +490,7 @@ export default function Legal() {
           direction={"column"}
           w={"70%"}
           ref={contentWrapperRef}
-          style={{ scrollMargin: "200px" }}
+          style={{ scrollMarginTop: "120px" }}
         >
           <Title fz={50}>
             {linkState === "terms" ? "Terms of Use" : "Privacy Policy"}
@@ -516,9 +521,8 @@ export default function Legal() {
                     variant="default"
                     size="compact-md"
                     fz={10}
-                    onClick={() => {
-                      router.push("/help");
-                    }}
+                    component={Link}
+                    href={"/news"}
                   >
                     About Tourassist
                   </Button>
@@ -527,9 +531,8 @@ export default function Legal() {
                     variant="default"
                     size="compact-md"
                     fz={10}
-                    onClick={() => {
-                      router.push("/contact");
-                    }}
+                    component={Link}
+                    href={"/contact"}
                   >
                     Contact Us
                   </Button>

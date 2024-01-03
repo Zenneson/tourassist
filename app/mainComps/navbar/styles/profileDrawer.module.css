@@ -52,12 +52,12 @@ section.mainDrawer {
   min-height: 570px;
   overflow: hidden;
   background-color: light-dark(
-    rgba(248, 249, 250, 0.95),
+    rgba(248, 249, 250, 0.9),
     rgba(12, 13, 14, 0.95)
   );
 }
 
-.legalButton {
+a.legalButton {
   background-color: rgba(0, 0, 0, 0);
   &:hover {
     color: light-dark(rgb(20, 21, 23), rgb(248, 249, 250));
@@ -89,14 +89,14 @@ section.mainDrawer {
   }
 }
 
-.panelDrawer {
+section.panelDrawer {
   background-color: light-dark(
-    rgba(248, 249, 250, 0.95),
+    rgba(248, 249, 250, 0.9),
     rgba(12, 13, 14, 0.95)
   );
 }
 
-.panelDrawerOverlay {
+div.panelDrawerOverlay {
   background: light-dark(rgba(248, 249, 250, 0.2), rgba(16, 17, 19, 0.5));
 }
 

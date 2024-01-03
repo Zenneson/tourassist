@@ -127,17 +127,17 @@ svg.darkIcon {
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-button.enterSiteBtn,
-button.infoButton {
+a.enterSiteBtn,
+a.infoButton {
   text-transform: uppercase;
 }
 
-button.infoButton {
+a.infoButton {
   font-weight: 900;
   color: #fff;
   background-color: light-dark(rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2));
 }
 
-button.enterSiteBtn {
+a.enterSiteBtn {
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }

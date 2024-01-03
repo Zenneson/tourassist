@@ -1,0 +1,13 @@
+div.legalModal {
+  position: relative;
+  z-index: 1500;
+}
+
+.legalModalOverlay {
+  --overlay-bg: light-dark(rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.5));
+  backdrop-filter: blur(9px);
+}
+
+.legalModalClose {
+  color: light-dark(var(--c-dark-9), var(--c-gray-0));
+}

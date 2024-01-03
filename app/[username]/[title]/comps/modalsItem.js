@@ -1,6 +1,5 @@
 "use client";
 import { DuffelPayments } from "@duffel/components";
-import TripContent from "@mainComps/trip/tripContent";
 import { dateFormat, formatDonation } from "@libs/custom";
 import { firestore } from "@libs/firebase";
 import {
@@ -13,6 +12,7 @@ import {
   postingUpdate,
   updatePosted,
 } from "@libs/notifications";
+import TripContent from "@mainComps/trip/tripContent";
 import {
   Box,
   Button,
@@ -515,7 +515,6 @@ export default function ModalsItem(props) {
         overlayProps={{
           color: dark ? "rgb(0,0,0)" : "rgb(255,255,255)",
           backgroundOpacity: dark ? 0.5 : 0.2,
-          blur: 9,
         }}
         onClose={() => {
           closeAltModal();

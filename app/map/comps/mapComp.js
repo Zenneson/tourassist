@@ -1,6 +1,6 @@
 "use client";
-import PageLoader from "@mainComps/pageLoader/pageLoader";
 import { useMapState } from "@libs/store";
+import PageLoader from "@mainComps/pageLoader/pageLoader";
 import {
   Box,
   Button,
@@ -244,6 +244,7 @@ export default function MapComp(props) {
       </Modal>
       <PageLoader contentLoaded={mapLoaded} />
       <Map
+        className={classes.map}
         id="mapRef"
         ref={mapRef}
         {...viewState}

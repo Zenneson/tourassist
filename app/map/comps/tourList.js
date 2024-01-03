@@ -70,7 +70,6 @@ export default function TourList(props) {
           classNames={{ content: classes.tourDrawer }}
           zIndex={10}
           opened={listOpened && places.length > 0}
-          // opened={true}
           onClose={() => setListOpened(false)}
           withOverlay={false}
           withCloseButton={false}

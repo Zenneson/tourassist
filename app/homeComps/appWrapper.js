@@ -1,13 +1,13 @@
 "use client";
-import ChatBot from "@mainComps/chatbot/chatBot";
-import MainMenu from "@mainComps/navbar/mainMenu";
-import SearchModal from "@mainComps/navbar/searchModal";
 import { UserProvider } from "@libs/context";
 import { useAppState } from "@libs/store";
 import { tourTheme } from "@libs/tourTheme";
+import ChatBot from "@mainComps/chatbot/chatBot";
+import MainMenu from "@mainComps/navbar/mainMenu";
+import SearchModal from "@mainComps/navbar/searchModal";
 import {
+  ActionIcon,
   AppShell,
-  Button,
   ColorSchemeScript,
   Group,
   MantineProvider,
@@ -16,10 +16,12 @@ import {
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
+import { IconX } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { SWRDevTools } from "swr-devtools";
-import Legal from "../legal";
+import Legal from "../legal/page";
 import "../styles/global.css";
+import classes from "./styles/home.module.css";
 
 export default function AppWrapper({ children }) {
   const pathname = usePathname();
@@ -33,18 +35,24 @@ export default function AppWrapper({ children }) {
           <Notifications position="top-center" zIndex={9999} limit={1} />
           <SearchModal />
           <Modal
-            className="legalModal"
-            zIndex={1500}
+            classNames={{
+              root: classes.legalModal,
+              overlay: classes.legalModalOverlay,
+            }}
             opened={showLegal}
-            fullScreen={true}
+            size={"95%"}
             onClose={() => setShowLegal(false)}
-            scrollAreaComponent={ScrollArea.Autosize}
             withCloseButton={false}
+            scrollAreaComponent={ScrollArea.Autosize}
           >
             <Group pos={"absolute"} right={20} w={"100%"} justify="flex-end">
-              <Button variant="default" onClick={() => setShowLegal(false)}>
-                CLOSE
-              </Button>
+              <ActionIcon
+                className={classes.legalModalClose}
+                variant="transparent"
+                onClick={() => setShowLegal(false)}
+              >
+                <IconX stroke={3} />
+              </ActionIcon>
             </Group>
             <Legal />
           </Modal>

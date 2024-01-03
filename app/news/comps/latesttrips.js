@@ -9,12 +9,10 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import Link from "next/link";
 import classes from "../styles/latesttrips.module.css";
 
 export default function LatestTrips() {
-  const router = useRouter();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
   });
@@ -75,7 +73,8 @@ export default function LatestTrips() {
     <Grid.Col span={4} key={index}>
       <Card
         className={classes.tripCard}
-        onClick={() => router.push("/trippage")}
+        component={Link}
+        href="/zenneson/zenneson_goingtogrenada113023" // PLACEHOLDER LINK
       >
         <Card.Section
           pos={"relative"}
@@ -157,10 +156,6 @@ export default function LatestTrips() {
       </Card>
     </Grid.Col>
   ));
-
-  useEffect(() => {
-    router.prefetch("/trippage");
-  }, [router]);
 
   return (
     <>

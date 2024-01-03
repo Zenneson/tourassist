@@ -289,6 +289,7 @@ export default function MainMenu() {
         </Box>
       </Box>
       <ProfileDrawer
+        user={user}
         active={active}
         setActive={setActive}
         panelOpened={panelOpened}
@@ -296,7 +297,6 @@ export default function MainMenu() {
         mainMenuOpened={mainMenuOpened}
         setMainMenuOpened={setMainMenuOpened}
         signOutFunc={signOutFunc}
-        openMenu={openMenu}
       />
     </>
   );

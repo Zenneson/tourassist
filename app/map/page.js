@@ -19,9 +19,12 @@ export default function Map() {
   }, []);
 
   return (
-    <Mymap
-      latitude={currentCenter.latitude}
-      longitude={currentCenter.longitude}
-    />
+    currentCenter.latitude !== 0 &&
+    currentCenter.longitude !== 0 && (
+      <Mymap
+        latitude={currentCenter.latitude}
+        longitude={currentCenter.longitude}
+      />
+    )
   );
 }

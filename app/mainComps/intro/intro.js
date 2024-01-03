@@ -19,13 +19,11 @@ import {
   IconWorld,
 } from "@tabler/icons-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import Link from "next/link";
 import LoginComp from "../login/loginComp";
 import classes from "./styles/intro.module.css";
 
 export default function Intro() {
-  const router = useRouter();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("dark", {
     getInitialValueInEffect: true,
@@ -34,10 +32,6 @@ export default function Intro() {
   const toggleColorScheme = () => {
     setColorScheme(dark ? "light" : "dark");
   };
-
-  useEffect(() => {
-    router.prefetch("/map");
-  }, [router]);
 
   return (
     <>
@@ -164,10 +158,8 @@ export default function Intro() {
                 size={"md"}
                 h={44}
                 variant="light"
-                onClick={() => {
-                  getPosition();
-                  router.push("/map");
-                }}
+                component={Link}
+                href="/map"
                 leftSection={
                   <IconInfoCircle className={classes.infoIcon} size={30} />
                 }
@@ -177,12 +169,13 @@ export default function Intro() {
               {/* Plan Trip Button */}
               <Button
                 className={classes.enterSiteBtn}
+                component={Link}
+                href="/map"
                 fw={900}
                 size={"md"}
                 variant="gradient"
                 radius={3}
                 gradient={{ from: "#11a3cc", to: "#0D3F82", deg: 45 }}
-                onClick={() => router.push("/map")}
                 leftSection={
                   <IconWorld className={classes.enterSiteIcon} size={30} />
                 }

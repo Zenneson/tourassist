@@ -236,7 +236,7 @@ export default function TripInfoWrapper(props) {
   };
 
   useEffect(() => {
-    router.prefetch("/" + currentTrip.tripId);
+    router.push(`/${currentTrip.username}/${currentTrip.tripId}`);
   }, [router]);
 
   return (

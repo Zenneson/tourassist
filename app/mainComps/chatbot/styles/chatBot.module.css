@@ -1,106 +1,123 @@
-.globeImg {
-  z-index: 2100;
-  transition: all 250ms ease-in-out;
+img.globeImg {
+  z-index: 1900;
+  transition: all 1000ms ease-in-out;
   cursor: pointer;
   position: absolute;
-  bottom: 40px;
-  right: 40px;
+  bottom: 60px;
+  right: 50px;
   max-width: 100%;
-  transform: scale(1);
   border-radius: 50%;
   background: rgba(0, 0, 0, 0);
+}
 
-  &:hover {
-    filter: contrast(1.2);
-    transform: scale(1.05);
+@keyframes blrry {
+  0% {
+    filter: url("#morpho-customize") blur(1px) invert(0%) sepia(0%)
+      saturate(100%) hue-rotate(0deg) brightness(96%) contrast(111%);
+  }
+  20% {
+    filter: url("#morpho-customize") blur(2px) invert(16%) sepia(18%)
+      saturate(421%) hue-rotate(0deg) brightness(117%) contrast(111%);
+  }
+  40% {
+    filter: url("#morpho-customize") blur(3px) invert(32%) sepia(36%)
+      saturate(742%) hue-rotate(0deg) brightness(138%) contrast(111%);
+  }
+  60% {
+    filter: blur(2px) invert(48%) sepia(54%) saturate(1063%) hue-rotate(0deg)
+      brightness(159%) contrast(111%);
+  }
+  80% {
+    filter: blur(1px) invert(64%) sepia(72%) saturate(1384%) hue-rotate(0deg)
+      brightness(180%) contrast(111%);
+  }
+  100% {
+    filter: blur(0px) invert(78%) sepia(92%) saturate(1707%) hue-rotate(353deg)
+      brightness(200%) contrast(111%);
   }
 }
 
-.moveRight {
-  right: 29px;
+@keyframes blrry2 {
+  0% {
+    filter: url("#morpho-customize") blur(0px) invert(78%) sepia(92%)
+      saturate(1707%) hue-rotate(353deg) brightness(200%) contrast(111%);
+  }
+  20% {
+    filter: url("#morpho-customize") blur(1px) invert(64%) sepia(72%)
+      saturate(1384%) hue-rotate(0deg) brightness(180%) contrast(111%);
+  }
+  40% {
+    filter: url("#morpho-customize") blur(2px) invert(48%) sepia(54%)
+      saturate(1063%) hue-rotate(0deg) brightness(159%) contrast(111%);
+  }
+  60% {
+    filter: url("#morpho-customize") blur(3px) invert(32%) sepia(36%)
+      saturate(742%) hue-rotate(0deg) brightness(138%) contrast(111%);
+  }
+  80% {
+    filter: url("#morpho-customize") blur(2px) invert(16%) sepia(18%)
+      saturate(421%) hue-rotate(0deg) brightness(117%) contrast(111%);
+  }
+  100% {
+    filter: url("#morpho-customize") blur(1px) invert(0%) sepia(0%)
+      saturate(100%) hue-rotate(0deg) brightness(96%) contrast(111%);
+  }
+}
+
+img.globeImgActive {
+  animation: blrry 1000ms ease-in-out;
+  transform: scale(1.5) rotate(5deg);
+  filter: invert(78%) sepia(92%) saturate(1707%) hue-rotate(353deg)
+    brightness(96%) contrast(111%);
+}
+
+img.globeImgInactive {
+  animation: blrry2 500ms ease-in-out;
+  transform: scale(1.1) rotate(5deg);
+  filter: url("#morpho-customize") brightness(200%) contrast(111%);
+}
+
+div.chatBotCenter {
+  z-index: 1800;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(5px);
+  background-color: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 0.8));
+}
+
+div.chatBotModal {
+  z-index: 1800;
+  position: relative;
+  width: 50vw;
+  height: 100vh;
+  padding: 60px 0px;
 }
 
 .chatBotTitle {
-  z-index: 1900;
   position: absolute;
+  left: -5px;
   text-transform: uppercase;
   font-weight: 900;
-  padding: 10px;
-  padding-left: 12px;
   font-weight: 700;
-  width: 100%;
-  background: light-dark(
-    linear-gradient(0deg, #e9ecef 0%, #fff 100%),
-    linear-gradient(0deg, #0b0c0d 0%, #16181a 100%)
-  );
-  box-shadow: light-dark(
-    0px 10px 15px rgba(0, 0, 0, 0.1),
-    0px 10px 15px rgba(255, 255, 255, 0.02)
-  );
-}
-
-.chatBotTitle::before {
-  content: "";
-  position: absolute;
-  background-color: transparent;
-  bottom: -30px;
-  left: 0;
-  width: 20px;
-  height: 30px;
-  border-top-left-radius: 10px;
-  box-shadow: 0 -10px 0 0 light-dark(rgba(233, 242, 248, 1), rgba(12, 13, 14, 1));
-}
-
-.chatBotTitle::after {
-  content: "";
-  position: absolute;
-  background-color: transparent;
-  bottom: -30px;
-  right: 0;
-  width: 20px;
-  height: 30px;
-  border-top-right-radius: 10px;
-  box-shadow: 0 -10px 0 0 light-dark(rgba(233, 242, 248, 1), rgba(12, 13, 14, 1));
-}
-
-.chatBotCloseBtn {
-  color: light-dark(rgba(12, 13, 14, 1), rgba(248, 249, 250, 1));
-  opacity: 0.5;
-
-  &:hover {
-    opacity: 1;
-  }
 }
 
 .chatBotMain {
-  height: 465px;
-  padding: 10px 15px;
-  padding-top: 55px;
-  overflow: auto;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 25px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  height: calc(100% - 175px);
+  margin-top: 40px;
+  overflow: hidden;
+  mask: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 95%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 
 .chatBotTextFrame {
-  margin-bottom: 10px;
-  padding: 10px;
+  padding: 15px 0px;
   border-radius: 3px;
-  border: 1px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.03));
-  background-color: light-dark(
-    rgba(248, 249, 250, 0.95),
-    rgba(12, 13, 14, 0.95)
-  );
 }
 
 .chatBotText {
@@ -108,21 +125,11 @@
   margin-left: 5px;
 }
 
-div.chatBotModal {
-  position: relative;
-  overflow: hidden;
-  border-radius: 5px;
-  background-color: light-dark(
-    rgba(248, 249, 250, 0.9),
-    rgba(12, 13, 14, 0.97)
-  );
-}
-
 textarea.chatBotTextInput {
   height: 135px;
   padding: 15px;
-  width: 400px;
-  margin-right: 140px;
+  width: 100%;
+  margin-top: 20px;
   background-color: light-dark(
     rgba(248, 249, 250, 0.95),
     rgba(12, 13, 14, 0.95)

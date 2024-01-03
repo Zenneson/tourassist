@@ -1,0 +1,31 @@
+span.indicator {
+  max-width: 146px;
+  max-height: 24.5px;
+}
+
+.link {
+  transition: all 150ms ease;
+  display: block;
+  text-decoration: none;
+  line-height: 2.4rem;
+  font-size: 12px;
+  height: 2.4rem;
+  color: light-dark(#000, #c1c2c5);
+
+  &:hover {
+    transform: translateX(3px);
+  }
+}
+
+.links {
+  position: relative;
+  top: 10px;
+}
+
+.arrow {
+  color: light-dark(#33d9f8, #0d3f82);
+  transition: transform 150ms ease;
+  position: absolute;
+  top: 10px;
+  left: -20px;
+}

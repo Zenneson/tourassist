@@ -1,17 +1,16 @@
-.editTripModalHeader {
-  background-color: transparent;
-}
-
-.editTripModalContent {
-  background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
-}
-
+.editTripModalHeader,
 .altModalHeader {
   background-color: transparent;
 }
 
+.editTripModalContent,
 .altModalContent {
   background-color: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
+}
+
+.editTripModalOverlay,
+.altModalModalOverlay {
+  backdrop-filter: blur(9px);
 }
 
 .dateInput {

@@ -1,5 +1,4 @@
 "use client";
-import { useUser } from "@libs/context";
 import { addEllipsis } from "@libs/custom";
 import {
   Badge,
@@ -28,8 +27,8 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import AccountInfo from "./accountInfo";
 import classes from "./styles/profileDrawer.module.css";
 import TripInfo from "./tripInfo";
@@ -40,19 +39,17 @@ export default function ProfileDrawer(props) {
   });
   const dark = computedColorScheme === "dark";
   const {
+    user,
     active,
     setActive,
     panelOpened,
     setPanelOpened,
     mainMenuOpened,
     setMainMenuOpened,
-    openMenu,
     signOutFunc,
   } = props;
 
-  const router = useRouter();
   const pathname = usePathname();
-  const { user } = useUser();
 
   const links = [
     {
@@ -76,7 +73,7 @@ export default function ProfileDrawer(props) {
   };
 
   const items = links.map((item, index) => {
-    // Main menu items
+    if (item.label === "Trip Info" && !user?.tripCreated) return;
     return (
       <NavLink
         px={25}
@@ -124,12 +121,6 @@ export default function ProfileDrawer(props) {
     setPanelOpened(false);
     setActive(-1);
   };
-
-  useEffect(() => {
-    router.prefetch("/map");
-    router.prefetch("/help");
-    router.prefetch("/legal");
-  }, [router]);
 
   return (
     <>
@@ -212,8 +203,9 @@ export default function ProfileDrawer(props) {
                 py={8}
                 leftSection={<IconWorld size={30} />}
                 variant="subtle"
+                component={Link}
+                href="/map"
                 onClick={() => {
-                  router.push("/map");
                   closeAll();
                 }}
                 classNames={{
@@ -245,8 +237,9 @@ export default function ProfileDrawer(props) {
                 py={8}
                 leftSection={<IconActivityHeartbeat size={30} />}
                 variant="subtle"
+                component={Link}
+                href="/news"
                 onClick={() => {
-                  router.push("/news");
                   closeAll();
                 }}
                 classNames={{
@@ -267,10 +260,11 @@ export default function ProfileDrawer(props) {
             w={"100%"}
             fz={10}
             color="gray.7"
+            component={Link}
+            href="/legal"
             leftSection={<IconGavel size={18} />}
             hidden={pathname === "/legal"}
             onClick={() => {
-              router.push("/legal");
               closeAll();
             }}
           >
