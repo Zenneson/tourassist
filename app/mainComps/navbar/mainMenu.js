@@ -133,7 +133,7 @@ export default function MainMenu() {
           >
             <Image
               ml={5}
-              h={60}
+              h={80}
               src={"/img/logos/TA_GlobeLogo.png"}
               alt="TouraSSist_logo"
             />

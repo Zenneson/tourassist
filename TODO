@@ -58,7 +58,6 @@ Tasks:
 	☐ Manage Server Side Rendering
 	☐ Add Pagination to updates
 	☐ Change Purchase page to look more like Duffel tutorial
-	☐ Strong Performance Testing and Optimization: https://discourse.threejs.org/t/help-optimizing-my-mapbox-like-map-implementation/8131 / https://aysha.me/2020/04/tips-on-improving-the-map-rendering-performance-of-mapbox/ 
 	☐ Review what someone who is not logged in sees
 	☐ Zip up Authentication
 	☐ Figure out rendering strategy for Nextjs
@@ -84,6 +83,11 @@ Tasks:
 	☐ Use webworks to lower Map loading time
 	☐ Once a tour campaign is created, the tour will show on the map
 	☐ Research using Web workers
+	☐ SEO Optimization: https://chat.openai.com/g/g-URU8tnZen-seo-expert https://developers.google.com/search/docs/advanced/guidelines/webmaster-guidelines 
+	☐ Strong Performance Testing and Optimization: https://discourse.threejs.org/t/help-optimizing-my-mapbox-like-map-implementation/8131 / https://aysha.me/2020/04/tips-on-improving-the-map-rendering-performance-of-mapbox/ 
+	☐ Run Lighthouse Audit: https://developers.google.com/web/tools/lighthouse
+	☐ Run Web Vitals: https://web.dev/vitals/
+	☐ Test the app with Meticulous AI https://app.meticulous.ai/
 	☐ Use Typesense for Search component: https://typesense.org/ https://extensions.dev/extensions/typesense/firestore-typesense-search https://github.com/typesense/typesense-js 
 	☐ Current trip loaction(s) and route will be shown on the map.
 	☐ Create onbaording app tour: https://driverjs.com/docs/installation

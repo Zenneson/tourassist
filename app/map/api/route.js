@@ -1,3 +1,4 @@
+"use client";
 import { Client } from "@googlemaps/google-maps-services-js";
 import { fetcher } from "@libs/custom";
 import axios from "axios";

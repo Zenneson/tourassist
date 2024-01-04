@@ -1,5 +1,7 @@
+import { useAppState } from "@libs/store";
 import {
   ActionIcon,
+  Badge,
   Box,
   Center,
   Flex,
@@ -11,31 +13,39 @@ import {
   Tooltip,
   Transition,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
 import {
   IconMessageChatbot,
   IconMessageForward,
   IconPointer,
 } from "@tabler/icons-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRef } from "react";
 import classes from "./styles/chatBot.module.css";
 
 export default function ChatBot() {
+  const {
+    chatOpened,
+    setChatOpened,
+    setPanelOpened,
+    setMainMenuOpened,
+    setSearchOpened,
+  } = useAppState();
   const chatInputRef = useRef(null);
 
-  const [chatOpened, setChatOpened] = useSessionStorage({
-    key: "chatOpened",
-    defaultValue: false,
-  });
-
-  const openChat = () => {
+  const toogleChat = () => {
     setChatOpened(!chatOpened);
+    setMainMenuOpened(false);
+    setPanelOpened(false);
+    setSearchOpened(false);
+
     setTimeout(() => {
       chatInputRef.current.focus();
     }, 400);
   };
+
+  const arrow = (
+    <IconPointer size={11} className={classes.chatLinkFrame} stroke={1} />
+  );
 
   return (
     <>
@@ -65,7 +75,7 @@ export default function ChatBot() {
           height={80}
           alt="Chatbot"
           priority={true}
-          onClick={openChat}
+          onClick={toogleChat}
         />
       </Tooltip>
       <Transition
@@ -79,9 +89,9 @@ export default function ChatBot() {
           <Center style={styles} className={classes.chatBotCenter}>
             <Box className={classes.chatBotModal}>
               <Group className={classes.chatBotTitle}>
-                <Flex align={"center"} gap={5}>
-                  <IconMessageChatbot size={30} stroke={1} opacity={0.5} />
-                  <Title order={6} fz={"15px"}>
+                <Flex align={"center"} gap={5} opacity={0.4}>
+                  <IconMessageChatbot size={30} stroke={1} />
+                  <Title order={6} fz={"17px"} fw={400}>
                     Tour - Assistant
                   </Title>
                 </Flex>
@@ -92,46 +102,20 @@ export default function ChatBot() {
                 component={ScrollArea}
               >
                 <Flex direction={"column-reverse"}>
-                  <Flex fz={12} gap={5} align={"center"}>
-                    <Link className={classes.chatBotLink} href="#">
+                  <Group>
+                    <Badge variant="light" rightSection={arrow}>
                       How do I pick a location?
-                    </Link>
-                    <IconPointer
-                      size={11}
-                      className={classes.chatLinkFrame}
-                      stroke={1}
-                    />
-                  </Flex>
-                  <Flex fz={12} gap={5} align={"center"}>
-                    <Link className={classes.chatBotLink} href="#">
+                    </Badge>
+                    <Badge variant="light" rightSection={arrow}>
                       How I book travel and accommodations?
-                    </Link>
-                    <IconPointer
-                      size={11}
-                      className={classes.chatLinkFrame}
-                      stroke={1}
-                    />
-                  </Flex>
-                  <Flex fz={12} gap={5} align={"center"}>
-                    <Link className={classes.chatBotLink} href="#">
+                    </Badge>
+                    <Badge variant="light" rightSection={arrow}>
                       What is Tour Assist?
-                    </Link>
-                    <IconPointer
-                      size={11}
-                      className={classes.chatLinkFrame}
-                      stroke={1}
-                    />
-                  </Flex>
-                  <Flex fz={12} gap={5} align={"center"}>
-                    <Link className={classes.chatBotLink} href="#">
+                    </Badge>
+                    <Badge variant="light" rightSection={arrow}>
                       How do I start a campaign for my trip?
-                    </Link>
-                    <IconPointer
-                      size={11}
-                      className={classes.chatLinkFrame}
-                      stroke={1}
-                    />
-                  </Flex>
+                    </Badge>
+                  </Group>
                   <Box className={classes.chatBotTextFrame}>
                     <Title
                       order={6}
@@ -140,7 +124,7 @@ export default function ChatBot() {
                     >
                       Tour Assistant
                     </Title>
-                    <Text fz={"12px"} className={classes.chatBotText}>
+                    <Text className={classes.chatBotText}>
                       This is your virtual travel assistant, here to guide you
                       on an exciting journey of crafting your dream trip through
                       crowdfunding.
@@ -151,7 +135,10 @@ export default function ChatBot() {
               <Box pos={"relative"}>
                 <Textarea
                   ref={chatInputRef}
-                  classNames={{ input: classes.chatBotTextInput }}
+                  classNames={{
+                    root: classes.chatBotInputRoot,
+                    input: classes.chatBotTextInput,
+                  }}
                   placeholder="Message Tour - Assistant..."
                 />
                 <ActionIcon

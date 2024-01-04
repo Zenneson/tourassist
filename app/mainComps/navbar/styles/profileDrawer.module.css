@@ -100,18 +100,23 @@ div.panelDrawerOverlay {
   background: light-dark(rgba(248, 249, 250, 0.2), rgba(16, 17, 19, 0.5));
 }
 
-button.closeButton {
+button.closeButton,
+button.closePanelButton {
   background: light-dark(rgb(241, 243, 245), rgba(5, 5, 5, 0.5));
   color: light-dark(rgb(16, 17, 19), #fff);
   border-radius: 3px 0 0 3px;
   z-index: 1000;
   position: absolute;
   padding: 5px 10px;
-  top: 77px;
+  top: 102px;
   right: 0px;
   transition: all 250ms ease-in-out;
 
   &:hover {
     background: light-dark(rgb(206, 212, 218), rgb(20, 21, 23));
   }
+}
+
+button.closePanelButton {
+  top: 77px;
 }

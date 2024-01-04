@@ -8,20 +8,31 @@ const sessionStore = {
 };
 
 // App State
-export const useAppState = create((set) => ({
-  active: -1,
-  setActive: (value) => set({ active: value }),
-  panelOpened: false,
-  setPanelOpened: (value) => set({ panelOpened: value }),
-  mainMenuOpened: false,
-  setMainMenuOpened: (value) => set({ mainMenuOpened: value }),
-  listOpened: false,
-  setListOpened: (value) => set({ listOpened: value }),
-  searchOpened: false,
-  setSearchOpened: (value) => set({ searchOpened: value }),
-  showLegal: false,
-  setShowLegal: (value) => set({ showLegal: value }),
-}));
+export const useAppState = create(
+  persist(
+    (set) => ({
+      active: -1,
+      setActive: (value) => set({ active: value }),
+      panelOpened: false,
+      setPanelOpened: (value) => set({ panelOpened: value }),
+      mainMenuOpened: false,
+      setMainMenuOpened: (value) => set({ mainMenuOpened: value }),
+      listOpened: false,
+      setListOpened: (value) => set({ listOpened: value }),
+      searchOpened: false,
+      setSearchOpened: (value) => set({ searchOpened: value }),
+      showLegal: false,
+      setShowLegal: (value) => set({ showLegal: value }),
+      chatOpened: false,
+      setChatOpened: (value) => set({ chatOpened: value }),
+    }),
+    {
+      name: "appState",
+      storage: sessionStore,
+      partialize: (state) => ({ chatOpened: state.chatOpened }),
+    }
+  )
+);
 
 // Hide Loader State
 export const useLoaderState = create((set) => ({

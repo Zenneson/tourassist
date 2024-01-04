@@ -19,7 +19,7 @@
 }
 
 h1.mainTitleThick {
-  color: light-dark(var(--c-dark-3), var(--c-gray-0));
+  color: light-dark(var(--c-blue-4), var(--c-blue-9));
 }
 
 span.mainTitleThin {

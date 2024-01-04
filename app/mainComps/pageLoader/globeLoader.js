@@ -52,7 +52,6 @@ export default function GlobeLoader() {
         <canvas
           className={`${classes.globeLoader} ${loadInAnimation}`}
           ref={canvasRef}
-          onClick={() => setChatOpened(!chatOpened)}
         />
       </Stack>
     </Center>

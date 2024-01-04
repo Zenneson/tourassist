@@ -133,7 +133,7 @@ export default function ProfileDrawer(props) {
           padding={0}
           opened={mainMenuOpened}
           onClose={closeAll}
-          size={310}
+          size={330}
           trapFocus={false}
           lockScroll={false}
           withOverlay={false}
@@ -147,7 +147,7 @@ export default function ProfileDrawer(props) {
           <Button onClick={closeAll} className={classes.closeButton}>
             <IconX size={15} />
           </Button>
-          <Space h={95} />
+          <Space h={120} />
           <Divider
             mt={0}
             mb={20}
@@ -299,8 +299,8 @@ export default function ProfileDrawer(props) {
         zIndex={499}
         withinPortal={false}
         opened={panelOpened}
-        padding="25px 25px 0 350px"
-        size={920}
+        padding="25px 25px 0 370px"
+        size={950}
         onClose={closePanel}
         withCloseButton={false}
         scrollAreaComponent={ScrollArea.Autosize}
@@ -314,7 +314,7 @@ export default function ProfileDrawer(props) {
       >
         <Space h={24} />
         {/* Close Panel Button */}
-        <Button className={classes.closeButton} onClick={closePanel}>
+        <Button className={classes.closePanelButton} onClick={closePanel}>
           <IconX size={15} />
         </Button>
         {active === 0 && (
