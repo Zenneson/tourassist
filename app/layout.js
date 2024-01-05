@@ -1,10 +1,7 @@
-import "@fontsource/open-sans/400.css";
-import "@fontsource/open-sans/700.css";
 import GlobeLoader from "@mainComps/pageLoader/globeLoader";
 import "@mantine/core/styles/global.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { cache } from "react";
-import "typeface-montserrat";
 import AppWrapper from "./homeComps/appWrapper";
 
 export const Globe = cache(() => <GlobeLoader />);
@@ -13,8 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {(process.env.NODE_ENV === "development" ||
-          process.env.VERCEL_ENV === "preview") && (
+        {process.env.NODE_ENV === "development" && (
           // eslint-disable-next-line @next/next/no-sync-scripts
           <script
             data-project-id="h8dEJji5WH1z5KTsa3P7YNGuxCMgt01zpk7aQIgN"

@@ -29,11 +29,6 @@ div.chatBotModal {
   height: calc(100% - 175px);
   margin-top: 40px;
   overflow: hidden;
-  /* mask: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 1) 95%,
-    rgba(255, 255, 255, 0) 100%
-  ); */
 }
 
 .chatBotTextFrame {
@@ -66,6 +61,21 @@ textarea.chatBotTextInput {
     rgba(248, 249, 250, 0.95),
     rgba(12, 13, 14, 0.95)
   );
+}
+
+.keySubmit {
+  z-index: 1800;
+  position: absolute;
+  transform: scale(0.7);
+  bottom: 6px;
+  right: 42px;
+  pointer-events: none;
+  opacity: 0.25;
+  animation: keySubmit 500ms ease-in-out;
+}
+
+.keySubmitActive {
+  opacity: 1;
 }
 
 .chatBotLink {
@@ -169,4 +179,21 @@ img.globeImgInactive {
   animation: blrry2 500ms ease-in-out;
   transform: scale(1.1) rotate(5deg);
   filter: url("#morpho-customize") brightness(200%) contrast(111%);
+}
+
+@keyframes computing {
+  0% {
+    filter: blur(0px) invert(78%) sepia(92%) saturate(1707%) hue-rotate(353deg)
+      brightness(200%) contrast(111%);
+  }
+  100% {
+    filter: blur(0px) invert(78%) sepia(92%) saturate(1707%) hue-rotate(0deg)
+      brightness(100%) contrast(50%);
+  }
+}
+
+img.globeImgComputing {
+  animation: computing 200ms ease-in-out infinite;
+  filter: invert(78%) sepia(92%) saturate(1707%) hue-rotate(360deg)
+    brightness(96%) contrast(111%);
 }

@@ -137,7 +137,4 @@ export const tourTheme = createTheme({
     fontFamily: "Montserrat, sans-serif",
   },
   fontFamily: "Open Sans, sans-serif",
-  TypographyStylesProvider: {
-    fontFamily: "Homemade Apple",
-  },
 });

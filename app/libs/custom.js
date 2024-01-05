@@ -1,3 +1,4 @@
+"use client";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import {
   deleteObject,
@@ -80,6 +81,11 @@ export const estTimeStamp = (timeStamp) => {
   return dateInEST + " EST";
 };
 
+// Generates a timestamp formatted as MMDDYYHHmmss, useful for creating unique IDs.
+export const timeStamper = () => {
+  return moment().format("MMDDYYHHmmss");
+};
+
 // Checks if two arrays are equal in terms of length and content.
 export const arraysAreEqual = (arr1, arr2) => {
   if (arr1?.length !== arr2?.length) return false;
@@ -95,11 +101,6 @@ export const parseDate = (dateString) => {
 // Generates a unique identifier based on the date, formatted as MMDDYY.
 export const dateId = (dateString) => {
   return moment(dateString).format("MMDDYY");
-};
-
-// Generates a timestamp formatted as MMDDYYHHmmss, useful for creating unique IDs.
-export const timeStamper = () => {
-  return moment().format("MMDDYYHHmmss");
 };
 
 // Formats a given date string into a more readable format with the full month name.
