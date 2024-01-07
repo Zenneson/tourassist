@@ -49,4 +49,7 @@ TODO
 
 # Spell Checker
 .spellignore
+
+# Why Did You Render
+.wdyr
 ```

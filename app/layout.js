@@ -1,5 +1,7 @@
-// This loads first
-import "../scripts/whyDidYouRender";
+"use client";
+// Why Did You Render
+import "@welldone-software/why-did-you-render";
+import "../.wdyr/scripts/wdyr";
 // ------
 
 import GlobeLoader from "@mainComps/pageLoader/globeLoader";

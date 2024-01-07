@@ -29,9 +29,11 @@
 	},
 	"include": [
 		"next-env.d.ts",
+		".wdyr/wdyr-disable.js",
+		".wdyr/wdyr-output.js",
+		"next.config.js",
 		"**/*.js",
 		"**/*.jsx",
-		"next.config.js"
 	],
 	"exclude": [
 		"node_modules"
