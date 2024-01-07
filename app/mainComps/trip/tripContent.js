@@ -1,5 +1,5 @@
 "use client";
-import { isEqual, removeImageByName, updateEditedTrip } from "@libs/custom";
+import { removeImageByName, updateEditedTrip } from "@libs/custom";
 import { tripUpdated, updatingTrip } from "@libs/notifications";
 import { useLoaderState, useTripPlannerState, useTripState } from "@libs/store";
 import {
@@ -27,7 +27,7 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { useWindowEvent } from "@mantine/hooks";
+import { shallowEqual, useWindowEvent } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import "@mantine/tiptap/styles.css";
@@ -86,7 +86,7 @@ export default function TripContent(props) {
 
   const [activeImages, setActiveImages] = useState(images);
   useEffect(() => {
-    if (isEqual(activeImages, images)) return;
+    if (shallowEqual(activeImages, images)) return;
     setActiveImages(images);
   }, [images]);
 

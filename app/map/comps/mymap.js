@@ -32,6 +32,7 @@ const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 export default function Mymap(props) {
   const {
+    chatOpened,
     searchOpened,
     listOpened,
     setListOpened,
@@ -540,7 +541,7 @@ export default function Mymap(props) {
         </motion.div>
       )}
       <Transition
-        mounted={!searchOpened && !locationDrawer}
+        mounted={!searchOpened && !locationDrawer && !chatOpened}
         transition="slide-down"
         duration={400}
         timingFunction="ease"

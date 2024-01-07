@@ -377,11 +377,6 @@ export const timeSince = (timeString) => {
   }
 };
 
-// Helper function for deep equality check (if needed)
-export const isEqual = (obj1, obj2) => {
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
-};
-
 // Custom Carousel Component
 export const CustomCarousel = ({ children, interval = 5000 }) => {
   const [activeIndex, setActiveIndex] = useState(0);

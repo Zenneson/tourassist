@@ -8,27 +8,21 @@ import {
   Center,
   Flex,
   FocusTrap,
-  Group,
   Kbd,
   Text,
   Textarea,
-  Title,
   Tooltip,
   Transition,
 } from "@mantine/core";
 import { getHotkeyHandler, useFocusWithin, useOs } from "@mantine/hooks";
-import {
-  IconCommand,
-  IconMessageChatbot,
-  IconPointer,
-  IconSend2,
-} from "@tabler/icons-react";
+import { IconCommand, IconPointer, IconSend2 } from "@tabler/icons-react";
 import { useChat } from "ai/react";
 import Image from "next/image";
-import ChatArea from "./comps/chatArea";
+import { useEffect, useState } from "react";
+import ChatArea from "./chatArea";
 import classes from "./styles/chatBot.module.css";
 
-export default function ChatBot() {
+export default function ChatBot(props) {
   const {
     chatOpened,
     setChatOpened,
@@ -36,21 +30,37 @@ export default function ChatBot() {
     setMainMenuOpened,
     setSearchOpened,
   } = useAppState();
-  const { user } = useUser();
   const clientOs = useOs();
+  const { user } = useUser();
   const { ref, focused } = useFocusWithin();
   const arrow = (
     <IconPointer size={11} className={classes.chatLinkFrame} stroke={1} />
   );
 
+  const [initContent, setInitContent] = useState(
+    `Welcome to Tourassist! I am Tour Assistant, your personal guide to the platform. I can help you with any questions you may have. Discover exciting travel campaigns here. Interested in creating your own? Let's get you started!`
+  );
+  useEffect(() => {
+    if (user && user !== "guest") {
+      setInitContent(`Welcome back ${user.email}! How may I assist you?`);
+    }
+  }, [user]);
+
   const chatId = user
     ? `${user.email}-${timeStamper()}`
     : `guest-${timeStamper()}`;
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({
-      api: "./api/route",
-      id: chatId,
-    });
+
+  const {
+    messages,
+    setMessages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+  } = useChat({
+    api: "/api/chat",
+    id: chatId,
+  });
 
   const toogleChat = () => {
     setChatOpened(!chatOpened);
@@ -59,114 +69,111 @@ export default function ChatBot() {
     setSearchOpened(false);
   };
 
+  useEffect(() => {
+    if (chatOpened && initContent && initContent.length > 0 && !messages) {
+      setMessages([
+        {
+          id: 0,
+          role: "assistant",
+          content: initContent,
+        },
+      ]);
+    }
+  }, [chatOpened]);
+
   return (
-    <>
-      {/* SVG Filter */}
-      <svg style={{ position: "absolute", width: 0, height: 0 }}>
-        <defs>
-          <filter id="morpho-customize">
-            <feFlood x="4" y="4" height="1" width="1" />
-            <feComposite width="4" height="5" />
-            <feTile result="a" />
-            <feComposite in="SourceGraphic" in2="a" operator="in" />
-            <feMorphology operator="dilate" radius={3} />
-          </filter>
-        </defs>
-      </svg>
-      <Tooltip
-        classNames={{ tooltip: "toolTip" }}
-        position="bottom"
-        label={"Tour Assistant"}
-      >
-        <Image
-          className={`${classes.globeImg} ${
-            chatOpened ? classes.globeImgActive : classes.globeImgInactive
-          }`}
-          src="/img/aiglobe.gif"
-          width={80}
-          height={80}
-          alt="Chatbot"
-          priority={true}
-          onClick={toogleChat}
-        />
-      </Tooltip>
-      <Transition
-        mounted={chatOpened}
-        keepMounted={true}
-        duration={500}
-        transition="fade"
-        timingFunction="ease"
-      >
-        {(styles) => (
-          <Center style={styles} className={classes.chatBotCenter}>
-            <Box className={classes.chatBotModal}>
-              <Group className={classes.chatBotTitle}>
-                <Flex align={"center"} gap={5} opacity={0.4}>
-                  <IconMessageChatbot size={30} stroke={1} />
-                  <Title order={6} fz={"17px"} fw={400}>
-                    Tour - Assistant
-                  </Title>
-                </Flex>
-              </Group>
-              <ChatArea user={user} messages={messages} />
-              <Box pos={"relative"} ref={ref}>
-                <FocusTrap active={chatOpened}>
-                  <form onSubmit={handleSubmit}>
-                    <Textarea
-                      autoFocus={true}
-                      value={input}
-                      onChange={handleInputChange}
-                      placeholder="Message Tour - Assistant..."
-                      classNames={{
-                        root: classes.chatBotInputRoot,
-                        input: classes.chatBotTextInput,
-                      }}
-                      onKeyDown={getHotkeyHandler([
-                        ["mod+Enter", handleSubmit],
-                      ])}
-                    />
-                    <ActionIcon
-                      type="submit"
-                      pos={"absolute"}
-                      bottom={0}
-                      right={0}
-                      size={45}
-                      radius={"15px 0 0 0"}
-                      variant="subtle"
-                      loading={isLoading}
-                      className={classes.chatSendBtn}
-                    >
-                      <IconSend2 className={classes.chatSendIcon} />
-                    </ActionIcon>
-                  </form>
-                </FocusTrap>
-                {clientOs !== "undetermined" && (
-                  <Text
-                    fw={700}
-                    fz={14}
-                    className={`${classes.keySubmit} ${
-                      focused && classes.keySubmitActive
-                    }`}
-                  >
-                    <Flex component="span" align={"center"}>
-                      <Kbd>
-                        {clientOs === "macos" ? (
-                          <IconCommand size={14} />
-                        ) : (
-                          "CTRL"
-                        )}
-                      </Kbd>
-                      <span style={{ margin: "0px 5px" }}>+</span>
-                      <Kbd>ENTER</Kbd>
-                    </Flex>
-                  </Text>
+    messages && (
+      <>
+        <Tooltip
+          classNames={{ tooltip: "toolTip" }}
+          position="bottom"
+          label={"Tour Assistant"}
+        >
+          <Image
+            className={`${classes.globeImg} ${
+              chatOpened ? classes.globeImgActive : classes.globeImgInactive
+            }`}
+            src="/img/aiglobe.gif"
+            width={80}
+            height={80}
+            alt="Chatbot"
+            priority={true}
+            onClick={toogleChat}
+          />
+        </Tooltip>
+        <Transition
+          mounted={chatOpened}
+          keepMounted={true}
+          duration={500}
+          transition="slide-up"
+          timingFunction="ease"
+        >
+          {(styles) => (
+            <Center style={styles} className={classes.chatBotCenter}>
+              <Box className={classes.chatBotModal}>
+                {messages && messages.length > 0 && (
+                  <ChatArea user={user} messages={messages} />
                 )}
+                <Box pos={"relative"} ref={ref}>
+                  <FocusTrap active={chatOpened}>
+                    <form>
+                      <Textarea
+                        data-autofocus
+                        autoFocus={true}
+                        value={input}
+                        onChange={handleInputChange}
+                        placeholder="Message Tour - Assistant..."
+                        classNames={{
+                          root: classes.chatBotInputRoot,
+                          input: classes.chatBotTextInput,
+                        }}
+                        onKeyDown={getHotkeyHandler([
+                          ["mod+Enter", handleSubmit],
+                        ])}
+                      />
+                      <ActionIcon
+                        pos={"absolute"}
+                        top={0}
+                        right={0}
+                        size={45}
+                        radius={"0 10px 0 10px"}
+                        variant="subtle"
+                        loading={isLoading}
+                        onClick={handleSubmit}
+                        className={classes.chatSendBtn}
+                      >
+                        <IconSend2 className={classes.chatSendIcon} />
+                      </ActionIcon>
+                    </form>
+                  </FocusTrap>
+                  {clientOs !== "undetermined" && (
+                    <Text
+                      fw={700}
+                      fz={14}
+                      className={`${classes.keySubmit} ${
+                        focused && classes.keySubmitActive
+                      }`}
+                    >
+                      <Flex component="span" align={"center"}>
+                        <Kbd>
+                          {clientOs === "macos" ? (
+                            <IconCommand size={14} />
+                          ) : (
+                            "CTRL"
+                          )}
+                        </Kbd>
+                        <span style={{ margin: "0px 5px" }}>+</span>
+                        <Kbd>ENTER</Kbd>
+                      </Flex>
+                    </Text>
+                  )}
+                </Box>
               </Box>
-            </Box>
-          </Center>
-        )}
-      </Transition>
-    </>
+            </Center>
+          )}
+        </Transition>
+      </>
+    )
   );
 }
 

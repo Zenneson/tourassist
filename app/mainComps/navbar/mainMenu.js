@@ -33,7 +33,6 @@ import {
 import { signOut } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-
 import ProfileDrawer from "./profileDrawer";
 import classes from "./styles/mainMenu.module.css";
 
@@ -41,6 +40,7 @@ export default function MainMenu() {
   const { user } = useUser();
 
   const {
+    chatOpened,
     panelOpened,
     setPanelOpened,
     setListOpened,
@@ -114,8 +114,7 @@ export default function MainMenu() {
     <>
       <Box>
         <Box
-          // height={1} // so that the header does not block the middele of the top
-          opacity={searchOpened ? 0 : 1}
+          opacity={searchOpened || chatOpened ? 0 : 1}
           className={classes.mainMenu}
         >
           {/* Main Menu Button  */}

@@ -24,17 +24,19 @@ export const UserProvider = ({ children }) => {
               const userData = docSnap.data();
               setUser({ ...userAuth, ...userData });
             } else {
+              setUser("guest");
               console.log("No such document!");
             }
           },
           (error) => {
+            setUser("guest");
             console.error("Error getting document:", error);
           }
         );
 
         return () => unsubscribeFirestore();
       } else {
-        setUser(null);
+        setUser("guest");
       }
     });
 

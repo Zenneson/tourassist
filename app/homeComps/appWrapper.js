@@ -29,6 +29,18 @@ export default function AppWrapper({ children }) {
 
   return (
     <>
+      {/* SVG Filter */}
+      <svg style={{ position: "absolute", width: 0, height: 0 }}>
+        <defs>
+          <filter id="morpho-customize">
+            <feFlood x="4" y="4" height="1" width="1" />
+            <feComposite width="4" height="5" />
+            <feTile result="a" />
+            <feComposite in="SourceGraphic" in2="a" operator="in" />
+            <feMorphology operator="dilate" radius={3} />
+          </filter>
+        </defs>
+      </svg>
       <ColorSchemeScript defaultColorScheme="dark" />
       <MantineProvider theme={tourTheme} defaultColorScheme="dark">
         <UserProvider>

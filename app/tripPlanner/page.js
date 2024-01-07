@@ -1,7 +1,6 @@
 "use client";
-import { isEqual } from "@libs/custom";
 import { useMapState } from "@libs/store";
-import { useSessionStorage } from "@mantine/hooks";
+import { shallowEqual, useSessionStorage } from "@mantine/hooks";
 import { useEffect } from "react";
 import TripPlannerWrapper from "./comps/tripPlannerWrapper";
 
@@ -13,7 +12,7 @@ export default function TripPlanner() {
   });
 
   useEffect(() => {
-    if (isEqual(sessionPlaces, places)) return;
+    if (shallowEqual(sessionPlaces, places)) return;
     setSessionPlaces(places);
   }, [places, sessionPlaces]);
 

@@ -4,7 +4,6 @@ import {
   dateRangeFunc,
   daysBefore,
   formatDateFullMonth,
-  isEqual,
   parseCustomDate,
   sumAmounts,
 } from "@libs/custom";
@@ -21,7 +20,7 @@ import {
   Title,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useSessionStorage } from "@mantine/hooks";
+import { shallowEqual, useSessionStorage } from "@mantine/hooks";
 import {
   IconAppWindow,
   IconChevronDown,
@@ -68,7 +67,7 @@ export default function TripInfoWrapper(props) {
   });
 
   useEffect(() => {
-    if (isEqual(allTrips, trips)) return;
+    if (shallowEqual(allTrips, trips)) return;
     setAllTrips(trips);
   }, [trips]);
 
@@ -322,11 +321,84 @@ export default function TripInfoWrapper(props) {
           mb={10}
           style={{
             borderRadius: 3,
+            backgroundColor: dark
+              ? "rgba(255, 255, 255, 0.01)"
+              : "rgba(5, 5, 5, 0.05)",
             border: `2px solid ${dark}`
               ? "rgba(255,255,255,0.1)"
               : "rgba(0,0,0,0.1)",
           }}
         >
+          <Group className={classes.moneyGroup} w={"100%"} gap={0} grow>
+            <Center>
+              <Box>
+                <Button
+                  className={classes.purchaseLink}
+                  onClick={() => {}}
+                  variant="subtle"
+                  size="md"
+                >
+                  <Flex align={"center"} gap={3}>
+                    <IconCurrencyDollar
+                      stroke={1}
+                      style={{
+                        marginRight: -7,
+                      }}
+                    />
+                    <Title order={3} ta={"center"}>
+                      {addComma(donationSum - spentFunds)}
+                    </Title>
+                    <IconCoins stroke={1} size={21} />
+                  </Flex>
+                </Button>
+                {/* <Text fz={10}>AVAILABLE FUNDS</Text> */}
+              </Box>
+            </Center>
+            <Center className={classes.fundsTally}>
+              <Box>
+                <Progress
+                  color={dark ? "blue.9" : "blue.4"}
+                  bg={dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.1)"}
+                  value={(donationSum / currentTrip?.costsSum) * 100}
+                  mt={7}
+                  ml={3}
+                  size={"sm"}
+                  w={"100%"}
+                  style={{
+                    boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
+                  }}
+                />
+                <Title order={3} ta={"center"}>
+                  <Flex align={"center"}>
+                    <IconCurrencyDollar
+                      stroke={1}
+                      style={{
+                        marginRight: -4,
+                      }}
+                    />
+                    {addComma(donationSum)}{" "}
+                    <IconSlash
+                      stroke={1}
+                      style={{
+                        transform: "rotate(-20deg) scale(1.2)",
+                        marginRight: -6,
+                      }}
+                    />
+                    <IconCurrencyDollar
+                      stroke={1}
+                      style={{
+                        marginRight: -4,
+                      }}
+                    />
+                    {addComma(currentTrip?.costsSum)}
+                  </Flex>
+                </Title>
+                <Text ta={"right"} mt={-7} mr={1} fz={10}>
+                  RAISED
+                </Text>
+              </Box>
+            </Center>
+          </Group>
           <Group w={"100%"} grow gap={0}>
             <Center>
               <Box>
@@ -378,76 +450,6 @@ export default function TripInfoWrapper(props) {
               </Button>
             </Center>
           </Group>
-          <Group className={classes.moneyGroup} w={"100%"} gap={0} grow>
-            <Center>
-              <Box>
-                <Button
-                  className={classes.viewPageLink}
-                  onClick={() => {}}
-                  variant="subtle"
-                  size="md"
-                >
-                  <Flex align={"center"} gap={3}>
-                    <IconCurrencyDollar
-                      stroke={1}
-                      style={{
-                        marginRight: -7,
-                      }}
-                    />
-                    <Title order={3} ta={"center"}>
-                      {addComma(donationSum - spentFunds)}
-                    </Title>
-                    <IconCoins stroke={1} size={21} />
-                  </Flex>
-                </Button>
-                {/* <Text fz={10}>AVAILABLE FUNDS</Text> */}
-              </Box>
-            </Center>
-            <Center className={classes.fundsTally}>
-              <Box>
-                <Progress
-                  color={dark ? "blue.9" : "blue.4"}
-                  bg={dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.1)"}
-                  value={(donationSum / currentTrip?.costsSum) * 100}
-                  mb={5}
-                  ml={3}
-                  size={"sm"}
-                  w={"100%"}
-                  style={{
-                    boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
-                  }}
-                />
-                <Title order={3} ta={"center"}>
-                  <Flex align={"center"}>
-                    <IconCurrencyDollar
-                      stroke={1}
-                      style={{
-                        marginRight: -4,
-                      }}
-                    />
-                    {addComma(donationSum)}{" "}
-                    <IconSlash
-                      stroke={1}
-                      style={{
-                        transform: "rotate(-20deg) scale(1.4)",
-                        marginRight: -6,
-                      }}
-                    />
-                    <IconCurrencyDollar
-                      stroke={1}
-                      style={{
-                        marginRight: -4,
-                      }}
-                    />
-                    {addComma(currentTrip?.costsSum)}
-                  </Flex>
-                </Title>
-                <Text ta={"right"} mr={4} mt={-4} fz={10}>
-                  RAISED
-                </Text>
-              </Box>
-            </Center>
-          </Group>
         </Box>
         <Flex my={10} pos={"relative"}>
           <Box
@@ -464,7 +466,7 @@ export default function TripInfoWrapper(props) {
               donations={currentTrip.donations ? currentTrip.donations : []}
               setDonations={setDonations}
               donationSectionLimit={6}
-              dHeight={"calc(100vh - 670px)"}
+              dHeight={"calc(100vh - 685px)"}
             />
           </Box>
         </Flex>

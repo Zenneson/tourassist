@@ -5,8 +5,7 @@ div.chatBotCenter {
   position: fixed;
   top: 0;
   left: 0;
-  backdrop-filter: blur(5px);
-  background-color: light-dark(rgba(248, 249, 250, 0.4), rgba(12, 13, 14, 0.6));
+  background: transparent;
 }
 
 div.chatBotModal {
@@ -17,27 +16,102 @@ div.chatBotModal {
   padding: 20px 0px 60px 0px;
 }
 
-.chatBotTitle {
-  position: absolute;
-  left: -5px;
-  text-transform: uppercase;
-  font-weight: 900;
-  font-weight: 700;
-}
-
 .chatBotMain {
-  height: calc(100% - 175px);
-  margin-top: 40px;
+  height: calc(100% - 135px);
   overflow: hidden;
 }
 
+.messagesArea {
+  height: calc(100vh - 210px);
+  mask-image: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 80%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.chatTextGrid {
+  padding-bottom: 20px;
+  overflow: hidden;
+}
+
+.assistantAvi {
+  color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));
+  transform: rotate(15deg);
+  margin: 17px 15px 0 0;
+  opacity: 0.25;
+  filter: drop-shadow(
+    0px 2px 3px light-dark(rgba(12, 13, 14, 1), rgba(12, 13, 14, 0.7))
+  );
+}
+
+.userAvi {
+  color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));
+  margin: 20px 0 0 15px;
+  opacity: 0.25;
+  filter: drop-shadow(
+    0px 2px 3px light-dark(rgba(12, 13, 14, 1), rgba(12, 13, 14, 0.7))
+  );
+}
+
 .chatBotTextFrame {
-  margin: 10px 0;
+  position: relative;
+  margin-top: 10px;
   padding: 15px;
-  border-radius: 3px;
+  border-radius: 10px;
+  overflow: visible;
   color: light-dark(#000, #fff);
-  background-color: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 0.8));
-  border: 1px solid light-dark(rgba(12, 13, 14, 0.1), rgba(248, 249, 250, 0.02));
+  background-color: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 0.7));
+  backdrop-filter: blur(5px);
+  filter: drop-shadow(
+    0px 3px 5px light-dark(rgba(12, 13, 14, 0.4), rgba(12, 13, 14, 0.7))
+  );
+}
+
+.chatBotTextFrame::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 10px;
+  background: light-dark(rgba(248, 249, 250, 0.7), rgba(12, 13, 14, 0.7));
+  filter: blur(3px);
+  z-index: -1;
+}
+
+.chatBotTextBotArrow::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  right: 100%;
+  top: 13px;
+  border: 0.75rem solid transparent;
+  border-left: none;
+  border-right-color: light-dark(
+    rgba(248, 249, 250, 0.7),
+    rgba(12, 13, 14, 0.7)
+  );
+}
+
+.chatBotTextUserArrow::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 100%;
+  top: 15px;
+  border: 0.75rem solid transparent;
+  border-right: none;
+  border-left-color: light-dark(
+    rgba(248, 249, 250, 0.7),
+    rgba(12, 13, 14, 0.7)
+  );
+  filter: drop-shadow(
+    0px 3px 10px light-dark(rgba(12, 13, 14, 0.4), rgba(12, 13, 14, 0.7))
+  );
 }
 
 p.chatBotText {
@@ -48,15 +122,18 @@ p.chatBotText {
 }
 
 div.chatBotInputRoot {
+  position: relative;
   margin-top: 20px;
-  border-top: 1px solid
-    light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.03));
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 textarea.chatBotTextInput {
   height: 135px;
   padding: 15px;
   width: 100%;
+  box-shadow: 0px 3px 10px
+    light-dark(rgba(12, 13, 14, 0.4), rgba(12, 13, 14, 0.7));
   background-color: light-dark(
     rgba(248, 249, 250, 0.95),
     rgba(12, 13, 14, 0.95)
@@ -67,7 +144,7 @@ textarea.chatBotTextInput {
   z-index: 1800;
   position: absolute;
   transform: scale(0.7);
-  bottom: 6px;
+  top: 6px;
   right: 42px;
   pointer-events: none;
   opacity: 0.25;
@@ -90,7 +167,8 @@ textarea.chatBotTextInput {
 
 button.chatSendBtn {
   opacity: 1;
-  box-shadow: 0px -3px 10px light-dark(rgba(233, 242, 248, 0.5), rgba(12, 13, 14, 0.5));
+  box-shadow: 0px 3px 5px
+    light-dark(rgba(233, 242, 248, 0.5), rgba(12, 13, 14, 0.5));
   background-color: light-dark(rgba(255, 255, 255), rgba(10, 10, 10));
 
   &:hover {
@@ -196,4 +274,17 @@ img.globeImgComputing {
   animation: computing 200ms ease-in-out infinite;
   filter: invert(78%) sepia(92%) saturate(1707%) hue-rotate(360deg)
     brightness(96%) contrast(111%);
+}
+
+.chatBotFadeOverlay {
+  filter: url("#chat-overlay");
+  z-index: 1700;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(5px);
+  background-color: light-dark(rgba(248, 249, 250, 0.8), rgba(12, 13, 14, 1));
+  mask-image: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
 }

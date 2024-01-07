@@ -1,4 +1,4 @@
-import { addEllipsis, isEqual } from "@libs/custom";
+import { addEllipsis } from "@libs/custom";
 import { useMapState } from "@libs/store";
 import {
   Box,
@@ -9,7 +9,7 @@ import {
   Select,
   Text,
 } from "@mantine/core";
-import { usePrevious } from "@mantine/hooks";
+import { shallowEqual, usePrevious } from "@mantine/hooks";
 import {
   IconArrowBadgeRightFilled,
   IconCaretDownFilled,
@@ -104,7 +104,7 @@ export default function LocationDrawer(props) {
   const [prevArea, setPrevArea] = useState({ label: "" });
   const oldArea = usePrevious(area);
   useEffect(() => {
-    if (isEqual(prevArea, oldArea)) return;
+    if (shallowEqual(prevArea, oldArea)) return;
     setPrevArea(oldArea);
   }, [oldArea]);
 

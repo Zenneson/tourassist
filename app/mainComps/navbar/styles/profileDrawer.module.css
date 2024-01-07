@@ -1,3 +1,13 @@
+.firstDivider {
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0.7) 40%,
+    rgba(0, 0, 0, 1) 100%
+  );
+}
+
 .navLinkIcon {
   opacity: 0.4;
   color: light-dark(#ccc, #333);
@@ -73,7 +83,7 @@ a.legalButton {
     light-dark(rgba(16, 17, 19, 0.1), rgba(248, 249, 250, 0.1));
 }
 
-.signOutButton {
+button.signOutButton {
   transition: all 200ms ease;
   color: light-dark(rgba(16, 17, 19, 0.1), rgba(248, 249, 250, 0.1));
   background-color: light-dark(
@@ -108,7 +118,7 @@ button.closePanelButton {
   z-index: 1000;
   position: absolute;
   padding: 5px 10px;
-  top: 102px;
+  top: 86px;
   right: 0px;
   transition: all 250ms ease-in-out;
 
@@ -118,5 +128,5 @@ button.closePanelButton {
 }
 
 button.closePanelButton {
-  top: 77px;
+  top: 86px;
 }

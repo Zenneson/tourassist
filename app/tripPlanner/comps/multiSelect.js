@@ -1,5 +1,4 @@
 "use client";
-import { isEqual } from "@libs/custom";
 import { useTripPlannerState } from "@libs/store";
 import {
   CheckIcon,
@@ -10,6 +9,7 @@ import {
   Text,
   useCombobox,
 } from "@mantine/core";
+import { shallowEqual } from "@mantine/hooks";
 import { IconCheckbox } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import classes from "../styles/multiSelect.module.css";
@@ -34,7 +34,7 @@ export default function MultiSelect(props) {
   const [search, setSearch] = useState("");
   const { tripTypes } = useTripPlannerState();
   useEffect(() => {
-    if (isEqual(tripTypes, selectedTypes)) return;
+    if (shallowEqual(tripTypes, selectedTypes)) return;
     setSelectedTypes(tripTypes);
   }, [tripTypes]);
 

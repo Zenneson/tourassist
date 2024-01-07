@@ -1,4 +1,5 @@
-import { isEqual, sumAmounts } from "@libs/custom";
+import { sumAmounts } from "@libs/custom";
+import { shallowEqual } from "@mantine/hooks";
 import { useEffect } from "react";
 
 // Custom Hook for Updating Trip Data
@@ -28,7 +29,7 @@ export function useSyncDonations(
   setDonationSum
 ) {
   useEffect(() => {
-    if (tripData && isEqual(donations, tripData.donations)) {
+    if (tripData && shallowEqual(donations, tripData.donations)) {
       setDonations(tripData.donations);
       setDonationSum(Math.floor(sumAmounts(tripData.donations)));
     }

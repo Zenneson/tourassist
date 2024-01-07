@@ -147,12 +147,13 @@ export default function ProfileDrawer(props) {
           <Button onClick={closeAll} className={classes.closeButton}>
             <IconX size={15} />
           </Button>
-          <Space h={120} />
+          <Space h={105} />
           <Divider
+            className={classes.firstDivider}
             mt={0}
+            w={"90%"}
+            ml={"5%"}
             mb={20}
-            w={"253px"}
-            ml={"15px"}
             opacity={dark ? 0.7 : 0.4}
             color={dark && "dark.7"}
           />
@@ -312,7 +313,7 @@ export default function ProfileDrawer(props) {
           blur: 9,
         }}
       >
-        <Space h={24} />
+        <Space h={45} />
         {/* Close Panel Button */}
         <Button className={classes.closePanelButton} onClick={closePanel}>
           <IconX size={15} />
@@ -323,13 +324,13 @@ export default function ProfileDrawer(props) {
               mt={-5}
               opacity={0.08}
               fw={600}
-              fz={40}
+              fz={30}
               style={{
                 textTransform: "uppercase",
               }}
             >
-              <Flex align={"center"} gap={10}>
-                Account Info <IconUserCircle size={40} />
+              <Flex align={"center"} gap={2}>
+                Account Info <IconUserCircle size={30} />
               </Flex>
             </Title>
             <AccountInfo user={user} />
@@ -341,13 +342,13 @@ export default function ProfileDrawer(props) {
               mt={-5}
               opacity={0.08}
               fw={600}
-              fz={40}
+              fz={30}
               style={{
                 textTransform: "uppercase",
               }}
             >
-              <Flex align={"center"} gap={10}>
-                TRIP INFO <IconClipboardData size={40} />
+              <Flex align={"center"} gap={0}>
+                TRIP INFO <IconClipboardData size={30} />
               </Flex>
             </Title>
             <TripInfo

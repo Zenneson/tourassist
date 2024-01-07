@@ -1,5 +1,5 @@
 "use client";
-import { isEqual, timeSince } from "@libs/custom";
+import { timeSince } from "@libs/custom";
 import {
   Anchor,
   Avatar,
@@ -18,7 +18,7 @@ import {
   Title,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useIntersection } from "@mantine/hooks";
+import { shallowEqual, useIntersection } from "@mantine/hooks";
 import { IconReload, IconShare3 } from "@tabler/icons-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import classes from "../styles/donations.module.css";
@@ -40,7 +40,7 @@ export default function Donations(props) {
   const [donationsData, setDonationsData] = useState([]);
 
   useEffect(() => {
-    if (isEqual(donationsData, donations)) return;
+    if (shallowEqual(donationsData, donations)) return;
     setDonationsData(donations);
   }, [donations]);
 

@@ -1,3 +1,7 @@
+// This loads first
+import "../scripts/whyDidYouRender";
+// ------
+
 import GlobeLoader from "@mainComps/pageLoader/globeLoader";
 import "@mantine/core/styles/global.css";
 import "mapbox-gl/dist/mapbox-gl.css";
